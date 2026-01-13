@@ -5,5 +5,16 @@
   },
   "dependencies": ["."],
   "env": "./.env",
-  "python_version": "3.11"
+  "python_version": "3.11",
+  "watch": {
+    "exclude": [
+      "scripts/**",
+      "docs/**",
+      "langgraph_runs/**",
+      "tests/**",
+      "*.md",
+      "*.csv",
+      "*.jsonl"
+    ]
+  }
 }

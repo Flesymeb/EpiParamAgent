@@ -114,7 +114,7 @@ class PubMedClient:
         """Search PubMed and return Paper objects."""
         self.last_total = None
         term = self._build_term(query, year)
-        logger.info(f"Searching PubMed for: {term}")
+        logger.debug(f"Searching PubMed for: {term}")
         target: Optional[int]
         if retmax is None or retmax <= 0:
             target = None
@@ -161,7 +161,7 @@ class PubMedClient:
                 self.last_total = total
                 if target is None:
                     target = total
-                logger.info(
+                logger.debug(
                     "PubMed total matches for query: %s (total=%s)", term, total
                 )
                 if total > 10000:
@@ -200,16 +200,25 @@ class PubMedClient:
         self,
         query: str,
         year: Optional[str],
-        # medline_only: bool = True,  # Whether to restrict to MEDLINE indexed articles
     ) -> str:
+        """Build PubMed search term with date filter.
+
+        Supports:
+        - Year range: "2020-2024" -> (query) AND (2020:2024[pdat])
+        - Date range: "2020/1/1-2020/10/22" -> (query) AND (2020/1/1:2020/10/22[pdat])
+        - Single year: "2020" -> (query) AND (2020[pdat])
+        - Single date: "2020/1/1" -> (query) AND (2020/1/1[pdat])
+        """
         term = query
 
         if year:  # Add publication date filter
             year = year.strip()
             if "-" in year:
+                # Split on dash, convert back to colon for PubMed
                 start, end = [p.strip() for p in year.split("-", 1)]
                 term = f"({term}) AND ({start}:{end}[pdat])"
             else:
+                # Single year or single date
                 term = f"({term}) AND ({year}[pdat])"
 
         if self.medline_only:  # Restrict to MEDLINE indexed articles

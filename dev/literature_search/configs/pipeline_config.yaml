@@ -1,0 +1,128 @@
+# MetaAgent-Epi 配置文件
+# 流行病学文献检索系统的运行时配置
+
+# ==============================================================================
+# 数据源配置
+# ==============================================================================
+# 主要数据源（默认只使用 PubMed）
+# 可选值: ["pubmed"] 或 ["pubmed", "eric"] （不推荐在流行病学研究中使用 ERIC）
+default_providers:
+  - pubmed
+
+# PubMed 检索配置
+pubmed:
+  # max_results: 默认不设置则获取所有匹配结果（无限制）
+  # 若需要限制结果数量，取消注释并设置数值，例如：
+  # max_results: 500
+  retmax_per_fetch: 500 # 单次 API 调用返回的最大记录数
+  include_medline_only: false # true: 仅MEDLINE索引文章(高质量期刊), false: 包含预印本(PubMed Central等)
+  year_filter: "2020-2024" # 年份过滤，如 "2020-2024" 或精确日期 "2020/1/1-2020/10/22"
+
+# ==============================================================================
+# 关键词生成配置
+# ==============================================================================
+keyword_generation:
+  max_iterations: 3 # LLM 关键词生成的最大迭代次数
+  enable_domain_analysis: true # 是否进行领域分析（自动识别子领域）
+  include_wildcards: true # 是否应用通配符（如 disease* → disease, diseases）
+
+  # 关键词类别权重（用于控制生成的关键词数量）
+  category_limits:
+    primary_keywords: 20
+    synonyms: 30
+    related_terms: 25
+    domain_terms: 20
+    outcome_terms: 20
+    design_terms: 15
+    population_terms: 15
+
+# ==============================================================================
+# 布尔查询生成配置
+# ==============================================================================
+query_generation:
+  max_queries_per_provider: 10 # 每个数据源生成的最大查询数（从12增加到10以获得更好覆盖）
+  use_llm_queries: true # 使用 LLM 生成查询（更智能，已优化JSON解析）
+  fallback_to_rules: false # LLM 失败时是否回退到规则生成
+  llm_max_retries: 3 # LLM 生成失败的最大重试次数（从2增加到3）
+  include_single_terms: false # 是否包含单个术语的简单查询
+
+  # 查询复杂度控制
+  min_terms_per_query: 3 # 每个查询的最小术语数
+  max_terms_per_query: 15 # 每个查询的最大术语数（避免过于复杂）
+
+# ==============================================================================
+# 筛选配置
+# ==============================================================================
+screening:
+  enable_autoscreen: true # 是否启用 LLM 自动筛选
+  autoscreen_batch_size: 10 # 批量筛选的文章数
+
+  # 筛选标准（流行病学特定）
+  study_design_priority:
+    - meta_analysis
+    - systematic_review
+    - cohort
+    - case_control
+    - randomized_controlled_trial
+    - cross_sectional
+
+  # 排除标准
+  exclude_types:
+    - editorial
+    - commentary
+    - letter
+    - case_report # 除非明确需要
+
+# ==============================================================================
+# Scoping Search 配置（可选的初步探索）
+# ==============================================================================
+scoping:
+  enabled: false # 是否启用 scoping search（使用 Tavily/Serper 进行初步探索）
+  providers:
+    - tavily
+  max_results: 5
+  max_items: 8
+  max_chars: 1600
+
+# ==============================================================================
+# 输出配置
+# ==============================================================================
+output:
+  export_formats:
+    - csv
+    - json
+  include_prisma_diagram: true # 是否生成 PRISMA 流程图
+  save_intermediate_results: true # 是否保存中间结果（queries, raw_records等）
+
+  # 导出字段
+  csv_columns:
+    - id
+    - title
+    - authors
+    - year
+    - abstract
+    - journal
+    - doi
+    - source
+    - decision
+    - reason
+    - study_design
+
+# ==============================================================================
+# 性能和限制
+# ==============================================================================
+performance:
+  parallel_retrieval: true # 并行检索（如果有多个数据源）
+  api_rate_limit_delay: 0.34 # API 调用之间的延迟（秒）
+  max_concurrent_requests: 3 # 最大并发请求数
+
+  # 结果数量警告阈值
+  warn_if_results_exceed: 10000 # PubMed 单次检索超过此数量时警告
+
+# ==============================================================================
+# 日志和调试
+# ==============================================================================
+logging:
+  level: WARNING # 只显示警告和错误，避免Web UI卡顿（可选：INFO, DEBUG）
+  log_llm_calls: false # 不记录 LLM 调用详情
+  log_api_responses: false # 不记录完整的 API 响应

@@ -13,6 +13,7 @@ from pathlib import Path
 
 from .state import SearchState
 from . import nodes
+from config import get_config
 
 try:
     from langgraph.graph import StateGraph, END
@@ -27,13 +28,16 @@ logger = logging.getLogger(__name__)
 
 
 class InputSchema(TypedDict):
-    """Minimal input exposed to Studio/UI."""
+    """Minimal input exposed to Studio/UI - epidemiology literature search."""
 
     research_question: str
+    """Research question for the systematic review (e.g., 'What is the association between air pollution and cardiovascular disease?')"""
+
     domain: NotRequired[str]
-    providers: NotRequired[list[str]]
+    """Epidemiology subdomain: infectious_disease, chronic_disease, environmental_epi, etc. Default: epidemiology"""
+
     params: NotRequired[dict]
-    workdir: NotRequired[str]
+    """Optional runtime params (scoping, query limits, year filters, etc.)"""
 
 
 def _require_langgraph():
@@ -54,7 +58,6 @@ def build_graph() -> "StateGraph":
     graph.add_node("generate_terms", _wrap("generate_terms", nodes.generate_terms))
     graph.add_node("build_queries", _wrap("build_queries", nodes.build_queries))
     graph.add_node("retrieve_pubmed", _wrap("retrieve_pubmed", nodes.retrieve_pubmed))
-    graph.add_node("retrieve_eric", _wrap("retrieve_eric", nodes.retrieve_eric))
     graph.add_node(
         "normalize_and_dedupe",
         _wrap("normalize_and_dedupe", nodes.normalize_and_dedupe),
@@ -69,11 +72,9 @@ def build_graph() -> "StateGraph":
     graph.add_edge("scoping_search", "generate_terms")
     graph.add_edge("generate_terms", "build_queries")
 
-    # Parallel retrieval: PubMed + ERIC in fan-out, then join into normalize step.
+    # Primary retrieval: PubMed only (ERIC removed for epidemiology focus)
     graph.add_edge("build_queries", "retrieve_pubmed")
-    graph.add_edge("build_queries", "retrieve_eric")
     graph.add_edge("retrieve_pubmed", "normalize_and_dedupe")
-    graph.add_edge("retrieve_eric", "normalize_and_dedupe")
     graph.add_edge("normalize_and_dedupe", "autoscreen_and_export")
     graph.add_edge("autoscreen_and_export", END)
 
@@ -90,10 +91,12 @@ def run_once(
     params: Optional[dict] = None,
 ) -> SearchState:
     """Run the graph once with a fresh state."""
+    config = get_config()
+
     initial = SearchState(
         research_question=research_question,
         domain=domain,
-        providers=providers or ["pubmed", "eric"],
+        providers=providers or config.default_providers,
         workdir=Path(workdir) if workdir else None,
         params=params or {},
     )

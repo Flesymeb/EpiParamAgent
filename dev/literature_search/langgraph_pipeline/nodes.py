@@ -200,7 +200,14 @@ def _load_autoscreen_prompt() -> tuple[str, str]:
 def _resolve_year_filter(
     params: Dict[str, Any], provider: Optional[str] = None
 ) -> Optional[str]:
-    """Resolve a year filter string from params (supports per-provider overrides)."""
+    """Resolve a year/date filter string from params.
+
+    Supports formats:
+    - Year range: "2020-2024" or "2020:2024"
+    - Date range: "2020/1/1-2020/10/22" or "2020/1/1:2020/10/22"
+    - Single year: "2020"
+    - Single date: "2020/1/1"
+    """
 
     def _get(key: str):
         return params.get(key) if params else None
@@ -208,6 +215,7 @@ def _resolve_year_filter(
     if provider:
         for key in (
             f"{provider}_year_range",
+            f"{provider}_date_range",
             f"{provider}_year",
             f"{provider}_min_year",
             f"{provider}_max_year",
@@ -228,12 +236,21 @@ def _resolve_year_filter(
             max_year = _safe_int(value)
             min_year = _safe_int(_get(f"{provider}_min_year")) if provider else None
         else:
-            return str(value).strip() if value is not None else None
+            # Direct pass-through for date ranges or year ranges
+            result = str(value).strip() if value is not None else None
+            # Normalize separator: convert colon to dash for consistency
+            if result and ":" in result:
+                result = result.replace(":", "-")
+            return result
     else:
         min_year = _safe_int(_get("min_year"))
         max_year = _safe_int(_get("max_year"))
         if _get("year_range"):
-            return str(_get("year_range")).strip()
+            result = str(_get("year_range")).strip()
+            return result.replace(":", "-") if ":" in result else result
+        if _get("date_range"):
+            result = str(_get("date_range")).strip()
+            return result.replace(":", "-") if ":" in result else result
         if _get("year"):
             return str(_get("year")).strip()
 
@@ -336,7 +353,7 @@ def generate_terms(state: SearchState, **_: Any) -> SearchState:
         state.workdir = base / f"run_{ts}"
         state.workdir.mkdir(parents=True, exist_ok=True)
         state.metrics["workdir"] = str(state.workdir)
-        logger.info("Initialized workdir at %s", state.workdir)
+        logger.debug("Initialized workdir at %s", state.workdir)
 
     try:
         from epidemiology.keyword_generator import KeywordGeneratorAgent
@@ -394,6 +411,36 @@ def build_queries(state: SearchState, **_: Any) -> SearchState:
     wildcard_map = state.params.get("wildcard_map")
     use_seed_queries = bool(state.params.get("use_seed_queries", False))
     eric_force_rule = bool(state.params.get("eric_force_rule_queries", False))
+    pubmed_field = state.params.get("pubmed_field", "all")
+    llm_iterations = _safe_int(state.params.get("llm_query_iterations")) or 3
+    llm_min_queries = _safe_int(state.params.get("llm_min_queries")) or 5
+    llm_query_mode = (state.params.get("llm_query_mode") or "").strip().lower()
+    llm_term_groups = state.params.get("llm_term_groups")
+    llm_term_limits = state.params.get("llm_term_limits")
+    llm_prompt_hint = state.params.get("llm_query_prompt_hint")
+
+    if isinstance(llm_term_groups, str):
+        llm_term_groups = [g.strip() for g in llm_term_groups.split(",") if g.strip()]
+    if llm_query_mode in {"epi", "epidemiology", "epi_three_facet"}:
+        if not llm_term_groups:
+            llm_term_groups = ["primary_keywords", "synonyms"]
+        if not llm_term_limits:
+            llm_term_limits = {
+                "primary_keywords": 6,
+                "synonyms": 8,
+            }
+        if not llm_prompt_hint:
+            llm_prompt_hint = (
+                "CRITICAL: Use STRUCTURED multi-facet AND logic, not flat OR lists.\n"
+                "REQUIRED STRUCTURE (for operational delays like isolation delay):\n"
+                "  (Disease OR Pathogen) AND (Time/Interval OR Delay) AND (Action/Event OR Setting)\n"
+                "EXAMPLE:\n"
+                "  (COVID-19 OR SARS-CoV-2) AND (interval OR delay OR latency) AND (isolation OR quarantine OR containment)\n"
+                "BANNED STRUCTURE:\n"
+                "  (COVID-19 OR SARS-CoV-2 OR isolation OR delay OR interval OR ...) [TOO BROAD]\n"
+                "Each facet must be required via AND. Use OR only within facets for synonyms.\n"
+                "Generate 3-5 queries with different facet combinations, NOT 10+ with same flat structure."
+            )
 
     class _LLMAdapter:
         def __init__(self, model):
@@ -410,6 +457,7 @@ def build_queries(state: SearchState, **_: Any) -> SearchState:
                 include_single_terms=include_single_terms,
                 apply_wildcards=apply_wildcards,
                 wildcard_map=wildcard_map,
+                pubmed_field=pubmed_field,
             )
             try:
                 use_llm = use_llm_queries and llm_model
@@ -420,7 +468,11 @@ def build_queries(state: SearchState, **_: Any) -> SearchState:
                         kw_obj,
                         agent=_LLMAdapter(llm_model),
                         research_query=state.research_question,
-                        prompt_hint=None,
+                        prompt_hint=llm_prompt_hint,
+                        iterations=llm_iterations,
+                        min_queries=llm_min_queries,
+                        term_groups=llm_term_groups,
+                        term_limits=llm_term_limits,
                     )
                     state.metrics["llm_calls"][f"queries_{provider}"] = {
                         "status": "ok_llm"
@@ -482,8 +534,12 @@ def build_queries(state: SearchState, **_: Any) -> SearchState:
     return state
 
 
-def retrieve_pubmed(state: SearchState, *, retmax: int = 50, **_: Any) -> SearchState:
-    """Call PubMed and store raw records."""
+def retrieve_pubmed(state: SearchState, *, retmax: int = 500, **_: Any) -> SearchState:
+    """Call PubMed and store raw records.
+
+    By default (no params specified), retrieves ALL results.
+    To limit results, explicitly set pubmed_retmax in params.
+    """
     if "pubmed" not in state.providers:
         return state
     query_list = state.queries.get("pubmed") or []
@@ -492,11 +548,18 @@ def retrieve_pubmed(state: SearchState, *, retmax: int = 50, **_: Any) -> Search
         return state
 
     no_limits = bool(state.params.get("no_limits"))
-    total_limit = (
-        None
-        if no_limits
-        else _resolve_limit(state.params.get("pubmed_retmax", retmax), retmax)
-    )
+
+    # Default behavior: no limit unless explicitly specified
+    # If user provides pubmed_retmax, use it; otherwise None (unlimited)
+    if no_limits:
+        total_limit = None
+    elif "pubmed_retmax" in state.params:
+        # User explicitly specified a limit
+        total_limit = _resolve_limit(state.params.get("pubmed_retmax"), None)
+    else:
+        # No explicit limit → unlimited
+        total_limit = None
+
     per_query_limit = (
         None
         if no_limits
@@ -505,7 +568,9 @@ def retrieve_pubmed(state: SearchState, *, retmax: int = 50, **_: Any) -> Search
     if per_query_limit is None and total_limit is not None:
         per_query_limit = max(1, total_limit // max(1, len(query_list)))
 
-    client = PubMedClient()
+    # Get medline_only setting from params (default True for high quality)
+    medline_only = state.params.get("include_medline_only", True)
+    client = PubMedClient(medline_only=medline_only)
     year_filter = _resolve_year_filter(state.params, "pubmed")
     totals = state.metrics.setdefault("provider_totals", {}).setdefault("pubmed", {})
     collected: List[Any] = []
@@ -590,7 +655,7 @@ def retrieve_eric(
                 )
                 total_hits = client.last_total
                 if papers:
-                    logger.info(
+                    logger.debug(
                         "ERIC hit with query variant: %s (n=%s, total=%s)",
                         v,
                         len(papers),

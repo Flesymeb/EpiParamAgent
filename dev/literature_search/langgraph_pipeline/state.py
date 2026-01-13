@@ -7,13 +7,23 @@ from typing import Dict, List, Any, Optional
 from pathlib import Path
 
 
+def _default_providers():
+    """Lazy load default providers from config."""
+    try:
+        from config import get_config
+
+        return get_config().default_providers
+    except:
+        return ["pubmed"]  # Fallback
+
+
 @dataclass
 class SearchState:
     """Shared state passed between nodes."""
 
     research_question: str
     domain: str = "epidemiology"
-    providers: List[str] = field(default_factory=lambda: ["pubmed", "eric"])
+    providers: List[str] = field(default_factory=_default_providers)
     terms: Dict[str, Any] = field(
         default_factory=dict
     )  # e.g., KeywordSet-like dict {"primary_keywords": [...]}

@@ -1,0 +1,11 @@
+{
+  "research_question": "Association between PM2.5 air pollution and cardiovascular disease mortality",
+  "domain": "environmental_epi",
+  "params": {
+    "use_scoping": true,
+    "pubmed_year_range": "2015:2024",
+    "pubmed_retmax": 500,
+    "max_queries": 12,
+    "use_llm_queries": true
+  }
+}

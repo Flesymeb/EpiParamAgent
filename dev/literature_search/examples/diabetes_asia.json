@@ -1,0 +1,10 @@
+{
+  "research_question": "Risk factors for type 2 diabetes in Asian populations",
+  "domain": "chronic_disease",
+  "params": {
+    "pubmed_year_range": "2010:2024",
+    "pubmed_retmax": 400,
+    "max_queries": 10,
+    "use_llm_queries": false
+  }
+}

@@ -27,6 +27,7 @@ Format your response as a JSON object with these keys:
 - context_terms: List[str]
 
 Be comprehensive but focused. Use empty lists for unknown categories.
+For PubMed compatibility, prefer 1-3 word terms, avoid long phrases, and avoid combining two concepts into a single phrase (for example, use "case isolation" and "delay" separately instead of "case isolation delay interval").
 [/SYSTEM]
 
 [USER]

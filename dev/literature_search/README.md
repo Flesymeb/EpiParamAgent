@@ -25,12 +25,25 @@ pip install -r requirements-full.txt
 
 ### Configuration
 
+Create your `.env` file:
+
 ```bash
 cp .env.example .env
 # Edit .env and add your API keys:
 # - LLM_PROVIDER and ANTHROPIC_API_KEY or OPENAI_API_KEY (required)
 # - NCBI_API_KEY and NCBI_EMAIL (highly recommended for PubMed)
 # - EMBASE_API_KEY (optional, requires institutional subscription)
+```
+
+Customize pipeline behavior (optional):
+
+```bash
+# Edit configs/pipeline_config.yaml to control:
+# - Data sources (default: PubMed only)
+# - Query generation (LLM vs rule-based)
+# - Result limits and filters
+# - Screening criteria
+# See docs/CONFIGURATION.md for details
 ```
 
 ### Run Literature Search
@@ -101,8 +114,35 @@ scoping_search (optional)
 
 ### Optional: ERIC (FREE - Education Database)
 
-- **Coverage**: Education research (lower relevance for pure epidemiology)
-- **Status**: Included but de-emphasized for epidemiology use cases
+- **Coverage**: Education research (NOT recommended for epidemiology)
+- **Status**: Removed from default pipeline (configure in `configs/pipeline_config.yaml` if needed)
+
+## Configuration
+
+The system uses YAML configuration files for fine-grained control. See [docs/CONFIGURATION.md](docs/CONFIGURATION.md) for complete documentation.
+
+**Key settings** in `configs/pipeline_config.yaml`:
+
+```yaml
+# Data sources (default: PubMed only)
+default_providers:
+  - pubmed
+
+# Query generation (LLM vs rule-based)
+query_generation:
+  use_llm_queries: true
+  fallback_to_rules: true
+
+# Result limits
+pubmed:
+  max_results: 500
+  year_filter: null  # or "2020-2024"
+```
+
+**Quick configurations**:
+
+- **Production** (default): `configs/pipeline_config.yaml`
+- **Testing/debugging**: `configs/test_config.yaml` (fewer queries, smaller results)
 
 ## Examples
 
