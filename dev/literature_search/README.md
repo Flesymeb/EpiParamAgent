@@ -8,8 +8,47 @@ Systematic literature search and screening pipeline optimized for **epidemiology
 - **Query generation**: LLM-based generation of comprehensive search terms (exposures, outcomes, risk factors, study designs)
 - **Multi-source retrieval**: PubMed (primary) + ERIC (optional) + Embase (placeholder for institutional access)
 - **LLM-based screening**: Automated abstract screening with epidemiologic study design evaluation
+- **🆕 Multi-dimensional scoring**: 7-dimension relevance assessment (HIGH/MEDIUM/LOW) instead of binary include/exclude
 - **De-duplication**: Cross-database duplicate detection
 - **Export formats**: CSV, JSON, PRISMA flowcharts
+
+## What's New
+
+### 🎯 Multi-Dimensional Relevance Scoring
+
+Go beyond binary screening! Evaluate papers across 7 critical dimensions for COVID-19 epidemiology:
+
+```python
+graph = build_graph().compile()
+
+result = run_once(
+    graph,
+    research_question="What is the serial interval of COVID-19?",
+    workdir="outputs/my_run",
+    params={
+        "llm_screen": True,
+        "use_multidim_screening": True,  # 🔥 Enable multi-dimensional mode
+    }
+)
+
+# Each paper gets dimension scores
+for paper in result.included:
+    print(paper["overall_score"])  # 0.0-1.0 weighted score
+    print(paper["dimension_scores"])  # {disease_relevance: "HIGH", ...}
+```
+
+**7 Evaluation Dimensions:**
+
+1. Disease Relevance (20%)
+2. Original Empirical Data (20%)
+3. Population-Level Study (15%)
+4. Parameter Availability (15%)
+5. Statistical Usability (10%)
+6. Design Relevance (10%)
+7. Parameter Alignment (10%)
+
+📖 **See [docs/MULTIDIM_SCREENING.md](docs/MULTIDIM_SCREENING.md)** for complete guide  
+🔬 **See [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** for technical details
 
 ## Quick Start
 

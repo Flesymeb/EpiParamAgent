@@ -68,7 +68,7 @@ class PubMedClient:
         api_key: Optional[str] = None,
         email: Optional[str] = None,
         tool: str = "meta-analysis-literature-search",
-        medline_only: bool = True,  # Whether to restrict to MEDLINE indexed articles
+        medline_only: bool = False,  # Whether to restrict to MEDLINE indexed articles (default: False to include more sources)
     ):
         self.api_key = (
             api_key or os.getenv("NCBI_API_KEY") or os.getenv("PUBMED_API_KEY")
@@ -261,6 +261,9 @@ class PubMedClient:
         papers: List[Paper] = []
         for article in root.findall(".//PubmedArticle"):
             if self.medline_only and not self._is_medline(article):
+                logger.debug(
+                    f"Skipping non-MEDLINE article: {self._text(article.find('.//PMID'))}"
+                )
                 continue
             paper = self._parse_article(article)
             if paper:
@@ -288,6 +291,11 @@ class PubMedClient:
             journal = self._text(article.find(".//Journal/Title")) or ""
             is_medline = self._is_medline(article)
 
+            # Construct comment field with metadata
+            mc = article.find(".//MedlineCitation")
+            mc_status = mc.get("Status", "Unknown") if mc is not None else "Unknown"
+            comment_str = f"MEDLINE={is_medline}|Status={mc_status}"
+
             return Paper(
                 id=f"pubmed:{pmid}" if pmid else "",
                 title=title,
@@ -298,7 +306,7 @@ class PubMedClient:
                 pdf_url="",
                 categories=[journal] if journal else [],
                 primary_category=journal,
-                comment=f"MEDLINE={is_medline}",
+                comment=comment_str,
                 journal_ref=journal or None,
                 doi=doi,
                 citation_count=0,
@@ -309,13 +317,29 @@ class PubMedClient:
             return None
 
     def _extract_abstract(self, article: ET.Element) -> str:
+        """Extract abstract, falling back to OtherAbstract (e.g., Chinese) if English is missing."""
         parts = []
+
+        # Try English abstract first
         for node in article.findall(".//Abstract/AbstractText"):
             label = node.get("Label")
             text = self._text(node)
             if not text:
                 continue
             parts.append(f"{label}: {text}" if label else text)
+
+        # If no English abstract, try OtherAbstract (e.g., Chinese, Publisher)
+        if not parts:
+            for other_abstract in article.findall(".//OtherAbstract"):
+                lang = other_abstract.get("Language", "")
+                for node in other_abstract.findall("AbstractText"):
+                    text = self._text(node)
+                    if not text:
+                        continue
+                    # Mark as non-English abstract
+                    prefix = f"[{lang.upper()}] " if lang else "[OTHER] "
+                    parts.append(prefix + text)
+
         return "\n".join(parts).strip()
 
     def _extract_authors(self, article: ET.Element) -> List[str]:
@@ -384,6 +408,8 @@ class PubMedClient:
     def _text(self, node: Optional[ET.Element]) -> Optional[str]:
         if node is None:
             return None
-        if node.text is None:
+        # Use itertext() to get all text including from child elements (e.g., <b>, <i>)
+        text = "".join(node.itertext()).strip()
+        if not text:
             return None
-        return html.unescape(node.text.strip())
+        return html.unescape(text)

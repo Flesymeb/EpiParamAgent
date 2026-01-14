@@ -159,8 +159,12 @@ def _sanitize_eric_queries(query_list: List[str]) -> List[str]:
     return clean
 
 
-def _load_autoscreen_prompt() -> tuple[str, str]:
-    """Load autoscreen prompt from default file, fallback to defaults."""
+def _load_autoscreen_prompt(use_multidim: bool = False) -> tuple[str, str]:
+    """Load autoscreen prompt from file, fallback to defaults.
+
+    Args:
+        use_multidim: If True, loads multi-dimensional screening prompt
+    """
     default_system = (
         "You are screening academic abstracts for a literature review. "
         "Think privately and do not reveal chain-of-thought. "
@@ -176,9 +180,12 @@ def _load_autoscreen_prompt() -> tuple[str, str]:
         "Return JSON with keys 'decision' (include/exclude) and 'reason' (brief)."
     )
 
-    path = Path(__file__).parent / "prompts" / "autoscreen.md"
+    # Choose prompt file based on screening mode
+    prompt_file = "multidim_screening.md" if use_multidim else "autoscreen.md"
+    path = Path(__file__).parent / "prompts" / prompt_file
 
     if not path.exists():
+        logger.warning(f"Prompt file not found: {path}, using defaults")
         return default_system, default_user
 
     try:
@@ -568,8 +575,10 @@ def retrieve_pubmed(state: SearchState, *, retmax: int = 500, **_: Any) -> Searc
     if per_query_limit is None and total_limit is not None:
         per_query_limit = max(1, total_limit // max(1, len(query_list)))
 
-    # Get medline_only setting from params (default True for high quality)
-    medline_only = state.params.get("include_medline_only", True)
+    # Get medline_only setting from params (default False to include all PubMed records)
+    # Note: PubMed-not-MEDLINE articles can be high quality (e.g., Frontiers journals)
+    # and often contain epidemiological studies. Use False to maximize recall.
+    medline_only = state.params.get("include_medline_only", False)
     client = PubMedClient(medline_only=medline_only)
     year_filter = _resolve_year_filter(state.params, "pubmed")
     totals = state.metrics.setdefault("provider_totals", {}).setdefault("pubmed", {})
@@ -690,6 +699,141 @@ def retrieve_eric(
     return {"eric_records": recs}
 
 
+def _process_screening_batch(
+    prompts_and_records: List[Tuple[Dict[str, Any], Any]],
+    llm_model: Any,
+    use_multidim: bool,
+    dimension_weights: Optional[Dict] = None,
+    aggregation_config: Optional[Dict] = None,
+    batch_size: int = 10,
+    included: List[Dict] = None,
+    excluded: List[Dict] = None,
+) -> None:
+    """批量处理LLM筛选，使用并行API调用提升速度
+
+    Args:
+        prompts_and_records: List of (record, prompt) tuples
+        llm_model: LLM model instance
+        use_multidim: Whether to use multi-dimensional scoring
+        dimension_weights: Weights for dimensions
+        aggregation_config: Aggregation configuration
+        batch_size: Number of records per batch
+        included: List to append included records
+        excluded: List to append excluded records
+    """
+    import asyncio
+    from typing import List as TypingList
+
+    if included is None:
+        included = []
+    if excluded is None:
+        excluded = []
+
+    # 分批处理
+    for i in range(0, len(prompts_and_records), batch_size):
+        batch = prompts_and_records[i : i + batch_size]
+        batch_prompts = [prompt for _, prompt in batch]
+        batch_records = [rec for rec, _ in batch]
+
+        try:
+            if use_multidim:
+                # 多维度评分批处理
+                from screening.dimension_scoring import EpiDimensionScores
+
+                structured_llm = llm_model.with_structured_output(EpiDimensionScores)
+
+                # 使用batch调用
+                results = structured_llm.batch(batch_prompts)
+
+                for rec, result in zip(batch_records, results):
+                    try:
+                        # 计算分数
+                        result.calculate_overall_score(weights=dimension_weights)
+                        if result.recommendation is None:
+                            thresholds = aggregation_config.get("thresholds", {})
+                            result.calculate_recommendation(
+                                high_threshold=thresholds.get("include", 0.70),
+                                maybe_threshold=thresholds.get("maybe", 0.40),
+                            )
+
+                        # 存储结果
+                        rec["dimension_scores"] = result.get_dimension_summary()
+                        rec["dimension_rationales"] = result.rationales or {}
+                        rec["overall_score"] = result.overall_score
+                        rec["screen_decision"] = (
+                            result.recommendation.lower()
+                            if result.recommendation
+                            else "maybe"
+                        )
+                        rec["screen_reason"] = (
+                            f"multidim_score={result.overall_score:.2f}"
+                        )
+                        rec["confidence"] = result.confidence
+
+                        # 分类
+                        if result.recommendation in ["INCLUDE", "MAYBE"]:
+                            included.append(rec)
+                        else:
+                            excluded.append(rec)
+                    except Exception as e:
+                        logger.warning(
+                            f"Processing failed for record {rec.get('id')}: {e}"
+                        )
+                        rec["screen_reason"] = f"llm_error:{e}"
+                        rec["screen_decision"] = "include"
+                        rec["overall_score"] = None
+                        included.append(rec)
+            else:
+                # 二分类批处理
+                import json as _json
+
+                results = llm_model.batch(batch_prompts)
+
+                for rec, resp in zip(batch_records, results):
+                    try:
+                        content = str(resp.content).strip()
+                        decision = "include"
+                        reason = "llm_pass"
+
+                        match = re.search(r"\{.*\}", content, re.DOTALL)
+                        payload = _json.loads(match.group(0) if match else content)
+                        decision = str(payload.get("decision", decision)).lower()
+                        reason = str(payload.get("reason", reason))
+                        study_design = payload.get("study_design", "unknown")
+
+                        rec["screen_reason"] = reason
+                        rec["screen_decision"] = decision
+                        rec["study_design"] = study_design
+
+                        if decision == "include":
+                            included.append(rec)
+                        else:
+                            excluded.append(rec)
+                    except Exception as e:
+                        logger.warning(
+                            f"Parsing failed for record {rec.get('id')}: {e}"
+                        )
+                        if "exclude" in content.lower():
+                            decision = "exclude"
+                            excluded.append(rec)
+                        else:
+                            rec["screen_reason"] = f"llm_error:{e}"
+                            rec["screen_decision"] = "include"
+                            included.append(rec)
+
+        except Exception as e:
+            logger.error(f"Batch processing failed: {e}")
+            # Fallback: 标记所有记录为失败并纳入
+            for rec in batch_records:
+                rec["screen_reason"] = f"batch_error:{e}"
+                rec["screen_decision"] = "include"
+                included.append(rec)
+
+        logger.info(
+            f"Processed batch {i//batch_size + 1}/{(len(prompts_and_records)-1)//batch_size + 1}"
+        )
+
+
 def normalize_and_dedupe(state: SearchState, **_: Any) -> SearchState:
     """Normalize schema and dedupe across all sources."""
     # Merge per-source records into raw_records for downstream use
@@ -727,12 +871,23 @@ def autoscreen_and_export(
     *,
     min_year: Optional[int] = None,
     export_dir: Optional[Path] = None,
+    use_multidim_screening: Optional[bool] = None,
 ) -> SearchState:
-    """Simple rules-based screening placeholder; swap with your own logic/LLM."""
+    """Screen records using rule-based filtering and optional LLM screening.
+
+    Args:
+        state: Current search state
+        min_year: Minimum publication year (excludes older papers)
+        export_dir: Directory for export files
+        use_multidim_screening: If True, uses multi-dimensional relevance scoring
+            instead of binary include/exclude. If None, reads from params.
+    """
     if min_year is None:
         min_year = state.params.get("min_year")
     if export_dir is None:
         export_dir = state.workdir / "outputs" if state.workdir else None
+    if use_multidim_screening is None:
+        use_multidim_screening = state.params.get("use_multidim_screening", False)
 
     included: List[Dict[str, Any]] = []
     excluded: List[Dict[str, Any]] = []
@@ -773,59 +928,170 @@ def autoscreen_and_export(
             llm_model = None
 
     if llm_model and state.params.get("llm_screen"):
-        system_text, user_text = _load_autoscreen_prompt()
+        # Load dimension criteria if using multi-dimensional screening
+        dimensions_text = ""
+        dimension_weights = None
+        aggregation_config = None
+
+        if use_multidim_screening:
+            try:
+                from screening.dimension_loader import load_and_format_dimensions
+                from screening.dimension_scoring import EpiDimensionScores
+
+                dimensions_text, dimension_weights, aggregation_config = (
+                    load_and_format_dimensions(include_weights=False)
+                )
+                logger.info(
+                    "Multi-dimensional screening enabled with 7 evaluation dimensions"
+                )
+            except Exception as e:
+                logger.error(f"Failed to load dimension config: {e}")
+                logger.info("Falling back to binary screening")
+                use_multidim_screening = False
+
+        system_text, user_text = _load_autoscreen_prompt(
+            use_multidim=use_multidim_screening
+        )
+
+        # Inject dimensions into prompt if multi-dimensional
+        if use_multidim_screening and dimensions_text:
+            user_text = user_text.replace("{dimensions_with_criteria}", dimensions_text)
+
         template = ChatPromptTemplate.from_messages(
             [
                 ("system", system_text),
                 ("human", user_text),
             ]
         )
-        for rec in rule_passed:
-            try:
-                key_terms = []
-                if state.terms:
-                    key_terms = (
-                        state.terms.get("primary_keywords", [])
-                        + state.terms.get("synonyms", [])
-                        + state.terms.get("related_terms", [])
-                    )
-                key_terms = [str(t) for t in key_terms if t]
-                key_terms = key_terms[:20]
-                prompt = template.format_messages(
-                    research_question=state.research_question,
-                    key_terms=", ".join(key_terms),
-                    title=rec.get("title", ""),
-                    abstract=rec.get("abstract", ""),
-                    year=str(rec.get("year") or ""),
-                )
-                resp = llm_model.invoke(prompt)
-                content = str(resp.content).strip()
-                decision = "include"
-                reason = "llm_pass"
-                try:
-                    import re
-                    import json as _json
 
-                    match = re.search(r"\{.*\}", content, re.DOTALL)
-                    payload = _json.loads(match.group(0) if match else content)
-                    decision = str(payload.get("decision", decision)).lower()
-                    reason = str(payload.get("reason", reason))
-                except Exception:
-                    if "exclude" in content.lower():
-                        decision = "exclude"
-                rec["screen_reason"] = reason
-                rec["screen_decision"] = decision
-                if decision == "include":
-                    included.append(rec)
-                else:
-                    excluded.append(rec)
-            except Exception as e:
-                rec["screen_reason"] = f"llm_error:{e}"
-                rec["screen_decision"] = "include"
-                included.append(rec)  # fail-open
+        # 批处理配置
+        batch_size = state.params.get("autoscreen_batch_size", 10)
+        use_batch = state.params.get("use_batch_screening", True)
+
+        # 准备所有prompts和对应的records
+        key_terms = []
+        if state.terms:
+            key_terms = (
+                state.terms.get("primary_keywords", [])
+                + state.terms.get("synonyms", [])
+                + state.terms.get("related_terms", [])
+            )
+        key_terms = [str(t) for t in key_terms if t]
+        key_terms = key_terms[:20]
+        key_terms_str = ", ".join(key_terms)
+
+        all_prompts = []
+        for rec in rule_passed:
+            prompt = template.format_messages(
+                research_question=state.research_question,
+                key_terms=key_terms_str,
+                title=rec.get("title", ""),
+                abstract=rec.get("abstract", ""),
+                year=str(rec.get("year") or ""),
+            )
+            all_prompts.append((rec, prompt))
+
+        # 批量处理或串行处理
+        if use_batch and len(all_prompts) > 5:
+            logger.info(f"Using batch screening with batch_size={batch_size}")
+            _process_screening_batch(
+                all_prompts,
+                llm_model,
+                use_multidim_screening,
+                dimension_weights,
+                aggregation_config,
+                batch_size,
+                included,
+                excluded,
+            )
+        else:
+            logger.info("Using serial screening")
+            for rec, prompt in all_prompts:
+                try:
+                    if use_multidim_screening:
+                        # Use structured output with Pydantic model
+                        try:
+                            structured_llm = llm_model.with_structured_output(
+                                EpiDimensionScores
+                            )
+                            result = structured_llm.invoke(prompt)
+
+                            # Calculate scores
+                            result.calculate_overall_score(weights=dimension_weights)
+
+                            # Calculate recommendation if not already set
+                            if result.recommendation is None:
+                                thresholds = aggregation_config.get("thresholds", {})
+                                result.calculate_recommendation(
+                                    high_threshold=thresholds.get("include", 0.70),
+                                    maybe_threshold=thresholds.get("maybe", 0.40),
+                                )
+
+                            # Store dimension scores in record
+                            rec["dimension_scores"] = result.get_dimension_summary()
+                            rec["dimension_rationales"] = result.rationales or {}
+                            rec["overall_score"] = result.overall_score
+                            rec["screen_decision"] = (
+                                result.recommendation.lower()
+                                if result.recommendation
+                                else "maybe"
+                            )
+                            rec["screen_reason"] = (
+                                f"multidim_score={result.overall_score:.2f}"
+                            )
+                            rec["confidence"] = result.confidence
+
+                            # Classify into included/excluded based on recommendation
+                            if result.recommendation in ["INCLUDE", "MAYBE"]:
+                                included.append(rec)
+                            else:
+                                excluded.append(rec)
+
+                        except Exception as e:
+                            logger.warning(
+                                f"Structured output failed for record {rec.get('id')}: {e}"
+                            )
+                            # Fail-open: include with error marker
+                            rec["screen_reason"] = f"llm_error:{e}"
+                            rec["screen_decision"] = "include"
+                            rec["overall_score"] = None
+                            included.append(rec)
+
+                    else:
+                        # Binary screening (original logic)
+                        resp = llm_model.invoke(prompt)
+                        content = str(resp.content).strip()
+                        decision = "include"
+                        reason = "llm_pass"
+                        try:
+                            import json as _json
+
+                            match = re.search(r"\{.*\}", content, re.DOTALL)
+                            payload = _json.loads(match.group(0) if match else content)
+                            decision = str(payload.get("decision", decision)).lower()
+                            reason = str(payload.get("reason", reason))
+                        except Exception:
+                            if "exclude" in content.lower():
+                                decision = "exclude"
+                        rec["screen_reason"] = reason
+                        rec["screen_decision"] = decision
+                        if decision == "include":
+                            included.append(rec)
+                        else:
+                            excluded.append(rec)
+
+                except Exception as e:
+                    logger.error(
+                        f"LLM screening failed for record {rec.get('id')}: {e}"
+                    )
+                    rec["screen_reason"] = f"llm_error:{e}"
+                    rec["screen_decision"] = "include"
+                    included.append(rec)  # fail-open
+
         state.metrics.setdefault("llm_calls", {})["screening"] = {
             "status": "ok",
             "provider": llm_provider,
+            "mode": "multidimensional" if use_multidim_screening else "binary",
         }
     else:
         for rec in rule_passed:

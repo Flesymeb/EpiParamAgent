@@ -4,8 +4,19 @@ from __future__ import annotations
 
 import csv
 import json
+import sys
 from pathlib import Path
 from typing import Iterable, Dict, Any, Optional, Sequence
+
+# Set CSV field size limit to maximum possible value
+# Try sys.maxsize first, fall back to 2GB on Windows where sys.maxsize may overflow
+try:
+    csv.field_size_limit(sys.maxsize)
+except (AttributeError, ValueError, OverflowError):
+    try:
+        csv.field_size_limit(2**31 - 1)  # 2GB, works on most systems
+    except (AttributeError, ValueError, OverflowError):
+        pass  # Use default limit if all attempts fail
 
 
 def export_records(
@@ -17,6 +28,7 @@ def export_records(
     write_csv: bool = True,
     fieldnames: Optional[Sequence[str]] = None,
     metadata: Optional[Dict[str, Any]] = None,
+    flatten_dimension_scores: bool = True,
 ) -> Dict[str, Path]:
     """Export records to JSON/CSV for downstream pipelines.
 
@@ -28,6 +40,8 @@ def export_records(
         write_csv: Whether to write CSV output.
         fieldnames: Optional explicit CSV columns.
         metadata: Optional metadata to include in JSON output.
+        flatten_dimension_scores: If True, expands dimension_scores dict into
+            separate columns for CSV export (e.g., dim_disease_relevance).
 
     Returns:
         Mapping of output type to path.
@@ -45,13 +59,70 @@ def export_records(
 
     if write_csv:
         csv_path = output_dir / f"{basename}.csv"
-        if fieldnames is None and records_list:
-            fieldnames = list(records_list[0].keys())
+
+        # Prepare records for CSV - flatten dimension scores if present
+        csv_records = []
+        for rec in records_list:
+            csv_rec = dict(rec)
+
+            # Flatten dimension_scores dict into separate columns
+            if flatten_dimension_scores and "dimension_scores" in csv_rec:
+                dim_scores = csv_rec.pop("dimension_scores")
+                if isinstance(dim_scores, dict):
+                    for dim_name, dim_value in dim_scores.items():
+                        csv_rec[f"dim_{dim_name}"] = dim_value
+
+            # Remove nested structures that don't work well in CSV
+            if "dimension_rationales" in csv_rec:
+                # Store as JSON string in CSV
+                csv_rec["dimension_rationales_json"] = json.dumps(
+                    csv_rec.pop("dimension_rationales")
+                )
+
+            # Keep other fields as-is
+            csv_records.append(csv_rec)
+
+        if fieldnames is None and csv_records:
+            # Auto-detect fieldnames, ensuring dimension columns come after standard fields
+            standard_fields = [
+                "id",
+                "title",
+                "authors",
+                "year",
+                "abstract",
+                "journal",
+                "doi",
+                "source",
+                "screen_decision",
+                "screen_reason",
+                "overall_score",
+                "confidence",
+            ]
+            all_keys = set()
+            for rec in csv_records:
+                all_keys.update(rec.keys())
+
+            # Order: standard fields first, then dimension fields, then others
+            fieldnames = []
+            for field in standard_fields:
+                if field in all_keys:
+                    fieldnames.append(field)
+                    all_keys.remove(field)
+
+            # Add dimension score fields
+            dim_fields = sorted([k for k in all_keys if k.startswith("dim_")])
+            fieldnames.extend(dim_fields)
+            for f in dim_fields:
+                all_keys.remove(f)
+
+            # Add remaining fields
+            fieldnames.extend(sorted(all_keys))
+
         with csv_path.open("w", encoding="utf-8", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames or [])
             if fieldnames:
                 writer.writeheader()
-                for record in records_list:
+                for record in csv_records:
                     writer.writerow(record)
         outputs["csv"] = csv_path
 
