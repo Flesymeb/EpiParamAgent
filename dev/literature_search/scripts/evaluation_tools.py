@@ -8,10 +8,10 @@
 
 使用示例：
     # 评估搜索覆盖率
-    python evaluation_tools.py search-coverage --ground-truth outputs/raw.csv --search-results langgraph_runs/ground_truth/search_v2.csv
+    python evaluation_tools.py search-coverage --ground-truth ../langgraph_runs/ground_truth/search_v2/search_v2_gt.csv --search-results ../langgraph_runs/ground_truth/search_v2/search_v2_raw.csv
 
     # 评估筛选效果（含混淆矩阵）
-    python evaluation_tools.py screening-performance --ground-truth ../langgraph_runs/ground_truth/search_v2_gt.csv --screened-results ../langgraph_runs/ground_truth/search_v2_screened_v6.csv
+    python evaluation_tools.py screening-performance --ground-truth ../langgraph_runs/ground_truth/search_v2/search_v2_gt.csv --screened-results ../langgraph_runs/ground_truth/search_v2/test_screen/search_v2_screened.csv
 
     # 评估检索召回率
     python evaluation_tools.py retrieval-metrics --ground-truth outputs/raw.csv --retrieved-results langgraph_runs/results/raw_pubmed.jsonl
@@ -230,21 +230,19 @@ def evaluate_screening_performance(
 
     # 混淆矩阵
     print(f"\n\n" + "=" * 100)
-    print(f"\n📋 混淆矩阵分析\n")
-    print("定义:")
-    print("  - 相关(Relevant): Strong or Possible candidates")
-    print("  - 不相关(Irrelevant): Unlikely candidates\n")
-
-    # Ground truth的分类
-    TP = combined_relevant  # Ground truth被正确识别为相关
-    FN = len(unlikely) + len(not_found)  # Ground truth被错误标记为不相关
+    print(f"\n📋 混淆矩阵分析（三分类）\n")
 
     # 非ground truth的分类
     non_gt_pmids = set(screened.keys()) - set(ground_truth.keys())
-    FP = sum(
+    FP_strong = sum(
         1
         for pmid in non_gt_pmids
-        if screened[pmid]["llm_suggest"] in ["strong_candidate", "possible_candidate"]
+        if screened[pmid]["llm_suggest"] == "strong_candidate"
+    )
+    FP_possible = sum(
+        1
+        for pmid in non_gt_pmids
+        if screened[pmid]["llm_suggest"] == "possible_candidate"
     )
     TN = sum(
         1
@@ -257,12 +255,32 @@ def evaluate_screening_performance(
     print(f"│                         │   实际相关(GT)   │   实际不相关     │")
     print(f"├─────────────────────────┼──────────────────┼──────────────────┤")
     print(
-        f"│ 预测相关(S+P)           │   TP = {TP:2d}        │   FP = {FP:2d}        │"
+        f"│ 💪 Strong               │      {len(strong):2d}          │      {FP_strong:2d}          │"
     )
     print(f"├─────────────────────────┼──────────────────┼──────────────────┤")
     print(
-        f"│ 预测不相关(Unlikely)    │   FN = {FN:2d}        │   TN = {TN:2d}        │"
+        f"│ 🤔 Possible             │      {len(possible):2d}          │      {FP_possible:2d}          │"
     )
+    print(f"├─────────────────────────┼──────────────────┼──────────────────┤")
+    print(
+        f"│ 😐 Unlikely             │      {len(unlikely)+len(not_found):2d}          │      {TN:2d}         │"
+    )
+    print(f"└─────────────────────────┴──────────────────┴──────────────────┘")
+
+    # 合并后的二分类混淆矩阵
+    print(f"\n\n📋 混淆矩阵（合并S+P为相关）\n")
+    TP = combined_relevant  # Ground truth被正确识别为相关
+    FN = len(unlikely) + len(not_found)  # Ground truth被错误标记为不相关
+    FP = FP_strong + FP_possible  # 非GT被错误标记为相关
+
+    print(f"┌─────────────────────────┬──────────────────┬──────────────────┐")
+    print(f"│                         │   实际相关(GT)   │   实际不相关     │")
+    print(f"├─────────────────────────┼──────────────────┼──────────────────┤")
+    print(
+        f"│ 预测相关(S+P)           │   TP = {TP:2d}        │   FP = {FP:2d}        │"
+    )
+    print(f"├─────────────────────────┼──────────────────┼──────────────────┤")
+    print(f"│ 预测不相关(Unlikely)    │   FN = {FN:2d}        │   TN = {TN:2d}       │")
     print(f"└─────────────────────────┴──────────────────┴──────────────────┘")
 
     # 性能指标
@@ -285,17 +303,17 @@ def evaluate_screening_performance(
         f"│ 📈 Sensitivity (召回率)     │ {sensitivity:6.1%}  │ TP/(TP+FN) = {TP}/{TP+FN:2d}      │"
     )
     print(
-        f"│ 🎯 Specificity (特异度)     │ {specificity:6.1%}  │ TN/(TN+FP) = {TN}/{TN+FP:2d}      │"
+        f"│ 🎯 Specificity (特异度)     │ {specificity:6.1%}  │ TN/(TN+FP) = {TN}/{TN+FP:2d}    │"
     )
     print(
         f"│ 💎 Precision (精确率)       │ {precision:6.1%}  │ TP/(TP+FP) = {TP}/{TP+FP:2d}      │"
     )
     print(
-        f"│ ✅ NPV (阴性预测值)         │ {npv:6.1%}  │ TN/(TN+FN) = {TN}/{TN+FN:2d}      │"
+        f"│ ✅ NPV (阴性预测值)         │ {npv:6.1%}  │ TN/(TN+FN) = {TN}/{TN+FN:2d}    │"
     )
     print(f"│ 🏆 F1-score                 │ {f1:6.1%}  │ 2×P×R/(P+R)             │")
     print(
-        f"│ ✨ Accuracy (准确率)        │ {accuracy:6.1%}  │ (TP+TN)/Total = {TP+TN}/{TP+TN+FP+FN}   │"
+        f"│ ✨ Accuracy (准确率)        │ {accuracy:6.1%}  │ (TP+TN)/Total = {TP+TN}/{TP+TN+FP+FN} │"
     )
     print(f"└─────────────────────────────┴─────────┴─────────────────────────┘")
 

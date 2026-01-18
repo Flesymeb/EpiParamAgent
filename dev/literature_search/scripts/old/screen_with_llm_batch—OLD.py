@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 使用LLM批量并行筛选文献，根据标题和摘要判断是否符合研究问题
-python screen_with_llm_batch.py --input ../langgraph_runs/ground_truth/search_v2/search_v2_raw.csv --output ../langgraph_runs/ground_truth/search_v2/test_screen/search_v2_screened.csv --ground-truth ../langgraph_runs/ground_truth/search_v2/search_v2_gt.csv --config V2 --batch-size 30
 """
 
 import argparse
@@ -23,7 +22,7 @@ import time
 import asyncio
 from pathlib import Path
 from typing import List, Dict, Any, Optional
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 
 # 加载环境变量
@@ -70,24 +69,10 @@ class ScreeningDecision(BaseModel):
     llm_suggest: str = Field(
         description="strong_candidate / possible_candidate / unlikely_candidate"
     )
-    overall_score: Optional[int] = Field(
-        default=None,
-        description="整体相关性评分 0-4，由系统自动计算加权平均（Disease 30% + Transmission 30% + Evidence 25% + Population 10% + Location 5%）",
+    overall_score: int = Field(
+        description="整体相关性评分 0-4 (0=不相关, 1=基本不相关, 2=不确定, 3=比较相关, 4=高度相关)"
     )
     overall_justification: str = Field(description="整体评估理由，2-3句话")
-
-    @model_validator(mode="after")
-    def calculate_overall_score(self):
-        """自动计算加权平均overall_score"""
-        weighted_score = (
-            0.30 * self.disease_relevance.score
-            + 0.30 * self.transmission_metric.score
-            + 0.25 * self.original_evidence.score
-            + 0.10 * self.population_relevance.score
-            + 0.05 * self.location_relevance.score
-        )
-        self.overall_score = round(weighted_score)
-        return self
 
 
 def load_ground_truth_pmids(gt_file: Path) -> set:
@@ -175,7 +160,6 @@ async def screen_papers_batch_async(
     research_question: str,
     llm_model: Any,
     batch_size: int = 20,
-    screening_config: Optional[Dict[str, Any]] = None,
 ) -> List[Dict[str, Any]]:
     """
     批量异步并行筛选文献
@@ -185,40 +169,32 @@ async def screen_papers_batch_async(
         research_question: 研究问题
         llm_model: LLM模型实例
         batch_size: 每批并发处理的文献数量
-        screening_config: 筛选配置字典（见screening_config_examples.py）
 
     Returns:
         添加了筛选结果的文献列表
     """
-    # 默认配置（COVID-19变异株传播）
-    default_config = {
-        "research_question": research_question,
-        "disease_focus": "(SARS-CoV-2 OR COVID-19 OR 2019-nCoV OR coronavirus) AND its (variant OR mutation OR lineage OR amino acid substitution)",
-        "disease_exclude": "studies that focus solely on other diseases or wild-type only without variant comparison",
-        "transmission_focus": "transmission metrics **related to the specific disease focus** (e.g., reproduction number, serial interval, attack rate, transmission probability)",
-        "transmission_exclude": "studies that only discuss clinical outcomes, severity, or vaccine effectiveness without transmission quantification",
-    }
-
-    # 合并用户配置
-    config = {**default_config, **(screening_config or {})}
-
     # 创建prompt模板
-    system_text = f"""You are assisting in the screening of academic papers for a systematic review in epidemiology.
+    system_text = """You are assisting in the screening of academic papers for a systematic review in epidemiology.
 
 Your task is NOT to make a final inclusion or exclusion decision.
 Instead, you should assess the relevance of each study across multiple predefined dimensions and provide a structured relevance annotation.
 
-Assess each study based on the title, abstract, and keywords (if available).
-
-My research question is: {config['research_question']}
+Assess each study based ONLY on the title and abstract.
 
 ### Core Inclusion Criteria (Relevance Dimensions):
 
 A study is considered potentially relevant if it meets all core criteria below.
 
-1. **Disease relevance**
-The study must explicitly investigate {config['disease_focus']}.
-Exclude studies that focus solely on other diseases AND {config['disease_exclude']}.
+1. **Disease relevance (Variant-specific focus)**
+The study must explicitly investigate SARS-CoV-2 **variants/lineages** and their transmission differences.
+
+**Score 4**: Named variants (Alpha, Delta, Omicron, B.1.1.7, etc.) with transmission comparison or variant-specific estimates.
+**Score 3**: Lineages/clades (e.g., "lineage B.1.1.33") OR early 2020 phylogenetic studies comparing distinct strains with reproduction numbers.
+**Score 2**: General COVID-19 with R0/Re but NO variant differentiation (e.g., "R0 of SARS-CoV-2 in population X" from early 2020).
+**Score 1**: COVID-19 study without transmission focus (vaccines, clinical outcomes, diagnostics only).
+**Score 0**: Not about COVID-19/SARS-CoV-2.
+
+**CRITICAL**: Wild-type/original strain ONLY studies (without variant comparison) should score ≤2.
 
 2. **Population relevance**
 The study focuses on humans (general population or predefined subgroups).
@@ -234,59 +210,57 @@ Exclude those without original data: reviews, meta-analyses, editorials, comment
 Exclude theoretical models/simulations that do not report new data (unless calibrated with real-world data reported in the abstract).
 Exclude case reports with less than 2 cases.
 
-5. **Transmission-related content**
-The study explicitly reports {config['transmission_focus']}.
-Exclude studies that only discuss clinical outcomes, severity, or vaccine effectiveness without transmission quantification AND {config['transmission_exclude']}.
+5. **Transmission-related content (Variant-specific metrics)**
+The study reports transmission metrics **related to variants**:
+
+**Score 4**: Numerical R0/Re/Rt values with CIs, explicitly for variants or comparing variants.
+**Score 3**: Quantitative variant-specific transmission metrics (fitness advantage %, growth rate, doubling time, SAR comparison), OR methods state R estimation for variants.
+**Score 2**: Transmission metrics mentioned but unclear if variant-specific, OR qualitative comparison ("more transmissible") with some data.
+**Score 1**: Only vague statements ("highly transmissible") without quantification.
+**Score 0**: No transmission-related content.
+
+**CRITICAL**: If the study only reports R0 for original/wild-type SARS-CoV-2 (without variant context), score should be ≤2, not 3-4.
+
+Exclude studies that only discuss clinical outcomes, severity, or vaccine effectiveness without transmission quantification.
 
 ### For EACH dimension:
-- Provide a relevance score using a 5-point scale with STRICT criteria:
-  
-  **Score 4 (Highly relevant)**: Clear, explicit, CENTRAL focus. Multiple specific keywords. PRIMARY study objective.
-  
-  **Score 3 (Moderately relevant)**: Clearly mentioned with specific evidence. Important component (not just passing mention). Must be EXPLICIT in title/abstract.
-  
-  **Score 2 (Uncertain)**: Vague/indirect mention OR insufficient detail to confirm. May be addressed but not clear.
-  
-  **Score 1 (Mostly not relevant)**: Very weak/tangential mention. Not a focus. Related concept but not the criterion itself.
-  
-  **Score 0 (Not relevant)**: No mention, completely irrelevant, or explicitly excluded.
-
+- Provide a relevance score using a 5-point scale:
+  - **0**: Not relevant / clearly does not meet criterion
+  - **1**: Mostly not relevant / unlikely to meet criterion
+  - **2**: Uncertain / possibly relevant / insufficient information
+  - **3**: Moderately relevant / likely meets criterion
+  - **4**: Highly relevant / clearly meets criterion
 - Provide a brief justification (1–2 sentences)
-
-**CRITICAL SCORING RULES**:
-- Be CONSERVATIVE with scores 3-4. When in doubt between 2 and 3, choose 2.
-- Score 3 requires EXPLICIT mention with specific details (not just related concepts).
-- For Disease & Outcome: BOTH must be clearly present AND related to each other.
-- Avoid "benefit of the doubt" - require clear textual evidence.
 
 ### Overall assessment rules:
 Based on the above dimensions, provide an overall **LLM suggestion** following these strict criteria:
 
-**strong_candidate** (High confidence - ALL must be met):
-  You must consider the question "Does this study actually aim to estimate the parameter we care about?"
-  1. Disease relevance = 4  [REQUIRED]
-  2. Transmission-related content = 4  [REQUIRED]
-  3. Evidence (original data)  ≥ 3  [REQUIRED]
-  4. Population AND Location relevance ≥ 2 
+**strong_candidate** (High confidence - all 3 must be met):
+  1. Disease (variant focus) ≥ 3  [REQUIRED]
+  2. Transmission (variant metrics) ≥ 3  [REQUIRED]
+  3. Evidence (original data) ≥ 3  [REQUIRED]
+  4. Population ≥ 2 AND Location ≥ 2
 
 **possible_candidate** (Moderate confidence - relaxed thresholds):
   1. Disease ≥ 3 AND Transmission ≥ 3  [BOTH REQUIRED]
-  2. Evidence ≥ 2  
-  3. Population AND Location relevance ≥ 2
+  2. Evidence ≥ 2  [At least some original analysis]
+  3. Any score on Population/Location
   
 **unlikely_candidate** (Low confidence - any one triggers):
-  - Disease < 3  [Insufficient disease focus]
-  - Transmission < 3  [Insufficient transmission metrics]
-  - Evidence = 0,1   (no original analysis/data; review/commentary/protocol)
+  - Disease < 3  [No clear variant focus]
+  - Transmission < 3  [No variant-specific transmission data]
+  - Evidence = 0  [Pure review/commentary]
 
-Note: Prefer specificity over sensitivity. It's better to mark unclear cases as "possible" or "unlikely" than to overestimate relevance.
+**Key principle**: Disease and Transmission are MANDATORY dimensions. A paper without variant-specific transmission data cannot be strong/possible, regardless of other scores.
+
+When information is insufficient, prefer "unclear" (Score 2) over "not relevant" (Score 0).
+Prioritize sensitivity over specificity at this stage.
 """
 
     user_text = """Research question: {research_question}
 
 Title: {title}
 Abstract: {abstract}
-Keywords: {keywords}
 
 Assess the relevance of this paper across all dimensions and provide structured annotations."""
 
@@ -302,21 +276,13 @@ Assess the relevance of this paper across all dimensions and provide structured 
     for paper in papers:
         title = paper.get("Title", "").strip()
         abstract = paper.get("Abstract", "").strip()
-        keywords = paper.get("Keywords", "").strip()
 
         # 如果没有摘要，使用特殊说明
         if not abstract:
             abstract = "(No abstract available. Please assess based on title only.)"
 
-        # 如果没有keywords
-        if not keywords:
-            keywords = "(No keywords available)"
-
         prompt = template.format_messages(
-            research_question=research_question,
-            title=title,
-            abstract=abstract,
-            keywords=keywords,
+            research_question=research_question, title=title, abstract=abstract
         )
         all_prompts.append((paper, prompt))
 
@@ -506,12 +472,6 @@ def main():
         "--batch-size", type=int, default=20, help="每批并发处理的文献数量"
     )
     parser.add_argument(
-        "--config",
-        type=str,
-        default=None,
-        help="筛选配置名称 (如 'CONFIG_INFLUENZA_TRANSMISSION'，见screening_config_examples.py)",
-    )
-    parser.add_argument(
         "--use-multidim",
         action="store_true",
         help="使用多维度评分（此参数保留但不影响功能）",
@@ -519,67 +479,10 @@ def main():
 
     args = parser.parse_args()
 
-    # 加载配置
-    screening_config = None
+    # 研究问题
     research_question = (
-        "What are the reproduction numbers of different SARS-CoV-2 variants?"  # 默认值
+        "What are the reproduction numbers of different SARS-CoV-2 variants?"
     )
-    if args.config:
-        try:
-            from screening_config_examples import (
-                CONFIG_SERIAL_INTERVAL,
-                CONFIG_COVID_VARIANTS,
-                CONFIG_SUPERSPREADING,
-                CONFIG_INFLUENZA_TRANSMISSION,
-                CONFIG_MEASLES_TRANSMISSION,
-                CONFIG_EBOLA_TRANSMISSION,
-                CONFIG_TB_TRANSMISSION,
-                CONFIG_GENERIC_INFECTIOUS_DISEASE,
-                CONFIG_OUTBREAK_INVESTIGATION,
-            )
-
-            config_map = {
-                "SERIAL_INTERVAL": CONFIG_SERIAL_INTERVAL,
-                "CONFIG_SERIAL_INTERVAL": CONFIG_SERIAL_INTERVAL,
-                "V1": CONFIG_SERIAL_INTERVAL,
-                "COVID_VARIANTS": CONFIG_COVID_VARIANTS,
-                "CONFIG_COVID_VARIANTS": CONFIG_COVID_VARIANTS,
-                "V2": CONFIG_COVID_VARIANTS,
-                "VARIANTS": CONFIG_COVID_VARIANTS,
-                "SUPERSPREADING": CONFIG_SUPERSPREADING,
-                "CONFIG_SUPERSPREADING": CONFIG_SUPERSPREADING,
-                "V3": CONFIG_SUPERSPREADING,
-                "INFLUENZA": CONFIG_INFLUENZA_TRANSMISSION,
-                "CONFIG_INFLUENZA_TRANSMISSION": CONFIG_INFLUENZA_TRANSMISSION,
-                "MEASLES": CONFIG_MEASLES_TRANSMISSION,
-                "CONFIG_MEASLES_TRANSMISSION": CONFIG_MEASLES_TRANSMISSION,
-                "EBOLA": CONFIG_EBOLA_TRANSMISSION,
-                "CONFIG_EBOLA_TRANSMISSION": CONFIG_EBOLA_TRANSMISSION,
-                "TB": CONFIG_TB_TRANSMISSION,
-                "CONFIG_TB_TRANSMISSION": CONFIG_TB_TRANSMISSION,
-                "GENERIC": CONFIG_GENERIC_INFECTIOUS_DISEASE,
-                "CONFIG_GENERIC_INFECTIOUS_DISEASE": CONFIG_GENERIC_INFECTIOUS_DISEASE,
-                "OUTBREAK": CONFIG_OUTBREAK_INVESTIGATION,
-                "CONFIG_OUTBREAK_INVESTIGATION": CONFIG_OUTBREAK_INVESTIGATION,
-            }
-            screening_config = config_map.get(args.config.upper())
-            if screening_config:
-                # 从配置中提取研究问题
-                if "research_question" in screening_config:
-                    research_question = screening_config["research_question"]
-                print(f"✓ 使用配置: {args.config}")
-                print(f"  Research question: {research_question}")
-                print(f"  Disease focus: {screening_config['disease_focus'][:80]}...")
-                print(
-                    f"  Transmission focus: {screening_config['transmission_focus'][:80]}...\n"
-                )
-            else:
-                print(
-                    f"⚠ 未找到配置 '{args.config}'，使用默认配置（COVID-19 variants）\n"
-                )
-        except ImportError as e:
-            print(f"⚠ 无法加载配置文件: {e}")
-            print("使用默认配置（COVID-19 variants）\n")
 
     # 转换为绝对路径
     script_dir = Path(__file__).parent
@@ -629,9 +532,7 @@ def main():
 
     # 异步并发筛选 - 使用命令行参数的batch_size
     papers = asyncio.run(
-        screen_papers_batch_async(
-            papers, research_question, llm_model, batch_size, screening_config
-        )
+        screen_papers_batch_async(papers, research_question, llm_model, batch_size)
     )
 
     # 保存结果
