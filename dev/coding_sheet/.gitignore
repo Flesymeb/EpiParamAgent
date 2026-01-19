@@ -1,0 +1,20 @@
+# Local env files (never commit secrets)
+.env
+.env.local
+
+# Virtual env
+.venv/
+
+# Outputs / artifacts
+outputs/*
+output/*
+__pycache__/
+*.pyc
+
+# Extracted images/text
+pdf_images/
+*.log
+
+
+# input data files
+papers/*

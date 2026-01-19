@@ -1,0 +1,229 @@
+# COVID-19 Variants Reproduction Numbers - Extraction Template
+# 变异株再生数提取配置
+
+project:
+  name: "COVID-19 Variants Reproduction Numbers"
+  description: "提取SARS-CoV-2变异株的R0/Re估计值"
+  effect_type: "reproduction_number"
+
+# === 提取模式配置 ===
+extraction:
+  mode: "full_context"  # 全文模式（不分chunk）
+  max_input_chars: 500000  # 最大输入字符数（约125k tokens）
+
+fields:
+  # === 论文识别 ===
+  - name: study
+    label: "Study"
+    type: str
+    required: true
+    prompt: "格式: Author et al., YEAR (如 Zhao et al., 2021)"
+
+  - name: variant
+    label: "Variant"
+    type: str
+    required: true
+    prompt: "变异株名称（优先WHO命名: Alpha/Beta/Gamma/Delta/Omicron，或谱系代码如B.1.1.7，或Wildtype）"
+
+  # === R0 (Basic Reproduction Number) ===
+  - name: r0_mean
+    label: "R0 Estimated Mean"
+    type: float
+    prompt: "基本再生数R0点估计。如只给范围(如5.20-7.06)取中点。未报告留空"
+
+  - name: r0_lower_ci
+    label: "R0 95% Lower Bound"
+    type: float
+    prompt: "R0的95% CI下限"
+
+  - name: r0_upper_ci
+    label: "R0 95% Upper Bound"
+    type: float
+    prompt: "R0的95% CI上限"
+
+  # === Re (Effective Reproduction Number) ===
+  - name: re_mean
+    label: "Re Estimated Mean"
+    type: float
+    prompt: "有效再生数Re/Rt点估计（考虑干预后的实际传播力）"
+
+  - name: re_lower_ci
+    label: "Re 95% Lower Bound"
+    type: float
+    prompt: "Re的95% CI下限"
+
+  - name: re_upper_ci
+    label: "Re 95% Upper Bound"
+    type: float
+    prompt: "Re的95% CI上限"
+
+  # === Rv/Rα (Relative Reproduction Number) ===
+  - name: relative_r_mean
+    label: "Rv/Rα Estimated Mean"
+    type: float
+    prompt: "相对传播力比值（如'1.65倍'或'65% higher'转为1.65）"
+
+  - name: relative_r_lower_ci
+    label: "Rv/Rα 95% Lower Bound"
+    type: float
+    prompt: "相对R的95% CI下限"
+
+  - name: relative_r_upper_ci
+    label: "Rv/Rα 95% Upper Bound"
+    type: float
+    prompt: "相对R的95% CI上限"
+
+  # === 时间与地点 ===
+  - name: start_date
+    label: "Start Date"
+    type: str
+    required: true
+    prompt: "数据收集起始日期 (格式YYYY-MM-DD，如只有年月用YYYY-MM-01)"
+
+  - name: end_date
+    label: "End Date"
+    type: str
+    required: true
+    prompt: "数据收集结束日期 (格式同start_date)"
+
+  - name: country
+    label: "Country"
+    type: str
+    required: true
+    prompt: "数据来源国家（单一国家如United Kingdom，多国用分号分隔，全球用Global）"
+
+  - name: region
+    label: "Region"
+    type: str
+    prompt: "国家内的具体区域（如England, California），全国数据留空"
+
+  # === 方法学 ===
+  - name: model_method
+    label: "Model/Method"
+    type: str
+    required: true
+    prompt: "估计方法（如Renewal equations, EpiEstim, GLM, SEIR model等，使用论文术语）"
+
+  - name: data_type
+    label: "Data Type"
+    type: str
+    prompt: "数据类型（如Case, Case+Genomic, Household, Contact tracing等）"
+
+  # === Serial Interval (序列间隔) ===
+  - name: serial_interval_mean
+    label: "Serial Interval Estimated Mean"
+    type: float
+    prompt: "序列间隔均值（天，连续病例发病间隔）"
+
+  - name: serial_interval_lower_ci
+    label: "Serial Interval 95% Lower Bound"
+    type: float
+    prompt: "序列间隔95% CI下限"
+
+  - name: serial_interval_upper_ci
+    label: "Serial Interval 95% Upper Bound"
+    type: float
+    prompt: "序列间隔95% CI上限"
+
+  # === Incubation Period (潜伏期) ===
+  - name: incubation_median
+    label: "Incubation Period Estimated Median"
+    type: float
+    prompt: "潜伏期中位数（天）"
+
+  - name: incubation_mean
+    label: "Incubation Period Estimated Mean"
+    type: float
+    prompt: "潜伏期均值（天）"
+
+  - name: incubation_lower_ci
+    label: "Incubation Period 95% Lower Bound"
+    type: float
+    prompt: "潜伏期95% CI下限"
+
+  - name: incubation_upper_ci
+    label: "Incubation Period 95% Upper Bound"
+    type: float
+    prompt: "潜伏期95% CI上限"
+
+  # === 备注 ===
+  - name: note
+    label: "Note"
+    type: str
+    prompt: "备注（Generation Time假设、R值计算说明、引用研究、特殊方法等）"
+
+  # === 证据追踪 ===
+  - name: evidence_locations
+    label: "Evidence Locations"
+    type: list[str]
+    prompt: "证据位置（如'Table 1', 'Methods section', 'Results paragraph 2'，最多3个位置）"
+
+  - name: evidence_quotes
+    label: "Key Evidence Quotes"
+    type: list[str]
+    prompt: "关键原文引用（最多3条，10-20词的简短引用）"
+
+# === 提取规则 ===
+extraction_rules:
+  - "每个变异株的每个时期为单独一行"
+  - "R0和Re可同时存在于一行（不同列）"
+  - "缺失数据用null"
+  - "日期格式YYYY-MM-DD"
+  - "优先WHO命名（Alpha/Beta/Gamma/Delta/Omicron）"
+
+# === Few-shot examples ===
+examples:
+  - study: "Zhao et al., 2021"
+    variant: "Alpha"
+    r0_mean: null
+    r0_lower_ci: null
+    r0_upper_ci: null
+    re_mean: 1.70
+    re_lower_ci: 1.02
+    re_upper_ci: 2.78
+    relative_r_mean: null
+    relative_r_lower_ci: null
+    relative_r_upper_ci: null
+    start_date: "2020-08-01"
+    end_date: "2020-12-31"
+    country: "United Kingdom"
+    region: ""
+    model_method: "Renewal equations"
+    data_type: "Case"
+    serial_interval_mean: null
+    serial_interval_lower_ci: null
+    serial_interval_upper_ci: null
+    incubation_median: null
+    incubation_mean: null
+    incubation_lower_ci: null
+    incubation_upper_ci: null
+    note: "Generation time: Gamma distribution with mean of 5.3 days and std of 2.1 days by averaging the GT estimates from the existing literatures."
+    evidence_locations:
+      - "Results section, paragraph 3"
+      - "Table 2"
+    evidence_quotes:
+      - "Re estimated as 1.70 (95% CI: 1.02-2.78)"
+
+  - study: "Xia et al., 2021"
+    variant: "Delta"
+    r0_mean: 6.13
+    r0_lower_ci: 5.07
+    r0_upper_ci: 7.23
+    re_mean: 1.51
+    re_lower_ci: 1.35
+    re_upper_ci: 1.68
+    relative_r_mean: 1.65
+    relative_r_lower_ci: 1.46
+    relative_r_upper_ci: 1.86
+    start_date: "2021-04-11"
+    end_date: "2021-05-17"
+    country: "United Kingdom"
+    region: ""
+    model_method: "Renewal equations"
+    data_type: "Case"
+    note: "R0 calculated using Alpha-to-wildtype ratio [1.4-1.9]; Generation time: Gamma(mean=5d, sd=3d)"
+    evidence_locations:
+      - "Abstract"
+      - "Table 3"
+    evidence_quotes:
+      - "Delta R0 5.20-7.06 (95% CI: 5.07-7.23)"

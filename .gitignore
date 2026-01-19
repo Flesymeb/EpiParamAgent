@@ -121,5 +121,13 @@ temp/
 *.avi
 
 
+# UI/UX files
+.github
+.shared
+
+
+
 # misc
 misc/
+*.pptx
+

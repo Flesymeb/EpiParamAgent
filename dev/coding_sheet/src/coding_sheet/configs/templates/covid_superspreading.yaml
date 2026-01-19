@@ -1,0 +1,270 @@
+project:
+  name: "COVID-19 Superspreading Meta-Analysis"
+  domain: "Epidemiology - SARS-CoV-2 Transmission Heterogeneity"
+  description: "Extract dispersion parameter (k) and 20/80 rule estimates from COVID-19 superspreading studies"
+
+extraction:
+  mode: "full_context"
+  max_input_chars: 500000
+
+fields:
+  # Study identification
+  - name: study
+    type: str
+    required: true
+    prompt: "Study citation (Author et al., Year format). CRITICAL: MUST be filled for EVERY record, even if multiple records from same study. Never leave empty."
+    examples:
+      - "Sun et al. (2021)"
+      - "Adam et al. (2020)"
+
+  # Estimation method
+  - name: method
+    type: str
+    required: true
+    prompt: "Statistical method used to estimate dispersion parameter. Must be a specific method description. DO NOT extract if method is unknown/unclear - skip that record entirely. NEVER use 'NR', 'Not reported', 'Unknown', or similar placeholders."
+    examples:
+      - "Negative binomial distribution"
+      - "Phylodynamic analysis"
+      - "Negative binomial distribution (zero-truncated framework)"
+      - "Branching process model with negative binomial offspring distribution"
+
+  # Dispersion parameter estimates
+  - name: k_mean
+    type: float
+    required: false
+    prompt: "Dispersion parameter k (mean/point estimate). Lower k = higher superspreading potential"
+    examples:
+      - 0.30
+
+  - name: k_lower_ci
+    type: float
+    required: false
+    prompt: "Dispersion parameter k lower bound of 95% CI/CrI. Extract from formats like '(0.23, 0.39)', '0.23-0.39', '[0.23-0.39]'. If 90% CI, convert to 95% and note in 'note' field."
+    examples:
+      - 0.23
+
+  - name: k_upper_ci
+    type: float
+    required: false
+    prompt: "Dispersion parameter k upper bound of 95% CI/CrI. Extract from formats like '(0.23, 0.39)', '0.23-0.39', '[0.23-0.39]'. If 90% CI, convert to 95% and note in 'note' field."
+    examples:
+      - 0.39
+      - 0.67
+      - 0.95
+
+  # Study period
+  - name: start_date
+    type: str
+    required: false
+    prompt: "Study period start date. Standardize to: YYYY-MM-DD (if full date), YYYY-MM (if month only), YYYY (if year only), or 'By YYYY-MM-DD' (if cumulative)"
+    examples:
+      - "2020-01-16"
+      - "2020-01"
+      - "2020"
+      - "By 2020-03-03"
+
+  - name: end_date
+    type: str
+    required: false
+    prompt: "Study period end date. Standardize to: YYYY-MM-DD (if full date), YYYY-MM (if month only), YYYY (if year only). Otherwise, keep the original expression."
+    examples:
+      - "2020-04-03"
+      - "2020-04"
+      - "2020"
+
+  # Geographic location
+  - name: country
+    type: str
+    required: true
+    prompt: "Country/region where data collected"
+    examples:
+      - "Mainland China"
+      - "Hong Kong, China"
+      - "USA"
+      - "Global"
+
+  - name: region_detail
+    type: str
+    required: false
+    prompt: "Specific region/city if mentioned (optional)"
+    examples:
+      - "Wuhan"
+      - "New York"
+
+  # Study population
+  - name: subgroup
+    type: str
+    required: false
+    prompt: "Subgroup/stratum identifier if study reports multiple k estimates. Use to distinguish: 'Overall', 'Region: XXX', 'Period: XXX', 'Age: XXX', 'Setting: XXX', etc. CRITICAL: If multiple k from same study, this field MUST differentiate them."
+    examples:
+      - "Overall"
+      - "Region: Wuhan"
+      - "Region: Other provinces"
+      - "Period: Early (Jan-Feb 2020)"
+      - "Period: Late (Mar-Apr 2020)"
+      - "Age: <60 years"
+      - "Setting: Household"
+
+  - name: case_type
+    type: str
+    required: false
+    prompt: "Type of cases analyzed (e.g., confirmed, imported, community)"
+    examples:
+      - "Confirmed cases"
+      - "Imported cases"
+      - "Community transmission"
+
+  - name: setting
+    type: str
+    required: false
+    prompt: "Study setting (e.g., household, hospital, community, general population)"
+    examples:
+      - "Household"
+      - "Community"
+      - "General population"
+
+  # Evidence tracking
+  - name: note
+    type: str
+    required: false
+    prompt: "Additional notes: (1) CI type (95% CI/CrI/Range/IQR); (2) If multiple k from same study, explain relationship (e.g., 'Overall pooled estimate; also reported regional k values'); (3) If k derived from 20/80 rule, document R/P/Q values and calculation; (4) Other context (sample size, confidence level, etc.)"
+    examples:
+      - "95% CI; Overall pooled estimate (n=2100); Regional estimates also reported"
+      - "95% CrI from Bayesian analysis"
+      - "k derived from 20/80 rule: R=2.5, P=0.20, Q=0.80. Numerically solved using NB framework."
+      - "90% CI converted to approximate 95% CI (multiplied width by 1.2)"
+
+  - name: evidence_locations
+    type: list[str]
+    required: false
+    prompt: "Document locations where k estimates found (e.g., 'Table 1', 'Results section paragraph 2')"
+    examples:
+      - ["Table 1", "Results section"]
+      - ["Supplementary Table S2"]
+
+  - name: evidence_quotes
+    type: list[str]
+    required: false
+    prompt: "Direct quotes containing k estimates (verbatim text)"
+    examples:
+      - ["The dispersion parameter was estimated at 0.30 (95% CI: 0.23, 0.39)"]
+      - ["k=0.43 (95% CI: 0.29-0.67) for Hong Kong"]
+
+extraction_rules:
+  - "**CRITICAL - RECORD COMPLETENESS**:"
+  - "  - EVERY record MUST have study field filled (author name + year), even if multiple records from same paper"
+  - "  - EVERY record MUST have method field with specific statistical method. If method unclear/not stated, DO NOT create that record"
+  - "  - NEVER use 'NR', 'Not reported', 'Unknown', or leave study/method empty"
+  - "**DO NOT EXTRACT from**:"
+  - "  - Table captions, headers, or footnotes (e.g., 'Reported in Table t1: ...', 'Dataset #X')"
+  - "  - Cross-references to other studies (e.g., 'from Xu et al. [8]', 'data from Adam et al. [11]')"
+  - "  - Meta-analysis summary rows that aggregate data from multiple primary studies"
+  - "  - If you see duplicate information (one with method='NR' or unclear source, another with full details), extract ONLY the complete record"
+  - "**MULTI-ESTIMATE SELECTION PRIORITY** (when study reports multiple k values):"
+  - "  Priority 1: Choose k labeled as 'overall', 'pooled', 'combined', or 'main analysis' - set subgroup='Overall'"
+  - "  Priority 2: If no overall estimate, choose the stratum with LARGEST sample size or explicitly stated as 'primary analysis'"
+  - "  Priority 3: Extract ALL k estimates as separate records if they represent different populations/settings (e.g., different regions, time periods, age groups). Each record MUST have: (a) identical study/method fields, (b) DISTINCT subgroup values (e.g., 'Region: Wuhan' vs 'Region: Other provinces'), (c) note explaining relationship to other estimates"
+  - "**CRITICAL - 20/80 RULE DERIVATION**: If study only reports 20/80 rule (or P/Q rule) without k: USE the negative binomial framework to DERIVE k value. Framework: Given R (reproduction number), P (proportion of most infectious individuals), Q (proportion of transmissions they cause), solve for k from equations: 1-P=∫[0,X]NB(x;k,k/(R+k))dx and 1-Q=(1/R)∫[0,X]xNB(x;k,k/(R+k))dx. Document R, P, Q values and derivation process in 'note' field with 'derived' flag."
+  - "**DATE EXTRACTION**: Extract dates as reported in the paper, any format acceptable (do not force standardization)"
+  - "**CONFIDENCE INTERVAL EXTRACTION RULES**:"
+  - "  - Extract CI bounds from any format: (lower, upper), [lower-upper], lower-upper, (lower to upper)"
+  - "  - If 90% CI reported, MUST convert to approximate 95% CI (multiply width by 1.2) and note conversion in 'note' field"
+  - "  - If range/IQR reported instead of CI, extract but note 'Range' or 'IQR' in 'note' field (not true CI)"
+  - "  - Distinguish between 95% CI (frequentist) and 95% CrI (Bayesian credible interval) in 'note' field"
+  - "  - If study reports median with IQR instead of mean with CI, note this in 'note' field and extract IQR as lower_ci/upper_ci"
+  - "If R not explicitly stated but 20/80 rule mentioned, check if R can be inferred from context (e.g., basic reproduction number estimates in same paper)"
+  - "Zero-truncated framework should be noted in method field"
+  - "If study mentions '20% of cases cause 80% of transmissions' but uses different percentages (e.g., 10/90 rule), derive k using actual P and Q values"
+
+extraction_examples:
+  - study: "Sun et al. (2021)"
+    method: "Negative binomial distribution"
+    k_mean: 0.30
+    k_lower_ci: 0.23
+    k_upper_ci: 0.39
+    start_date: "2020-01-16"
+    end_date: "2020-04-03"
+    country: "Mainland China"
+    region_detail: null
+    case_type: null
+    setting: null
+    note: "95% CI; CI extracted from format (0.23, 0.39)"
+    evidence_locations: ["Table 1"]
+    evidence_quotes:
+      [
+        "The dispersion parameter k was estimated at 0.30 (95% CI: 0.23, 0.39) for the study period from January 16 to April 3, 2020 in Mainland China.",
+      ]
+
+  - study: "Kwok et al. (2020)"
+    method: "Negative binomial distribution"
+    k_mean: 2.30
+    k_lower_ci: 0.02
+    k_upper_ci: 4.58
+    start_date: "By 2020-03-03"
+    end_date: null
+    country: "Hong Kong, China"
+    region_detail: null
+    case_type: null
+    setting: null
+    note: "Cumulative data by 2020-03-03; 95% CI; Wide CI indicates high uncertainty"
+    evidence_locations: ["Table 1"]
+    evidence_quotes:
+      [
+        "Cumulative data up to March 3, 2020 in Hong Kong yielded k=2.30 with 95% CI [0.02-4.58].",
+      ]
+
+  - study: "Hypothetical Study (2020)"
+    method: "Negative binomial distribution (derived from 20/80 rule)"
+    k_mean: 0.45
+    k_lower_ci: null
+    k_upper_ci: null
+    start_date: "2020-01-01"
+    end_date: "2020-03-31"
+    country: "Example Country"
+    region_detail: null
+    case_type: "Confirmed cases"
+    setting: "Community"
+    note: "k derived from 20/80 rule (R=2.5, P=0.20, Q=0.80). Using negative binomial framework: 1-P=∫NB(x;k,k/(R+k))dx and 1-Q=(1/R)∫xNB(x;k,k/(R+k))dx, numerically solved k≈0.45. CI not calculable from provided data."
+    evidence_locations: ["Methods section", "Results paragraph 2"]
+    evidence_quotes:
+      [
+        "We found that 20% of cases were responsible for 80% of secondary infections, with R=2.5",
+      ]
+
+  # Example 4: Multiple k estimates - overall/pooled preferred
+  - study: "Multi-Region Study (2021)"
+    method: "Negative binomial distribution"
+    k_mean: 0.48
+    k_lower_ci: 0.42
+    k_upper_ci: 0.55
+    start_date: "2020-02-01"
+    end_date: "2020-05-31"
+    country: "Mainland China"
+    region_detail: null
+    subgroup: "Overall"
+    case_type: "Confirmed cases"
+    setting: "General population"
+    note: "Overall/pooled estimate (Priority 1 selection); 95% CI; n=2100 cases. Regional estimates also reported: Wuhan k=0.42 (n=1250), Other provinces k=0.58 (n=850)"
+    evidence_locations: ["Table 2", "Abstract"]
+    evidence_quotes:
+      [
+        "Overall pooled estimate: k=0.48 (95% CI: 0.42-0.55)",
+        "Regional heterogeneity observed with Wuhan showing k=0.42",
+      ]
+
+  # Example 5: Multiple records from same study - study field MUST be filled in each record
+  - study: "Multi-Region Study (2021)"
+    method: "Negative binomial distribution"
+    k_mean: 0.42
+    k_lower_ci: null
+    k_upper_ci: null
+    start_date: "2020-02-01"
+    end_date: "2020-05-31"
+    country: "Mainland China"
+    region_detail: "Wuhan"
+    subgroup: "Region: Wuhan"
+    case_type: "Confirmed cases"
+    setting: "General population"
+    note: "Regional estimate; n=1250; Overall pooled estimate k=0.48 also reported in same study"
+    evidence_locations: ["Table 2"]
+    evidence_quotes: ["Wuhan: k=0.42 (n=1250)"]

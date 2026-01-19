@@ -28,23 +28,35 @@ CONFIG_COVID_VARIANTS = {
 }
 
 # ========== Search V3: Superspreading 研究 ==========
+# ========== Search V3: Superspreading 研究 ==========
 CONFIG_SUPERSPREADING = {
-    "research_question": "What are the superspreading patterns and heterogeneity in SARS-CoV-2 transmission?",
-    "disease_focus": "(COVID19 OR SARS-COV-2 OR 2019-nCov OR Coronavirus 2019 OR 2019 coronavirus OR coronavirus Wuhan OR pneumonia Wuhan)",
+    "research_question": (
+        "What are the superspreading patterns and heterogeneity in SARS-CoV-2 transmission, "
+        "quantified by negative-binomial offspring dispersion k or clearly convertible equivalents?"
+    ),
+    "disease_focus": (
+        "(COVID-19 OR COVID19 OR SARS-CoV-2 OR SARS-COV-2 OR 2019-nCoV OR Coronavirus 2019 "
+        "OR 2019 coronavirus OR coronavirus Wuhan OR pneumonia Wuhan)"
+    ),
     "disease_exclude": "none",
     "transmission_focus": (
-        "studies that estimate transmission overdispersion using a negative-binomial offspring distribution "
-        "or branching-process/cluster-size/secondary-infections-per-case frameworks, and report a dispersion parameter "
-        "(k, 1/k, overdispersion) or clearly defined equivalent that can be converted to k"
+        "Include studies that quantify transmission heterogeneity (superspreading/overdispersion) "
+        "using a negative-binomial offspring distribution (Lloyd-Smith style) or equivalent branching-process / "
+        "cluster-size / secondary-infections-per-case frameworks, and report at least one of: "
+        "(1) dispersion parameter k (or 1/k; or NB overdispersion explicitly defined), or "
+        "(2) a 20/80 rule metric (e.g., p or p_h: fraction of cases responsible for 80% of transmissions) "
+        "together with a reproduction number R so that k can be inferred under a negative-binomial offspring model."
     ),
     "transmission_exclude": (
-        "exclude studies that only quantify heterogeneity indirectly via infectiousness-rate variance (beta variance), "
-        "variance in early growth rates across regions/subpopulations, or other inequality metrics without estimating "
-        "negative-binomial offspring k (or a clearly convertible equivalent)"
+        "Exclude studies that only discuss superspreading qualitatively without estimating a parameter. "
+        "Exclude studies that quantify heterogeneity only indirectly via infectiousness-rate variance (beta variance), "
+        "variance in early growth rates across regions/subpopulations, Gini/inequality metrics, "
+        "or other proxies that do not estimate NB-offspring k and are not clearly convertible to k."
     ),
-    # "transmission_focus": "studies that report or estimate transmission heterogeneity metrics (superspreading OR superspreader OR super-spreading OR super-spreader OR overdispersion OR dispersion parameter OR k parameter OR negative-binomial OR offspring distribution OR transmission heterogeneity OR individual variation in transmission OR 80/20 rule OR 20/80 rule)",
-    # "transmission_exclude": "studies that only discuss general transmission without quantifying heterogeneity or superspreading potential",
 }
+
+# "transmission_focus": "studies that report or estimate transmission heterogeneity metrics (superspreading OR superspreader OR super-spreading OR super-spreader OR overdispersion OR dispersion parameter OR k parameter OR negative-binomial OR offspring distribution OR transmission heterogeneity OR individual variation in transmission OR 80/20 rule OR 20/80 rule)",
+# "transmission_exclude": "studies that only discuss general transmission without quantifying heterogeneity or superspreading potential",
 
 
 # ========== 流感传播研究 ==========
