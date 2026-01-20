@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
 使用LLM批量并行筛选文献，根据标题和摘要判断是否符合研究问题
-python screen_with_llm_batch.py --input ../langgraph_runs/ground_truth/search_v2/search_v2_raw.csv --output ../langgraph_runs/ground_truth/search_v2/test_screen/search_v2_screened.csv --ground-truth ../langgraph_runs/ground_truth/search_v2/search_v2_gt.csv --config V2 --batch-size 30
+
+Usage:
+  python screening_llm_batch.py --input ../langgraph_runs/ground_truth/search_v2/search_v2_raw.csv --output ../langgraph_runs/ground_truth/search_v2/test_screen/search_v2_screened.csv --ground-truth ../langgraph_runs/ground_truth/search_v2/search_v2_gt.csv --config V2 --batch-size 30
 """
 
 import argparse
@@ -185,7 +187,7 @@ async def screen_papers_batch_async(
         research_question: 研究问题
         llm_model: LLM模型实例
         batch_size: 每批并发处理的文献数量
-        screening_config: 筛选配置字典（见screening_config_examples.py）
+        screening_config: 筛选配置字典（见screening_configs.py）
 
     Returns:
         添加了筛选结果的文献列表
@@ -509,7 +511,7 @@ def main():
         "--config",
         type=str,
         default=None,
-        help="筛选配置名称 (如 'CONFIG_INFLUENZA_TRANSMISSION'，见screening_config_examples.py)",
+        help="筛选配置名称 (如 'CONFIG_INFLUENZA_TRANSMISSION'，见screening_configs.py)",
     )
     parser.add_argument(
         "--use-multidim",
@@ -526,7 +528,7 @@ def main():
     )
     if args.config:
         try:
-            from screening_config_examples import (
+            from screening_configs import (
                 CONFIG_SERIAL_INTERVAL,
                 CONFIG_COVID_VARIANTS,
                 CONFIG_SUPERSPREADING,

@@ -34,7 +34,7 @@ cp .env.example .env
 echo "10.1111/cdev.12676" > papers/doi.txt
 
 # Download with automatic DDoS-Guard bypass
-python scripts/get_scihub_urls.py --download
+python scripts/pdf_fecher.py --download
 # → Saves PDFs to papers/pdfs/
 # → Records URLs in papers/scihub_urls.jsonl
 ```
@@ -61,7 +61,7 @@ python scripts/run_extraction.py \
 
 | Script               | Purpose                                             |
 | -------------------- | --------------------------------------------------- |
-| `get_scihub_urls.py` | Download PDFs from Sci-Hub (with Playwright bypass) |
+| `pdf_fecher.py` | Download PDFs from Sci-Hub (with Playwright bypass) |
 | `run_extraction.py`  | Extract structured data from PDFs → Excel           |
 | `script_utils.py`    | Shared utilities                                    |
 
@@ -108,7 +108,7 @@ HTTPS_PROXY=http://proxy:port
 
 ```bash
 # Step 1: Download PDFs (with Playwright fallback for 403)
-python scripts/get_scihub_urls.py --download
+python scripts/pdf_fecher.py --download
 
 # Step 2: Extract from local files (fast, repeatable)
 python scripts/run_extraction.py --input papers/pdfs/ --method mineru
@@ -145,18 +145,18 @@ Error code: 402 - You requested up to 100000 tokens, but can only afford 42902
 
 ### Sci-Hub 403 Errors
 
-**Solution**: Use two-step workflow. `get_scihub_urls.py --download` has Playwright fallback.
+**Solution**: Use two-step workflow. `pdf_fecher.py --download` has Playwright fallback.
 
 ### Proxy Configuration
 
 ```bash
 # Windows PowerShell
 $env:HTTP_PROXY="http://proxy:port"
-python scripts/get_scihub_urls.py --download
+python scripts/pdf_fecher.py --download
 
 # Linux/Mac
 export HTTP_PROXY="http://proxy:port"
-python scripts/get_scihub_urls.py --download
+python scripts/pdf_fecher.py --download
 ```
 
 ## Output Structure
@@ -202,7 +202,7 @@ python scripts/run_extraction.py \
 ```
 coding_sheet/
 ├── scripts/                    # Executable scripts
-│   ├── get_scihub_urls.py     # PDF download
+│   ├── pdf_fecher.py          # PDF download
 │   ├── run_extraction.py      # Data extraction
 │   └── script_utils.py        # Utilities
 ├── src/coding_sheet/          # Core library

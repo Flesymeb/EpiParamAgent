@@ -18,7 +18,7 @@ All modules are under `dev/` for active development.
 
 Now, we only support the correlation template extraction.
 
-`dois` => `get_scihub_urls` => `pdf→markdown` (MinerU) => `LLM extraction` => `coding sheet`
+`dois` => `pdf_fecher` => `pdf→markdown` (MinerU) => `LLM extraction` => `coding sheet`
 
 - **Multi-timepoint extraction**: Longitudinal studies → ALL timepoints (no filtering during extraction)
 - **Dependency tracking**: `sample_id`, `is_dependent` for multilevel meta-analysis
@@ -53,7 +53,7 @@ cp .env.example .env  # Add API keys
 
 ```
 # 1) get Sci-Hub URLs from DOIs
-python scripts/get_scihub_urls.py --input dois.txt --out scihub_urls.txt
+python scripts/pdf_fecher.py --input dois.txt --out scihub_urls.txt
 # 2) run extraction
 python scripts/run_extraction.py --input papers/scihub_urls.txt --out output/extraction_fixed --method mineru --mode debug --template early_numeracy --continue-on-error
 ```

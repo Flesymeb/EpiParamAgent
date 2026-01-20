@@ -2,10 +2,10 @@
 筛选配置示例 - 针对不同疾病和研究主题的配置
 
 使用方法：
-在screen_with_llm_batch.py中传入screening_config参数
+在screening_llm_batch.py中传入screening_config参数
 
 示例：
-    from screening_config_examples import CONFIG_COVID_VARIANTS
+    from screening_configs import CONFIG_COVID_VARIANTS
     screen_papers_batch(papers, research_question, llm, screening_config=CONFIG_COVID_VARIANTS)
 """
 

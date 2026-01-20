@@ -1,16 +1,9 @@
-"""
-Deprecated wrapper for Sci-Hub URL extraction.
+"""Entry point for the Sci-Hub/PubMed PDF fetcher.
 
 Usage:
-  python MetaAgent-Epi/dev/coding_sheet/scripts/get_scihub_urls.py
-
-Note:
-  The implementation now lives at:
-  MetaAgent-Epi/dev/tools/paper_fetch/pdf_fecher.py
-
-Preferred:
-  python MetaAgent-Epi/dev/coding_sheet/scripts/pdf_fecher.py
+  python MetaAgent-Epi/dev/coding_sheet/scripts/pdf_fecher.py --download
 """
+from __future__ import annotations
 
 from pathlib import Path
 import runpy

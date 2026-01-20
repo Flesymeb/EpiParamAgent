@@ -16,12 +16,12 @@
 # Windows (PowerShell)
 $env:HTTP_PROXY="http://proxy.example.com:8080"
 $env:HTTPS_PROXY="http://proxy.example.com:8080"
-python scripts/get_scihub_urls.py --download
+python scripts/pdf_fecher.py --download
 
 # Linux/Mac
 export HTTP_PROXY="http://proxy.example.com:8080"
 export HTTPS_PROXY="http://proxy.example.com:8080"
-python scripts/get_scihub_urls.py --download
+python scripts/pdf_fecher.py --download
 ```
 
 ### 3. 完整下载记录
@@ -57,7 +57,7 @@ JSONL 文件现在包含：
 大多数 DOI 通过 sci.bban.top 直接下载，无需人工干预：
 
 ```bash
-python scripts/get_scihub_urls.py --download
+python scripts/pdf_fecher.py --download
 ```
 
 ### 场景 2：仅获取 URL
@@ -65,7 +65,7 @@ python scripts/get_scihub_urls.py --download
 不下载 PDF，只获取可用 URL 列表：
 
 ```bash
-python scripts/get_scihub_urls.py
+python scripts/pdf_fecher.py
 ```
 
 ### 场景 3：通过代理下载
@@ -74,7 +74,7 @@ python scripts/get_scihub_urls.py
 
 ```bash
 $env:HTTP_PROXY="http://127.0.0.1:7890"
-python scripts/get_scihub_urls.py --download
+python scripts/pdf_fecher.py --download
 ```
 
 ### 场景 4：Playwright 半自动模式
@@ -124,7 +124,7 @@ DOI输入
 **解决**：
 
 - 使用代理加速
-- 或手动调整镜像顺序（修改`get_scihub_urls.py`中的`self.mirrors`列表）
+- 或手动调整镜像顺序（修改`pdf_fecher.py`中的`self.mirrors`列表）
 
 ### 问题 3：OpenRouter 余额不足
 

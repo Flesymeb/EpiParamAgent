@@ -17,7 +17,7 @@ python scripts/run_extraction.py \
 - 直接读取本地 PDF 文件
 - 无需网络连接
 - 处理速度最快
-- 适合已经通过 `get_scihub_urls.py --download` 下载的 PDF
+- 适合已经通过 `pdf_fecher.py --download` 下载的 PDF
 
 **工作流程：**
 
@@ -46,7 +46,7 @@ python scripts/run_extraction.py \
 - 实时从 URL 下载 PDF（使用 cloudscraper 绕过 DDoS-Guard）
 - 需要稳定的网络连接
 - 下载到临时文件再处理
-- **可能遇到 403 错误**（无法像 get_scihub_urls.py 那样启用 Playwright）
+- **可能遇到 403 错误**（无法像 pdf_fecher.py 那样启用 Playwright）
 
 **工作流程：**
 
@@ -72,7 +72,7 @@ LLM结构化提取
 **步骤 1：批量下载 PDF**
 
 ```bash
-python scripts/get_scihub_urls.py --download
+python scripts/pdf_fecher.py --download
 ```
 
 - ✅ sci.bban.top 优先（速度快）
@@ -134,7 +134,7 @@ https://sci.bban.top/pdf/10.1016/j.learninstruc.2018.11.006.pdf
 
    - `run_extraction.py` 只用 `cloudscraper` 下载
    - 遇到 403 时**无法自动启动浏览器**
-   - 而 `get_scihub_urls.py` 有 Playwright 兜底机制
+  - 而 `pdf_fecher.py` 有 Playwright 兜底机制
 
 2. **临时文件开销**
 
@@ -185,7 +185,7 @@ cat > papers/doi.txt << EOF
 EOF
 
 # 2. 批量下载PDF（自动处理403）
-python scripts/get_scihub_urls.py --download
+python scripts/pdf_fecher.py --download
 
 # 3. 本地提取数据
 python scripts/run_extraction.py \
@@ -255,7 +255,7 @@ python scripts/run_extraction.py \
 
 **A:** 改用两步法：
 
-1. `python scripts/get_scihub_urls.py --download`（会启用 Playwright）
+1. `python scripts/pdf_fecher.py --download`（会启用 Playwright）
 2. `python scripts/run_extraction.py --input papers/pdfs/`
 
 ### Q2: 本地 PDF 和 URL 能混用吗？
@@ -272,7 +272,7 @@ cat papers/scihub_urls.jsonl | jq '.urls[0].download_url'
 
 ### Q4: URL 模式会保存 PDF 吗？
 
-**A:** 不会。下载到临时文件，提取后自动删除。如需保存，用 `get_scihub_urls.py --download`。
+**A:** 不会。下载到临时文件，提取后自动删除。如需保存，用 `pdf_fecher.py --download`。
 
 ---
 
@@ -280,7 +280,7 @@ cat papers/scihub_urls.jsonl | jq '.urls[0].download_url'
 
 | 你的目标            | 使用命令                                                                   |
 | ------------------- | -------------------------------------------------------------------------- |
-| 🎯 生产环境批量提取 | `get_scihub_urls.py --download` → `run_extraction.py --input papers/pdfs/` |
+| 🎯 生产环境批量提取 | `pdf_fecher.py --download` → `run_extraction.py --input papers/pdfs/` |
 | 🧪 快速测试单个 PDF | `run_extraction.py --input papers/pdfs/test.pdf`                           |
 | 🌐 试验 URL 直连    | `run_extraction.py --input papers/urls.txt`（不推荐）                      |
 | 🐛 调试前 3 个      | `run_extraction.py --input papers/pdfs/ --mode debug`                      |

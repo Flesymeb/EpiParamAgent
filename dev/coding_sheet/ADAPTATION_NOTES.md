@@ -167,7 +167,7 @@ mkdir -p papers
 ### 2. 下载PDFs
 
 ```bash
-python scripts/get_scihub_urls.py --download
+python scripts/pdf_fecher.py --download
 # → papers/pdfs/*.pdf
 ```
 

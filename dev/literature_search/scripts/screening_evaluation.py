@@ -8,13 +8,13 @@
 
 使用示例：
     # 评估搜索覆盖率
-    python evaluation_tools.py search-coverage --ground-truth ../langgraph_runs/ground_truth/search_v2/search_v2_gt.csv --search-results ../langgraph_runs/ground_truth/search_v2/search_v2_raw.csv
+    python screening_evaluation.py search-coverage --ground-truth ../langgraph_runs/ground_truth/search_v2/search_v2_gt.csv --search-results ../langgraph_runs/ground_truth/search_v2/search_v2_raw.csv
 
     # 评估筛选效果（含混淆矩阵）
-    python evaluation_tools.py screening-performance --ground-truth ../langgraph_runs/ground_truth/search_v2/search_v2_gt.csv --screened-results ../langgraph_runs/ground_truth/search_v2/test_screen/search_v2_screened.csv
+    python screening_evaluation.py screening-performance --ground-truth ../langgraph_runs/ground_truth/search_v2/search_v2_gt.csv --screened-results ../langgraph_runs/ground_truth/search_v2/test_screen/search_v2_screened.csv
 
     # 评估检索召回率
-    python evaluation_tools.py retrieval-metrics --ground-truth outputs/raw.csv --retrieved-results langgraph_runs/results/raw_pubmed.jsonl
+    python screening_evaluation.py retrieval-metrics --ground-truth outputs/raw.csv --retrieved-results langgraph_runs/results/raw_pubmed.jsonl
 """
 
 import argparse
