@@ -6,10 +6,10 @@ Usage:
 
 Note:
   The implementation now lives at:
-  MetaAgent-Epi/dev/tools/paper_fetch/pdf_fecher.py
+  MetaAgent-Epi/dev/tools/paper_fetch/pdf_fetcher.py
 
 Preferred:
-  python MetaAgent-Epi/dev/coding_sheet/scripts/pdf_fecher.py
+  python MetaAgent-Epi/dev/coding_sheet/scripts/pdf_fetcher.py
 """
 
 from pathlib import Path
@@ -21,7 +21,7 @@ def main() -> None:
         Path(__file__).resolve().parents[2]
         / "tools"
         / "paper_fetch"
-        / "pdf_fecher.py"
+        / "pdf_fetcher.py"
     )
     if not target.exists():
         raise FileNotFoundError(f"Target script not found: {target}")

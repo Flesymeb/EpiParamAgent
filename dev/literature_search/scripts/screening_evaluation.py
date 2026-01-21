@@ -263,7 +263,7 @@ def evaluate_screening_performance(
     )
     print(f"├─────────────────────────┼──────────────────┼──────────────────┤")
     print(
-        f"│ 😐 Unlikely             │      {len(unlikely)+len(not_found):2d}          │      {TN:2d}         │"
+        f"│ 😐 Unlikely             │      {len(unlikely)+len(not_found):2d}          │      {TN:2d}          │"
     )
     print(f"└─────────────────────────┴──────────────────┴──────────────────┘")
 
@@ -280,7 +280,9 @@ def evaluate_screening_performance(
         f"│ 预测相关(S+P)           │   TP = {TP:2d}        │   FP = {FP:2d}        │"
     )
     print(f"├─────────────────────────┼──────────────────┼──────────────────┤")
-    print(f"│ 预测不相关(Unlikely)    │   FN = {FN:2d}        │   TN = {TN:2d}       │")
+    print(
+        f"│ 预测不相关(Unlikely)    │   FN = {FN:2d}        │   TN = {TN:2d}        │"
+    )
     print(f"└─────────────────────────┴──────────────────┴──────────────────┘")
 
     # 性能指标
@@ -303,17 +305,17 @@ def evaluate_screening_performance(
         f"│ 📈 Sensitivity (召回率)     │ {sensitivity:6.1%}  │ TP/(TP+FN) = {TP}/{TP+FN:2d}      │"
     )
     print(
-        f"│ 🎯 Specificity (特异度)     │ {specificity:6.1%}  │ TN/(TN+FP) = {TN}/{TN+FP:2d}    │"
+        f"│ 🎯 Specificity (特异度)     │ {specificity:6.1%}  │ TN/(TN+FP) = {TN}/{TN+FP:2d}      │"
     )
     print(
         f"│ 💎 Precision (精确率)       │ {precision:6.1%}  │ TP/(TP+FP) = {TP}/{TP+FP:2d}      │"
     )
     print(
-        f"│ ✅ NPV (阴性预测值)         │ {npv:6.1%}  │ TN/(TN+FN) = {TN}/{TN+FN:2d}    │"
+        f"│ ✅ NPV (阴性预测值)         │ {npv:6.1%}  │ TN/(TN+FN) = {TN}/{TN+FN:2d}      │"
     )
     print(f"│ 🏆 F1-score                 │ {f1:6.1%}  │ 2×P×R/(P+R)             │")
     print(
-        f"│ ✨ Accuracy (准确率)        │ {accuracy:6.1%}  │ (TP+TN)/Total = {TP+TN}/{TP+TN+FP+FN} │"
+        f"│ ✨ Accuracy (准确率)        │ {accuracy:6.1%}  │ (TP+TN)/Total = {TP+TN}/{TP+TN+FP+FN}   │"
     )
     print(f"└─────────────────────────────┴─────────┴─────────────────────────┘")
 

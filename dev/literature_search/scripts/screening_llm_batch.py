@@ -3,13 +3,14 @@
 使用LLM批量并行筛选文献，根据标题和摘要判断是否符合研究问题
 
 Usage:
-  python screening_llm_batch.py --input ../langgraph_runs/ground_truth/search_v2/search_v2_raw.csv --output ../langgraph_runs/ground_truth/search_v2/test_screen/search_v2_screened.csv --ground-truth ../langgraph_runs/ground_truth/search_v2/search_v2_gt.csv --config V2 --batch-size 30
+  python .\scripts\screening_llm_batch.py --input ../langgraph_runs/ground_truth/search_v2/search_v2_raw.csv --output ../langgraph_runs/ground_truth/search_v2/test_screen/search_v2_screened.csv --ground-truth ../langgraph_runs/ground_truth/search_v2/search_v2_gt.csv --config V2 --auto-fulltext --batch-size 3
 """
 
 import argparse
 import csv
 import os
 import sys
+import shutil
 from datetime import datetime
 
 # Set CSV field size limit to maximum possible value
@@ -33,10 +34,22 @@ load_dotenv()
 
 # 添加src到path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "coding_sheet" / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools"))
 
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
+from mineru.config import load_mineru_config
+from mineru.pdf_reader_mineru import extract_pdf_markdown_mineru
+
+PROMPT_DIR = Path(__file__).resolve().parents[1] / "src" / "epidemiology" / "prompts"
+SCREENING_SYSTEM_PROMPT = PROMPT_DIR / "screening_system.md"
+SCREENING_USER_PROMPT = PROMPT_DIR / "screening_user.md"
+
+FULLTEXT_CACHE_ROOT = Path(__file__).resolve().parents[2] / "paper_pool"
+PDF_CACHE_DIR = FULLTEXT_CACHE_ROOT / "pdfs"
+MD_CACHE_DIR = FULLTEXT_CACHE_ROOT / "markdown"
 
 
 class DimensionAssessment(BaseModel):
@@ -140,6 +153,182 @@ def init_llm_model() -> Any:
     )
 
 
+def load_prompt_templates() -> tuple[str, str]:
+    """Load system and user prompt templates from files."""
+    system_text = SCREENING_SYSTEM_PROMPT.read_text(encoding="utf-8")
+    user_text = SCREENING_USER_PROMPT.read_text(encoding="utf-8")
+    return system_text, user_text
+
+
+def ensure_fulltext_cache_dirs() -> None:
+    """Create fixed full-text cache directories."""
+    PDF_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    MD_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def load_pdf_fetcher_module():
+    """Load pdf_fetcher module from tools/paper_fetch."""
+    paper_fetch_dir = Path(__file__).resolve().parents[2] / "tools" / "paper_fetch"
+    if str(paper_fetch_dir) not in sys.path:
+        sys.path.insert(0, str(paper_fetch_dir))
+    import pdf_fetcher as pdf_fetcher
+
+    return pdf_fetcher
+
+
+def download_pdfs_batch(
+    pmids: List[str],
+    pmid_overrides: Optional[dict[str, dict[str, str]]] = None,
+) -> dict[str, dict[str, str]]:
+    """Download PDFs for PMIDs into the fixed cache dir.
+
+    Returns a mapping of PMID -> {"status": ..., "pdf_path": ...}.
+    """
+    ensure_fulltext_cache_dirs()
+    pdf_fetcher = load_pdf_fetcher_module()
+    extractor = pdf_fetcher.SciHubUrlExtractor()
+    extractor.get_mirrors()
+
+    results: dict[str, dict[str, str]] = {}
+    pmid_overrides = pmid_overrides or {}
+    for pmid in pmids:
+        pmid = (pmid or "").strip()
+        if not pmid:
+            continue
+
+        target_pdf = PDF_CACHE_DIR / f"PMID_{pmid}.pdf"
+        if target_pdf.exists():
+            results[pmid] = {"status": "downloaded", "pdf_path": str(target_pdf)}
+            continue
+
+        override = pmid_overrides.get(pmid, {})
+        doi = (override.get("doi") or "").strip()
+        pmcid = (override.get("pmcid") or "").strip()
+        if not pmcid or not doi:
+            resolved_doi, resolved_pmcid = extractor._resolve_pmid(pmid)
+            if not doi:
+                doi = resolved_doi
+            if not pmcid:
+                pmcid = resolved_pmcid
+        if not doi and not pmcid:
+            results[pmid] = {"status": "no_id", "pdf_path": ""}
+            continue
+
+        if doi or pmcid:
+            doi_display = doi or "N/A"
+            pmcid_display = pmcid or "N/A"
+            print(
+                f"Resolving PMID: {pmid} | DOI: {doi_display} | PMCID: {pmcid_display}"
+            )
+
+        print("  Sci-Hub:")
+        url_results, doi, pmcid = extractor.process_pmid(
+            pmid,
+            download_dir=PDF_CACHE_DIR,
+            doi_override=doi,
+            pmcid_override=pmcid,
+        )
+        pdf_path = None
+        for info in url_results:
+            local_path = info.get("local_path")
+            if local_path and Path(local_path).exists():
+                pdf_path = Path(local_path)
+                break
+
+        if pdf_path and pdf_path.exists():
+            if pdf_path != target_pdf:
+                if target_pdf.exists():
+                    try:
+                        pdf_path.unlink()
+                    except Exception:
+                        pass
+                else:
+                    try:
+                        pdf_path.replace(target_pdf)
+                    except Exception:
+                        shutil.copyfile(pdf_path, target_pdf)
+            results[pmid] = {"status": "downloaded", "pdf_path": str(target_pdf)}
+        else:
+            results[pmid] = {"status": "download_failed", "pdf_path": ""}
+
+    return results
+
+
+def convert_pdfs_to_markdown(
+    pmid_to_pdf: dict[str, dict[str, str]],
+) -> dict[str, dict[str, str]]:
+    """Convert cached PDFs to Markdown using MinerU.
+
+    Returns a mapping of PMID -> {"status": ..., "md_path": ...}.
+    """
+    ensure_fulltext_cache_dirs()
+    cfg = load_mineru_config()
+    if not cfg.api_key:
+        print("⚠️  MinerU API key missing; skipping full-text conversion.")
+        return {
+            pmid: {"status": "conversion_failed", "md_path": "", "error": "no_api_key"}
+            for pmid in pmid_to_pdf.keys()
+        }
+
+    total_pdfs = sum(1 for info in pmid_to_pdf.values() if info.get("pdf_path"))
+    if total_pdfs:
+        print(f"开始全文转换 (MinerU): {total_pdfs} 篇 | 输出目录: {MD_CACHE_DIR}")
+    results: dict[str, dict[str, str]] = {}
+    converted = 0
+    failed = 0
+    cached = 0
+    for pmid, info in pmid_to_pdf.items():
+        pdf_path = info.get("pdf_path") or ""
+        if not pdf_path:
+            failed += 1
+            results[pmid] = {"status": "conversion_failed", "md_path": ""}
+            continue
+
+        paper_dir = MD_CACHE_DIR / f"PMID_{pmid}"
+        md_path = paper_dir / f"PMID_{pmid}.md"
+        if md_path.exists() and md_path.stat().st_size > 0:
+            results[pmid] = {"status": "converted", "md_path": str(md_path)}
+            converted += 1
+            cached += 1
+            continue
+
+        try:
+            paper_dir.mkdir(parents=True, exist_ok=True)
+            print(f"  [MinerU] 转换 PMID {pmid} ...")
+            extracted = extract_pdf_markdown_mineru(
+                Path(pdf_path),
+                output_dir=paper_dir,
+            )
+            if extracted.markdown:
+                md_path.write_text(extracted.markdown, encoding="utf-8")
+                results[pmid] = {"status": "converted", "md_path": str(md_path)}
+                converted += 1
+                print(f"  [MinerU] 完成 PMID {pmid}")
+            else:
+                failed += 1
+                results[pmid] = {
+                    "status": "conversion_failed",
+                    "md_path": "",
+                    "error": "empty_markdown",
+                }
+                if not any(paper_dir.iterdir()):
+                    paper_dir.rmdir()
+        except Exception as exc:
+            failed += 1
+            results[pmid] = {
+                "status": "conversion_failed",
+                "md_path": "",
+                "error": str(exc)[:200],
+            }
+            print(f"  [MinerU] 失败 PMID {pmid}: {str(exc)[:200]}")
+            if paper_dir.exists() and not any(paper_dir.iterdir()):
+                paper_dir.rmdir()
+
+    if total_pdfs:
+        print(f"全文转换完成: 成功 {converted} (缓存 {cached}) | 失败 {failed}")
+    return results
+
+
 async def invoke_with_retry_async(llm, prompt, max_retries=3, delay=1.0):
     """带重试机制的异步单次调用"""
     last_exception = None
@@ -178,6 +367,11 @@ async def screen_papers_batch_async(
     llm_model: Any,
     batch_size: int = 20,
     screening_config: Optional[Dict[str, Any]] = None,
+    content_label: str = "Abstract",
+    content_key: str = "Abstract",
+    content_fallback: str = "(No abstract available. Please assess based on title only.)",
+    system_template: Optional[str] = None,
+    user_template: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
     """
     批量异步并行筛选文献
@@ -204,93 +398,19 @@ async def screen_papers_batch_async(
     # 合并用户配置
     config = {**default_config, **(screening_config or {})}
 
-    # 创建prompt模板
-    system_text = f"""You are assisting in the screening of academic papers for a systematic review in epidemiology.
+    # 创建prompt模板（外置文件）
+    if system_template is None or user_template is None:
+        system_text, user_text = load_prompt_templates()
+    else:
+        system_text, user_text = system_template, user_template
 
-Your task is NOT to make a final inclusion or exclusion decision.
-Instead, you should assess the relevance of each study across multiple predefined dimensions and provide a structured relevance annotation.
-
-Assess each study based on the title, abstract, and keywords (if available).
-
-My research question is: {config['research_question']}
-
-### Core Inclusion Criteria (Relevance Dimensions):
-
-A study is considered potentially relevant if it meets all core criteria below.
-
-1. **Disease relevance**
-The study must explicitly investigate {config['disease_focus']}.
-Exclude studies that focus solely on other diseases AND {config['disease_exclude']}.
-
-2. **Population relevance**
-The study focuses on humans (general population or predefined subgroups).
-Exclude studies that are purely animal or in vitro.
-
-3. **Location relevance**
-Studies conducted in any geographic region are eligible.
-Note: Some research questions may specify geographic restrictions - assess based on the research question provided.
-
-4. **Original empirical evidence**
-The study reports or estimates original empirical data.
-Exclude those without original data: reviews, meta-analyses, editorials, commentaries, perspectives, and letters that do not report new data.
-Exclude theoretical models/simulations that do not report new data (unless calibrated with real-world data reported in the abstract).
-Exclude case reports with less than 2 cases.
-
-5. **Transmission-related content**
-The study explicitly reports {config['transmission_focus']}.
-Exclude studies that only discuss clinical outcomes, severity, or vaccine effectiveness without transmission quantification AND {config['transmission_exclude']}.
-
-### For EACH dimension:
-- Provide a relevance score using a 5-point scale with STRICT criteria:
-  
-  **Score 4 (Highly relevant)**: Clear, explicit, CENTRAL focus. Multiple specific keywords. PRIMARY study objective.
-  
-  **Score 3 (Moderately relevant)**: Clearly mentioned with specific evidence. Important component (not just passing mention). Must be EXPLICIT in title/abstract.
-  
-  **Score 2 (Uncertain)**: Vague/indirect mention OR insufficient detail to confirm. May be addressed but not clear.
-  
-  **Score 1 (Mostly not relevant)**: Very weak/tangential mention. Not a focus. Related concept but not the criterion itself.
-  
-  **Score 0 (Not relevant)**: No mention, completely irrelevant, or explicitly excluded.
-
-- Provide a brief justification (1–2 sentences)
-
-**CRITICAL SCORING RULES**:
-- Be CONSERVATIVE with scores 3-4. When in doubt between 2 and 3, choose 2.
-- Score 3 requires EXPLICIT mention with specific details (not just related concepts).
-- For Disease & Outcome: BOTH must be clearly present AND related to each other.
-- Avoid "benefit of the doubt" - require clear textual evidence.
-
-### Overall assessment rules:
-Based on the above dimensions, provide an overall **LLM suggestion** following these strict criteria:
-
-**strong_candidate** (High confidence - ALL must be met):
-  You must consider the question "Does this study actually aim to estimate the parameter we care about?"
-  1. Disease relevance = 4  [REQUIRED]
-  2. Transmission-related content = 4  [REQUIRED]
-  3. Evidence (original data)  ≥ 3  [REQUIRED]
-  4. Population AND Location relevance ≥ 2 
-
-**possible_candidate** (Moderate confidence - relaxed thresholds):
-  1. Disease ≥ 3 AND Transmission ≥ 3  [BOTH REQUIRED]
-  2. Evidence ≥ 2  
-  3. Population AND Location relevance ≥ 2
-  
-**unlikely_candidate** (Low confidence - any one triggers):
-  - Disease < 3  [Insufficient disease focus]
-  - Transmission < 3  [Insufficient transmission metrics]
-  - Evidence = 0,1   (no original analysis/data; review/commentary/protocol)
-
-Note: Prefer specificity over sensitivity. It's better to mark unclear cases as "possible" or "unlikely" than to overestimate relevance.
-"""
-
-    user_text = """Research question: {research_question}
-
-Title: {title}
-Abstract: {abstract}
-Keywords: {keywords}
-
-Assess the relevance of this paper across all dimensions and provide structured annotations."""
+    system_text = system_text.format(
+        research_question=config["research_question"],
+        disease_focus=config["disease_focus"],
+        disease_exclude=config["disease_exclude"],
+        transmission_focus=config["transmission_focus"],
+        transmission_exclude=config["transmission_exclude"],
+    )
 
     template = ChatPromptTemplate.from_messages(
         [("system", system_text), ("human", user_text)]
@@ -303,12 +423,12 @@ Assess the relevance of this paper across all dimensions and provide structured 
     all_prompts = []
     for paper in papers:
         title = paper.get("Title", "").strip()
-        abstract = paper.get("Abstract", "").strip()
+        abstract = paper.get(content_key, "").strip()
         keywords = paper.get("Keywords", "").strip()
 
         # 如果没有摘要，使用特殊说明
         if not abstract:
-            abstract = "(No abstract available. Please assess based on title only.)"
+            abstract = content_fallback
 
         # 如果没有keywords
         if not keywords:
@@ -317,7 +437,8 @@ Assess the relevance of this paper across all dimensions and provide structured 
         prompt = template.format_messages(
             research_question=research_question,
             title=title,
-            abstract=abstract,
+            content_label=content_label,
+            content=abstract,
             keywords=keywords,
         )
         all_prompts.append((paper, prompt))
@@ -518,6 +639,11 @@ def main():
         action="store_true",
         help="使用多维度评分（此参数保留但不影响功能）",
     )
+    parser.add_argument(
+        "--auto-fulltext",
+        action="store_true",
+        help="无摘要文献自动下载全文并进行筛选",
+    )
 
     args = parser.parse_args()
 
@@ -629,12 +755,152 @@ def main():
     print(f"研究问题: {research_question}")
     print("=" * 80)
 
-    # 异步并发筛选 - 使用命令行参数的batch_size
-    papers = asyncio.run(
-        screen_papers_batch_async(
-            papers, research_question, llm_model, batch_size, screening_config
-        )
+    system_template, user_template = load_prompt_templates()
+
+    papers_with_abstract = []
+    papers_without_abstract = []
+    fulltext_errors = []
+    for paper in papers:
+        abstract = (paper.get("Abstract") or "").strip()
+        if abstract:
+            papers_with_abstract.append(paper)
+            paper["screening_stage"] = "title_abstract"
+        else:
+            papers_without_abstract.append(paper)
+            paper["screening_stage"] = "pending_fulltext"
+            paper["fulltext_status"] = "pending"
+            paper["fulltext_path"] = ""
+            paper["llm_suggest"] = "needs_full_text"
+
+    print(
+        f"筛选分流: title+abstract={len(papers_with_abstract)} | full-text={len(papers_without_abstract)}\n"
     )
+
+    # 异步并发筛选 - 有摘要
+    if papers_with_abstract:
+        asyncio.run(
+            screen_papers_batch_async(
+                papers_with_abstract,
+                research_question,
+                llm_model,
+                batch_size,
+                screening_config,
+                content_label="Abstract",
+                content_key="Abstract",
+                content_fallback="(No abstract available. Please assess based on title only.)",
+                system_template=system_template,
+                user_template=user_template,
+            )
+        )
+
+    # 自动全文筛选 - 无摘要
+    if args.auto_fulltext and papers_without_abstract:
+        print(f"\n开始全文筛选流程 ({len(papers_without_abstract)} 篇)...")
+        ensure_fulltext_cache_dirs()
+
+        pmids = []
+        pmid_overrides = {}
+        for paper in papers_without_abstract:
+            pmid = (paper.get("PMID") or "").strip()
+            if pmid:
+                pmids.append(pmid)
+                doi = (paper.get("DOI") or paper.get("doi") or "").strip()
+                pmcid = (paper.get("PMCID") or paper.get("pmcid") or "").strip()
+                if doi or pmcid:
+                    pmid_overrides[pmid] = {"doi": doi, "pmcid": pmcid}
+            else:
+                paper["fulltext_status"] = "no_pmid"
+                fulltext_errors.append(
+                    {
+                        "pmid": "",
+                        "title": paper.get("Title", ""),
+                        "status": "no_pmid",
+                        "detail": "missing PMID",
+                    }
+                )
+
+        print(f"开始全文下载 (PDF) | 输出目录: {PDF_CACHE_DIR}")
+        pdf_results = download_pdfs_batch(pmids, pmid_overrides)
+        md_results = convert_pdfs_to_markdown(pdf_results)
+
+        fulltext_ready = []
+        for paper in papers_without_abstract:
+            pmid = (paper.get("PMID") or "").strip()
+            if not pmid:
+                continue
+            pdf_info = pdf_results.get(pmid, {})
+            md_info = md_results.get(pmid, {})
+
+            if pdf_info.get("status") != "downloaded":
+                status = pdf_info.get("status", "download_failed")
+                paper["fulltext_status"] = status
+                fulltext_errors.append(
+                    {
+                        "pmid": pmid,
+                        "title": paper.get("Title", ""),
+                        "status": status,
+                        "detail": pdf_info.get("error", ""),
+                    }
+                )
+                continue
+
+            if md_info.get("status") != "converted":
+                status = md_info.get("status", "conversion_failed")
+                paper["fulltext_status"] = status
+                fulltext_errors.append(
+                    {
+                        "pmid": pmid,
+                        "title": paper.get("Title", ""),
+                        "status": status,
+                        "detail": md_info.get("error", ""),
+                    }
+                )
+                continue
+
+            md_path = md_info.get("md_path", "")
+            paper["fulltext_path"] = md_path
+            paper["fulltext_status"] = "converted"
+            paper["screening_stage"] = "full_text"
+            try:
+                paper["fulltext_markdown"] = Path(md_path).read_text(encoding="utf-8")
+                fulltext_ready.append(paper)
+            except Exception:
+                paper["fulltext_status"] = "read_failed"
+                fulltext_errors.append(
+                    {
+                        "pmid": pmid,
+                        "title": paper.get("Title", ""),
+                        "status": "read_failed",
+                        "detail": "read markdown failed",
+                    }
+                )
+
+        downloaded = sum(
+            1 for v in pdf_results.values() if v.get("status") == "downloaded"
+        )
+        converted = sum(
+            1 for v in md_results.values() if v.get("status") == "converted"
+        )
+        print(f"全文筛选入选: {len(fulltext_ready)}/{len(papers_without_abstract)}")
+
+        if fulltext_ready:
+            print(f"开始全文筛选 (full-text): {len(fulltext_ready)} 篇...")
+            asyncio.run(
+                screen_papers_batch_async(
+                    fulltext_ready,
+                    research_question,
+                    llm_model,
+                    batch_size,
+                    screening_config,
+                    content_label="Full-text content (Markdown)",
+                    content_key="fulltext_markdown",
+                    content_fallback="(Full-text content unavailable.)",
+                    system_template=system_template,
+                    user_template=user_template,
+                )
+            )
+            for paper in fulltext_ready:
+                paper["fulltext_status"] = "screened"
 
     # 保存结果
     output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -656,6 +922,9 @@ def main():
         for field in ["llm_suggest", "overall_score", "overall_justification"]:
             if field not in fieldnames:
                 fieldnames.append(field)
+        for field in ["screening_stage", "fulltext_status", "fulltext_path"]:
+            if field not in fieldnames:
+                fieldnames.append(field)
         # 各维度评估字段
         for dimension in [
             "disease",
@@ -668,6 +937,9 @@ def main():
                 field = f"{dimension}_{suffix}"
                 if field not in fieldnames:
                     fieldnames.append(field)
+
+    for paper in papers:
+        paper.pop("fulltext_markdown", None)
 
     with open(output_file, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -699,6 +971,12 @@ def main():
         f"模型配置: {os.getenv('LLM_PROVIDER', 'openai')}/{os.getenv('LLM_MODEL', 'gpt-4o-mini')}"
     )
     report_lines.append(f"批处理大小: {batch_size}")
+    report_lines.append(
+        "Full-text: "
+        f"need_fulltext={len(papers_without_abstract)} | "
+        f"screened={len(fulltext_ready) if 'fulltext_ready' in locals() else 0}"
+    )
+
     report_lines.append("\n" + "=" * 80)
     report_lines.append("📊 筛选结果统计")
     report_lines.append("=" * 80)
@@ -722,6 +1000,17 @@ def main():
         f"│ 📝 总记录数              │   {len(papers):4d}   │ 100.0%   │"
     )
     report_lines.append("└─────────────────────────┴──────────┴──────────┘")
+    if fulltext_errors:
+        report_lines.append("\n" + "=" * 80)
+        report_lines.append("Full-text failures")
+        report_lines.append("=" * 80)
+        for idx, item in enumerate(fulltext_errors, 1):
+            report_lines.append(
+                f"[{idx:02d}] PMID={item.get('pmid') or 'N/A'} | {item.get('status')} | {item.get('title')}"
+            )
+            detail = (item.get("detail") or "").strip()
+            if detail:
+                report_lines.append(f"     detail: {detail}")
 
     # 统计各维度的评分分布
     report_lines.append("\n" + "=" * 80)

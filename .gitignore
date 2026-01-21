@@ -128,7 +128,10 @@ temp/
 
 
 # misc
+docs/
 misc/
 *.pptx
+
+paper_pool/
 
 dev/tools/paper_fetch/papers

@@ -4,9 +4,9 @@ Reads DOIs or PMIDs from an input file, resolves them to PDF URLs from multiple 
 tests each URL for accessibility, and saves results in JSONL format.
 
 Usage:
-    python MetaAgent-Epi/dev/tools/paper_fetch/pdf_fecher.py --input papers/doi.txt
-    python MetaAgent-Epi/dev/tools/paper_fetch/pdf_fecher.py --input papers/pmid.txt --input-type pmid
-    python MetaAgent-Epi/dev/coding_sheet/scripts/pdf_fecher.py --input papers/doi.txt
+    python MetaAgent-Epi/dev/tools/paper_fetch/pdf_fetcher.py --input papers/doi.txt
+    python MetaAgent-Epi/dev/tools/paper_fetch/pdf_fetcher.py --input papers/pmid.txt --input-type pmid
+    python MetaAgent-Epi/dev/coding_sheet/scripts/pdf_fetcher.py --input papers/doi.txt
 
 Input:
     --input PATH - One ID per line (DOI or PMID). If omitted, defaults to papers/doi.txt.
@@ -286,7 +286,8 @@ class SciHubUrlExtractor:
             with self._playwright() as p:
                 # Launch in non-headless mode with larger window for better visibility
                 browser = p.chromium.launch(
-                    headless=False,
+                    # headless=False,
+                    headless=True, # 
                     args=[
                         "--no-sandbox",
                         "--start-maximized",  # Start maximized
@@ -705,11 +706,141 @@ class SciHubUrlExtractor:
             return None
         return None
 
-    def process_doi(self, doi, download_dir=None):
+    def _process_pmcid(self, pmcid, download_dir=None):
+        """Resolve PMCID to a PMC PDF and optionally download it."""
+        url_results = []
+        pmc_url = self._try_pmc_by_pmcid(pmcid)
+        if not pmc_url:
+            cprint(f"  [PMC] No PMC PDF found for {pmcid}", "yellow")
+            return url_results
+
+        if not download_dir:
+            url_results.append(
+                {
+                    "url": pmc_url,
+                    "download_url": pmc_url,
+                    "source": "PubMed Central",
+                    "status": "available",
+                    "code": 200,
+                    "size": None,
+                }
+            )
+            return url_results
+
+        safe_name = safe_slug(pmcid)
+        pdf_path = Path(download_dir) / f"{safe_name}.pdf"
+        if pdf_path.exists():
+            cprint(f"  [PMC] PDF already exists: {pdf_path.name}", "yellow")
+            url_results.append(
+                {
+                    "url": pmc_url,
+                    "download_url": pmc_url,
+                    "source": "PubMed Central",
+                    "status": "downloaded",
+                    "local_path": str(pdf_path),
+                    "code": 200,
+                    "size": None,
+                }
+            )
+            return url_results
+
+        try:
+            pmc_headers = {
+                "User-Agent": self.sess.headers.get(
+                    "User-Agent",
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                ),
+                "Accept": "application/pdf,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.9",
+                "Referer": f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/",
+                "Connection": "keep-alive",
+            }
+            resp = self.sess.get(pmc_url, headers=pmc_headers, timeout=30)
+            if resp.status_code == 200 and resp.content[:4] == b"%PDF":
+                pdf_path.write_bytes(resp.content)
+                size_mb = len(resp.content) / 1024 / 1024
+                cprint(
+                    f"  [PMC] Saved {pdf_path.name} ({size_mb:.2f} MB)",
+                    "green",
+                )
+                url_results.append(
+                    {
+                        "url": pmc_url,
+                        "download_url": pmc_url,
+                        "source": "PubMed Central",
+                        "status": "downloaded",
+                        "local_path": str(pdf_path),
+                        "code": 200,
+                        "size": len(resp.content),
+                    }
+                )
+                return url_results
+            cprint(
+                f"  [PMC] HTTP download failed (status={resp.status_code}), trying browser...",
+                "yellow",
+            )
+            pmc_article_url = f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/"
+            link_or_path, _from_playwright, actual_url = (
+                self._get_pdf_url_with_playwright(
+                    pmc_article_url,
+                    "https://pmc.ncbi.nlm.nih.gov",
+                    pmcid,
+                    download_dir,
+                    pdf_url_override=pmc_url,
+                )
+            )
+            if link_or_path and Path(link_or_path).exists():
+                url_results.append(
+                    {
+                        "url": pmc_url,
+                        "download_url": actual_url or pmc_url,
+                        "source": "PubMed Central (Browser)",
+                        "status": "downloaded",
+                        "local_path": str(link_or_path),
+                        "code": 200,
+                        "size": None,
+                    }
+                )
+        except Exception as e:
+            cprint(f"  [PMC] download error: {e}", "red")
+        return url_results
+
+    def process_pmid(self, pmid, download_dir=None, doi_override=None, pmcid_override=None):
+        """Resolve PMID to Sci-Hub via DOI first, then PMC as fallback."""
+        doi = (doi_override or "").strip()
+        pmcid = (pmcid_override or "").strip()
+        if not doi or not pmcid:
+            resolved_doi, resolved_pmcid = self._resolve_pmid(pmid)
+            if not doi:
+                doi = resolved_doi
+            if not pmcid:
+                pmcid = resolved_pmcid
+
+        url_results = []
+        if doi:
+            url_results = self.process_doi(
+                doi, download_dir=download_dir, use_pmc=False
+            )
+            if any(
+                info.get("local_path")
+                and Path(info.get("local_path")).exists()
+                for info in url_results
+            ):
+                return url_results, doi, pmcid
+
+        if pmcid:
+            cprint("  PMC:", "cyan")
+            pmc_results = self._process_pmcid(pmcid, download_dir)
+            if pmc_results:
+                return pmc_results, doi, pmcid
+
+        return url_results, doi, pmcid
+
+    def process_doi(self, doi, download_dir=None, use_pmc=False):
         """Resolve DOI to multiple PDF URLs from different mirrors and test each.
 
         Priority order:
-        1. PubMed Central full-text (if available)
+        1. PubMed Central full-text (if enabled and available)
         2. sci.bban.top (direct PDF, fastest)
         3. Other Sci-Hub mirrors
 
@@ -725,8 +856,8 @@ class SciHubUrlExtractor:
         seen_urls = set()
         found_available = False
 
-        # Priority 1: Try PubMed Central first
-        pmc_url = self._try_pubmed_fulltext(doi)
+        # Priority 1: Try PubMed Central first (if enabled)
+        pmc_url = self._try_pubmed_fulltext(doi) if use_pmc else None
         pmc_download_success = False
 
         if pmc_url:
@@ -895,6 +1026,9 @@ class SciHubUrlExtractor:
             # Return early only if PMC download actually succeeded
             if pmc_download_success:
                 return url_results
+
+        elif use_pmc:
+            cprint(f"  [PMC] No PMC full-text found for {doi}", "yellow")
 
         # Priority 2-3: Try Sci-Hub mirrors if PMC failed or unavailable
 
@@ -1094,113 +1228,28 @@ def main():
 
         if id_type == "pmid":
             pmid = identifier
-            doi, pmcid = extractor._resolve_pmid(pmid)
-            if doi:
-                cprint(f"Resolved PMID {pmid} → DOI {doi}", "cyan")
         else:
             doi = identifier
 
         # Pass download_dir if download mode enabled
         download_target = pdf_dir if args.download else None
-        if doi:
-            url_results = extractor.process_doi(doi, download_dir=download_target)
+        url_results = []
+
+        if pmid:
+            cprint(f"Resolving PMID: {pmid}", "magenta")
+            url_results, doi, pmcid = extractor.process_pmid(
+                pmid, download_dir=download_target, doi_override=doi, pmcid_override=pmcid
+            )
         elif pmcid:
             cprint(f"Resolving PMCID: {pmcid}", "magenta")
-            pmc_url = extractor._try_pmc_by_pmcid(pmcid)
-            url_results = []
-            if pmc_url:
-                if download_target:
-                    safe_name = safe_slug(pmcid or pmid or identifier)
-                    pdf_path = Path(download_target) / f"{safe_name}.pdf"
-                    if pdf_path.exists():
-                        cprint(f"  ↓ PDF already exists: {pdf_path.name}", "yellow")
-                        url_results.append(
-                            {
-                                "url": pmc_url,
-                                "download_url": pmc_url,
-                                "source": "PubMed Central",
-                                "status": "downloaded",
-                                "local_path": str(pdf_path),
-                                "code": 200,
-                                "size": None,
-                            }
-                        )
-                    else:
-                        try:
-                            pmc_headers = {
-                                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                                "Accept": "application/pdf,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                                "Accept-Language": "en-US,en;q=0.9",
-                                "Referer": f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/",
-                                "Connection": "keep-alive",
-                            }
-                            resp = extractor.sess.get(
-                                pmc_url, headers=pmc_headers, timeout=30
-                            )
-                            if resp.status_code == 200 and resp.content[:4] == b"%PDF":
-                                pdf_path.write_bytes(resp.content)
-                                size_mb = len(resp.content) / 1024 / 1024
-                                cprint(
-                                    f"  ✓ Saved {pdf_path.name} ({size_mb:.2f} MB)",
-                                    "green",
-                                )
-                                url_results.append(
-                                    {
-                                        "url": pmc_url,
-                                        "download_url": pmc_url,
-                                        "source": "PubMed Central",
-                                        "status": "downloaded",
-                                        "local_path": str(pdf_path),
-                                        "code": 200,
-                                        "size": len(resp.content),
-                                    }
-                                )
-                            else:
-                                cprint(
-                                    f"  ⚠ HTTP download failed (status={resp.status_code}), trying browser...",
-                                    "yellow",
-                                )
-                                pmc_article_url = (
-                                    f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/"
-                                )
-                                link_or_path, from_playwright, actual_url = (
-                                    extractor._get_pdf_url_with_playwright(
-                                        pmc_article_url,
-                                        "https://pmc.ncbi.nlm.nih.gov",
-                                        pmcid,
-                                        download_target,
-                                    )
-                                )
-                                if link_or_path and Path(link_or_path).exists():
-                                    url_results.append(
-                                        {
-                                            "url": pmc_url,
-                                            "download_url": actual_url or pmc_url,
-                                            "source": "PubMed Central (Browser)",
-                                            "status": "downloaded",
-                                            "local_path": str(link_or_path),
-                                            "code": 200,
-                                            "size": None,
-                                        }
-                                    )
-                        except Exception as e:
-                            cprint(f"  ⚠ PMC download error: {e}", "red")
-                else:
-                    url_results.append(
-                        {
-                            "url": pmc_url,
-                            "download_url": pmc_url,
-                            "source": "PubMed Central",
-                            "status": "available",
-                            "code": 200,
-                            "size": None,
-                        }
-                    )
-            else:
-                cprint(f"  ? No PMC PDF found for {pmcid}", "yellow")
+            url_results = extractor._process_pmcid(pmcid, download_dir=download_target)
+        elif doi:
+            cprint(f"Resolving DOI: {doi}", "magenta")
+            url_results = extractor.process_doi(
+                doi, download_dir=download_target, use_pmc=False
+            )
         else:
             cprint(f"  ? PMID {pmid} has no DOI/PMCID, skipping", "yellow")
-            url_results = []
 
         result = {
             "doi": doi,

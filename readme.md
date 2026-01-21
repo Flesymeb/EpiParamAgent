@@ -1,44 +1,33 @@
-# MetaAgent
+# MetaAgent-Epi
 
-> A modular agentic workflow for scientific meta-analysis.
+Modular workflows for epidemiology-oriented meta-analysis. Active development lives under `dev/`.
 
----
+## Modules
 
-## 🔍 Modules
+- **Literature Search** (`dev/literature_search`)
+  - LangGraph pipeline for scoping, query generation, retrieval, deduplication, and screening.
+  - Primary source: PubMed. Optional clients exist (ERIC/Embase placeholders).
+  - Screening supports abstract-first with full-text fallback.
 
-All modules are under `dev/` for active development.
+- **Coding Sheet Extraction** (`dev/coding_sheet`)
+  - PDF acquisition → MinerU → LLM extraction → coding sheet output.
+  - Templates are YAML-based (no code changes to add fields).
 
-### 1. Literature Search (`dev/literature_search/`)
+- **Shared Tools** (`dev/tools`)
+  - `paper_fetch`: PDF download tooling (Sci‑Hub + PMC).
+  - `mineru`: MinerU client and PDF→Markdown helpers.
 
-- **LangGraph pipeline**: Scoping → Query Generation → Multi-DB Retrieval → Deduplication → Auto-screening
-- **Data sources**: PubMed, ERIC, etc.
-- **Output**: Screened papers with inclusion decisions + screening reports
-
-### 2. Coding Sheet Extraction (`dev/coding_sheet/`)
-
-Now, we only support the correlation template extraction.
-
-`dois` => `pdf_fecher` => `pdf→markdown` (MinerU) => `LLM extraction` => `coding sheet`
-
-- **Multi-timepoint extraction**: Longitudinal studies → ALL timepoints (no filtering during extraction)
-- **Dependency tracking**: `sample_id`, `is_dependent` for multilevel meta-analysis
-- **Smart calculation**: Sample sizes from missing rates, n from (T1+T2)/2
-- **Templates**: `early_numeracy`, `correlation`, `intervention` (YAML-based schemas)
-
----
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Literature Search
 
 ```bash
 cd dev/literature_search
 uv sync
-cp .env.example .env  # Add API keys
+cp .env.example .env
+.venv/Scripts/activate
 
-# Run the search pipeline
-.venv\Scripts\activate
-
+# Run LangGraph dev server (optional)
 langgraph dev --allow-blocking
 ```
 
@@ -47,37 +36,35 @@ langgraph dev --allow-blocking
 ```bash
 cd dev/coding_sheet
 uv sync
-cp .env.example .env  # Add API keys
-.venv\Scripts\activate
+cp .env.example .env
+.venv/Scripts/activate
+
+# Download PDFs
+python scripts/pdf_fetcher.py --download
+
+# Run extraction
+python scripts/run_extraction.py --input papers/pdfs/ --out output/extraction --method mineru --template v2
 ```
 
+## Key Entrypoints
+
+- Literature search + screening:
+  - `dev/literature_search/scripts/screening_llm_batch.py`
+  - `dev/literature_search/scripts/run_llm_screening.ps1` (V1/V2/V3)
+- PDF fetcher:
+  - `dev/tools/paper_fetch/pdf_fetcher.py`
+
+## Project Layout (high-level)
+
 ```
-# 1) get Sci-Hub URLs from DOIs
-python scripts/pdf_fecher.py --input dois.txt --out scihub_urls.txt
-# 2) run extraction
-python scripts/run_extraction.py --input papers/scihub_urls.txt --out output/extraction_fixed --method mineru --mode debug --template early_numeracy --continue-on-error
+dev/
+  literature_search/
+  coding_sheet/
+  tools/
+docs/
+misc/
 ```
 
----
-
-## 📚 Documentation
-
-- Literature Search: [START.md](dev/literature_search/START.md)
-- Coding Sheet: [FEATURES.md](dev/coding_sheet/docs/FEATURES.md)
-- Template Config: [early_numeracy.yaml](dev/coding_sheet/src/coding_sheet/configs/templates/early_numeracy.yaml)
-
----
-
-## 🗂️ Database Support
-
-**Literature Search Module**:
-
-- [x] PubMed (NCBI Entrez API)
-- [x] ERIC (IES API)
-- [ ] PsycINFO
-- [ ] ProQuest
-
-**Coding Sheet Module**:
-
-- PDF → Markdown: MinerU VLM
-- Paper access: Sci-Hub integration
+For details, see:
+- `dev/literature_search/README.md`
+- `dev/coding_sheet/README.md`

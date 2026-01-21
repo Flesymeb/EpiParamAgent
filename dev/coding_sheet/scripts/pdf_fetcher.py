@@ -1,7 +1,7 @@
 """Entry point for the Sci-Hub/PubMed PDF fetcher.
 
 Usage:
-  python MetaAgent-Epi/dev/coding_sheet/scripts/pdf_fecher.py --download
+  python MetaAgent-Epi/dev/coding_sheet/scripts/pdf_fetcher.py --download
 """
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ def main() -> None:
         Path(__file__).resolve().parents[2]
         / "tools"
         / "paper_fetch"
-        / "pdf_fecher.py"
+        / "pdf_fetcher.py"
     )
     if not target.exists():
         raise FileNotFoundError(f"Target script not found: {target}")

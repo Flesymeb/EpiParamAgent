@@ -167,7 +167,7 @@ mkdir -p papers
 ### 2. 下载PDFs
 
 ```bash
-python scripts/pdf_fecher.py --download
+python scripts/pdf_fetcher.py --download
 # → papers/pdfs/*.pdf
 ```
 
