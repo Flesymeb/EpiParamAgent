@@ -37,7 +37,7 @@ import json
 import random
 import csv
 from termcolor import cprint
-from urllib.parse import urljoin
+from urllib.parse import urljoin, quote
 from pathlib import Path
 from fake_useragent import UserAgent
 
@@ -126,6 +126,10 @@ class SciHubUrlExtractor:
                 self.mirrors.remove("https://sci.bban.top")
                 self.mirrors.insert(0, "https://sci.bban.top")
 
+            # Optional fallback mirror/search page
+            if "https://pismin.com" not in self.mirrors:
+                self.mirrors.append("https://pismin.com")
+
             if not self.mirrors:
                 cprint(
                     "No mirrors found from sci-hub.pub, using fallback list...",
@@ -136,6 +140,7 @@ class SciHubUrlExtractor:
                     "https://sci-hub.se",
                     "https://sci-hub.st",
                     "https://sci-hub.ru",
+                    "https://pismin.com",
                 ]
 
             cprint(
@@ -151,12 +156,32 @@ class SciHubUrlExtractor:
                 "https://sci-hub.se",
                 "https://sci-hub.st",
                 "https://sci-hub.ru",
+                "https://pismin.com",
             ]
             cprint(f"Fallback mirrors: {', '.join(self.mirrors)}", "green")
 
     def _random_delay(self, min_sec=0.5, max_sec=2.0):
         """Random delay to avoid detection."""
         time.sleep(random.uniform(min_sec, max_sec))
+
+    def _bban_direct_pdf_url(self, doi, base_url):
+        """Build sci.bban.top direct PDF URL for a DOI using its encoding scheme."""
+        doi = (doi or "").strip()
+        if "/" not in doi:
+            return f"{base_url}/pdf/{doi}.pdf?download=true"
+        prefix, suffix = doi.split("/", 1)
+        # Encode suffix once, then escape '%' to match bban's double-encoding
+        suffix_enc = quote(suffix, safe="")
+        suffix_double = suffix_enc.replace("%", "%25")
+        return f"{base_url}/pdf/{prefix}/{suffix_double}.pdf?download=true"
+
+    def _extract_bban_onclick_url(self, html):
+        """Extract Sci-Hub download URL from a bban.top onclick button."""
+        match = re.search(r"location\\.href='([^']+)'", html)
+        if not match:
+            return None
+        url = match.group(1).replace("\\/", "/")
+        return url
 
     def get_pdf_url(self, doi, base_url, download_dir=None):
         """Extract PDF download link from Sci-Hub page using cloudscraper.
@@ -179,9 +204,29 @@ class SciHubUrlExtractor:
                 - from_playwright: True if obtained via Playwright
                 - download_url: The actual PDF download URL when known (best-effort)
         """
-        # Special handling for sci.bban.top - direct PDF format
+        # Special handling for sci.bban.top - try page onclick first, then build direct URL
         if "bban.top" in base_url:
-            pdf_url = f"{base_url}/pdf/{doi}.pdf"
+            page_url = f"{base_url}/{doi}"
+            try:
+                headers = self._get_random_headers()
+                headers["Referer"] = base_url + "/"
+                resp = self.sess.get(page_url, headers=headers, timeout=15)
+                if resp.status_code == 403:
+                    cprint(
+                        f"  ⚠ HTTP 403 from cloudscraper, trying Playwright...", "yellow"
+                    )
+                    return self._get_pdf_url_with_playwright(
+                        page_url, base_url, doi, download_dir
+                    )
+                if resp.status_code == 200:
+                    onclick_url = self._extract_bban_onclick_url(resp.text)
+                    if onclick_url:
+                        cprint(f"  → Found via onclick: {onclick_url}", "green")
+                        return (onclick_url, False, onclick_url)
+            except Exception:
+                pass
+
+            pdf_url = self._bban_direct_pdf_url(doi, base_url)
             cprint(f"  → Direct PDF URL: {pdf_url}", "cyan")
             return (pdf_url, False, pdf_url)
 
@@ -691,6 +736,7 @@ class SciHubUrlExtractor:
     def _try_pmc_by_pmcid(self, pmcid):
         """Try to get full-text PDF from PMC by PMCID."""
         try:
+            pmcid = re.sub(r"^.*?(PMC\d+).*$", r"\1", pmcid, flags=re.IGNORECASE)
             pmcid = pmcid if pmcid.startswith("PMC") else f"PMC{pmcid}"
             html_url = f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/"
             html_resp = self.sess.get(html_url, timeout=10)
@@ -709,6 +755,7 @@ class SciHubUrlExtractor:
     def _process_pmcid(self, pmcid, download_dir=None):
         """Resolve PMCID to a PMC PDF and optionally download it."""
         url_results = []
+        pmcid = re.sub(r"^.*?(PMC\d+).*$", r"\1", pmcid, flags=re.IGNORECASE)
         pmc_url = self._try_pmc_by_pmcid(pmcid)
         if not pmc_url:
             cprint(f"  [PMC] No PMC PDF found for {pmcid}", "yellow")
@@ -821,6 +868,63 @@ class SciHubUrlExtractor:
             url_results = self.process_doi(
                 doi, download_dir=download_dir, use_pmc=False
             )
+            if download_dir:
+                downloaded_entry = next(
+                    (u for u in url_results if u.get("status") == "downloaded"), None
+                )
+                if not downloaded_entry:
+                    first_available = next(
+                        (u for u in url_results if u.get("status") == "available"),
+                        None,
+                    )
+                    if first_available:
+                        pdf_url = first_available["url"]
+                        safe_name = safe_slug(doi or pmid)
+                        pdf_path = Path(download_dir) / f"{safe_name}.pdf"
+                        if pdf_path.exists():
+                            cprint(f"  ↓ PDF already exists: {pdf_path.name}", "yellow")
+                            url_results.append(
+                                {
+                                    "url": pdf_url,
+                                    "download_url": first_available.get("download_url"),
+                                    "source": "Sci-Hub",
+                                    "status": "downloaded",
+                                    "local_path": str(pdf_path),
+                                    "code": 200,
+                                    "size": None,
+                                }
+                            )
+                        else:
+                            cprint(f"  ↓ Downloading PDF via HTTP...", "cyan", end="")
+                            try:
+                                resp = self.sess.get(pdf_url, timeout=30)
+                                if resp.status_code == 200 and resp.content[:4] == b"%PDF":
+                                    pdf_path.write_bytes(resp.content)
+                                    size_mb = len(resp.content) / 1024 / 1024
+                                    cprint(
+                                        f" ✓ Saved {pdf_path.name} ({size_mb:.2f} MB)",
+                                        "green",
+                                    )
+                                    url_results.append(
+                                        {
+                                            "url": pdf_url,
+                                            "download_url": first_available.get(
+                                                "download_url"
+                                            ),
+                                            "source": "Sci-Hub",
+                                            "status": "downloaded",
+                                            "local_path": str(pdf_path),
+                                            "code": 200,
+                                            "size": len(resp.content),
+                                        }
+                                    )
+                                else:
+                                    cprint(
+                                        f" ✗ Failed (status={resp.status_code}, not PDF)",
+                                        "red",
+                                    )
+                            except Exception as e:
+                                cprint(f" ✗ Download error: {e}", "red")
             if any(
                 info.get("local_path")
                 and Path(info.get("local_path")).exists()

@@ -22,6 +22,7 @@ except (AttributeError, ValueError, OverflowError):
     except (AttributeError, ValueError, OverflowError):
         pass
 import json
+import re
 import time
 import asyncio
 from pathlib import Path
@@ -203,13 +204,24 @@ def download_pdfs_batch(
 
         override = pmid_overrides.get(pmid, {})
         doi = (override.get("doi") or "").strip()
-        pmcid = (override.get("pmcid") or "").strip()
+        pmcid_raw = (override.get("pmcid") or "").strip()
+        pmcid = pmcid_raw
+        if pmcid:
+            pmcid = re.sub(r"^.*?(PMC\d+).*$", r"\1", pmcid, flags=re.IGNORECASE)
+        resolved_doi = ""
+        resolved_pmcid = ""
         if not pmcid or not doi:
             resolved_doi, resolved_pmcid = extractor._resolve_pmid(pmid)
             if not doi:
                 doi = resolved_doi
             if not pmcid:
                 pmcid = resolved_pmcid
+        if pmcid:
+            pmcid = re.sub(r"^.*?(PMC\d+).*$", r"\1", pmcid, flags=re.IGNORECASE)
+        if pmcid_raw and pmcid_raw != pmcid:
+            print(f"  [PMCID] normalized: {pmcid_raw} -> {pmcid}")
+        if resolved_pmcid and not pmcid_raw:
+            print(f"  [PMCID] resolved from PMID: {resolved_pmcid}")
         if not doi and not pmcid:
             results[pmid] = {"status": "no_id", "pdf_path": ""}
             continue

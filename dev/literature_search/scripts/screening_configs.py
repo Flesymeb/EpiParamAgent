@@ -28,7 +28,6 @@ CONFIG_COVID_VARIANTS = {
 }
 
 # ========== Search V3: Superspreading 研究 ==========
-# ========== Search V3: Superspreading 研究 ==========
 CONFIG_SUPERSPREADING = {
     "research_question": (
         "What are the superspreading patterns and heterogeneity in SARS-CoV-2 transmission, "

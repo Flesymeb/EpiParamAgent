@@ -9,6 +9,11 @@ if (-not $ConfigName) {
   $ConfigName = "V2"
 }
 
+$BatchSize = $args[1]
+if (-not $BatchSize) {
+  $BatchSize = 10
+}
+
 $SearchKey = $ConfigName.ToLower().Replace("v", "search_v")
 
 $Input = Join-Path $ProjectDir ("langgraph_runs\\ground_truth\\{0}\\{0}_raw.csv" -f $SearchKey)
@@ -21,4 +26,4 @@ python (Join-Path $ScriptDir "screening_llm_batch.py") `
   --ground-truth $GroundTruth `
   --config $ConfigName `
   --auto-fulltext `
-  --batch-size 10
+  --batch-size $BatchSize
