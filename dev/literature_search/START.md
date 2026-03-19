@@ -2,17 +2,28 @@
 
 ## Setup
 
-```bash
+```powershell
 cd dev/literature_search
 uv sync
-cp .env.example .env
 .venv/Scripts/activate
 ```
 
+Config rule:
+
+- shared defaults: `dev/.env`
+- local machine overrides: `dev/.env.local`
+- literature_search-only overrides: `dev/literature_search/.env.local`
+
 ## Run Screening (V1/V2/V3)
 
-```bash
-scripts\\run_llm_screening.ps1 V2
+```powershell
+scripts\\ops\\run_llm_screening.ps1 -ConfigName P10 -Topic serial_interval
+```
+
+## Run Dashboard
+
+```powershell
+scripts\\ops\\run_screening_dashboard.ps1
 ```
 
 ## Run LangGraph Dev Server (optional)
@@ -25,3 +36,4 @@ langgraph dev --allow-blocking
 
 - Screening outputs: `dev/literature_search/langgraph_runs/...`
 - Full-text cache: `dev/paper_pool/`
+- Screening manifests: next to outputs / `screening_logs/run_manifest_*.json`

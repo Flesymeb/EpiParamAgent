@@ -19,12 +19,17 @@ Modular workflows for epidemiology-oriented meta-analysis. Active development li
 
 ## Quick Start
 
+Shared runtime config:
+
+- put shared defaults in `dev/.env`
+- put machine-specific secrets in `dev/.env.local`
+- keep module-only overrides in `dev/literature_search/.env.local` or `dev/coding_sheet/.env.local`
+
 ### Literature Search
 
-```bash
+```powershell
 cd dev/literature_search
 uv sync
-cp .env.example .env
 .venv/Scripts/activate
 
 # Run LangGraph dev server (optional)
@@ -33,26 +38,24 @@ langgraph dev --allow-blocking
 
 ### Coding Sheet Extraction
 
-```bash
+```powershell
 cd dev/coding_sheet
 uv sync
-cp .env.example .env
 .venv/Scripts/activate
 
-# Download PDFs
-python scripts/pdf_fetcher.py --download
-
 # Run extraction
-python scripts/run_extraction.py --input papers/pdfs/ --out output/extraction --method mineru --template v2
+python cli/extract_epi.py --input pmid.txt --out output/epi_extract --stage both
 ```
 
 ## Key Entrypoints
 
 - Literature search + screening:
-  - `dev/literature_search/scripts/screening_llm_batch.py`
-  - `dev/literature_search/scripts/run_llm_screening.ps1` (V1/V2/V3)
+  - `dev/literature_search/scripts/cli/screening_llm_batch.py`
+  - `dev/literature_search/scripts/ops/run_llm_screening.ps1`
 - PDF fetcher:
   - `dev/tools/paper_fetch/pdf_fetcher.py`
+- Coding sheet extraction:
+  - `dev/coding_sheet/cli/extract_epi.py`
 
 ## Project Layout (high-level)
 
@@ -66,5 +69,6 @@ misc/
 ```
 
 For details, see:
+- `dev/START.md`
 - `dev/literature_search/README.md`
 - `dev/coding_sheet/README.md`

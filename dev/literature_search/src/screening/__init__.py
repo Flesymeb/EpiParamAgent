@@ -1,5 +1,8 @@
-"""Screening module for multi-dimensional relevance scoring."""
+"""Screening package.
 
-from .dimension_scoring import EpiDimensionScores, DimensionScore
+Submodules are imported explicitly to keep CLI cold-start light and avoid
+pulling heavy LLM/full-text dependencies during simple operations such as
+`--help`.
+"""
 
-__all__ = ["EpiDimensionScores", "DimensionScore"]
+__all__: list[str] = []

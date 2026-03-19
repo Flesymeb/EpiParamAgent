@@ -1,0 +1,143 @@
+"""Paper staging helpers for screening workflows."""
+
+from __future__ import annotations
+
+import csv
+from pathlib import Path
+from typing import Any
+
+from .fulltext_pipeline import MD_CACHE_DIR
+
+
+def print_ground_truth_warning(gt_file: Path) -> None:
+    """Emit a helpful warning when GT PMIDs cannot be loaded."""
+    if gt_file.exists():
+        header = ""
+        try:
+            with open(gt_file, "r", encoding="utf-8-sig") as f:
+                reader = csv.DictReader(f)
+                header = ",".join(reader.fieldnames or [])
+        except Exception:
+            header = ""
+        print(
+            f"⚠️  Ground Truth 文件存在但未识别到 PMID 列: {gt_file}\n"
+            f"   Header: {header}\n"
+        )
+    else:
+        print(f"⚠️  未找到Ground Truth文件: {gt_file}\n")
+
+
+def annotate_ground_truth(
+    papers: list[dict[str, Any]], gt_pmids: set[str]
+) -> int | None:
+    """Mark papers that belong to the provided GT PMID set."""
+    if not gt_pmids:
+        return None
+
+    for paper in papers:
+        pmid = (paper.get("PMID") or "").strip()
+        paper["is_ground_truth"] = "✓" if pmid in gt_pmids else ""
+    gt_count = sum(1 for p in papers if p.get("is_ground_truth") == "✓")
+    print(f"其中包含 {gt_count}/{len(gt_pmids)} 篇Ground Truth\n")
+    return gt_count
+
+
+def partition_papers(
+    *,
+    papers: list[dict[str, Any]],
+    auto_fulltext: bool,
+    fulltext_only: bool,
+) -> dict[str, Any]:
+    """Split papers into title/abstract screening and full-text rescue buckets."""
+    papers_with_abstract: list[dict[str, Any]] = []
+    papers_without_abstract: list[dict[str, Any]] = []
+    fulltext_errors: list[dict[str, str]] = []
+    fulltext_cached: list[dict[str, Any]] = []
+
+    for paper in papers:
+        pmid = (paper.get("PMID") or "").strip()
+        abstract = (paper.get("Abstract") or "").strip()
+        fulltext_markdown = (paper.get("fulltext_markdown") or "").strip()
+        fulltext_path = (paper.get("fulltext_path") or "").strip()
+
+        if abstract:
+            papers_with_abstract.append(paper)
+            paper["screening_stage"] = "title_abstract"
+            continue
+
+        if not auto_fulltext and not fulltext_only:
+            papers_with_abstract.append(paper)
+            paper["screening_stage"] = "title_only"
+        else:
+            papers_without_abstract.append(paper)
+            paper["screening_stage"] = "pending_fulltext"
+            paper["fulltext_status"] = "pending"
+            paper.setdefault("fulltext_path", "")
+            paper["llm_suggest"] = "needs_full_text"
+
+        if not (auto_fulltext or fulltext_only):
+            continue
+
+        if not fulltext_markdown and fulltext_path:
+            try:
+                fulltext_markdown = Path(fulltext_path).read_text(encoding="utf-8")
+                paper["fulltext_markdown"] = fulltext_markdown
+            except Exception:
+                fulltext_errors.append(
+                    {
+                        "pmid": pmid,
+                        "title": paper.get("Title", ""),
+                        "status": "read_failed",
+                        "detail": f"failed to read fulltext_path: {fulltext_path}",
+                    }
+                )
+
+        if not fulltext_markdown and pmid:
+            cached_md = MD_CACHE_DIR / f"PMID_{pmid}" / f"PMID_{pmid}.md"
+            if cached_md.exists() and cached_md.stat().st_size > 0:
+                try:
+                    fulltext_markdown = cached_md.read_text(encoding="utf-8")
+                    paper["fulltext_markdown"] = fulltext_markdown
+                    paper["fulltext_path"] = str(cached_md)
+                except Exception:
+                    fulltext_errors.append(
+                        {
+                            "pmid": pmid,
+                            "title": paper.get("Title", ""),
+                            "status": "read_failed",
+                            "detail": f"failed to read cached md: {cached_md}",
+                        }
+                    )
+
+        if fulltext_markdown:
+            fulltext_cached.append(paper)
+
+    return {
+        "papers_with_abstract": papers_with_abstract,
+        "papers_without_abstract": papers_without_abstract,
+        "fulltext_errors": fulltext_errors,
+        "fulltext_cached": fulltext_cached,
+    }
+
+
+def print_stage_split(
+    *,
+    papers_with_abstract: list[dict[str, Any]],
+    papers_without_abstract: list[dict[str, Any]],
+    auto_fulltext: bool,
+    fulltext_only: bool,
+) -> None:
+    """Print the routing summary of the current screening run."""
+    print("=" * 80)
+    if auto_fulltext or fulltext_only:
+        print(
+            f"筛选分流: title+abstract={len(papers_with_abstract)} | full-text={len(papers_without_abstract)}"
+        )
+    else:
+        title_only = sum(
+            1 for p in papers_with_abstract if p.get("screening_stage") == "title_only"
+        )
+        print(
+            f"筛选分流: title+abstract={len(papers_with_abstract)-title_only} | title-only={title_only}"
+        )
+    print("=" * 80)

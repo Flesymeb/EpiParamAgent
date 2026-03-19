@@ -42,30 +42,17 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from langgraph.graph import StateGraph, END
 import yaml
 from pathlib import Path
-from dotenv import load_dotenv
+import sys
 
 logger = logging.getLogger(__name__)
 
-# Load environment variables from multiple possible locations
-# Try to find .env file in project directories
-env_paths = [
-    Path(__file__).parent.parent.parent.parent / ".env",  # dev/literature_search/.env
-    Path(__file__).parent.parent.parent.parent.parent / ".env",  # project root .env
-    Path.cwd() / ".env",  # current working directory
-    Path.cwd() / "dev" / "literature_search" / ".env",  # relative to cwd
-]
+TOOLS_DIR = Path(__file__).resolve().parents[3] / "tools"
+if str(TOOLS_DIR) not in sys.path:
+    sys.path.insert(0, str(TOOLS_DIR))
 
-for env_path in env_paths:
-    if env_path.exists():
-        load_dotenv(env_path, override=False)  # Don't override existing env vars
-        logger.info(f"Loaded .env from: {env_path}")
-        break
-else:
-    # Fallback: try default location
-    load_dotenv()
-    logger.warning(
-        "No .env file found in expected locations, using default dotenv behavior"
-    )
+from common.config import load_runtime_env
+
+load_runtime_env(module_hint="literature_search")
 
 
 @dataclass

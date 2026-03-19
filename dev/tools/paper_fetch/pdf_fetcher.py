@@ -130,6 +130,15 @@ class SciHubUrlExtractor:
             if "https://pismin.com" not in self.mirrors:
                 self.mirrors.append("https://pismin.com")
 
+            # Ensure common mirrors are always included (for /doi access)
+            for mirror in [
+                "https://sci-hub.st",
+                "https://sci-hub.se",
+                "https://sci-hub.ru",
+            ]:
+                if mirror not in self.mirrors:
+                    self.mirrors.append(mirror)
+
             if not self.mirrors:
                 cprint(
                     "No mirrors found from sci-hub.pub, using fallback list...",
@@ -164,6 +173,13 @@ class SciHubUrlExtractor:
         """Random delay to avoid detection."""
         time.sleep(random.uniform(min_sec, max_sec))
 
+    def _pick_interactive_mirror(self):
+        """Pick a mirror for interactive (browser) fallback."""
+        for mirror in ["https://sci-hub.st", "https://sci-hub.se", "https://sci-hub.ru"]:
+            if mirror in self.mirrors:
+                return mirror
+        return "https://sci-hub.st"
+
     def _bban_direct_pdf_url(self, doi, base_url):
         """Build sci.bban.top direct PDF URL for a DOI using its encoding scheme."""
         doi = (doi or "").strip()
@@ -183,7 +199,7 @@ class SciHubUrlExtractor:
         url = match.group(1).replace("\\/", "/")
         return url
 
-    def get_pdf_url(self, doi, base_url, download_dir=None):
+    def get_pdf_url(self, doi, base_url, download_dir=None, allow_playwright=True):
         """Extract PDF download link from Sci-Hub page using cloudscraper.
 
         Tries multiple methods to find PDF URL:
@@ -213,11 +229,10 @@ class SciHubUrlExtractor:
                 resp = self.sess.get(page_url, headers=headers, timeout=15)
                 if resp.status_code == 403:
                     cprint(
-                        f"  ⚠ HTTP 403 from cloudscraper, trying Playwright...", "yellow"
+                        "  ✗ HTTP 403 from cloudscraper (bban); try interactive mirrors",
+                        "yellow",
                     )
-                    return self._get_pdf_url_with_playwright(
-                        page_url, base_url, doi, download_dir
-                    )
+                    # Fall back to direct PDF URL construction
                 if resp.status_code == 200:
                     onclick_url = self._extract_bban_onclick_url(resp.text)
                     if onclick_url:
@@ -244,11 +259,22 @@ class SciHubUrlExtractor:
             resp = self.sess.get(page_url, headers=headers, timeout=15)
 
             if resp.status_code == 403:
+                if not allow_playwright:
+                    cprint(
+                        f"  ✗ HTTP 403 from cloudscraper (skip Playwright)", "yellow"
+                    )
+                    return (None, False, None)
                 cprint(
                     f"  ⚠ HTTP 403 from cloudscraper, trying Playwright...", "yellow"
                 )
+                interactive_base = self._pick_interactive_mirror()
+                interactive_page = f"{interactive_base}/{doi}"
                 return self._get_pdf_url_with_playwright(
-                    page_url, base_url, doi, download_dir
+                    interactive_page,
+                    interactive_base,
+                    doi,
+                    download_dir,
+                    headless=False,
                 )
 
             if resp.status_code != 200:
@@ -304,7 +330,13 @@ class SciHubUrlExtractor:
             return (None, False, None)
 
     def _get_pdf_url_with_playwright(
-        self, page_url, base_url, doi=None, download_dir=None, pdf_url_override=None
+        self,
+        page_url,
+        base_url,
+        doi=None,
+        download_dir=None,
+        pdf_url_override=None,
+        headless=True,
     ):
         """Fallback: Use Playwright to bypass DDoS-Guard and download PDF directly.
 
@@ -329,10 +361,9 @@ class SciHubUrlExtractor:
 
         try:
             with self._playwright() as p:
-                # Launch in non-headless mode with larger window for better visibility
+                # Launch with configurable headless mode
                 browser = p.chromium.launch(
-                    # headless=False,
-                    headless=True, # 
+                    headless=headless,
                     args=[
                         "--no-sandbox",
                         "--start-maximized",  # Start maximized
@@ -357,6 +388,7 @@ class SciHubUrlExtractor:
                 downloaded_file = None
                 pdf_url_from_download = None
                 actual_download_url = None  # 记录真实下载URL
+                download_start_ts = time.time()
 
                 def handle_download(download):
                     nonlocal downloaded_file, pdf_url_from_download, actual_download_url
@@ -439,7 +471,10 @@ class SciHubUrlExtractor:
                     browser.close()
                     return (None, False, None)
 
-                cprint("  Opening browser window...", "cyan")
+                if headless:
+                    cprint("  Opening headless browser...", "cyan")
+                else:
+                    cprint("  Opening browser window...", "cyan")
                 page.goto(page_url, timeout=30000)
                 page.wait_for_load_state("networkidle", timeout=15000)
 
@@ -601,6 +636,31 @@ class SciHubUrlExtractor:
                         page.wait_for_event("download", timeout=60000)
                     except Exception:
                         cprint(f"  ✗ No download detected within timeout", "red")
+
+                    # Optional manual wait/pickup
+                    if not downloaded_file and download_dir and doi:
+                        try:
+                            user_input = input(
+                                "  ⏸ Press Enter after manual download, or type 'skip' to continue: "
+                            ).strip().lower()
+                        except EOFError:
+                            user_input = "skip"
+                        if user_input != "skip":
+                            # Try to pick up recently downloaded PDF
+                            download_dir = Path(download_dir)
+                            candidates = sorted(
+                                download_dir.glob("*.pdf"),
+                                key=lambda p: p.stat().st_mtime,
+                                reverse=True,
+                            )
+                            for candidate in candidates:
+                                if candidate.stat().st_mtime >= download_start_ts:
+                                    downloaded_file = candidate
+                                    cprint(
+                                        f"  ✓ Detected manual download: {candidate.name}",
+                                        "green",
+                                    )
+                                    break
 
                 browser.close()
 
@@ -834,6 +894,7 @@ class SciHubUrlExtractor:
                     pmcid,
                     download_dir,
                     pdf_url_override=pmc_url,
+                    headless=True,
                 )
             )
             if link_or_path and Path(link_or_path).exists():
@@ -856,12 +917,16 @@ class SciHubUrlExtractor:
         """Resolve PMID to Sci-Hub via DOI first, then PMC as fallback."""
         doi = (doi_override or "").strip()
         pmcid = (pmcid_override or "").strip()
+        if pmcid:
+            pmcid = re.sub(r"^.*?(PMC\d+).*$", r"\1", pmcid, flags=re.IGNORECASE)
         if not doi or not pmcid:
             resolved_doi, resolved_pmcid = self._resolve_pmid(pmid)
             if not doi:
                 doi = resolved_doi
             if not pmcid:
                 pmcid = resolved_pmcid
+        if pmcid:
+            pmcid = re.sub(r"^.*?(PMC\d+).*$", r"\1", pmcid, flags=re.IGNORECASE)
 
         url_results = []
         if doi:
@@ -931,6 +996,13 @@ class SciHubUrlExtractor:
                 for info in url_results
             ):
                 return url_results, doi, pmcid
+            # Sci-Hub available but not downloaded -> fall back to PMC if possible
+            if not pmcid:
+                resolved_doi, resolved_pmcid = self._resolve_pmid(pmid)
+                if not pmcid:
+                    pmcid = resolved_pmcid
+            if pmcid:
+                pmcid = re.sub(r"^.*?(PMC\d+).*$", r"\1", pmcid, flags=re.IGNORECASE)
 
         if pmcid:
             cprint("  PMC:", "cyan")
@@ -1136,10 +1208,17 @@ class SciHubUrlExtractor:
 
         # Priority 2-3: Try Sci-Hub mirrors if PMC failed or unavailable
 
+        playwright_attempted = False
+        interactive_mirror = self._pick_interactive_mirror()
         for mirror in self.mirrors:
-            link_or_path, from_playwright, actual_url = self.get_pdf_url(
-                doi, mirror, download_dir
+            allow_playwright = (
+                not playwright_attempted and mirror == interactive_mirror
             )
+            link_or_path, from_playwright, actual_url = self.get_pdf_url(
+                doi, mirror, download_dir, allow_playwright=allow_playwright
+            )
+            if allow_playwright:
+                playwright_attempted = True
 
             if link_or_path and link_or_path not in seen_urls:
                 seen_urls.add(link_or_path)

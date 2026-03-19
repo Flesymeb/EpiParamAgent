@@ -1,25 +1,19 @@
 import sys
 from pathlib import Path
-from dotenv import load_dotenv
-
-env_path = Path(__file__).resolve().parent.parent / ".env"
-load_dotenv(env_path, override=False)
-
-# LangSmith variable shims
-import os
-
-if os.getenv("LANGSMITH_API_KEY") and not os.getenv("LANGCHAIN_API_KEY"):
-    os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGSMITH_API_KEY")
-if os.getenv("LANGSMITH_PROJECT") and not os.getenv("LANGCHAIN_PROJECT"):
-    os.environ["LANGCHAIN_PROJECT"] = os.getenv("LANGSMITH_PROJECT")
-os.environ.setdefault("LANGCHAIN_TRACING_V2", "true")
-os.environ.setdefault("LANGCHAIN_ENDPOINT", "https://api.smith.langchain.com")
 
 # Ensure project src is on sys.path for imports like `data_sources`
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "src"
+TOOLS = ROOT.parent / "tools"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
+
+from common.config import apply_langsmith_env, load_runtime_env
+
+load_runtime_env(module_hint="literature_search")
+apply_langsmith_env(module_hint="literature_search")
 
 from langgraph_pipeline.graph import build_graph
 
