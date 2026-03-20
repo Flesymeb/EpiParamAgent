@@ -87,6 +87,7 @@ torch_cache/
 # Logs
 logs/
 *.log
+vite-*.log
 
 # Large files
 *.pkl
@@ -113,6 +114,19 @@ Thumbs.db
 tmp/
 temp/
 *.tmp
+*.tsbuildinfo
+
+# Node / frontend
+node_modules/
+dev/workbench/frontend/dist/
+dev/workbench/frontend/tailwind.config.js
+dev/workbench/frontend/tailwind.config.d.ts
+dev/workbench/frontend/vite.config.js
+dev/workbench/frontend/vite.config.d.ts
+
+# Local workflow outputs
+dev/coding_sheet/output/
+dev/tmp_manifest_test/
 
 
 # video files

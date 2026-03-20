@@ -24,7 +24,6 @@ except (AttributeError, ValueError, OverflowError):
 BASE_DIR = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(BASE_DIR / "src"))
 sys.path.insert(0, str(BASE_DIR.parent / "tools"))
-sys.path.insert(0, str(BASE_DIR / "scripts" / "tools"))
 
 from common.config import load_runtime_env
 from screening.fulltext_pipeline import MD_CACHE_DIR
@@ -34,7 +33,11 @@ load_runtime_env(module_hint="literature_search")
 
 def main() -> None:
     args = _build_arg_parser().parse_args()
-    from screening.config_resolution import resolve_cli_paths, resolve_screening_config
+    from screening.profile_resolution import (
+        resolve_explicit_cli_paths,
+        resolve_profile_config,
+        resolve_profile_io_paths,
+    )
     from screening.fulltext_pipeline import prepare_fulltext_candidates
     from screening.llm_screening import (
         init_llm_model,
@@ -50,13 +53,26 @@ def main() -> None:
         print_stage_split,
     )
 
-    screening_config, research_question = resolve_screening_config(args.config)
-    input_file, output_file, gt_file = resolve_cli_paths(
-        base_dir=BASE_DIR,
-        input_raw=args.input,
-        output_raw=args.output,
-        ground_truth_raw=args.ground_truth,
+    screening_config, research_question = resolve_profile_config(
+        args.profile, args.topic
     )
+    if args.project_root and args.profile:
+        _, input_file, output_file, gt_file = resolve_profile_io_paths(
+            project_root=args.project_root,
+            profile_name=args.profile,
+            topic=args.topic,
+        )
+    else:
+        if not (args.input and args.output and args.ground_truth):
+            raise ValueError(
+                "Use either --project-root/--profile or explicit --input/--output/--ground-truth."
+            )
+        input_file, output_file, gt_file = resolve_explicit_cli_paths(
+            base_dir=BASE_DIR,
+            input_raw=args.input,
+            output_raw=args.output,
+            ground_truth_raw=args.ground_truth,
+        )
     batch_size = args.batch_size
     batch_concurrency = args.batch_concurrency
 
@@ -177,10 +193,9 @@ def main() -> None:
         gt_count=gt_count,
         batch_size=batch_size,
         batch_concurrency=batch_concurrency,
-        config_name=args.config,
+        profile_name=args.profile,
         auto_fulltext=bool(args.auto_fulltext),
         fulltext_only=bool(args.fulltext_only),
-        use_multidim=bool(args.use_multidim),
         fulltext_needed_count=len(stage_state["papers_without_abstract"]),
         fulltext_ready_count=len(fulltext_ready),
         fulltext_errors=stage_state["fulltext_errors"],
@@ -204,23 +219,26 @@ def main() -> None:
 
 def _build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="使用LLM批量筛选文献")
+    parser.add_argument("--project-root", type=str, default="", help="仓库根目录；与 --profile 配合使用时自动解析 evaluation 路径")
+    parser.add_argument("--profile", type=str, default=None, help="实验 profile 名称，例如 P13")
+    parser.add_argument("--topic", type=str, default="", help="可选 topic 覆盖；默认使用 profile 自带 topic")
     parser.add_argument(
         "--input",
         type=str,
-        default="../langgraph_runs/ground_truth/search_v2_with_abstracts.csv",
-        help="输入CSV文件路径",
+        default="",
+        help="输入CSV文件路径（显式文件模式）",
     )
     parser.add_argument(
         "--output",
         type=str,
-        default="../langgraph_runs/ground_truth/search_v2_screened_v3.csv",
-        help="输出CSV文件路径",
+        default="",
+        help="输出CSV文件路径（显式文件模式）",
     )
     parser.add_argument(
         "--ground-truth",
         type=str,
-        default="../langgraph_runs/ground_truth/search_v2_gt.csv",
-        help="Ground truth CSV文件路径",
+        default="",
+        help="Ground truth CSV文件路径（显式文件模式）",
     )
     parser.add_argument("--batch-size", type=int, default=20, help="每批处理的文献数量")
     parser.add_argument(
@@ -233,17 +251,6 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         "--fulltext-only",
         action="store_true",
         help="仅运行全文筛选（跳过标题/摘要筛选）",
-    )
-    parser.add_argument(
-        "--config",
-        type=str,
-        default=None,
-        help="筛选配置名称 (如 'CONFIG_INFLUENZA_TRANSMISSION'，见screening_configs.py)",
-    )
-    parser.add_argument(
-        "--use-multidim",
-        action="store_true",
-        help="使用多维度评分（此参数保留但不影响功能）",
     )
     parser.add_argument(
         "--auto-fulltext",

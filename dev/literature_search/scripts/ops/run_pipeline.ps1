@@ -1,7 +1,7 @@
 <#
 Usage examples:
-  .\run_pipeline.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -ConfigName P13 -Topic serial_interval -IncludeGt -FixMissing -BatchSize 10 -BatchConcurrency 1 -AutoFulltext
-  .\run_pipeline.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -ConfigName P8 -Topic reproduction_number -IncludeGt -FixMissing -BatchSize 20 -BatchConcurrency 3
+  .\run_pipeline.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -Profile P13 -Topic serial_interval -IncludeGt -FixMissing -BatchSize 10 -BatchConcurrency 1 -AutoFulltext
+  .\run_pipeline.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -Profile P8 -Topic reproduction_number -IncludeGt -FixMissing -BatchSize 20 -BatchConcurrency 3
 #>
 
 Param(
@@ -9,9 +9,9 @@ Param(
   [string]$ProjectDir,
 
   [Parameter(Mandatory = $true)]
-  [string]$ConfigName,
+  [string]$Profile,
 
-  [string]$Topic = "serial_interval",
+  [string]$Topic = "",
 
   [switch]$IncludeGt,
   [switch]$FixMissing,
@@ -30,7 +30,7 @@ $ScreeningEvalScript = Join-Path $ScriptDir "run_screening_eval.ps1"
 
 $PrepareArgs = @{
   ProjectDir = $ProjectDir
-  ConfigName = $ConfigName
+  Profile = $Profile
   Topic = $Topic
 }
 if ($IncludeGt) {
@@ -42,7 +42,7 @@ if ($FixMissing) {
 
 $ScreeningArgs = @{
   ProjectDir = $ProjectDir
-  ConfigName = $ConfigName
+  Profile = $Profile
   Topic = $Topic
   BatchSize = $BatchSize
   BatchConcurrency = $BatchConcurrency

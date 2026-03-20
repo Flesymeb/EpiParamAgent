@@ -29,19 +29,19 @@ Runtime config:
 Use when raw or ground truth changed.
 
 ```powershell
-scripts\ops\run_prepare_raw.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -ConfigName P10 -Topic serial_interval -IncludeGt -FixMissing
+scripts\ops\run_prepare_raw.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -Profile P10 -Topic serial_interval -IncludeGt -FixMissing
 ```
 
 ### 2. Run formal screening + evaluation
 
 ```powershell
-scripts\ops\run_screening_eval.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -ConfigName P10 -Topic serial_interval -BatchSize 10 -BatchConcurrency 3 -AutoFulltext
+scripts\ops\run_screening_eval.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -Profile P10 -Topic serial_interval -BatchSize 10 -BatchConcurrency 3 -AutoFulltext
 ```
 
 ### 3. Run the one-command wrapper
 
 ```powershell
-scripts\ops\run_pipeline.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -ConfigName P10 -Topic serial_interval -IncludeGt -FixMissing -BatchSize 10 -BatchConcurrency 3 -AutoFulltext
+scripts\ops\run_pipeline.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -Profile P10 -Topic serial_interval -IncludeGt -FixMissing -BatchSize 10 -BatchConcurrency 3 -AutoFulltext
 ```
 
 ### 4. Inspect results
@@ -54,9 +54,12 @@ scripts\ops\run_pipeline.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-E
 
 - `scripts/cli/`: workflow entrypoints
 - `scripts/ops/`: PowerShell wrappers for supported runs
-- `scripts/tools/`: supporting utilities
+- `scripts/tools/`: supporting utilities only
 - `src/screening/`: screening domain modules
-- `archive/`: deprecated dashboards, tests, and scratch assets
+- `configs/screening_profiles/`: canonical screening profile catalog
+- `src/screening/profile_registry.py`: YAML profile loader and path registry
+- `src/screening/profile_resolution.py`: profile-aware CLI resolution helpers
+- `archive/`: legacy LangGraph pipeline, old docs, retired configs, and scratch assets
 
 ## Core Entrypoints
 
@@ -77,4 +80,4 @@ scripts\ops\run_pipeline.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-E
 
 - Primary source is PubMed.
 - Full-text fallback uses shared tooling under `dev/tools/paper_fetch/` and `dev/tools/mineru/`.
-- Legacy Streamlit dashboard and one-off tests were moved to `archive/`.
+- Legacy Streamlit dashboard, LangGraph pipeline, retired config scripts, and old planning docs were moved to `archive/`.

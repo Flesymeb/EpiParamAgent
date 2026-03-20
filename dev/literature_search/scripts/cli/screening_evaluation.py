@@ -1,20 +1,14 @@
 """
-筛选结果评估工具 - 统一评估检索和筛选效果
+筛选结果评估工具。
 
-功能：
-1. 评估搜索策略覆盖率（search coverage）
-2. 评估LLM筛选效果（screening performance with confusion matrix）
-3. 评估检索结果的召回率和精确率
+支持两种模式：
+1. profile 模式：--project-root + --profile
+2. 显式文件模式：直接传入 raw / screened / ground-truth 文件
 
 使用示例：
-    # 评估搜索覆盖率
-    python scripts/cli/screening_evaluation.py search-coverage --ground-truth ../langgraph_runs/ground_truth/search_v2/search_v2_gt.csv --search-results ../langgraph_runs/ground_truth/search_v2/search_v2_raw.csv
-
-    # 评估筛选效果（含混淆矩阵）
-    python scripts/cli/screening_evaluation.py screening-performance --ground-truth ../langgraph_runs/ground_truth/search_v2/search_v2_gt.csv --screened-results ../langgraph_runs/ground_truth/search_v2/test_screen/search_v2_screened.csv
-
-    # 评估检索召回率
-    python scripts/cli/screening_evaluation.py retrieval-metrics --ground-truth outputs/raw.csv --retrieved-results langgraph_runs/results/raw_pubmed.jsonl
+    python scripts/cli/screening_evaluation.py search-coverage --project-root D:/repo/MetaAgent-Epi --profile P13
+    python scripts/cli/screening_evaluation.py screening-performance --project-root D:/repo/MetaAgent-Epi --profile P13
+    python scripts/cli/screening_evaluation.py retrieval-metrics --ground-truth outputs/raw.csv --retrieved-results outputs/retrieved.jsonl
 """
 
 import argparse
@@ -25,8 +19,10 @@ from pathlib import Path
 from typing import Dict, Set, List, Tuple
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2].parent / "tools"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
 from common.provenance import write_run_manifest
+from screening.profile_registry import resolve_profile_paths
 
 # Set CSV field size limit to maximum possible value
 try:
@@ -416,20 +412,26 @@ def main():
 
     # search-coverage
     search_parser = subparsers.add_parser("search-coverage", help="评估搜索覆盖率")
+    search_parser.add_argument("--project-root", default="", help="仓库根目录；与 --profile 配合使用时自动解析 evaluation 路径")
+    search_parser.add_argument("--profile", default="", help="实验 profile 名称，例如 P13")
+    search_parser.add_argument("--topic", default="", help="可选 topic 覆盖；默认使用 profile 自带 topic")
     search_parser.add_argument(
-        "--ground-truth", required=True, help="Ground truth CSV文件"
+        "--ground-truth", default="", help="Ground truth CSV文件"
     )
     search_parser.add_argument(
-        "--search-results", required=True, help="搜索结果CSV文件"
+        "--search-results", default="", help="搜索结果CSV文件"
     )
 
     # screening-performance
     screen_parser = subparsers.add_parser("screening-performance", help="评估筛选效果")
+    screen_parser.add_argument("--project-root", default="", help="仓库根目录；与 --profile 配合使用时自动解析 evaluation 路径")
+    screen_parser.add_argument("--profile", default="", help="实验 profile 名称，例如 P13")
+    screen_parser.add_argument("--topic", default="", help="可选 topic 覆盖；默认使用 profile 自带 topic")
     screen_parser.add_argument(
-        "--ground-truth", required=True, help="Ground truth CSV文件"
+        "--ground-truth", default="", help="Ground truth CSV文件"
     )
     screen_parser.add_argument(
-        "--screened-results", required=True, help="筛选结果CSV文件"
+        "--screened-results", default="", help="筛选结果CSV文件"
     )
 
     # retrieval-metrics
@@ -448,8 +450,21 @@ def main():
         return
 
     if args.command == "search-coverage":
-        gt_file = Path(args.ground_truth)
-        search_file = Path(args.search_results)
+        if args.project_root and args.profile:
+            _, paths = resolve_profile_paths(
+                project_root=args.project_root,
+                profile_name=args.profile,
+                topic=args.topic or None,
+            )
+            gt_file = paths.ground_truth_file
+            search_file = paths.raw_file
+        else:
+            if not args.ground_truth or not args.search_results:
+                raise ValueError(
+                    "search-coverage requires explicit files or --project-root/--profile."
+                )
+            gt_file = Path(args.ground_truth)
+            search_file = Path(args.search_results)
 
         ground_truth = load_ground_truth_pmids(gt_file)
         search_results = load_search_results(search_file)
@@ -459,7 +474,11 @@ def main():
             output_dir=search_file.parent,
             workflow="search_coverage_evaluation",
             module="literature_search",
-            params={"command": args.command},
+            params={
+                "command": args.command,
+                "profile": getattr(args, "profile", ""),
+                "topic": getattr(args, "topic", ""),
+            },
             inputs=[gt_file, search_file],
             outputs=[search_file.parent],
             extra={"summary": summary},
@@ -467,8 +486,21 @@ def main():
         print(f"\n🧾 Manifest: {manifest_path}")
 
     elif args.command == "screening-performance":
-        gt_file = Path(args.ground_truth)
-        screened_file = Path(args.screened_results)
+        if args.project_root and args.profile:
+            _, paths = resolve_profile_paths(
+                project_root=args.project_root,
+                profile_name=args.profile,
+                topic=args.topic or None,
+            )
+            gt_file = paths.ground_truth_file
+            screened_file = paths.screened_file
+        else:
+            if not args.ground_truth or not args.screened_results:
+                raise ValueError(
+                    "screening-performance requires explicit files or --project-root/--profile."
+                )
+            gt_file = Path(args.ground_truth)
+            screened_file = Path(args.screened_results)
 
         ground_truth = load_ground_truth_pmids(gt_file)
         screened = load_screened_results(screened_file)
@@ -478,7 +510,11 @@ def main():
             output_dir=screened_file.parent,
             workflow="screening_evaluation",
             module="literature_search",
-            params={"command": args.command},
+            params={
+                "command": args.command,
+                "profile": getattr(args, "profile", ""),
+                "topic": getattr(args, "topic", ""),
+            },
             inputs=[gt_file, screened_file],
             outputs=[screened_file.parent],
             extra={"summary": summary},

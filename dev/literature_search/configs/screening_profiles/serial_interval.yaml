@@ -1,0 +1,63 @@
+topic: serial_interval
+
+defaults:
+  thresholds:
+    strong:
+      disease_min: 4
+      transmission_min: 4
+      evidence_min: 3
+      population_min: 2
+      location_min: 2
+    possible:
+      disease_min: 3
+      transmission_min: 3
+      evidence_min: 2
+      population_min: 2
+      location_min: 2
+  policies:
+    title_abstract_mode: strict
+    title_only_mode: lenient
+    fulltext_rescue:
+      enabled: true
+      when_no_abstract: true
+
+profiles:
+  P10:
+    project_number: 10
+    research_question: What are the serial interval and generation time of SARS-CoV-2 variants such as Omicron and Delta?
+    disease_focus: (SARS-CoV-2 OR COVID-19) AND (variant OR mutation OR lineage OR amino acid substitution)
+    disease_exclude: studies that focus solely on the wild-type virus without variant comparison
+    transmission_focus: studies that report or estimate serial interval or generation time (including studies where these parameters are reported in the full text but not explicitly mentioned in the title or abstract)
+    transmission_exclude: studies that do not report or estimate serial interval or generation time in the full text
+
+  P11:
+    project_number: 11
+    research_question: What are the serial interval and generation time of SARS-CoV-2 estimated from contact tracing or household transmission studies?
+    disease_focus: (COVID-19 OR SARS-CoV-2 OR 2019-nCoV OR "coronavirus disease 2019" OR "severe acute respiratory syndrome coronavirus 2")
+    disease_exclude: none
+    transmission_focus: (serial interval* OR generation time* OR generation interval*)
+    transmission_exclude: studies that do not report or estimate serial interval or generation time
+
+  P12:
+    project_number: 12
+    research_question: What are the serial interval and generation time of COVID-19?
+    disease_focus: (COVID-19 OR SARS-CoV-2 OR novel coronavirus)
+    disease_exclude: none
+    transmission_focus: (serial interval OR generation time OR generation interval)
+    transmission_exclude: studies that do not report or estimate serial interval or generation time
+
+  P13:
+    project_number: 13
+    research_question: What are the serial interval and generation time of COVID-19?
+    disease_focus: (COVID-19 OR SARS-CoV-2 OR coronavirus OR 2019-nCoV OR SARS-CoV)
+    disease_exclude: none
+    transmission_focus: (serial interval OR generation interval OR generation time OR serial distribution)
+    transmission_exclude: studies that do not report or estimate serial interval or generation time
+
+  P14:
+    project_number: 14
+    research_question: What is the serial interval of COVID-19?
+    disease_focus: (COVID-19 OR 2019-nCoV OR coronavirus)
+    disease_exclude: none
+    transmission_focus: (serial interval)
+    transmission_exclude: studies that do not report or estimate serial interval

@@ -9,6 +9,7 @@ Workflow:
 
 Usage:
   python scripts/cli/screening_prepare_raw.py --query "..." --date-range "2020/1/1-2021/9/10" --output raw.csv --ground-truth gt.csv --fix-missing
+  python scripts/cli/screening_prepare_raw.py --project-root D:/repo/MetaAgent-Epi --profile P13
 """
 
 from __future__ import annotations
@@ -29,6 +30,7 @@ sys.path.insert(0, str(BASE_DIR / "scripts" / "tools"))
 from data_sources.pubmed_client import PubMedClient
 from common.provenance import write_run_manifest
 from pubmed_manager import fetch_paper_details, fix_missing_fields
+from screening.profile_registry import resolve_profile_paths
 
 
 def _load_pmids_from_csv(path: Path) -> List[str]:
@@ -89,6 +91,9 @@ def _chunk(items: List[str], size: int) -> Iterable[List[str]]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Prepare raw screening CSV from PubMed")
+    parser.add_argument("--project-root", default="", help="仓库根目录；与 --profile 配合使用时自动解析 evaluation 路径")
+    parser.add_argument("--profile", default="", help="实验 profile 名称，例如 P13")
+    parser.add_argument("--topic", default="", help="可选 topic 覆盖；默认使用 profile 自带 topic")
     parser.add_argument("--query", help="PubMed search term/query")
     parser.add_argument(
         "--date-range",
@@ -101,7 +106,7 @@ def main() -> None:
         default="",
         help="Existing raw CSV to merge GT into (skip PubMed search)",
     )
-    parser.add_argument("--output", required=True, help="Output raw CSV path")
+    parser.add_argument("--output", default="", help="Output raw CSV path")
     parser.add_argument("--ground-truth", default="", help="Ground truth CSV path")
     parser.add_argument(
         "--include-gt",
@@ -120,8 +125,21 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    output_path = Path(args.output)
-    gt_path = Path(args.ground_truth) if args.ground_truth else None
+    if args.project_root and args.profile:
+        _, paths = resolve_profile_paths(
+            project_root=args.project_root,
+            profile_name=args.profile,
+            topic=args.topic or None,
+        )
+        output_path = paths.raw_file
+        gt_path = paths.ground_truth_file
+        if not args.raw_input:
+            args.raw_input = str(paths.raw_file)
+    else:
+        if not args.output:
+            raise ValueError("Either --output or --project-root/--profile must be provided.")
+        output_path = Path(args.output)
+        gt_path = Path(args.ground_truth) if args.ground_truth else None
 
     retmax = None
     if args.retmax and str(args.retmax).lower() != "all":
@@ -174,6 +192,8 @@ def main() -> None:
         workflow="prepare_raw",
         module="literature_search",
         params={
+            "profile": args.profile or "",
+            "topic": args.topic or "",
             "query": args.query or "",
             "date_range": args.date_range or "",
             "retmax": args.retmax,
