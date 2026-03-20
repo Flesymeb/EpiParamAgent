@@ -24,6 +24,9 @@ $ErrorActionPreference = "Stop"
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $CliDir = Join-Path $ScriptDir "..\\cli"
+$ModuleDir = Resolve-Path (Join-Path $ScriptDir "..\\..")
+$LocalPython = Join-Path $ModuleDir ".venv\\Scripts\\python.exe"
+$PythonExe = if (Test-Path $LocalPython) { $LocalPython } else { "python" }
 
 $ConfigKey = $ConfigName.Trim().ToLower()
 $ConfigNum = ($ConfigName -replace '[^0-9]', '')
@@ -76,9 +79,9 @@ if ($FulltextOnly) {
 } elseif ($AutoFulltext) {
   $ArgsList += "--auto-fulltext"
 }
-python @ArgsList
+& $PythonExe @ArgsList
 
 Write-Host "Running evaluation..." -ForegroundColor Cyan
-python (Join-Path $CliDir "screening_evaluation.py") screening-performance `
+& $PythonExe (Join-Path $CliDir "screening_evaluation.py") screening-performance `
   --ground-truth "$Gt" `
   --screened-results "$Out"

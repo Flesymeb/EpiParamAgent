@@ -23,6 +23,9 @@ $ErrorActionPreference = "Stop"
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $CliDir = Join-Path $ScriptDir "..\\cli"
+$ModuleDir = Resolve-Path (Join-Path $ScriptDir "..\\..")
+$LocalPython = Join-Path $ModuleDir ".venv\\Scripts\\python.exe"
+$PythonExe = if (Test-Path $LocalPython) { $LocalPython } else { "python" }
 
 $ConfigKey = $ConfigName.Trim().ToLower()
 $ConfigNum = ($ConfigName -replace '[^0-9]', '')
@@ -74,4 +77,4 @@ if ($FixMissing) {
 }
 
 Write-Host "Running prepare-raw..." -ForegroundColor Cyan
-python @ArgsList
+& $PythonExe @ArgsList

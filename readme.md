@@ -1,74 +1,94 @@
 # MetaAgent-Epi
 
-Modular workflows for epidemiology-oriented meta-analysis. Active development lives under `dev/`.
+Epidemiology-oriented meta-analysis workspace with three active modules under `dev/`:
 
-## Modules
+- `literature_search`: search, screening, evaluation
+- `coding_sheet`: PDF-to-coding-sheet extraction
+- `workbench`: local analysis and visualization console
 
-- **Literature Search** (`dev/literature_search`)
-  - LangGraph pipeline for scoping, query generation, retrieval, deduplication, and screening.
-  - Primary source: PubMed. Optional clients exist (ERIC/Embase placeholders).
-  - Screening supports abstract-first with full-text fallback.
+## Start Here
 
-- **Coding Sheet Extraction** (`dev/coding_sheet`)
-  - PDF acquisition → MinerU → LLM extraction → coding sheet output.
-  - Templates are YAML-based (no code changes to add fields).
+For the current developer workflow, read:
 
-- **Shared Tools** (`dev/tools`)
-  - `paper_fetch`: PDF download tooling (Sci‑Hub + PMC).
-  - `mineru`: MinerU client and PDF→Markdown helpers.
+- [`dev/START.md`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/START.md)
 
-## Quick Start
+## Module Map
 
-Shared runtime config:
+### `dev/literature_search`
 
-- put shared defaults in `dev/.env`
-- put machine-specific secrets in `dev/.env.local`
-- keep module-only overrides in `dev/literature_search/.env.local` or `dev/coding_sheet/.env.local`
+Purpose:
+- build screening-ready raw datasets
+- run title/abstract and optional full-text screening
+- evaluate results against ground truth
 
-### Literature Search
+Primary entrypoints:
+- [`run_prepare_raw.ps1`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/ops/run_prepare_raw.ps1)
+- [`run_screening_eval.ps1`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/ops/run_screening_eval.ps1)
+- [`run_pipeline.ps1`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/ops/run_pipeline.ps1)
 
-```powershell
-cd dev/literature_search
-uv sync
-.venv/Scripts/activate
+Reference:
+- [`dev/literature_search/README.md`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/README.md)
 
-# Run LangGraph dev server (optional)
-langgraph dev --allow-blocking
-```
+### `dev/coding_sheet`
 
-### Coding Sheet Extraction
+Purpose:
+- acquire PDFs / markdown inputs
+- run Stage A / Stage B extraction
+- export coding sheet outputs
 
-```powershell
-cd dev/coding_sheet
-uv sync
-.venv/Scripts/activate
+Primary entrypoints:
+- [`extract_epi.py`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/coding_sheet/cli/extract_epi.py)
+- [`run_codebook_extract.ps1`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/coding_sheet/run_codebook_extract.ps1)
 
-# Run extraction
-python cli/extract_epi.py --input pmid.txt --out output/epi_extract --stage both
-```
+Reference:
+- [`dev/coding_sheet/README.md`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/coding_sheet/README.md)
 
-## Key Entrypoints
+### `dev/workbench`
 
-- Literature search + screening:
-  - `dev/literature_search/scripts/cli/screening_llm_batch.py`
-  - `dev/literature_search/scripts/ops/run_llm_screening.ps1`
-- PDF fetcher:
-  - `dev/tools/paper_fetch/pdf_fetcher.py`
-- Coding sheet extraction:
-  - `dev/coding_sheet/cli/extract_epi.py`
+Purpose:
+- inspect screening runs
+- inspect failure cases and metrics
+- visualize manifests and outputs from active modules
 
-## Project Layout (high-level)
+Primary entrypoint:
+- [`run_workbench.ps1`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/workbench/scripts/ops/run_workbench.ps1)
 
-```
-dev/
-  literature_search/
-  coding_sheet/
-  tools/
-docs/
-misc/
-```
+Reference:
+- [`dev/workbench/README.md`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/workbench/README.md)
 
-For details, see:
-- `dev/START.md`
-- `dev/literature_search/README.md`
-- `dev/coding_sheet/README.md`
+## Runtime Config
+
+Runtime env is loaded in this order:
+
+1. `dev/.env`
+2. `dev/.env.local`
+3. `dev/<module>/.env`
+4. `dev/<module>/.env.local`
+
+Rules:
+- shared defaults go in `dev/.env`
+- machine-local secrets go in `dev/.env.local`
+- module-only overrides go in module-local `.env.local`
+
+## Shared Infrastructure
+
+Shared code lives under `dev/tools`:
+
+- `common`: runtime config and provenance helpers
+- `paper_fetch`: PDF download tooling
+- `mineru`: PDF-to-Markdown helpers
+
+## Canonical Workflow
+
+For screening experiments, the supported path is:
+
+1. raw / GT changed -> `run_prepare_raw.ps1`
+2. formal experiment -> `run_screening_eval.ps1`
+3. optional one-command wrapper -> `run_pipeline.ps1`
+4. analysis / failure cases -> `run_workbench.ps1`
+
+## Design Notes
+
+Key workflow and documentation decisions are tracked in:
+
+- [`docs/DECISIONS.md`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/docs/DECISIONS.md)

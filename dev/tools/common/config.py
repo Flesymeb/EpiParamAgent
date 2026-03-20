@@ -1,11 +1,12 @@
 """Shared runtime configuration management for MetaAgent-Epi.
 
-Rules:
-1. Shared defaults live in ``dev/.env`` and optional machine overrides in
+Preferred rules:
+1. Shared defaults live in ``dev/.env`` and shared machine-local secrets in
    ``dev/.env.local``.
-2. Module-specific overrides live in ``dev/<module>/.env`` and
-   ``dev/<module>/.env.local``.
-3. Callers should pass ``module_hint`` so one workflow does not accidentally
+2. Module-specific differences should live in ``dev/<module>/.env.local``.
+3. ``dev/<module>/.env`` is still supported for backward compatibility, but new
+   setups should prefer module-local ``.env.local`` instead.
+4. Callers should pass ``module_hint`` so one workflow does not accidentally
    load another workflow's env file.
 """
 

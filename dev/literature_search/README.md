@@ -1,76 +1,80 @@
-# Literature Search (Epidemiology)
+# Literature Search
 
-Epidemiology-focused literature search and screening pipeline.
+Search, screening, and evaluation workflow for epidemiology-oriented literature review.
 
-## What It Does
+## What This Module Owns
 
-- Generate search terms and Boolean queries
-- Retrieve records (PubMed primary; ERIC/Embase optional placeholders)
-- Normalize and deduplicate
-- LLM screening (abstract-first with full-text fallback)
+- screening-ready raw dataset construction
+- LLM screening on title/abstract
+- optional full-text rescue for no-abstract papers
+- evaluation against ground truth
 
 ## Quick Start
 
 ```powershell
 cd dev/literature_search
 uv sync
-.venv/Scripts/activate
+.venv\Scripts\Activate.ps1
 ```
 
 Runtime config:
-
 - shared defaults: `dev/.env`
-- shared local overrides: `dev/.env.local`
-- literature_search-only overrides: `dev/literature_search/.env.local`
+- shared machine overrides: `dev/.env.local`
+- module-only overrides: `dev/literature_search/.env.local`
 
-Run LangGraph dev server (optional):
+## Canonical Workflow
 
-```powershell
-langgraph dev --allow-blocking
-```
+### 1. Prepare raw dataset
 
-Run batch screening:
+Use when raw or ground truth changed.
 
 ```powershell
-python scripts/cli/screening_llm_batch.py --input ..\\langgraph_runs\\ground_truth\\search_v2\\search_v2_raw.csv --output ..\\langgraph_runs\\ground_truth\\search_v2\\test_screen\\search_v2_screened.csv --config V2 --auto-fulltext --batch-size 3
+scripts\ops\run_prepare_raw.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -ConfigName P10 -Topic serial_interval -IncludeGt -FixMissing
 ```
 
-Or use the helper script:
+### 2. Run formal screening + evaluation
 
 ```powershell
-scripts\\ops\\run_llm_screening.ps1 V2
+scripts\ops\run_screening_eval.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -ConfigName P10 -Topic serial_interval -BatchSize 10 -BatchConcurrency 3 -AutoFulltext
 ```
 
-Run the local screening dashboard:
+### 3. Run the one-command wrapper
 
 ```powershell
-scripts\\ops\\run_screening_dashboard.ps1
+scripts\ops\run_pipeline.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -ConfigName P10 -Topic serial_interval -IncludeGt -FixMissing -BatchSize 10 -BatchConcurrency 3 -AutoFulltext
 ```
 
-## Key Scripts
+### 4. Inspect results
 
-- `scripts/cli/`: 主入口（screening / prepare raw / evaluation）
-- `scripts/ops/`: PowerShell 运行脚本
-- `scripts/tools/`: 功能性工具（PubMed 修复、配置等）
-- `scripts/tests/`: 测试/实验脚本
+```powershell
+..\workbench\scripts\ops\run_workbench.ps1
+```
 
-常用入口：
-- `scripts/cli/screening_llm_batch.py`: LLM screening (abstract + full-text)
-- `scripts/cli/screening_prepare_raw.py`: merge GT + fix missing
-- `scripts/cli/screening_evaluation.py`: evaluate screened results vs ground truth
-- `scripts/ops/run_llm_screening.ps1`: run V1/V2/V3 configs with standard paths
-- `apps/screening_dashboard.py`: Streamlit dashboard for manifests + screened CSVs
-- `scripts/ops/run_screening_dashboard.ps1`: launch the local dashboard
+## Directory Roles
 
-## Data Sources
+- `scripts/cli/`: workflow entrypoints
+- `scripts/ops/`: PowerShell wrappers for supported runs
+- `scripts/tools/`: supporting utilities
+- `src/screening/`: screening domain modules
+- `archive/`: deprecated dashboards, tests, and scratch assets
 
-- PubMed (primary)
-- ERIC (optional)
-- Embase (placeholder; requires institutional access)
+## Core Entrypoints
+
+- [`screening_prepare_raw.py`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_prepare_raw.py)
+- [`screening_llm_batch.py`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_llm_batch.py)
+- [`screening_evaluation.py`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_evaluation.py)
+- [`run_prepare_raw.ps1`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/ops/run_prepare_raw.ps1)
+- [`run_screening_eval.ps1`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/ops/run_screening_eval.ps1)
+- [`run_pipeline.ps1`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/ops/run_pipeline.ps1)
+
+## Outputs
+
+- screening outputs: `evaluation/screening/GT_1/GT_export/{topic}/pXX/`
+- full-text cache: `dev/paper_pool/`
+- manifests: next to outputs or under `screening_logs/`
 
 ## Notes
 
-- Full-text cache: `dev/paper_pool/` (PDFs + Markdown).
-- Prompts: `src/epidemiology/prompts/`.
-- Runtime env is loaded via `dev/tools/common/config.py`.
-- Main workflows emit `run_manifest_*.json` next to outputs for provenance.
+- Primary source is PubMed.
+- Full-text fallback uses shared tooling under `dev/tools/paper_fetch/` and `dev/tools/mineru/`.
+- Legacy Streamlit dashboard and one-off tests were moved to `archive/`.

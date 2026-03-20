@@ -1,6 +1,6 @@
 # Workbench
 
-Local visualization and analysis layer for `literature_search` and `coding_sheet`.
+Local read-only analysis console for `literature_search` and `coding_sheet`.
 
 ## Stack
 
@@ -18,7 +18,15 @@ dev/workbench/
   scripts/ops/
 ```
 
-The backend is intentionally thin and read-only. It scans local manifests and outputs and exposes a stable JSON layer for the frontend.
+The backend is intentionally thin and read-only. It scans local manifests and
+outputs and exposes a stable JSON layer for the frontend.
+
+## What It Is For
+
+- inspect screening runs
+- inspect confusion matrices and failure cases
+- inspect extraction outputs and manifests
+- keep analysis separate from production workflows
 
 ## Run
 
@@ -38,3 +46,9 @@ Or start each side separately:
 ```
 
 If you use a local proxy tool, make sure `localhost`, `127.0.0.1`, and `::1` are bypassed. The provided PowerShell scripts now export `NO_PROXY` automatically for local workbench ports.
+
+## Relationship To Other Modules
+
+- `literature_search` produces screening outputs and manifests
+- `coding_sheet` produces extraction outputs and manifests
+- `workbench` reads those outputs; it does not run the underlying pipelines
