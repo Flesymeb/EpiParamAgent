@@ -94,6 +94,9 @@ def load_screened_results(csv_file: Path) -> Dict[str, Dict]:
         for row in reader:
             pmid = row.get("PMID", "").strip()
             if pmid:
+                parameter_score_raw = row.get("parameter_score", "")
+                if not str(parameter_score_raw).strip():
+                    parameter_score_raw = row.get("transmission_score", "0")
                 screened[pmid] = {
                     "llm_suggest": row.get("llm_suggest", ""),
                     "overall_score": row.get("overall_score", "0"),
@@ -104,9 +107,7 @@ def load_screened_results(csv_file: Path) -> Dict[str, Dict]:
                     "population_score": int(row.get("population_score", "0") or "0"),
                     "location_score": int(row.get("location_score", "0") or "0"),
                     "evidence_score": int(row.get("evidence_score", "0") or "0"),
-                    "transmission_score": int(
-                        row.get("transmission_score", "0") or "0"
-                    ),
+                    "parameter_score": int(parameter_score_raw or "0"),
                 }
     return screened
 
@@ -178,7 +179,7 @@ def meets_core_criteria(paper: Dict, threshold: int = 3) -> bool:
         "population_score",
         "location_score",
         "evidence_score",
-        "transmission_score",
+        "parameter_score",
     ]
     return all(paper.get(dim, 0) >= threshold for dim in dimensions)
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import shutil
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -32,6 +33,15 @@ def save_screening_outputs(
 ) -> tuple[Path, Path, Path]:
     """Persist screened CSV, detailed report, and run manifest."""
     output_file.parent.mkdir(parents=True, exist_ok=True)
+
+    # Archive previous result before overwriting so multi-run history is preserved.
+    # The canonical output_file always holds the latest run; backups accumulate in screening_logs/.
+    if output_file.exists():
+        log_dir_early = output_file.parent / "screening_logs"
+        log_dir_early.mkdir(parents=True, exist_ok=True)
+        timestamp_backup = datetime.now().strftime("%Y%m%d_%H%M%S")
+        backup_path = log_dir_early / f"{output_file.stem}_backup_{timestamp_backup}.csv"
+        shutil.copy2(output_file, backup_path)
 
     fieldnames = _collect_fieldnames(papers)
     for paper in papers:
@@ -134,7 +144,7 @@ def _collect_fieldnames(papers: list[dict[str, Any]]) -> list[str]:
     for field in ["screening_stage", "fulltext_status", "fulltext_path"]:
         if field not in fieldnames:
             fieldnames.append(field)
-    for dimension in ["disease", "population", "location", "evidence", "transmission"]:
+    for dimension in ["disease", "population", "location", "evidence", "parameter"]:
         for suffix in ["score", "justification"]:
             field = f"{dimension}_{suffix}"
             if field not in fieldnames:
@@ -218,7 +228,7 @@ def _build_report_lines(
         ("population", "Population"),
         ("location", "Location"),
         ("evidence", "Evidence"),
-        ("transmission", "Transmission"),
+        ("parameter", "Parameter"),
     ]
     report_lines.append(
         "\n┌─────────────────┬─────────┬──────────┬────────────────────────────────┐"
@@ -268,6 +278,6 @@ def _build_report_lines(
                 f"   Overall: {paper.get('overall_justification', 'N/A')}"
             )
             report_lines.append(
-                f"   维度评分: D={paper.get('disease_score')} P={paper.get('population_score')} L={paper.get('location_score')} E={paper.get('evidence_score')} T={paper.get('transmission_score')}"
+                f"   维度评分: D={paper.get('disease_score')} P={paper.get('population_score')} L={paper.get('location_score')} E={paper.get('evidence_score')} Param={paper.get('parameter_score')}"
             )
     return report_lines

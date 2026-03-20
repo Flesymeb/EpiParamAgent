@@ -84,6 +84,9 @@ def load_screened_results(csv_file: Path) -> Dict[str, Dict[str, Optional[float]
             if not pmid:
                 continue
             suggest = (row.get("llm_suggest") or "").strip() or "unlikely_candidate"
+            parameter_score_raw = row.get("parameter_score", "")
+            if not str(parameter_score_raw).strip():
+                parameter_score_raw = row.get("transmission_score", "")
             screened[pmid] = {
                 "llm_suggest": suggest,
                 "overall_score": _safe_float(row.get("overall_score", "")),
@@ -91,7 +94,7 @@ def load_screened_results(csv_file: Path) -> Dict[str, Dict[str, Optional[float]
                 "population_score": _safe_float(row.get("population_score", "")),
                 "location_score": _safe_float(row.get("location_score", "")),
                 "evidence_score": _safe_float(row.get("evidence_score", "")),
-                "transmission_score": _safe_float(row.get("transmission_score", "")),
+                "parameter_score": _safe_float(parameter_score_raw),
             }
     return screened
 
@@ -803,7 +806,7 @@ def main() -> None:
             ("population_score", "Population"),
             ("location_score", "Location"),
             ("evidence_score", "Evidence"),
-            ("transmission_score", "Transmission"),
+            ("parameter_score", "Parameter"),
         ]
         for topic in sorted(set(r["topic"] for r in runs)):
             topic_runs = [r for r in runs if r["topic"] == topic]

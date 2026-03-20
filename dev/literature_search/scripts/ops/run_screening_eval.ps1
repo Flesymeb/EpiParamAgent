@@ -3,6 +3,9 @@ Usage examples:
   .\run_screening_eval.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -Profile P10 -Topic serial_interval -BatchSize 10 -BatchConcurrency 3 -AutoFulltext
   .\run_screening_eval.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -Profile P10 -Topic reproduction_number -BatchSize 10 -BatchConcurrency 3 -FulltextOnly
   .\run_screening_eval.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -Profile P4 -Topic fatality -BatchSize 30 -BatchConcurrency 3 -AutoFulltext
+  # Two-phase workflow (no-abstract papers last):
+  .\run_screening_eval.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -Profile P4 -Topic fatality -BatchSize 30 -BatchConcurrency 3 -SkipNoAbstract
+  .\run_screening_eval.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -Profile P4 -Topic fatality -BatchSize 10 -BatchConcurrency 3 -ResumeFulltext
 #>
 
 Param(
@@ -17,7 +20,9 @@ Param(
   [int]$BatchSize = 10,
   [int]$BatchConcurrency = 1,
   [switch]$AutoFulltext,
-  [switch]$FulltextOnly
+  [switch]$FulltextOnly,
+  [switch]$SkipNoAbstract,
+  [switch]$ResumeFulltext
 )
 
 $ErrorActionPreference = "Stop"
@@ -43,6 +48,10 @@ if ($FulltextOnly) {
   $ArgsList += "--fulltext-only"
 } elseif ($AutoFulltext) {
   $ArgsList += "--auto-fulltext"
+} elseif ($SkipNoAbstract) {
+  $ArgsList += "--skip-no-abstract"
+} elseif ($ResumeFulltext) {
+  $ArgsList += "--resume-fulltext"
 }
 & $PythonExe @ArgsList
 

@@ -29,8 +29,8 @@ class ScreeningProfile:
     research_question: str
     disease_focus: str
     disease_exclude: str
-    transmission_focus: str
-    transmission_exclude: str
+    parameter_focus: str
+    parameter_exclude: str
     thresholds: dict[str, Any]
     policies: dict[str, Any]
 
@@ -58,8 +58,8 @@ class ScreeningProfile:
             "research_question": self.research_question,
             "disease_focus": self.disease_focus,
             "disease_exclude": self.disease_exclude,
-            "transmission_focus": self.transmission_focus,
-            "transmission_exclude": self.transmission_exclude,
+            "parameter_focus": self.parameter_focus,
+            "parameter_exclude": self.parameter_exclude,
             "thresholds": self.thresholds,
             "policies": self.policies,
         }
@@ -77,6 +77,14 @@ class ScreeningProjectPaths:
 
 def _merge_profile(defaults: dict[str, Any], profile_id: str, topic: str, raw: dict[str, Any]) -> ScreeningProfile:
     merged = {**defaults, **raw}
+    merged["thresholds"] = {
+        **(defaults.get("thresholds", {}) or {}),
+        **(raw.get("thresholds", {}) or {}),
+    }
+    merged["policies"] = {
+        **(defaults.get("policies", {}) or {}),
+        **(raw.get("policies", {}) or {}),
+    }
     return ScreeningProfile(
         id=profile_id.upper(),
         topic=_normalize_topic(topic),
@@ -84,8 +92,8 @@ def _merge_profile(defaults: dict[str, Any], profile_id: str, topic: str, raw: d
         research_question=str(merged["research_question"]),
         disease_focus=str(merged["disease_focus"]),
         disease_exclude=str(merged.get("disease_exclude", "none")),
-        transmission_focus=str(merged["transmission_focus"]),
-        transmission_exclude=str(merged.get("transmission_exclude", "none")),
+        parameter_focus=str(merged["parameter_focus"]),
+        parameter_exclude=str(merged.get("parameter_exclude", "none")),
         thresholds=dict(merged.get("thresholds", {})),
         policies=dict(merged.get("policies", {})),
     )

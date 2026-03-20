@@ -1,10 +1,36 @@
-"""Structured output models for epidemiology screening decisions."""
+"""Structured output models and code-side classification for screening."""
 
 from __future__ import annotations
 
-from typing import Optional
+from copy import deepcopy
+from typing import Any, Optional
 
 from pydantic import BaseModel, Field, model_validator
+
+DEFAULT_THRESHOLDS: dict[str, dict[str, int]] = {
+    "strong": {
+        "disease_min": 4,
+        "parameter_min": 4,
+        "evidence_min": 3,
+        "population_min": 2,
+        "location_min": 2,
+    },
+    "possible": {
+        "disease_min": 3,
+        "parameter_min": 3,
+        "evidence_min": 2,
+        "population_min": 2,
+        "location_min": 2,
+    },
+}
+
+DIMENSION_KEY_MAP = {
+    "disease_min": "disease_relevance",
+    "parameter_min": "parameter_relevance",
+    "evidence_min": "original_evidence",
+    "population_min": "population_relevance",
+    "location_min": "location_relevance",
+}
 
 
 class DimensionAssessment(BaseModel):
@@ -31,16 +57,13 @@ class ScreeningDecision(BaseModel):
     original_evidence: DimensionAssessment = Field(
         description="原始数据: 是否报告原始经验数据（非综述等）"
     )
-    transmission_metric: DimensionAssessment = Field(
-        description="传播指标: 是否报告传播强度或再生数相关指标"
+    parameter_relevance: DimensionAssessment = Field(
+        description="目标参数相关性: 是否报告研究问题所关注的参数"
     )
 
-    llm_suggest: str = Field(
-        description="strong_candidate / possible_candidate / unlikely_candidate"
-    )
     overall_score: Optional[int] = Field(
         default=None,
-        description="整体相关性评分 0-4，由系统自动计算加权平均（Disease 30% + Transmission 30% + Evidence 25% + Population 10% + Location 5%）",
+        description="整体相关性评分 0-4，由系统自动计算加权平均（Disease 30% + Parameter 30% + Evidence 25% + Population 10% + Location 5%）",
     )
     overall_justification: str = Field(description="整体评估理由，2-3句话")
 
@@ -48,10 +71,85 @@ class ScreeningDecision(BaseModel):
     def calculate_overall_score(self):
         weighted_score = (
             0.30 * self.disease_relevance.score
-            + 0.30 * self.transmission_metric.score
+            + 0.30 * self.parameter_relevance.score
             + 0.25 * self.original_evidence.score
             + 0.10 * self.population_relevance.score
             + 0.05 * self.location_relevance.score
         )
         self.overall_score = round(weighted_score)
         return self
+
+
+def normalize_thresholds(raw_thresholds: dict[str, Any] | None) -> dict[str, dict[str, int]]:
+    """Merge partial YAML thresholds with canonical defaults."""
+    merged = deepcopy(DEFAULT_THRESHOLDS)
+    for bucket_name, default_values in DEFAULT_THRESHOLDS.items():
+        overrides = (raw_thresholds or {}).get(bucket_name, {}) or {}
+        for key, default_value in default_values.items():
+            merged[bucket_name][key] = int(overrides.get(key, default_value))
+    return merged
+
+
+def resolve_stage_mode(stage: str, policies: dict[str, Any] | None) -> str:
+    """Resolve stage-specific scoring mode from YAML policies."""
+    policy_map = {
+        "title_abstract": "title_abstract_mode",
+        "title_only": "title_only_mode",
+        "full_text": "full_text_mode",
+    }
+    default_map = {
+        "title_abstract": "strict",
+        "title_only": "lenient",
+        "full_text": "standard",
+    }
+    key = policy_map.get(stage, "title_abstract_mode")
+    return str((policies or {}).get(key, default_map.get(stage, "strict"))).strip().lower()
+
+
+def classify_screening_decision(
+    decision: ScreeningDecision,
+    *,
+    thresholds: dict[str, Any] | None = None,
+    stage_mode: str = "strict",
+) -> str:
+    """Map five-dimension scores to strong/possible/unlikely in code."""
+    normalized = normalize_thresholds(thresholds)
+
+    if _meets_threshold_block(decision, normalized["strong"]):
+        return "strong_candidate"
+
+    possible_block = _apply_stage_mode(normalized["possible"], stage_mode=stage_mode)
+    if _meets_threshold_block(decision, possible_block):
+        return "possible_candidate"
+
+    return "unlikely_candidate"
+
+
+def _meets_threshold_block(
+    decision: ScreeningDecision, threshold_block: dict[str, int]
+) -> bool:
+    for threshold_key, min_score in threshold_block.items():
+        attr_name = DIMENSION_KEY_MAP[threshold_key]
+        score = getattr(decision, attr_name).score
+        if score < min_score:
+            return False
+    return True
+
+
+def _apply_stage_mode(
+    threshold_block: dict[str, int], *, stage_mode: str
+) -> dict[str, int]:
+    adjusted = dict(threshold_block)
+    if stage_mode != "lenient":
+        return adjusted
+
+    relaxed_by_one = {
+        "disease_min": 2,
+        "parameter_min": 2,
+        "evidence_min": 1,
+        "population_min": 1,
+        "location_min": 1,
+    }
+    for key, floor in relaxed_by_one.items():
+        adjusted[key] = max(floor, adjusted[key] - 1)
+    return adjusted

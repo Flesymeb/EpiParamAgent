@@ -26,12 +26,25 @@ topic: serial_interval
 
 defaults:
   thresholds:
-    strong_min_score: 16
-    possible_min_score: 12
+    strong:
+      disease_min: 4
+      parameter_min: 4
+      evidence_min: 3
+      population_min: 2
+      location_min: 2
+    possible:
+      disease_min: 3
+      parameter_min: 3
+      evidence_min: 2
+      population_min: 2
+      location_min: 2
   policies:
     title_abstract_mode: standard
     title_only_mode: lenient
-    fulltext_rescue: enabled
+    full_text_mode: standard
+    fulltext_rescue:
+      enabled: true
+      when_no_abstract: true
 
 profiles:
   P18:
@@ -39,8 +52,8 @@ profiles:
     research_question: What are the serial intervals of SARS-CoV-2?
     disease_focus: "(COVID-19 OR SARS-CoV-2)"
     disease_exclude: "(MERS OR influenza)"
-    transmission_focus: "(serial interval)"
-    transmission_exclude: "none"
+    parameter_focus: "(serial interval)"
+    parameter_exclude: "none"
 ```
 
 ## Naming rules

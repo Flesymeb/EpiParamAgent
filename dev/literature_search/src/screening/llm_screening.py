@@ -14,12 +14,28 @@ from langchain_openai import ChatOpenAI
 
 from common.config import load_llm_config
 
-from .decision_models import ScreeningDecision
+from .decision_models import (
+    ScreeningDecision,
+    classify_screening_decision,
+    resolve_stage_mode,
+)
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 PROMPT_DIR = BASE_DIR / "src" / "epidemiology" / "prompts"
-SCREENING_SYSTEM_PROMPT = PROMPT_DIR / "screening_system.md"
-SCREENING_USER_PROMPT = PROMPT_DIR / "screening_user.md"
+PROMPT_FILES = {
+    "title_abstract": (
+        PROMPT_DIR / "screening_system_title_abstract.md",
+        PROMPT_DIR / "screening_user_title_abstract.md",
+    ),
+    "title_only": (
+        PROMPT_DIR / "screening_system_title_only.md",
+        PROMPT_DIR / "screening_user_title_only.md",
+    ),
+    "full_text": (
+        PROMPT_DIR / "screening_system_full_text.md",
+        PROMPT_DIR / "screening_user_full_text.md",
+    ),
+}
 
 
 def load_ground_truth_pmids(gt_file: Path) -> set[str]:
@@ -75,10 +91,14 @@ def init_llm_model() -> Any:
     )
 
 
-def load_prompt_templates() -> tuple[str, str]:
-    """Load screening system/user prompts from prompt files."""
-    system_text = SCREENING_SYSTEM_PROMPT.read_text(encoding="utf-8")
-    user_text = SCREENING_USER_PROMPT.read_text(encoding="utf-8")
+def load_prompt_templates(screening_stage: str) -> tuple[str, str]:
+    """Load stage-aware screening system/user prompts from prompt files."""
+    prompt_pair = PROMPT_FILES.get(screening_stage)
+    if prompt_pair is None:
+        raise KeyError(f"Unknown screening prompt stage: {screening_stage}")
+    system_path, user_path = prompt_pair
+    system_text = system_path.read_text(encoding="utf-8")
+    user_text = user_path.read_text(encoding="utf-8")
     return system_text, user_text
 
 
@@ -115,33 +135,31 @@ async def screen_papers_batch_async(
     batch_size: int = 20,
     batch_concurrency: int = 1,
     screening_config: Optional[dict[str, Any]] = None,
+    screening_stage: str = "title_abstract",
     content_label: str = "Abstract",
     content_key: str = "Abstract",
     content_fallback: str = "(No abstract available. Please assess based on title only.)",
-    system_template: Optional[str] = None,
-    user_template: Optional[str] = None,
 ) -> list[dict[str, Any]]:
     """Screen papers in async batches and write scores back onto each paper dict."""
     default_config = {
         "research_question": research_question,
         "disease_focus": "(SARS-CoV-2 OR COVID-19 OR 2019-nCoV OR coronavirus) AND its (variant OR mutation OR lineage OR amino acid substitution)",
         "disease_exclude": "studies that focus solely on other diseases or wild-type only without variant comparison",
-        "transmission_focus": "transmission metrics **related to the specific disease focus** (e.g., reproduction number, serial interval, attack rate, transmission probability)",
-        "transmission_exclude": "studies that only discuss clinical outcomes, severity, or vaccine effectiveness without transmission quantification",
+        "parameter_focus": "target epidemiological parameters related to the research question (e.g., reproduction number, serial interval, fatality rate)",
+        "parameter_exclude": "studies that discuss adjacent outcomes without actually reporting or estimating the target parameter",
     }
     config = {**default_config, **(screening_config or {})}
 
-    if system_template is None or user_template is None:
-        system_text, user_text = load_prompt_templates()
-    else:
-        system_text, user_text = system_template, user_template
+    system_text, user_text = load_prompt_templates(screening_stage)
+    stage_mode = resolve_stage_mode(screening_stage, config.get("policies", {}))
 
     system_text = system_text.format(
+        screening_stage=screening_stage.replace("_", " "),
         research_question=config["research_question"],
         disease_focus=config["disease_focus"],
         disease_exclude=config["disease_exclude"],
-        transmission_focus=config["transmission_focus"],
-        transmission_exclude=config["transmission_exclude"],
+        parameter_focus=config["parameter_focus"],
+        parameter_exclude=config["parameter_exclude"],
     )
     template = ChatPromptTemplate.from_messages(
         [("system", system_text), ("human", user_text)]
@@ -202,7 +220,12 @@ async def screen_papers_batch_async(
                         _mark_paper_error(paper, result)
                         continue
 
-                    _write_structured_result(paper, result)
+                    _write_structured_result(
+                        paper,
+                        result,
+                        thresholds=config.get("thresholds"),
+                        stage_mode=stage_mode,
+                    )
 
                 strong_count = sum(
                     1
@@ -238,7 +261,12 @@ async def screen_papers_batch_async(
                 for paper, prompt in batch:
                     try:
                         result = await invoke_with_retry_async(structured_llm, prompt)
-                        _write_structured_result(paper, result)
+                        _write_structured_result(
+                            paper,
+                            result,
+                            thresholds=config.get("thresholds"),
+                            stage_mode=stage_mode,
+                        )
                     except Exception as e2:
                         print(
                             f"    单篇失败 PMID={paper.get('PMID', 'N/A')}: {str(e2)[:100]}"
@@ -258,8 +286,18 @@ async def screen_papers_batch_async(
     return papers
 
 
-def _write_structured_result(paper: dict[str, Any], result: ScreeningDecision) -> None:
-    paper["llm_suggest"] = result.llm_suggest
+def _write_structured_result(
+    paper: dict[str, Any],
+    result: ScreeningDecision,
+    *,
+    thresholds: dict[str, Any] | None,
+    stage_mode: str,
+) -> None:
+    paper["llm_suggest"] = classify_screening_decision(
+        result,
+        thresholds=thresholds,
+        stage_mode=stage_mode,
+    )
     paper["overall_score"] = result.overall_score
     paper["overall_justification"] = result.overall_justification
     paper["disease_score"] = result.disease_relevance.score
@@ -270,8 +308,8 @@ def _write_structured_result(paper: dict[str, Any], result: ScreeningDecision) -
     paper["location_justification"] = result.location_relevance.justification
     paper["evidence_score"] = result.original_evidence.score
     paper["evidence_justification"] = result.original_evidence.justification
-    paper["transmission_score"] = result.transmission_metric.score
-    paper["transmission_justification"] = result.transmission_metric.justification
+    paper["parameter_score"] = result.parameter_relevance.score
+    paper["parameter_justification"] = result.parameter_relevance.justification
 
 
 def _mark_paper_error(paper: dict[str, Any], error: Exception) -> None:
@@ -283,7 +321,7 @@ def _mark_paper_error(paper: dict[str, Any], error: Exception) -> None:
         "population",
         "location",
         "evidence",
-        "transmission",
+        "parameter",
     ]:
         paper[f"{dimension}_score"] = 0
         paper[f"{dimension}_justification"] = "Error"

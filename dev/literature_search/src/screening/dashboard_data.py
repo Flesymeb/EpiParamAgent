@@ -44,9 +44,17 @@ def load_screened_dataframe(csv_path: str | Path | None) -> pd.DataFrame:
     if not path.exists():
         return pd.DataFrame()
     try:
-        return pd.read_csv(path, encoding="utf-8-sig")
+        df = pd.read_csv(path, encoding="utf-8-sig")
     except Exception:
         return pd.DataFrame()
+    if "parameter_score" not in df.columns and "transmission_score" in df.columns:
+        df["parameter_score"] = df["transmission_score"]
+    if (
+        "parameter_justification" not in df.columns
+        and "transmission_justification" in df.columns
+    ):
+        df["parameter_justification"] = df["transmission_justification"]
+    return df
 
 
 def load_text_preview(path_like: str | Path | None, max_chars: int = 4000) -> str:

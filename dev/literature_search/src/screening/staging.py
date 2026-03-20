@@ -45,14 +45,30 @@ def annotate_ground_truth(
 def partition_papers(
     *,
     papers: list[dict[str, Any]],
+    screening_config: dict[str, Any] | None,
     auto_fulltext: bool,
     fulltext_only: bool,
 ) -> dict[str, Any]:
     """Split papers into title/abstract screening and full-text rescue buckets."""
-    papers_with_abstract: list[dict[str, Any]] = []
+    papers_title_abstract: list[dict[str, Any]] = []
+    papers_title_only: list[dict[str, Any]] = []
     papers_without_abstract: list[dict[str, Any]] = []
     fulltext_errors: list[dict[str, str]] = []
     fulltext_cached: list[dict[str, Any]] = []
+    policies = (screening_config or {}).get("policies", {}) or {}
+    rescue_policy = policies.get("fulltext_rescue", {}) or {}
+    effective_fulltext_only = bool(fulltext_only)
+    effective_auto_fulltext = bool(
+        effective_fulltext_only
+        or auto_fulltext
+        or (
+            bool(rescue_policy.get("enabled"))
+            and bool(rescue_policy.get("when_no_abstract"))
+        )
+    )
+    title_abstract_mode = str(policies.get("title_abstract_mode", "strict")).strip().lower()
+    title_only_mode = str(policies.get("title_only_mode", "lenient")).strip().lower()
+    full_text_mode = str(policies.get("full_text_mode", "standard")).strip().lower()
 
     for paper in papers:
         pmid = (paper.get("PMID") or "").strip()
@@ -61,21 +77,24 @@ def partition_papers(
         fulltext_path = (paper.get("fulltext_path") or "").strip()
 
         if abstract:
-            papers_with_abstract.append(paper)
+            papers_title_abstract.append(paper)
             paper["screening_stage"] = "title_abstract"
+            paper["screening_mode"] = title_abstract_mode
             continue
 
-        if not auto_fulltext and not fulltext_only:
-            papers_with_abstract.append(paper)
+        if not effective_auto_fulltext and not effective_fulltext_only:
+            papers_title_only.append(paper)
             paper["screening_stage"] = "title_only"
+            paper["screening_mode"] = title_only_mode
         else:
             papers_without_abstract.append(paper)
             paper["screening_stage"] = "pending_fulltext"
+            paper["screening_mode"] = full_text_mode
             paper["fulltext_status"] = "pending"
             paper.setdefault("fulltext_path", "")
             paper["llm_suggest"] = "needs_full_text"
 
-        if not (auto_fulltext or fulltext_only):
+        if not (effective_auto_fulltext or effective_fulltext_only):
             continue
 
         if not fulltext_markdown and fulltext_path:
@@ -113,16 +132,20 @@ def partition_papers(
             fulltext_cached.append(paper)
 
     return {
-        "papers_with_abstract": papers_with_abstract,
+        "papers_title_abstract": papers_title_abstract,
+        "papers_title_only": papers_title_only,
         "papers_without_abstract": papers_without_abstract,
         "fulltext_errors": fulltext_errors,
         "fulltext_cached": fulltext_cached,
+        "effective_auto_fulltext": effective_auto_fulltext,
+        "effective_fulltext_only": effective_fulltext_only,
     }
 
 
 def print_stage_split(
     *,
-    papers_with_abstract: list[dict[str, Any]],
+    papers_title_abstract: list[dict[str, Any]],
+    papers_title_only: list[dict[str, Any]],
     papers_without_abstract: list[dict[str, Any]],
     auto_fulltext: bool,
     fulltext_only: bool,
@@ -131,13 +154,10 @@ def print_stage_split(
     print("=" * 80)
     if auto_fulltext or fulltext_only:
         print(
-            f"筛选分流: title+abstract={len(papers_with_abstract)} | full-text={len(papers_without_abstract)}"
+            f"筛选分流: title+abstract={len(papers_title_abstract)} | full-text={len(papers_without_abstract)}"
         )
     else:
-        title_only = sum(
-            1 for p in papers_with_abstract if p.get("screening_stage") == "title_only"
-        )
         print(
-            f"筛选分流: title+abstract={len(papers_with_abstract)-title_only} | title-only={title_only}"
+            f"筛选分流: title+abstract={len(papers_title_abstract)} | title-only={len(papers_title_only)}"
         )
     print("=" * 80)

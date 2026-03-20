@@ -35,7 +35,7 @@ def resolve_profile_config(
     print(f"  Project: {profile.project_dir_name}")
     print(f"  Research question: {research_question}")
     print(f"  Disease focus: {profile_config['disease_focus'][:80]}...")
-    print(f"  Transmission focus: {profile_config['transmission_focus'][:80]}...\n")
+    print(f"  Parameter focus: {profile_config['parameter_focus'][:80]}...\n")
 
     return profile_config, research_question
 
