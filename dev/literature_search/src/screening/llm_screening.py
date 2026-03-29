@@ -188,6 +188,7 @@ async def screen_papers_batch_async(
     )
 
     semaphore = asyncio.Semaphore(max(1, batch_concurrency))
+    print_lock = asyncio.Lock()
     completed = 0
     started_at = time.perf_counter()
 
@@ -196,13 +197,12 @@ async def screen_papers_batch_async(
         async with semaphore:
             batch_prompts = [prompt for _, prompt in batch]
             batch_papers = [paper for paper, _ in batch]
-            if (
+
+            should_log = (
                 batch_idx == 1
                 or batch_idx == total_batches
                 or batch_idx % log_every_batches == 0
-            ):
-                print("-" * 72)
-                print(f"[Batch {batch_idx:>3}/{total_batches}] ({len(batch)} 篇)")
+            )
 
             try:
                 tasks = [
@@ -211,15 +211,15 @@ async def screen_papers_batch_async(
                 ]
                 results = await asyncio.gather(*tasks, return_exceptions=True)
 
+                single_errors: list[str] = []
                 for paper, result in zip(batch_papers, results):
                     completed += 1
                     if isinstance(result, Exception):
-                        print(
+                        single_errors.append(
                             f"  ⚠️ 单篇失败 PMID={paper.get('PMID', 'N/A')}: {str(result)[:100]}"
                         )
                         _mark_paper_error(paper, result)
                         continue
-
                     _write_structured_result(
                         paper,
                         result,
@@ -228,36 +228,32 @@ async def screen_papers_batch_async(
                     )
 
                 strong_count = sum(
-                    1
-                    for p in batch_papers
-                    if p.get("llm_suggest") == "strong_candidate"
+                    1 for p in batch_papers if p.get("llm_suggest") == "strong_candidate"
                 )
                 possible_count = sum(
-                    1
-                    for p in batch_papers
-                    if p.get("llm_suggest") == "possible_candidate"
+                    1 for p in batch_papers if p.get("llm_suggest") == "possible_candidate"
                 )
                 error_count = sum(
                     1 for p in batch_papers if p.get("llm_suggest") == "error"
                 )
-                if (
-                    batch_idx == 1
-                    or batch_idx == total_batches
-                    or batch_idx % log_every_batches == 0
-                    or error_count > 0
-                ):
+
+                if should_log or error_count > 0:
                     elapsed = time.perf_counter() - started_at
                     rate = completed / elapsed if elapsed > 0 else 0.0
                     eta = (total - completed) / rate if rate > 0 else 0.0
-                    print(
-                        f"进度: {completed}/{total} | {rate:.2f} 篇/秒 | ETA {eta/60:.1f} 分钟"
-                    )
-                    print(
-                        f"结果: {strong_count} strong | {possible_count} possible | {len(batch) - strong_count - possible_count - error_count} unlikely | {error_count} errors"
-                    )
+                    unlikely_count = len(batch) - strong_count - possible_count - error_count
+                    async with print_lock:
+                        print(f"[{batch_idx:>3}/{total_batches}] "
+                              f"进度 {completed}/{total} | "
+                              f"{rate:.1f} 篇/秒 | ETA {eta/60:.1f}min | "
+                              f"S={strong_count} P={possible_count} U={unlikely_count} E={error_count}")
+                        for msg in single_errors:
+                            print(msg)
+
             except Exception as e:
-                print(f"  批次处理失败: {str(e)[:200]}...")
-                print("  尝试单篇重新处理 (with async retries)...")
+                async with print_lock:
+                    print(f"  [Batch {batch_idx}] 批次失败: {str(e)[:200]}")
+                    print(f"  [Batch {batch_idx}] 尝试单篇重处理...")
                 for paper, prompt in batch:
                     try:
                         result = await invoke_with_retry_async(structured_llm, prompt)
@@ -268,9 +264,10 @@ async def screen_papers_batch_async(
                             stage_mode=stage_mode,
                         )
                     except Exception as e2:
-                        print(
-                            f"    单篇失败 PMID={paper.get('PMID', 'N/A')}: {str(e2)[:100]}"
-                        )
+                        async with print_lock:
+                            print(
+                                f"    单篇失败 PMID={paper.get('PMID', 'N/A')}: {str(e2)[:100]}"
+                            )
                         _mark_paper_error(paper, e2)
 
     batches = [all_prompts[i : i + batch_size] for i in range(0, total, batch_size)]

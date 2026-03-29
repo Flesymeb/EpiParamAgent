@@ -913,8 +913,23 @@ class SciHubUrlExtractor:
             cprint(f"  [PMC] download error: {e}", "red")
         return url_results
 
-    def process_pmid(self, pmid, download_dir=None, doi_override=None, pmcid_override=None):
-        """Resolve PMID to Sci-Hub via DOI first, then PMC as fallback."""
+    def process_pmid(
+        self,
+        pmid,
+        download_dir=None,
+        doi_override=None,
+        pmcid_override=None,
+        prefer_pmc=True,
+        allow_interactive=True,
+    ):
+        """Resolve PMID to a downloadable PDF.
+
+        Strategy:
+        1. Prefer PubMed Central when a PMCID exists (fast, deterministic, legal)
+        2. If no PMCID download succeeds, try DOI resolution
+           - optionally PMC-first via DOI lookup
+           - then Sci-Hub fallback
+        """
         doi = (doi_override or "").strip()
         pmcid = (pmcid_override or "").strip()
         if pmcid:
@@ -929,9 +944,19 @@ class SciHubUrlExtractor:
             pmcid = re.sub(r"^.*?(PMC\d+).*$", r"\1", pmcid, flags=re.IGNORECASE)
 
         url_results = []
+
+        if prefer_pmc and pmcid:
+            cprint("  PMC:", "cyan")
+            pmc_results = self._process_pmcid(pmcid, download_dir)
+            if pmc_results:
+                return pmc_results, doi, pmcid
+
         if doi:
             url_results = self.process_doi(
-                doi, download_dir=download_dir, use_pmc=False
+                doi,
+                download_dir=download_dir,
+                use_pmc=prefer_pmc and not pmcid,
+                allow_interactive=allow_interactive,
             )
             if download_dir:
                 downloaded_entry = next(
@@ -996,7 +1021,7 @@ class SciHubUrlExtractor:
                 for info in url_results
             ):
                 return url_results, doi, pmcid
-            # Sci-Hub available but not downloaded -> fall back to PMC if possible
+            # DOI route failed -> fall back to PMC if possible
             if not pmcid:
                 resolved_doi, resolved_pmcid = self._resolve_pmid(pmid)
                 if not pmcid:
@@ -1012,7 +1037,9 @@ class SciHubUrlExtractor:
 
         return url_results, doi, pmcid
 
-    def process_doi(self, doi, download_dir=None, use_pmc=False):
+    def process_doi(
+        self, doi, download_dir=None, use_pmc=False, allow_interactive=True
+    ):
         """Resolve DOI to multiple PDF URLs from different mirrors and test each.
 
         Priority order:
@@ -1212,7 +1239,9 @@ class SciHubUrlExtractor:
         interactive_mirror = self._pick_interactive_mirror()
         for mirror in self.mirrors:
             allow_playwright = (
-                not playwright_attempted and mirror == interactive_mirror
+                allow_interactive
+                and not playwright_attempted
+                and mirror == interactive_mirror
             )
             link_or_path, from_playwright, actual_url = self.get_pdf_url(
                 doi, mirror, download_dir, allow_playwright=allow_playwright

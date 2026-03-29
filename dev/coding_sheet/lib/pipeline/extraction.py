@@ -59,7 +59,12 @@ def _fetch_missing_pmids(pmids: list[str], pdf_dir: Path) -> list[str]:
         if target.exists():
             continue
         try:
-            url_results, _, _ = extractor.process_pmid(pmid, download_dir=pdf_dir)
+            url_results, _, _ = extractor.process_pmid(
+                pmid,
+                download_dir=pdf_dir,
+                prefer_pmc=True,
+                allow_interactive=False,
+            )
         except Exception as exc:
             print(f"[WARN] PMID {pmid} fetch failed: {exc}")
             still_missing.append(pmid)

@@ -89,7 +89,7 @@ def main() -> None:
     print("初始化LLM模型...")
     llm_model = init_llm_model()
     print(
-        f"使用模型: {os.getenv('LLM_PROVIDER', 'openai')}/{os.getenv('LLM_MODEL', 'gpt-4o-mini')}\n"
+        f"使用模型: {os.getenv('LLM_MODEL', 'gpt-4o-mini')}\n"
     )
 
     # --resume-fulltext: read from the milestone output file (previous --skip-no-abstract run)

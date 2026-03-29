@@ -141,7 +141,7 @@ def _collect_fieldnames(papers: list[dict[str, Any]]) -> list[str]:
     for field in ["llm_suggest", "overall_score", "overall_justification"]:
         if field not in fieldnames:
             fieldnames.append(field)
-    for field in ["screening_stage", "fulltext_status", "fulltext_path"]:
+    for field in ["screening_stage", "screening_mode", "fulltext_status", "fulltext_path", "fulltext_eligible"]:
         if field not in fieldnames:
             fieldnames.append(field)
     for dimension in ["disease", "population", "location", "evidence", "parameter"]:

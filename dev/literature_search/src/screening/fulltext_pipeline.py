@@ -83,12 +83,14 @@ def download_pdfs_batch(
         print(
             f"Resolving PMID: {pmid} | DOI: {doi or 'N/A'} | PMCID: {pmcid or 'N/A'}"
         )
-        print("  Sci-Hub:")
+        print("  Full-text fetch (PMC first, Sci-Hub fallback):")
         url_results, doi, pmcid = extractor.process_pmid(
             pmid,
             download_dir=PDF_CACHE_DIR,
             doi_override=doi,
             pmcid_override=pmcid,
+            prefer_pmc=True,
+            allow_interactive=False,
         )
         pdf_path = _first_downloaded_pdf(url_results)
         if pdf_path and pdf_path.exists():

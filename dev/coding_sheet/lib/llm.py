@@ -3,6 +3,8 @@ from __future__ import annotations
 import os
 import sys
 from pathlib import Path
+
+import httpx
 from langchain_openai import ChatOpenAI
 
 
@@ -17,6 +19,7 @@ def init_llm():
     if not cfg.api_key:
         raise RuntimeError("Missing LLM_API_KEY/OPENAI_API_KEY")
     model = cfg.model or "openai/gpt-4.1"
+    http_client = httpx.Client(verify=cfg.verify_ssl, timeout=cfg.timeout_s)
     return ChatOpenAI(
         model=model,
         api_key=cfg.api_key,
@@ -24,4 +27,5 @@ def init_llm():
         temperature=cfg.temperature,
         max_retries=3,
         request_timeout=cfg.timeout_s,
+        http_client=http_client,
     )
