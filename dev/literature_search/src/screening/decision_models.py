@@ -96,11 +96,14 @@ def resolve_stage_mode(stage: str, policies: dict[str, Any] | None) -> str:
         "title_abstract": "title_abstract_mode",
         "title_only": "title_only_mode",
         "full_text": "full_text_mode",
+        "possible_full_text": "possible_full_text_mode",
     }
     default_map = {
         "title_abstract": "strict",
         "title_only": "lenient",
         "full_text": "standard",
+        "possible_full_text": "confirm_parameter",
+        "strong_full_text": "confirm_parameter",
     }
     key = policy_map.get(stage, "title_abstract_mode")
     return str((policies or {}).get(key, default_map.get(stage, "strict"))).strip().lower()
@@ -119,10 +122,37 @@ def classify_screening_decision(
         return "strong_candidate"
 
     possible_block = _apply_stage_mode(normalized["possible"], stage_mode=stage_mode)
+    if stage_mode == "confirm_parameter":
+        return _classify_confirm_parameter(decision, possible_block)
+
     if _meets_threshold_block(decision, possible_block):
         return "possible_candidate"
 
     return "unlikely_candidate"
+
+
+def _classify_confirm_parameter(
+    decision: ScreeningDecision,
+    threshold_block: dict[str, int],
+) -> str:
+    """Second-stage rule: demote a stage-1 possible paper only when full text shows parameter is clearly absent.
+
+    Stage-1 already screened against profile-specific thresholds.  Stage-2 is a
+    rescue/confirmation pass, so we only demote when the full text provides clear
+    evidence that the target parameter or original empirical data is missing
+    entirely (score <= 1).  A weak-but-present parameter (score == 2) is kept as
+    possible_candidate — the doubt was already factored in by stage-1.
+    """
+    # Hard floor: demote only when full text clearly shows the parameter is absent.
+    # Do NOT re-apply the profile-specific possible_min here; that is stage-1's job.
+    DEMOTE_FLOOR = 1
+
+    if decision.parameter_relevance.score <= DEMOTE_FLOOR:
+        return "unlikely_candidate"
+    if decision.original_evidence.score <= DEMOTE_FLOOR:
+        return "unlikely_candidate"
+
+    return "possible_candidate"
 
 
 def _meets_threshold_block(

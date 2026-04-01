@@ -28,24 +28,30 @@ profiles:
     research_question: What are the fatality and severity outcomes of SARS-CoV-2 infection?
     disease_focus: (COVID-19 OR COVID19 OR SARS-CoV-2 OR SARS-COV-2 OR 2019-nCoV OR coronavirus OR coronavirus disease 2019)
     disease_exclude: none
-    parameter_focus: (mortality OR fatality OR case fatality rate OR CFR OR infection fatality rate OR IFR OR death rate OR died OR ICU admission OR intensive care OR invasive mechanical ventilation OR mechanical ventilation)
-    parameter_exclude: studies that do not report mortality, fatality rates, ICU admission, or mechanical ventilation outcomes as quantified endpoints
+    # P4 is benchmarked against a review whose inclusion scope explicitly covers
+    # both fatality and severity endpoints (including ICU admission and invasive
+    # mechanical ventilation). Keep this broader scope aligned with the GT set.
+    parameter_focus: (mortality OR fatality OR case fatality rate OR case fatality ratio OR CFR OR infection fatality rate OR infection fatality ratio OR IFR OR death rate OR died OR ICU admission OR intensive care OR intensive care unit OR invasive mechanical ventilation OR mechanical ventilation OR ventilation OR clinical characteristic*)
+    parameter_exclude: studies that do not report mortality, fatality, ICU admission, or invasive mechanical ventilation outcomes as quantified endpoints
 
   P5:
     project_number: 5
-    research_question: What are the fatality rates of SARS-CoV-2 inferred from seroprevalence or antibody studies?
+    research_question: What seroprevalence or antibody studies can support inference of SARS-CoV-2 infection fatality rates?
     disease_focus: (COVID-19 OR COVID19 OR SARS-CoV-2 OR SARS-COV-2 OR 2019-nCoV OR coronavirus)
     disease_exclude: none
-    parameter_focus: (seroprevalence OR sero-prevalence OR seropositivity OR serological survey OR serosurvey OR seroepidemiolog* OR anti-SARS-CoV-2 antibod* OR infection fatality rate OR infection fatality ratio OR IFR OR fatality rate OR case fatality rate OR CFR)
-    parameter_exclude: studies that report antibody responses for vaccine efficacy or therapeutic purposes without estimating population-level fatality rates
+    # Keep the screening scope aligned with the original review query
+    # (seroprevalence / antibody evidence), while excluding clearly off-target
+    # immunogenicity and assay-development papers.
+    parameter_focus: (seroprevalence OR sero-prevalence OR seropositivity OR serological survey OR serosurvey OR seroepidemiolog* OR anti-SARS-CoV-2 antibod* OR antibody prevalence OR antibody survey)
+    parameter_exclude: studies that report antibody responses for vaccine efficacy, immunogenicity, assay development, or laboratory validation without population-level seroprevalence or antibody prevalence estimates
 
   P6:
     project_number: 6
     research_question: What is the mortality or case fatality rate of COVID-19?
     disease_focus: (COVID-19 OR COVID 19 OR COVID-2019 OR 2019-nCoV OR 2019nCoV OR SARS-CoV-2 OR severe acute respiratory syndrome coronavirus 2 OR ((Wuhan AND coronavirus)))
     disease_exclude: none
-    parameter_focus: (case fatality rate OR case fatality ratio OR CFR OR infection fatality rate OR infection fatality ratio OR IFR OR mortality rate OR death rate OR fatality rate OR COVID-19 mortality OR SARS-CoV-2 mortality)
-    parameter_exclude: studies that mention mortality only as a secondary outcome without reporting or estimating a fatality rate
+    parameter_focus: (mortality OR (case AND fatality AND rate) OR case fatality rate OR mortality rate OR death rate)
+    parameter_exclude: none
 
   # P9 excluded from evaluation: only 14 GT papers (2 mislabeled), pool positive rate ~0.7%,
   # metrics too noisy to be informative. Profile kept here for reference only.

@@ -30,17 +30,19 @@ def save_screening_outputs(
     fulltext_needed_count: int,
     fulltext_ready_count: int,
     fulltext_errors: list[dict[str, str]],
-) -> tuple[Path, Path, Path]:
+) -> tuple[Path, Path, Path, Path]:
     """Persist screened CSV, detailed report, and run manifest."""
     output_file.parent.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    run_dir = output_file.parent / "screening_runs" / timestamp
+    run_dir.mkdir(parents=True, exist_ok=True)
 
     # Archive previous result before overwriting so multi-run history is preserved.
     # The canonical output_file always holds the latest run; backups accumulate in screening_logs/.
     if output_file.exists():
         log_dir_early = output_file.parent / "screening_logs"
         log_dir_early.mkdir(parents=True, exist_ok=True)
-        timestamp_backup = datetime.now().strftime("%Y%m%d_%H%M%S")
-        backup_path = log_dir_early / f"{output_file.stem}_backup_{timestamp_backup}.csv"
+        backup_path = log_dir_early / f"{output_file.stem}_backup_{timestamp}.csv"
         shutil.copy2(output_file, backup_path)
 
     fieldnames = _collect_fieldnames(papers)
@@ -57,7 +59,6 @@ def save_screening_outputs(
     unlikely = [p for p in papers if p.get("llm_suggest") == "unlikely_candidate"]
     errors = [p for p in papers if p.get("llm_suggest") == "error"]
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_dir = output_file.parent / "screening_logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_file = log_dir / f"screening_report_{timestamp}.txt"
@@ -122,7 +123,13 @@ def save_screening_outputs(
             "fulltext_error_count": len(fulltext_errors),
         },
     )
-    return output_file, log_file, manifest_path
+    run_output_file = run_dir / output_file.name
+    run_log_file = run_dir / log_file.name
+    run_manifest_file = run_dir / manifest_path.name
+    shutil.copy2(output_file, run_output_file)
+    shutil.copy2(log_file, run_log_file)
+    shutil.copy2(manifest_path, run_manifest_file)
+    return output_file, log_file, manifest_path, run_dir
 
 
 def _collect_fieldnames(papers: list[dict[str, Any]]) -> list[str]:

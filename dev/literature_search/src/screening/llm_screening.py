@@ -35,6 +35,14 @@ PROMPT_FILES = {
         PROMPT_DIR / "screening_system_full_text.md",
         PROMPT_DIR / "screening_user_full_text.md",
     ),
+    "possible_full_text": (
+        PROMPT_DIR / "screening_system_possible_full_text.md",
+        PROMPT_DIR / "screening_user_possible_full_text.md",
+    ),
+    "strong_full_text": (
+        PROMPT_DIR / "screening_system_strong_full_text.md",
+        PROMPT_DIR / "screening_user_strong_full_text.md",
+    ),
 }
 
 
@@ -76,6 +84,7 @@ def init_llm_model() -> Any:
     print(f"API Base: {api_base}")
     print(f"Model: {llm_model}\n")
     print(f"SSL Verify: {cfg.verify_ssl}\n")
+    print(f"Force streaming: {cfg.force_streaming}\n")
 
     http_client = httpx.Client(verify=cfg.verify_ssl)
     http_async_client = httpx.AsyncClient(verify=cfg.verify_ssl)
@@ -88,6 +97,7 @@ def init_llm_model() -> Any:
         http_async_client=http_async_client,
         max_retries=3,
         request_timeout=cfg.timeout_s or 60,
+        streaming=cfg.force_streaming,
     )
 
 

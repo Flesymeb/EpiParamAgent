@@ -33,6 +33,8 @@ def load_pdf_fetcher_module():
 def download_pdfs_batch(
     pmids: list[str],
     pmid_overrides: dict[str, dict[str, str]] | None = None,
+    *,
+    source_strategy: str = "pmc_first",
 ) -> dict[str, dict[str, str]]:
     """Download PDFs into the shared cache and return per-PMID status."""
     ensure_fulltext_cache_dirs()
@@ -56,7 +58,8 @@ def download_pdfs_batch(
 
     pdf_fetcher = load_pdf_fetcher_module()
     extractor = pdf_fetcher.SciHubUrlExtractor()
-    extractor.get_mirrors()
+    if source_strategy != "pmc_only":
+        extractor.get_mirrors()
 
     for pmid in todo_pmids:
         target_pdf = PDF_CACHE_DIR / f"PMID_{pmid}.pdf"
@@ -83,15 +86,22 @@ def download_pdfs_batch(
         print(
             f"Resolving PMID: {pmid} | DOI: {doi or 'N/A'} | PMCID: {pmcid or 'N/A'}"
         )
-        print("  Full-text fetch (PMC first, Sci-Hub fallback):")
-        url_results, doi, pmcid = extractor.process_pmid(
-            pmid,
-            download_dir=PDF_CACHE_DIR,
-            doi_override=doi,
-            pmcid_override=pmcid,
-            prefer_pmc=True,
-            allow_interactive=False,
-        )
+        if source_strategy == "pmc_only":
+            print("  Full-text fetch (PMC only):")
+            if not pmcid:
+                results[pmid] = {"status": "pmc_unavailable", "pdf_path": ""}
+                continue
+            url_results = extractor._process_pmcid(pmcid, PDF_CACHE_DIR)
+        else:
+            print("  Full-text fetch (PMC first, Sci-Hub fallback):")
+            url_results, doi, pmcid = extractor.process_pmid(
+                pmid,
+                download_dir=PDF_CACHE_DIR,
+                doi_override=doi,
+                pmcid_override=pmcid,
+                prefer_pmc=True,
+                allow_interactive=False,
+            )
         pdf_path = _first_downloaded_pdf(url_results)
         if pdf_path and pdf_path.exists():
             if pdf_path != target_pdf:
@@ -107,7 +117,10 @@ def download_pdfs_batch(
                         shutil.copyfile(pdf_path, target_pdf)
             results[pmid] = {"status": "downloaded", "pdf_path": str(target_pdf)}
         else:
-            results[pmid] = {"status": "download_failed", "pdf_path": ""}
+            results[pmid] = {
+                "status": "pmc_unavailable" if source_strategy == "pmc_only" else "download_failed",
+                "pdf_path": "",
+            }
 
     missing = [pmid for pmid, info in results.items() if info["status"] != "downloaded"]
     if missing and sys.stdin.isatty():
@@ -202,6 +215,8 @@ def prepare_fulltext_candidates(
     papers_without_abstract: list[dict[str, Any]],
     fulltext_cached: list[dict[str, Any]],
     fulltext_errors: list[dict[str, str]],
+    *,
+    source_strategy: str = "pmc_first",
 ) -> tuple[list[dict[str, Any]], dict[str, dict[str, str]], dict[str, dict[str, str]]]:
     """Prepare markdown-backed papers for full-text screening."""
     total_fulltext = len({id(p) for p in papers_without_abstract + fulltext_cached})
@@ -250,7 +265,11 @@ def prepare_fulltext_candidates(
             print(f"开始全文下载 (PDF) | 输出目录: {PDF_CACHE_DIR}")
         else:
             print("PDF 缓存已命中，无需下载。")
-        pdf_results = download_pdfs_batch(pmids, pmid_overrides)
+        pdf_results = download_pdfs_batch(
+            pmids,
+            pmid_overrides,
+            source_strategy=source_strategy,
+        )
         md_results = convert_pdfs_to_markdown(pdf_results)
 
     fulltext_ready: list[dict[str, Any]] = []

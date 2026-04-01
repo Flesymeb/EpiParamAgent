@@ -10,7 +10,7 @@ defaults:
       location_min: 2
     possible:
       disease_min: 3
-      parameter_min: 3
+      parameter_min: 2
       evidence_min: 2
       population_min: 2
       location_min: 2
@@ -25,11 +25,11 @@ defaults:
 profiles:
   P10:
     project_number: 10
-    research_question: What are the serial interval and generation time of SARS-CoV-2 variants such as Omicron and Delta?
-    disease_focus: (SARS-CoV-2 OR COVID-19) AND (variant OR mutation OR lineage OR amino acid substitution)
-    disease_exclude: studies that focus solely on the wild-type virus without variant comparison
-    parameter_focus: studies that report or estimate serial interval or generation time (including studies where these parameters are reported in the full text but not explicitly mentioned in the title or abstract)
-    parameter_exclude: studies that do not report or estimate serial interval or generation time in the full text
+    research_question: What are the serial interval and generation interval/time estimates reported for SARS-CoV-2, including original strains and variants (e.g. Delta, Omicron)?
+    disease_focus: COVID-19 or SARS-CoV-2 studies, including original wild-type strains, variants, lineages, or sublineages (e.g. Alpha, Delta, Omicron, BA.*).
+    disease_exclude: none
+    parameter_focus: studies that explicitly report, estimate, or compare serial interval, generation interval, or generation time for SARS-CoV-2 (any strain or variant); also include transmission-pair or household-contact studies where these parameters are a central implied outcome.
+    parameter_exclude: studies on transmission dynamics, household transmission, outbreak investigation, incubation period, attack rate, or reproduction number that do not explicitly report or estimate serial interval, generation interval, or generation time.
 
   P11:
     project_number: 11

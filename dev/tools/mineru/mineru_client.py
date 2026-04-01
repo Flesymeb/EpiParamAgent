@@ -1,23 +1,115 @@
 from __future__ import annotations
 
 import logging
+import os
 import time
 import zipfile
+from contextlib import contextmanager
 from dataclasses import dataclass
 from io import BytesIO
 from pathlib import Path
 from typing import Any, Optional
 
-from tenacity import (
-    retry,
-    stop_after_attempt,
-    wait_exponential,
-    retry_if_exception_type,
-)
-
 from .config import MineruConfig, load_mineru_config
 
 logger = logging.getLogger(__name__)
+
+
+def _transient_request_exception_types():
+    requests = _requests()
+    return (
+        requests.exceptions.SSLError,
+        requests.exceptions.ConnectionError,
+        requests.exceptions.ReadTimeout,
+        requests.exceptions.Timeout,
+    )
+
+
+def _mineru_should_bypass_proxy(url: str, cfg: Optional[MineruConfig]) -> bool:
+    if not cfg or not cfg.no_proxy:
+        return False
+    host = (url or '').lower()
+    return any(domain in host for domain in ('mineru.net', 'openxlab.org.cn', 'cdn-mineru'))
+
+
+@contextmanager
+def _temporary_no_proxy(url: str, cfg: Optional[MineruConfig]):
+    if not _mineru_should_bypass_proxy(url, cfg):
+        yield
+        return
+
+    proxy_keys = ['HTTP_PROXY', 'HTTPS_PROXY', 'http_proxy', 'https_proxy', 'ALL_PROXY', 'all_proxy']
+    original = {key: os.environ.get(key) for key in proxy_keys}
+    no_proxy_keys = ['NO_PROXY', 'no_proxy']
+    original_no_proxy = {key: os.environ.get(key) for key in no_proxy_keys}
+    mineru_hosts = 'mineru.net,openxlab.org.cn,cdn-mineru.openxlab.org.cn'
+
+    try:
+        for key in proxy_keys:
+            os.environ.pop(key, None)
+        for key in no_proxy_keys:
+            existing = original_no_proxy.get(key)
+            os.environ[key] = f"{existing},{mineru_hosts}" if existing else mineru_hosts
+        yield
+    finally:
+        for key in proxy_keys:
+            if original[key] is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = original[key]
+        for key in no_proxy_keys:
+            if original_no_proxy[key] is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = original_no_proxy[key]
+
+
+def _request_with_retry(
+    method: str,
+    url: str,
+    *,
+    cfg: Optional[MineruConfig],
+    timeout_s: int,
+    headers: Optional[dict[str, str]] = None,
+    json_payload: Optional[dict[str, Any]] = None,
+    data: Any = None,
+):
+    requests = _requests()
+    transient_types = _transient_request_exception_types()
+    attempts = max(1, int(getattr(cfg, 'retry_attempts', 3) or 3))
+    base_delay = float(getattr(cfg, 'retry_base_delay_s', 1.0) or 1.0)
+    last_exc = None
+
+    for attempt in range(1, attempts + 1):
+        try:
+            with _temporary_no_proxy(url, cfg):
+                return requests.request(
+                    method,
+                    url,
+                    headers=headers,
+                    json=json_payload,
+                    data=data,
+                    timeout=timeout_s,
+                )
+        except transient_types as exc:
+            last_exc = exc
+            if attempt >= attempts:
+                raise
+            delay = base_delay * (2 ** (attempt - 1))
+            logger.warning(
+                'MinerU request failed (%s %s) attempt %d/%d: %s; retrying in %.1fs',
+                method,
+                url[:120],
+                attempt,
+                attempts,
+                type(exc).__name__,
+                delay,
+            )
+            time.sleep(delay)
+
+    if last_exc:
+        raise last_exc
+    raise RuntimeError(f'Unexpected retry loop exit for MinerU request: {method} {url}')
 
 
 @dataclass(frozen=True)
@@ -66,7 +158,7 @@ def pdf_file_to_markdown(
 
     logger.info("Requesting upload URL for: %s", pdf_path.name)
     response = _json_post_with_retry(
-        batch_url, payload, token=token, timeout_s=cfg.timeout_s
+        batch_url, payload, token=token, timeout_s=cfg.timeout_s, cfg=cfg
     )
 
     if not isinstance(response, dict) or response.get("code") != 0:
@@ -87,7 +179,13 @@ def pdf_file_to_markdown(
     # Step 2: Upload file
     logger.info("Uploading file to MinerU...")
     with open(pdf_path, "rb") as f:
-        upload_resp = _requests().put(upload_url, data=f, timeout=cfg.timeout_s)
+        upload_resp = _request_with_retry(
+            "PUT",
+            upload_url,
+            cfg=cfg,
+            data=f,
+            timeout_s=cfg.timeout_s,
+        )
         if upload_resp.status_code != 200:
             raise RuntimeError(f"File upload failed: status={upload_resp.status_code}")
 
@@ -102,7 +200,7 @@ def pdf_file_to_markdown(
         poll_count += 1
         time.sleep(poll_interval_s)
 
-        result = _json_get(poll_url, token=token, timeout_s=cfg.timeout_s)
+        result = _json_get(poll_url, token=token, timeout_s=cfg.timeout_s, cfg=cfg)
         if not isinstance(result, dict) or result.get("code") != 0:
             logger.warning("Poll failed: %s", _truncate_json(result))
             continue
@@ -138,6 +236,7 @@ def pdf_file_to_markdown(
                 token=token,
                 timeout_s=cfg.timeout_s,
                 save_to=save_zip_to,
+                cfg=cfg,
             )
             logger.info("MinerU result extracted: %d chars", len(md))
             return MineruMarkdown(markdown=md, title=None, raw_response=result)
@@ -181,7 +280,7 @@ def pdf_url_to_markdown(
     payload = {"url": pdf_url, "model_version": model_version}
 
     logger.info("Submitting PDF to MinerU: %s", pdf_url)
-    created = _json_post(task_url, payload, token=token, timeout_s=cfg.timeout_s)
+    created = _json_post(task_url, payload, token=token, timeout_s=cfg.timeout_s, cfg=cfg)
 
     # MinerU typically returns {"code":0, "msg":"ok", "data":{...}}
     if isinstance(created, dict):
@@ -220,7 +319,7 @@ def pdf_url_to_markdown(
 
     while time.time() < deadline:
         poll_count += 1
-        last = _json_get(poll_url, token=token, timeout_s=cfg.timeout_s)
+        last = _json_get(poll_url, token=token, timeout_s=cfg.timeout_s, cfg=cfg)
         data = (last or {}).get("data") if isinstance(last, dict) else None
         data = data if isinstance(data, dict) else {}
 
@@ -261,6 +360,7 @@ def pdf_url_to_markdown(
                 token=token,
                 timeout_s=cfg.timeout_s,
                 save_to=save_zip_to,
+                cfg=cfg,
             )
             logger.info("MinerU result extracted: %d chars", len(md))
             return MineruMarkdown(markdown=md, title=None, raw_response=last)
@@ -291,24 +391,42 @@ def _json_post(
     *,
     token: Optional[str],
     timeout_s: int,
+    cfg: Optional[MineruConfig] = None,
 ) -> dict[str, Any]:
-    requests = _requests()
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
     if token:
         headers["Authorization"] = f"Bearer {token}"
 
-    resp = requests.post(url, headers=headers, json=payload, timeout=timeout_s)
+    resp = _request_with_retry(
+        "POST",
+        url,
+        cfg=cfg,
+        headers=headers,
+        json_payload=payload,
+        timeout_s=timeout_s,
+    )
     if resp.status_code >= 400:
         raise RuntimeError(f"MinerU HTTP {resp.status_code}: {resp.text[:1000]}")
     return resp.json()
 
 
-def _json_get(url: str, *, token: Optional[str], timeout_s: int) -> dict[str, Any]:
-    requests = _requests()
+def _json_get(
+    url: str,
+    *,
+    token: Optional[str],
+    timeout_s: int,
+    cfg: Optional[MineruConfig] = None,
+) -> dict[str, Any]:
     headers = {"Accept": "application/json"}
     if token:
         headers["Authorization"] = f"Bearer {token}"
-    resp = requests.get(url, headers=headers, timeout=timeout_s)
+    resp = _request_with_retry(
+        "GET",
+        url,
+        cfg=cfg,
+        headers=headers,
+        timeout_s=timeout_s,
+    )
     if resp.status_code >= 400:
         raise RuntimeError(f"MinerU HTTP {resp.status_code}: {resp.text[:1000]}")
     return resp.json()
@@ -320,13 +438,19 @@ def _download_zip_extract_markdown(
     token: Optional[str],
     timeout_s: int,
     save_to: Optional[Path | str] = None,
+    cfg: Optional[MineruConfig] = None,
 ) -> str:
-    requests = _requests()
     headers: dict[str, str] = {}
     if token:
         headers["Authorization"] = f"Bearer {token}"
 
-    resp = requests.get(zip_url, headers=headers, timeout=timeout_s)
+    resp = _request_with_retry(
+        "GET",
+        zip_url,
+        cfg=cfg,
+        headers=headers,
+        timeout_s=timeout_s,
+    )
     if resp.status_code >= 400:
         raise RuntimeError(
             f"MinerU zip download HTTP {resp.status_code}: {resp.text[:200]}"
@@ -337,23 +461,15 @@ def _download_zip_extract_markdown(
     if save_to:
         p = Path(save_to)
         p.parent.mkdir(parents=True, exist_ok=True)
-        # If save_to is a directory, unzip there. If it's a file (ends in .zip), save zip.
-        # But usually we want to unzip.
-        # Let's assume save_to is a directory to unzip into.
-        # Or if it ends in .zip, save the zip file.
-
         if p.suffix.lower() == ".zip":
             p.write_bytes(zbytes)
         else:
-            # Unzip to directory
             with zipfile.ZipFile(BytesIO(zbytes)) as z:
                 z.extractall(p)
 
     with zipfile.ZipFile(BytesIO(zbytes)) as z:
         names = z.namelist()
-        # Prefer markdown files
         md_names = [n for n in names if n.lower().endswith((".md", ".markdown"))]
-        # If no md, fall back to txt
         if not md_names:
             md_names = [n for n in names if n.lower().endswith(".txt")]
         if not md_names:
@@ -361,14 +477,12 @@ def _download_zip_extract_markdown(
                 f"No markdown-like file found in MinerU zip. Entries: {names[:50]}"
             )
 
-        # Prefer the conventional main file when present.
         lower = {n.lower(): n for n in md_names}
         for preferred in ("full.md", "full.markdown"):
             if preferred in lower:
                 chosen = lower[preferred]
                 break
         else:
-            # Prefer root-level markdown, then shorter paths.
             md_names.sort(key=lambda n: ("/" in n, len(n)))
             chosen = md_names[0]
         data = z.read(chosen)
@@ -495,14 +609,13 @@ def _summarize_error(data: Any) -> str:
 
 
 # Retry wrapper for network/API calls
-@retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=2, max=10),
-    retry=retry_if_exception_type((ConnectionError, TimeoutError)),
-    reraise=True,
-)
 def _json_post_with_retry(
-    url: str, payload: dict, *, token: str, timeout_s: int
+    url: str,
+    payload: dict,
+    *,
+    token: str,
+    timeout_s: int,
+    cfg: Optional[MineruConfig] = None,
 ) -> dict:
-    """POST request with retry on network errors."""
-    return _json_post(url, payload, token=token, timeout_s=timeout_s)
+    """POST request with retry on transient MinerU network errors."""
+    return _json_post(url, payload, token=token, timeout_s=timeout_s, cfg=cfg)

@@ -94,6 +94,7 @@ class LLMConfig:
     max_tokens: int = 32000
     temperature: float = 0.1
     verify_ssl: bool = True
+    force_streaming: bool = False
 
 
 @dataclass
@@ -102,6 +103,9 @@ class MineruConfig:
     api_key: Optional[str] = None
     endpoint: str = "/api/v4/extract/task"
     timeout_s: int = 180
+    no_proxy: bool = False
+    retry_attempts: int = 3
+    retry_base_delay_s: float = 1.0
 
 
 def load_llm_config(
@@ -157,6 +161,9 @@ def load_llm_config(
     verify_ssl = _safe_bool(
         params.get("llm_verify_ssl") or os.getenv("LLM_VERIFY_SSL")
     )
+    force_streaming = _safe_bool(
+        params.get("llm_force_streaming") or os.getenv("LLM_FORCE_STREAMING") or False
+    )
 
     return LLMConfig(
         provider=provider,
@@ -167,6 +174,7 @@ def load_llm_config(
         max_tokens=max_tokens,
         temperature=temperature,
         verify_ssl=verify_ssl,
+        force_streaming=force_streaming,
     )
 
 
@@ -196,12 +204,26 @@ def load_mineru_config(
         _safe_int(params.get("mineru_timeout_s") or os.getenv("MINERU_TIMEOUT_S"))
         or 180
     )
+    no_proxy = _safe_bool(
+        params.get("mineru_no_proxy") or os.getenv("MINERU_NO_PROXY") or False
+    )
+    retry_attempts = (
+        _safe_int(params.get("mineru_retry_attempts") or os.getenv("MINERU_RETRY_ATTEMPTS"))
+        or 3
+    )
+    retry_base_delay_s = (
+        _safe_float(params.get("mineru_retry_base_delay_s") or os.getenv("MINERU_RETRY_BASE_DELAY_S") or 1.0)
+        or 1.0
+    )
 
     return MineruConfig(
         base_url=base_url,
         api_key=api_key,
         endpoint=endpoint,
         timeout_s=timeout_s,
+        no_proxy=no_proxy,
+        retry_attempts=retry_attempts,
+        retry_base_delay_s=retry_base_delay_s,
     )
 
 

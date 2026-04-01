@@ -115,6 +115,7 @@ tmp/
 temp/
 *.tmp
 *.tsbuildinfo
+*.patch
 
 # Node / frontend
 node_modules/

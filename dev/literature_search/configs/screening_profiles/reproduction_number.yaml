@@ -58,7 +58,7 @@ profiles:
   P17:
     project_number: 17
     research_question: What is the basic reproduction number (R0) of COVID-19?
-    disease_focus: (COVID-19)
+    disease_focus: (COVID-19 OR SARS-CoV-2 OR 2019-nCoV OR coronavirus)
     disease_exclude: none
-    parameter_focus: (basic reproduction number OR R0)
+    parameter_focus: (basic reproduction number OR basic reproductive number OR R0 OR R naught OR reproduction number)
     parameter_exclude: none
