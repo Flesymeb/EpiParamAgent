@@ -15,22 +15,25 @@ PMIDS="$REPO_ROOT/evaluation/coding/serial_interval/p13/pmids.txt"
 OUT=""
 STAGE="both"
 CODEBOOK="configs/codebook_serial_interval.yaml"
+FETCH_MODE="pmc_only"   # pmc_only | pmc_scihub | pmc_scihub_manual
 
 while [[ $# -gt 0 ]]; do
     case $1 in
-        --profile)  PROFILE="$2";  shift 2 ;;
-        --pmids)    PMIDS="$2";    shift 2 ;;
-        --out)      OUT="$2";      shift 2 ;;
-        --stage)    STAGE="$2";    shift 2 ;;
-        --codebook) CODEBOOK="$2"; shift 2 ;;
+        --profile)    PROFILE="$2";    shift 2 ;;
+        --pmids)      PMIDS="$2";      shift 2 ;;
+        --out)        OUT="$2";        shift 2 ;;
+        --stage)      STAGE="$2";      shift 2 ;;
+        --codebook)   CODEBOOK="$2";   shift 2 ;;
+        --fetch-mode) FETCH_MODE="$2"; shift 2 ;;
         *) echo "Unknown arg: $1"; exit 1 ;;
     esac
 done
 
-echo "Profile:  $PROFILE"
-echo "PMIDs:    $PMIDS"
-echo "Stage:    $STAGE"
-echo "Codebook: $CODEBOOK"
+echo "Profile:    $PROFILE"
+echo "PMIDs:      $PMIDS"
+echo "Stage:      $STAGE"
+echo "Fetch mode: $FETCH_MODE"
+echo "Codebook:   $CODEBOOK"
 echo ""
 
 if [[ -n "$OUT" ]]; then
@@ -40,7 +43,8 @@ else
 fi
 
 uv run python cli/extract_epi.py \
-    --input    "$PMIDS" \
-    --stage    "$STAGE" \
-    --codebook "$CODEBOOK" \
+    --input      "$PMIDS" \
+    --stage      "$STAGE" \
+    --codebook   "$CODEBOOK" \
+    --fetch-mode "$FETCH_MODE" \
     "${OUT_ARGS[@]}"

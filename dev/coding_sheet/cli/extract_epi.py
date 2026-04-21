@@ -12,7 +12,7 @@ SCREENING_SRC = REPO_ROOT / "dev" / "literature_search" / "src"
 sys.path.insert(0, str(MODULE_ROOT))
 sys.path.insert(0, str(SCREENING_SRC))
 
-from lib.pipeline.extraction import run_pipeline
+from lib.pipeline.extraction import FETCH_STRATEGIES, run_pipeline
 
 
 def _resolve_output_from_profile(profile_name: str) -> Path:
@@ -55,6 +55,18 @@ def main():
     )
     parser.add_argument("--stage", choices=["index", "extract", "both"], default="both")
     parser.add_argument(
+        "--fetch-mode",
+        dest="fetch_mode",
+        choices=FETCH_STRATEGIES,
+        default="pmc_only",
+        help=(
+            "PDF fetch strategy: "
+            "pmc_only = PMC OA only (default, safe); "
+            "pmc_scihub = PMC first then Sci-Hub fallback; "
+            "pmc_scihub_manual = as above plus interactive prompt"
+        ),
+    )
+    parser.add_argument(
         "--codebook",
         default=str(MODULE_ROOT / "configs" / "codebook_epi.yaml"),
     )
@@ -68,7 +80,7 @@ def main():
         parser.error("Either --out or --profile must be provided.")
 
     print(f"Output: {out_dir}")
-    run_pipeline(Path(args.input), out_dir, args.stage, Path(args.codebook))
+    run_pipeline(Path(args.input), out_dir, args.stage, Path(args.codebook), fetch_strategy=args.fetch_mode)
 
 
 if __name__ == "__main__":

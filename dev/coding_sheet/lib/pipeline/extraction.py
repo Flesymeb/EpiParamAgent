@@ -40,46 +40,70 @@ def _ensure_tools_on_path() -> None:
         sys.path.insert(0, str(tools_dir))
 
 
-def _fetch_missing_pmids(pmids: list[str], pdf_dir: Path) -> list[str]:
+FETCH_STRATEGIES = ("pmc_only", "pmc_scihub", "pmc_scihub_manual")
+
+
+def _fetch_missing_pmids(
+    pmids: list[str],
+    pdf_dir: Path,
+    fetch_strategy: str = "pmc_only",
+) -> list[str]:
+    """Download PDFs for PMIDs not already in pdf_dir.
+
+    fetch_strategy:
+      pmc_only          — PMC OA only; skip if no PMCID (default, safe)
+      pmc_scihub        — PMC first, then Sci-Hub via DOI fallback
+      pmc_scihub_manual — as above, plus interactive prompt when automated fails
+    """
     if not pmids:
         return []
     _ensure_tools_on_path()
     try:
         from paper_fetch.pdf_fetcher import SciHubUrlExtractor  # type: ignore
-    except Exception as exc:  # pragma: no cover - optional dependency
+    except Exception as exc:
         print(f"[WARN] Unable to import pdf_fetcher: {exc}")
         return pmids
 
     extractor = SciHubUrlExtractor()
-    extractor.get_mirrors()
+    if fetch_strategy != "pmc_only":
+        extractor.get_mirrors()
 
+    allow_interactive = fetch_strategy == "pmc_scihub_manual"
     still_missing = []
+
     for pmid in pmids:
         target = pdf_dir / f"PMID_{pmid}.pdf"
         if target.exists():
             continue
+
         try:
-            url_results, _, _ = extractor.process_pmid(
-                pmid,
-                download_dir=pdf_dir,
-                prefer_pmc=True,
-                allow_interactive=False,
-            )
+            if fetch_strategy == "pmc_only":
+                _, resolved_pmcid = extractor._resolve_pmid(pmid)
+                if not resolved_pmcid:
+                    print(f"  [SKIP] PMID {pmid}: no PMCID (pmc_only mode)")
+                    still_missing.append(pmid)
+                    continue
+                url_results = extractor._process_pmcid(resolved_pmcid, pdf_dir)
+            else:
+                url_results, _, _ = extractor.process_pmid(
+                    pmid,
+                    download_dir=pdf_dir,
+                    prefer_pmc=True,
+                    allow_interactive=allow_interactive,
+                )
         except Exception as exc:
             print(f"[WARN] PMID {pmid} fetch failed: {exc}")
             still_missing.append(pmid)
             continue
 
-        downloaded = next(
-            (u for u in url_results if u.get("status") == "downloaded"), None
-        )
+        downloaded = next((u for u in url_results if u.get("status") == "downloaded"), None)
         if downloaded:
             local_path = Path(downloaded.get("local_path", downloaded.get("url", "")))
-            if local_path.exists():
+            if local_path.exists() and local_path != target:
                 try:
+                    local_path.replace(target)
+                except Exception:
                     shutil.copy2(local_path, target)
-                except Exception as exc:
-                    print(f"[WARN] Failed to copy {local_path.name} -> {target.name}: {exc}")
         if not target.exists():
             still_missing.append(pmid)
 
@@ -105,7 +129,7 @@ def _load_markdown_from_pdf(pdf_path: Path, pmid: str) -> str:
     return extract.markdown or ""
 
 
-def _iter_inputs(input_path: Path):
+def _iter_inputs(input_path: Path, fetch_strategy: str = "pmc_only"):
     if input_path.is_file() and input_path.suffix.lower() == ".pdf":
         yield input_path
         return
@@ -123,12 +147,8 @@ def _iter_inputs(input_path: Path):
             else:
                 missing.append(pmid)
         if missing:
-            print(f"[WARN] Missing PDFs for {len(missing)} PMID(s) in {pdf_dir}")
-            for pmid in missing[:10]:
-                print(f"  - PMID_{pmid}.pdf")
-            if len(missing) > 10:
-                print(f"  ... and {len(missing) - 10} more")
-            missing = _fetch_missing_pmids(missing, pdf_dir)
+            print(f"[INFO] {len(missing)} PDF(s) not cached — fetching (strategy: {fetch_strategy})")
+            missing = _fetch_missing_pmids(missing, pdf_dir, fetch_strategy=fetch_strategy)
             if missing:
                 print(f"[WARN] Still missing PDFs for {len(missing)} PMID(s) after fetch")
             for pmid in pmids:
@@ -312,7 +332,13 @@ def run_extract(
     return parse_json_records(resp.content)
 
 
-def run_pipeline(input_path: Path, out_dir: Path, stage: str, codebook_path: Path) -> None:
+def run_pipeline(
+    input_path: Path,
+    out_dir: Path,
+    stage: str,
+    codebook_path: Path,
+    fetch_strategy: str = "pmc_only",
+) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     index_dir = out_dir / "index"
     index_dir.mkdir(parents=True, exist_ok=True)
@@ -333,7 +359,7 @@ def run_pipeline(input_path: Path, out_dir: Path, stage: str, codebook_path: Pat
     index_rows: list[dict] = []
     xlsx_path: Path | None = None
 
-    inputs = list(_iter_inputs(input_path))
+    inputs = list(_iter_inputs(input_path, fetch_strategy=fetch_strategy))
     if not inputs:
         print(f"[WARN] No input files found for: {input_path}")
         return
