@@ -16,6 +16,7 @@ dependencies = [
     "langchain-anthropic>=0.3.0",
     "pymupdf>=1.24.0",
     "pyyaml>=6.0.0",
+    "httpx[socks]>=0.28.1",
 ]
 
 [build-system]
