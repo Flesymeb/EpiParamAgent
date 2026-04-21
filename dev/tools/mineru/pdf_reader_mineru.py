@@ -22,6 +22,7 @@ def extract_pdf_markdown_mineru(
     pdf_url: Optional[str] = None,
     model_version: str = "vlm",
     output_dir: Optional[Path | str] = None,
+    max_poll_s: int = 600,
 ) -> PdfMarkdownExtract:
     """Extract a PDF as Markdown using MinerU.
 
@@ -40,6 +41,7 @@ def extract_pdf_markdown_mineru(
             model_version=model_version,
             save_zip_to=output_dir,
             data_id=path.stem,
+            max_poll_s=max_poll_s,
         )
     else:
         # URL mode

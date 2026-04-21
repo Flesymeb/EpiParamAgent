@@ -117,14 +117,19 @@ def _markdown_cache_path(md_dir: Path, pmid: str) -> Path:
 def _load_markdown_from_pdf(pdf_path: Path, pmid: str) -> str:
     _ensure_tools_on_path()
     from mineru.pdf_reader_mineru import extract_pdf_markdown_mineru  # type: ignore
+    from common.config import load_mineru_config  # type: ignore
 
     _, md_dir = _paper_pool_dirs()
     cache_path = _markdown_cache_path(md_dir, pmid)
     if cache_path.exists():
         return cache_path.read_text(encoding="utf-8", errors="ignore")
 
+    mineru_cfg = load_mineru_config(module_hint="coding_sheet")
+    # Allow up to 10× the per-request timeout for the full parse cycle (default 600s)
+    max_poll_s = max(600, mineru_cfg.timeout_s * 10)
+
     cache_path.parent.mkdir(parents=True, exist_ok=True)
-    extract = extract_pdf_markdown_mineru(pdf_path, output_dir=cache_path.parent)
+    extract = extract_pdf_markdown_mineru(pdf_path, output_dir=cache_path.parent, max_poll_s=max_poll_s)
     cache_path.write_text(extract.markdown or "", encoding="utf-8")
     return extract.markdown or ""
 
@@ -148,10 +153,12 @@ def _iter_inputs(input_path: Path, fetch_strategy: str = "pmc_only"):
                 missing.append(pmid)
         if missing:
             print(f"[INFO] {len(missing)} PDF(s) not cached — fetching (strategy: {fetch_strategy})")
-            missing = _fetch_missing_pmids(missing, pdf_dir, fetch_strategy=fetch_strategy)
-            if missing:
-                print(f"[WARN] Still missing PDFs for {len(missing)} PMID(s) after fetch")
-            for pmid in pmids:
+            still_missing = _fetch_missing_pmids(missing, pdf_dir, fetch_strategy=fetch_strategy)
+            if still_missing:
+                print(f"[WARN] Still missing PDFs for {len(still_missing)} PMID(s) after fetch")
+            # yield only the newly downloaded PDFs (avoid re-yielding those from first pass)
+            newly_fetched = set(missing) - set(still_missing)
+            for pmid in newly_fetched:
                 pdf_path = pdf_dir / f"PMID_{pmid}.pdf"
                 if pdf_path.exists():
                     yield pdf_path

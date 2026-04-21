@@ -17,6 +17,9 @@ dependencies = [
     "pymupdf>=1.24.0",
     "pyyaml>=6.0.0",
     "httpx[socks]>=0.28.1",
+    "cloudscraper>=1.2.71",
+    "fake-useragent>=2.2.0",
+    "termcolor>=3.3.0",
 ]
 
 [build-system]
