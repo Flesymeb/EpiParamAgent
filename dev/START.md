@@ -21,6 +21,14 @@ Use:
 
 ### Literature Search
 
+**Linux/macOS:**
+```bash
+cd dev/literature_search
+uv sync
+source .venv/bin/activate
+```
+
+**Windows (PowerShell):**
 ```powershell
 cd dev/literature_search
 uv sync
@@ -30,27 +38,59 @@ uv sync
 Use this order:
 
 1. raw / GT changed
+
+**Linux:**
+```bash
+scripts/ops/run_prepare_raw.sh --project-dir /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi --profile P10 --topic serial_interval --include-gt --fix-missing
+```
+**Windows:**
 ```powershell
 scripts\ops\run_prepare_raw.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -Profile P10 -Topic serial_interval -IncludeGt -FixMissing
 ```
 
 2. formal screening experiment
+
+**Linux:**
+```bash
+scripts/ops/run_screening_eval.sh --project-dir /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi --profile P10 --topic serial_interval --batch-size 10 --batch-concurrency 3 --auto-fulltext
+```
+**Windows:**
 ```powershell
 scripts\ops\run_screening_eval.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -Profile P10 -Topic serial_interval -BatchSize 10 -BatchConcurrency 3 -AutoFulltext
 ```
 
 3. one-command wrapper
+
+**Linux:**
+```bash
+scripts/ops/run_pipeline.sh --project-dir /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi --profile P10 --topic serial_interval --include-gt --fix-missing --batch-size 10 --batch-concurrency 3 --auto-fulltext
+```
+**Windows:**
 ```powershell
 scripts\ops\run_pipeline.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi" -Profile P10 -Topic serial_interval -IncludeGt -FixMissing -BatchSize 10 -BatchConcurrency 3 -AutoFulltext
 ```
 
 4. analysis / failure cases
+
+**Linux:**
+```bash
+../workbench/scripts/ops/run_workbench.sh
+```
+**Windows:**
 ```powershell
 ..\workbench\scripts\ops\run_workbench.ps1
 ```
 
 ### Coding Sheet
 
+**Linux/macOS:**
+```bash
+cd dev/coding_sheet
+uv sync
+source .venv/bin/activate
+```
+
+**Windows (PowerShell):**
 ```powershell
 cd dev/coding_sheet
 uv sync
@@ -59,7 +99,7 @@ uv sync
 
 Main entry:
 
-```powershell
+```bash
 python cli/extract_epi.py --input papers/pdfs_all --out output/epi_extract --stage both
 ```
 

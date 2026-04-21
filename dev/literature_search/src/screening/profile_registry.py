@@ -132,6 +132,7 @@ def resolve_profile_paths(
     project_root: str | Path,
     profile_name: str,
     topic: str | None = None,
+    experiment: str | None = None,
 ) -> tuple[ScreeningProfile, ScreeningProjectPaths]:
     profile = get_profile(profile_name)
     if profile is None:
@@ -148,13 +149,22 @@ def resolve_profile_paths(
     )
     project_dir = base_dir / profile.project_dir_name
     stem = profile.project_file_stem
+
+    # Raw and ground-truth are always in the project root (shared across experiments).
+    # Screened output goes into an experiment subdirectory when one is specified,
+    # so that multiple runs coexist without overwriting each other.
+    if experiment:
+        screened_dir = project_dir / "experiments" / experiment
+    else:
+        screened_dir = project_dir
+
     paths = ScreeningProjectPaths(
         topic=topic_key,
         topic_dir=base_dir,
         project_dir=project_dir,
         raw_file=project_dir / f"{stem}_raw.csv",
         ground_truth_file=project_dir / f"{stem}_groundtruth.csv",
-        screened_file=project_dir / f"{stem}_screened.csv",
+        screened_file=screened_dir / f"{stem}_screened.csv",
     )
     return profile, paths
 

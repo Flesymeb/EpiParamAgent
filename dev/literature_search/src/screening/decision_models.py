@@ -80,6 +80,20 @@ class ScreeningDecision(BaseModel):
         return self
 
 
+class BinaryDecision(BaseModel):
+    """Structured binary output for simple include/exclude screening."""
+
+    include: bool = Field(
+        description="Should this paper be included in the review? True=Include, False=Exclude"
+    )
+    justification: str = Field(description="Brief justification for the decision, 1-2 sentences")
+
+
+def classify_binary_decision(decision: BinaryDecision) -> str:
+    """Map binary include/exclude to the canonical candidate label."""
+    return "strong_candidate" if decision.include else "unlikely_candidate"
+
+
 def normalize_thresholds(raw_thresholds: dict[str, Any] | None) -> dict[str, dict[str, int]]:
     """Merge partial YAML thresholds with canonical defaults."""
     merged = deepcopy(DEFAULT_THRESHOLDS)
@@ -97,16 +111,26 @@ def resolve_stage_mode(stage: str, policies: dict[str, Any] | None) -> str:
         "title_only": "title_only_mode",
         "full_text": "full_text_mode",
         "possible_full_text": "possible_full_text_mode",
+        "strong_full_text": "strong_full_text_mode",
     }
     default_map = {
         "title_abstract": "strict",
         "title_only": "lenient",
         "full_text": "standard",
-        "possible_full_text": "confirm_parameter",
+        "possible_full_text": "filter_possible",
         "strong_full_text": "confirm_parameter",
     }
     key = policy_map.get(stage, "title_abstract_mode")
     return str((policies or {}).get(key, default_map.get(stage, "strict"))).strip().lower()
+
+
+def resolve_stage2_evidence_floor(policies: dict[str, Any] | None) -> int:
+    """Read stage2_evidence_floor from profile policies, defaulting to 1.
+
+    SI profiles set this to 2 (require directly observed contact-pair data).
+    R0/Rt profiles leave it at the default 1 (model-fitted aggregate data accepted).
+    """
+    return int((policies or {}).get("stage2_evidence_floor", 1))
 
 
 def classify_screening_decision(
@@ -114,6 +138,7 @@ def classify_screening_decision(
     *,
     thresholds: dict[str, Any] | None = None,
     stage_mode: str = "strict",
+    evidence_floor: int = 1,
 ) -> str:
     """Map five-dimension scores to strong/possible/unlikely in code."""
     normalized = normalize_thresholds(thresholds)
@@ -123,7 +148,9 @@ def classify_screening_decision(
 
     possible_block = _apply_stage_mode(normalized["possible"], stage_mode=stage_mode)
     if stage_mode == "confirm_parameter":
-        return _classify_confirm_parameter(decision, possible_block)
+        return _classify_confirm_parameter(decision, possible_block, evidence_floor=evidence_floor)
+    if stage_mode == "filter_possible":
+        return _classify_possible_fulltext(decision, possible_block, evidence_floor=evidence_floor)
 
     if _meets_threshold_block(decision, possible_block):
         return "possible_candidate"
@@ -134,22 +161,43 @@ def classify_screening_decision(
 def _classify_confirm_parameter(
     decision: ScreeningDecision,
     threshold_block: dict[str, int],
+    *,
+    evidence_floor: int = 1,
 ) -> str:
-    """Second-stage rule: demote a stage-1 possible paper only when full text shows parameter is clearly absent.
+    """Stage-2 rule for STRONG candidates: conservative confirmation pass.
 
-    Stage-1 already screened against profile-specific thresholds.  Stage-2 is a
-    rescue/confirmation pass, so we only demote when the full text provides clear
-    evidence that the target parameter or original empirical data is missing
-    entirely (score <= 1).  A weak-but-present parameter (score == 2) is kept as
-    possible_candidate — the doubt was already factored in by stage-1.
+    Demote only when the full text provides clear evidence that:
+    - the target parameter is entirely absent or cited-only (score <= 1), OR
+    - evidence quality is below the profile-specific floor:
+        SI profiles: floor=2 → demote model-fitted (evidence=2) papers
+        R0 profiles: floor=1 → only demote purely theoretical papers (evidence≤1)
     """
-    # Hard floor: demote only when full text clearly shows the parameter is absent.
-    # Do NOT re-apply the profile-specific possible_min here; that is stage-1's job.
-    DEMOTE_FLOOR = 1
-
-    if decision.parameter_relevance.score <= DEMOTE_FLOOR:
+    if decision.parameter_relevance.score <= 1:
         return "unlikely_candidate"
-    if decision.original_evidence.score <= DEMOTE_FLOOR:
+    if decision.original_evidence.score <= evidence_floor:
+        return "unlikely_candidate"
+
+    return "possible_candidate"
+
+
+def _classify_possible_fulltext(
+    decision: ScreeningDecision,
+    threshold_block: dict[str, int],
+    *,
+    evidence_floor: int = 1,
+) -> str:
+    """Stage-2 rule for POSSIBLE candidates: active FP reduction pass.
+
+    Demotion rules (any one is sufficient):
+    - parameter_relevance <= 2  (weakly/not supported; or cited-only estimate)
+    - original_evidence   <= evidence_floor  (below profile-specific threshold)
+    - disease_relevance   <= 1  (clearly off-topic disease)
+    """
+    if decision.parameter_relevance.score <= 2:
+        return "unlikely_candidate"
+    if decision.original_evidence.score <= evidence_floor:
+        return "unlikely_candidate"
+    if decision.disease_relevance.score <= 1:
         return "unlikely_candidate"
 
     return "possible_candidate"

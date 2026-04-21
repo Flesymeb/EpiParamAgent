@@ -65,12 +65,20 @@ def resolve_profile_io_paths(
     project_root: str | Path,
     profile_name: str,
     topic: str | None = None,
+    experiment: str | None = None,
 ) -> tuple[dict[str, Any], Path, Path, Path]:
-    """Resolve profile metadata and canonical IO paths for an evaluation project."""
+    """Resolve profile metadata and canonical IO paths for an evaluation project.
+
+    When ``experiment`` is given, the screened output and its associated
+    screening_logs / screening_runs land in
+    ``project_dir/experiments/{experiment}/`` so that multiple runs coexist.
+    The raw and ground-truth files always come from the shared project root.
+    """
     profile, paths = resolve_profile_paths(
         project_root=project_root,
         profile_name=profile_name,
         topic=topic,
+        experiment=experiment,
     )
     return (
         profile.to_screening_config(),

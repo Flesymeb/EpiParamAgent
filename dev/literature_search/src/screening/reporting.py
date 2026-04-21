@@ -30,6 +30,8 @@ def save_screening_outputs(
     fulltext_needed_count: int,
     fulltext_ready_count: int,
     fulltext_errors: list[dict[str, str]],
+    strategy: str = "5d",
+    experiment: str | None = None,
 ) -> tuple[Path, Path, Path, Path]:
     """Persist screened CSV, detailed report, and run manifest."""
     output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -93,6 +95,8 @@ def save_screening_outputs(
             "auto_fulltext": bool(auto_fulltext),
             "fulltext_only": bool(fulltext_only),
             "research_question": research_question,
+            "strategy": strategy,
+            "experiment": experiment,
         },
         inputs=[input_file, gt_file] if gt_file else [input_file],
         outputs=[output_file, log_file],

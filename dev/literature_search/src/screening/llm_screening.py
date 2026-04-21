@@ -15,8 +15,11 @@ from langchain_openai import ChatOpenAI
 from common.config import load_llm_config
 
 from .decision_models import (
+    BinaryDecision,
     ScreeningDecision,
+    classify_binary_decision,
     classify_screening_decision,
+    resolve_stage2_evidence_floor,
     resolve_stage_mode,
 )
 
@@ -24,24 +27,32 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 PROMPT_DIR = BASE_DIR / "src" / "epidemiology" / "prompts"
 PROMPT_FILES = {
     "title_abstract": (
-        PROMPT_DIR / "screening_system_title_abstract.md",
-        PROMPT_DIR / "screening_user_title_abstract.md",
+        PROMPT_DIR / "5d" / "screening_system_title_abstract.md",
+        PROMPT_DIR / "5d" / "screening_user_title_abstract.md",
     ),
     "title_only": (
-        PROMPT_DIR / "screening_system_title_only.md",
-        PROMPT_DIR / "screening_user_title_only.md",
+        PROMPT_DIR / "5d" / "screening_system_title_only.md",
+        PROMPT_DIR / "5d" / "screening_user_title_only.md",
     ),
     "full_text": (
-        PROMPT_DIR / "screening_system_full_text.md",
-        PROMPT_DIR / "screening_user_full_text.md",
+        PROMPT_DIR / "5d" / "screening_system_full_text.md",
+        PROMPT_DIR / "5d" / "screening_user_full_text.md",
     ),
     "possible_full_text": (
-        PROMPT_DIR / "screening_system_possible_full_text.md",
-        PROMPT_DIR / "screening_user_possible_full_text.md",
+        PROMPT_DIR / "5d" / "screening_system_possible_full_text.md",
+        PROMPT_DIR / "5d" / "screening_user_possible_full_text.md",
     ),
     "strong_full_text": (
-        PROMPT_DIR / "screening_system_strong_full_text.md",
-        PROMPT_DIR / "screening_user_strong_full_text.md",
+        PROMPT_DIR / "5d" / "screening_system_strong_full_text.md",
+        PROMPT_DIR / "5d" / "screening_user_strong_full_text.md",
+    ),
+    "binary_title_abstract": (
+        PROMPT_DIR / "binary" / "screening_system_title_abstract.md",
+        PROMPT_DIR / "binary" / "screening_user_title_abstract.md",
+    ),
+    "binary_title_only": (
+        PROMPT_DIR / "binary" / "screening_system_title_only.md",
+        PROMPT_DIR / "binary" / "screening_user_title_only.md",
     ),
 }
 
@@ -70,15 +81,20 @@ def load_ground_truth_pmids(gt_file: Path) -> set[str]:
     return gt_pmids
 
 
-def init_llm_model() -> Any:
-    """Initialize screening model from shared runtime config."""
+def init_llm_model(model_override: str | None = None) -> Any:
+    """Initialize screening model from shared runtime config.
+
+    Args:
+        model_override: If provided, overrides the model name from env/config.
+            Useful for running baseline comparisons across multiple models.
+    """
     cfg = load_llm_config(module_hint="literature_search")
     if not cfg.api_key:
         raise ValueError(
             "API key not found. Please set LLM_API_KEY/OPENAI_API_KEY in .env file"
         )
 
-    llm_model = cfg.model or "openai/gpt-4o-mini"
+    llm_model = model_override or cfg.model or "openai/gpt-4o-mini"
     api_base = cfg.api_base or "https://api.openai.com/v1"
 
     print(f"API Base: {api_base}")
@@ -86,8 +102,8 @@ def init_llm_model() -> Any:
     print(f"SSL Verify: {cfg.verify_ssl}\n")
     print(f"Force streaming: {cfg.force_streaming}\n")
 
-    http_client = httpx.Client(verify=cfg.verify_ssl)
-    http_async_client = httpx.AsyncClient(verify=cfg.verify_ssl)
+    http_client = httpx.Client(verify=cfg.verify_ssl, timeout=cfg.timeout_s)
+    http_async_client = httpx.AsyncClient(verify=cfg.verify_ssl, timeout=cfg.timeout_s)
     return ChatOpenAI(
         model=llm_model,
         temperature=cfg.temperature,
@@ -96,7 +112,7 @@ def init_llm_model() -> Any:
         http_client=http_client,
         http_async_client=http_async_client,
         max_retries=3,
-        request_timeout=cfg.timeout_s or 60,
+        request_timeout=cfg.timeout_s,
         streaming=cfg.force_streaming,
     )
 
@@ -149,32 +165,75 @@ async def screen_papers_batch_async(
     content_label: str = "Abstract",
     content_key: str = "Abstract",
     content_fallback: str = "(No abstract available. Please assess based on title only.)",
+    strategy: str = "5d",
 ) -> list[dict[str, Any]]:
-    """Screen papers in async batches and write scores back onto each paper dict."""
+    """Screen papers in async batches and write scores back onto each paper dict.
+
+    Args:
+        strategy: Screening strategy. "5d" uses the five-dimension scoring model;
+            "binary" uses a simpler include/exclude decision model.
+    """
     default_config = {
         "research_question": research_question,
         "disease_focus": "(SARS-CoV-2 OR COVID-19 OR 2019-nCoV OR coronavirus) AND its (variant OR mutation OR lineage OR amino acid substitution)",
         "disease_exclude": "studies that focus solely on other diseases or wild-type only without variant comparison",
         "parameter_focus": "target epidemiological parameters related to the research question (e.g., reproduction number, serial interval, fatality rate)",
         "parameter_exclude": "studies that discuss adjacent outcomes without actually reporting or estimating the target parameter",
+        "parameter_scoring_note": (
+            "- Score 3–4 only if the paper directly reports the parameter from its own observed individual-level data "
+            "(contact-tracing pairs, household contacts, clinical surveillance records).\n"
+            "- Score 2 if the paper estimates the parameter as a model output (transmission model calibration), "
+            "or uses the parameter value from another study as an input assumption.\n"
+            "- Score 0–1 if the paper only mentions the parameter in the introduction/background without reporting a new estimate."
+        ),
     }
     config = {**default_config, **(screening_config or {})}
 
-    system_text, user_text = load_prompt_templates(screening_stage)
-    stage_mode = resolve_stage_mode(screening_stage, config.get("policies", {}))
+    # parameter_scoring_note may come from policies (YAML block scalar) — strip trailing whitespace
+    policies = config.get("policies", {}) or {}
+    if "parameter_scoring_note" in policies:
+        config["parameter_scoring_note"] = str(policies["parameter_scoring_note"]).strip()
 
-    system_text = system_text.format(
-        screening_stage=screening_stage.replace("_", " "),
-        research_question=config["research_question"],
-        disease_focus=config["disease_focus"],
-        disease_exclude=config["disease_exclude"],
-        parameter_focus=config["parameter_focus"],
-        parameter_exclude=config["parameter_exclude"],
-    )
+    # Binary strategy only applies at title/abstract stages; full-text stages always
+    # use 5D scoring because the detailed prompt and ScreeningDecision schema are
+    # needed for the stage-2 classification logic.
+    BINARY_STAGES = {"title_abstract", "title_only"}
+    is_binary = strategy == "binary" and screening_stage in BINARY_STAGES
+
+    # Binary strategy uses separate prompt files with a simpler instruction set
+    effective_stage = screening_stage
+    if is_binary:
+        binary_stage_map = {
+            "title_abstract": "binary_title_abstract",
+            "title_only": "binary_title_only",
+        }
+        effective_stage = binary_stage_map.get(screening_stage, screening_stage)
+
+    system_text, user_text = load_prompt_templates(effective_stage)
+    stage_mode = resolve_stage_mode(screening_stage, policies)
+    evidence_floor = resolve_stage2_evidence_floor(policies)
+
+    if is_binary:
+        fmt_kwargs: dict[str, str] = {
+            "research_question": config["research_question"],
+        }
+    else:
+        fmt_kwargs = {
+            "screening_stage": screening_stage.replace("_", " "),
+            "research_question": config["research_question"],
+            "disease_focus": config["disease_focus"],
+            "disease_exclude": config["disease_exclude"],
+            "parameter_focus": config["parameter_focus"],
+            "parameter_exclude": config["parameter_exclude"],
+            "parameter_scoring_note": config["parameter_scoring_note"],
+        }
+
+    system_text = system_text.format(**fmt_kwargs)
     template = ChatPromptTemplate.from_messages(
         [("system", system_text), ("human", user_text)]
     )
-    structured_llm = llm_model.with_structured_output(ScreeningDecision)
+    output_schema = BinaryDecision if is_binary else ScreeningDecision
+    structured_llm = llm_model.with_structured_output(output_schema)
 
     all_prompts: list[tuple[dict[str, Any], Any]] = []
     for paper in papers:
@@ -230,12 +289,16 @@ async def screen_papers_batch_async(
                         )
                         _mark_paper_error(paper, result)
                         continue
-                    _write_structured_result(
-                        paper,
-                        result,
-                        thresholds=config.get("thresholds"),
-                        stage_mode=stage_mode,
-                    )
+                    if isinstance(result, BinaryDecision):
+                        _write_binary_result(paper, result)
+                    else:
+                        _write_structured_result(
+                            paper,
+                            result,
+                            thresholds=config.get("thresholds"),
+                            stage_mode=stage_mode,
+                            evidence_floor=evidence_floor,
+                        )
 
                 strong_count = sum(
                     1 for p in batch_papers if p.get("llm_suggest") == "strong_candidate"
@@ -267,12 +330,16 @@ async def screen_papers_batch_async(
                 for paper, prompt in batch:
                     try:
                         result = await invoke_with_retry_async(structured_llm, prompt)
-                        _write_structured_result(
-                            paper,
-                            result,
-                            thresholds=config.get("thresholds"),
-                            stage_mode=stage_mode,
-                        )
+                        if isinstance(result, BinaryDecision):
+                            _write_binary_result(paper, result)
+                        else:
+                            _write_structured_result(
+                                paper,
+                                result,
+                                thresholds=config.get("thresholds"),
+                                stage_mode=stage_mode,
+                                evidence_floor=evidence_floor,
+                            )
                     except Exception as e2:
                         async with print_lock:
                             print(
@@ -299,11 +366,13 @@ def _write_structured_result(
     *,
     thresholds: dict[str, Any] | None,
     stage_mode: str,
+    evidence_floor: int = 1,
 ) -> None:
     paper["llm_suggest"] = classify_screening_decision(
         result,
         thresholds=thresholds,
         stage_mode=stage_mode,
+        evidence_floor=evidence_floor,
     )
     paper["overall_score"] = result.overall_score
     paper["overall_justification"] = result.overall_justification
@@ -317,6 +386,20 @@ def _write_structured_result(
     paper["evidence_justification"] = result.original_evidence.justification
     paper["parameter_score"] = result.parameter_relevance.score
     paper["parameter_justification"] = result.parameter_relevance.justification
+
+
+def _write_binary_result(paper: dict[str, Any], result: BinaryDecision) -> None:
+    """Write binary include/exclude decision fields onto the paper dict.
+
+    Dimension score fields are left empty to keep the output schema consistent
+    with 5D runs while clearly signalling that per-dimension scores are absent.
+    """
+    paper["llm_suggest"] = classify_binary_decision(result)
+    paper["overall_score"] = 4 if result.include else 0
+    paper["overall_justification"] = result.justification
+    for dim in ["disease", "population", "location", "evidence", "parameter"]:
+        paper[f"{dim}_score"] = ""
+        paper[f"{dim}_justification"] = ""
 
 
 def _mark_paper_error(paper: dict[str, Any], error: Exception) -> None:

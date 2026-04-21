@@ -263,6 +263,7 @@ def main() -> None:
             project_root=args.project_root,
             profile_name=args.profile,
             topic=args.topic,
+            experiment=args.experiment or None,
         )
     else:
         if not (args.input and args.output and args.ground_truth):
@@ -277,6 +278,10 @@ def main() -> None:
         )
     batch_size = args.batch_size
     batch_concurrency = args.batch_concurrency
+    strategy = args.strategy
+
+    if args.experiment:
+        print(f"实验模式: [{args.experiment}] 输出至 {output_file}\n")
 
     if not input_file.exists():
         print(f"错误: 找不到输入文件 {input_file}")
@@ -290,9 +295,9 @@ def main() -> None:
         print_ground_truth_warning(gt_file)
 
     print("初始化LLM模型...")
-    llm_model = init_llm_model()
+    llm_model = init_llm_model(model_override=args.model or None)
     print(
-        f"使用模型: {os.getenv('LLM_MODEL', 'gpt-4o-mini')}\n"
+        f"使用模型: {args.model or os.getenv('LLM_MODEL', 'gpt-4o-mini')} | 策略: {strategy}\n"
     )
 
     # ── helper shared by --resume-possible-fulltext and --resume-sp-fulltext ──
@@ -508,6 +513,7 @@ def main() -> None:
                     content_label="Full-text content (Markdown)",
                     content_key="fulltext_markdown",
                     content_fallback="(Full-text content unavailable.)",
+                    strategy=strategy,
                 )
             )
             for paper in fulltext_ready:
@@ -614,6 +620,7 @@ def main() -> None:
                 content_label="Abstract",
                 content_key="Abstract",
                 content_fallback="(Abstract unavailable.)",
+                strategy=strategy,
             )
         )
 
@@ -633,6 +640,7 @@ def main() -> None:
                 content_label="Available metadata",
                 content_key="Abstract",
                 content_fallback="(No abstract available. Assess based on title and keywords only.)",
+                strategy=strategy,
             )
         )
 
@@ -665,6 +673,7 @@ def main() -> None:
                     content_label="Full-text content (Markdown)",
                     content_key="fulltext_markdown",
                     content_fallback="(Full-text content unavailable.)",
+                    strategy=strategy,
                 )
             )
             for paper in fulltext_ready:
@@ -686,6 +695,8 @@ def main() -> None:
         fulltext_needed_count=len(stage_state["papers_without_abstract"]),
         fulltext_ready_count=len(fulltext_ready),
         fulltext_errors=stage_state["fulltext_errors"],
+        strategy=strategy,
+        experiment=args.experiment or None,
     )
 
     strong = sum(1 for p in papers if p.get("llm_suggest") == "strong_candidate")
@@ -736,6 +747,25 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         help="同时并行的批次数",
     )
     parser.add_argument(
+        "--model",
+        type=str,
+        default="",
+        help="覆盖配置文件中的模型名称，例如 openai/gpt-4o 或 deepseek/deepseek-chat",
+    )
+    parser.add_argument(
+        "--strategy",
+        type=str,
+        choices=["5d", "binary"],
+        default="5d",
+        help="筛选策略：5d=五维评分（默认），binary=简单包含/排除",
+    )
+    parser.add_argument(
+        "--experiment",
+        type=str,
+        default="",
+        help="实验名称；若指定，输出保存至 {project_root}/evaluation/experiments/{experiment}/",
+    )
+    parser.add_argument(
         "--fulltext-only",
         action="store_true",
         help="仅运行全文筛选（跳过标题/摘要筛选）",
@@ -763,7 +793,7 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--resume-sp-fulltext",
         action="store_true",
-        help="第二阶段：从现有 screened.csv 中抽 strong+possible 候选，Strong 用 standard 全文模式重判，Possible 用 confirm_parameter 宽松模式，以减少 FP",
+        help="第二阶段：从现有 screened.csv 中抽 strong+possible 候选，Strong 用 confirmation 模式（只在参数/证据得分≤1 时降级），Possible 用 confirm_parameter 宽松模式，以减少 FP",
     )
     return parser
 

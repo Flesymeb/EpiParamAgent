@@ -18,6 +18,11 @@ defaults:
     title_abstract_mode: strict
     title_only_mode: lenient
     full_text_mode: standard
+    stage2_evidence_floor: 1
+    parameter_scoring_note: |
+      - Score 3–4 if the paper directly reports fatality or severity rates (CFR, IFR, hospitalization rate, case severity distribution) computed or estimated from its own real patient or surveillance data.
+      - Score 2 if the paper estimates fatality using a model adjustment applied to aggregate counts, or borrows fatality estimates from another study as an input assumption.
+      - Score 0–1 if the paper only mentions fatality or severity in the introduction/background without reporting a new estimate.
     fulltext_rescue:
       enabled: true
       when_no_abstract: true

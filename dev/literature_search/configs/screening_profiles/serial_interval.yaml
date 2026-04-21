@@ -18,6 +18,11 @@ defaults:
     title_abstract_mode: strict
     title_only_mode: lenient
     full_text_mode: standard
+    stage2_evidence_floor: 2
+    parameter_scoring_note: |
+      - Score 3–4 only if the paper directly reports serial interval or generation time from its own observed individual-level data (contact-tracing pairs, infector-infectee pairs, or household contact records with symptom onset dates).
+      - Score 2 if the paper estimates the parameter as a model output or posterior from a transmission model calibration, or uses the parameter value from another study as an input assumption.
+      - Score 0–1 if the paper only mentions serial interval or generation time in the introduction/background without reporting a new estimate.
     fulltext_rescue:
       enabled: true
       when_no_abstract: true

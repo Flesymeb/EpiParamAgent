@@ -18,6 +18,11 @@ defaults:
     title_abstract_mode: strict
     title_only_mode: lenient
     full_text_mode: standard
+    stage2_evidence_floor: 1
+    parameter_scoring_note: |
+      - Score 3–4 if the paper estimates or reports the reproduction number by applying a transmission model, exponential growth rate method, or Bayesian inference to its own real epidemic incidence or case data.
+      - Score 2 if the paper only cites or borrows another study's R0/Rt estimate as an input assumption, without producing its own estimate.
+      - Score 0–1 if the paper only mentions the reproduction number in the introduction or background without reporting a new estimate.
     fulltext_rescue:
       enabled: true
       when_no_abstract: true
