@@ -340,6 +340,28 @@ def run_pipeline(
     fetch_strategy: str = "pmc_only",
 ) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    # ── Phase 0: fetch-only ──────────────────────────────────────────────────
+    # Download missing PDFs and warm the MinerU markdown cache.
+    # No LLM calls; useful as a pre-flight before a full extraction run.
+    if stage == "fetch":
+        inputs = list(_iter_inputs(input_path, fetch_strategy=fetch_strategy))
+        pdf_dir, md_dir = _paper_pool_dirs()
+        cached = warmed = 0
+        for path in inputs:
+            pmid = infer_pmid_from_path(path) or path.stem
+            cache = _markdown_cache_path(md_dir, pmid)
+            if cache.exists():
+                cached += 1
+                print(f"  [MD cache] PMID_{pmid} ✓")
+            else:
+                print(f"  [MinerU]   PMID_{pmid} — parsing…")
+                _load_markdown_from_pdf(path, pmid)
+                warmed += 1
+        print(f"\n[fetch] Done. PDF={len(inputs)}  MD cached={cached}  MinerU parsed={warmed}")
+        return
+
+    # ── Phase 1+2: LLM extraction ────────────────────────────────────────────
     index_dir = out_dir / "index"
     index_dir.mkdir(parents=True, exist_ok=True)
 

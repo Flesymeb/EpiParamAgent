@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 # SI parameter extraction — Linux entry point
+#
+# Two-phase workflow:
+#   Phase 1: download missing PDFs + warm MinerU cache  (--stage fetch)
+#   Phase 2: LLM extraction Stage A + B                (--stage both)
+#
 # Usage:
-#   ./run_extract_si.sh                                   # P13 GT, auto-routed to evaluation/coding/
+#   ./run_extract_si.sh                              # full run (both phases)
+#   ./run_extract_si.sh --stage fetch                # phase 1 only
+#   ./run_extract_si.sh --stage both                 # phase 2 only (PDFs already cached)
 #   ./run_extract_si.sh --profile P10 --pmids ../../evaluation/coding/serial_interval/p10/pmids.txt
-#   ./run_extract_si.sh --out /custom/path --stage index
+#   ./run_extract_si.sh --fetch-mode pmc_scihub      # use Sci-Hub fallback in phase 1
 
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -13,9 +20,9 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 PROFILE="P13"
 PMIDS="$REPO_ROOT/evaluation/coding/serial_interval/p13/pmids.txt"
 OUT=""
-STAGE="both"
+STAGE="all"     # all = fetch then both; or: fetch | index | extract | both
 CODEBOOK="configs/codebook_serial_interval.yaml"
-FETCH_MODE="pmc_only"   # pmc_only | pmc_scihub | pmc_scihub_manual
+FETCH_MODE="pmc_scihub"   # pmc_only | pmc_scihub | pmc_scihub_manual
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -29,6 +36,18 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+if [[ -n "$OUT" ]]; then
+    OUT_ARGS=(--out "$OUT")
+else
+    OUT_ARGS=(--profile "$PROFILE")
+fi
+
+BASE_ARGS=(
+    --input    "$PMIDS"
+    --codebook "$CODEBOOK"
+    "${OUT_ARGS[@]}"
+)
+
 echo "Profile:    $PROFILE"
 echo "PMIDs:      $PMIDS"
 echo "Stage:      $STAGE"
@@ -36,15 +55,16 @@ echo "Fetch mode: $FETCH_MODE"
 echo "Codebook:   $CODEBOOK"
 echo ""
 
-if [[ -n "$OUT" ]]; then
-    OUT_ARGS=(--out "$OUT")
-else
-    OUT_ARGS=(--profile "$PROFILE")
+if [[ "$STAGE" == "all" || "$STAGE" == "fetch" ]]; then
+    echo "══ Phase 1: fetch + MinerU cache ══"
+    uv run python cli/extract_epi.py "${BASE_ARGS[@]}" --stage fetch --fetch-mode "$FETCH_MODE"
+    echo ""
 fi
 
-uv run python cli/extract_epi.py \
-    --input      "$PMIDS" \
-    --stage      "$STAGE" \
-    --codebook   "$CODEBOOK" \
-    --fetch-mode "$FETCH_MODE" \
-    "${OUT_ARGS[@]}"
+if [[ "$STAGE" == "all" || "$STAGE" == "both" || "$STAGE" == "index" || "$STAGE" == "extract" ]]; then
+    echo "══ Phase 2: LLM extraction ══"
+    LLM_STAGE="${STAGE}"
+    [[ "$STAGE" == "all" ]] && LLM_STAGE="both"
+    uv run python cli/extract_epi.py "${BASE_ARGS[@]}" --stage "$LLM_STAGE" --fetch-mode pmc_only
+fi
+

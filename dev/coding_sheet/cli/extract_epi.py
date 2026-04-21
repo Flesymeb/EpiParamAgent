@@ -53,7 +53,8 @@ def main():
         default=None,
         help="Explicit output directory. Overrides --profile auto-path when given.",
     )
-    parser.add_argument("--stage", choices=["index", "extract", "both"], default="both")
+    parser.add_argument("--stage", choices=["fetch", "index", "extract", "both"], default="both",
+                        help="fetch=download+MinerU only; index=Stage A; extract=Stage B; both=A+B")
     parser.add_argument(
         "--fetch-mode",
         dest="fetch_mode",
