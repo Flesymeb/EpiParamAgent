@@ -154,5 +154,5 @@ dev/tools/paper_fetch/papers
 # old versions
 old/
 
-# Evaluation
+# Evaluation — ignore run outputs and large data; pmids.txt tracked via git add -f
 evaluation/
