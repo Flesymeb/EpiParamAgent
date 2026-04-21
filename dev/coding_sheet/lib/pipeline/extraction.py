@@ -446,6 +446,8 @@ def run_pipeline(
                 config=effect_config,
                 model=model,
             )
+            if not record_objs:
+                print(f"  [WARN] PMID {pmid}: Stage B returned 0 records")
             for record_obj in record_objs or []:
                 if "pmid" not in record_obj:
                     record_obj["pmid"] = pmid
