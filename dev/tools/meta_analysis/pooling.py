@@ -346,16 +346,21 @@ def summarize(
 
     # ── Include medians (treat as means) ─────────────────────────────────────
     if estimate_measure == "mean" and include_median and "estimate_measure" in work.columns:
-        mask = work["estimate_measure"].astype(str).str.strip().str.lower().isin(
-            ("mean", "median")
-        )
-        work = work[mask]
-        n_median_used = (work["estimate_measure"].astype(str).str.strip().str.lower() == "median").sum()
+        em = work["estimate_measure"].astype(str).str.strip().str.lower()
+        # Prefer mean over median when the same PMID reports both (Ali 2021 Rule i).
+        # For each PMID: keep all mean rows; add median rows only if no mean exists.
+        if "pmid" in work.columns:
+            pmids_with_mean = set(work.loc[em == "mean", "pmid"].astype(str))
+            median_mask = (em == "median") & ~work["pmid"].astype(str).isin(pmids_with_mean)
+        else:
+            median_mask = em == "median"
+        work = work[(em == "mean") | median_mask]
+        n_median_used = int(median_mask.sum())
         if n_median_used:
             warnings.warn(
                 f"{n_median_used} median estimate(s) included as mean approximations "
-                "(Ali 2021 convention). Pooled estimate may be slightly biased for "
-                "skewed distributions."
+                "(only for papers with no mean estimate — Ali 2021 Rule i). "
+                "Pooled estimate may be slightly biased for skewed distributions."
             )
     elif estimate_measure and "estimate_measure" in work.columns:
         work = work[work["estimate_measure"].astype(str).str.strip().str.lower()
