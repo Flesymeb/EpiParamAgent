@@ -216,17 +216,23 @@ def search_disease(
     api_key: Optional[str],
     email: Optional[str],
     verify_ssl: bool,
-) -> List[str]:
-    """Return list of PMIDs for a single disease query."""
+) -> tuple[List[str], int]:
+    """Return (pmids, pubmed_total) for a single disease query.
+
+    pubmed_total is the real PubMed hit count regardless of retmax.
+    """
     query = disease.get("query") or disease["english_name"]
     logger.info("[%s] Searching: %s (retmax=%d)", disease["id"], query, retmax)
 
     if client is not None:
         papers = client.search(query, retmax=retmax)
-        client.last_total  # side-effect only
+        real_total: int = client.last_total or len(papers)
         pmids = [p.id.replace("pubmed:", "") for p in papers if p.id]
-        logger.info("[%s] Found %d PMIDs via PubMedClient", disease["id"], len(pmids))
-        return pmids
+        logger.info(
+            "[%s] PubMed total=%d, returning %d PMIDs",
+            disease["id"], real_total, len(pmids),
+        )
+        return pmids, real_total
 
     # Fallback: direct esearch
     url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
@@ -247,12 +253,13 @@ def search_disease(
         resp.raise_for_status()
         data = resp.json()
         pmids = data.get("esearchresult", {}).get("idlist", [])
-        total = data.get("esearchresult", {}).get("count", "?")
-        logger.info("[%s] Found %s total, returning %d", disease["id"], total, len(pmids))
-        return pmids
+        total_str = data.get("esearchresult", {}).get("count", "0")
+        real_total = int(total_str) if str(total_str).isdigit() else len(pmids)
+        logger.info("[%s] PubMed total=%d, returning %d", disease["id"], real_total, len(pmids))
+        return pmids, real_total
     except Exception as exc:
         logger.error("[%s] Search failed: %s", disease["id"], exc)
-        return []
+        return [], 0
 
 
 def process_disease(
@@ -275,10 +282,10 @@ def process_disease(
 
     search_date = datetime.now().strftime("%Y-%m-%d")
 
-    # 1. Search
-    pmids = search_disease(disease, retmax, client, api_key, email, verify_ssl)
+    # 1. Search — returns (pmids, pubmed_real_total)
+    pmids, pubmed_total = search_disease(disease, retmax, client, api_key, email, verify_ssl)
 
-    # 2. Write pmids.csv
+    # 2. Write pmids.csv — total_results = real PubMed hit count
     pmids_path = out_dir / "pmids.csv"
     with open(pmids_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=PMID_FIELDS)
@@ -291,9 +298,9 @@ def process_disease(
                 "disease_name": name,
                 "search_query": query,
                 "search_date": search_date,
-                "total_results": len(pmids),
+                "total_results": pubmed_total,
             })
-    logger.info("[%s] Saved %d PMIDs → %s", disease_id, len(pmids), pmids_path)
+    logger.info("[%s] Saved %d/%d PMIDs → %s", disease_id, len(pmids), pubmed_total, pmids_path)
 
     if pmids_only or not pmids:
         return
