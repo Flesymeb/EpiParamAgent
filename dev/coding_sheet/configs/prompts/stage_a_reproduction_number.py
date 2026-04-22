@@ -34,7 +34,9 @@ Return a JSON object with ALL of the following keys:
     "generation_interval_assumed": "SI or GI value used as input, e.g. '5.1 days (SD 3.4)' or null if estimated internally",
     "is_pre_intervention": true or false,
     "data_weeks": estimated number of weeks of data used (integer or null),
-    "processing_hint": "one of: standard_ci | treat_cri_as_ci | log_normal_se | wide_ci_flag | no_interval"
+    "transformation": "transformation applied IN THE PAPER: log | log10 | none | other",
+    "processing_hint": "one of: standard_ci | treat_cri_as_ci | log_normal_se | wide_ci_flag | no_interval",
+    "method_notes": "free-text note about critical methodological details, special populations, or processing caveats — e.g. 'log-scale CI; back-transform needed', 'closed cruise ship environment', 'CI is sensitivity range not statistical'"
   },
 
   "parameter_mentions": [

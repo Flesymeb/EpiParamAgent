@@ -154,6 +154,16 @@ fields:
     type: str
     prompt: "standard_ci | treat_cri_as_ci | log_normal_se | wide_ci_flag | no_interval."
 
+  - name: transformation
+    label: "Transformation"
+    type: str
+    prompt: "Transformation applied to the estimate IN THE PAPER: log | log10 | none | other. 'log' means the paper fitted a log-normal distribution or reported geometric mean and log-scale CI."
+
+  - name: method_notes
+    label: "Method_Notes"
+    type: str
+    prompt: "Free-text methodological notes critical for downstream processing. Examples: 'log-transformed CI reported; need exp() before pooling', 'closed-population cruise ship — not representative of community R0', 'assumed susceptible fraction 0.6 — estimate may be inflated', 'CI from sensitivity range not statistical uncertainty'."
+
   - name: notes
     label: "Notes"
     type: str
@@ -185,8 +195,12 @@ index_schema:
     path: method_index.is_pre_intervention
   - name: data_weeks
     path: method_index.data_weeks
+  - name: transformation
+    path: method_index.transformation
   - name: processing_hint
     path: method_index.processing_hint
+  - name: method_notes
+    path: method_index.method_notes
   - name: parameter_hint
     path: field_evidence.parameter_type
   - name: estimate_hint
