@@ -82,7 +82,7 @@ def _ci_z(level: Any) -> float | None:
         return 2.576
     if t in {"80", "80%", "0.80"}:
         return 1.282
-    # Try to parse e.g. "97.5" → z = norm.ppf(0.975 + (1-0.975)/2)... fallback
+    # Try to parse e.g. "97.5" -> z = norm.ppf(0.975 + (1-0.975)/2)... fallback
     m = re.match(r"^(\d+(?:\.\d+)?)%?$", t)
     if m:
         pct = float(m.group(1))
@@ -121,7 +121,7 @@ def se_from_record(row: dict, fallback_sd: float | None = None) -> float | None:
 
     Supported types
     ---------------
-    CI / CrI  :  SE = (upper − lower) / (2 × z)
+    CI / CrI  :  SE = (upper - lower) / (2 * z)
                  level defaults to 95% if not stated
     SE        :  SE = single provided value (low or high, whichever is set)
     SD        :  SE = SD / √n   (SD = single value in low or high field)
@@ -245,6 +245,7 @@ def _reml_tau2(y: np.ndarray, var: np.ndarray) -> float:
 def pool_means(
     records: Sequence[dict],
     method: str = "random",
+    log_transform: bool = False,
 ) -> dict:
     """Inverse-variance weighted pooling.
 
@@ -254,11 +255,18 @@ def pool_means(
     'random'  – DerSimonian-Laird random effects (default, fast, closed-form)
     'reml'    – REML random effects (iterative; matches R's metafor/rma default)
 
+    log_transform : bool
+        If True, pool log(estimate) then back-transform (exp). Recommended for
+        right-skewed outcomes like R0 where geometric mean is more appropriate
+        (matches Dhungel 2022 approach for R0 meta-analysis).
+
+
     Parameters
     ----------
     records : sequence of dicts, each must have 'point_estimate' (float) and
               'se' (float > 0).  Rows with missing/invalid values are excluded.
-    method  : 'random' (default, DL estimator) or 'fixed'.
+    method  : 'random' (default, DL) or 'fixed' or 'reml'.
+    log_transform : bool, pool log(estimate) then back-transform.
 
     Returns
     -------
@@ -295,6 +303,27 @@ def pool_means(
     var = se_arr ** 2
     k = len(y)
 
+    # Log-transform: pool log(y), back-transform with delta method for SE
+    # SE_log ≈ SE / y  (delta method: Var(log y) ≈ Var(y)/y²)
+    if log_transform:
+        mask = y > 0
+        if not mask.all():
+            n_neg = int((~mask).sum())
+            warnings.warn(f"{n_neg} non-positive estimates excluded (cannot log-transform).")
+            y = y[mask]; se_arr = se_arr[mask]; var = var[mask]; k = len(y)
+            n_excluded += n_neg
+        if k == 0:
+            return {"pooled_mean": float("nan"), "se_pooled": float("nan"),
+                    "ci_lower": float("nan"), "ci_upper": float("nan"),
+                    "i2": float("nan"), "tau2": float("nan"),
+                    "Q": float("nan"), "df": 0,
+                    "p_het": float("nan"), "n_studies": 0, "n_excluded": n_excluded}
+        var_log = var / (y ** 2)   # delta method
+        y = np.log(y)
+        var = var_log
+        se_arr = np.sqrt(var)
+
+
     # Fixed-effects quantities (used for Q and I²)
     w_fe = 1.0 / var
     mu_fe = float(np.dot(w_fe, y) / w_fe.sum())
@@ -314,12 +343,21 @@ def pool_means(
     w = 1.0 / (var + tau2)
     pooled = float(np.dot(w, y) / w.sum())
     se_pooled = float(math.sqrt(1.0 / w.sum()))
+    ci_lo = pooled - 1.96 * se_pooled
+    ci_hi = pooled + 1.96 * se_pooled
+
+    # Back-transform if log scale
+    if log_transform:
+        pooled = math.exp(pooled)
+        ci_lo = math.exp(ci_lo)
+        ci_hi = math.exp(ci_hi)
+        se_pooled = float("nan")  # SE not meaningful after back-transform
 
     return {
         "pooled_mean": pooled,
         "se_pooled": se_pooled,
-        "ci_lower": pooled - 1.96 * se_pooled,
-        "ci_upper": pooled + 1.96 * se_pooled,
+        "ci_lower": ci_lo,
+        "ci_upper": ci_hi,
         "i2": i2,
         "tau2": tau2,
         "Q": Q,
@@ -343,8 +381,9 @@ def summarize(
     impute_missing_se: bool = True,
     group_by: str | list[str] | None = None,
     method: str = "random",
+    log_transform: bool = False,
 ) -> pd.DataFrame:
-    """Derive SEs and compute pooled mean (± I²) from a coding_sheet DataFrame.
+    """Derive SEs and compute pooled mean (+/- I2) from a coding_sheet DataFrame.
 
     Parameters
     ----------
@@ -444,7 +483,7 @@ def summarize(
 
     def _pool_group(g: pd.DataFrame) -> dict:
         recs = g[["point_estimate", "se"]].to_dict("records")
-        result = pool_means(recs, method=method)
+        result = pool_means(recs, method=method, log_transform=log_transform)
         result["n_imputed"] = int(g["se_imputed"].sum())
         return result
 
@@ -487,8 +526,8 @@ def enrich_ci(df: pd.DataFrame, z: float = 1.96) -> pd.DataFrame:
     preserved as-is.  For rows where CI is missing but SE can be computed
     from SD / IQR / Range + sample_size, the 95% CI is derived as:
 
-        ci_95_derived_lower = point_estimate − z × SE
-        ci_95_derived_upper = point_estimate + z × SE
+        ci_95_derived_lower = point_estimate - z * SE
+        ci_95_derived_upper = point_estimate + z * SE
 
     Two new columns are added:
         ci_95_derived_lower  : float or NaN
@@ -501,7 +540,7 @@ def enrich_ci(df: pd.DataFrame, z: float = 1.96) -> pd.DataFrame:
     Parameters
     ----------
     df : coding_sheet extraction output DataFrame
-    z  : z-score for the CI (default 1.96 → 95%)
+    z  : z-score for the CI (default 1.96 -> 95%)
     """
     if not isinstance(df, pd.DataFrame):
         raise TypeError("df must be a pandas DataFrame")
@@ -515,7 +554,7 @@ def enrich_ci(df: pd.DataFrame, z: float = 1.96) -> pd.DataFrame:
         lo_rep = _f(row.get("uncertainty_low"))
         hi_rep = _f(row.get("uncertainty_high"))
 
-        # Already has CI bounds → use them
+        # Already has CI bounds -> use them
         if utype in ("ci", "cri", "confidenceinterval", "credibleinterval",
                      "credibleintervals", "confidenceintervals"):
             if lo_rep is not None and hi_rep is not None and hi_rep > lo_rep:
