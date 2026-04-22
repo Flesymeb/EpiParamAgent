@@ -103,13 +103,20 @@ def _single(low: Any, high: Any) -> float | None:
 # Public: SE derivation
 # ---------------------------------------------------------------------------
 
-def se_from_record(row: dict) -> float | None:
+def se_from_record(row: dict, fallback_sd: float | None = None) -> float | None:
     """Derive standard error from a coding_sheet row.
 
     Reads: uncertainty_type, uncertainty_level, uncertainty_low,
            uncertainty_high, sample_size.
 
     Returns SE (float > 0) or None if SE cannot be derived.
+
+    Parameters
+    ----------
+    row         : dict from coding_sheet output
+    fallback_sd : if SE cannot be computed from reported uncertainty, but
+                  sample_size is available, use SE = fallback_sd / sqrt(n).
+                  Typically set to the pooled within-study SD from the dataset.
 
     Supported types
     ---------------
@@ -126,6 +133,9 @@ def se_from_record(row: dict) -> float | None:
     n = _extract_n(row.get("sample_size"))
 
     if utype in ("", "nr", "other", "missing", "nan"):
+        # Even with NR uncertainty, we can impute if fallback_sd + n available
+        if fallback_sd is not None and fallback_sd > 0 and n is not None and n > 0:
+            return fallback_sd / math.sqrt(n)
         return None
 
     # ── CI / CrI ────────────────────────────────────────────────────────────
@@ -195,6 +205,10 @@ def se_from_record(row: dict) -> float | None:
         return sd_approx / math.sqrt(n)
 
     warnings.warn(f"Unrecognised uncertainty_type={row.get('uncertainty_type')!r}; returning None.")
+
+    # ── Fallback: impute from sample size if fallback_sd provided ─────────────
+    if fallback_sd is not None and fallback_sd > 0 and n is not None and n > 0:
+        return fallback_sd / math.sqrt(n)
     return None
 
 
@@ -291,6 +305,8 @@ def summarize(
     *,
     parameter_type: str | None = None,
     estimate_measure: str | None = "mean",
+    include_median: bool = False,
+    impute_missing_se: bool = True,
     group_by: str | list[str] | None = None,
     method: str = "random",
 ) -> pd.DataFrame:
@@ -298,32 +314,50 @@ def summarize(
 
     Parameters
     ----------
-    df              : coding_sheet extraction output (must contain standard columns).
-    parameter_type  : filter to this parameter_type (e.g. 'serial_interval'). None = all.
-    estimate_measure: filter to 'mean', 'median', or None (all). Default 'mean'.
-                      Pass None to include medians (treated as means — use with caution).
-    group_by        : column name(s) to group by before pooling (e.g. 'disease_name',
-                      ['disease_name', 'country']).  None = pool everything.
-    method          : 'random' (default) or 'fixed'.
+    df                 : coding_sheet extraction output.
+    parameter_type     : filter rows by parameter_type (e.g. 'serial_interval').
+    estimate_measure   : 'mean' (default), 'median', or None (all).
+    include_median     : if True, also include median rows, treating median as
+                         mean (standard practice in SI meta-analysis per Ali 2021:
+                         "If it's an IQR, first we approximated mean as median").
+                         Ignored when estimate_measure is not 'mean'.
+    impute_missing_se  : if True (default), rows without CI/SD/SE information but
+                         with sample_size are imputed using the pooled within-study
+                         SD estimated from studies that DO have SE information.
+                         Imputed rows are flagged with se_imputed=True.
+    group_by           : column name(s) to group by (e.g. 'disease_name'). None = all.
+    method             : 'random' (DL, default) or 'fixed'.
 
     Returns
     -------
-    pd.DataFrame with one row per group (or one row if group_by is None), columns:
+    pd.DataFrame with one row per group, columns:
         [group columns..., pooled_mean, se_pooled, ci_lower, ci_upper,
-         i2, tau2, Q, df, p_het, n_studies, n_excluded]
+         i2, tau2, Q, df, p_het, n_studies, n_excluded, n_imputed]
     """
     if not isinstance(df, pd.DataFrame):
         raise TypeError("df must be a pandas DataFrame")
 
     work = df.copy()
 
-    # Filter by parameter type
+    # ── Filter by parameter type ─────────────────────────────────────────────
     if parameter_type and "parameter_type" in work.columns:
         work = work[work["parameter_type"].astype(str).str.strip().str.lower()
                     == parameter_type.strip().lower()]
 
-    # Filter by estimate measure
-    if estimate_measure and "estimate_measure" in work.columns:
+    # ── Include medians (treat as means) ─────────────────────────────────────
+    if estimate_measure == "mean" and include_median and "estimate_measure" in work.columns:
+        mask = work["estimate_measure"].astype(str).str.strip().str.lower().isin(
+            ("mean", "median")
+        )
+        work = work[mask]
+        n_median_used = (work["estimate_measure"].astype(str).str.strip().str.lower() == "median").sum()
+        if n_median_used:
+            warnings.warn(
+                f"{n_median_used} median estimate(s) included as mean approximations "
+                "(Ali 2021 convention). Pooled estimate may be slightly biased for "
+                "skewed distributions."
+            )
+    elif estimate_measure and "estimate_measure" in work.columns:
         work = work[work["estimate_measure"].astype(str).str.strip().str.lower()
                     == estimate_measure.strip().lower()]
 
@@ -331,13 +365,49 @@ def summarize(
         warnings.warn("No rows remain after filtering; returning empty summary.")
         return pd.DataFrame()
 
-    # Derive SE for every row
     work = work.copy()
+
+    # ── Pass 1: compute SE where possible ───────────────────────────────────
     work["se"] = [se_from_record(row) for row in work.to_dict("records")]
+    work["se_imputed"] = False
+
+    # ── Pass 2: impute SE for rows without it ───────────────────────────────
+    if impute_missing_se:
+        has_se = work["se"].notna() & (work["se"] > 0)
+        missing_se = ~has_se
+
+        if missing_se.any() and has_se.any():
+            # Estimate pooled within-study SD from studies that have SE + sample_size
+            tmp = work.loc[has_se].copy()
+            tmp["_n"] = tmp["sample_size"].apply(_extract_n)
+            tmp["_sd"] = tmp.apply(
+                lambda r: r["se"] * math.sqrt(r["_n"]) if r["_n"] and r["_n"] > 0 else None,
+                axis=1,
+            )
+            valid_sds = tmp["_sd"].dropna()
+            if not valid_sds.empty:
+                pooled_sd = float(valid_sds.median())  # median SD is robust
+                n_imputed = missing_se.sum()
+                # Re-derive SE with fallback_sd
+                for idx in work.index[missing_se]:
+                    row = work.loc[idx].to_dict()
+                    se_imp = se_from_record(row, fallback_sd=pooled_sd)
+                    if se_imp is not None:
+                        work.at[idx, "se"] = se_imp
+                        work.at[idx, "se_imputed"] = True
+                imputed_count = work["se_imputed"].sum()
+                if imputed_count:
+                    warnings.warn(
+                        f"{imputed_count} SE(s) imputed using pooled SD={pooled_sd:.3f} "
+                        f"(median of {len(valid_sds)} within-study SDs). "
+                        "Imputed rows marked se_imputed=True."
+                    )
 
     def _pool_group(g: pd.DataFrame) -> dict:
         recs = g[["point_estimate", "se"]].to_dict("records")
-        return pool_means(recs, method=method)
+        result = pool_means(recs, method=method)
+        result["n_imputed"] = int(g["se_imputed"].sum())
+        return result
 
     if group_by is None:
         result = _pool_group(work)
