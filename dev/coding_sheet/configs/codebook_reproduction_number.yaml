@@ -22,9 +22,18 @@ parameters:
 notes: |
   Goal: extract reproduction number information FROM EACH PRIMARY STUDY.
   Do NOT copy R0 values from systematic review tables.
-  Prefer the headline/overall R0 estimate. If only Rt is reported, capture it.
-  Do NOT compute R0 unless the study explicitly reports it.
-  If the paper uses SI as a model input, capture it in notes, not as the main estimate.
+
+  Priority rule: R0 (basic reproduction number, pre-intervention/naive population) > Rt.
+  - If the paper reports BOTH R0 and Rt, extract only R0 as the main record.
+  - If the paper reports ONLY Rt (effective/control-period), mark parameter_type='Rt'
+    and note that no R0 was estimated; still extract for completeness.
+  - R0 must be ≥ 1.0 in an epidemic context; if the extracted value is <1.0,
+    it is almost certainly Rt under control measures — label it Rt, not R0.
+  - Do NOT compute R0 unless the study explicitly reports it as R0.
+  - If the paper uses an assumed SI or assumed R0 as a model input (not estimated
+    from their own data), do NOT extract it as a new estimate; note it instead.
+  - Do NOT extract estimates from sensitivity analyses or hypothetical scenarios
+    as the main estimate; prefer the headline/primary result.
 
 fields:
   - name: pmid
