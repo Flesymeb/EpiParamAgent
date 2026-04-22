@@ -27,6 +27,7 @@ from typing import Any, Sequence
 
 import numpy as np
 import pandas as pd
+from scipy.optimize import minimize_scalar
 from scipy.stats import chi2, norm
 
 __all__ = ["se_from_record", "pool_means", "summarize", "enrich_ci"]
@@ -216,11 +217,42 @@ def se_from_record(row: dict, fallback_sd: float | None = None) -> float | None:
 # Public: pooling
 # ---------------------------------------------------------------------------
 
+def _reml_tau2(y: np.ndarray, var: np.ndarray) -> float:
+    """Estimate τ² via Restricted Maximum Likelihood (REML).
+
+    Maximises the REML profile log-likelihood (profiling out μ):
+
+        l_REML(τ²) = -½ Σ log(vᵢ+τ²) - ½ log(Σwᵢ) - ½ Σ wᵢ(yᵢ-ȳw)²
+
+    where wᵢ = 1/(vᵢ+τ²) and ȳw = Σwᵢyᵢ/Σwᵢ.
+    Uses bounded scalar minimisation over τ² ∈ [0, upper_bound].
+    """
+    def neg_ll(tau2: float) -> float:
+        w = 1.0 / (var + tau2)
+        mu_w = float(np.dot(w, y) / w.sum())
+        ll = (
+            -0.5 * float(np.sum(np.log(var + tau2)))
+            - 0.5 * math.log(float(w.sum()))
+            - 0.5 * float(np.dot(w, (y - mu_w) ** 2))
+        )
+        return -ll  # minimise negative log-likelihood
+
+    upper = max(float(np.var(y)) * 10, 100.0)
+    result = minimize_scalar(neg_ll, bounds=(0.0, upper), method="bounded")
+    return max(0.0, float(result.x))
+
+
 def pool_means(
     records: Sequence[dict],
     method: str = "random",
 ) -> dict:
-    """Inverse-variance weighted pooling (fixed or DerSimonian-Laird random effects).
+    """Inverse-variance weighted pooling.
+
+    method options
+    --------------
+    'fixed'   – fixed-effects (no between-study variance)
+    'random'  – DerSimonian-Laird random effects (default, fast, closed-form)
+    'reml'    – REML random effects (iterative; matches R's metafor/rma default)
 
     Parameters
     ----------
@@ -236,8 +268,8 @@ def pool_means(
         n_studies (used), n_excluded (dropped due to missing SE/estimate)
     """
     method = method.lower()
-    if method not in ("fixed", "random"):
-        raise ValueError("method must be 'fixed' or 'random'")
+    if method not in ("fixed", "random", "reml"):
+        raise ValueError("method must be 'fixed', 'random', or 'reml'")
 
     valid: list[tuple[float, float]] = []
     n_excluded = 0
@@ -271,9 +303,11 @@ def pool_means(
     p_het = float(chi2.sf(Q, df)) if df > 0 else float("nan")
     i2 = float(max(0.0, (Q - df) / Q * 100.0)) if (Q > 0 and df > 0) else 0.0
 
-    # Tau² (DerSimonian-Laird)
+    # Tau² estimation
     tau2 = 0.0
-    if method == "random" and k > 1:
+    if method == "reml" and k > 1:
+        tau2 = _reml_tau2(y, var)
+    elif method == "random" and k > 1:
         c = float(w_fe.sum() - (w_fe ** 2).sum() / w_fe.sum())
         tau2 = max(0.0, (Q - df) / c) if c > 0 else 0.0
 
