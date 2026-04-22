@@ -29,7 +29,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import chi2, norm
 
-__all__ = ["se_from_record", "pool_means", "summarize"]
+__all__ = ["se_from_record", "pool_means", "summarize", "enrich_ci"]
 
 
 # ---------------------------------------------------------------------------
@@ -439,4 +439,82 @@ def summarize(
     for col in ("i2",):
         if col in out.columns:
             out[col] = out[col].round(1)
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Public: enrich extraction output with derived 95% CI
+# ---------------------------------------------------------------------------
+
+def enrich_ci(df: pd.DataFrame, z: float = 1.96) -> pd.DataFrame:
+    """Add derived 95% CI columns to a coding_sheet extraction DataFrame.
+
+    For each row that already has uncertainty_low/high reported, those are
+    preserved as-is.  For rows where CI is missing but SE can be computed
+    from SD / IQR / Range + sample_size, the 95% CI is derived as:
+
+        ci_95_derived_lower = point_estimate − z × SE
+        ci_95_derived_upper = point_estimate + z × SE
+
+    Two new columns are added:
+        ci_95_derived_lower  : float or NaN
+        ci_95_derived_upper  : float or NaN
+        ci_95_source         : 'reported' | 'derived_from_sd' | 'derived_from_iqr'
+                               | 'derived_from_range' | 'derived_from_se' | 'missing'
+
+    The original uncertainty_low / uncertainty_high columns are unchanged.
+
+    Parameters
+    ----------
+    df : coding_sheet extraction output DataFrame
+    z  : z-score for the CI (default 1.96 → 95%)
+    """
+    if not isinstance(df, pd.DataFrame):
+        raise TypeError("df must be a pandas DataFrame")
+
+    out = df.copy()
+    lowers, uppers, sources = [], [], []
+
+    for row in out.to_dict("records"):
+        est = _f(row.get("point_estimate"))
+        utype = _norm(row.get("uncertainty_type"))
+        lo_rep = _f(row.get("uncertainty_low"))
+        hi_rep = _f(row.get("uncertainty_high"))
+
+        # Already has CI bounds → use them
+        if utype in ("ci", "cri", "confidenceinterval", "credibleinterval",
+                     "credibleintervals", "confidenceintervals"):
+            if lo_rep is not None and hi_rep is not None and hi_rep > lo_rep:
+                lowers.append(lo_rep)
+                uppers.append(hi_rep)
+                sources.append("reported")
+                continue
+
+        # Already has SE bounds reported directly
+        if utype == "se" and est is not None:
+            se_val = _single(lo_rep, hi_rep) or (
+                ((lo_rep or 0) + (hi_rep or 0)) / 2 if lo_rep and hi_rep else None
+            )
+            if se_val and se_val > 0:
+                lowers.append(round(est - z * se_val, 4))
+                uppers.append(round(est + z * se_val, 4))
+                sources.append("derived_from_se")
+                continue
+
+        # Try to derive SE, then compute CI
+        if est is not None:
+            se = se_from_record(row)
+            if se is not None and se > 0:
+                lowers.append(round(est - z * se, 4))
+                uppers.append(round(est + z * se, 4))
+                sources.append(f"derived_from_{utype}" if utype not in ('', 'nr', 'other', 'missing', 'nan') else "derived_from_imputed")
+                continue
+
+        lowers.append(float("nan"))
+        uppers.append(float("nan"))
+        sources.append("missing")
+
+    out["ci_95_derived_lower"] = lowers
+    out["ci_95_derived_upper"] = uppers
+    out["ci_95_source"] = sources
     return out
