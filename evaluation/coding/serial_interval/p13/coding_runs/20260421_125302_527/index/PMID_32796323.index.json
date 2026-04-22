@@ -1,0 +1,124 @@
+{
+  "pmid": "32796323",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Section 1"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Data collection",
+          "Statistics"
+        ],
+        "evidence_hint": "Section 2"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Basic characteristics and route of identification",
+          "Symptom presentation",
+          "Sites of disease transmission",
+          "Infection source",
+          "Incubation period and serial interval",
+          "Infectious period",
+          "Reproduction number",
+          "Time from symptom onset to disease confirmation",
+          "Case fatality rate"
+        ],
+        "evidence_hint": "Section 3"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Section 4"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Characteristics of the 55 Community-acquired COVID-19 Cases in Taiwan",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Section 3.1 / Table 1"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Symptom Presentation in the 55 Community-acquired COVID-19 Cases in Taiwan",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Section 3.2 / Table 2"
+      },
+      {
+        "table_id": "Table 3",
+        "title_or_caption": "Asymptomatic Proportion of Laboratory Confirmed COVID-19 Cases in Taiwan",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Section 3.2 / Table 3"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Taiwan",
+      "period_raw": "January 28 to April 12, 2020",
+      "population_raw": "55 community-acquired COVID-19 cases in Taiwan",
+      "sample_size_raw": "55 community-acquired cases; 31 cases with serial interval data",
+      "method_raw": "Open-access data and press releases from Taiwan CDC website; contact tracing; descriptive statistics",
+      "evidence": "Methods / Results / Table 1"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4 days",
+        "uncertainty_raw": "range -3 to 24 d",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Abstract / Results section 3.5"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.1 d",
+        "uncertainty_raw": "SD 5.6 d",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results section 3.5"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "range -3-24 d",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results section 3.5 / Figure 3"
+      }
+    ],
+    "field_evidence": {
+      "region": "Methods / Abstract",
+      "period": "Methods / Abstract",
+      "population": "Methods / Abstract",
+      "sample_size": "Methods / Results section 3.5",
+      "method": "Methods section 2.1",
+      "parameter_type": "Methods section 2.1 / Abstract / Results section 3.5",
+      "estimate_measure": "Results section 3.5",
+      "point_estimate": "Results section 3.5",
+      "uncertainty": "Results section 3.5",
+      "distribution": "Figure 3",
+      "unit": "Results section 3.5"
+    }
+  }
+}

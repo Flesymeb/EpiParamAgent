@@ -1,0 +1,182 @@
+{
+  "pmid": "33034281",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Data sources",
+          "Statistical analyses"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Conclusion",
+        "subsections": [],
+        "evidence_hint": "Conclusion"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Estimates for the incubation period based on the Weibull distribution for the COVID-19 epidemic, by age group, sex, epidemic phase and location, China, 1 January–11 February 2020 (n = 1,158)",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 1 / Results"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Estimates for the serial interval, generation interval and time from symptom onset to discharge for the COVID-19 epidemic based on the log-logistic model, by epidemic phase and location, China, 1 January–11 February 2020 (n = 265, 223 and 455, respectively)",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": true,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 2 / Results"
+      },
+      {
+        "table_id": "Table 3",
+        "title_or_caption": "Estimates for the peak time of infectivity after exposure and the probability of secondary transmission during the incubation period rather than after symptom onset of a primary case, by epidemic phase and location, COVID-19 epidemic, China, 1 January–11 February 2020 (n = 223)",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 3 / Results"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Mainland China",
+      "period_raw": "1 January to 11 February 2020",
+      "population_raw": "Laboratory-confirmed COVID-19 cases and identified transmission pairs from publicly accessible data",
+      "sample_size_raw": "265 transmission pairs for serial interval; 223 transmission pairs for generation interval; 1,158 cases for incubation period",
+      "method_raw": "Parametric models (Weibull, gamma, log-logistic, log-normal) fitted using maximum likelihood with interval censoring; transmission pairs identified from epidemiological clusters",
+      "evidence": "Methods / Data sources / Results / Figure 1"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.7",
+        "uncertainty_raw": "95% CI: 4.2–5.3",
+        "distribution_raw": "Weibull (best fit); gamma also fitted well",
+        "unit_raw": "days",
+        "evidence": "Abstract / Results / Table 2"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "5th percentile",
+        "value_raw": "0.9",
+        "uncertainty_raw": "95% CI: 0.6–1.2",
+        "distribution_raw": "Weibull",
+        "unit_raw": "days",
+        "evidence": "Results / Table 2"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "95th percentile",
+        "value_raw": "12.4",
+        "uncertainty_raw": "95% CI: 11.0–13.7",
+        "distribution_raw": "Weibull",
+        "unit_raw": "days",
+        "evidence": "Results / Table 2"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "5.9",
+        "uncertainty_raw": "95% CI: 5.1–6.7",
+        "distribution_raw": "Weibull",
+        "unit_raw": "days",
+        "evidence": "Results / Table 2 (before 25 Jan 2020)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "3.4",
+        "uncertainty_raw": "95% CI: 2.9–4.1",
+        "distribution_raw": "Weibull",
+        "unit_raw": "days",
+        "evidence": "Results / Table 2 (25 Jan–11 Feb 2020)"
+      },
+      {
+        "param": "generation_interval",
+        "measure": "median",
+        "value_raw": "4.6",
+        "uncertainty_raw": "95% CI: 4.2–5.1",
+        "distribution_raw": "log-logistic (best fit)",
+        "unit_raw": "days",
+        "evidence": "Abstract / Results / Table 2"
+      },
+      {
+        "param": "generation_interval",
+        "measure": "5th percentile",
+        "value_raw": "2.2",
+        "uncertainty_raw": "95% CI: 1.8–2.6",
+        "distribution_raw": "log-logistic",
+        "unit_raw": "days",
+        "evidence": "Results / Table 2"
+      },
+      {
+        "param": "generation_interval",
+        "measure": "95th percentile",
+        "value_raw": "9.6",
+        "uncertainty_raw": "95% CI: 8.3–11.3",
+        "distribution_raw": "log-logistic",
+        "unit_raw": "days",
+        "evidence": "Results / Table 2"
+      },
+      {
+        "param": "generation_interval",
+        "measure": "median",
+        "value_raw": "4.8",
+        "uncertainty_raw": "95% CI: 4.3–5.3",
+        "distribution_raw": "log-logistic",
+        "unit_raw": "days",
+        "evidence": "Results / Table 2 (before 25 Jan 2020)"
+      },
+      {
+        "param": "generation_interval",
+        "measure": "median",
+        "value_raw": "3.7",
+        "uncertainty_raw": "95% CI: 3.0–4.5",
+        "distribution_raw": "log-logistic",
+        "unit_raw": "days",
+        "evidence": "Results / Table 2 (25 Jan–11 Feb 2020)"
+      }
+    ],
+    "field_evidence": {
+      "region": "Title / Methods / Data sources",
+      "period": "Title / Methods / Data sources",
+      "population": "Methods / Data sources / Results",
+      "sample_size": "Results / Figure 1 / Table 2",
+      "method": "Methods / Statistical analyses",
+      "parameter_type": "Abstract / Results / Table 2",
+      "estimate_measure": "Results / Table 2",
+      "point_estimate": "Results / Table 2",
+      "uncertainty": "Results / Table 2",
+      "distribution": "Methods / Statistical analyses / Results / Figure 4",
+      "unit": "Results / Table 2"
+    }
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "pmid": "32422201",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Summary/Abstract",
+        "subsections": [
+          "Background",
+          "Methods",
+          "Findings",
+          "Interpretation"
+        ],
+        "evidence_hint": "Abstract with key serial interval estimate"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [
+          "Research in context"
+        ],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Study design and participants",
+          "Contact classification and management",
+          "Case interviews",
+          "Laboratory testing",
+          "Secondary attack rate among contacts",
+          "Role of the funding source"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results - contains serial interval and incubation period estimates"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion - compares serial interval to other studies"
+      },
+      {
+        "section": "Contributors",
+        "subsections": [],
+        "evidence_hint": "Contributors"
+      },
+      {
+        "section": "Declaration of interests",
+        "subsections": [],
+        "evidence_hint": "Declaration of interests"
+      },
+      {
+        "section": "Acknowledgments",
+        "subsections": [],
+        "evidence_hint": "Acknowledgments"
+      },
+      {
+        "section": "References",
+        "subsections": [],
+        "evidence_hint": "References"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Characteristics of laboratory-confirmed cases in the Bavarian COVID-19 outbreak in January–February, 2020",
+        "table_type": "study_desc",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 1 contains individual case data with symptom onset dates, most likely predecessor, incubation periods, and transmission timing from which serial intervals can be derived"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Genome single nucleotide polymorphisms compared with reference sequence",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 2 contains genomic sequencing data confirming transmission links"
+      },
+      {
+        "table_id": "Table 3",
+        "title_or_caption": "Secondary attack rates among high-risk and low-risk contacts in the Bavarian COVID-19 outbreak in January–February, 2020",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 3 contains secondary attack rates with 95% CIs"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Bavaria, Germany",
+      "period_raw": "January–February, 2020 (Jan 27 – Feb 19, 2020 for case identification; primary case arrival Jan 20, 2020)",
+      "population_raw": "Contacts of a single travel-associated primary case (Chinese business visitor) in a company setting and household contacts in Bavaria, Germany",
+      "sample_size_raw": "16 subsequent cases; 241 high-risk contacts identified",
+      "method_raw": "Outbreak investigation with contact tracing, case interviews, and whole genome sequencing to reconstruct transmission events and estimate incubation period and serial interval",
+      "evidence": "Methods / Study design and participants / Results"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4·0 days",
+        "uncertainty_raw": "IQR 3·0–5·0",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Findings in Abstract / Results paragraph 5"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4 days",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Added value of this study section"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4·0 days",
+        "uncertainty_raw": "IQR 3·0–5·0",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results paragraph 5"
+      }
+    ],
+    "field_evidence": {
+      "region": "Methods / Study design and participants",
+      "period": "Results / Table 1",
+      "population": "Methods / Study design and participants",
+      "sample_size": "Results / Table 1",
+      "method": "Methods / Study design and participants / Contact classification and management / Case interviews",
+      "parameter_type": "Findings / Results",
+      "estimate_measure": "Results / Findings",
+      "point_estimate": "Results / Findings",
+      "uncertainty": "Results / Findings",
+      "distribution": null,
+      "unit": "Results / Findings"
+    }
+  }
+}

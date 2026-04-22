@@ -1,0 +1,128 @@
+{
+  "pmid": "33088292",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Section 1"
+      },
+      {
+        "section": "Study Selection",
+        "subsections": [],
+        "evidence_hint": "Section 2"
+      },
+      {
+        "section": "Meta-analysis",
+        "subsections": [],
+        "evidence_hint": "Section 3"
+      },
+      {
+        "section": "Epidemic Characteristics",
+        "subsections": [
+          "Basic Reproduction Number",
+          "Incubation Period",
+          "Serial Interval",
+          "Epidemic Doubling Time"
+        ],
+        "evidence_hint": "Section 4"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Basic Reproduction Number",
+          "Incubation Period",
+          "Serial Interval",
+          "Epidemic Doubling Time"
+        ],
+        "evidence_hint": "Section 5"
+      },
+      {
+        "section": "Sensitivity Analysis",
+        "subsections": [],
+        "evidence_hint": "Section 6"
+      },
+      {
+        "section": "Concluding Remarks",
+        "subsections": [],
+        "evidence_hint": "Section 7"
+      },
+      {
+        "section": "Supplementary Materials",
+        "subsections": [],
+        "evidence_hint": "Supplementary"
+      },
+      {
+        "section": "References",
+        "subsections": [],
+        "evidence_hint": "References"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "t1",
+        "title_or_caption": "Forest plot data for epidemic doubling time (before trim-and-fill)",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Figure 4 top panel"
+      },
+      {
+        "table_id": "t2",
+        "title_or_caption": "Forest plot data for epidemic doubling time (after trim-and-fill)",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Figure 4 bottom panel"
+      },
+      {
+        "table_id": "t3",
+        "title_or_caption": "Table 1: Summary of our numerical findings with respect to R0 or the basic reproduction number, the incubation period, the serial interval and the doubling time of the epidemic.",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 1 in Section 6"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "mainland China",
+      "period_raw": null,
+      "population_raw": "COVID-19 cases in mainland China",
+      "sample_size_raw": "10 studies for serial interval (Bi et al., 2020; Du et al., 2020c,b; He et al., 2020b; Li et al., 2020; Zhao et al., 2020; Tindale et al., 2020; Wu et al., 2020a; Zhang et al., 2020)",
+      "method_raw": "Meta-analysis using random-effects model (Hartung-Knapp-Sidik-Jonkman method)",
+      "evidence": "Section 2 / Section 5 Serial Interval / Table 1"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.40",
+        "uncertainty_raw": "95% CI [4.53, 6.26]; 95% PI [2.89, 7.90]",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Section 5 Serial Interval / Table 1"
+      }
+    ],
+    "field_evidence": {
+      "region": "Section 2 / Abstract",
+      "period": null,
+      "population": "Section 2 / Section 5",
+      "sample_size": "Section 5 Serial Interval paragraph",
+      "method": "Section 3",
+      "parameter_type": "Abstract / Section 4 / Section 5",
+      "estimate_measure": "Section 5 / Table 1",
+      "point_estimate": "Section 5 / Table 1",
+      "uncertainty": "Section 5 / Table 1",
+      "distribution": null,
+      "unit": "Section 5 (implied days)"
+    }
+  }
+}

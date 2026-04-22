@@ -1,0 +1,146 @@
+{
+  "pmid": "32392331",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Summary",
+        "subsections": [],
+        "evidence_hint": "Summary"
+      },
+      {
+        "section": "Abstract",
+        "subsections": [
+          "Background",
+          "Methods",
+          "Results",
+          "Conclusion"
+        ],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Definitions",
+          "Study Design",
+          "Statistical Analyses"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Characteristics of index case patients, contacts and households",
+          "Household Second Infection Rate and Risk Factors of Household Transmission",
+          "Serial interval and incubation period"
+        ],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Tables",
+        "subsections": [
+          "Table 1",
+          "Table 2",
+          "Table 3"
+        ],
+        "evidence_hint": "Tables"
+      },
+      {
+        "section": "Figures",
+        "subsections": [
+          "Figure 1",
+          "Figure 2"
+        ],
+        "evidence_hint": "Figures"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Characteristics of Index Cases, Secondary Cases and Noncases",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 1"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Secondary Infection Rate (SIR) and Odds Ratio (OR) for Association with COVID-19 by Characteristics of Index patients, Contacts and Households",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 2"
+      },
+      {
+        "table_id": "Table 3",
+        "title_or_caption": "Multivariable Models for Risk Factors Associated with COVID-19 by Characteristics of Index Patients, Contacts and Households",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 3"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Zhuhai, China",
+      "period_raw": "January 17 to February 29, 2020 (enrollment); February 1, 2020 to March 1, 2020 (prospective investigation)",
+      "population_raw": "Household contacts of confirmed SARS-CoV-2 index cases",
+      "sample_size_raw": "35 index cases and 148 household contacts; 48 secondary cases for serial interval calculation",
+      "method_raw": "Prospective observational household transmission study; serial interval estimated using parametric regression techniques assuming log-normal distribution",
+      "evidence": "Abstract / Methods / Results"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "5.1 days",
+        "uncertainty_raw": "95% CI: 4.3 to 6.2 days",
+        "distribution_raw": "log-normal",
+        "unit_raw": "days",
+        "evidence": "Results / Serial interval and incubation period / Figure 2 legend"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "6.3 days",
+        "uncertainty_raw": null,
+        "distribution_raw": "log-normal",
+        "unit_raw": "days",
+        "evidence": "Discussion / Figure 2 legend"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "5th percentile: 1.8 days; 95th percentile: 14.8 days",
+        "uncertainty_raw": "5th percentile 95% CI: 1.4 to 2.4 days; 95th percentile 95% CI: 11 to 19.2 days",
+        "distribution_raw": "log-normal; dispersion parameter 1.9 (95% CI: 1.65 to 2.2)",
+        "unit_raw": "days",
+        "evidence": "Figure 2 legend"
+      }
+    ],
+    "field_evidence": {
+      "region": "Abstract / Methods",
+      "period": "Methods / Study Design",
+      "population": "Abstract / Methods / Definitions",
+      "sample_size": "Abstract / Results / Table 1",
+      "method": "Methods / Study Design / Statistical Analyses",
+      "parameter_type": "Abstract / Results / Figure 2 legend",
+      "estimate_measure": "Results / Figure 2 legend",
+      "point_estimate": "Results / Figure 2 legend",
+      "uncertainty": "Results / Figure 2 legend",
+      "distribution": "Methods / Statistical Analyses / Figure 2 legend",
+      "unit": "Results / Figure 2 legend"
+    }
+  }
+}

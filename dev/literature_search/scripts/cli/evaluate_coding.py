@@ -46,11 +46,12 @@ for p in (TOOLS_SRC,):
 
 from meta_analysis.pooling import enrich_ci, summarize  # type: ignore
 
-# Topic → default parameter_type for pooling
+# Topic → default parameter_type filter for pooling
+# Must match values in the 'parameter_type' column of the codebook output.
 TOPIC_PARAM = {
-    "serial_interval": "serial_interval",
-    "reproduction_number": "serial_interval",  # R0 codebook also uses point_estimate
-    "fatality": "serial_interval",              # placeholder; CFR needs logit — warn
+    "serial_interval":     "serial_interval",
+    "reproduction_number": "R0",          # codebook uses R0|Rt|...
+    "fatality":            "CFR",         # codebook uses CFR|IFR|...
 }
 
 
@@ -218,9 +219,9 @@ def main() -> None:
     for topic, project, project_dir in projects_to_run:
         param_type = args.parameter_type or TOPIC_PARAM.get(topic, "serial_interval")
         if topic == "fatality":
-            print(f"  [{topic}/{project}] WARNING: CFR requires logit transform; "
-                  "pooled_mean reported here is arithmetic (may be biased). "
-                  "Use with caution.")
+            print(f"  [{topic}/{project}] NOTE: CFR/IFR is a proportion — "
+                  "pooled_mean here is arithmetic average (may be biased). "
+                  "For publication-quality meta-analysis use logit transform.")
         result = evaluate_project(
             topic=topic,
             project=project,

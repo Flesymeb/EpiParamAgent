@@ -1,0 +1,121 @@
+{
+  "pmid": "32473049",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Materials and Methods",
+        "subsections": [
+          "Data source",
+          "Generation time",
+          "Time-varying reproduction numbers during epidemics"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "COVID-19 epidemic in Iran, China, South Korea and Italy",
+          "Generation time",
+          "Reproduction number estimation (R)",
+          "Sensitivity analysis",
+          "R values in Iran, China, South Korea and Italy"
+        ],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Figure 2",
+        "title_or_caption": "Serial interval of COVID-19 infection in Qom, Iran / Discrete distribution of the serial interval of COVID-19",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Figure 2 shows discrete distribution of serial interval"
+      },
+      {
+        "table_id": "Figure 3",
+        "title_or_caption": "Estimated R values with 95% CI using non-parametric and MCMC models in time lapses of 7 days (a) and 14 days (b)",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Figure 3 shows R estimates with CIs"
+      },
+      {
+        "table_id": "Figure 4",
+        "title_or_caption": "Sensitivity analysis of estimated R values with different parameters for generation time on two different data sets",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": true,
+        "contains_uncertainty": true,
+        "evidence_hint": "Figure 4 shows sensitivity analysis with varying serial interval parameters"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Qom, Iran",
+      "period_raw": "From 20 February 2020 (first case 19 February 2020); early phase of outbreak; 18 days of data",
+      "population_raw": "51 confirmed COVID-19 index cases and their 318 close contacts in Qom, Iran",
+      "sample_size_raw": "51 index cases, 318 close contacts, 37 secondary cases (infector-infected pairs)",
+      "method_raw": "Contact tracing with daily follow-up for 21 days; gamma distribution fitted to serial interval; time-varying method (Wallinga-Teunis) for R0 estimation; EpiEstim and R0 packages in R",
+      "evidence": "Abstract / Methods / Results"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.55",
+        "uncertainty_raw": "SD 3.30 days",
+        "distribution_raw": "gamma",
+        "unit_raw": "days",
+        "evidence": "Abstract / Results section 'Generation time' / Figure 2"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "3.30",
+        "uncertainty_raw": null,
+        "distribution_raw": "gamma",
+        "unit_raw": "days",
+        "evidence": "Abstract / Results section 'Generation time'"
+      },
+      {
+        "param": "generation_interval",
+        "measure": "other",
+        "value_raw": null,
+        "uncertainty_raw": null,
+        "distribution_raw": "serial interval used as proxy for generation time",
+        "unit_raw": null,
+        "evidence": "Methods section 'Generation time'"
+      }
+    ],
+    "field_evidence": {
+      "region": "Abstract / Methods 'Data source'",
+      "period": "Methods 'Data source' / Results",
+      "population": "Methods 'Data source'",
+      "sample_size": "Methods 'Data source' / Results 'Generation time'",
+      "method": "Methods 'Generation time' / Methods 'Time-varying reproduction numbers'",
+      "parameter_type": "Title / Abstract / Results 'Generation time'",
+      "estimate_measure": "Abstract / Results 'Generation time'",
+      "point_estimate": "Abstract / Results 'Generation time'",
+      "uncertainty": "Abstract / Results 'Generation time' / Sensitivity analysis",
+      "distribution": "Abstract / Results 'Generation time'",
+      "unit": "Abstract / Results 'Generation time'"
+    }
+  }
+}

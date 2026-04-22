@@ -1,0 +1,157 @@
+# Epidemiology codebook: reproduction number (R0 / Rt) extraction
+
+topic: reproduction_number
+
+project:
+  name: "Epi Codebook: Reproduction Number (R0/Rt)"
+  description: "Extract R0 and Rt estimates from primary COVID-19 epidemiological studies."
+  effect_type: "reproduction_number"
+
+stage_a:
+  prompt_file: prompts/stage_a_reproduction_number.py
+
+stage_b:
+  prompt_file: prompts/stage_b_reproduction_number.py
+
+parameters:
+  research_question: >
+    This project extracts basic reproduction number (R0) and effective reproduction number (Rt)
+    estimates from primary COVID-19 epidemiological studies. The goal is to capture the headline
+    R0/Rt estimate with its uncertainty, method, and study metadata.
+
+notes: |
+  Goal: extract reproduction number information FROM EACH PRIMARY STUDY.
+  Do NOT copy R0 values from systematic review tables.
+  Prefer the headline/overall R0 estimate. If only Rt is reported, capture it.
+  Do NOT compute R0 unless the study explicitly reports it.
+  If the paper uses SI as a model input, capture it in notes, not as the main estimate.
+
+fields:
+  - name: pmid
+    label: "PMID"
+    type: str
+    required: true
+    prompt: "PubMed ID for the study."
+
+  - name: study
+    label: "Study"
+    type: str
+    required: true
+    prompt: "Study identifier (author/year or short label)."
+
+  - name: region
+    label: "Region"
+    type: str
+    required: true
+    prompt: "Study location/region/setting as reported."
+
+  - name: estimation_period
+    label: "Estimation_Period"
+    type: str
+    required: true
+    prompt: "Estimation period or time window (raw text)."
+
+  - name: population
+    label: "Population"
+    type: str
+    prompt: "Study population or epidemic context."
+
+  - name: sample_size
+    label: "Sample_Size"
+    type: str
+    prompt: "Epidemic size, number of cases, or study size as reported."
+
+  - name: method
+    label: "Method"
+    type: str
+    required: true
+    prompt: "Estimation method: exponential_growth | maximum_likelihood | bayesian | seir_fit | branching_process | other."
+
+  - name: model_type
+    label: "Model_Type"
+    type: str
+    prompt: "Compartmental model if used: SIR | SEIR | SEIRD | other | NA."
+
+  - name: data_type
+    label: "Data_Type"
+    type: str
+    prompt: "Data used: case_counts | deaths | hospitalizations | serological | wastewater | other."
+
+  - name: parameter_type
+    label: "Parameter_Type"
+    type: str
+    required: true
+    prompt: "R0 (basic) | Rt (effective/time-varying) | net_reproduction_number | other."
+
+  - name: estimate_measure
+    label: "Estimate_Measure"
+    type: str
+    required: true
+    prompt: "mean | median | mode | point_estimate | other."
+
+  - name: point_estimate
+    label: "Point_Estimate"
+    type: float
+    prompt: "Main reported point estimate."
+
+  - name: unit
+    label: "Unit"
+    type: str
+    required: true
+    prompt: "dimensionless (R0/Rt has no unit)."
+
+  - name: uncertainty_type
+    label: "Uncertainty_Type"
+    type: str
+    prompt: "CI | CrI | SD | SE | IQR | Range | Other | NR."
+
+  - name: uncertainty_level
+    label: "Uncertainty_Level"
+    type: str
+    prompt: "95% | 90% | NR | Other."
+
+  - name: uncertainty_low
+    label: "Uncertainty_Low"
+    type: float
+    prompt: "Lower bound of uncertainty interval if reported."
+
+  - name: uncertainty_high
+    label: "Uncertainty_High"
+    type: float
+    prompt: "Upper bound of uncertainty interval if reported."
+
+  - name: notes
+    label: "Notes"
+    type: str
+    prompt: "Alternative estimates, subgroup results, caveats, or evidence locations."
+
+  - name: evidence_locations
+    label: "Evidence_Locations"
+    type: list[str]
+    prompt: "1-3 evidence locations (e.g. 'Abstract', 'Table 1', 'Results section 2')."
+
+index_schema:
+  - name: region_raw
+    path: study_meta.region_raw
+  - name: period_raw
+    path: study_meta.period_raw
+  - name: method_raw
+    path: study_meta.method_raw
+  - name: data_type_raw
+    path: study_meta.data_type_raw
+  - name: model_type_raw
+    path: study_meta.model_type_raw
+  - name: parameter_hint
+    path: field_evidence.parameter_type
+  - name: estimate_hint
+    path: field_evidence.point_estimate
+
+quality_rules:
+  missing_penalties:
+    point_estimate: 0.2
+  review_threshold: 0.7
+
+extraction:
+  mode: "full_context"
+  max_input_chars: 500000
+  truncation_marker: "\n\n[... document truncated ...]\n"

@@ -1,0 +1,183 @@
+{
+  "pmid": "32694200",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Opening paragraph summarizing findings"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Background on serial interval and NPIs"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Serial interval estimation by period",
+          "Running time window analysis",
+          "Stratified analysis",
+          "Rt estimation"
+        ],
+        "evidence_hint": "Main results with serial interval estimates"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Interpretation of serial interval shortening"
+      },
+      {
+        "section": "Supplementary Materials",
+        "subsections": [
+          "Materials and Methods",
+          "Figs. S1-S14",
+          "Tables S1-S5"
+        ],
+        "evidence_hint": "Detailed methods and supplementary tables"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table S1",
+        "title_or_caption": "Entire database of 1407 transmission pairs",
+        "table_type": "study_desc",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Referenced in main text: 'see table S1 for entire database'"
+      },
+      {
+        "table_id": "Table S2",
+        "title_or_caption": "Estimated serial interval distributions by period and stratification",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Referenced in main text for mean, SD, and 95% CrI of serial intervals by period and stratification"
+      },
+      {
+        "table_id": "Table S3",
+        "title_or_caption": "Estimated serial interval distributions for running time windows",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Referenced in main text for running time window serial interval estimates"
+      },
+      {
+        "table_id": "Table S4",
+        "title_or_caption": "Serial interval estimates stratified by isolation delay",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Referenced in main text for isolation delay stratification"
+      },
+      {
+        "table_id": "Table S5",
+        "title_or_caption": "Regression model results for variability in serial intervals",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Referenced in main text: isolation delay explains 51.5% of variability, NPIs explain additional 15.6-16.7%"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Mainland China (outside Hubei province); 27 provincial and 264 urban health commissions",
+      "period_raw": "9 January to 13 February 2020 (36-day period)",
+      "population_raw": "Confirmed COVID-19 cases linked in transmission chains; 1407 transmission pairs compiled, 677 with symptom-onset dates for both infector and infectee",
+      "sample_size_raw": "677 transmission pairs (out of 1407 compiled); 9120 confirmed cases in source data",
+      "method_raw": "Normal distribution fitted to serial intervals using MCMC; serial interval computed as days between symptom-onset date of infector and infectee; running time windows of 10, 14, 18 days; stratification by household, isolation delay, age, gender",
+      "evidence": "Methods section and Results paragraph 2"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.1",
+        "uncertainty_raw": "95% CrI: 4.7, 5.5",
+        "distribution_raw": "Normal distribution (MCMC)",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 3 / Table S2"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "7.8",
+        "uncertainty_raw": "7.0, 8.6",
+        "distribution_raw": "Normal distribution (MCMC)",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 3 / Table S2 (prepeak: 9-22 January 2020)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.1",
+        "uncertainty_raw": "4.6, 5.7",
+        "distribution_raw": "Normal distribution (MCMC)",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 3 / Table S2 (peak week: 23-29 January 2020)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "2.6",
+        "uncertainty_raw": "1.9, 3.2",
+        "distribution_raw": "Normal distribution (MCMC)",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 3 / Table S2 (postpeak: 30 January - 13 February 2020)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "2.2",
+        "uncertainty_raw": "1.5, 2.9",
+        "distribution_raw": "Normal distribution (MCMC)",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 4 / Table S3 (last 14-day running window: 30 January - 13 February 2020)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "3.3",
+        "uncertainty_raw": "2.7, 3.8",
+        "distribution_raw": "Normal distribution (MCMC)",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 5 / Table S2 (isolation delay shorter than median)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "6.8",
+        "uncertainty_raw": "6.2, 7.3",
+        "distribution_raw": "Normal distribution (MCMC)",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 5 / Table S2 (isolation delay longer than median)"
+      },
+      {
+        "param": "generation_time",
+        "measure": "mean",
+        "value_raw": "7.8",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results paragraph 6 (simulation model parameter)"
+      }
+    ],
+    "field_evidence": {
+      "region": "Results paragraph 2: 'transmission pairs in mainland China'; '27 provincial and 264 urban health commissions in China outside Hubei province'",
+      "period": "Results paragraph 2: '9 January through 13 February 2020'",
+      "population": "Results paragraph 2: '1407 COVID-19 transmission pairs...677 transmission pairs with infectors having developed symptoms'",
+      "sample_size": "Results paragraph 2: '677 transmission pairs' with symptom-onset dates",
+      "method": "Results paragraph 3: 'fitting a normal distribution to the corresponding serial intervals data' using MCMC",
+      "parameter_type": "Title / Abstract / Results: serial interval is the primary parameter",
+      "estimate_measure": "Results paragraphs 3-5: mean serial interval reported",
+      "point_estimate": "Results paragraph 3: overall mean 5.1 days; period-specific means 7.8, 5.1, 2.6 days",
+      "uncertainty": "Results paragraph 3: 95% credibility intervals reported",
+      "distribution": "Results paragraph 3: Normal distribution; Results paragraph 4: MCMC fitting",
+      "unit": "Results paragraph 3: days"
+    }
+  }
+}

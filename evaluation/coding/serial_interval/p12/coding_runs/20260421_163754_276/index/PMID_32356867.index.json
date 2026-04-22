@@ -1,0 +1,189 @@
+{
+  "pmid": "32356867",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Supplementary Online Content",
+        "subsections": [],
+        "evidence_hint": "Title and overview of supplementary content"
+      },
+      {
+        "section": "eMethods",
+        "subsections": [
+          "Serial interval distribution - Data",
+          "Serial interval distribution - Methods",
+          "Incubation period distribution - Data and methods"
+        ],
+        "evidence_hint": "Methods for serial interval and incubation period estimation"
+      },
+      {
+        "section": "eTable 1",
+        "subsections": [],
+        "evidence_hint": "Serial interval by exposure setting"
+      },
+      {
+        "section": "eTable 2",
+        "subsections": [],
+        "evidence_hint": "Serial interval by region"
+      },
+      {
+        "section": "eTable 3",
+        "subsections": [],
+        "evidence_hint": "Serial interval overall"
+      },
+      {
+        "section": "eTable 4",
+        "subsections": [],
+        "evidence_hint": "Incubation period by region"
+      },
+      {
+        "section": "eTable 5",
+        "subsections": [],
+        "evidence_hint": "Incubation period overall"
+      },
+      {
+        "section": "eFigures 1-5",
+        "subsections": [],
+        "evidence_hint": "Visual distributions of serial interval and incubation period"
+      },
+      {
+        "section": "eReferences",
+        "subsections": [],
+        "evidence_hint": "References"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "eTable 1",
+        "title_or_caption": "The estimated distribution parameters of the serial interval for each exposure setting (household, community, and others), with 95% credible interval (CrI)",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Serial interval median, shape, and scale by exposure setting with 95% CrI"
+      },
+      {
+        "table_id": "eTable 2",
+        "title_or_caption": "The estimated distribution parameters of the serial interval for each region (Taiwan, Mainland China, and others), with 95% credible interval (CrI)",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Serial interval median, shape, and scale by region with 95% CrI"
+      },
+      {
+        "table_id": "eTable 3",
+        "title_or_caption": "The estimated distribution parameters of the serial interval (overall countries and settings), with 95% credible interval (CrI)",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Overall serial interval median, shape, and scale with 95% CrI"
+      },
+      {
+        "table_id": "eTable 4",
+        "title_or_caption": "The estimated distribution parameters of the incubation period for each region (Taiwan, Mainland China, and others), with 95% credible interval (CrI)",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Incubation period by region, not serial interval"
+      },
+      {
+        "table_id": "eTable 5",
+        "title_or_caption": "The estimated distribution parameters of the incubation period (overall countries and settings), with 95% credible interval (CrI)",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Overall incubation period, not serial interval"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Taiwan, Mainland China, and others",
+      "period_raw": null,
+      "population_raw": "COVID-19 patients with confirmed transmission links",
+      "sample_size_raw": "58 transmission pairs",
+      "method_raw": "Bayesian framework with gamma distribution fitted to observed serial intervals; MCMC using NUTS algorithm in Stan with 4 chains, 1000 warmup and 500 samples each",
+      "evidence": "eMethods / eTable 3"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.11",
+        "uncertainty_raw": "95% CrI: 0.19, 20.39",
+        "distribution_raw": "Gamma(shape=1.09, scale=5.26)",
+        "unit_raw": "days",
+        "evidence": "eTable 3"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "5.23",
+        "uncertainty_raw": "95% CrI: 0.74, 17.56",
+        "distribution_raw": "Gamma(shape=1.96, scale=3.19)",
+        "unit_raw": "days",
+        "evidence": "eTable 1 (Household)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "2.89",
+        "uncertainty_raw": "95% CrI: 0, 37.34",
+        "distribution_raw": "Gamma(shape=0.45, scale=15.81)",
+        "unit_raw": "days",
+        "evidence": "eTable 1 (Community)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "3.26",
+        "uncertainty_raw": "95% CrI: 0.1, 18.22",
+        "distribution_raw": "Gamma(shape=0.94, scale=5.11)",
+        "unit_raw": "days",
+        "evidence": "eTable 1 (Others setting)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.1",
+        "uncertainty_raw": "95% CrI: 0.06, 27.78",
+        "distribution_raw": "Gamma(shape=0.77, scale=8.75)",
+        "unit_raw": "days",
+        "evidence": "eTable 2 (Taiwan)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "5.03",
+        "uncertainty_raw": "95% CrI: 1.46, 12.13",
+        "distribution_raw": "Gamma(shape=3.9, scale=1.41)",
+        "unit_raw": "days",
+        "evidence": "eTable 2 (China)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "2.89",
+        "uncertainty_raw": "95% CrI: 0.04, 20.64",
+        "distribution_raw": "Gamma(shape=0.72, scale=6.71)",
+        "unit_raw": "days",
+        "evidence": "eTable 2 (Others region)"
+      }
+    ],
+    "field_evidence": {
+      "region": "eMethods / eTable 2",
+      "period": null,
+      "population": "eMethods (Serial interval distribution - Data)",
+      "sample_size": "eMethods (Serial interval distribution - Data)",
+      "method": "eMethods (Serial interval distribution - Methods)",
+      "parameter_type": "eMethods / eTables 1-3",
+      "estimate_measure": "eTables 1-3",
+      "point_estimate": "eTables 1-3",
+      "uncertainty": "eTables 1-3",
+      "distribution": "eMethods / eTables 1-3",
+      "unit": "eTables 1-3"
+    }
+  }
+}

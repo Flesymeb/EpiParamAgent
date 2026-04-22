@@ -1,0 +1,128 @@
+{
+  "pmid": "32247326",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Summary",
+        "subsections": [
+          "Background",
+          "Methods",
+          "Findings",
+          "Interpretation"
+        ],
+        "evidence_hint": "Summary"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Research in context",
+        "subsections": [
+          "Evidence before this study",
+          "Added value of this study",
+          "Implications of all the available evidence"
+        ],
+        "evidence_hint": "Research in context"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Case definitions and surveillance",
+          "Data sources and collection",
+          "Statistical analysis"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Tables",
+        "subsections": [
+          "Table 1",
+          "Table 2"
+        ],
+        "evidence_hint": "Tables"
+      },
+      {
+        "section": "Figures",
+        "subsections": [
+          "Figure 1",
+          "Figure 2",
+          "Figure 3"
+        ],
+        "evidence_hint": "Figures"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Characteristics of laboratory-confirmed COVID-19 cases in provinces outside Hubei in mainland China by epidemic period, as of Feb 17, 2020",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 1"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Key time-to-event intervals for laboratory-confirmed COVID-19 cases by epidemic period, as of Feb 17, 2020",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 2"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Provinces outside Hubei in mainland China",
+      "period_raw": "Dec 24, 2019 to Feb 17, 2020 (two periods: Dec 24–Jan 27 and Jan 28–Feb 17)",
+      "population_raw": "Laboratory-confirmed COVID-19 cases reported outside Hubei in mainland China",
+      "sample_size_raw": "8579 total cases; for serial interval: 35 secondary cases and 28 corresponding primary cases (one case removed)",
+      "method_raw": "Prospective contact tracing of epidemiologically linked clusters; gamma distribution fitted to serial interval data; Bayesian approach for Rt estimation",
+      "evidence": "Methods / Results / Table 1"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.1 days",
+        "uncertainty_raw": "95% CI 1.3–11.6",
+        "distribution_raw": "gamma distribution",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 4 / Figure 2"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "between 5.0 days and 6.3 days",
+        "uncertainty_raw": "5.0 days (0.8–13.0) and 6.3 days (3.2–10.5)",
+        "distribution_raw": "gamma distribution (sensitivity analysis with different levels of data censoring)",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 4 / Appendix p 22"
+      }
+    ],
+    "field_evidence": {
+      "region": "Methods / Results",
+      "period": "Methods / Results",
+      "population": "Methods / Results",
+      "sample_size": "Results paragraph 4 / Table 1",
+      "method": "Methods / Statistical analysis",
+      "parameter_type": "Results / Summary",
+      "estimate_measure": "Results paragraph 4",
+      "point_estimate": "Results paragraph 4",
+      "uncertainty": "Results paragraph 4",
+      "distribution": "Results paragraph 4 / Methods (Statistical analysis)",
+      "unit": "Results paragraph 4"
+    }
+  }
+}

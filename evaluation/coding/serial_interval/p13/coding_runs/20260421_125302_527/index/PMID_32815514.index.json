@@ -1,0 +1,111 @@
+{
+  "pmid": "32815514",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Case identification and contact tracing",
+          "Statistical analysis"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Description of cases",
+          "Impact of travel restrictions",
+          "Epidemic characteristics over time"
+        ],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [
+          "Key findings",
+          "Estimating the reproduction number",
+          "Test, isolate, and trace",
+          "Travel restrictions and other non-pharmaceutical interventions",
+          "Limitations"
+        ],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Conclusion",
+        "subsections": [],
+        "evidence_hint": "Conclusion"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Demographic and clinical characteristics of the first 135 COVID-19 cases in Brunei Darussalam",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Results / Table 1"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Brunei Darussalam",
+      "period_raw": "March 9 to April 5, 2020 (symptom onset dates)",
+      "population_raw": "First 135 COVID-19 cases in Brunei Darussalam",
+      "sample_size_raw": "59 symptomatic and presymptomatic infector–infectee pairs (for SI); 135 cases total",
+      "method_raw": "Serial interval calculated as duration between symptom onset dates for primary case and secondary case; only symptomatic or presymptomatic infector–infectee pairs with clear epidemiological links were included",
+      "evidence": "Methods / Results"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.4 days",
+        "uncertainty_raw": "SD = 4.5; 95% CI: 4.3, 6.5 (approximated using normal distribution)",
+        "distribution_raw": "Normal distribution approximation for CI; Gamma distribution used for Rt estimation",
+        "unit_raw": "days",
+        "evidence": "Abstract / Results (Epidemic characteristics over time) / Figure 2C"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.39 days",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Discussion (Travel restrictions and other non-pharmaceutical interventions)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "range between -4 and 20 days; 4 pairs (6.8%) had negative SI values",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results (Epidemic characteristics over time) / Figure 2C"
+      }
+    ],
+    "field_evidence": {
+      "region": "Introduction / Methods",
+      "period": "Abstract / Methods (Case identification and contact tracing)",
+      "population": "Abstract / Introduction / Methods",
+      "sample_size": "Results (Epidemic characteristics over time)",
+      "method": "Methods (Statistical analysis)",
+      "parameter_type": "Abstract / Results",
+      "estimate_measure": "Abstract / Results",
+      "point_estimate": "Abstract / Results",
+      "uncertainty": "Abstract / Results",
+      "distribution": "Methods (Statistical analysis) / Discussion (Limitations)",
+      "unit": "Abstract / Results"
+    }
+  }
+}

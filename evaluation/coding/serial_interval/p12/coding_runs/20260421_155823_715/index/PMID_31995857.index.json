@@ -1,0 +1,105 @@
+{
+  "pmid": "31995857",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [
+          "Background",
+          "Methods",
+          "Results",
+          "Conclusions"
+        ],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "First paragraph after Abstract"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Sources of Data",
+          "Case Definitions",
+          "Laboratory Testing",
+          "Statistical Analysis",
+          "Ethics Approval"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Appendix",
+        "subsections": [],
+        "evidence_hint": "Appendix"
+      },
+      {
+        "section": "References",
+        "subsections": [],
+        "evidence_hint": "References"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Characteristics of Patients with Novel Coronavirus-Infected Pneumonia in Wuhan as of January 22, 2020.",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 1"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Data from the 5 Clusters Used in the Estimation of Serial Interval",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table t2 below Figure 3"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Wuhan, China",
+      "period_raw": "December 2019 – January 22, 2020",
+      "population_raw": "First 425 laboratory-confirmed cases of NCIP in Wuhan",
+      "sample_size_raw": "425 confirmed cases; 6 pairs of cases from 5 clusters for serial interval estimation",
+      "method_raw": "Fitted a gamma distribution to data from cluster investigations to estimate the serial interval distribution, defined as the delay between illness onset dates in successive cases in chains of transmission",
+      "evidence": "Methods / Statistical Analysis / Results"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "7.5",
+        "uncertainty_raw": "SD 3.4 days; 95% CI 5.3 to 19",
+        "distribution_raw": "gamma",
+        "unit_raw": "days",
+        "evidence": "Results / Abstract / Figure 2B"
+      }
+    ],
+    "field_evidence": {
+      "region": "Abstract / Methods / Results",
+      "period": "Abstract / Methods / Results",
+      "population": "Abstract / Methods / Results",
+      "sample_size": "Abstract / Results / Table t2",
+      "method": "Methods / Statistical Analysis",
+      "parameter_type": "Abstract / Methods / Statistical Analysis / Results",
+      "estimate_measure": "Results / Abstract",
+      "point_estimate": "Results / Abstract",
+      "uncertainty": "Results / Abstract",
+      "distribution": "Methods / Statistical Analysis",
+      "unit": "Results / Abstract"
+    }
+  }
+}

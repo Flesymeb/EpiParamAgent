@@ -1,0 +1,98 @@
+{
+  "pmid": "32566233",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Data source",
+          "Statistical analysis",
+          "Sensitivity analysis"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "COVID-19 epidemic curve in Kermanshah province",
+          "SI for COVID-19",
+          "Time-dependent effective reproductive number (Rt) for COVID-19",
+          "Sensitivity analysis for reproduction number"
+        ],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Conclusion",
+        "subsections": [],
+        "evidence_hint": "Conclusion"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Fig 2",
+        "title_or_caption": "The distribution of serial interval of COVID-19 in Kermanshah, Iran",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Results / SI for COVID-19"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Kermanshah province, western Iran",
+      "period_raw": "22 February to 9 April 2020 (overall); 22 February to 29 March 2020 (confirmed cases for SI)",
+      "population_raw": "1477 confirmed, probable and suspected cases of SARS-CoV-2",
+      "sample_size_raw": "21 infector–infectee pairs (12 primary cases and 21 secondary cases)",
+      "method_raw": "Contact tracing via telephone follow-up; fitted Weibull, log-normal, and Gamma distributions using 'est.GT' function in R0 package; Bayesian approach with 'SI from sample' in EpiEstim package",
+      "evidence": "Methods / Results / Abstract"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.71",
+        "uncertainty_raw": "SD 3.89 days",
+        "distribution_raw": "Weibull",
+        "unit_raw": "days",
+        "evidence": "Results / SI for COVID-19 / Abstract"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.75",
+        "uncertainty_raw": null,
+        "distribution_raw": "Weibull",
+        "unit_raw": "days",
+        "evidence": "Discussion"
+      }
+    ],
+    "field_evidence": {
+      "region": "Abstract / Methods / Results",
+      "period": "Abstract / Methods / Results",
+      "population": "Abstract / Methods",
+      "sample_size": "Results / SI for COVID-19",
+      "method": "Methods / Statistical analysis",
+      "parameter_type": "Abstract / Keywords / Methods",
+      "estimate_measure": "Results / Discussion",
+      "point_estimate": "Results / Discussion",
+      "uncertainty": "Results / Discussion",
+      "distribution": "Results / SI for COVID-19",
+      "unit": "Results / Discussion"
+    }
+  }
+}

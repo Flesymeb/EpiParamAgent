@@ -1,0 +1,131 @@
+{
+  "pmid": "34814093",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Title",
+        "subsections": [],
+        "evidence_hint": "Title"
+      },
+      {
+        "section": "Definition of case",
+        "subsections": [],
+        "evidence_hint": "Section 1"
+      },
+      {
+        "section": "Definition of contact",
+        "subsections": [],
+        "evidence_hint": "Section 2"
+      },
+      {
+        "section": "Timeline of interventions",
+        "subsections": [],
+        "evidence_hint": "Section 3 / Table S1"
+      },
+      {
+        "section": "Serial interval distribution",
+        "subsections": [],
+        "evidence_hint": "Section 4 / Figure S1"
+      },
+      {
+        "section": "Estimation of the reproduction number",
+        "subsections": [],
+        "evidence_hint": "Section 5 / Figures S2"
+      },
+      {
+        "section": "Sensitivity analysis on the serial interval",
+        "subsections": [],
+        "evidence_hint": "Section 6 / Figures S3-S4"
+      },
+      {
+        "section": "Sensitivity on recall bias",
+        "subsections": [],
+        "evidence_hint": "Section 7 / Figures S5-S6"
+      },
+      {
+        "section": "Reporting delays",
+        "subsections": [],
+        "evidence_hint": "Section 8 / Table S2 / Figures S7-S12"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table S1",
+        "title_or_caption": "Timeline of principal interventions occurred in the period 20 February – 9 March 2020 in Lombardy",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Section 3"
+      },
+      {
+        "table_id": "Table S2",
+        "title_or_caption": "Parameters of the gamma distributions used for fitting the observed distributions of delay to reporting",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Section 8"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Lombardy Region, Italy",
+      "period_raw": "20 February – 9 March 2020 (early phase of the COVID-19 epidemic in Lombardy)",
+      "population_raw": "Close contacts of confirmed SARS-CoV-2 cases in Lombardy Region identified through contact tracing",
+      "sample_size_raw": "6,106 reported contacts; 233 resulted in SARS-CoV-2 infection; 90 infector-infectee pairs with dates of symptom onset for both cases; 55 unique primary cases",
+      "method_raw": "Contact tracing through standardized interviews by ATS operators; serial intervals estimated from infector-infectee pairs connected by epidemiological link within same cluster; gamma distribution fitted by maximum likelihood estimation",
+      "evidence": "Section 4 / Section 3"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "6.6 days",
+        "uncertainty_raw": "95% CI shown in Figure S1 (shaded area)",
+        "distribution_raw": "Gamma distribution (shape 1.87, SD 0.26; scale 0.28, SD 0.04)",
+        "unit_raw": "days",
+        "evidence": "Section 4 / Figure S1"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "5.5 days",
+        "uncertainty_raw": null,
+        "distribution_raw": "Gamma distribution (shape 1.87, SD 0.26; scale 0.28, SD 0.04)",
+        "unit_raw": "days",
+        "evidence": "Section 4"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "5.1 days (sensitivity, from Wuhan clusters [12])",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Section 6 / Figure S3 caption"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "7.5 days (sensitivity, from Chinese provinces outside Hubei [11]); Figure S3 caption reports 7.1 days",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Section 6 / Figure S3-S4 captions"
+      }
+    ],
+    "field_evidence": {
+      "region": "Title / Section 3",
+      "period": "Section 3 / Table S1",
+      "population": "Section 4",
+      "sample_size": "Section 4",
+      "method": "Section 4",
+      "parameter_type": "Section 4 title / text",
+      "estimate_measure": "Section 4",
+      "point_estimate": "Section 4",
+      "uncertainty": "Section 4 / Figure S1",
+      "distribution": "Section 4",
+      "unit": "Section 4"
+    }
+  }
+}

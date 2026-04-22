@@ -1,0 +1,124 @@
+{
+  "pmid": "32301964",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [
+          "Background",
+          "Methods",
+          "Results",
+          "Conclusion"
+        ],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Background",
+        "subsections": [],
+        "evidence_hint": "Background heading"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Data sources",
+          "Statistical analysis"
+        ],
+        "evidence_hint": "Methods heading"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Baseline characteristics of index patients of COVID-19",
+          "Baseline characteristics of household contact patients of COVID-19",
+          "The characteristics of secondary transmission of COVID-19 in households"
+        ],
+        "evidence_hint": "Results heading"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion heading"
+      },
+      {
+        "section": "Notes",
+        "subsections": [],
+        "evidence_hint": "Notes heading"
+      },
+      {
+        "section": "References",
+        "subsections": [],
+        "evidence_hint": "References heading"
+      },
+      {
+        "section": "Tables",
+        "subsections": [
+          "Table 1",
+          "Table 2",
+          "Table 3"
+        ],
+        "evidence_hint": "Tables"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Baseline characteristics of index patients of COVID-19",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 1"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Baseline characteristics of household contact patients of COVID-19",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 2"
+      },
+      {
+        "table_id": "Table 3",
+        "title_or_caption": "The characteristics of secondary transmission of COVID-19 in households",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 3"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Zaoyang First People's Hospital and Chibi People's Hospital, Hubei, China (near Wuhan)",
+      "period_raw": "January 1 to February 20, 2020; last enrolled index case hospitalized February 13, 2020; follow-up until March 1, 2020",
+      "population_raw": "105 index patients and 392 household contacts from 105 family clusters",
+      "sample_size_raw": "105 households, 392 household contacts, 64 secondary cases",
+      "method_raw": "Retrospective household cohort study; index patients and household members inspected by SARS-CoV-2 RT-PCR; information extracted from medical records and confirmed by telephone interviews",
+      "evidence": "Methods / Data sources"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "6",
+        "uncertainty_raw": "25th to 75th percentile, 4 to 10",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results / Baseline characteristics of household contact patients / Table 2"
+      }
+    ],
+    "field_evidence": {
+      "region": "Methods / Data sources",
+      "period": "Methods / Data sources",
+      "population": "Methods / Data sources",
+      "sample_size": "Methods / Data sources",
+      "method": "Methods / Data sources",
+      "parameter_type": "Results / Table 2 note",
+      "estimate_measure": "Results / Table 2",
+      "point_estimate": "Results / Table 2",
+      "uncertainty": "Results / Table 2",
+      "distribution": null,
+      "unit": "Results / Table 2"
+    }
+  }
+}

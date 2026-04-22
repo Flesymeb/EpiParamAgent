@@ -1,0 +1,133 @@
+{
+  "pmid": "32145466",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Materials and Methods",
+        "subsections": [],
+        "evidence_hint": "Materials and Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Figure Legends",
+        "subsections": [],
+        "evidence_hint": "Figure Legends"
+      }
+    ],
+    "tables": [],
+    "study_meta": {
+      "region_raw": "Multiple countries (publicly available information from research articles and official outbreak investigation reports; includes pairs from China and Germany)",
+      "period_raw": "Late 2019 to 12 February 2020 (data collection cutoff)",
+      "population_raw": "Infector-infectee pairs with COVID-19; 12 of 28 pairs were family clusters",
+      "sample_size_raw": "28 infector-infectee pairs (full dataset); 18 certain pairs (subset with highest certainty in reporting)",
+      "method_raw": "Bayesian approach with doubly interval censored likelihood; right truncation adjustment for exponential growth phase; lognormal, gamma, and Weibull distributions compared using WAIC; exponential growth rate r=0.14",
+      "evidence": "Abstract / Materials and Methods / Results"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.0 days",
+        "uncertainty_raw": "95% CrI: 3.1, 4.9",
+        "distribution_raw": "lognormal (best-fit with right truncation, WAIC=224.0); all pairs n=28",
+        "unit_raw": "days",
+        "evidence": "Results / Abstract"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.7 days",
+        "uncertainty_raw": "95% CrI: 3.7, 6.0",
+        "distribution_raw": "lognormal (best-fit with right truncation, WAIC=224.0); all pairs n=28",
+        "unit_raw": "days",
+        "evidence": "Results"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "SD",
+        "value_raw": "2.9 days",
+        "uncertainty_raw": "95% CrI: 1.9, 4.9",
+        "distribution_raw": "lognormal (best-fit with right truncation, WAIC=224.0); all pairs n=28",
+        "unit_raw": "days",
+        "evidence": "Results"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "3.9 days",
+        "uncertainty_raw": "95% CrI: 3.1, 4.8",
+        "distribution_raw": "lognormal (best-fit without right truncation, WAIC=128.0); all pairs n=28",
+        "unit_raw": "days",
+        "evidence": "Results"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.6 days",
+        "uncertainty_raw": "95% CrI: 3.5, 5.9",
+        "distribution_raw": "Weibull (best-fit with right truncation); certain pairs only n=18",
+        "unit_raw": "days",
+        "evidence": "Results"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.8 days",
+        "uncertainty_raw": "95% CrI: 3.8, 6.1",
+        "distribution_raw": "Weibull (best-fit with right truncation); certain pairs only n=18",
+        "unit_raw": "days",
+        "evidence": "Results"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "SD",
+        "value_raw": "2.3 days",
+        "uncertainty_raw": "95% CrI: 1.6, 3.5",
+        "distribution_raw": "Weibull (best-fit with right truncation); certain pairs only n=18",
+        "unit_raw": "days",
+        "evidence": "Results"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.1 days",
+        "uncertainty_raw": "95% CrI: 3.2, 5.0",
+        "distribution_raw": "lognormal (best-fit without right truncation); certain pairs only n=18",
+        "unit_raw": "days",
+        "evidence": "Results"
+      }
+    ],
+    "field_evidence": {
+      "region": "Introduction / Materials and Methods",
+      "period": "Materials and Methods",
+      "population": "Materials and Methods / Results",
+      "sample_size": "Abstract / Materials and Methods",
+      "method": "Materials and Methods",
+      "parameter_type": "Title / Abstract / Introduction",
+      "estimate_measure": "Results / Abstract",
+      "point_estimate": "Results / Abstract",
+      "uncertainty": "Results / Abstract",
+      "distribution": "Materials and Methods / Results",
+      "unit": "Results / Abstract"
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "pmid": "32512664",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Materials and Methods",
+        "subsections": [
+          "Epidemiological investigation procedure and methods",
+          "Serial intervals",
+          "Effective reproduction number",
+          "Ethics statement"
+        ],
+        "evidence_hint": "Materials and Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Daily numbers of tests and rates of positive tests",
+          "Characteristics of confirmed cases and the epidemic curve",
+          "Relationship diagram of confirmed cases",
+          "Contact tracing and quarantine",
+          "Serial intervals",
+          "Effective reproduction number"
+        ],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Supplementary Materials",
+        "subsections": [],
+        "evidence_hint": "Supplementary Materials"
+      },
+      {
+        "section": "References",
+        "subsections": [],
+        "evidence_hint": "References"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Demographic characteristics and symptom distribution of all confirmed cases (n=108)",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Results / Table 1"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Busan, Korea",
+      "period_raw": "February 21, 2020 to March 24, 2020",
+      "population_raw": "108 confirmed COVID-19 cases in Busan, Korea",
+      "sample_size_raw": "28 infector-infectee pairs (56 cases) for serial interval estimation",
+      "method_raw": "Maximum likelihood estimation (MLE) with discretized gamma distribution; parametric bootstrapping using Hessian matrix for 95% CI",
+      "evidence": "Abstract / Materials and Methods / Results (Serial intervals)"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.54 days",
+        "uncertainty_raw": "95% CI, 4.08 to 7.01",
+        "distribution_raw": "discretized gamma distribution",
+        "unit_raw": "days",
+        "evidence": "Results / Serial intervals"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "3.90 days (standard deviation)",
+        "uncertainty_raw": "95% CI, 2.47 to 5.32",
+        "distribution_raw": "discretized gamma distribution",
+        "unit_raw": "days",
+        "evidence": "Results / Serial intervals"
+      }
+    ],
+    "field_evidence": {
+      "region": "Introduction / Abstract",
+      "period": "Abstract / Results",
+      "population": "Abstract / Results",
+      "sample_size": "Results / Serial intervals",
+      "method": "Materials and Methods / Serial intervals",
+      "parameter_type": "Abstract / Materials and Methods / Results",
+      "estimate_measure": "Results / Serial intervals",
+      "point_estimate": "Results / Serial intervals",
+      "uncertainty": "Results / Serial intervals",
+      "distribution": "Materials and Methods / Serial intervals",
+      "unit": "Results / Serial intervals"
+    }
+  }
+}

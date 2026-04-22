@@ -1,0 +1,94 @@
+{
+  "pmid": "32776726",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Diagnostic sampling and testing",
+          "Contact tracing and isolation",
+          "Statistical analysis",
+          "Ethics statement"
+        ],
+        "evidence_hint": "Methods heading"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results heading"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion heading"
+      },
+      {
+        "section": "References",
+        "subsections": [],
+        "evidence_hint": "References"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Demographics of the confirmed cases in coronavirus disease 2019 outbreak in fitness centers in Cheonan, Korea",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 1 in Results"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Attack rates and incubation period of coronavirus disease 2019 outbreak in fitness centers in Cheonan, Korea",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 2 in Results"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Cheonan, Korea (Chunchungnam-do province)",
+      "period_raw": "February 24 to March 13, 2020",
+      "population_raw": "COVID-19 cases associated with fitness centers (Zumba classes) in Cheonan, Korea",
+      "sample_size_raw": "116 confirmed cases; 1,687 contacts traced",
+      "method_raw": "Contact tracing and epidemiological investigation; serial interval estimated assuming gamma distribution using R0 package in R",
+      "evidence": "Abstract / Methods / Results / Table 1"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.2",
+        "uncertainty_raw": "± 3.8 (standard deviation)",
+        "distribution_raw": "gamma distribution",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 2"
+      }
+    ],
+    "field_evidence": {
+      "region": "Abstract / Introduction / Methods",
+      "period": "Abstract / Methods / Results",
+      "population": "Abstract / Introduction / Results",
+      "sample_size": "Abstract / Results / Table 1",
+      "method": "Methods / Statistical analysis",
+      "parameter_type": "Abstract / Results",
+      "estimate_measure": "Results",
+      "point_estimate": "Results paragraph 2",
+      "uncertainty": "Results paragraph 2",
+      "distribution": "Methods / Statistical analysis",
+      "unit": "Results paragraph 2"
+    }
+  }
+}

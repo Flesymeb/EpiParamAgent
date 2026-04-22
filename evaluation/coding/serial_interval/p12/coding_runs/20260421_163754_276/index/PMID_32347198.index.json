@@ -1,0 +1,136 @@
+{
+  "pmid": "32347198",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Method",
+        "subsections": [
+          "Data retrieval",
+          "Case, contact and cluster definitions",
+          "Definitions of epidemiological parameters",
+          "Statistical analysis",
+          "Ethical statement"
+        ],
+        "evidence_hint": "Method heading"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Characteristics of cases",
+          "Containment delay",
+          "Factors associated with containment delay",
+          "Serial interval",
+          "Secondary attack rate"
+        ],
+        "evidence_hint": "Results heading"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion heading"
+      },
+      {
+        "section": "References",
+        "subsections": [],
+        "evidence_hint": "References heading"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Characteristics of the first 53 laboratory-confirmed cases of coronavirus disease reported in Hong Kong, 23 January–13 February 2020",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 1 in Results / Characteristics of cases"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Factors associated with containment delay, Hong Kong, 23 January–13 February 2020",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 2 in Results / Factors associated with containment delay"
+      },
+      {
+        "table_id": "Table S2",
+        "title_or_caption": "Supplementary table with containment delay and serial interval estimates from fitted distributions",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table S2 referenced in Results / Serial interval and Results / Containment delay"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Hong Kong",
+      "period_raw": "23 January–13 February 2020 (case reporting); 18 January–8 February 2020 (symptom onset)",
+      "population_raw": "First 53 laboratory-confirmed cases of COVID-19 in Hong Kong and their close contacts",
+      "sample_size_raw": "53 confirmed cases; 26 infector–infectee paired data (17 certain, 9 probable) for serial interval; 49 cases for containment delay; 206 close contacts for secondary attack rate",
+      "method_raw": "Doubly interval-censored likelihood with Bayesian framework, fitting gamma, lognormal and Weibull distributions with right truncation; model comparison by WAIC",
+      "evidence": "Methods / Results / Table 1"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.58 days (95% bCI: 3.35 to 5.85)",
+        "uncertainty_raw": "95% bCI: 3.35 to 5.85; SD 3.28 days (95% bCI: 2.18 to 4.01)",
+        "distribution_raw": "empirical",
+        "unit_raw": "days",
+        "evidence": "Results / Serial interval paragraph 1"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.77 days (95% CrI: 3.47 to 6.90)",
+        "uncertainty_raw": "95% CrI: 3.47 to 6.90; SD 4.08 days (95% CrI: 2.26 to 8.05)",
+        "distribution_raw": "lognormal (best-fit by WAIC), with right truncation",
+        "unit_raw": "days",
+        "evidence": "Results / Serial interval paragraph 2"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.41 days (95% CrI: 2.46 to 11.15)",
+        "uncertainty_raw": "95% CrI: 2.46 to 11.15; SD 3.44 days (95% CrI: 2.13 to 5.93)",
+        "distribution_raw": "lognormal, without right truncation",
+        "unit_raw": "days",
+        "evidence": "Results / Serial interval paragraph 2"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "6.06 days (empirical); 6.23 days (estimated, truncated); 5.86 days (estimated, non-truncated)",
+        "uncertainty_raw": "NR in text (see Table S2)",
+        "distribution_raw": "lognormal (best-fit), restricted to 17 certain paired data",
+        "unit_raw": "days",
+        "evidence": "Results / Serial interval paragraph 3"
+      }
+    ],
+    "field_evidence": {
+      "region": "Title / Methods / Table 1",
+      "period": "Methods / Table 1 / Figure 2 caption",
+      "population": "Methods / Results / Table 1",
+      "sample_size": "Results / Serial interval (26 paired data); Results / Characteristics of cases (53 cases)",
+      "method": "Methods / Statistical analysis",
+      "parameter_type": "Abstract / Methods / Definitions of epidemiological parameters / Results",
+      "estimate_measure": "Results / Serial interval",
+      "point_estimate": "Results / Serial interval",
+      "uncertainty": "Results / Serial interval",
+      "distribution": "Methods / Statistical analysis; Results / Serial interval"
+    }
+  }
+}

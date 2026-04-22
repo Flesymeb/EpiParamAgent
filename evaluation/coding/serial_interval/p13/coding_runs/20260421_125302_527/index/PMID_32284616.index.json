@@ -1,0 +1,135 @@
+{
+  "pmid": "32284616",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Severity estimates",
+          "Epidemiologic parameters"
+        ],
+        "evidence_hint": "Results / Figure 3 description"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Model assumptions",
+          "Likelihood functions",
+          "Serial interval likelihood (L8)"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Extended Data",
+        "subsections": [
+          "Extended Data Fig. 1",
+          "Extended Data Fig. 2",
+          "Extended Data Fig. 3",
+          "Extended Data Fig. 4"
+        ],
+        "evidence_hint": "Extended Data figures and tables"
+      },
+      {
+        "section": "Supplementary Tables",
+        "subsections": [
+          "Supplementary Table 8"
+        ],
+        "evidence_hint": "Supplementary Table 8 - infector-infectee pairs"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table t1",
+        "title_or_caption": "Extended Data Fig. 1 - Model parameters that were subject to statistical inference",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": true,
+        "contains_uncertainty": true,
+        "evidence_hint": "Extended Data Fig. 1 lists (μSI, σSI) as inferred parameters"
+      },
+      {
+        "table_id": "Table t2",
+        "title_or_caption": "Extended Data Fig. 3 - Severity estimates comparison across diseases",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Extended Data Fig. 3 - comparison of severity estimates"
+      },
+      {
+        "table_id": "Table t3",
+        "title_or_caption": "Extended Data Fig. 4 - Model parameters assumed constant",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Extended Data Fig. 4 - fixed parameters"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Wuhan, China",
+      "period_raw": "December 2019 – February 2020 (early epidemic: 10 Dec 2019 – 3 Jan 2020 for case data; charter flights 29 Jan – 4 Feb 2020)",
+      "population_raw": "Confirmed COVID-19 cases in Wuhan with no epidemiologic links to Huanan Seafood Wholesale Market; infector-infectee pairs; international exported cases; charter flight returnees",
+      "sample_size_raw": "43 infector–infectee pairs for serial interval estimation",
+      "method_raw": "Age-structured SIR transmission model fitted via Markov chain Monte Carlo with Gibbs sampling and non-informative flat priors; serial interval distribution inferred jointly with other epidemiologic parameters",
+      "evidence": "Methods / Figure 3 / Supplementary Table 8"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "7.0",
+        "uncertainty_raw": "5.8–8.1 (95% CrI)",
+        "distribution_raw": "gamma",
+        "unit_raw": "days",
+        "evidence": "Results / Figure 3 description"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other (standard deviation)",
+        "value_raw": "4.5",
+        "uncertainty_raw": "3.5–5.5 (95% CrI)",
+        "distribution_raw": "gamma",
+        "unit_raw": "days",
+        "evidence": "Results / Figure 3 description"
+      },
+      {
+        "param": "generation_interval",
+        "measure": "mean",
+        "value_raw": "same as serial interval (7.0)",
+        "uncertainty_raw": "same as serial interval (5.8–8.1)",
+        "distribution_raw": "gamma (assumed same as serial interval)",
+        "unit_raw": "days",
+        "evidence": "Methods assumption 4 / Results paragraph on Figure 3"
+      }
+    ],
+    "field_evidence": {
+      "region": "Title / Abstract / Methods",
+      "period": "Methods / Figure 1 description",
+      "population": "Methods / Data sources 1-8",
+      "sample_size": "Methods / Data source 8 (43 infector-infectee pairs)",
+      "method": "Methods (MCMC with Gibbs sampling)",
+      "parameter_type": "Results / Methods assumption 4 / Extended Data Fig. 1",
+      "estimate_measure": "Results / Figure 3",
+      "point_estimate": "Results / Figure 3",
+      "uncertainty": "Results / Figure 3 (95% CrI)",
+      "distribution": "Methods assumption 4 (gamma)",
+      "unit": "Results / Figure 3 (days)"
+    }
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "pmid": "32511616",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Background & Summary",
+        "subsections": [],
+        "evidence_hint": "Background & Summary"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Data",
+          "Estimating Serial Interval Distribution",
+          "Model comparison",
+          "Distribution analysis"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Data Records",
+        "subsections": [],
+        "evidence_hint": "Data Records"
+      },
+      {
+        "section": "Technical Validation",
+        "subsections": [],
+        "evidence_hint": "Technical Validation"
+      },
+      {
+        "section": "Appendix",
+        "subsections": [
+          "Appendix Table 1",
+          "Appendix Table 2",
+          "Appendix Table 3",
+          "Appendix Table 4",
+          "Appendix Figure 1",
+          "Appendix Figure 2",
+          "Appendix Figure 3"
+        ],
+        "evidence_hint": "Appendix"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Appendix Table 1",
+        "title_or_caption": "Model comparison for COVID-19 serial intervals based on 158 reported transmission events in China between January 20, 2020 and February 19, 2020 in which both the infector and infectee were infected in the reporting city",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Appendix Table 1: model comparison with mean/shape and SD/scale CIs for normal, lognormal, gamma, Weibull fits to truncated and shifted data for locally infected pairs"
+      },
+      {
+        "table_id": "Appendix Table 2",
+        "title_or_caption": "Estimated serial interval distributions based on the location of index infection (imported versus local) and the secondary infection (household versus non-household)",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Appendix Table 2: mean and SD with 95% CIs for all pairs and stratified subgroups"
+      },
+      {
+        "table_id": "Appendix Table 3",
+        "title_or_caption": "Model comparison for COVID-19 serial intervals based on all 339 reported transmission events in China between January 20, 2020 and February 19, 2020",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Appendix Table 3: model comparison with mean/shape and SD/scale CIs for normal, lognormal, gamma, Weibull fits to truncated and shifted data for all 339 pairs"
+      },
+      {
+        "table_id": "Appendix Table 4",
+        "title_or_caption": "Age distribution for the 339 infector–infectee pairs",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Appendix Table 4: age cross-tabulation of infector-infectee pairs"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "86 Chinese cities in 17 Chinese provinces and Tianjin, mainland China outside of Hubei Province",
+      "period_raw": "January 20, 2020 to February 19, 2020",
+      "population_raw": "339 confirmed COVID-19 infector-infectee pairs identified via contact tracing; 556 distinct individuals",
+      "sample_size_raw": "339 infector-infectee pairs",
+      "method_raw": "Contact tracing data from provincial health departments; normal distribution fitted using Matlab fitdist; model comparison via AIC for normal, lognormal, Weibull, gamma",
+      "evidence": "Methods / Background & Summary / Appendix Table 2"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.29",
+        "uncertainty_raw": "95% CI 4.72–5.86",
+        "distribution_raw": "Normal",
+        "unit_raw": "days",
+        "evidence": "Technical Validation / Appendix Table 2 / Appendix Table 3"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "5.32",
+        "uncertainty_raw": "95% CI 4.95–5.75",
+        "distribution_raw": "Normal (SD)",
+        "unit_raw": "days",
+        "evidence": "Technical Validation / Appendix Table 2 / Appendix Table 3"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.92",
+        "uncertainty_raw": "95% CI 4.09–5.75",
+        "distribution_raw": "Normal",
+        "unit_raw": "days",
+        "evidence": "Technical Validation / Appendix Table 2 (locally infected index case, n=158)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.61",
+        "uncertainty_raw": "95% CI 4.83–6.40",
+        "distribution_raw": "Normal",
+        "unit_raw": "days",
+        "evidence": "Technical Validation / Appendix Table 2 (imported index case, n=181)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.57",
+        "uncertainty_raw": "95% CI 3.76–5.38",
+        "distribution_raw": "Normal",
+        "unit_raw": "days",
+        "evidence": "Technical Validation / Appendix Table 2 (household secondary infection, n=149)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.85",
+        "uncertainty_raw": "95% CI 5.06–6.64",
+        "distribution_raw": "Normal",
+        "unit_raw": "days",
+        "evidence": "Technical Validation / Appendix Table 2 (non-household secondary infection, n=190)"
+      }
+    ],
+    "field_evidence": {
+      "region": "Methods / Background & Summary",
+      "period": "Methods / Background & Summary",
+      "population": "Methods / Background & Summary",
+      "sample_size": "Methods / Appendix Table 2",
+      "method": "Methods / Estimating Serial Interval Distribution",
+      "parameter_type": "Abstract / Background & Summary / Technical Validation",
+      "estimate_measure": "Technical Validation / Appendix Table 2 / Appendix Table 3",
+      "point_estimate": "Technical Validation / Appendix Table 2 / Appendix Table 3",
+      "uncertainty": "Technical Validation / Appendix Table 2 / Appendix Table 3",
+      "distribution": "Methods / Model comparison / Appendix Table 3",
+      "unit": "Technical Validation / Appendix Table 2"
+    }
+  }
+}

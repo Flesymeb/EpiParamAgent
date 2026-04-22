@@ -1,0 +1,186 @@
+{
+  "pmid": "32604404",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction/Background",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Analysis of infection prevalence",
+        "subsections": [],
+        "evidence_hint": "Results - Prevalence"
+      },
+      {
+        "section": "Role of asymptomatic transmission",
+        "subsections": [],
+        "evidence_hint": "Results - Asymptomatic transmission"
+      },
+      {
+        "section": "Reconstructing transmission chains",
+        "subsections": [],
+        "evidence_hint": "Results - Serial interval estimates"
+      },
+      {
+        "section": "Modelling point prevalence data",
+        "subsections": [],
+        "evidence_hint": "Results - Mathematical model"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Study setting",
+          "Laboratory methods",
+          "Assessment of genome equivalents",
+          "Reconstructing transmission chains",
+          "Mathematical modelling",
+          "Analysis of associations"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Extended Data",
+        "subsections": [
+          "Extended Data Fig. 4",
+          "Extended Data Tables 1-4"
+        ],
+        "evidence_hint": "Extended Data"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Extended Data Table 1",
+        "title_or_caption": "Age distribution of Vo' residents and the number of tested participants at the two time points across different age groups",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Extended Data Table 1"
+      },
+      {
+        "table_id": "Extended Data Table 2",
+        "title_or_caption": "Age distribution of symptomatic and asymptomatic individuals at the first and second surveys",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Extended Data Table 2"
+      },
+      {
+        "table_id": "Extended Data Table 3",
+        "title_or_caption": "Children negative for SARS-CoV-2 living in households with infected relatives",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Extended Data Table 3"
+      },
+      {
+        "table_id": "Extended Data Table 4",
+        "title_or_caption": "Results of the second survey for participants living with or reporting close contacts with relatives infected with SARS-CoV-2",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Extended Data Table 4"
+      },
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Participants positive for SARS-CoV-2 at the first and second surveys",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 1"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Participants testing positive stratified by sex and age",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 2"
+      },
+      {
+        "table_id": "Extended Data Fig. 4",
+        "title_or_caption": "Serial interval distribution and transmission chains",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Extended Data Fig. 4"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Vo', province of Padua, Veneto region, Italy",
+      "period_raw": "First survey: 21-29 February 2020; Second survey: 7 March 2020",
+      "population_raw": "Residents of Vo' municipality (population 3,275)",
+      "sample_size_raw": "2,812 (first survey) and 2,343 (second survey) participants tested",
+      "method_raw": "Contact tracing and household composition data used to infer transmission pairs; serial interval estimated from observed and inferred symptom onset dates alongside contact information",
+      "evidence": "Methods / Study setting / Reconstructing transmission chains"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "7.2 days",
+        "uncertainty_raw": "95% CI: 5.9-9.6",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Abstract / Reconstructing transmission chains"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "7.6 days",
+        "uncertainty_raw": "95% CI: 6.4-8.7",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Reconstructing transmission chains (pre-lockdown)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "6.2 days",
+        "uncertainty_raw": "95% CI: 2.6-10.7",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Reconstructing transmission chains (post-lockdown)"
+      },
+      {
+        "param": "generation_time",
+        "measure": "mean",
+        "value_raw": "7 days",
+        "uncertainty_raw": null,
+        "distribution_raw": "1/ν + 1/δ + 1/γ",
+        "unit_raw": "days",
+        "evidence": "Methods / Mathematical modelling (fixed assumption, not estimated)"
+      }
+    ],
+    "field_evidence": {
+      "region": "Methods / Study setting",
+      "period": "Methods / Study setting",
+      "population": "Methods / Study setting",
+      "sample_size": "Methods / Study setting / Extended Data Table 1",
+      "method": "Methods / Reconstructing transmission chains",
+      "parameter_type": "Abstract / Reconstructing transmission chains",
+      "estimate_measure": "Reconstructing transmission chains",
+      "point_estimate": "Abstract / Reconstructing transmission chains",
+      "uncertainty": "Abstract / Reconstructing transmission chains",
+      "distribution": "Extended Data Fig. 4",
+      "unit": "Abstract / Reconstructing transmission chains"
+    }
+  }
+}

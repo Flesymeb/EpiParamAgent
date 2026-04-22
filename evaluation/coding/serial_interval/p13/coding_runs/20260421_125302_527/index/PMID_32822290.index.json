@@ -1,0 +1,117 @@
+{
+  "pmid": "32822290",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract summary of serial interval finding"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Background on cruise ship outbreak"
+      },
+      {
+        "section": "Design and Methods",
+        "subsections": [
+          "Study population",
+          "Case definitions",
+          "Serial interval classification method"
+        ],
+        "evidence_hint": "Methods including series interval threshold of 4 days"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Passenger and crew case counts",
+          "Serial interval results"
+        ],
+        "evidence_hint": "Serial interval estimates for passengers and crew"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Interpretation of findings including asymptomatic proportion"
+      },
+      {
+        "section": "Tables",
+        "subsections": [
+          "Table 1",
+          "Table 2"
+        ],
+        "evidence_hint": "Demographic and symptomatic status tables"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Characteristics of persons aboard quarantined cruise ship, Japan, February 5–24, 2020",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Demographics and case counts by age, sex, country of origin"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Symptomatic and asymptomatic cases among passengers and crew aboard quarantined cruise ship, by age group, Japan",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Symptomatic vs asymptomatic case counts by age group"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Yokohama, Japan (Diamond Princess cruise ship)",
+      "period_raw": "February 5–24, 2020 (quarantine period); cases with onset dates from January 20",
+      "population_raw": "2,666 passengers and 1,045 crew members (3,711 total) aboard the Diamond Princess cruise ship",
+      "sample_size_raw": "26 pairs of passenger cases in same cabin; 6 pairs of crew cases in same cabins",
+      "method_raw": "Descriptive and analytical statistics; serial interval computed between cases in same cabin; a series interval of 4 days used to assign secondary/tertiary case status within cabins",
+      "evidence": "Abstract / Methods / Results"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "2 days",
+        "uncertainty_raw": "range 0–25 days; interquartile range 2–4 days",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results paragraph 4 / Abstract"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "9 of 26 pairs (35%) had serial interval ≥5 days",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results paragraph 4"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "0, 1, 2, 3, 4, and 5 days (6 crew pairs)",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results paragraph 4"
+      }
+    ],
+    "field_evidence": {
+      "region": "Abstract / Introduction",
+      "period": "Abstract / Methods",
+      "population": "Abstract / Methods / Table 1",
+      "sample_size": "Results paragraph 4",
+      "method": "Methods",
+      "parameter_type": "Abstract / Results",
+      "estimate_measure": "Results paragraph 4",
+      "point_estimate": "Results paragraph 4",
+      "uncertainty": "Results paragraph 4",
+      "distribution": null,
+      "unit": "Results paragraph 4"
+    }
+  }
+}

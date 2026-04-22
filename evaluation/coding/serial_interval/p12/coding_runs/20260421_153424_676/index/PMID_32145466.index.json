@@ -1,0 +1,150 @@
+{
+  "pmid": "32145466",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Materials and Methods",
+        "subsections": [
+          "Data collection and credibility ranking",
+          "Bayesian estimation with doubly interval-censored likelihood",
+          "Right truncation adjustment"
+        ],
+        "evidence_hint": "Materials and Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Figure Legends",
+        "subsections": [
+          "Figure 1",
+          "Figure 2"
+        ],
+        "evidence_hint": "Figure Legends"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Supplementary Table",
+        "title_or_caption": "28 infector-infectee pairs data",
+        "table_type": "study_desc",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Results paragraph 1"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Publicly available information from research articles and official reports of outbreak investigations (cases in China, Germany, and worldwide)",
+      "period_raw": "Data collection cutoff point of 12 February 2020; epidemic began in late 2019",
+      "population_raw": "Infector-infectee pairs from published research articles and case investigation reports; 12 pairs were family clusters",
+      "sample_size_raw": "28 infector-infectee pairs (18 certain pairs, 10 probable pairs)",
+      "method_raw": "Bayesian approach with doubly interval-censored likelihood; right truncation adjustment during exponential growth phase; lognormal, gamma, and Weibull distributions compared using WAIC",
+      "evidence": "Materials and Methods / Results"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.0 days",
+        "uncertainty_raw": "95% CrI: 3.1, 4.9",
+        "distribution_raw": "lognormal (best-fit, WAIC=224.0)",
+        "unit_raw": "days",
+        "evidence": "Results / all pairs with right truncation"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.7 days",
+        "uncertainty_raw": "95% CrI: 3.7, 6.0",
+        "distribution_raw": "lognormal (best-fit, WAIC=224.0)",
+        "unit_raw": "days",
+        "evidence": "Results / all pairs with right truncation"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "2.9 days (SD)",
+        "uncertainty_raw": "95% CrI: 1.9, 4.9",
+        "distribution_raw": "lognormal (best-fit, WAIC=224.0)",
+        "unit_raw": "days",
+        "evidence": "Results / all pairs with right truncation"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "3.9 days",
+        "uncertainty_raw": "95% CrI: 3.1, 4.8",
+        "distribution_raw": "lognormal (best-fit, WAIC=128.0)",
+        "unit_raw": "days",
+        "evidence": "Results / all pairs without right truncation"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.6 days",
+        "uncertainty_raw": "95% CI: 3.5, 5.9",
+        "distribution_raw": "Weibull (best-fit)",
+        "unit_raw": "days",
+        "evidence": "Results / certain pairs only with right truncation"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.8 days",
+        "uncertainty_raw": "95% CrI: 3.8, 6.1",
+        "distribution_raw": "Weibull (best-fit)",
+        "unit_raw": "days",
+        "evidence": "Results / certain pairs only with right truncation"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "2.3 days (SD)",
+        "uncertainty_raw": "95% CrI: 1.6, 3.5",
+        "distribution_raw": "Weibull (best-fit)",
+        "unit_raw": "days",
+        "evidence": "Results / certain pairs only with right truncation"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.1 days",
+        "uncertainty_raw": "95% CrI: 3.2, 5.0",
+        "distribution_raw": "lognormal (best-fit)",
+        "unit_raw": "days",
+        "evidence": "Results / certain pairs only without right truncation"
+      }
+    ],
+    "field_evidence": {
+      "region": "Introduction / Materials and Methods",
+      "period": "Materials and Methods (data cutoff 12 February 2020)",
+      "population": "Materials and Methods / Results (28 infector-infectee pairs, 12 family clusters)",
+      "sample_size": "Abstract / Materials and Methods / Results (n=28 all pairs; n=18 certain pairs)",
+      "method": "Materials and Methods (Bayesian with doubly interval-censored likelihood, right truncation adjustment)",
+      "parameter_type": "Title / Abstract / Keywords (serial interval; generation time mentioned in keywords)",
+      "estimate_measure": "Results (median and mean serial interval)",
+      "point_estimate": "Results (median 4.0 days, mean 4.7 days with right truncation, all pairs)",
+      "uncertainty": "Results (95% credible intervals)",
+      "distribution": "Results / Materials and Methods (lognormal, gamma, Weibull compared; lognormal best-fit for all pairs with truncation)",
+      "unit": "Results (days)"
+    }
+  }
+}

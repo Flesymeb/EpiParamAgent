@@ -1,0 +1,148 @@
+{
+  "pmid": "32353347",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Summary/Abstract",
+        "subsections": [],
+        "evidence_hint": "Summary heading"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction heading"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Case identification",
+          "Epidemiological and clinical characteristics of cases",
+          "Timing of key events",
+          "Transmission characteristics"
+        ],
+        "evidence_hint": "Methods heading"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results heading"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion heading"
+      },
+      {
+        "section": "References",
+        "subsections": [],
+        "evidence_hint": "References heading"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Demographic and clinical characteristics of cases by contact-based versus symptom-based surveillance",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 1 caption"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Regression results for symptom-based surveillance and moderate/severe assessment",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 2 content"
+      },
+      {
+        "table_id": "Table 3",
+        "title_or_caption": "Group-specific attack rates and risk factors for SARS-CoV-2 infection among close contacts",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 3 caption"
+      },
+      {
+        "table_id": "Figure 1",
+        "title_or_caption": "Incubation period and serial interval of COVID-19",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Figure 1 caption and panel B"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Shenzhen, China",
+      "period_raw": "Jan 14 to Feb 12, 2020",
+      "population_raw": "391 SARS-CoV-2 cases and 1286 close contacts identified by Shenzhen CDC",
+      "sample_size_raw": "48 pairs of cases with a clear relationship between the index case and secondary case and time of symptom onset",
+      "method_raw": "Contact tracing with parametric distribution fitting (gamma) to serial interval from clear case-contact pairs",
+      "evidence": "Methods / Results / Figure 1"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "6.3 days",
+        "uncertainty_raw": "95% CI 5.2-7.6",
+        "distribution_raw": "gamma",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 6 / Figure 1B / Abstract"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "5.4 days",
+        "uncertainty_raw": "95% CI 4.4-6.5",
+        "distribution_raw": "gamma",
+        "unit_raw": "days",
+        "evidence": "Figure 1 caption"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "SD 4.2 days",
+        "uncertainty_raw": "95% CI 3.1-5.3",
+        "distribution_raw": "gamma",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 6"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "95th percentile 14.3 days",
+        "uncertainty_raw": "95% CI 11.1-17.6",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results paragraph 6 / Figure 1 caption"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "5th percentile 1.3 days",
+        "uncertainty_raw": "95% CI 0.9-1.9",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Figure 1 caption"
+      }
+    ],
+    "field_evidence": {
+      "region": "Methods / Abstract",
+      "period": "Methods / Abstract",
+      "population": "Methods / Results",
+      "sample_size": "Results paragraph 6",
+      "method": "Methods - Transmission characteristics",
+      "parameter_type": "Abstract / Results / Figure 1",
+      "estimate_measure": "Results / Figure 1 caption",
+      "point_estimate": "Results paragraph 6 / Figure 1 caption",
+      "uncertainty": "Results paragraph 6 / Figure 1 caption",
+      "distribution": "Results paragraph 6",
+      "unit": "Results paragraph 6 / Figure 1 caption"
+    }
+  }
+}

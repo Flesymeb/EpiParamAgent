@@ -1,0 +1,159 @@
+# Epidemiology codebook: case/infection fatality rate (CFR/IFR) extraction
+
+topic: fatality
+
+project:
+  name: "Epi Codebook: Fatality Rate (CFR/IFR)"
+  description: "Extract CFR and IFR estimates from primary COVID-19 epidemiological studies."
+  effect_type: "fatality_rate"
+
+stage_a:
+  prompt_file: prompts/stage_a_fatality.py
+
+stage_b:
+  prompt_file: prompts/stage_b_fatality.py
+
+parameters:
+  research_question: >
+    This project extracts case fatality rate (CFR) and infection fatality rate (IFR) estimates
+    from primary COVID-19 epidemiological studies, along with study metadata and uncertainty.
+
+notes: |
+  Goal: extract fatality rate information FROM EACH PRIMARY STUDY.
+  Point estimates in percentage (%). 1.5% not 0.015.
+  Prefer overall population estimate; note age/severity subgroups separately.
+  Record denominator_type carefully: confirmed cases vs estimated infections changes interpretation substantially.
+  Do NOT compute CFR unless explicitly stated.
+
+fields:
+  - name: pmid
+    label: "PMID"
+    type: str
+    required: true
+    prompt: "PubMed ID for the study."
+
+  - name: study
+    label: "Study"
+    type: str
+    required: true
+    prompt: "Study identifier (author/year)."
+
+  - name: region
+    label: "Region"
+    type: str
+    required: true
+    prompt: "Study location/region as reported."
+
+  - name: estimation_period
+    label: "Estimation_Period"
+    type: str
+    required: true
+    prompt: "Estimation period or time window."
+
+  - name: population
+    label: "Population"
+    type: str
+    prompt: "Study population (general, hospitalized, ICU, elderly, etc.)."
+
+  - name: sample_size
+    label: "Sample_Size"
+    type: str
+    prompt: "Number of cases or infections as reported."
+
+  - name: fatality_type
+    label: "Fatality_Type"
+    type: str
+    required: true
+    prompt: "CFR (case fatality rate) | IFR (infection fatality rate) | HFR (hospital) | ICU_fatality_rate | other."
+
+  - name: denominator_type
+    label: "Denominator_Type"
+    type: str
+    required: true
+    prompt: "confirmed_cases | estimated_infections | hospitalizations | PCR_positive | other."
+
+  - name: age_group
+    label: "Age_Group"
+    type: str
+    prompt: "all | child (<18) | adult (18-64) | elderly (65+) | specific range | NR."
+
+  - name: severity_group
+    label: "Severity_Group"
+    type: str
+    prompt: "all | mild | moderate | severe | critical | hospitalized | ICU | NR."
+
+  - name: adjustment
+    label: "Adjustment"
+    type: str
+    prompt: "none | age_standardized | ascertainment_corrected | statistical | bayesian | NR."
+
+  - name: estimate_measure
+    label: "Estimate_Measure"
+    type: str
+    required: true
+    prompt: "proportion | percentage | rate | other."
+
+  - name: point_estimate
+    label: "Point_Estimate"
+    type: float
+    prompt: "Main fatality rate estimate in % (e.g. 1.5 for 1.5%)."
+
+  - name: unit
+    label: "Unit"
+    type: str
+    required: true
+    prompt: "% (percentage). Always percent, not proportion."
+
+  - name: uncertainty_type
+    label: "Uncertainty_Type"
+    type: str
+    prompt: "CI | CrI | SE | Range | Other | NR."
+
+  - name: uncertainty_level
+    label: "Uncertainty_Level"
+    type: str
+    prompt: "95% | 90% | NR | Other."
+
+  - name: uncertainty_low
+    label: "Uncertainty_Low"
+    type: float
+    prompt: "Lower uncertainty bound in % (same unit as point_estimate)."
+
+  - name: uncertainty_high
+    label: "Uncertainty_High"
+    type: float
+    prompt: "Upper uncertainty bound in %."
+
+  - name: notes
+    label: "Notes"
+    type: str
+    prompt: "Subgroup estimates, methodological notes, evidence locations."
+
+  - name: evidence_locations
+    label: "Evidence_Locations"
+    type: list[str]
+    prompt: "1-3 evidence locations (e.g. 'Abstract', 'Table 2')."
+
+index_schema:
+  - name: region_raw
+    path: study_meta.region_raw
+  - name: period_raw
+    path: study_meta.period_raw
+  - name: population_raw
+    path: study_meta.population_raw
+  - name: sample_size_raw
+    path: study_meta.sample_size_raw
+  - name: fatality_type_hint
+    path: field_evidence.fatality_type
+  - name: estimate_hint
+    path: field_evidence.point_estimate
+
+quality_rules:
+  missing_penalties:
+    point_estimate: 0.3
+  review_threshold: 0.7
+
+extraction:
+  mode: "full_context"
+  max_input_chars: 500000
+  truncation_marker: "\n\n[... document truncated ...]\n"

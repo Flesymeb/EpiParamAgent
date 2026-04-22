@@ -1,0 +1,122 @@
+{
+  "pmid": "32771633",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Data",
+          "Procedures"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Tables",
+        "subsections": [
+          "Table 1 (incubation period)",
+          "Table 2 (serial interval)"
+        ],
+        "evidence_hint": "Tables"
+      },
+      {
+        "section": "Figures",
+        "subsections": [
+          "Figure 1 (transmission plot)",
+          "Figure 2 (secondary infections)",
+          "Figure 3 (transmission onset distribution)"
+        ],
+        "evidence_hint": "Figures"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 2 (t1)",
+        "title_or_caption": "Estimated serial interval distributions for COVID-19 based on 69 infector-infectee pairs with symptom onset dates",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 2 presents median serial interval with 95% CI and distribution parameters for lognormal, gamma, and Weibull fits"
+      },
+      {
+        "table_id": "Table 1 (t2)",
+        "title_or_caption": "Estimated incubation period distributions for COVID-19 based on 35 infector-infectee pairs with defined contact dates",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 1 presents incubation period estimates with 95% CI and distribution parameters"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "South Korea",
+      "period_raw": "January 23 to March 31, 2020",
+      "population_raw": "Infector-infectee pairs of confirmed COVID-19 patients identified from public reports and contact tracing in South Korea",
+      "sample_size_raw": "72 infector-infectee pairs (69 pairs with symptom onset dates for serial interval; 35 pairs with defined contact dates for incubation period)",
+      "method_raw": "Bayesian methods with MCMC algorithm to estimate transmission onset distribution; lognormal, gamma, and Weibull parametric models fitted for serial interval and incubation period distributions",
+      "evidence": "Methods / Results / Table 2"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "3.56 days",
+        "uncertainty_raw": "95% CI, 2.72–4.44",
+        "distribution_raw": "lognormal (best fit); also gamma and Weibull estimated",
+        "unit_raw": "days",
+        "evidence": "Results / Table 2"
+      },
+      {
+        "param": "transmission_onset",
+        "measure": "median",
+        "value_raw": "0.68 days after symptom onset",
+        "uncertainty_raw": "95% CI, -0.09 to 1.73",
+        "distribution_raw": "Bayes estimate with smoothing; mixture of shifted gamma and uniform",
+        "unit_raw": "days",
+        "evidence": "Results / Figure 3"
+      },
+      {
+        "param": "transmission_onset",
+        "measure": "mean",
+        "value_raw": "1.31 days after symptom onset",
+        "uncertainty_raw": "95% CI, 0.38–2.55; SD 2.64 days",
+        "distribution_raw": "Bayes estimate with smoothing; mixture of shifted gamma and uniform",
+        "unit_raw": "days",
+        "evidence": "Results / Abstract"
+      }
+    ],
+    "field_evidence": {
+      "region": "Methods / Data",
+      "period": "Methods / Data / Discussion",
+      "population": "Methods / Data",
+      "sample_size": "Methods / Results",
+      "method": "Methods / Procedures",
+      "parameter_type": "Title / Abstract / Results",
+      "estimate_measure": "Results / Table 2",
+      "point_estimate": "Results / Table 2",
+      "uncertainty": "Results / Table 2",
+      "distribution": "Methods / Procedures / Table 2",
+      "unit": "Results / Table 2"
+    }
+  }
+}

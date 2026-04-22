@@ -1,0 +1,109 @@
+{
+  "pmid": "33031427",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [
+          "Introduction",
+          "Methods",
+          "Results",
+          "Discussion"
+        ],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Definition",
+          "Search strategy and inclusion criteria",
+          "Data extraction and quality assessment",
+          "Statistical analysis"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Household SAR",
+          "Stratified household SAR",
+          "Risk factors of household transmission",
+          "Healthcare SAR",
+          "SAR in other non-household settings"
+        ],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [
+          "Summary of key findings",
+          "Secondary attack rate",
+          "SARS-CoV-2 transmission in children",
+          "Strengths and limitations"
+        ],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Conclusion",
+        "subsections": [],
+        "evidence_hint": "Conclusion"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Description of studies included in the review and analysis of household secondary attack rate (SAR)",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 1 / t1, t2, t3"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Description of studies included in the review and analysis of healthcare secondary attack rate (SAR)",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 2 / t4"
+      },
+      {
+        "table_id": "Table 3",
+        "title_or_caption": "Studies of secondary attack rate (SAR) in settings outside household and healthcare",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 3 / t5"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Multiple countries (China, South Korea, US, Israel, Australia, Brunei, Canada, Germany, India, Italy, Singapore, Spain, France, Japan, Switzerland, Ireland)",
+      "period_raw": "January 1 to July 25, 2020 (search period); individual study periods vary",
+      "population_raw": "Close contacts of confirmed SARS-CoV-2 cases in household, healthcare, and other settings",
+      "sample_size_raw": "43 studies for household SAR, 18 for healthcare SAR, 17 for other settings",
+      "method_raw": "Systematic review and meta-analysis of secondary attack rate using random-effects DerSimonian-Laird model",
+      "evidence": "Abstract / Methods"
+    },
+    "parameter_mentions": [],
+    "field_evidence": {
+      "region": "Abstract / Results / Tables 1-3",
+      "period": "Methods / Abstract",
+      "population": "Methods / Results",
+      "sample_size": "Results / Tables 1-3",
+      "method": "Methods / Abstract",
+      "parameter_type": null,
+      "estimate_measure": null,
+      "point_estimate": null,
+      "uncertainty": null,
+      "distribution": null,
+      "unit": null
+    }
+  }
+}

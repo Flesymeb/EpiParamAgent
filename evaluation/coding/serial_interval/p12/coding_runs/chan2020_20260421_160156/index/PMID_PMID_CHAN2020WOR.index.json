@@ -1,0 +1,119 @@
+{
+  "pmid": "PMID_CHAN2020WOR",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Estimation of time-varying reproduction number",
+          "Descriptive epidemiology"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Estimation of Rt",
+          "Age, spatial and temporal distribution",
+          "Trend of case onset, confirmation and discharge/death"
+        ],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Data availability",
+        "subsections": [],
+        "evidence_hint": "Data availability"
+      },
+      {
+        "section": "References",
+        "subsections": [],
+        "evidence_hint": "References"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1 (t2)",
+        "title_or_caption": "Key control measures implemented to combat COVID-19 in Hong Kong from Jan to Mar 2020",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Methods / Table 1"
+      },
+      {
+        "table_id": "Table 2 (t3)",
+        "title_or_caption": "Classification of importation status for cases included in the analyses (n = 915)",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Methods / Table 2"
+      },
+      {
+        "table_id": "Table 3 (t4, t5)",
+        "title_or_caption": "Infector-infectee pairs used to compute local serial interval data",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Methods / Table 3"
+      },
+      {
+        "table_id": "Table 4 (t6)",
+        "title_or_caption": "Characteristics of COVID-19 cases in Hong Kong reported from 23 January to 6 April 2020 (n = 915)",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Results / Table 4"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Hong Kong",
+      "period_raw": "23 January to 6 April 2020",
+      "population_raw": "Confirmed and probable COVID-19 cases in Hong Kong",
+      "sample_size_raw": "915 cases; 47 infector-infectee pairs for serial interval",
+      "method_raw": "Contact tracing and epidemiological investigation of infector-infectee pairs; gamma distribution fitted to serial interval data; EpiEstim package for Rt estimation",
+      "evidence": "Methods / Results / Table 3 / Table 4"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "6.5 days",
+        "uncertainty_raw": "SD 4.7; median: 5, 95% quantiles: 0, 18",
+        "distribution_raw": "Gamma distribution fitted to serial interval data",
+        "unit_raw": "days",
+        "evidence": "Results / Figure 2"
+      }
+    ],
+    "field_evidence": {
+      "region": "Abstract / Methods / Results",
+      "period": "Abstract / Methods / Results / Table 4",
+      "population": "Methods / Results / Table 4",
+      "sample_size": "Methods / Results / Table 3 / Table 4",
+      "method": "Methods / Estimation of time-varying reproduction number",
+      "parameter_type": "Title / Abstract / Methods / Results",
+      "estimate_measure": "Results paragraph on Rt estimation",
+      "point_estimate": "Results paragraph on Rt estimation",
+      "uncertainty": "Results paragraph on Rt estimation",
+      "distribution": "Methods / Figure 2",
+      "unit": "Results"
+    }
+  }
+}

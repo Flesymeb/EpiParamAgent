@@ -1,0 +1,115 @@
+{
+  "pmid": "32771634",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Data and methods",
+        "subsections": [
+          "Data and inclusion criteria",
+          "Statistical methods"
+        ],
+        "evidence_hint": "Data and methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Supplementary data",
+        "subsections": [
+          "Supplement A",
+          "Supplement B",
+          "Supplement C",
+          "Supplement D"
+        ],
+        "evidence_hint": "Appendix A"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Estimated means of the clinical onset serial interval, the diagnostic serial interval, and their difference (diagnostic serial interval — clinical onset serial interval) of SARS-CoV-2/COVID-19 in South Korea, including 95% normal-based bootstrap confidence intervals (in days).",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 1"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "South Korea",
+      "period_raw": "January 20th and June 30th, 2020",
+      "population_raw": "Individuals confirmed to be infected with SARS-CoV-2 in South Korea; infector-infectee pairs",
+      "sample_size_raw": "Data set A: 1,235 infector-infectee pairs; Data set B: 102 infector-infectee pairs",
+      "method_raw": "Balanced cluster bootstrap method for 95% confidence intervals; matched sample (paired) analysis for difference",
+      "evidence": "Data and methods / Table 1"
+    },
+    "parameter_mentions": [
+      {
+        "param": "diagnostic_serial_interval",
+        "measure": "mean",
+        "value_raw": "3.63",
+        "uncertainty_raw": "95% CI: 3.24, 4.01",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results / Table 1 (Data set A)"
+      },
+      {
+        "param": "clinical_onset_serial_interval",
+        "measure": "mean",
+        "value_raw": "3.43",
+        "uncertainty_raw": "95% CI: 2.62, 4.24",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results / Table 1 (Data set B)"
+      },
+      {
+        "param": "diagnostic_serial_interval",
+        "measure": "mean",
+        "value_raw": "2.31",
+        "uncertainty_raw": "95% CI: 1.48, 3.14",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results / Table 1 (Data set B)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "-1.12",
+        "uncertainty_raw": "95% CI: 1.98, 0.26",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results / Table 1 (Data set B, difference: diagnostic — clinical onset)"
+      }
+    ],
+    "field_evidence": {
+      "region": "Data and methods / Data and inclusion criteria",
+      "period": "Data and methods / Data and inclusion criteria",
+      "population": "Data and methods / Data and inclusion criteria",
+      "sample_size": "Data and methods / Data and inclusion criteria",
+      "method": "Data and methods / Statistical methods",
+      "parameter_type": "Title / Abstract / Introduction",
+      "estimate_measure": "Results / Table 1",
+      "point_estimate": "Results / Table 1",
+      "uncertainty": "Results / Table 1",
+      "distribution": "Results / Figure 4",
+      "unit": "Results / Table 1"
+    }
+  }
+}

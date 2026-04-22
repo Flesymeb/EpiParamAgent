@@ -1,0 +1,85 @@
+{
+  "pmid": "32473049",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Materials and Methods",
+        "subsections": [
+          "Data source",
+          "Generation time",
+          "Time-varying reproduction numbers during epidemics"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "COVID-19 epidemic in Iran, China, South Korea and Italy",
+          "Generation time",
+          "Reproduction number estimation (R)",
+          "Sensitivity analysis",
+          "R values in Iran, China, South Korea and Italy"
+        ],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Figure 2",
+        "title_or_caption": "Serial interval of COVID-19 infection in Qom, Iran / Discrete distribution of the serial interval of covid-19",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Results / Generation time section; Figure 2"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Qom, Iran",
+      "period_raw": "Beginning 20 February 2020; early phase of the outbreak; first case confirmed 19 February 2020",
+      "population_raw": "51 index cases with laboratory-confirmed COVID-19 and their 318 close contacts in Qom, Iran",
+      "sample_size_raw": "37 infector–infected pairs (51 index cases, 318 close contacts, 37 secondary cases)",
+      "method_raw": "Contact tracing with daily phone follow-up for 21 days; serial interval estimated from symptom onset in index cases to symptom onset in close contacts; gamma distribution fitted; time-varying method for R0",
+      "evidence": "Abstract / Methods / Results"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.55",
+        "uncertainty_raw": "SD 3.30 days",
+        "distribution_raw": "gamma distribution",
+        "unit_raw": "days",
+        "evidence": "Abstract / Results / Generation time section"
+      }
+    ],
+    "field_evidence": {
+      "region": "Abstract / Methods / Data source",
+      "period": "Methods / Data source",
+      "population": "Methods / Data source",
+      "sample_size": "Methods / Data source / Discussion",
+      "method": "Methods / Data source / Generation time",
+      "parameter_type": "Title / Abstract / Results / Generation time",
+      "estimate_measure": "Results / Generation time",
+      "point_estimate": "Results / Generation time / Abstract",
+      "uncertainty": "Results / Generation time / Abstract",
+      "distribution": "Results / Generation time / Abstract",
+      "unit": "Results / Generation time / Abstract"
+    }
+  }
+}

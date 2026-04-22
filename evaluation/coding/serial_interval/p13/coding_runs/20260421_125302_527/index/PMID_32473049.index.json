@@ -1,0 +1,93 @@
+{
+  "pmid": "32473049",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Section 1"
+      },
+      {
+        "section": "Materials and Methods",
+        "subsections": [
+          "Data source",
+          "Generation time",
+          "Time-varying reproduction numbers during epidemics"
+        ],
+        "evidence_hint": "Section 2"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "COVID-19 epidemic in Iran, China, South Korea and Italy",
+          "Generation time",
+          "Reproduction number estimation (R)",
+          "Sensitivity analysis",
+          "R values in Iran, China, South Korea and Italy"
+        ],
+        "evidence_hint": "Section 3"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Section 4"
+      }
+    ],
+    "tables": [],
+    "study_meta": {
+      "region_raw": "Qom, Iran",
+      "period_raw": "Beginning 20 February 2020; early phase of the outbreak",
+      "population_raw": "51 index cases with laboratory-confirmed COVID-19 and their 318 close contacts in Qom, Iran",
+      "sample_size_raw": "37 infector–infected pairs (37 secondary cases from 318 close contacts)",
+      "method_raw": "Contact tracing; serial interval estimated by fitting distributions to time intervals between primary and secondary case symptom onsets; gamma distribution fitted; R0 estimated using time-varying method (Wallinga-Teunis)",
+      "evidence": "Abstract / Section 2.1 / Section 3.2"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.55",
+        "uncertainty_raw": "SD 3.30 days",
+        "distribution_raw": "gamma distribution",
+        "unit_raw": "days",
+        "evidence": "Abstract / Section 3.2 / Figure 2"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "3.30",
+        "uncertainty_raw": null,
+        "distribution_raw": "gamma distribution",
+        "unit_raw": "days",
+        "evidence": "Abstract / Section 3.2"
+      },
+      {
+        "param": "generation_time",
+        "measure": "other",
+        "value_raw": "used serial interval as proxy",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": null,
+        "evidence": "Section 2.2"
+      }
+    ],
+    "field_evidence": {
+      "region": "Abstract / Section 2.1",
+      "period": "Abstract / Section 2.1",
+      "population": "Abstract / Section 2.1",
+      "sample_size": "Abstract / Section 2.1 / Section 3.2",
+      "method": "Section 2.1 / Section 2.2",
+      "parameter_type": "Abstract / Section 2.2 / Section 3.2",
+      "estimate_measure": "Abstract / Section 3.2",
+      "point_estimate": "Abstract / Section 3.2",
+      "uncertainty": "Abstract / Section 3.2",
+      "distribution": "Abstract / Section 3.2",
+      "unit": "Abstract / Section 3.2"
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "pmid": "33362233",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [
+          "Objective",
+          "Methods",
+          "Results",
+          "Conclusion"
+        ],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Data sources and collection",
+          "Statistical analysis",
+          "Ethical statement"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Author Contributions",
+        "subsections": [],
+        "evidence_hint": "Author Contributions"
+      },
+      {
+        "section": "References",
+        "subsections": [],
+        "evidence_hint": "References"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Mean and SD of the estimated incubation period for confirmed Vietnamese COVID-19 cases between 23 Jan 2020 to 13 Apr 2020",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 1 in Results; shows mean, SD, 95% CI for Weibull, Gamma, Lognormal distributions of incubation period"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Percentiles of the estimated incubation period for confirmed Vietnamese COVID-19 cases between 23 Jan 2020 to 13 Apr 2020 with Weibull, Gamma and Lognormal distribution",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 2 in Results; shows percentiles (2.5th–99th) with 95% CI for three distributions"
+      },
+      {
+        "table_id": "Table 3",
+        "title_or_caption": "Comparison of estimated incubation periods for SARS-COV-2",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 3 in Discussion; compares incubation period estimates across studies"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Vietnam",
+      "period_raw": "23 Jan 2020 to 13 April 2020",
+      "population_raw": "Confirmed COVID-19 cases who are Vietnamese and locally infected with available data on date of symptom onset and clearly defined window of possible SARS-CoV-2 exposure",
+      "sample_size_raw": "19 cases",
+      "method_raw": "Three parametric forms (Weibull, Gamma, Lognormal) with Hamiltonian Monte Carlo method for Bayesian Inference; interval-censored likelihood; LOOIC for model comparison",
+      "evidence": "Methods / Results / Table 1"
+    },
+    "parameter_mentions": [],
+    "field_evidence": {
+      "region": "Methods / Results",
+      "period": "Abstract / Methods / Results",
+      "population": "Methods / Results",
+      "sample_size": "Results / Table 1",
+      "method": "Methods / Statistical analysis",
+      "parameter_type": null,
+      "estimate_measure": null,
+      "point_estimate": null,
+      "uncertainty": null,
+      "distribution": null,
+      "unit": null
+    }
+  }
+}

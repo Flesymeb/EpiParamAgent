@@ -1,0 +1,63 @@
+{
+  "pmid": "33088292",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "1. Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "2. Data and Models",
+        "subsections": [],
+        "evidence_hint": "Data and Models"
+      },
+      {
+        "section": "3. Methodology Using The Posterior Predictive p-Value",
+        "subsections": [],
+        "evidence_hint": "Methodology"
+      },
+      {
+        "section": "4. Results",
+        "subsections": [
+          "4.1 Population based analysis",
+          "4.2 Subpopulation based analysis"
+        ],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "5. Summary",
+        "subsections": [],
+        "evidence_hint": "Summary"
+      }
+    ],
+    "tables": [],
+    "study_meta": {
+      "region_raw": null,
+      "period_raw": null,
+      "population_raw": null,
+      "sample_size_raw": null,
+      "method_raw": null,
+      "evidence": null
+    },
+    "parameter_mentions": [],
+    "field_evidence": {
+      "region": null,
+      "period": null,
+      "population": null,
+      "sample_size": null,
+      "method": null,
+      "parameter_type": null,
+      "estimate_measure": null,
+      "point_estimate": null,
+      "uncertainty": null,
+      "distribution": null,
+      "unit": null
+    }
+  }
+}

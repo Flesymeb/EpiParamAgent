@@ -1,0 +1,139 @@
+{
+  "pmid": "33554183",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Conclusions",
+        "subsections": [],
+        "evidence_hint": "Conclusions"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Study Design and Participants",
+          "Data Collection",
+          "Laboratory Confirmation and Tests",
+          "Statistical Analysis"
+        ],
+        "evidence_hint": "Methods"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Baseline Characteristics of Study Patients Infected with COVID-19",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 1"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Laboratory Findings of Study Patients on Admission",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 2"
+      },
+      {
+        "table_id": "Table 3",
+        "title_or_caption": "Treatments and Prognosis Outcomes in Patients with COVID-19",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 3"
+      },
+      {
+        "table_id": "Figure 2",
+        "title_or_caption": "Information on Exposures and Dates of Illness Onset in Six Symptomatic Cases and Their Family Close Contacts",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Figure 2 caption and image"
+      },
+      {
+        "table_id": "Figure 3A",
+        "title_or_caption": "Estimated serial interval distribution",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Figure 3A"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Chongqing Three Gorges Central Hospital, Wanzhou district, Chongqing City, China",
+      "period_raw": "January 25, 2020 to February 18, 2020 (hospitalization); follow-up until February 23-25, 2020",
+      "population_raw": "Confirmed COVID-19 patients aged 10 to 35 years (adolescents 10-24 years and young adults 25-35 years)",
+      "sample_size_raw": "46 confirmed patients; 12 secondary cases from family clusters used for serial interval estimation",
+      "method_raw": "Retrospective case series; parametric survival analysis with gamma distribution for serial interval; family-clustered transmission pairs",
+      "evidence": "Methods / Results / Figure 2"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "1.9 days",
+        "uncertainty_raw": "95% CI 0.4–6.2",
+        "distribution_raw": "gamma distribution (parametric survival analysis)",
+        "unit_raw": "days",
+        "evidence": "Results / Figure 3A"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "6.5 days",
+        "uncertainty_raw": "95% CI 2.5–17.4",
+        "distribution_raw": "gamma distribution (parametric survival analysis)",
+        "unit_raw": "days",
+        "evidence": "Discussion paragraph 2"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other (95th percentile)",
+        "value_raw": "28.6 days",
+        "uncertainty_raw": "95% CI 10.6–76.9",
+        "distribution_raw": "gamma distribution (parametric survival analysis)",
+        "unit_raw": "days",
+        "evidence": "Results / Figure 3A"
+      }
+    ],
+    "field_evidence": {
+      "region": "Methods / Study Design and Participants",
+      "period": "Methods / Study Design and Participants",
+      "population": "Methods / Study Design and Participants / Results",
+      "sample_size": "Results / Figure 2 caption",
+      "method": "Methods / Statistical Analysis",
+      "parameter_type": "Abstract / Results / Discussion",
+      "estimate_measure": "Results / Discussion",
+      "point_estimate": "Results / Discussion",
+      "uncertainty": "Results / Discussion",
+      "distribution": "Methods / Statistical Analysis",
+      "unit": "Results / Discussion"
+    }
+  }
+}

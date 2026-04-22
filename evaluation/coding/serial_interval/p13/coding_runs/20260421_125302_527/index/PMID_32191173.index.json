@@ -1,0 +1,140 @@
+{
+  "pmid": "32191173",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Title/Authors",
+        "subsections": [],
+        "evidence_hint": "Title and author affiliations"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Definition of serial interval and study rationale"
+      },
+      {
+        "section": "Methods/Data",
+        "subsections": [],
+        "evidence_hint": "Data source: 468 transmission events from 18 provincial CDCs"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Main estimate",
+          "Subgroup estimates"
+        ],
+        "evidence_hint": "Mean serial interval, SD, subgroup analyses"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [
+          "Bias considerations"
+        ],
+        "evidence_hint": "Limitations and interpretation"
+      },
+      {
+        "section": "Figure",
+        "subsections": [],
+        "evidence_hint": "Estimated serial interval distribution histogram with fitted normal"
+      }
+    ],
+    "tables": [],
+    "figures": [
+      {
+        "figure_id": "Figure",
+        "title_or_caption": "Estimated serial interval distribution for coronavirus disease (COVID-19) based on 468 reported transmission events, China, January 21–February 8, 2020",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "contains_fitted_distribution": true,
+        "evidence_hint": "Figure panels A and B show histogram of serial intervals with fitted normal distributions"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Mainland China outside of Hubei Province",
+      "period_raw": "January 21–February 8, 2020",
+      "population_raw": "468 COVID-19 transmission events reported in mainland China outside Hubei Province; 752 case-patients from 93 cities",
+      "sample_size_raw": "468 transmission events; 752 case-patients",
+      "method_raw": "Publicly reported confirmed cases compiled from online reports from 18 provincial centers for disease control and prevention",
+      "evidence": "Results paragraph 1; Figure caption"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "3.96",
+        "uncertainty_raw": "95% CI 3.53–4.39",
+        "distribution_raw": "normal",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 2; Abstract"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "SD",
+        "value_raw": "4.75",
+        "uncertainty_raw": "95% CI 4.46–5.07",
+        "distribution_raw": "normal",
+        "unit_raw": "days",
+        "evidence": "Results paragraph 2; Abstract"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.06",
+        "uncertainty_raw": "95% CI 3.55–4.57",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results paragraph 2 (index case imported)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "3.66",
+        "uncertainty_raw": "95% CI 2.84–4.47",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results paragraph 2 (index case locally infected)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.03",
+        "uncertainty_raw": "95% CI 3.12–4.94",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results paragraph 2 (secondary transmission within household)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.56",
+        "uncertainty_raw": "95% CI 3.85–5.27",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results paragraph 2 (secondary transmission outside household)"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "proportion_negative",
+        "value_raw": "12.6%",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": null,
+        "evidence": "Abstract; Results paragraph 1 (presymptomatic transmission)"
+      }
+    ],
+    "field_evidence": {
+      "region": "Results paragraph 1",
+      "period": "Results paragraph 1; Figure caption",
+      "population": "Results paragraph 1; Results paragraph 3",
+      "sample_size": "Results paragraph 1; Figure caption",
+      "method": "Results paragraph 1",
+      "parameter_type": "Title; Abstract; Results paragraph 1",
+      "estimate_measure": "Results paragraph 2",
+      "point_estimate": "Results paragraph 2; Abstract",
+      "uncertainty": "Results paragraph 2; Abstract",
+      "distribution": "Results paragraph 2; Figure",
+      "unit": "Results paragraph 2; Abstract"
+    }
+  }
+}

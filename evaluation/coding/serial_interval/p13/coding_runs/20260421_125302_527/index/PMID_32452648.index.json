@@ -1,0 +1,134 @@
+{
+  "pmid": "32452648",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Data and Methods",
+        "subsections": [],
+        "evidence_hint": "Data and Methods"
+      },
+      {
+        "section": "Results and Discussion",
+        "subsections": [],
+        "evidence_hint": "Results and Discussion"
+      },
+      {
+        "section": "Conclusion",
+        "subsections": [],
+        "evidence_hint": "Conclusion"
+      },
+      {
+        "section": "References",
+        "subsections": [],
+        "evidence_hint": "References"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "The summary of mean and standard deviation (SD) estimates of the serial interval (SI) of COVID-19 in Shenzhen, China",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 1 shows mean and SD of SI under Gamma, Weibull, and Lognormal distributions with 95% CI and AICc"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Shenzhen, China",
+      "period_raw": "19 January to 22 February 2020",
+      "population_raw": "Confirmed COVID-19 cases in Shenzhen, China",
+      "sample_size_raw": "27 transmission chains, including 23 infectees matched with only one infector",
+      "method_raw": "Interval-censored likelihood framework with Weibull, lognormal, and gamma distributions; maximum-likelihood estimation; AICc model comparison",
+      "evidence": "Abstract / Data and Methods / Results and Discussion"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.9",
+        "uncertainty_raw": "95% CI: 3.9–9.6",
+        "distribution_raw": "Weibull",
+        "unit_raw": "days",
+        "evidence": "Abstract / Results and Discussion / Table 1"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "4.8",
+        "uncertainty_raw": "95% CI: 3.1–10.1",
+        "distribution_raw": "Weibull",
+        "unit_raw": "days",
+        "evidence": "Abstract / Results and Discussion / Table 1"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.9",
+        "uncertainty_raw": "95% CI: 3.9–9.7",
+        "distribution_raw": "Gamma",
+        "unit_raw": "days",
+        "evidence": "Table 1"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "5.0",
+        "uncertainty_raw": "95% CI: 3.1–9.7",
+        "distribution_raw": "Gamma",
+        "unit_raw": "days",
+        "evidence": "Table 1"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "6.5",
+        "uncertainty_raw": "95% CI: 3.9–15.1",
+        "distribution_raw": "Lognormal",
+        "unit_raw": "days",
+        "evidence": "Table 1"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "7.9",
+        "uncertainty_raw": "95% CI: 3.9–37.3",
+        "distribution_raw": "Lognormal",
+        "unit_raw": "days",
+        "evidence": "Table 1"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4",
+        "uncertainty_raw": "IQR: 2–10",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results and Discussion"
+      }
+    ],
+    "field_evidence": {
+      "region": "Title / Introduction",
+      "period": "Title / Introduction",
+      "population": "Introduction / Data and Methods",
+      "sample_size": "Data and Methods / Results and Discussion",
+      "method": "Data and Methods",
+      "parameter_type": "Abstract / Title",
+      "estimate_measure": "Abstract / Results and Discussion / Table 1",
+      "point_estimate": "Abstract / Results and Discussion / Table 1",
+      "uncertainty": "Abstract / Results and Discussion / Table 1",
+      "distribution": "Data and Methods / Table 1",
+      "unit": "Abstract / Results and Discussion"
+    }
+  }
+}

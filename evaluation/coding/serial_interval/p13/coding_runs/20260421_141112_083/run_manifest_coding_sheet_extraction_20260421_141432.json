@@ -1,0 +1,113 @@
+{
+  "timestamp_utc": "2026-04-21T06:14:32.447245+00:00",
+  "workflow": "coding_sheet_extraction",
+  "module": "coding_sheet",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/coding_sheet",
+  "argv": [
+    "cli/extract_epi.py",
+    "--input",
+    "/tmp/missing3.txt",
+    "--profile",
+    "P13",
+    "--stage",
+    "both",
+    "--fetch-mode",
+    "pmc_only",
+    "--codebook",
+    "configs/codebook_serial_interval.yaml"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "bd2c280ac9d085ed2ab2f33d5e5eb4f269ff9923",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "stage": "both",
+    "codebook": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/coding_sheet/configs/codebook_serial_interval.yaml",
+    "stage_a_config": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/coding_sheet/configs/stages/stage_a.yaml"
+  },
+  "inputs": [
+    {
+      "path": "/tmp/missing3.txt",
+      "exists": true,
+      "mtime_utc": "2026-04-21T06:11:11.207161+00:00",
+      "type": "file",
+      "size_bytes": 27,
+      "sha256": "1e2cdb321fffabe980005bacf0c6b16963c8e43be564473591be349c7a8dd065"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/coding_sheet/configs/codebook_serial_interval.yaml",
+      "exists": true,
+      "mtime_utc": "2026-04-01T09:18:52.870965+00:00",
+      "type": "file",
+      "size_bytes": 4205,
+      "sha256": "f267d214ccf41b55928e24529d84809b3873b096c305059fb0f8bd2bcc85decb"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/coding_sheet/configs/stages/stage_a.yaml",
+      "exists": true,
+      "mtime_utc": "2026-04-01T07:33:05.254105+00:00",
+      "type": "file",
+      "size_bytes": 771,
+      "sha256": "df4ca7a5c655dc0915309d3c2b84597ff6e86aaf26d47ee31d2853ef6248340a"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/coding/serial_interval/p13/coding_runs/20260421_141112_083",
+      "exists": true,
+      "mtime_utc": "2026-04-21T06:14:32.440889+00:00",
+      "type": "dir",
+      "file_count": 4,
+      "dir_digest": "8580879f32e01ccc95b37d93b562b4118e830d36fe42da3f6f228564d6398b4b",
+      "dir_digest_truncated": false
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/coding/serial_interval/p13/coding_runs/20260421_141112_083/index",
+      "exists": true,
+      "mtime_utc": "2026-04-21T06:13:51.396407+00:00",
+      "type": "dir",
+      "file_count": 3,
+      "dir_digest": "7132518cd20ba9efb1e849552d85fc5f6fab9e7957e13b14c214393626ea2c44",
+      "dir_digest_truncated": false
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/coding/serial_interval/p13/coding_runs/20260421_141112_083/coding_sheet_20260421_141432.xlsx",
+      "exists": true,
+      "mtime_utc": "2026-04-21T06:14:32.446889+00:00",
+      "type": "file",
+      "size_bytes": 6161,
+      "sha256": "750ebd75e52af157391f0afebd224af47085ec4396e339c738ec6fb63cf51196"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": "openai",
+      "model": "z-ai/glm-5.1",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 120,
+      "verify_ssl": false,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": true
+    }
+  },
+  "extra": {
+    "input_count": 3,
+    "record_count": 2,
+    "index_row_count": 3,
+    "input_files": [
+      "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/paper_pool/pdfs/PMID_33031427.pdf",
+      "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/paper_pool/pdfs/PMID_32815514.pdf",
+      "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/paper_pool/pdfs/PMID_32473049.pdf"
+    ],
+    "xlsx_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/coding/serial_interval/p13/coding_runs/20260421_141112_083/coding_sheet_20260421_141432.xlsx"
+  }
+}

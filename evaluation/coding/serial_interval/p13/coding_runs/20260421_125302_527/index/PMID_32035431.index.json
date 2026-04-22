@@ -1,0 +1,103 @@
+{
+  "pmid": "32035431",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract summary of 28 cases in Korea"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Background on 2019-nCoV outbreak"
+      },
+      {
+        "section": "Materials and Methods",
+        "subsections": [
+          "Ethics statement"
+        ],
+        "evidence_hint": "Methods: definition of generation time/serial interval, data sources"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Epidemiologic characteristics",
+          "Patient characteristics"
+        ],
+        "evidence_hint": "Serial interval estimates, Table 1, Figure 1"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Comparison with China estimates"
+      },
+      {
+        "section": "Appendix 1",
+        "subsections": [],
+        "evidence_hint": "Individual case descriptions and transmission chains"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Summary of epidemiologic characteristics of 2019 novel coronavirus disease using early 28 cases in Korea",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": true,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 1 contains serial interval mean 6.6 days (range 3-15), median 4.0; also incubation period and reproduction number with CIs"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Korea",
+      "period_raw": "January 20, 2020 to February 10, 2020",
+      "population_raw": "28 confirmed 2019-nCoV patients in Korea (16 index cases, 9 first-generation, 3 second-generation)",
+      "sample_size_raw": "28 confirmed cases; 12 first-generation and second-generation patients for serial interval",
+      "method_raw": "Epidemiologic investigation report by Korea Centers for Disease Control and Prevention (KCDC); contact tracing of confirmed cases; serial interval defined as time-interval between symptom-onset of index case and symptom-onset of subsequently infected patient",
+      "evidence": "Abstract / Materials and Methods / Table 1"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "6.6",
+        "uncertainty_raw": "range 3-15",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results / Table 1"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.0",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results / Table 1"
+      },
+      {
+        "param": "generation_time",
+        "measure": "other",
+        "value_raw": "equated with serial interval in definition",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Materials and Methods: 'The generation time or serial interval means the time-interval between the date of symptom-onset of an index case and the date of symptom-onset of the subsequently infected patient.'"
+      }
+    ],
+    "field_evidence": {
+      "region": "Abstract / Table 1",
+      "period": "Abstract: 'between January 20, 2020 and February 10, 2020'",
+      "population": "Abstract / Results: 28 confirmed 2019-nCoV patients in Korea",
+      "sample_size": "Table 1 / Results: 28 total cases; 12 first/second generation for serial interval",
+      "method": "Materials and Methods: KCDC epidemiologic investigation report; contact tracing",
+      "parameter_type": "Materials and Methods / Table 1: serial interval and generation time mentioned",
+      "estimate_measure": "Table 1: mean and median serial interval",
+      "point_estimate": "Table 1: mean 6.6 days, median 4.0 days",
+      "uncertainty": "Table 1: range 3-15 days",
+      "distribution": null,
+      "unit": "Table 1 / Results: days"
+    }
+  }
+}

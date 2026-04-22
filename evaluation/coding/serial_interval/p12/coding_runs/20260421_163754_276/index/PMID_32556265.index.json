@@ -1,0 +1,151 @@
+{
+  "pmid": "32556265",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [
+          "Background",
+          "Methods",
+          "Results",
+          "Conclusions"
+        ],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Data Collection",
+          "Statistical Analysis"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results / Figure 1"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Supplementary Data",
+        "subsections": [],
+        "evidence_hint": "Supplementary Tables 3-5"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1 (t2)",
+        "title_or_caption": "Age-stratified Hazard of Infection for Household Versus Nonhousehold Transmissions",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 1 in Results/Discussion"
+      },
+      {
+        "table_id": "Table 2 (t1)",
+        "title_or_caption": "Sex-specific Hazard of Infection for Household Versus Nonhousehold Transmissions",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Table 2 in Results/Discussion"
+      },
+      {
+        "table_id": "Supplementary Table 3",
+        "title_or_caption": "Serial interval estimation results (referenced)",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Supplementary Tables 3-5 referenced in Results"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Mainland China (outside Hubei province)",
+      "period_raw": "15 January–29 February 2020",
+      "population_raw": "9120 confirmed COVID-19 cases reported by 27 provincial and 264 urban health commissions",
+      "sample_size_raw": "1407 transmission pairs forming 643 transmission clusters (662 household, 745 nonhousehold)",
+      "method_raw": "Normal distribution fitted via MCMC with Gibbs sampling and noninformative flat prior; serial interval computed as days between symptom onset dates of primary and secondary cases",
+      "evidence": "Methods / Data Collection / Statistical Analysis"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.0",
+        "uncertainty_raw": "95% CrI, 4.4–5.5",
+        "distribution_raw": "Normal distribution (MCMC)",
+        "unit_raw": "days",
+        "evidence": "Results / Figure 1C"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "5.2 (SD)",
+        "uncertainty_raw": "95% CrI, 4.9–5.7",
+        "distribution_raw": "Normal distribution (MCMC)",
+        "unit_raw": "days",
+        "evidence": "Results / Figure 1C"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "5.0",
+        "uncertainty_raw": "IQR, 1.5–8.5",
+        "distribution_raw": "Normal distribution (MCMC)",
+        "unit_raw": "days",
+        "evidence": "Results"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.2",
+        "uncertainty_raw": "95% CrI, 4.6–5.8",
+        "distribution_raw": "Normal distribution (MCMC)",
+        "unit_raw": "days",
+        "evidence": "Results / Figure 1C"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "other",
+        "value_raw": "5.3 (SD)",
+        "uncertainty_raw": "95% CrI, 4.9–5.7",
+        "distribution_raw": "Normal distribution (MCMC)",
+        "unit_raw": "days",
+        "evidence": "Results / Figure 1C"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "5.2",
+        "uncertainty_raw": "IQR, 1.6–8.8",
+        "distribution_raw": "Normal distribution (MCMC)",
+        "unit_raw": "days",
+        "evidence": "Results"
+      }
+    ],
+    "field_evidence": {
+      "region": "Methods / Data Collection",
+      "period": "Methods / Data Collection",
+      "population": "Methods / Data Collection",
+      "sample_size": "Methods / Statistical Analysis / Results",
+      "method": "Methods / Statistical Analysis",
+      "parameter_type": "Title / Abstract / Results",
+      "estimate_measure": "Results",
+      "point_estimate": "Results / Figure 1C",
+      "uncertainty": "Results / Figure 1C",
+      "distribution": "Methods / Statistical Analysis / Results",
+      "unit": "Results"
+    }
+  }
+}

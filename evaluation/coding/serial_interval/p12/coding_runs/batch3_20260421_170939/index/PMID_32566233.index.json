@@ -1,0 +1,116 @@
+{
+  "pmid": "32566233",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Data source",
+          "Statistical analysis",
+          "Sensitivity analysis"
+        ],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "COVID-19 epidemic curve in Kermanshah province",
+          "SI for COVID-19",
+          "Time-dependent effective reproductive number (Rt) for COVID-19",
+          "Sensitivity analysis for reproduction number"
+        ],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      },
+      {
+        "section": "Conclusion",
+        "subsections": [],
+        "evidence_hint": "Conclusion"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Fig. 2",
+        "title_or_caption": "The distribution of serial interval of COVID-19 in Kermanshah, Iran",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Results / SI for COVID-19"
+      },
+      {
+        "table_id": "Fig. 3",
+        "title_or_caption": "The time-varying reproduction number (95% CI) of COVID-19 in Kermanshah, Iran",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Results / Time-dependent effective reproductive number"
+      },
+      {
+        "table_id": "Fig. 4",
+        "title_or_caption": "Sensitivity analysis for time-varying reproduction number (95% credible interval) of COVID-19 in Kermanshah, Iran",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Results / Sensitivity analysis for reproduction number"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Western Iran, Kermanshah province",
+      "period_raw": "22 February to 9 April 2020 (full case data); 22 February to 29 March 2020 (confirmed RT-PCR cases for SI)",
+      "population_raw": "Confirmed, probable and suspected COVID-19 cases in Kermanshah province",
+      "sample_size_raw": "1477 confirmed, probable and suspected cases; 247 RT-PCR confirmed cases; 21 infector–infectee pairs (12 primary cases, 21 secondary cases)",
+      "method_raw": "Contact tracing via telephone follow-up of patients and their contacts; fitted log-normal, Weibull and Gamma distributions using R0 package; Bayesian approach with SI from sample using EpiEstim package with MCMC",
+      "evidence": "Methods / Results / Abstract"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.71",
+        "uncertainty_raw": "SD = 3.89 days",
+        "distribution_raw": "Weibull (best fit among log-normal, Weibull, Gamma)",
+        "unit_raw": "days",
+        "evidence": "Results / SI for COVID-19 / Fig. 2"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.75",
+        "uncertainty_raw": null,
+        "distribution_raw": "Weibull (best fit among log-normal, Weibull, Gamma)",
+        "unit_raw": "days",
+        "evidence": "Discussion paragraph 1"
+      }
+    ],
+    "field_evidence": {
+      "region": "Abstract / Methods / Data source",
+      "period": "Abstract / Methods / Data source / Results",
+      "population": "Abstract / Methods / Data source",
+      "sample_size": "Abstract / Results / SI for COVID-19",
+      "method": "Methods / Statistical analysis",
+      "parameter_type": "Title / Abstract / Introduction / Results",
+      "estimate_measure": "Results / SI for COVID-19 / Discussion",
+      "point_estimate": "Results / SI for COVID-19 / Discussion",
+      "uncertainty": "Results / SI for COVID-19",
+      "distribution": "Methods / Statistical analysis / Results / SI for COVID-19",
+      "unit": "Results / SI for COVID-19"
+    }
+  }
+}

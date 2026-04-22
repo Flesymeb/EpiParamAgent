@@ -1,0 +1,153 @@
+{
+  "pmid": "33234640",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Material and Methods",
+        "subsections": [],
+        "evidence_hint": "Methods heading"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results heading"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [
+          "Range of estimates obtained",
+          "Methods used for estimating the serial interval and the generation time",
+          "Statistical distributions used",
+          "Relationship between the serial interval, generation time and the reproduction number"
+        ],
+        "evidence_hint": "Discussion heading"
+      },
+      {
+        "section": "Conclusion",
+        "subsections": [],
+        "evidence_hint": "Conclusion heading"
+      },
+      {
+        "section": "References",
+        "subsections": [],
+        "evidence_hint": "References"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "t1",
+        "title_or_caption": "PRISMA identification",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Figure 1 PRISMA flow diagram"
+      },
+      {
+        "table_id": "t2",
+        "title_or_caption": "PRISMA screening and eligibility",
+        "table_type": "other",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": false,
+        "evidence_hint": "Figure 1 PRISMA flow diagram"
+      },
+      {
+        "table_id": "t3",
+        "title_or_caption": "Table 1: Estimates of serial interval and generation times for COVID-19 from 40 scientific papers, by country",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 1 (China through Iran entries)"
+      },
+      {
+        "table_id": "t4",
+        "title_or_caption": "Table 1: Continued (Brazil through combination of countries)",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": true,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 1 continued (Brazil, Italy, Germany, combination of countries including generation time estimates)"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Multiple countries (primarily Asian countries, particularly China; also Taiwan, Singapore, South Korea, Vietnam, Brunei, Iran, Brazil, Italy, Germany)",
+      "period_raw": "1 January 2020 to 21 August 2020 (literature search period); individual study periods vary",
+      "population_raw": "COVID-19 infector-infectee pairs from 40 included studies",
+      "sample_size_raw": "40 papers included in the review; individual study pair counts range from 3 to 1407",
+      "method_raw": "Rapid review of literature; serial interval and generation time parameters extracted from included papers; distributions simulated where sufficient parameters provided",
+      "evidence": "Methods / Results / Table 1"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "3.03 to 7.6 days (38 estimates)",
+        "uncertainty_raw": "95% CIs reported per study in Table 1",
+        "distribution_raw": "Normal, lognormal, gamma, and Weibull distributions used across studies; 30 studies assumed an overall distribution",
+        "unit_raw": "days",
+        "evidence": "Results / Table 1"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "1.0 to 6.0 days (15 estimates)",
+        "uncertainty_raw": "95% CIs reported per study in Table 1",
+        "distribution_raw": "See above",
+        "unit_raw": "days",
+        "evidence": "Results / Table 1"
+      },
+      {
+        "param": "generation_interval",
+        "measure": "mean",
+        "value_raw": "3.95 to 5.20 days (3 estimates)",
+        "uncertainty_raw": "95% CIs reported per study in Table 1 (e.g., Ganyani et al: 3.78–6.78 and 3.01–4.91)",
+        "distribution_raw": "Not specified in aggregate",
+        "unit_raw": "days",
+        "evidence": "Results / Table 1"
+      },
+      {
+        "param": "generation_interval",
+        "measure": "median",
+        "value_raw": "5.0 days (1 estimate, Ferretti et al)",
+        "uncertainty_raw": "NR",
+        "distribution_raw": "NR",
+        "unit_raw": "days",
+        "evidence": "Results / Table 1"
+      },
+      {
+        "param": "diagnostic_serial_interval",
+        "measure": "other",
+        "value_raw": "NR (proposed as new indicator by Mettler et al)",
+        "uncertainty_raw": "NR",
+        "distribution_raw": "NR",
+        "unit_raw": "NR",
+        "evidence": "Discussion paragraph 8"
+      }
+    ],
+    "field_evidence": {
+      "region": "Results / Table 1",
+      "period": "Methods / Results",
+      "population": "Results / Table 1",
+      "sample_size": "Results / Table 1",
+      "method": "Methods",
+      "parameter_type": "Abstract / Results / Table 1",
+      "estimate_measure": "Results / Table 1",
+      "point_estimate": "Results / Table 1",
+      "uncertainty": "Results / Table 1",
+      "distribution": "Results / Discussion",
+      "unit": "Results / Table 1"
+    }
+  }
+}
