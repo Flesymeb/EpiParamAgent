@@ -20,6 +20,7 @@ dependencies = [
     "cloudscraper>=1.2.71",
     "fake-useragent>=2.2.0",
     "termcolor>=3.3.0",
+    "scipy>=1.17.1",
 ]
 
 [build-system]
