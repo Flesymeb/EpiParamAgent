@@ -9,26 +9,36 @@ Task: Use the Codebook + full text, with the Study Index (Stage A) as guidance, 
 Follow codebook field definitions strictly.
 If a field is not reported, use null for numbers and "NR" for required strings.
 
-IMPORTANT: Extract fatality rates even if they are not explicitly labeled "CFR" or "IFR".
-Any of the following qualify:
-- "X% of patients/cases died" → CFR if denominator is confirmed cases
-- "mortality rate was X%" → capture as CFR or IFR depending on denominator
-- "X deaths among Y hospitalized" → HFR = X/Y × 100
-- "estimated infection fatality rate of X%" → IFR
-- Seroprevalence-corrected mortality → IFR
+CRITICAL RULES:
 
-Key extraction rules:
-1. Convert proportions to percentages: 0.023 → 2.3%
-2. For point_estimate: always store as percentage (%), not as proportion
-3. If paper reports stratified estimates (by age/sex), extract the OVERALL estimate as primary
-   and note stratified values in notes field
-4. fatality_type field:
-   - CFR: deaths / confirmed cases
-   - IFR: deaths / estimated total infections (from sero-survey or model)
-   - HFR: deaths / hospitalized cases
-   - ICU_fatality_rate: deaths / ICU admissions
-5. If denominator unclear, use CFR as default and note in notes
-6. DO NOT extract: treatment response rates, complication rates, or non-mortality outcomes
+1. fatality_type classification (use EXACTLY one):
+   - CFR: deaths / confirmed cases (most common in early studies)
+   - IFR: deaths / estimated total infections (requires seroprevalence or modeling)
+   - HFR: deaths / hospitalized patients
+   - ICU_fatality_rate: deaths / ICU admitted patients
+   - IMV_fatality_rate: deaths / patients on invasive mechanical ventilation (intubated/ventilated)
+   - other: if clearly none of the above
+
+2. IMV detection - use IMV_fatality_rate if:
+   - paper explicitly states "invasive mechanical ventilation", "intubated", "ventilated patients"
+   - denominator is IMV/ventilated patients specifically
+   - EXCLUDE non-invasive ventilation (NIV, CPAP, high-flow)
+
+3. Point estimate: ALWAYS in percentage (%), not proportion
+   - Convert: 0.023 → 2.3%, 0.5 → 50.0%
+   - If unclear whether proportion or %, use context (if >1, it's already %)
+
+4. summary_type field:
+   - Record how this paper reports the value: "single_study" | "median" | "mean" | "pooled_mean"
+   - This is CRITICAL for downstream comparison with SR benchmarks
+
+5. If paper reports BOTH overall and stratified (by age/sex/region):
+   - Extract overall as primary record
+   - Note stratified values in notes field
+
+6. Do NOT extract: treatment response rates, complication rates, ICU admission rates, or any non-mortality outcome
+
+Use the analysis_summary from Stage A index to guide your extraction approach.
 """
 
 OUTPUT = """

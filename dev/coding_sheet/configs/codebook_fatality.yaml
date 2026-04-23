@@ -64,13 +64,18 @@ fields:
     label: "Fatality_Type"
     type: str
     required: true
-    prompt: "CFR (case fatality rate) | IFR (infection fatality rate) | HFR (hospital) | ICU_fatality_rate | other."
+    prompt: "CFR (confirmed cases) | IFR (estimated infections) | HFR (hospitalized) | ICU_fatality_rate | IMV_fatality_rate (invasive mechanical ventilation) | other."
 
   - name: denominator_type
     label: "Denominator_Type"
     type: str
     required: true
-    prompt: "confirmed_cases | estimated_infections | hospitalizations | PCR_positive | other."
+    prompt: "confirmed_cases | estimated_infections | hospitalizations | ICU_admissions | IMV_patients | PCR_positive | other."
+
+  - name: summary_type
+    label: "Summary_Type"
+    type: str
+    prompt: "How this value is reported: single_study | median | mean | pooled_mean | pooled_proportion | other. CRITICAL for matching SR comparison method."
 
   - name: age_group
     label: "Age_Group"
@@ -80,7 +85,7 @@ fields:
   - name: severity_group
     label: "Severity_Group"
     type: str
-    prompt: "all | mild | moderate | severe | critical | hospitalized | ICU | NR."
+    prompt: "all | mild | moderate | severe | critical | hospitalized | ICU | IMV | NR."
 
   - name: adjustment
     label: "Adjustment"
@@ -137,6 +142,20 @@ fields:
 index_schema:
   - name: region_raw
     path: study_meta.region_raw
+  - name: period_raw
+    path: study_meta.period_raw
+  - name: fatality_type_raw
+    path: study_meta.fatality_type_raw
+  - name: summary_statistic
+    path: analysis_summary.summary_statistic
+  - name: pooling_method
+    path: analysis_summary.pooling_method
+  - name: denominator_type
+    path: analysis_summary.denominator_type
+  - name: adjustment
+    path: analysis_summary.adjustment
+  - name: processing_hint
+    path: analysis_summary.processing_hint
   - name: period_raw
     path: study_meta.period_raw
   - name: population_raw
