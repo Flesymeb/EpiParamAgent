@@ -78,6 +78,10 @@ class PubMedClient:
         self.medline_only = medline_only
 
         self.session = requests.Session()
+        # Bypass system proxy for NCBI (PubMed is publicly accessible; proxy adds latency and can drop connections).
+        # Set NCBI_USE_PROXY=true to re-enable proxy routing.
+        if os.getenv("NCBI_USE_PROXY", "false").lower() != "true":
+            self.session.trust_env = False
         self._min_interval = 0.1 if self.api_key else 0.34
         self._last_request_ts: Optional[float] = None
         # Allow disabling SSL verification via env (NCBI_VERIFY_SSL=false) for environments with custom certs.
@@ -183,7 +187,7 @@ class PubMedClient:
 
         papers: List[Paper] = []
         slice_ids = ids if target is None else ids[:target]
-        for chunk in self._chunk_ids(slice_ids, chunk_size=200):
+        for chunk in self._chunk_ids(slice_ids, chunk_size=50):
             papers.extend(self._fetch_details(chunk))
             self._throttle()
         return papers

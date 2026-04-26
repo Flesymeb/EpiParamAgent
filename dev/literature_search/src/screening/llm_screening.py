@@ -114,6 +114,7 @@ def init_llm_model(model_override: str | None = None) -> Any:
         max_retries=3,
         request_timeout=cfg.timeout_s,
         streaming=cfg.force_streaming,
+        max_tokens=cfg.max_tokens,
     )
 
 

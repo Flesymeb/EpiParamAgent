@@ -165,8 +165,8 @@ def main() -> None:
         pmids = [p.id.replace("pubmed:", "") for p in papers if p.id]
         print(f"[INFO] PubMed search hits: {len(pmids)}")
         if pmids:
-            details = fetch_paper_details(pmids, client)
-            rows.extend(details)
+            for chunk in _chunk(pmids, 50):
+                rows.extend(fetch_paper_details(chunk, client))
 
     if args.include_gt and gt_path and gt_path.exists():
         gt_pmids = _load_pmids_from_csv(gt_path)
@@ -174,7 +174,7 @@ def main() -> None:
         missing = [p for p in gt_pmids if p and p not in raw_pmids]
         if missing:
             print(f"[INFO] Adding missing GT PMIDs: {len(missing)}")
-            for chunk in _chunk(missing, 200):
+            for chunk in _chunk(missing, 50):
                 rows.extend(fetch_paper_details(chunk, client))
         else:
             print("[INFO] All GT PMIDs already in raw.")
