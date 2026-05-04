@@ -264,7 +264,7 @@ def _run_script(script_name: str, argv: list[str]) -> None:
         "prepare_downstream_experiment": "prepare_downstream_experiment",
     }
 
-    scripts_dir = DEV_ROOT / "literature_search" / "scripts" / "cli"
+    scripts_dir = DEV_ROOT / "tools" / "scripts"
     script_path = scripts_dir / f"{script_name}.py"
 
     if not script_path.exists():

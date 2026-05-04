@@ -41,15 +41,15 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(BASE_DIR.parent / "tools"))
 sys.path.insert(0, str(BASE_DIR / "src"))
 
-from common.config import load_llm_config
+from metaagent.config import load_llm_config
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
-from screening.llm_screening import (
+from metaagent.screening.llm_screening import (
     init_llm_model,
     load_ground_truth_pmids,
     screen_papers_batch_async,
 )
-from screening.profile_registry import resolve_profile_paths
+from metaagent.screening.profile_registry import resolve_profile_paths
 
 PROMPT_DIR = BASE_DIR / "src" / "epidemiology" / "prompts"
 SYSTEM_PROMPT_PATH = PROMPT_DIR / "5d" / "screening_system_title_abstract.md"

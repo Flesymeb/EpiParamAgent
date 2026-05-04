@@ -36,7 +36,7 @@ import requests
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from metaagent.pubmed.client import PubMedClient
+from tools.pubmed.client import PubMedClient
 
 
 def _fetch_pubmed_details_with_keywords(

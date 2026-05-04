@@ -21,7 +21,7 @@ def _resolve_output_from_profile(profile_name: str) -> Path:
     Returns: evaluation/coding/{disease}/{topic}/{project}/coding_runs/{timestamp}/
     """
     try:
-        from screening.profile_registry import get_profile
+        from metaagent.screening.profile_registry import get_profile
         p = get_profile(profile_name.upper())
         if p is not None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:19]

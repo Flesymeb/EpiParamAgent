@@ -11,7 +11,7 @@ from typing import Any
 from metaagent.config import load_mineru_config
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-FULLTEXT_CACHE_ROOT = BASE_DIR.parent / "paper_pool"
+FULLTEXT_CACHE_ROOT = BASE_DIR / "paper_pool"
 PDF_CACHE_DIR = FULLTEXT_CACHE_ROOT / "pdfs"
 MD_CACHE_DIR = FULLTEXT_CACHE_ROOT / "markdown"
 
@@ -22,7 +22,7 @@ def ensure_fulltext_cache_dirs() -> None:
 
 
 def load_pdf_fetcher_module():
-    paper_fetch_dir = BASE_DIR.parent / "tools" / "paper_fetch"
+    paper_fetch_dir = BASE_DIR / "tools" / "paper_fetch"
     if str(paper_fetch_dir) not in sys.path:
         sys.path.insert(0, str(paper_fetch_dir))
     import pdf_fetcher as pdf_fetcher

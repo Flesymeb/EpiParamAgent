@@ -23,8 +23,8 @@ from typing import Any, Dict, Set, List, Tuple
 sys.path.insert(0, str(Path(__file__).resolve().parents[2].parent / "tools"))
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
-from common.provenance import write_run_manifest
-from screening.profile_registry import resolve_profile_paths
+from metaagent.provenance import write_run_manifest
+from metaagent.screening.profile_registry import resolve_profile_paths
 
 try:
     from rich.console import Console

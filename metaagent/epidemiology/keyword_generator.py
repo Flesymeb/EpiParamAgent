@@ -46,11 +46,11 @@ import sys
 
 logger = logging.getLogger(__name__)
 
-TOOLS_DIR = Path(__file__).resolve().parents[3] / "tools"
+TOOLS_DIR = Path(__file__).resolve().parents[2] / "tools"
 if str(TOOLS_DIR) not in sys.path:
     sys.path.insert(0, str(TOOLS_DIR))
 
-from common.config import load_runtime_env
+from metaagent.config import load_runtime_env
 
 load_runtime_env(module_hint="literature_search")
 

@@ -11,7 +11,7 @@ LIT_SEARCH_SRC = ROOT / "dev" / "literature_search" / "src"
 if str(LIT_SEARCH_SRC) not in sys.path:
     sys.path.insert(0, str(LIT_SEARCH_SRC))
 
-from screening.dashboard_data import (  # type: ignore
+from metaagent.screening.dashboard_data import (  # type: ignore
     discover_screening_runs,
     load_screened_dataframe,
     load_text_preview,

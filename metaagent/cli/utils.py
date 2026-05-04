@@ -46,7 +46,7 @@ def resolve_project_root(ctx: click.Context | None = None) -> Path:
 
 def resolve_profile(profile: str, disease: str | None = None):
     """Look up a screening profile and validate it."""
-    from screening.profile_registry import get_profile
+    from metaagent.screening.profile_registry import get_profile
 
     p = get_profile(profile.upper())
     if p is None:

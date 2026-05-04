@@ -44,7 +44,7 @@ def extract(disease, topic, profile, stage, fetch_mode, out, codebook):
         cb_rel = cb_map.get((disease, topic))
         if not cb_rel:
             raise click.BadParameter(f"No codebook mapping for disease={disease}, topic={topic}")
-        cb_path = DEV_ROOT / "coding_sheet" / cb_rel
+        cb_path = DEV_ROOT / "configs" / "codebooks" / cb_rel.name
 
     # Resolve pmids.txt
     if profile:
@@ -68,7 +68,7 @@ def extract(disease, topic, profile, stage, fetch_mode, out, codebook):
         argv += ["--profile", profile]
 
     # Run the extraction script
-    script_path = DEV_ROOT / "coding_sheet" / "cli" / "extract_epi.py"
+    script_path = DEV_ROOT / "tools" / "scripts" / "extract_coding.py"
     _run_script(script_path, argv)
 
 
@@ -99,7 +99,7 @@ def evaluate(disease, topic, project, parameter_type, estimate_measure,
     if output:          argv += ["--output", output]
 
     proj = resolve_project_root()
-    script_path = DEV_ROOT / "literature_search" / "scripts" / "cli" / "evaluate_coding.py"
+    script_path = DEV_ROOT / "tools" / "scripts" / "evaluate_coding.py"
     _run_script(script_path, argv)
 
 

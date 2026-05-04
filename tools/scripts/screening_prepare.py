@@ -27,10 +27,10 @@ BASE_DIR = SCRIPT_DIR.parents[1]
 # Removed: path now resolved via metaagent package
 # Removed: path now resolved via metaagent package
 
-from metaagent.pubmed.client import PubMedClient
-from common.provenance import write_run_manifest
+from tools.pubmed.client import PubMedClient
+from metaagent.provenance import write_run_manifest
 from pubmed_manager import fetch_paper_details, fix_missing_fields
-from screening.profile_registry import resolve_profile_paths
+from metaagent.screening.profile_registry import resolve_profile_paths
 
 
 def _load_pmids_from_csv(path: Path) -> List[str]:
