@@ -66,6 +66,12 @@ class ScreeningDecision(BaseModel):
         description="整体相关性评分 0-4，由系统自动计算加权平均（Disease 30% + Parameter 30% + Evidence 25% + Population 10% + Location 5%）",
     )
     overall_justification: str = Field(description="整体评估理由，2-3句话")
+    confidence: Optional[float] = Field(
+        default=None,
+        ge=0.0,
+        le=1.0,
+        description="置信度 0-1。反映各维度评分的信息充分程度。1.0=摘要直接覆盖所有维度，0.0=完全无法判断",
+    )
 
     @model_validator(mode="after")
     def calculate_overall_score(self):
@@ -87,11 +93,71 @@ class BinaryDecision(BaseModel):
         description="Should this paper be included in the review? True=Include, False=Exclude"
     )
     justification: str = Field(description="Brief justification for the decision, 1-2 sentences")
+    confidence: Optional[float] = Field(
+        default=None,
+        ge=0.0,
+        le=1.0,
+        description="Confidence in the decision. 1.0=highly confident, 0.0=complete guess.",
+    )
+
+
+class PECOElement(BaseModel):
+    """Assessment for a single PECO element."""
+
+    present: bool = Field(description="Whether evidence for this element was found in the text")
+    justification: str = Field(description="Brief justification, 1-2 sentences")
+
+
+class PECODecision(BaseModel):
+    """Structured PECO framework output for epidemiological screening."""
+
+    population: PECOElement = Field(description="P — Population: human subjects or human-derived data?")
+    exposure: PECOElement = Field(description="E — Exposure: target disease/pathogen/risk factor?")
+    comparison: PECOElement = Field(
+        description="C — Comparison: comparison group or context? (Optional for descriptive epi)"
+    )
+    outcome: PECOElement = Field(description="O — Outcome: target epidemiological parameter reported?")
+
+    include: bool = Field(
+        description="Include decision: P AND E AND O must all be present (C optional). True=Include, False=Exclude."
+    )
+    confidence: float = Field(
+        ge=0.0,
+        le=1.0,
+        description="Confidence in the overall decision. 0.0-0.3=very uncertain, 0.7+=high confidence.",
+    )
+    justification: str = Field(description="Overall justification, 2-3 sentences summarizing key evidence")
 
 
 def classify_binary_decision(decision: BinaryDecision) -> str:
     """Map binary include/exclude to the canonical candidate label."""
     return "strong_candidate" if decision.include else "unlikely_candidate"
+
+
+def classify_peco_decision(decision: PECODecision) -> str:
+    """Map PECO include/exclude to the canonical candidate label.
+
+    Low-confidence includes are downgraded to possible_candidate.
+    Low-confidence excludes are kept as unlikely_candidate.
+    """
+    if not decision.include:
+        return "unlikely_candidate"
+    if decision.confidence < 0.7:
+        return "possible_candidate"
+    return "strong_candidate"
+
+
+def peco_confidence_from_elements(decision: PECODecision) -> float:
+    """Derive confidence from per-element certainty.
+
+    If the LLM didn't provide an overall confidence, estimate it from
+    the number of elements that are definitively present vs uncertain.
+    """
+    elements = [decision.population, decision.exposure, decision.outcome]
+    n_clear = sum(1 for e in elements if e.present)
+    total = len(elements)
+    # More elements present = higher confidence that inclusion is correct
+    return round(n_clear / total, 2)
 
 
 def normalize_thresholds(raw_thresholds: dict[str, Any] | None) -> dict[str, dict[str, int]]:

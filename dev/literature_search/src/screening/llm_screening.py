@@ -17,8 +17,10 @@ from common.config import load_llm_config
 from .decision_models import (
     BinaryDecision,
     ScreeningDecision,
+    PECODecision,
     classify_binary_decision,
     classify_screening_decision,
+    classify_peco_decision,
     resolve_stage2_evidence_floor,
     resolve_stage_mode,
 )
@@ -69,6 +71,14 @@ PROMPT_FILES = {
     "binary_baseline_title_only": (
         PROMPT_DIR / "binary_baseline" / "screening_system_title_only.md",
         PROMPT_DIR / "binary_baseline" / "screening_user_title_only.md",
+    ),
+    "peco_title_abstract": (
+        PROMPT_DIR / "peco" / "screening_system_title_abstract.md",
+        PROMPT_DIR / "peco" / "screening_user_title_abstract.md",
+    ),
+    "peco_title_only": (
+        PROMPT_DIR / "peco" / "screening_system_title_only.md",
+        PROMPT_DIR / "peco" / "screening_user_title_only.md",
     ),
 }
 
@@ -214,14 +224,22 @@ async def screen_papers_batch_async(
     # Binary strategy only applies at title/abstract stages; full-text stages always
     # use 5D scoring because the detailed prompt and ScreeningDecision schema are
     # needed for the stage-2 classification logic.
+    # PECO strategy similarly applies only at title/abstract stages.
     BINARY_STAGES = {"title_abstract", "title_only"}
     is_binary = strategy in {"binary", "binary_noguidance", "binary_baseline"} and screening_stage in BINARY_STAGES
+    is_peco = strategy == "peco" and screening_stage in BINARY_STAGES
     is_noguidance = strategy == "binary_noguidance" and screening_stage in BINARY_STAGES
     is_baseline = strategy == "binary_baseline" and screening_stage in BINARY_STAGES
 
-    # Binary strategy uses separate prompt files with a simpler instruction set
+    # PECO strategy uses separate prompt files
     effective_stage = screening_stage
-    if is_binary:
+    if is_peco:
+        peco_stage_map = {
+            "title_abstract": "peco_title_abstract",
+            "title_only": "peco_title_only",
+        }
+        effective_stage = peco_stage_map.get(screening_stage, screening_stage)
+    elif is_binary:
         if is_noguidance:
             binary_stage_map = {
                 "title_abstract": "binary_noguidance_title_abstract",
@@ -254,6 +272,14 @@ async def screen_papers_batch_async(
         fmt_kwargs = {
             "research_question": config["research_question"],
         }
+    elif is_peco:
+        fmt_kwargs = {
+            "research_question": config["research_question"],
+            "disease_focus": config["disease_focus"],
+            "disease_exclude": config["disease_exclude"],
+            "parameter_focus": config["parameter_focus"],
+            "parameter_exclude": config["parameter_exclude"],
+        }
     else:
         fmt_kwargs = {
             "screening_stage": screening_stage.replace("_", " "),
@@ -269,7 +295,12 @@ async def screen_papers_batch_async(
     template = ChatPromptTemplate.from_messages(
         [("system", system_text), ("human", user_text)]
     )
-    output_schema = BinaryDecision if is_binary else ScreeningDecision
+    if is_peco:
+        output_schema = PECODecision
+    elif is_binary:
+        output_schema = BinaryDecision
+    else:
+        output_schema = ScreeningDecision
     structured_llm = llm_model.with_structured_output(output_schema)
 
     all_prompts: list[tuple[dict[str, Any], Any]] = []
@@ -328,6 +359,8 @@ async def screen_papers_batch_async(
                         continue
                     if isinstance(result, BinaryDecision):
                         _write_binary_result(paper, result)
+                    elif isinstance(result, PECODecision):
+                        _write_peco_result(paper, result)
                     else:
                         _write_structured_result(
                             paper,
@@ -369,6 +402,8 @@ async def screen_papers_batch_async(
                         result = await invoke_with_retry_async(structured_llm, prompt)
                         if isinstance(result, BinaryDecision):
                             _write_binary_result(paper, result)
+                        elif isinstance(result, PECODecision):
+                            _write_peco_result(paper, result)
                         else:
                             _write_structured_result(
                                 paper,
@@ -437,6 +472,29 @@ def _write_binary_result(paper: dict[str, Any], result: BinaryDecision) -> None:
     for dim in ["disease", "population", "location", "evidence", "parameter"]:
         paper[f"{dim}_score"] = ""
         paper[f"{dim}_justification"] = ""
+
+
+def _write_peco_result(paper: dict[str, Any], result: PECODecision) -> None:
+    """Write PECO framework decision fields onto the paper dict.
+
+    Maps PECO elements to dimension score fields for output schema consistency.
+    P→population, E→disease, C→(unmapped, stored in overall_justification),
+    O→parameter.
+    """
+    paper["llm_suggest"] = classify_peco_decision(result)
+    paper["overall_score"] = 4 if result.include else (2 if result.confidence < 0.7 else 0)
+    paper["overall_justification"] = result.justification
+    paper["disease_score"] = 4 if result.exposure.present else 0
+    paper["disease_justification"] = result.exposure.justification
+    paper["population_score"] = 4 if result.population.present else 0
+    paper["population_justification"] = result.population.justification
+    paper["parameter_score"] = 4 if result.outcome.present else 0
+    paper["parameter_justification"] = result.outcome.justification
+    paper["location_score"] = ""
+    paper["location_justification"] = f"[PECO] C={result.comparison.present} | {result.comparison.justification}"
+    paper["evidence_score"] = ""
+    paper["evidence_justification"] = ""
+    paper["confidence"] = result.confidence
 
 
 def _mark_paper_error(paper: dict[str, Any], error: Exception) -> None:

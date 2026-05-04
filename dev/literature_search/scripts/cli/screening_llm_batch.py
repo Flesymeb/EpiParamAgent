@@ -755,9 +755,9 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--strategy",
         type=str,
-        choices=["5d", "binary", "binary_noguidance", "binary_baseline"],
+        choices=["5d", "binary", "binary_noguidance", "binary_baseline", "peco"],
         default="5d",
-        help="筛选策略：5d=五维评分（默认），binary=简单包含/排除",
+        help="Screening strategy: 5d=five-dimension scoring (default), binary=simple include/exclude, binary_baseline=disease+param only, binary_noguidance=no guidance, peco=PECO framework",
     )
     parser.add_argument(
         "--experiment",

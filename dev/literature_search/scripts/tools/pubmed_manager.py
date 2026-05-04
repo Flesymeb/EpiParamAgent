@@ -194,6 +194,16 @@ def _parse_pubmed_article_details(article: ET.Element) -> Dict[str, str]:
                 mesh_terms.append(f"[MeSH] {descriptor.text.strip()}")
     keywords = keyword_terms if keyword_terms else mesh_terms
     keywords_str = "; ".join(keywords) if keywords else ""
+    mesh_terms_str = "; ".join(mesh_terms) if mesh_terms else ""
+
+    # Extract Publication Types (e.g., "Journal Article", "Observational Study", "Review")
+    pub_types: list[str] = []
+    pub_type_list = article_elem.find(".//PublicationTypeList")
+    if pub_type_list is not None:
+        for pt in pub_type_list.findall(".//PublicationType"):
+            if pt.text:
+                pub_types.append(pt.text.strip())
+    pub_types_str = "; ".join(pub_types) if pub_types else ""
 
     return {
         "pmid": pmid,
@@ -205,6 +215,8 @@ def _parse_pubmed_article_details(article: ET.Element) -> Dict[str, str]:
         "journal": journal,
         "doi": doi,
         "keywords": keywords_str,
+        "mesh_terms": mesh_terms_str,
+        "pub_types": pub_types_str,
     }
 
 
