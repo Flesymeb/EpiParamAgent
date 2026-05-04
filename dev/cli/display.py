@@ -23,31 +23,40 @@ ERROR       = "#f94144"   # red — errors
 
 
 # ── ASCII art banner (solid block characters, Prism4MAS outline style) ─
+_SEP = [
+    "  ▄▄▄▄  ",
+    " ██████ ",
+    " ██████ ",
+    " ▀▀▀▀▀▀ ",
+    "  ▀▀▀▀  ",
+    "        ",
+]
 _LOGO = [
-    "██╗ ██╗ ██████╗ ██████╗  █████╗   ●     █████╗  █████╗ ██████╗ ██╗ ██╗ ██████╗ ",
-    "███╗███║██╔═══╝ ╚══██╔╝ ██╔══██╗  ●    ██╔══██╗██╔═══╝ ██╔═══╝ ███████║╚══██╔╝ ",
-    "██╔████║█████╗    ██║   ███████║  ●    ███████║██║ ██╗ █████╗  ██╔████║  ██║   ",
-    "██║╚╝██║██╔══╝    ██║   ██╔══██║  ●    ██╔══██║██║ ╚██╗██╔══╝  ██║╚███║  ██║   ",
-    "██║  ██║██████╗   ██║   ██║  ██║  ●    ██║  ██║╚█████╔╝██████╗ ██║ ╚██║  ██║   ",
-    "╚═╝  ╚═╝╚═════╝   ╚═╝   ╚═╝  ╚═╝  ●    ╚═╝  ╚═╝ ╚════╝ ╚═════╝ ╚═╝  ╚═╝  ╚═╝   ",
+    "██╗ ██╗ ██████╗ ██████╗  █████╗",
+    "███╗███║██╔═══╝ ╚══██╔╝ ██╔══██╗",
+    "██╔████║█████╗    ██║   ███████║",
+    "██║╚╝██║██╔══╝    ██║   ██╔══██║",
+    "██║  ██║██████╗   ██║   ██║  ██║",
+    "╚═╝  ╚═╝╚═════╝   ╚═╝   ╚═╝  ╚═╝",
+]
+_LOGO2 = [
+    " █████╗  █████╗ ██████╗ ██╗ ██╗ ██████╗ ",
+    "██╔══██╗██╔═══╝ ██╔═══╝ ███████║╚══██╔╝ ",
+    "███████║██║ ██╗ █████╗  ██╔████║  ██║   ",
+    "██╔══██║██║ ╚██╗██╔══╝  ██║╚███║  ██║   ",
+    "██║  ██║╚█████╔╝██████╗ ██║ ╚██║  ██║   ",
+    "╚═╝  ╚═╝ ╚════╝ ╚═════╝ ╚═╝  ╚═╝  ╚═╝   ",
 ]
 
 
 def show_banner(version: str = "0.2.0") -> None:
     """Print the MetaAgent startup banner."""
     console.print(f"[{ACCENT}]" + "━" * 80 + f"[/{ACCENT}]")
-    for line in _LOGO:
-        meta_part = line[:32]    # META — orange
-        gap_left = line[32:35]   # spaces before dot
-        dot       = line[35]     # ● — teal accent
-        gap_right = line[36:40]  # spaces after dot
-        agent_part = line[40:]   # AGENT — white
+    for meta, sep, agent in zip(_LOGO, _SEP, _LOGO2):
         console.print(
-            f"[bold {LOGO_LEFT}]{meta_part}[/bold {LOGO_LEFT}]"
-            f"{gap_left}"
-            f"[bold {ACCENT}]{dot}[/bold {ACCENT}]"
-            f"{gap_right}"
-            f"[bold #ffffff]{agent_part}[/bold #ffffff]"
+            f"[bold {LOGO_LEFT}]{meta}[/bold {LOGO_LEFT}]"
+            f"[bold {ACCENT}]{sep}[/bold {ACCENT}]"
+            f"[bold #ffffff]{agent}[/bold #ffffff]"
         )
     console.print(f"[bold {ACCENT}]Epidemiology Meta-Analysis Agent[/bold {ACCENT}]")
     console.print(
