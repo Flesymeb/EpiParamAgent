@@ -7,13 +7,13 @@ import shutil
 import traceback
 from pathlib import Path
 
-from lib.llm import init_llm
-from lib.shared.io import infer_pmid_from_path, iter_markdown_files, read_text
-from lib.export.exporters import export_records
-from lib.parsing import parse_json_records
-from lib.fulltext_processor import process_fulltext
-from lib.schema.config_loader import load_config, ProjectConfig
-from lib.schema.prompt_factory import (
+from metaagent.coding.llm import init_llm
+from metaagent.coding.shared.io import infer_pmid_from_path, iter_markdown_files, read_text
+from metaagent.coding.export.exporters import export_records
+from metaagent.coding.parsing import parse_json_records
+from metaagent.coding.fulltext_processor import process_fulltext
+from metaagent.coding.schema.config_loader import load_config, ProjectConfig
+from metaagent.coding.schema.prompt_factory import (
     build_full_context_system_prompt,
     build_full_context_user_prompt,
 )

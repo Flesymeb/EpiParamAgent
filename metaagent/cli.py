@@ -101,11 +101,18 @@ def _cmd_screening_run(args: argparse.Namespace) -> None:
     gt_count = annotate_ground_truth(papers, gt_pmids)
 
     # Stage papers
-    stage_state = partition_papers(papers, screening_config, auto_fulltext=False)
+    stage_state = partition_papers(
+        papers=papers,
+        screening_config=screening_config,
+        auto_fulltext=False,
+        fulltext_only=False,
+    )
     print_stage_split(
-        stage_state["papers_title_abstract"],
-        stage_state["papers_title_only"],
-        stage_state["papers_without_abstract"],
+        papers_title_abstract=stage_state["papers_title_abstract"],
+        papers_title_only=stage_state["papers_title_only"],
+        papers_without_abstract=stage_state["papers_without_abstract"],
+        auto_fulltext=False,
+        fulltext_only=False,
     )
 
     # Run title+abstract screening
@@ -158,6 +165,11 @@ def _cmd_screening_run(args: argparse.Namespace) -> None:
         batch_size=args.batch_size,
         batch_concurrency=args.batch_concurrency,
         profile_name="",
+        auto_fulltext=False,
+        fulltext_only=False,
+        fulltext_needed_count=0,
+        fulltext_ready_count=0,
+        fulltext_errors=[],
         strategy=strategy,
         experiment=args.experiment or None,
     )

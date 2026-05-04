@@ -1,2 +1,5 @@
 #!/usr/bin/env bash
-exec "$(dirname "$0")/dev/.venv/bin/metaagent" "$@"
+# MetaAgent-Epi entry point
+# Usage: ./metaagent.sh [command]
+cd "$(dirname "$0")"
+python -m metaagent.cli "$@"

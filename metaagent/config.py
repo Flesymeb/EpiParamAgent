@@ -22,7 +22,7 @@ _DOTENV_LOADED: set[str] = set()
 _VALID_MODULE_HINTS = {"literature_search", "coding_sheet"}
 
 
-def get_dev_root() -> Path:
+def get_project_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
@@ -39,7 +39,7 @@ def _normalize_module_hint(module_hint: Optional[str]) -> Optional[str]:
 
 
 def _iter_env_candidates(module_hint: Optional[str]) -> Iterable[Path]:
-    dev_root = get_dev_root()
+    dev_root = get_project_root()
     yield dev_root
     normalized = _normalize_module_hint(module_hint)
     if normalized:
