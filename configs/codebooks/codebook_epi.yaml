@@ -1,0 +1,163 @@
+# Epidemiology codebook: Table 1 (study descriptions + k dispersion)
+
+project:
+  name: "Epi Codebook: Dispersion (k) from Primary Studies"
+  description: "Extract dispersion parameter estimates from individual COVID-19 studies (not from SR tables)."
+  effect_type: "dispersion_k"
+
+stage_a:
+  prompt_file: prompts/stage_a.py
+
+stage_b:
+  prompt_file: prompts/stage_b.py
+
+parameters:
+  research_question: >
+    This project want to extract study-level information on the dispersion parameter k from epidemiological studies of SARS-CoV-2 transmission. 
+    The goal is to capture the reported k values and their confidence intervals, along with study metadata such as study name, method, period, and region, etc.
+
+notes: |
+  Goal: extract dispersion parameter information FROM EACH PRIMARY STUDY.
+  Do NOT copy values from systematic review tables.
+  Include k estimates with uncertainty intervals (95%/90% CI, 95% CrI, or 95% range).
+  If only 90% CI is reported, keep it in the original fields and note conversion to 95% CI.
+  If k is not reported but a 20/80 rule is reported, capture P/Q and any R value.
+  Do NOT compute k unless the study explicitly reports it; if derived by the paper, mark k_source="derived_in_paper".
+  If the paper describes estimation period/location/model/setting, capture them.
+
+fields:
+  - name: pmid
+    label: "PMID"
+    type: str
+    required: true
+    prompt: "PubMed ID for the study."
+
+  - name: study
+    label: "Study"
+    type: str
+    required: true
+    prompt: "Study identifier (author/year or study label in the table)."
+
+  - name: estimation_period
+    label: "Estimation_Period"
+    type: str
+    required: true
+    prompt: "Estimation period or time window (raw text)."
+
+  - name: location
+    label: "Location"
+    type: str
+    required: true
+    prompt: "Study location/region/setting as reported."
+
+  - name: population
+    label: "Population"
+    type: str
+    prompt: "Study population or case type (e.g., community cases, hospitalized, household)."
+
+  - name: method
+    label: "Method"
+    type: str
+    required: true
+    prompt: "Study method or estimation approach as reported."
+
+  - name: model
+    label: "Model"
+    type: str
+    prompt: "Model used (e.g., negative binomial, branching process, renewal model)."
+
+  - name: transmissibility_metric
+    label: "Transmissibility_Metric"
+    type: str
+    prompt: "Metric used (e.g., R, Rt, reproduction number, overdispersion)."
+
+  - name: k_value
+    label: "k"
+    type: float
+    prompt: "Dispersion parameter k (null if not reported)."
+
+  - name: k_source
+    label: "k_Source"
+    type: str
+    prompt: "reported|derived_in_paper|not_reported"
+
+  - name: k_ci_type
+    label: "k_CI_Type"
+    type: str
+    prompt: "CI|CrI|Range|Other"
+
+  - name: k_ci_level
+    label: "k_CI_Level"
+    type: str
+    prompt: "90%|95%|Other"
+
+  - name: k_ci_low
+    label: "k_CI_Low"
+    type: float
+    prompt: "Lower bound of 95% CI for k (null if not reported)."
+
+  - name: k_ci_high
+    label: "k_CI_High"
+    type: float
+    prompt: "Upper bound of 95% CI for k (null if not reported)."
+
+  - name: k_ci_low_original
+    label: "k_CI_Low_Orig"
+    type: float
+    prompt: "Lower bound of original CI/CrI/Range if not 95%."
+
+  - name: k_ci_high_original
+    label: "k_CI_High_Orig"
+    type: float
+    prompt: "Upper bound of original CI/CrI/Range if not 95%."
+
+  - name: r_value
+    label: "R_Value"
+    type: float
+    prompt: "Reported reproduction number R (if used with 20/80 rule)."
+
+  - name: p_prop
+    label: "P_Prop"
+    type: float
+    prompt: "P: proportion of most infectious individuals (e.g., 0.2)."
+
+  - name: q_prop
+    label: "Q_Prop"
+    type: float
+    prompt: "Q: proportion of transmissions (e.g., 0.8)."
+
+  - name: notes
+    label: "Notes"
+    type: str
+    prompt: "Evidence location, table/section references, or clarification notes."
+
+  - name: evidence_locations
+    label: "Evidence_Locations"
+    type: list[str]
+    prompt: "1-3 evidence locations (e.g., 'Table 1', 'Results paragraph 2')."
+
+index_schema:
+  - name: method_raw
+    path: study_meta.method_raw
+  - name: period_raw
+    path: study_meta.period_raw
+  - name: region_raw
+    path: study_meta.region_raw
+  - name: k_value_hint
+    path: field_evidence.k_value
+  - name: k_ci_hint
+    path: field_evidence.k_ci
+  - name: r_hint
+    path: field_evidence.r_value
+  - name: rule_20_80_hint
+    path: field_evidence.rule_20_80
+
+quality_rules:
+  missing_penalties:
+    k_value: 0.2
+  review_threshold: 0.7
+
+extraction:
+  mode: "full_context"
+  max_input_chars: 500000
+  truncation_marker: "\n\n[... document truncated ...]\n"
