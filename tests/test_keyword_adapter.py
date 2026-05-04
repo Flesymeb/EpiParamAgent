@@ -4,10 +4,10 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 # Ensure src is on path for test run via `python tests/test_keyword_adapter.py`
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+# sys.path removed - using package imports))
 
-import epidemiology.keyword_generator as kg
-from epidemiology.keyword_generator import KeywordGeneratorAgent
+import tools.epidemiology.keyword_generator as kg
+from tools.epidemiology.keyword_generator import KeywordGeneratorAgent
 
 
 def test_http_fallback_success():

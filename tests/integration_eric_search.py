@@ -2,10 +2,10 @@ import sys
 from pathlib import Path
 
 # Ensure src is on path
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+# sys.path removed - using package imports))
 
-from data_sources.eric_client import ERICClient
-from epidemiology.utils import export_records
+from tools.pubmed.eric_client import ERICClient
+from tools.epidemiology.utils import export_records
 
 
 def run_eric_smoke_test(query: str = "learning", limit: int = 5):

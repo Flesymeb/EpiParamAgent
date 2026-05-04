@@ -62,8 +62,9 @@ def prepare(project_root, profile, disease, topic, query, date_range, retmax,
 @click.option("--batch-size", default=20, type=int, help="Papers per batch")
 @click.option("--batch-concurrency", default=1, type=int, help="Concurrent batches")
 @click.option("--model", default=None, help="Override model name")
-@click.option("--strategy", default="5d", type=click.Choice(["5d", "binary", "binary_noguidance"]))
+@click.option("--strategy", default="5d", type=click.Choice(["5d", "binary", "binary_noguidance", "binary_baseline", "peco"]))
 @click.option("--experiment", default=None, help="Experiment subdirectory")
+@click.option("--cascade", is_flag=True, help="Enable cascade screening (Tier1->Tier2->Tier3) with deep research retrieval")
 @click.option("--auto-fulltext", is_flag=True, help="Auto-download full-text for no-abstract papers")
 @click.option("--fulltext-only", is_flag=True, help="Skip title/abstract, only run full-text")
 @click.option("--skip-no-abstract", is_flag=True, help="Route no-abstract papers to title-only")
@@ -71,9 +72,14 @@ def prepare(project_root, profile, disease, topic, query, date_range, retmax,
 @click.option("--resume-possible-fulltext", is_flag=True, help="Stage 2: PMC-only full-text rescue for possible candidates")
 @click.option("--resume-sp-fulltext", is_flag=True, help="Stage 2: PMC-only full-text for strong+possible")
 def run(project_root, profile, disease, topic, batch_size, batch_concurrency,
-        model, strategy, experiment, auto_fulltext, fulltext_only, skip_no_abstract,
+        model, strategy, experiment, cascade, auto_fulltext, fulltext_only, skip_no_abstract,
         resume_fulltext, resume_possible_fulltext, resume_sp_fulltext):
-    """Run LLM-based batch screening."""
+    """Run LLM-based batch screening with optional cascade retrieval."""
+    if cascade:
+        _run_cascade(project_root, profile, disease, topic, batch_size, batch_concurrency,
+                     model, strategy, experiment)
+        return
+
     argv = [
         "screening_llm_batch.py",
         "--project-root", str(resolve_project_root() if not project_root else Path(project_root).resolve()),

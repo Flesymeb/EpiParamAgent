@@ -6,8 +6,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[5]
-LIT_SEARCH_SRC = ROOT / "dev" / "literature_search" / "src"
+ROOT = Path(__file__).resolve().parents[4]
+LIT_SEARCH_SRC = ROOT
 if str(LIT_SEARCH_SRC) not in sys.path:
     sys.path.insert(0, str(LIT_SEARCH_SRC))
 

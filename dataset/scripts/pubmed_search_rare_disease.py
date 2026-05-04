@@ -62,7 +62,7 @@ for _p in (_LIT_SEARCH_SRC, _TOOLS_SRC):
         sys.path.insert(0, str(_p))
 
 try:
-    from data_sources.pubmed_client import PubMedClient  # type: ignore
+    from tools.pubmed.client import PubMedClient  # type: ignore
     _HAVE_CLIENT = True
 except ImportError:
     _HAVE_CLIENT = False
@@ -367,7 +367,7 @@ def main() -> None:
 
     # Load env
     try:
-        from common.config import load_runtime_env  # type: ignore
+        from metaagent.config import load_runtime_env  # type: ignore
         load_runtime_env("literature_search")
     except Exception:
         pass

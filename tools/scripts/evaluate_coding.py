@@ -39,7 +39,7 @@ from pathlib import Path
 
 import pandas as pd
 
-REPO_ROOT = Path(__file__).resolve().parents[4]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 CODING_ROOT = REPO_ROOT / "evaluation" / "coding"
 TOOLS_SRC = REPO_ROOT / "dev" / "tools"
 

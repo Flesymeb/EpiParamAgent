@@ -66,4 +66,4 @@ def get_extraction_run(run_id: str, root: str = Query(default="")) -> dict[str, 
 def _resolve_root(root: str) -> Path:
     if root:
         return Path(root).resolve()
-    return Path(__file__).resolve().parents[5]
+    return Path(__file__).resolve().parents[4]

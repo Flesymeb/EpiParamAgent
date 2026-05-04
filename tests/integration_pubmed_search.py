@@ -3,10 +3,10 @@ import sys
 from pathlib import Path
 
 # Ensure src is on path
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+# sys.path removed - using package imports))
 
-from data_sources.pubmed_client import PubMedClient
-from epidemiology.utils import export_records
+from tools.pubmed.client import PubMedClient
+from tools.epidemiology.utils import export_records
 
 
 def run_pubmed_smoke_test(
