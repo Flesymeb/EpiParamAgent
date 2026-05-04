@@ -7,13 +7,13 @@ random-effects pooling (inverse-variance weighting).
 Typical workflow
 ---------------
 >>> import pandas as pd
->>> from meta_analysis.pooling import summarize
+>>> from tools.analysis.pooling import summarize
 >>> df = pd.read_excel("coding_sheet_output.xlsx")
 >>> summary = summarize(df, parameter_type="serial_interval", group_by="disease_name")
 >>> print(summary[["disease_name", "pooled_mean", "ci_lower", "ci_upper", "i2", "n_studies"]])
 
 Or low-level:
->>> from meta_analysis.pooling import se_from_record, pool_means
+>>> from tools.analysis.pooling import se_from_record, pool_means
 >>> records = [{"point_estimate": 6.3, "se": se_from_record(row)} for row in rows]
 >>> result = pool_means(records)  # DL random effects
 """

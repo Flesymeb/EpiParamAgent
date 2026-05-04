@@ -43,6 +43,7 @@ dependencies = [
     "tenacity>=8.2.3",
     "streamlit>=1.41.0",
     "matplotlib>=3.8",
+    "socksio>=1.0.0",
 ]
 
 [project.optional-dependencies]

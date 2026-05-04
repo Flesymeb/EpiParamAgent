@@ -12,7 +12,7 @@ Equivalent:
 import argparse
 from pathlib import Path
 
-from pubmed_manager import search_titles_to_csv
+from tools.scripts.pubmed_manager import search_titles_to_csv
 
 
 def main() -> None:

@@ -17,7 +17,7 @@ from typing import Any, Iterable, Optional
 
 
 _DOTENV_LOADED: set[str] = set()
-_VALID_MODULE_HINTS = {"literature_search", "coding_sheet"}
+_VALID_MODULE_HINTS = {"screening", "coding"}
 
 
 def get_project_root() -> Path:

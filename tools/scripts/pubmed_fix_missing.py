@@ -12,7 +12,7 @@ Equivalent:
 import argparse
 from pathlib import Path
 
-from pubmed_manager import fix_missing_fields
+from tools.scripts.pubmed_manager import fix_missing_fields
 
 
 def main() -> None:

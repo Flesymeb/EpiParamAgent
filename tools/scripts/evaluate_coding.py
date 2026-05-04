@@ -47,7 +47,7 @@ for p in (TOOLS_SRC,):
     if str(p) not in sys.path:
         sys.path.insert(0, str(p))
 
-from meta_analysis.pooling import enrich_ci, summarize  # type: ignore
+from tools.analysis.pooling import enrich_ci, summarize  # type: ignore
 
 # Topic → default parameter_type filter for pooling
 TOPIC_PARAM = {

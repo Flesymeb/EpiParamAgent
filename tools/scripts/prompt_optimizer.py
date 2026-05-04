@@ -44,7 +44,7 @@ sys.path.insert(0, str(BASE_DIR / "src"))
 from metaagent.config import load_llm_config
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
-from metaagent.screening.llm_screening import (
+from metaagent.screening.engine import (
     init_llm_model,
     load_ground_truth_pmids,
     screen_papers_batch_async,

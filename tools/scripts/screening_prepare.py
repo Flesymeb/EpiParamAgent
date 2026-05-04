@@ -29,7 +29,7 @@ BASE_DIR = SCRIPT_DIR.parents[1]
 
 from tools.pubmed.client import PubMedClient
 from tools.provenance import write_run_manifest
-from pubmed_manager import fetch_paper_details, fix_missing_fields
+from tools.scripts.pubmed_manager import fetch_paper_details, fix_missing_fields
 from metaagent.screening.profile_registry import resolve_profile_paths
 
 

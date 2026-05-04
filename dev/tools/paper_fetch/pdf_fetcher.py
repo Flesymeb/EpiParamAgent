@@ -735,6 +735,10 @@ class SciHubUrlExtractor:
 
                 if id_list:
                     pmc_id = id_list[0]
+                    pmc_url = self._try_pmc_by_pmcid(f"PMC{pmc_id}")
+                    if pmc_url:
+                        cprint(f"  [PMC] PDF link: {pmc_url}", "cyan")
+                        return pmc_url
 
                     # Visit HTML page to parse actual PDF link (path is not fixed)
                     html_url = f"https://pmc.ncbi.nlm.nih.gov/articles/PMC{pmc_id}/"
@@ -806,10 +810,35 @@ class SciHubUrlExtractor:
             pdf_links = soup.find_all("a", href=True)
             for link in pdf_links:
                 href = link["href"]
-                if href.endswith(".pdf") or "/pdf/" in href:
-                    return urljoin(html_url, href)
+                if not (href.endswith(".pdf") or "/pdf/" in href):
+                    continue
+                pdf_url = urljoin(html_url, href)
+                pdf_url_l = pdf_url.lower()
+                # PMC article pages often contain PDF links in references and
+                # supplementary material. Only accept links that are clearly for
+                # the same article; otherwise we can cache an unrelated PDF under
+                # the requested PMCID/PMID.
+                if "pmc.ncbi.nlm.nih.gov" in pdf_url_l and pmcid.lower() in pdf_url_l:
+                    return pdf_url
         except Exception:
-            return None
+            pass
+
+        # Some PMC records do not expose a PDF link on the NCBI page, while
+        # Europe PMC can still render an open-access PDF for the same PMCID.
+        try:
+            epmc_url = f"https://europepmc.org/articles/{pmcid}?pdf=render"
+            resp = self.sess.get(
+                epmc_url,
+                headers={"Accept": "application/pdf,*/*;q=0.8"},
+                timeout=15,
+            )
+            content_type = (resp.headers.get("Content-Type") or "").lower()
+            if resp.status_code == 200 and (
+                resp.content[:4] == b"%PDF" or "application/pdf" in content_type
+            ):
+                return epmc_url
+        except Exception:
+            pass
         return None
 
     def _process_pmcid(self, pmcid, download_dir=None):
