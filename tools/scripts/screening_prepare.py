@@ -28,7 +28,7 @@ BASE_DIR = SCRIPT_DIR.parents[1]
 # Removed: path now resolved via metaagent package
 
 from tools.pubmed.client import PubMedClient
-from metaagent.provenance import write_run_manifest
+from tools.provenance import write_run_manifest
 from pubmed_manager import fetch_paper_details, fix_missing_fields
 from metaagent.screening.profile_registry import resolve_profile_paths
 

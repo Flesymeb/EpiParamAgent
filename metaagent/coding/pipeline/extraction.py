@@ -117,7 +117,7 @@ def _markdown_cache_path(md_dir: Path, pmid: str) -> Path:
 
 def _load_markdown_from_pdf(pdf_path: Path, pmid: str) -> str:
     _ensure_tools_on_path()
-    from metaagent.pdf_reader_mineru import extract_pdf_markdown_mineru  # type: ignore
+    from tools.mineru.pdf_reader import extract_pdf_markdown_mineru  # type: ignore
     from metaagent.config import load_mineru_config  # type: ignore
 
     _, md_dir = _paper_pool_dirs()
@@ -502,7 +502,7 @@ def run_pipeline(
 
     _ensure_tools_on_path()
     from metaagent.config import load_llm_config, load_mineru_config  # type: ignore
-    from metaagent.provenance import write_run_manifest  # type: ignore
+    from tools.provenance import write_run_manifest  # type: ignore
 
     llm_cfg = load_llm_config(module_hint="coding_sheet")
     mineru_cfg = load_mineru_config(module_hint="coding_sheet")

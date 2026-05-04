@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
 
-from .mineru_client import MineruMarkdown, pdf_url_to_markdown, pdf_file_to_markdown
+from tools.mineru.client import MineruMarkdown, pdf_url_to_markdown, pdf_file_to_markdown
 
 
 @dataclass(frozen=True)

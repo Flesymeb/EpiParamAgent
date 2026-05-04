@@ -151,7 +151,7 @@ def convert_pdfs_to_markdown(
             for pmid in pmid_to_pdf.keys()
         }
 
-    from metaagent.pdf_reader_mineru import extract_pdf_markdown_mineru
+    from tools.mineru.pdf_reader import extract_pdf_markdown_mineru
 
     total_pdfs = sum(1 for info in pmid_to_pdf.values() if info.get("pdf_path"))
     if total_pdfs:
