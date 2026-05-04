@@ -163,4 +163,7 @@ class StyledGroup(click.Group):
             console.print(opt_table)
             console.print()
 
-        console.print(f"[{ACCENT_DIM}]Run [bold]metaagent {group_name} <subcommand> --help[/bold] for details.[/{ACCENT_DIM}]")
+        if group_name == "main":
+            console.print(f"[{ACCENT_DIM}]Run [bold]metaagent <command> --help[/bold] for command details.[/{ACCENT_DIM}]")
+        else:
+            console.print(f"[{ACCENT_DIM}]Run [bold]metaagent {group_name} <subcommand> --help[/bold] for details.[/{ACCENT_DIM}]")
