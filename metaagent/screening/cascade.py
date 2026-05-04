@@ -18,6 +18,12 @@ from metaagent.screening.retrieval import (
     retrieve_enriched_content,
     summarize_retrieval_stats,
 )
+from metaagent.screening.enrichment import (
+    EnrichedMetadata,
+    enrich_paper_metadata,
+    batch_enrich,
+    build_enriched_prompt,
+)
 
 # Confidence thresholds for cascade triage
 DEFAULT_CONFIDENCE_HIGH = 0.7  # Above this: accept LLM decision
@@ -233,5 +239,109 @@ async def run_cascade_screening(
         r = stats["retrieval"]
         print(f"  Retrieval: {r['successful']}/{r['total']} sources found "
               f"({r['avg_elapsed_ms']:.0f}ms avg)")
+
+    return stats
+
+
+async def run_simple_cascade(
+    papers: list[dict[str, Any]],
+    *,
+    screen_fn,
+    screen_kwargs: dict[str, Any],
+    confidence_threshold: float = DEFAULT_CONFIDENCE_HIGH,
+    human_review_threshold: float = DEFAULT_CONFIDENCE_LOW,
+    enrichment_concurrency: int = 5,
+    try_pmc: bool = True,
+) -> dict[str, Any]:
+    """Run cascade screening with PubMed XML + PMC HTML enrichment.
+
+    Simpler than run_cascade_screening: only uses PubMed/PMC for Tier 2,
+    which directly addresses the dimension-level evidence gaps that cause
+    5D and PECO to underperform on abstracts alone.
+
+    Tier 1: LLM screens with metadata only (title + abstract + keywords).
+    Tier 2: Uncertain papers get PubMed XML (MeSH, PubType, structured abstract)
+            and optionally PMC HTML (Methods section), then re-screened.
+    Tier 3: Still-uncertain papers flagged for human review.
+    """
+    started_at = time.perf_counter()
+
+    # ── Tier 1 ──
+    print(f"\n{'='*60}")
+    print(f"CASCADE Tier 1: Screening {len(papers)} papers with metadata only")
+    print(f"{'='*60}")
+    await screen_fn(papers, **screen_kwargs)
+
+    confident, uncertain = partition_by_confidence(
+        papers, threshold_high=confidence_threshold
+    )
+    print(f"\nTier 1: {len(confident)} confident, {len(uncertain)} uncertain "
+          f"(threshold={confidence_threshold})")
+
+    for p in confident:
+        p["cascade_tier"] = "1"
+
+    if not uncertain:
+        elapsed = time.perf_counter() - started_at
+        print(f"Cascade complete in {elapsed:.1f}s — all decisions confident.")
+        return summarize_cascade(papers)
+
+    # ── Tier 2: PubMed/PMC enrichment ──
+    print(f"\n{'='*60}")
+    print(f"CASCADE Tier 2: Enriching {len(uncertain)} uncertain papers via PubMed/PMC")
+    print(f"{'='*60}")
+
+    enriched_results = await batch_enrich(
+        uncertain, concurrency=enrichment_concurrency, try_pmc=try_pmc
+    )
+
+    success_count = sum(1 for _, e in enriched_results if e.success)
+    pmc_count = sum(1 for _, e in enriched_results if e.pmc_full_text_snippet)
+    print(f"Enrichment: {success_count}/{len(uncertain)} with new metadata, "
+          f"{pmc_count} with PMC full-text")
+
+    # Build enriched prompts and re-screen
+    re_screen_papers = []
+    for paper, enriched in enriched_results:
+        if enriched.success:
+            enriched_text = build_enriched_prompt(paper, enriched)
+            paper["_enriched_content"] = enriched_text
+            paper["_enrichment_source"] = enriched.source
+            re_screen_papers.append(paper)
+        else:
+            conf = paper.get("confidence", 0.0)
+            if isinstance(conf, (int, float)) and conf < human_review_threshold:
+                paper["cascade_tier"] = "3"
+            else:
+                paper["cascade_tier"] = "2"
+
+    if re_screen_papers:
+        print(f"\nRe-screening {len(re_screen_papers)} papers with enriched content...")
+        tier2_kwargs = dict(screen_kwargs)
+        tier2_kwargs["content_key"] = "_enriched_content"
+        tier2_kwargs["content_label"] = "Enriched content (PubMed metadata + PMC full-text)"
+        tier2_kwargs["content_fallback"] = "(No enriched content available)"
+        await screen_fn(re_screen_papers, **tier2_kwargs)
+
+        for paper in re_screen_papers:
+            conf = paper.get("confidence", 0.0)
+            if isinstance(conf, (int, float)) and conf < human_review_threshold:
+                paper["cascade_tier"] = "3"
+            else:
+                paper["cascade_tier"] = "2"
+
+    elapsed = time.perf_counter() - started_at
+    stats = summarize_cascade(papers)
+    stats["total_elapsed_s"] = elapsed
+    stats["enrichment_success_rate"] = success_count / len(uncertain) if uncertain else 0
+    stats["pmc_fulltext_rate"] = pmc_count / len(uncertain) if uncertain else 0
+
+    tier3_count = sum(1 for p in papers if p.get("cascade_tier") == "3")
+    print(f"\nCascade complete in {elapsed:.1f}s.")
+    print(f"  Tier 1 (confident):      {stats['tier1_resolved']}")
+    print(f"  Tier 2 (enriched):       {stats['tier2_resolved']}")
+    print(f"  Tier 3 (human review):   {tier3_count}")
+    print(f"  Enrichment success:      {success_count}/{len(uncertain)} ({stats['enrichment_success_rate']:.0%})")
+    print(f"  PMC full-text found:     {pmc_count}/{len(uncertain)} ({stats['pmc_fulltext_rate']:.0%})")
 
     return stats

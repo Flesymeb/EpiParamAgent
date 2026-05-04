@@ -101,6 +101,73 @@ def run(project_root, profile, disease, topic, batch_size, batch_concurrency,
     _run_script("screening_llm_batch", argv)
 
 
+def _run_cascade(project_root, profile, disease, topic, batch_size, batch_concurrency,
+                 model, strategy, experiment):
+    """Run cascade screening with Tier-2 PubMed/PMC enrichment."""
+    import asyncio, csv
+    from metaagent.config import load_llm_config
+    from metaagent.screening.engine import init_llm_model, screen_papers_batch_async
+    from metaagent.screening.staging import partition_papers, annotate_ground_truth
+    from metaagent.screening.cascade import run_simple_cascade
+
+    root = resolve_project_root()
+    print(f"Starting cascade screening with strategy={strategy}")
+    print(f"Project root: {root}")
+
+    cfg = load_llm_config()
+    llm = init_llm_model(model_override=model or None)
+    print(f"Model: {model or cfg.model}")
+
+    # Load input CSV (resolve from profile or explicit path)
+    input_file = root / "evaluation" / "screening" / (disease or "covid19") / "raw.csv"
+    if not input_file.exists():
+        print(f"Warning: input file not found at {input_file}")
+        print("Cascade mode requires a CSV with Title, Abstract, Keywords, PMID columns.")
+        print("Run 'metaagent screening prepare' first.")
+        return
+
+    with open(input_file, encoding="utf-8-sig") as f:
+        papers = list(csv.DictReader(f))
+    print(f"Loaded {len(papers)} papers from {input_file}")
+
+    # Run cascade
+    async def _run():
+        await run_simple_cascade(
+            papers=papers,
+            screen_fn=screen_papers_batch_async,
+            screen_kwargs={
+                "research_question": "",
+                "llm_model": llm,
+                "batch_size": int(batch_size),
+                "batch_concurrency": int(batch_concurrency),
+                "screening_stage": "title_abstract",
+                "content_label": "Abstract",
+                "content_key": "Abstract",
+                "content_fallback": "(Abstract unavailable)",
+                "strategy": strategy,
+            },
+            try_pmc=True,
+        )
+
+    asyncio.run(_run())
+
+    # Save output
+    from datetime import datetime
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    exp_name = experiment or f"cascade_{strategy}_{disease or 'all'}_{ts}"
+    out_dir = root / "evaluation" / "experiments" / exp_name / "screening" / (disease or "all")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_file = out_dir / f"screened_{ts}.csv"
+
+    fieldnames = list(papers[0].keys()) if papers else []
+    with open(out_file, "w", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(papers)
+
+    print(f"Output saved to {out_file}")
+
+
 # ── evaluate ───────────────────────────────────────────────────────────
 @screening.command("evaluate")
 @click.argument("subcommand", type=click.Choice([
