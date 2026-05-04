@@ -18,7 +18,7 @@ cd "$SCRIPT_DIR"
 
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 PROFILE="P13"
-PMIDS="$REPO_ROOT/evaluation/coding/serial_interval/p13/pmids.txt"
+PMIDS="$REPO_ROOT/evaluation/coding/covid19/serial_interval/p13/pmids.txt"
 OUT=""
 STAGE="all"     # all = fetch then both; or: fetch | index | extract | both
 CODEBOOK="configs/codebook_serial_interval.yaml"

@@ -202,9 +202,20 @@ def _pick_output(
 
 
 def _infer_topic(path_like: str | Path | None) -> str:
+    """Infer topic from a path, supporting both flat and two-level structures.
+
+    Two-level: .../{disease}/{topic}/...  → returns topic part
+    Flat legacy: .../{topic}/...          → returns topic part
+    """
     if not path_like:
         return "unknown"
     path = Path(path_like)
+    parts = path.parts
+    # Check two-level pattern: disease/parameter consecutive in path
+    for i in range(len(parts) - 1):
+        if parts[i + 1] in TOPIC_NAMES and parts[i] not in TOPIC_NAMES:
+            return parts[i + 1]
+    # Fallback: single-level match
     for part in path.parts:
         if part in TOPIC_NAMES:
             return part

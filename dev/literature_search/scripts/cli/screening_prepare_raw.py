@@ -133,7 +133,7 @@ def main() -> None:
         )
         output_path = paths.raw_file
         gt_path = paths.ground_truth_file
-        if not args.raw_input:
+        if not args.raw_input and paths.raw_file.exists():
             args.raw_input = str(paths.raw_file)
     else:
         if not args.output:

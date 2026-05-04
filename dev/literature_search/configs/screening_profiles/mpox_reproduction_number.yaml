@@ -1,0 +1,41 @@
+topic: reproduction_number
+disease: mpox
+
+defaults:
+  thresholds:
+    strong:
+      disease_min: 4
+      parameter_min: 4
+      evidence_min: 3
+      population_min: 2
+      location_min: 2
+    possible:
+      disease_min: 3
+      parameter_min: 3
+      evidence_min: 2
+      population_min: 2
+      location_min: 2
+  policies:
+    title_abstract_mode: strict
+    title_only_mode: lenient
+    full_text_mode: standard
+    stage2_evidence_floor: 1
+    parameter_scoring_note: |
+      - Score 3–4 if the paper estimates or reports the reproduction number by applying
+        a transmission model or exponential growth method to its own real epidemic data.
+      - Score 2 if the paper only cites or borrows another study's R0 estimate as a
+        model input assumption, without producing its own estimate.
+      - Score 0–1 if the paper only mentions R0 in the introduction without reporting
+        a new estimate.
+    fulltext_rescue:
+      enabled: true
+      when_no_abstract: true
+
+profiles:
+  MP9:
+    project_number: 9
+    research_question: What is the basic reproduction number (R0) of mpox?
+    disease_focus: mpox or monkeypox or MPXV
+    disease_exclude: none
+    parameter_focus: basic reproduction number OR R0 OR effective reproduction number OR Rt
+    parameter_exclude: studies that do not report or estimate reproduction number

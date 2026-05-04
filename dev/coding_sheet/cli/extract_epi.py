@@ -18,7 +18,7 @@ from lib.pipeline.extraction import FETCH_STRATEGIES, run_pipeline
 def _resolve_output_from_profile(profile_name: str) -> Path:
     """Look up profile in the screening registry to derive the evaluation output path.
 
-    Returns: evaluation/coding/{topic}/{project}/coding_runs/{timestamp}/
+    Returns: evaluation/coding/{disease}/{topic}/{project}/coding_runs/{timestamp}/
     """
     try:
         from screening.profile_registry import get_profile
@@ -27,7 +27,8 @@ def _resolve_output_from_profile(profile_name: str) -> Path:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:19]
             return (
                 REPO_ROOT / "evaluation" / "coding"
-                / p.topic_key / p.project_dir_name
+                / p.disease_key / p.topic_key
+                / p.project_dir_name
                 / "coding_runs" / timestamp
             )
     except Exception:

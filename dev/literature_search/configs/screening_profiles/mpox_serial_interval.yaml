@@ -1,0 +1,65 @@
+topic: serial_interval
+disease: mpox
+
+defaults:
+  thresholds:
+    strong:
+      disease_min: 4
+      parameter_min: 4
+      evidence_min: 3
+      population_min: 2
+      location_min: 2
+    possible:
+      disease_min: 3
+      parameter_min: 2
+      evidence_min: 2
+      population_min: 2
+      location_min: 2
+  policies:
+    title_abstract_mode: strict
+    title_only_mode: lenient
+    full_text_mode: standard
+    stage2_evidence_floor: 2
+    parameter_scoring_note: |
+      - Score 3–4 only if the paper directly reports serial interval, generation interval,
+        or incubation period from its own observed individual-level data (contact-tracing
+        pairs, household contacts).
+      - Score 2 if the paper estimates the parameter via a model output, or borrows values
+        from another study as an input assumption.
+      - Score 0–1 if the paper only mentions the parameter without reporting a new estimate.
+    fulltext_rescue:
+      enabled: true
+      when_no_abstract: true
+
+profiles:
+  MP5:
+    project_number: 5
+    research_question: What are the serial intervals and generation time of mpox?
+    disease_focus: mpox or monkeypox or MPXV
+    disease_exclude: none
+    parameter_focus: serial interval or generation interval or incubation period
+    parameter_exclude: studies that do not report or estimate serial interval or generation time
+
+  MP6:
+    project_number: 6
+    research_question: What are the serial intervals and incubation period of mpox?
+    disease_focus: mpox or monkeypox or MPXV
+    disease_exclude: none
+    parameter_focus: serial interval or incubation period or latent period
+    parameter_exclude: studies that do not report serial interval or incubation period
+
+  MP10:
+    project_number: 10
+    research_question: What are the serial intervals, generation time, and R0/Rt of mpox?
+    disease_focus: mpox or monkeypox or MPXV
+    disease_exclude: none
+    parameter_focus: serial interval or generation time or reproduction number or R0
+    parameter_exclude: none
+
+  MP11:
+    project_number: 11
+    research_question: What are the serial intervals and incubation periods of mpox?
+    disease_focus: mpox or monkeypox or MPXV
+    disease_exclude: none
+    parameter_focus: serial interval or incubation period
+    parameter_exclude: studies that do not report serial interval or incubation period

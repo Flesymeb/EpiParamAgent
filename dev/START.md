@@ -118,7 +118,11 @@ Module-local:
 
 ## Output Locations
 
-- screening results: `evaluation/screening/GT_1/GT_export/{topic}/pXX/`
+- screening results: `evaluation/screening/{disease}/GT_1/GT_export/{parameter}/pXX/`
+- coding results: `evaluation/coding/{disease}/{parameter}/pXX/`
 - full-text cache: `dev/paper_pool/`
 - coding outputs: `dev/coding_sheet/output/`
 - manifests: next to workflow outputs
+
+Diseases: `covid19`, `mpox`, `rare_disease` (future)
+Parameters: `fatality`, `serial_interval`, `reproduction_number`

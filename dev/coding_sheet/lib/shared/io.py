@@ -12,6 +12,8 @@ def infer_pmid_from_path(path: Path) -> str | None:
     match = PMID_PATTERN.search(name)
     if match:
         return match.group(1)
+    if name.upper().startswith("DOI_"):
+        return name
     digits = re.findall(r"\d{6,}", name)
     if digits:
         return digits[0]

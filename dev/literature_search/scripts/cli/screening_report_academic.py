@@ -319,10 +319,16 @@ def _collect_runs(root: Path, topics: Iterable[str]) -> List[Dict[str, str]]:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Academic screening report generator")
     parser.add_argument(
+        "--disease",
+        type=str,
+        default=None,
+        help="Disease filter (e.g. covid19, mpox). Changes root path accordingly.",
+    )
+    parser.add_argument(
         "--root",
         type=Path,
-        default=Path("evaluation/screening/GT_1/GT_export"),
-        help="GT_export root directory",
+        default=None,
+        help="GT_export root directory (default: auto-resolved from --disease)",
     )
     parser.add_argument(
         "--topics",
@@ -344,7 +350,12 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    root = args.root.resolve()
+    REPO_ROOT = Path(__file__).resolve().parents[4]
+    if args.root is not None:
+        root = args.root.resolve()
+    else:
+        disease = args.disease or "covid19"
+        root = REPO_ROOT / "evaluation" / "screening" / disease / "GT_1" / "GT_export"
     out_dir = args.out.resolve()
     tables_dir = out_dir / "tables"
     figs_dir = out_dir / "figs"

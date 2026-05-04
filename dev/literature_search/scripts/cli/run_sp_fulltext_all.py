@@ -143,6 +143,8 @@ FIELDS = [
 def main() -> None:
     parser = argparse.ArgumentParser(description="Batch --resume-sp-fulltext for all profiles")
     parser.add_argument("--project-root", default=".", help="Repository root directory")
+    parser.add_argument("--disease", default="covid19",
+                        help="Disease to process (covid19, mpox, etc.)")
     parser.add_argument("--dry-run", action="store_true",
                         help="Print commands without executing")
     parser.add_argument("--profiles", nargs="+", default=PROFILES,
@@ -152,7 +154,7 @@ def main() -> None:
     project_root = Path(args.project_root).resolve()
     python_exe = project_root / "dev" / "literature_search" / ".venv" / "Scripts" / "python.exe"
     screening_script = project_root / "dev" / "literature_search" / "scripts" / "cli" / "screening_llm_batch.py"
-    results_dir = project_root / "evaluation" / "screening" / "GT_1"
+    results_dir = project_root / "evaluation" / "screening" / args.disease / "GT_1"
     results_file = results_dir / RESULTS_FILENAME
     log_dir = results_dir / "sp_fulltext_logs"
 

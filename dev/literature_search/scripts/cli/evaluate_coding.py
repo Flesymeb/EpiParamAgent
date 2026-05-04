@@ -1,6 +1,6 @@
 """Evaluate coding extraction results: compute pooled mean per project.
 
-Scans evaluation/coding/{topic}/{project}/coding_runs/ for the latest run,
+Scans evaluation/coding/{disease}/{topic}/{project}/coding_runs/ for the latest run,
 applies enrich_ci + summarize, and writes a consolidated summary CSV.
 
 Usage
@@ -8,20 +8,23 @@ Usage
 # All projects (auto-discover):
 uv run --directory dev python dev/literature_search/scripts/cli/evaluate_coding.py
 
-# Specific topic:
-uv run --directory dev python dev/literature_search/scripts/cli/evaluate_coding.py --topic serial_interval
+# Specific disease:
+uv run --directory dev python dev/literature_search/scripts/cli/evaluate_coding.py --disease covid19
+
+# Specific disease + topic:
+uv run --directory dev python dev/literature_search/scripts/cli/evaluate_coding.py --disease covid19 --topic serial_interval
 
 # Specific project:
-uv run --directory dev python dev/literature_search/scripts/cli/evaluate_coding.py --topic serial_interval --project p13
+uv run --directory dev python dev/literature_search/scripts/cli/evaluate_coding.py --disease mpox --topic fatality --project p4
 
 # Override method / parameter filter:
-uv run --directory dev python dev/literature_search/scripts/cli/evaluate_coding.py \\
-    --parameter-type serial_interval --estimate-measure mean --include-median --impute-se
+uv run --directory dev python dev/literature_search/scripts/cli/evaluate_coding.py \
+    --disease covid19 --parameter-type serial_interval --estimate-measure mean --include-median --impute-se
 
 Output
 ------
 evaluation/coding/pooled_summary_{YYYYMMDD}.csv
-  topic, project, parameter_type, n_studies, n_excluded, n_imputed,
+  disease, topic, project, parameter_type, n_studies, n_excluded, n_imputed,
   pooled_mean, se_pooled, ci_lower, ci_upper, i2, tau2, p_het, run_used
 """
 
@@ -47,11 +50,10 @@ for p in (TOOLS_SRC,):
 from meta_analysis.pooling import enrich_ci, summarize  # type: ignore
 
 # Topic → default parameter_type filter for pooling
-# Must match values in the 'parameter_type' column of the codebook output.
 TOPIC_PARAM = {
     "serial_interval":     "serial_interval",
-    "reproduction_number": "R0",          # codebook uses R0|Rt|...
-    "fatality":            "CFR",         # codebook uses CFR|IFR|...
+    "reproduction_number": "R0",
+    "fatality":            "CFR",
 }
 
 
@@ -175,6 +177,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Compute pooled means from coding extraction results."
     )
+    parser.add_argument("--disease", default=None, help="Filter by disease (e.g. covid19, mpox).")
     parser.add_argument("--topic", default=None, help="Filter by topic (e.g. serial_interval).")
     parser.add_argument("--project", default=None, help="Filter by project (e.g. p13).")
     parser.add_argument("--parameter-type", default=None,
@@ -195,19 +198,25 @@ def main() -> None:
         print(f"ERROR: {CODING_ROOT} not found.")
         sys.exit(1)
 
-    # Discover projects
-    projects_to_run: list[tuple[str, str, Path]] = []
-    for topic_dir in sorted(CODING_ROOT.iterdir()):
-        if not topic_dir.is_dir():
+    # Discover projects — two-level iteration: disease → topic → project
+    _SKIP_DIRS = {"GT_papers", "figures", "_summary"}
+    projects_to_run: list[tuple[str, str, str, Path]] = []
+    for disease_dir in sorted(CODING_ROOT.iterdir()):
+        if not disease_dir.is_dir() or disease_dir.name.startswith("_"):
             continue
-        if args.topic and topic_dir.name != args.topic:
+        if args.disease and disease_dir.name != args.disease:
             continue
-        for project_dir in sorted(topic_dir.iterdir()):
-            if not project_dir.is_dir():
+        for topic_dir in sorted(disease_dir.iterdir()):
+            if not topic_dir.is_dir() or topic_dir.name in _SKIP_DIRS:
                 continue
-            if args.project and project_dir.name != args.project:
+            if args.topic and topic_dir.name != args.topic:
                 continue
-            projects_to_run.append((topic_dir.name, project_dir.name, project_dir))
+            for project_dir in sorted(topic_dir.iterdir()):
+                if not project_dir.is_dir() or project_dir.name.startswith("_"):
+                    continue
+                if args.project and project_dir.name != args.project:
+                    continue
+                projects_to_run.append((disease_dir.name, topic_dir.name, project_dir.name, project_dir))
 
     if not projects_to_run:
         print("No projects found matching filters.")
@@ -216,10 +225,10 @@ def main() -> None:
     print(f"Found {len(projects_to_run)} project(s) to evaluate.\n")
 
     rows = []
-    for topic, project, project_dir in projects_to_run:
+    for disease, topic, project, project_dir in projects_to_run:
         param_type = args.parameter_type or TOPIC_PARAM.get(topic, "serial_interval")
         if topic == "fatality":
-            print(f"  [{topic}/{project}] NOTE: CFR/IFR is a proportion — "
+            print(f"  [{disease}/{topic}/{project}] NOTE: CFR/IFR is a proportion — "
                   "pooled_mean here is arithmetic average (may be biased). "
                   "For publication-quality meta-analysis use logit transform.")
         result = evaluate_project(
@@ -233,6 +242,7 @@ def main() -> None:
             method=args.method,
         )
         if result:
+            result["disease"] = disease
             rows.append(result)
 
     if not rows:
@@ -245,7 +255,7 @@ def main() -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     fieldnames = [
-        "topic", "project", "parameter_type", "estimate_measure",
+        "disease", "topic", "project", "parameter_type", "estimate_measure",
         "include_median", "impute_se", "method",
         "n_studies", "n_excluded", "n_imputed",
         "pooled_mean", "se_pooled", "ci_lower", "ci_upper",
@@ -258,7 +268,7 @@ def main() -> None:
 
     print(f"\n=== Summary ===")
     df_out = pd.DataFrame(rows)
-    print(df_out[["topic","project","n_studies","n_excluded","n_imputed",
+    print(df_out[["disease","topic","project","n_studies","n_excluded","n_imputed",
                    "pooled_mean","ci_lower","ci_upper","i2"]].to_string(index=False))
     print(f"\nSaved: {out_path}")
 

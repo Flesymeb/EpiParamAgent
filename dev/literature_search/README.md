@@ -72,7 +72,7 @@ scripts\ops\run_pipeline.ps1 -ProjectDir "D:\AILab\MAS\Meta-Analysis\MetaAgent-E
 
 ## Outputs
 
-- screening outputs: `evaluation/screening/GT_1/GT_export/{topic}/pXX/`
+- screening outputs: `evaluation/screening/{disease}/GT_1/GT_export/{parameter}/pXX/`
 - full-text cache: `dev/paper_pool/`
 - manifests: next to outputs or under `screening_logs/`
 

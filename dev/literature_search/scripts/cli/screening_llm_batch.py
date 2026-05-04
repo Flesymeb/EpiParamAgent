@@ -755,7 +755,7 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--strategy",
         type=str,
-        choices=["5d", "binary"],
+        choices=["5d", "binary", "binary_noguidance", "binary_baseline"],
         default="5d",
         help="筛选策略：5d=五维评分（默认），binary=简单包含/排除",
     )

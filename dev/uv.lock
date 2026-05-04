@@ -19,6 +19,7 @@ resolution-markers = [
 [manifest]
 members = [
     "metaagent-coding-sheet",
+    "metaagent-epi",
     "metaagent-literature-search",
 ]
 
@@ -2954,6 +2955,17 @@ requires-dist = [
     { name = "tenacity", specifier = ">=8.2.3" },
     { name = "termcolor", specifier = ">=3.3.0" },
 ]
+
+[[package]]
+name = "metaagent-epi"
+version = "0.2.0"
+source = { editable = "." }
+dependencies = [
+    { name = "click" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "click", specifier = ">=8.0" }]
 
 [[package]]
 name = "metaagent-literature-search"

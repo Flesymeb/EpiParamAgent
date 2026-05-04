@@ -4,6 +4,7 @@ import json
 import re
 import sys
 import shutil
+import traceback
 from pathlib import Path
 
 from lib.llm import init_llm
@@ -143,14 +144,20 @@ def _iter_inputs(input_path: Path, fetch_strategy: str = "pmc_only"):
         pmids = [p for p in pmids if p and not p.startswith("#")]
         if not pmids:
             return
-        pdf_dir, _ = _paper_pool_dirs()
+        pdf_dir, md_dir = _paper_pool_dirs()
         missing = []
         for pmid in pmids:
             pdf_path = pdf_dir / f"PMID_{pmid}.pdf"
             if pdf_path.exists():
                 yield pdf_path
+            elif _markdown_cache_path(md_dir, pmid).exists():
+                yield _markdown_cache_path(md_dir, pmid)
             else:
-                missing.append(pmid)
+                legacy_md = md_dir / f"PMID_{pmid}" / f"PMID_{pmid}.md"
+                if legacy_md.exists():
+                    yield legacy_md
+                else:
+                    missing.append(pmid)
         if missing:
             print(f"[INFO] {len(missing)} PDF(s) not cached — fetching (strategy: {fetch_strategy})")
             still_missing = _fetch_missing_pmids(missing, pdf_dir, fetch_strategy=fetch_strategy)
@@ -280,6 +287,21 @@ def _build_index_row(pmid: str, index_obj: dict, index_schema: list[dict]) -> di
     return row
 
 
+def _write_paper_error(out_dir: Path, pmid: str, stage_name: str, exc: Exception) -> None:
+    errors_dir = out_dir / "errors"
+    errors_dir.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "pmid": pmid,
+        "stage": stage_name,
+        "error_type": type(exc).__name__,
+        "error": str(exc),
+        "traceback": traceback.format_exc(),
+    }
+    error_path = errors_dir / f"PMID_{pmid}.{stage_name}.error.json"
+    error_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"  [ERROR] PMID {pmid}: {stage_name} failed ({type(exc).__name__}); wrote {error_path}")
+
+
 def run_index(
     *,
     fulltext: str,
@@ -386,6 +408,7 @@ def run_pipeline(
     _inject_codebook_context(stage_a_config, effect_config)
     records: list[dict] = []
     index_rows: list[dict] = []
+    errors: list[dict] = []
     xlsx_path: Path | None = None
 
     inputs = list(_iter_inputs(input_path, fetch_strategy=fetch_strategy))
@@ -411,23 +434,33 @@ def run_pipeline(
         abstract = ""
 
         if stage in ("index", "extract", "both"):
-            index_obj = run_index(
-                fulltext=fulltext,
-                tables_summary=tables_summary,
-                was_truncated=processed.was_truncated,
-                pmid=pmid,
-                title=title,
-                abstract=abstract,
-                config=stage_a_config,
-                model=model,
-            )
-            index_payload = index_obj.get("index") if isinstance(index_obj, dict) else None
-            index_envelope = {"pmid": pmid, "index": index_payload or index_obj}
             index_path = index_dir / f"PMID_{pmid}.index.json"
-            index_path.write_text(
-                json.dumps(index_envelope, ensure_ascii=False, indent=2),
-                encoding="utf-8",
-            )
+            if index_path.exists():
+                index_envelope = json.loads(index_path.read_text(encoding="utf-8"))
+                index_obj = index_envelope.get("index", index_envelope)
+                print(f"  [Index] PMID {pmid}: reusing existing index")
+            else:
+                try:
+                    index_obj = run_index(
+                        fulltext=fulltext,
+                        tables_summary=tables_summary,
+                        was_truncated=processed.was_truncated,
+                        pmid=pmid,
+                        title=title,
+                        abstract=abstract,
+                        config=stage_a_config,
+                        model=model,
+                    )
+                    index_payload = index_obj.get("index") if isinstance(index_obj, dict) else None
+                    index_envelope = {"pmid": pmid, "index": index_payload or index_obj}
+                    index_path.write_text(
+                        json.dumps(index_envelope, ensure_ascii=False, indent=2),
+                        encoding="utf-8",
+                    )
+                except Exception as exc:
+                    _write_paper_error(out_dir, pmid, "index", exc)
+                    errors.append({"pmid": pmid, "stage": "index", "error": str(exc)})
+                    continue
             index_schema = _get_index_schema(effect_config)
             if index_schema:
                 index_rows.append(_build_index_row(pmid, index_envelope, index_schema))
@@ -436,20 +469,26 @@ def run_pipeline(
 
         if stage in ("extract", "both"):
             index_json = json.dumps(index_obj, ensure_ascii=False)
-            record_objs = run_extract(
-                fulltext=fulltext,
-                tables_summary=tables_summary,
-                was_truncated=processed.was_truncated,
-                title=title,
-                abstract=abstract,
-                index_json=index_json,
-                config=effect_config,
-                model=model,
-            )
+            try:
+                record_objs = run_extract(
+                    fulltext=fulltext,
+                    tables_summary=tables_summary,
+                    was_truncated=processed.was_truncated,
+                    title=title,
+                    abstract=abstract,
+                    index_json=index_json,
+                    config=effect_config,
+                    model=model,
+                )
+            except Exception as exc:
+                _write_paper_error(out_dir, pmid, "extract", exc)
+                errors.append({"pmid": pmid, "stage": "extract", "error": str(exc)})
+                continue
             if not record_objs:
                 print(f"  [WARN] PMID {pmid}: Stage B returned 0 records")
             for record_obj in record_objs or []:
-                if "pmid" not in record_obj:
+                pmid_value = str(record_obj.get("pmid", "")).strip().upper()
+                if "pmid" not in record_obj or pmid_value in {"", "NR", "NA", "N/A", "NONE", "NULL"}:
                     record_obj["pmid"] = pmid
                 records.append(record_obj)
 
@@ -498,6 +537,8 @@ def run_pipeline(
             "input_count": len(inputs),
             "record_count": len(records),
             "index_row_count": len(index_rows),
+            "error_count": len(errors),
+            "errors": errors,
             "input_files": [str(p) for p in inputs],
             "xlsx_path": str(xlsx_path) if xlsx_path else None,
         },

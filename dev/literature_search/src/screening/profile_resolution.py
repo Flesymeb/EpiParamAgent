@@ -31,6 +31,7 @@ def resolve_profile_config(
         profile_config["topic_override"] = str(topic).strip()
     research_question = profile_config.get("research_question", research_question)
     print(f"✓ 使用 profile: {profile.profile_key}")
+    print(f"  Disease: {profile.disease_key}")
     print(f"  Topic: {profile.topic_key}")
     print(f"  Project: {profile.project_dir_name}")
     print(f"  Research question: {research_question}")

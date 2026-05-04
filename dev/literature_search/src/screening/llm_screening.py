@@ -54,6 +54,22 @@ PROMPT_FILES = {
         PROMPT_DIR / "binary" / "screening_system_title_only.md",
         PROMPT_DIR / "binary" / "screening_user_title_only.md",
     ),
+    "binary_noguidance_title_abstract": (
+        PROMPT_DIR / "binary_noguidance" / "screening_system_title_abstract.md",
+        PROMPT_DIR / "binary_noguidance" / "screening_user_title_abstract.md",
+    ),
+    "binary_noguidance_title_only": (
+        PROMPT_DIR / "binary_noguidance" / "screening_system_title_only.md",
+        PROMPT_DIR / "binary_noguidance" / "screening_user_title_only.md",
+    ),
+    "binary_baseline_title_abstract": (
+        PROMPT_DIR / "binary_baseline" / "screening_system_title_abstract.md",
+        PROMPT_DIR / "binary_baseline" / "screening_user_title_abstract.md",
+    ),
+    "binary_baseline_title_only": (
+        PROMPT_DIR / "binary_baseline" / "screening_system_title_only.md",
+        PROMPT_DIR / "binary_baseline" / "screening_user_title_only.md",
+    ),
 }
 
 
@@ -199,23 +215,43 @@ async def screen_papers_batch_async(
     # use 5D scoring because the detailed prompt and ScreeningDecision schema are
     # needed for the stage-2 classification logic.
     BINARY_STAGES = {"title_abstract", "title_only"}
-    is_binary = strategy == "binary" and screening_stage in BINARY_STAGES
+    is_binary = strategy in {"binary", "binary_noguidance", "binary_baseline"} and screening_stage in BINARY_STAGES
+    is_noguidance = strategy == "binary_noguidance" and screening_stage in BINARY_STAGES
+    is_baseline = strategy == "binary_baseline" and screening_stage in BINARY_STAGES
 
     # Binary strategy uses separate prompt files with a simpler instruction set
     effective_stage = screening_stage
     if is_binary:
-        binary_stage_map = {
-            "title_abstract": "binary_title_abstract",
-            "title_only": "binary_title_only",
-        }
+        if is_noguidance:
+            binary_stage_map = {
+                "title_abstract": "binary_noguidance_title_abstract",
+                "title_only": "binary_noguidance_title_only",
+            }
+        elif is_baseline:
+            binary_stage_map = {
+                "title_abstract": "binary_baseline_title_abstract",
+                "title_only": "binary_baseline_title_only",
+            }
+        else:
+            binary_stage_map = {
+                "title_abstract": "binary_title_abstract",
+                "title_only": "binary_title_only",
+            }
         effective_stage = binary_stage_map.get(screening_stage, screening_stage)
 
     system_text, user_text = load_prompt_templates(effective_stage)
     stage_mode = resolve_stage_mode(screening_stage, policies)
     evidence_floor = resolve_stage2_evidence_floor(policies)
 
-    if is_binary:
-        fmt_kwargs: dict[str, str] = {
+    if is_noguidance:
+        fmt_kwargs: dict[str, str] = {}
+    elif is_baseline:
+        fmt_kwargs = {
+            "disease_focus": config["disease_focus"],
+            "parameter_focus": config["parameter_focus"],
+        }
+    elif is_binary:
+        fmt_kwargs = {
             "research_question": config["research_question"],
         }
     else:

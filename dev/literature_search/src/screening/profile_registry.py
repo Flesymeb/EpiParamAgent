@@ -25,6 +25,7 @@ def _normalize_topic(topic: str) -> str:
 class ScreeningProfile:
     id: str
     topic: str
+    disease: str
     project_number: int
     research_question: str
     disease_focus: str
@@ -36,7 +37,18 @@ class ScreeningProfile:
 
     @property
     def topic_key(self) -> str:
+        """Pure epidemiological parameter name (fatality, serial_interval, etc.)."""
         return _normalize_topic(self.topic)
+
+    @property
+    def disease_key(self) -> str:
+        """Disease identifier (covid19, mpox, etc.)."""
+        return _normalize_topic(self.disease)
+
+    @property
+    def path_key(self) -> str:
+        """Two-level path segment: disease/parameter."""
+        return f"{self.disease_key}/{self.topic_key}"
 
     @property
     def profile_key(self) -> str:
@@ -53,6 +65,7 @@ class ScreeningProfile:
     def to_screening_config(self) -> dict[str, Any]:
         return {
             "profile_id": self.id,
+            "disease": self.disease_key,
             "topic": self.topic_key,
             "project_number": self.project_number,
             "research_question": self.research_question,
@@ -75,7 +88,7 @@ class ScreeningProjectPaths:
     screened_file: Path
 
 
-def _merge_profile(defaults: dict[str, Any], profile_id: str, topic: str, raw: dict[str, Any]) -> ScreeningProfile:
+def _merge_profile(defaults: dict[str, Any], profile_id: str, topic: str, disease: str, raw: dict[str, Any]) -> ScreeningProfile:
     merged = {**defaults, **raw}
     merged["thresholds"] = {
         **(defaults.get("thresholds", {}) or {}),
@@ -88,6 +101,7 @@ def _merge_profile(defaults: dict[str, Any], profile_id: str, topic: str, raw: d
     return ScreeningProfile(
         id=profile_id.upper(),
         topic=_normalize_topic(topic),
+        disease=_normalize_topic(disease),
         project_number=int(merged["project_number"]),
         research_question=str(merged["research_question"]),
         disease_focus=str(merged["disease_focus"]),
@@ -109,13 +123,14 @@ def load_profile_registry() -> dict[str, ScreeningProfile]:
         with open(yaml_file, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f) or {}
         topic = _normalize_topic(data.get("topic") or yaml_file.stem)
+        disease = _normalize_topic(data.get("disease", ""))
         defaults = {
             "thresholds": data.get("defaults", {}).get("thresholds", {}),
             "policies": data.get("defaults", {}).get("policies", {}),
         }
         profiles = data.get("profiles", {}) or {}
         for profile_id, profile_data in profiles.items():
-            profile = _merge_profile(defaults, profile_id, topic, profile_data or {})
+            profile = _merge_profile(defaults, profile_id, topic, disease, profile_data or {})
             registry[profile.profile_key] = profile
 
     return registry
@@ -132,6 +147,7 @@ def resolve_profile_paths(
     project_root: str | Path,
     profile_name: str,
     topic: str | None = None,
+    disease: str | None = None,
     experiment: str | None = None,
 ) -> tuple[ScreeningProfile, ScreeningProjectPaths]:
     profile = get_profile(profile_name)
@@ -139,10 +155,12 @@ def resolve_profile_paths(
         raise KeyError(f"Unknown screening profile: {profile_name}")
 
     topic_key = _normalize_topic(topic) if topic else profile.topic_key
+    disease_key = _normalize_topic(disease) if disease else profile.disease_key
     base_dir = (
         Path(project_root)
         / "evaluation"
         / "screening"
+        / disease_key
         / "GT_1"
         / "GT_export"
         / topic_key
