@@ -452,6 +452,7 @@ def _write_structured_result(
     paper["evidence_justification"] = result.original_evidence.justification
     paper["parameter_score"] = result.parameter_relevance.score
     paper["parameter_justification"] = result.parameter_relevance.justification
+    paper["confidence"] = result.confidence
 
 
 def _write_binary_result(paper: dict[str, Any], result: BinaryDecision) -> None:
@@ -463,6 +464,7 @@ def _write_binary_result(paper: dict[str, Any], result: BinaryDecision) -> None:
     paper["llm_suggest"] = classify_binary_decision(result)
     paper["overall_score"] = 4 if result.include else 0
     paper["overall_justification"] = result.justification
+    paper["confidence"] = result.confidence
     for dim in ["disease", "population", "location", "evidence", "parameter"]:
         paper[f"{dim}_score"] = ""
         paper[f"{dim}_justification"] = ""
@@ -478,6 +480,7 @@ def _write_peco_result(paper: dict[str, Any], result: PECODecision) -> None:
     paper["llm_suggest"] = classify_peco_decision(result)
     paper["overall_score"] = 4 if result.include else (2 if result.confidence < 0.7 else 0)
     paper["overall_justification"] = result.justification
+    paper["confidence"] = result.confidence
     paper["disease_score"] = 4 if result.exposure.present else 0
     paper["disease_justification"] = result.exposure.justification
     paper["population_score"] = 4 if result.population.present else 0
