@@ -10,7 +10,7 @@ from typing import Any
 
 from metaagent.config import load_llm_config
 from tools.provenance import write_run_manifest
-from tools.mineru.config import load_mineru_config
+from tools.mineru._config import load_mineru_config
 
 
 def save_screening_outputs(

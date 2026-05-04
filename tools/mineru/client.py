@@ -10,7 +10,7 @@ from io import BytesIO
 from pathlib import Path
 from typing import Any, Optional
 
-from tools.mineru.config import MineruConfig, load_mineru_config
+from tools.mineru._config import MineruConfig, load_mineru_config
 
 logger = logging.getLogger(__name__)
 
