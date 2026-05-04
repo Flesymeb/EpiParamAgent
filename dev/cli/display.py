@@ -16,6 +16,7 @@ ACCENT      = "#00b4d8"   # teal — primary accent
 ACCENT_DIM  = "#90e0ef"   # light teal — secondary info
 ACCENT_BOLD = "#0077b6"   # deep blue — strong emphasis
 TEXT_DIM    = "#caf0f8"   # pale teal — hints/tips
+LOGO_LEFT   = "#f4a261"   # warm orange — "META" in banner
 SUCCESS     = "#2dc653"   # green — OK
 WARN        = "#f9c74f"   # amber — warnings
 ERROR       = "#f94144"   # red — errors
@@ -36,7 +37,14 @@ def show_banner(version: str = "0.2.0") -> None:
     """Print the MetaAgent startup banner."""
     console.print(f"[{ACCENT}]" + "━" * 76 + f"[/{ACCENT}]")
     for line in _LOGO:
-        console.print(f"[bold #ffffff]{line}[/bold #ffffff]")
+        meta_part = line[:32]
+        space_part = line[32:37]
+        agent_part = line[37:]
+        console.print(
+            f"[bold {LOGO_LEFT}]{meta_part}[/bold {LOGO_LEFT}]"
+            f"{space_part}"
+            f"[bold #ffffff]{agent_part}[/bold #ffffff]"
+        )
     console.print(f"[bold {ACCENT}]Epidemiology Meta-Analysis Agent[/bold {ACCENT}]")
     console.print(
         f"[{ACCENT_DIM}]Version {version}[/{ACCENT_DIM}]  "
