@@ -373,7 +373,7 @@ async def screen_papers_batch_async(
     total_batches = (total - 1) // batch_size + 1
     log_every_batches = max(1, total_batches // 20)
     print(
-        f"\n准备筛选 {total} 篇文献（batch_size={batch_size} | batch_concurrency={batch_concurrency}）...\n"
+        f"\nPreparing to screen {total} papers (batch_size={batch_size} | batch_concurrency={batch_concurrency})...\n"
     )
 
     semaphore = asyncio.Semaphore(max(1, batch_concurrency))
@@ -405,7 +405,7 @@ async def screen_papers_batch_async(
                     completed += 1
                     if isinstance(result, Exception):
                         single_errors.append(
-                            f"  ⚠️ 单篇失败 PMID={paper.get('PMID', 'N/A')}: {str(result)[:100]}"
+                            f"  ⚠️ Paper failed PMID={paper.get('PMID', 'N/A')}: {str(result)[:100]}"
                         )
                         _mark_paper_error(paper, result)
                         continue
@@ -441,16 +441,16 @@ async def screen_papers_batch_async(
                     unlikely_count = len(batch) - strong_count - possible_count - error_count
                     async with print_lock:
                         print(f"[{batch_idx:>3}/{total_batches}] "
-                              f"进度 {completed}/{total} | "
-                              f"{rate:.1f} 篇/秒 | ETA {eta/60:.1f}min | "
+                              f"Progress {completed}/{total} | "
+                              f"{rate:.1f} papers/s | ETA {eta/60:.1f}min | "
                               f"S={strong_count} P={possible_count} U={unlikely_count} E={error_count}")
                         for msg in single_errors:
                             print(msg)
 
             except Exception as e:
                 async with print_lock:
-                    print(f"  [Batch {batch_idx}] 批次失败: {str(e)[:200]}")
-                    print(f"  [Batch {batch_idx}] 尝试单篇重处理...")
+                    print(f"  [Batch {batch_idx}] Batch failed: {str(e)[:200]}")
+                    print(f"  [Batch {batch_idx}] Retrying individual papers...")
                 for paper, prompt in batch:
                     try:
                         raw = await invoke_with_retry_async(structured_llm, prompt)
@@ -474,7 +474,7 @@ async def screen_papers_batch_async(
                     except Exception as e2:
                         async with print_lock:
                             print(
-                                f"    单篇失败 PMID={paper.get('PMID', 'N/A')}: {str(e2)[:100]}"
+                                f"    Paper failed PMID={paper.get('PMID', 'N/A')}: {str(e2)[:100]}"
                             )
                         _mark_paper_error(paper, e2)
 
@@ -486,7 +486,7 @@ async def screen_papers_batch_async(
     elapsed_total = time.perf_counter() - started_at
     rate_total = total / elapsed_total if elapsed_total > 0 else 0.0
     print(
-        f"完成 {total} 篇，总耗时 {elapsed_total/60:.1f} 分钟，平均 {rate_total:.2f} 篇/秒"
+        f"Completed {total} papers in {elapsed_total/60:.1f}min, avg {rate_total:.2f} papers/s"
     )
     return papers
 
