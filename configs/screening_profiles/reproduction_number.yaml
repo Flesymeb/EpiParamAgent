@@ -1,0 +1,70 @@
+topic: reproduction_number
+disease: covid19
+
+defaults:
+  thresholds:
+    strong:
+      disease_min: 4
+      parameter_min: 4
+      evidence_min: 3
+      population_min: 2
+      location_min: 2
+    possible:
+      disease_min: 3
+      parameter_min: 3
+      evidence_min: 2
+      population_min: 2
+      location_min: 2
+  policies:
+    title_abstract_mode: strict
+    title_only_mode: lenient
+    full_text_mode: standard
+    stage2_evidence_floor: 1
+    parameter_scoring_note: |
+      - Score 3–4 if the paper estimates or reports the reproduction number by applying a transmission model, exponential growth rate method, or Bayesian inference to its own real epidemic incidence or case data.
+      - Score 2 if the paper only cites or borrows another study's R0/Rt estimate as an input assumption, without producing its own estimate.
+      - Score 0–1 if the paper only mentions the reproduction number in the introduction or background without reporting a new estimate.
+    fulltext_rescue:
+      enabled: true
+      when_no_abstract: true
+
+profiles:
+  P7:
+    project_number: 7
+    research_question: What is the basic reproduction number (R0) of COVID-19?
+    disease_focus: (COVID-19 OR SARS-CoV-2 OR 2019-nCoV OR coronavirus)
+    disease_exclude: none
+    parameter_focus: (basic reproduction number OR basic reproductive number OR R0 OR R naught OR reproduction number)
+    parameter_exclude: none
+
+  P8:
+    project_number: 8
+    research_question: What is the basic reproduction number (R0) of COVID-19?
+    disease_focus: (2019 novel coronavirus OR COVID-19 OR SARS-CoV-2)
+    disease_exclude: none
+    parameter_focus: (basic reproduction number OR basic reproductive number OR R0 OR R naught OR reproduction number)
+    parameter_exclude: none
+
+  P15:
+    project_number: 15
+    research_question: What is the reproduction/reproductive number (R0) of COVID-19?
+    disease_focus: (Coronavirus OR "Corona virus" OR COVID-19 OR SARS-CoV-2 OR n2019-CoV OR "novel coronavirus")
+    disease_exclude: none
+    parameter_focus: (reproductive number OR reproduction number OR R0 OR "R naught")
+    parameter_exclude: none
+
+  P16:
+    project_number: 16
+    research_question: What is the basic reproduction number (R0) of COVID-19?
+    disease_focus: (novel coronavirus OR SARS-CoV-2 OR 2019 novel coronavirus disease OR COVID-19)
+    disease_exclude: none
+    parameter_focus: (basic reproduction number OR R0 OR R naught OR reproduction number)
+    parameter_exclude: none
+
+  P17:
+    project_number: 17
+    research_question: What is the basic reproduction number (R0) of COVID-19?
+    disease_focus: (COVID-19 OR SARS-CoV-2 OR 2019-nCoV OR coronavirus)
+    disease_exclude: none
+    parameter_focus: (basic reproduction number OR basic reproductive number OR R0 OR R naught OR reproduction number)
+    parameter_exclude: none

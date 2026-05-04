@@ -1,0 +1,32 @@
+topic: example_topic
+
+defaults:
+  thresholds:
+    strong:
+      disease_min: 4
+      parameter_min: 4
+      evidence_min: 3
+      population_min: 2
+      location_min: 2
+    possible:
+      disease_min: 3
+      parameter_min: 3
+      evidence_min: 2
+      population_min: 2
+      location_min: 2
+  policies:
+    title_abstract_mode: standard
+    title_only_mode: lenient
+    full_text_mode: standard
+    fulltext_rescue:
+      enabled: true
+      when_no_abstract: true
+
+profiles:
+  P00:
+    project_number: 0
+    research_question: Replace with the study question for this project.
+    disease_focus: "(COVID-19 OR SARS-CoV-2)"
+    disease_exclude: "none"
+    parameter_focus: "(replace with parameter-specific terms)"
+    parameter_exclude: "none"
