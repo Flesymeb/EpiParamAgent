@@ -8,9 +8,10 @@ from pathlib import Path
 import click
 
 from cli.utils import DEV_ROOT, DISEASE_NAMES, TOPIC_NAMES, resolve_project_root
+from cli.display import show_step, show_success, show_error, show_command_header, StyledGroup
 
 
-@click.group()
+@click.group(cls=StyledGroup)
 def screening():
     """Literature screening workflow: prepare → run → evaluate."""
 
@@ -167,7 +168,7 @@ def pipeline(project_root, profile, disease, topic, include_gt, fix_missing,
     proj = str(resolve_project_root() if not project_root else Path(project_root).resolve())
 
     # Step 1: prepare
-    click.echo("═ Step 1: prepare raw ═")
+    show_step(1, 2, "Prepare raw CSV")
     prep_argv = ["--project-root", proj, "--profile", profile]
     if topic:       prep_argv += ["--topic", topic]
     if include_gt:  prep_argv += ["--include-gt"]
@@ -175,7 +176,7 @@ def pipeline(project_root, profile, disease, topic, include_gt, fix_missing,
     _run_script("screening_prepare_raw", prep_argv)
 
     # Step 2: run + evaluate
-    click.echo("\n═ Step 2: LLM screening + evaluation ═")
+    show_step(2, 2, "LLM screening + evaluation")
     eval_argv = [
         "--project-root", proj, "--profile", profile,
         "--batch-size", str(batch_size),
@@ -186,6 +187,7 @@ def pipeline(project_root, profile, disease, topic, include_gt, fix_missing,
     if auto_fulltext:  eval_argv += ["--auto-fulltext"]
     if fulltext_only:  eval_argv += ["--fulltext-only"]
     _run_script("screening_llm_batch", eval_argv)
+    show_success("Pipeline complete")
 
 
 # ── fulltext (batch) ───────────────────────────────────────────────────

@@ -8,9 +8,10 @@ from pathlib import Path
 import click
 
 from cli.utils import DEV_ROOT, DISEASE_NAMES, TOPIC_NAMES, resolve_project_root
+from cli.display import show_command_header, StyledGroup
 
 
-@click.group()
+@click.group(cls=StyledGroup)
 def coding():
     """Coding sheet extraction and evaluation."""
 

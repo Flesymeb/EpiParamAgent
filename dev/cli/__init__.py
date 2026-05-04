@@ -10,9 +10,8 @@ from pathlib import Path
 
 import click
 
-# ── sys.path setup ──────────────────────────────────────────────────────
-# Make shared tools and screening/coding modules importable.
 from cli.utils import DEV_ROOT, REPO_ROOT
+from cli.display import console, ACCENT, ACCENT_BOLD, ACCENT_DIM, StyledGroup
 
 _SRC_PATHS = [
     str(DEV_ROOT / "tools"),                   # common, mineru, paper_fetch, meta_analysis
@@ -24,10 +23,14 @@ for _p in _SRC_PATHS:
         sys.path.insert(0, _p)
 
 
-@click.group()
-@click.version_option(version="0.2.0", prog_name="metaagent")
-def main():
+@click.group(invoke_without_command=True, cls=StyledGroup)
+@click.version_option(version="0.2.0", prog_name="metaagent", message=f"[{ACCENT}]%(prog)s[/{ACCENT}] [bold]%(version)s[/bold]")
+@click.pass_context
+def main(ctx):
     """MetaAgent-Epi: epidemiology meta-analysis CLI."""
+    if ctx.invoked_subcommand is None:
+        from cli.display import show_banner
+        show_banner()
 
 
 # ── Lazy-load sub-groups to avoid heavy imports at startup ──────────

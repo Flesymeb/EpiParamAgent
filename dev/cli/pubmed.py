@@ -8,9 +8,10 @@ import subprocess
 import click
 
 from cli.utils import resolve_project_root
+from cli.display import StyledGroup
 
 
-@click.group()
+@click.group(cls=StyledGroup)
 def pubmed():
     """PubMed data management tools."""
 

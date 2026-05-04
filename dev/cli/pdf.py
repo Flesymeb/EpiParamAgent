@@ -9,9 +9,10 @@ from pathlib import Path
 import click
 
 from cli.utils import DEV_ROOT, resolve_project_root
+from cli.display import StyledGroup
 
 
-@click.group()
+@click.group(cls=StyledGroup)
 def pdf():
     """PDF fetch and conversion tools."""
 

@@ -5,6 +5,7 @@ description = "Epidemiology meta-analysis agent: unified CLI for screening, codi
 requires-python = ">=3.11"
 dependencies = [
     "click>=8.0",
+    "rich>=14.0",
 ]
 
 [project.scripts]
