@@ -1,28 +1,59 @@
-"""MetaAgent-Epi CLI entry point.
+"""MetaAgent-Epi unified CLI entry point.
 
-Usage:
-    python -m metaagent.cli [command] [options]
-    python -m metaagent.cli screening run --input data.csv --output out.csv
-
-For the full Click-based CLI with Rich styling, use:
-    python -m metaagent.cli.__init__
+Usage: python -m metaagent.cli [command]
 """
 
 from __future__ import annotations
 
 import sys
-from pathlib import Path
 
-# Ensure project root is on path
-_PROJECT_ROOT = Path(__file__).resolve().parent.parent
-if str(_PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(_PROJECT_ROOT))
+import click
+
+from metaagent._cli_shared import (
+    ACCENT, ACCENT_BOLD, ACCENT_DIM, REPO_ROOT, DEV_ROOT,
+    StyledGroup, console, show_command_header,
+)
 
 
-def main() -> None:
-    """Run the full Click-based CLI."""
-    from metaagent.cli import main as _cli_main
-    _cli_main()
+def _show_banner():
+    from metaagent import __version__
+    console.print()
+    console.print(
+        r"  [bold #00b4d8]MetaAgent-Epi[/bold #00b4d8]",
+        justify="center",
+    )
+    console.print(
+        f"  [dim]v{__version__} — LLM-powered epidemiological systematic review automation[/dim]",
+        justify="center",
+    )
+    console.print()
+
+
+@click.group(invoke_without_command=True, cls=StyledGroup)
+@click.version_option(
+    version="0.3.0",
+    prog_name="metaagent",
+    message=f"[{ACCENT}]%(prog)s[/{ACCENT}] [bold]%(version)s[/bold]",
+)
+@click.pass_context
+def main(ctx):
+    """MetaAgent-Epi: epidemiology meta-analysis CLI."""
+    if ctx.invoked_subcommand is None:
+        _show_banner()
+
+
+# ── Register command groups from domain modules ───────────────
+sys.path.insert(0, str(DEV_ROOT))
+
+from metaagent.screening.cli import screening
+from metaagent.coding.cli import coding
+from tools.pubmed.cli import pubmed
+from tools.paper_fetch.cli import pdf
+
+main.add_command(screening)
+main.add_command(coding)
+main.add_command(pubmed)
+main.add_command(pdf)
 
 
 if __name__ == "__main__":
