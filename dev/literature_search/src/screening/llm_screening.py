@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 import httpx
+from langchain_core.callbacks import BaseCallbackHandler
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 
@@ -155,12 +156,59 @@ def load_prompt_templates(screening_stage: str) -> tuple[str, str]:
     return system_text, user_text
 
 
+class _TokenCounter(BaseCallbackHandler):
+    """Per-invocation callback that captures token usage from the LLM response."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.prompt_tokens: int = 0
+        self.completion_tokens: int = 0
+        self.total_tokens: int = 0
+
+    def on_llm_end(self, response: Any, **kwargs: Any) -> None:
+        try:
+            usage = None
+            if hasattr(response, "llm_output") and response.llm_output:
+                usage = response.llm_output.get("token_usage")
+            if usage is None and hasattr(response, "generations"):
+                for gen_list in response.generations:
+                    for gen in gen_list:
+                        msg = getattr(gen, "message", None)
+                        if msg and hasattr(msg, "usage_metadata"):
+                            u = msg.usage_metadata
+                            self.prompt_tokens += u.get("input_tokens", 0)
+                            self.completion_tokens += u.get("output_tokens", 0)
+                            self.total_tokens += u.get("total_tokens", 0)
+                            return
+            if usage:
+                self.prompt_tokens = usage.get("prompt_tokens", 0)
+                self.completion_tokens = usage.get("completion_tokens", 0)
+                self.total_tokens = usage.get("total_tokens", 0)
+        except Exception:
+            pass  # Token counting is best-effort
+
+
 async def invoke_with_retry_async(llm, prompt, max_retries=3, delay=1.0):
-    """Invoke structured output with bounded retries and exponential backoff."""
+    """Invoke structured output with bounded retries, exponential backoff, and cost tracking.
+
+    Returns:
+        (result, cost_dict) where cost_dict has keys: prompt_tokens, completion_tokens,
+        total_tokens, wall_time_ms.
+    """
     last_exception = None
     for attempt in range(max_retries):
         try:
-            return await llm.ainvoke(prompt)
+            counter = _TokenCounter()
+            t0 = time.perf_counter()
+            result = await llm.ainvoke(prompt, config={"callbacks": [counter]})
+            wall_ms = (time.perf_counter() - t0) * 1000
+            cost = {
+                "prompt_tokens": counter.prompt_tokens,
+                "completion_tokens": counter.completion_tokens,
+                "total_tokens": counter.total_tokens,
+                "wall_time_ms": round(wall_ms, 1),
+            }
+            return result, cost
         except Exception as e:
             last_exception = e
             error_str = str(e)
@@ -361,14 +409,16 @@ async def screen_papers_batch_async(
                         )
                         _mark_paper_error(paper, result)
                         continue
-                    if isinstance(result, BinaryDecision):
-                        _write_binary_result(paper, result)
-                    elif isinstance(result, PECODecision):
-                        _write_peco_result(paper, result)
+                    decision, cost = result
+                    _write_cost(paper, cost)
+                    if isinstance(decision, BinaryDecision):
+                        _write_binary_result(paper, decision)
+                    elif isinstance(decision, PECODecision):
+                        _write_peco_result(paper, decision)
                     else:
                         _write_structured_result(
                             paper,
-                            result,
+                            decision,
                             thresholds=config.get("thresholds"),
                             stage_mode=stage_mode,
                             evidence_floor=evidence_floor,
@@ -403,7 +453,12 @@ async def screen_papers_batch_async(
                     print(f"  [Batch {batch_idx}] 尝试单篇重处理...")
                 for paper, prompt in batch:
                     try:
-                        result = await invoke_with_retry_async(structured_llm, prompt)
+                        raw = await invoke_with_retry_async(structured_llm, prompt)
+                        if isinstance(raw, tuple):
+                            result, cost = raw
+                            _write_cost(paper, cost)
+                        else:
+                            result = raw
                         if isinstance(result, BinaryDecision):
                             _write_binary_result(paper, result)
                         elif isinstance(result, PECODecision):
@@ -499,6 +554,14 @@ def _write_peco_result(paper: dict[str, Any], result: PECODecision) -> None:
     paper["evidence_score"] = ""
     paper["evidence_justification"] = ""
     paper["confidence"] = result.confidence
+
+
+def _write_cost(paper: dict[str, Any], cost: dict[str, Any]) -> None:
+    """Write per-paper token usage and timing onto the paper dict."""
+    paper["prompt_tokens"] = cost.get("prompt_tokens", 0)
+    paper["completion_tokens"] = cost.get("completion_tokens", 0)
+    paper["total_tokens"] = cost.get("total_tokens", 0)
+    paper["wall_time_ms"] = cost.get("wall_time_ms", 0)
 
 
 def _mark_paper_error(paper: dict[str, Any], error: Exception) -> None:
