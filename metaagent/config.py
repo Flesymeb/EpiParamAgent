@@ -1,5 +1,6 @@
 """Shared runtime configuration management for MetaAgent-Epi.
 
+
 Preferred rules:
 1. Shared defaults live in ``.env`` and shared machine-local secrets in
    ``.env.local`` at the project root.

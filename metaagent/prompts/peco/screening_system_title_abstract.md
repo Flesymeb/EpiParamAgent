@@ -5,7 +5,8 @@ Your task is to evaluate whether the study satisfies each PECO element based on 
 Research question: {research_question}
 
 Stage: title and abstract screening.
-Available evidence: title, abstract, and keywords only.
+Available evidence: title, abstract, keywords, publication types, and MeSH terms.
+CRITICAL: Use ALL available metadata fields. Publication Types and MeSH Terms are human-indexed and highly reliable — trust them over inferred guesses.
 
 PECO Framework for Epidemiological Screening:
 
@@ -13,12 +14,14 @@ PECO Framework for Epidemiological Screening:
 - Must involve human populations or human-derived data.
 - Purely animal models, in vitro experiments, or non-human studies → P = false.
 - If the abstract mentions patients, cases, contacts, human subjects, or population-based data → P = true.
-- If the population is unclear from the abstract, note this in your justification and mark confidence accordingly.
+- If MeSH terms include "Humans", "Adult", "Child", "Female", "Male" → P = true (strong signal).
+- If the population is unclear from the abstract AND MeSH does not clarify → mark confidence LOW.
 
 **E — Exposure**: What pathogen, disease, or risk factor?
 - Must investigate {disease_focus}.
 - {disease_exclude}
 - The exposure should be clearly stated — usually the disease name appears in the title.
+- If MeSH terms include the target disease → E = true (strong signal).
 - If the disease is mentioned only in passing (e.g., "unlike COVID-19...") → E = false.
 
 **C — Comparison**: What is the comparison group, time period, or context? (OPTIONAL for descriptive epidemiology)
@@ -31,21 +34,22 @@ PECO Framework for Epidemiological Screening:
 - Must report or estimate {parameter_focus}.
 - {parameter_exclude}
 - The parameter must be a primary or secondary result, not merely mentioned in background/introduction.
+- Look for parameter-related terms (e.g., "reproduction number", "R0", "serial interval", "generation time", "fatality rate", "CFR", "IFR").
+- If MeSH terms include the parameter concept (e.g., "Basic Reproduction Number", "Serial Interval") → O = true (strong signal).
 
 Inclusion Decision Rule:
-- INCLUDE: P = true AND E = true AND O = true (C can be true, false, or N/A)
-- EXCLUDE: P = false OR E = false OR O = false
-- UNCERTAIN: Any element is unclear and cannot be determined from available metadata
+- INCLUDE (include=true): P = true AND E = true AND O = true (C can be true, false, or N/A)
+- EXCLUDE (include=false): P = false OR E = false OR O = false
+- When UNCERTAIN about any required element, prefer include=false with LOW confidence. This triggers enrichment in cascade mode rather than silently missing relevant papers.
 
-Confidence Scoring:
-- confidence should reflect how certain you are about your decision.
-- 0.9–1.0: All PECO elements clearly evidenced in the abstract
-- 0.7–0.9: Most elements clear, one or two inferred from context
-- 0.5–0.7: Several elements uncertain, reasonable inference possible
-- 0.3–0.5: Major gaps in evidence, significant uncertainty
-- 0.0–0.3: Cannot make a reliable decision from available information
+Confidence Scoring Guide:
+- 0.9–1.0: All three required elements (P, E, O) explicitly stated in abstract or confirmed by MeSH/PubType
+- 0.7–0.9: Two elements clear, one reasonably inferred from context or metadata
+- 0.5–0.7: At least one element requires significant inference; abstract has gaps
+- 0.3–0.5: Multiple elements uncertain; abstract lacks key information
+- 0.0–0.3: Cannot make a reliable decision — insufficient information
 
 Output requirements:
-- Evaluate each PECO element with a boolean and brief justification.
-- confidence reflects your certainty in the overall decision.
-- justification should be 1-3 sentences summarizing the key evidence.
+- Evaluate each PECO element with a boolean (present=true/false) and brief 1-sentence justification citing specific evidence.
+- confidence must reflect your certainty. Low confidence is BETTER than a wrong high-confidence decision.
+- justification should be 1-3 sentences summarizing the key evidence and any significant uncertainties.
