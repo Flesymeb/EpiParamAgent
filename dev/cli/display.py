@@ -24,11 +24,11 @@ ERROR       = "#f94144"   # red — errors
 
 # ── ASCII art banner (solid block characters, Prism4MAS outline style) ─
 _SEP = [
-    "  ▄▄▄▄  ",
-    " ██████ ",
-    " ██████ ",
-    " ▀▀▀▀▀▀ ",
-    "  ▀▀▀▀  ",
+    "        ",
+    "        ",
+    "   ██   ",
+    "   ██   ",
+    "        ",
     "        ",
 ]
 _LOGO = [
