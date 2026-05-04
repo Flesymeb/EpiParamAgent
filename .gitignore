@@ -119,16 +119,13 @@ temp/
 
 # Node / frontend
 node_modules/
-dev/workbench/frontend/dist/
-dev/workbench/frontend/tailwind.config.js
-dev/workbench/frontend/tailwind.config.d.ts
-dev/workbench/frontend/vite.config.js
-dev/workbench/frontend/vite.config.d.ts
+workbench/frontend/dist/
+workbench/frontend/tailwind.config.js
+workbench/frontend/tailwind.config.d.ts
+workbench/frontend/vite.config.js
+workbench/frontend/vite.config.d.ts
 
 # Local workflow outputs
-dev/coding_sheet/output/
-dev/tmp_manifest_test/
-
 
 # video files
 *.mp4
@@ -148,11 +145,9 @@ misc/
 
 paper_pool/
 
-dev/tools/paper_fetch/papers
-
-
 # old versions
 old/
+dev/
 
 # Evaluation — ignore run outputs and large data; pmids.txt tracked via git add -f
 evaluation/
