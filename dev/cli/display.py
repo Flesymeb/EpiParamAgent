@@ -21,44 +21,23 @@ WARN        = "#f9c74f"   # amber — warnings
 ERROR       = "#f94144"   # red — errors
 
 
-# ── ASCII art banner ──────────────────────────────────────────────────
-# Top block: META
-# Bottom block: AGENT ─ EPI  (compact inline)
-_META = [
-    " █▀▀█ █▀▀ █▀▀ █ █▀▀ █▀▀█ █▀▀█ ",
-    " █▄▀  █▀▀ ▀▀█ █ █   █  █ █▄▀  ",
-    " █   ▀▀▀ ▀▀▀ ▀ ▀▀▀ ▀▀▀▀ █  █ ",
-]
-_AGENT = [
-    "█▀▀ █▀▀█ █▀▀ █▀▀█ █▀▀█ █   █▀▀ █▀▀█",
-    "▀▀█ █  █ █▀▀ █▄▀  █  █ █   █▀▀ █  █",
-    "▀▀▀ ▀▀▀▀ ▀▀▀ █   ▀▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀▀",
-]
-_EPI = [
-    "█▀▀█ █  █ █▀▀ █▀▀█ █▀▀█",
-    "█▄▀  █  █ █▀▀ █▄▀  █  █",
-    "█   ▀▀▀▀ ▀▀▀ █   ▀▀▀▀",
-]
-_SEP = [
-    "  ──  ",
-    "  ──  ",
-    "  ──  ",
+# ── ASCII art banner (generated with pyfiglet slant) ────────────────────
+_LOGO = [
+    "    __  ___     __        ___                    __ ",
+    "   /  |/  /__  / /_____ _/   | ____ ____  ____  / /_",
+    "  / /|_/ / _ \\/ __/ __ `/ /| |/ __ `/ _ \\/ __ \\/ __/",
+    " / /  / /  __/ /_/ /_/ / ___ / /_/ /  __/ / / / /_  ",
+    "/_/  /_/\\___/\\__/\\__,_/_/  |_\\__, /\\___/_/ /_/\\__/  ",
+    "                            /____/                   ",
 ]
 
 
 def show_banner(version: str = "0.2.0") -> None:
     """Print the MetaAgent-Epi startup banner."""
     console.print(f"[{ACCENT}]" + "━" * 72 + f"[/{ACCENT}]")
-    # Top block — META
-    for line in _META:
-        console.print(f"[bold #ffffff]{line}[/bold #ffffff]")
-    # Bottom block — AGENT ─ EPI (inline)
-    for a, s, e in zip(_AGENT, _SEP, _EPI):
-        console.print(
-            f"[bold {ACCENT}]{a}[/bold {ACCENT}]"
-            f"[bold {ACCENT_DIM}]{s}[/bold {ACCENT_DIM}]"
-            f"[bold #ffffff]{e}[/bold #ffffff]"
-        )
+    for line in _LOGO:
+        console.print(f"[bold {ACCENT}]{line}[/bold {ACCENT}]")
+    console.print(f"[bold {ACCENT_DIM}]                              -Epi[/bold {ACCENT_DIM}]")
     console.print()
     console.print(f"[bold {ACCENT_BOLD}]Epidemiology Meta-Analysis Agent[/bold {ACCENT_BOLD}]")
     console.print(
