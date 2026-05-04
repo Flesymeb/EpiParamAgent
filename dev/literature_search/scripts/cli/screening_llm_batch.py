@@ -795,6 +795,11 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="第二阶段：从现有 screened.csv 中抽 strong+possible 候选，Strong 用 confirmation 模式（只在参数/证据得分≤1 时降级），Possible 用 confirm_parameter 宽松模式，以减少 FP",
     )
+    parser.add_argument(
+        "--cascade",
+        action="store_true",
+        help="Enable cascade screening: uncertain papers (low confidence) trigger Tier-2 retrieval for enriched re-evaluation.",
+    )
     return parser
 
 

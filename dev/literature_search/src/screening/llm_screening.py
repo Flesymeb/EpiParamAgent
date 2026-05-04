@@ -308,13 +308,17 @@ async def screen_papers_batch_async(
         title = paper.get("Title", "").strip()
         content = (paper.get(content_key) or "").strip() or content_fallback
         keywords = (paper.get("Keywords") or "").strip() or "(No keywords available)"
-        prompt = template.format_messages(
-            research_question=research_question,
-            title=title,
-            content_label=content_label,
-            content=content,
-            keywords=keywords,
-        )
+        prompt_kwargs: dict[str, str] = {
+            "research_question": research_question,
+            "title": title,
+            "content_label": content_label,
+            "content": content,
+            "keywords": keywords,
+        }
+        if is_peco:
+            prompt_kwargs["pub_types"] = (paper.get("pub_types") or "").strip() or "(Not available)"
+            prompt_kwargs["mesh_terms"] = (paper.get("mesh_terms") or "").strip() or "(Not available)"
+        prompt = template.format_messages(**prompt_kwargs)
         all_prompts.append((paper, prompt))
 
     total = len(all_prompts)
