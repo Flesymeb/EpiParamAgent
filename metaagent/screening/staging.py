@@ -6,7 +6,7 @@ import csv
 from pathlib import Path
 from typing import Any
 
-from .fulltext_pipeline import MD_CACHE_DIR
+from metaagent.screening.fulltext_pipeline import MD_CACHE_DIR
 
 
 def print_ground_truth_warning(gt_file: Path) -> None:
@@ -20,11 +20,11 @@ def print_ground_truth_warning(gt_file: Path) -> None:
         except Exception:
             header = ""
         print(
-            f"⚠️  Ground Truth 文件存在但未识别到 PMID 列: {gt_file}\n"
+            f"⚠️  Ground Truth file exists but no PMID column recognized: {gt_file}\n"
             f"   Header: {header}\n"
         )
     else:
-        print(f"⚠️  未找到Ground Truth文件: {gt_file}\n")
+        print(f"⚠️  Ground truth file not found: {gt_file}\n")
 
 
 def annotate_ground_truth(
@@ -38,7 +38,7 @@ def annotate_ground_truth(
         pmid = (paper.get("PMID") or "").strip()
         paper["is_ground_truth"] = "✓" if pmid in gt_pmids else ""
     gt_count = sum(1 for p in papers if p.get("is_ground_truth") == "✓")
-    print(f"其中包含 {gt_count}/{len(gt_pmids)} 篇Ground Truth\n")
+    print(f"Containing {gt_count}/{len(gt_pmids)} ground truth papers\n")
     return gt_count
 
 
@@ -154,10 +154,10 @@ def print_stage_split(
     print("=" * 80)
     if auto_fulltext or fulltext_only:
         print(
-            f"筛选分流: title+abstract={len(papers_title_abstract)} | full-text={len(papers_without_abstract)}"
+            f"Stage split: title+abstract={len(papers_title_abstract)} | full-text={len(papers_without_abstract)}"
         )
     else:
         print(
-            f"筛选分流: title+abstract={len(papers_title_abstract)} | title-only={len(papers_title_only)}"
+            f"Stage split: title+abstract={len(papers_title_abstract)} | title-only={len(papers_title_only)}"
         )
     print("=" * 80)

@@ -124,9 +124,9 @@ def download_pdfs_batch(
 
     missing = [pmid for pmid, info in results.items() if info["status"] != "downloaded"]
     if missing and sys.stdin.isatty():
-        print(f"⚠️  {len(missing)} 篇 PDF 仍未下载。可手动下载到 {PDF_CACHE_DIR} 后继续。")
+        print(f"⚠️  {len(missing)} PDFs still not downloaded. Manually download to {PDF_CACHE_DIR} to continue.")
         try:
-            user_input = input("⏸ 按 Enter 重新扫描缓存，或输入 skip 跳过: ").strip().lower()
+            user_input = input("⏸ Press Enter to re-scan cache, or type skip: ").strip().lower()
         except EOFError:
             user_input = "skip"
         if user_input != "skip":
@@ -155,7 +155,7 @@ def convert_pdfs_to_markdown(
 
     total_pdfs = sum(1 for info in pmid_to_pdf.values() if info.get("pdf_path"))
     if total_pdfs:
-        print(f"开始全文转换 (MinerU): {total_pdfs} 篇 | 输出目录: {MD_CACHE_DIR}")
+        print(f"Starting full-text conversion (MinerU): {total_pdfs}  papers | 输出目录: {MD_CACHE_DIR}")
 
     results: dict[str, dict[str, str]] = {}
     converted = 0
@@ -179,13 +179,13 @@ def convert_pdfs_to_markdown(
 
         try:
             paper_dir.mkdir(parents=True, exist_ok=True)
-            print(f"  [MinerU] 转换 PMID {pmid} ...")
+            print(f"  [MinerU] Converting PMID {pmid} ...")
             extracted = extract_pdf_markdown_mineru(Path(pdf_path), output_dir=paper_dir)
             if extracted.markdown:
                 md_path.write_text(extracted.markdown, encoding="utf-8")
                 results[pmid] = {"status": "converted", "md_path": str(md_path)}
                 converted += 1
-                print(f"  [MinerU] 完成 PMID {pmid}")
+                print(f"  [MinerU] Completed PMID {pmid}")
             else:
                 failed += 1
                 results[pmid] = {
@@ -202,12 +202,12 @@ def convert_pdfs_to_markdown(
                 "md_path": "",
                 "error": str(exc)[:200],
             }
-            print(f"  [MinerU] 失败 PMID {pmid}: {str(exc)[:200]}")
+            print(f"  [MinerU] Failed PMID {pmid}: {str(exc)[:200]}")
             if paper_dir.exists() and not any(paper_dir.iterdir()):
                 paper_dir.rmdir()
 
     if total_pdfs:
-        print(f"全文转换完成: 成功 {converted} (缓存 {cached}) | 失败 {failed}")
+        print(f"Full-text conversion complete: success {converted} (cached {cached}) | failed {failed}")
     return results
 
 
@@ -220,7 +220,7 @@ def prepare_fulltext_candidates(
 ) -> tuple[list[dict[str, Any]], dict[str, dict[str, str]], dict[str, dict[str, str]]]:
     """Prepare markdown-backed papers for full-text screening."""
     total_fulltext = len({id(p) for p in papers_without_abstract + fulltext_cached})
-    print(f"\n开始全文筛选流程 ({total_fulltext} 篇)...")
+    print(f"\nStarting full-text screening pipeline ({total_fulltext} 篇)...")
     ensure_fulltext_cache_dirs()
 
     cached_pmids = {
@@ -262,9 +262,9 @@ def prepare_fulltext_candidates(
     if pmids:
         pdf_need = [pmid for pmid in pmids if not (PDF_CACHE_DIR / f"PMID_{pmid}.pdf").exists()]
         if pdf_need:
-            print(f"开始全文下载 (PDF) | 输出目录: {PDF_CACHE_DIR}")
+            print(f"Starting full-text download (PDF) | 输出目录: {PDF_CACHE_DIR}")
         else:
-            print("PDF 缓存已命中，无需下载。")
+            print("PDF cache hit, no download needed.")
         pdf_results = download_pdfs_batch(
             pmids,
             pmid_overrides,
@@ -319,7 +319,7 @@ def prepare_fulltext_candidates(
                 "read markdown failed",
             )
 
-    print(f"全文筛选入选: {len(fulltext_ready)}/{total_fulltext}")
+    print(f"Full-text screening included: {len(fulltext_ready)}/{total_fulltext}")
     return fulltext_ready, pdf_results, md_results
 
 

@@ -8,9 +8,9 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from common.config import load_mineru_config
+from metaagent.config import load_mineru_config
 
-BASE_DIR = Path(__file__).resolve().parents[2]
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 FULLTEXT_CACHE_ROOT = BASE_DIR.parent / "paper_pool"
 PDF_CACHE_DIR = FULLTEXT_CACHE_ROOT / "pdfs"
 MD_CACHE_DIR = FULLTEXT_CACHE_ROOT / "markdown"
@@ -151,7 +151,7 @@ def convert_pdfs_to_markdown(
             for pmid in pmid_to_pdf.keys()
         }
 
-    from mineru.pdf_reader_mineru import extract_pdf_markdown_mineru
+    from metaagent.pdf_reader_mineru import extract_pdf_markdown_mineru
 
     total_pdfs = sum(1 for info in pmid_to_pdf.values() if info.get("pdf_path"))
     if total_pdfs:

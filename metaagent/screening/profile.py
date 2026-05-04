@@ -30,7 +30,7 @@ def resolve_profile_config(
     if topic and profile_config.get("topic") != _normalize_topic(topic):
         profile_config["topic_override"] = str(topic).strip()
     research_question = profile_config.get("research_question", research_question)
-    print(f"✓ 使用 profile: {profile.profile_key}")
+    print(f"✓ Using profile: {profile.profile_key}")
     print(f"  Disease: {profile.disease_key}")
     print(f"  Topic: {profile.topic_key}")
     print(f"  Project: {profile.project_dir_name}")

@@ -8,9 +8,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from common.config import load_llm_config
-from common.provenance import write_run_manifest
-from mineru.config import load_mineru_config
+from metaagent.config import load_llm_config
+from metaagent.provenance import write_run_manifest
+from metaagent.mineru_config import load_mineru_config
 
 
 def save_screening_outputs(
@@ -181,10 +181,10 @@ def _build_report_lines(
 ) -> list[str]:
     report_lines: list[str] = []
     report_lines.append("=" * 80)
-    report_lines.append("LLM文献筛选详细报告")
+    report_lines.append("LLM Screening Detailed Report")
     report_lines.append("=" * 80)
-    report_lines.append(f"\n生成时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    report_lines.append(f"研究问题: {research_question}")
+    report_lines.append(f"\nGenerated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    report_lines.append(f"Research question: {research_question}")
     report_lines.append(f"输入文件: {input_file}")
     report_lines.append(f"输出文件: {output_file}")
     llm_cfg = load_llm_config(module_hint="literature_search")
