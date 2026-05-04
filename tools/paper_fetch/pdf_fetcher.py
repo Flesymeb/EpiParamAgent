@@ -4,9 +4,9 @@ Reads DOIs or PMIDs from an input file, resolves them to PDF URLs from multiple 
 tests each URL for accessibility, and saves results in JSONL format.
 
 Usage:
-    python MetaAgent-Epi/dev/tools/paper_fetch/pdf_fetcher.py --input papers/doi.txt
-    python MetaAgent-Epi/dev/tools/paper_fetch/pdf_fetcher.py --input papers/pmid.txt --input-type pmid
-    python MetaAgent-Epi/dev/coding_sheet/scripts/pdf_fetcher.py --input papers/doi.txt
+    python tools/paper_fetch/pdf_fetcher.py --input papers/doi.txt
+    python tools/paper_fetch/pdf_fetcher.py --input papers/pmid.txt --input-type pmid
+    python tools/paper_fetch/pdf_fetcher.py --input papers/doi.txt
 
 Input:
     --input PATH - One ID per line (DOI or PMID). If omitted, defaults to papers/doi.txt.

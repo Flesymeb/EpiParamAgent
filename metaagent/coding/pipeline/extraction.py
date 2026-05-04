@@ -27,7 +27,7 @@ def _parse_json_object(text: str) -> dict:
 
 
 def _paper_pool_dirs() -> tuple[Path, Path]:
-    base = Path(__file__).resolve().parents[3] / "paper_pool"
+    base = Path(__file__).resolve().parents[2] / "paper_pool"
     pdf_dir = base / "pdfs"
     md_dir = base / "markdown"
     pdf_dir.mkdir(parents=True, exist_ok=True)
@@ -36,7 +36,7 @@ def _paper_pool_dirs() -> tuple[Path, Path]:
 
 
 def _ensure_tools_on_path() -> None:
-    tools_dir = Path(__file__).resolve().parents[3] / "tools"
+    tools_dir = Path(__file__).resolve().parents[2] / "tools"
     if str(tools_dir) not in sys.path:
         sys.path.insert(0, str(tools_dir))
 
