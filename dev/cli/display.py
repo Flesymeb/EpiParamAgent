@@ -22,24 +22,24 @@ WARN        = "#f9c74f"   # amber — warnings
 ERROR       = "#f94144"   # red — errors
 
 
-# ── ASCII art banner (solid block characters) ─────────────────────────
+# ── ASCII art banner (solid block characters, Prism4MAS outline style) ─
 _LOGO = [
-    "██╗  ██╗██████╗ ██████╗  █████╗      █████╗  █████╗ ██████╗ ██╗  ██╗██████╗ ",
-    "███╗███║██╔═══╝ ╚══██╔╝ ██╔══██╗    ██╔══██╗██╔════╝██╔═══╝ ████ ██║╚══██╔╝ ",
-    "██╗████║█████╗    ██║   ███████║    ███████║██║ ██╗ █████╗  ██╔████║  ██║   ",
-    "██║╚╝██║██╔══╝    ██║   ██╔══██║    ██╔══██║██║ ╚██╗██╔══╝  ██║╚███║  ██║   ",
-    "██║  ██║██████╗   ██║   ██║  ██║    ██║  ██║╚█████╔╝██████╗ ██║ ╚██║  ██║   ",
-    "╚═╝  ╚═╝╚═════╝   ╚═╝   ╚═╝  ╚═╝    ╚═╝  ╚═╝ ╚════╝ ╚═════╝ ╚═╝  ╚═╝  ╚═╝   ",
+    "██╗ ██╗ ██████╗ ██████╗  █████╗          █████╗  █████╗ ██████╗ ██╗ ██╗ ██████╗ ",
+    "███╗███║██╔═══╝ ╚══██╔╝ ██╔══██╗        ██╔══██╗██╔═══╝ ██╔═══╝ ███████║╚══██╔╝ ",
+    "██╔████║█████╗    ██║   ███████║        ███████║██║ ██╗ █████╗  ██╔████║  ██║   ",
+    "██║╚╝██║██╔══╝    ██║   ██╔══██║        ██╔══██║██║ ╚██╗██╔══╝  ██║╚███║  ██║   ",
+    "██║  ██║██████╗   ██║   ██║  ██║        ██║  ██║╚█████╔╝██████╗ ██║ ╚██║  ██║   ",
+    "╚═╝  ╚═╝╚═════╝   ╚═╝   ╚═╝  ╚═╝        ╚═╝  ╚═╝ ╚════╝ ╚═════╝ ╚═╝  ╚═╝  ╚═╝   ",
 ]
 
 
 def show_banner(version: str = "0.2.0") -> None:
     """Print the MetaAgent startup banner."""
-    console.print(f"[{ACCENT}]" + "━" * 76 + f"[/{ACCENT}]")
+    console.print(f"[{ACCENT}]" + "━" * 80 + f"[/{ACCENT}]")
     for line in _LOGO:
         meta_part = line[:32]
-        space_part = line[32:37]
-        agent_part = line[37:]
+        space_part = line[32:40]
+        agent_part = line[40:]
         console.print(
             f"[bold {LOGO_LEFT}]{meta_part}[/bold {LOGO_LEFT}]"
             f"{space_part}"
@@ -51,7 +51,7 @@ def show_banner(version: str = "0.2.0") -> None:
         f"[{ACCENT}]•[/{ACCENT}]  "
         f"[{ACCENT_DIM}]https://github.com/Flesymeb/MetaAgent-Epi[/{ACCENT_DIM}]"
     )
-    console.print(f"[{ACCENT}]" + "━" * 76 + f"[/{ACCENT}]")
+    console.print(f"[{ACCENT}]" + "━" * 80 + f"[/{ACCENT}]")
     console.print(
         f"[{TEXT_DIM}]Start with "
         f"[bold]metaagent screening prepare[/bold] or "
