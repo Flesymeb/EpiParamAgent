@@ -23,11 +23,11 @@ import sys
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 BASE_DIR = SCRIPT_DIR.parents[1]
-sys.path.insert(0, str(BASE_DIR / "src"))
-sys.path.insert(0, str(BASE_DIR.parent / "tools"))
-sys.path.insert(0, str(BASE_DIR / "scripts" / "tools"))
+# Removed: path now resolved via metaagent package
+# Removed: path now resolved via metaagent package
+# Removed: path now resolved via metaagent package
 
-from data_sources.pubmed_client import PubMedClient
+from metaagent.pubmed.client import PubMedClient
 from common.provenance import write_run_manifest
 from pubmed_manager import fetch_paper_details, fix_missing_fields
 from screening.profile_registry import resolve_profile_paths

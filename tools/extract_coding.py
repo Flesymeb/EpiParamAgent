@@ -7,12 +7,12 @@ from pathlib import Path
 
 MODULE_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = MODULE_ROOT.parents[1]  # MetaAgent-Epi/
-SCREENING_SRC = REPO_ROOT / "dev" / "literature_search" / "src"
+SCREENING_SRC = REPO_ROOT
 
 sys.path.insert(0, str(MODULE_ROOT))
 sys.path.insert(0, str(SCREENING_SRC))
 
-from lib.pipeline.extraction import FETCH_STRATEGIES, run_pipeline
+from metaagent.coding.pipeline.extraction import FETCH_STRATEGIES, run_pipeline
 
 
 def _resolve_output_from_profile(profile_name: str) -> Path:
