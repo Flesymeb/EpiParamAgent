@@ -21,41 +21,31 @@ WARN        = "#f9c74f"   # amber — warnings
 ERROR       = "#f94144"   # red — errors
 
 
-# ── ASCII art banner (Prism4MAS-style block characters) ────────────────
-_META_LINES = [
-    " █████╗  ███████╗ ████████╗  █████╗  ",
-    " ██╔══██╗ ██╔════╝ ╚══██╔══╝ ██╔══██╗ ",
-    " ███████║ █████╗      ██║    ███████║ ",
-    " ██╔══██║ ██╔══╝      ██║    ██╔══██║ ",
-    " ██║  ██║ ███████╗    ██║    ██║  ██║ ",
-    " ╚═╝  ╚═╝ ╚══════╝    ╚═╝    ╚═╝  ╚═╝ ",
-]
-
-_AGENT_LINES = [
-    "  █████╗   ██████╗  ███████╗ ███╗   ██╗ ████████╗ ",
-    " ██╔══██╗ ██╔════╝  ██╔════╝ ████╗  ██║ ╚══██╔══╝ ",
-    " ███████║ ██║  ██╗ █████╗   ██╔██╗ ██║    ██║    ",
-    " ██╔══██║ ██║  ██║ ██╔══╝   ██║╚████║    ██║    ",
-    " ██║  ██║ ╚██████╔╝ ███████╗ ██║ ╚███║    ██║    ",
-    " ╚═╝  ╚═╝  ╚═════╝  ╚══════╝ ╚═╝  ╚══╝    ╚═╝    ",
+# ── ASCII art banner (pyfiglet doom font) ──────────────────────────────
+_LOGO = [
+    "___  ___     _         ___                   _   ",
+    "|  \\/  |    | |       / _ \\                 | |  ",
+    "| .  . | ___| |_ __ _/ /_\\ \\ __ _  ___ _ __ | |_ ",
+    "| |\\/| |/ _ \\ __/ _` |  _  |/ _` |/ _ \\ '_ \\| __|",
+    "| |  | |  __/ || (_| | | | | (_| |  __/ | | | |_ ",
+    "\\_|  |_/\\___|\\__\\__,_\\_| |_/\\__, |\\___|_| |_|\\__|",
+    "                             __/ |                ",
+    "                            |___/                 ",
 ]
 
 
 def show_banner(version: str = "0.2.0") -> None:
-    """Print the MetaAgent startup banner (Prism4MAS-style)."""
-    console.print(f"[{ACCENT}]" + "━" * 92 + f"[/{ACCENT}]")
-    for meta, agent in zip(_META_LINES, _AGENT_LINES):
-        console.print(
-            f"[bold #ffffff]{meta}[/bold #ffffff]"
-            f"[bold {ACCENT}]{agent}[/bold {ACCENT}]"
-        )
-    console.print(f"[bold {ACCENT}]Epidemiology Meta-Analysis Agent[/bold {ACCENT}]")
+    """Print the MetaAgent startup banner."""
+    console.print(f"[{ACCENT}]" + "━" * 60 + f"[/{ACCENT}]")
+    for line in _LOGO:
+        console.print(f"[bold {ACCENT}]{line}[/bold {ACCENT}]")
+    console.print(f"[bold {ACCENT_BOLD}]Epidemiology Meta-Analysis Agent[/bold {ACCENT_BOLD}]")
     console.print(
         f"[{ACCENT_DIM}]Version {version}[/{ACCENT_DIM}]  "
         f"[{ACCENT}]•[/{ACCENT}]  "
         f"[{ACCENT_DIM}]https://github.com/Flesymeb/MetaAgent-Epi[/{ACCENT_DIM}]"
     )
-    console.print(f"[{ACCENT}]" + "━" * 92 + f"[/{ACCENT}]")
+    console.print(f"[{ACCENT}]" + "━" * 60 + f"[/{ACCENT}]")
     console.print(
         f"[{TEXT_DIM}]Start with "
         f"[bold]metaagent screening prepare[/bold] or "
