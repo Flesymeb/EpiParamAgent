@@ -22,7 +22,7 @@ _VALID_MODULE_HINTS = {"screening", "coding"}
 
 
 def get_project_root() -> Path:
-    return Path(__file__).resolve().parents[2]
+    return Path(__file__).resolve().parents[1]
 
 
 def _normalize_module_hint(module_hint: Optional[str]) -> Optional[str]:
