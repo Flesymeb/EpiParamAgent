@@ -179,14 +179,16 @@ async def screen_papers_batch_async(
         "research_question": research_question,
         "disease_focus": research_question or "(SARS-CoV-2 OR COVID-19 OR 2019-nCoV OR coronavirus)",
         "disease_exclude": "studies that focus solely on other diseases",
-        "parameter_focus": "target epidemiological parameters related to the research question (e.g., reproduction number, serial interval, fatality rate)",
-        "parameter_exclude": "studies that discuss adjacent outcomes without actually reporting or estimating the target parameter",
+        "parameter_focus": "target epidemiological parameter (e.g., case fatality rate, mortality, death rate, infection fatality rate). Include papers that report or estimate death/survival outcomes from original patient data.",
+        "parameter_exclude": "studies that only mention the parameter in passing without quantitative data",
         "parameter_scoring_note": (
-            "- Score 3–4 only if the paper directly reports the parameter from its own observed individual-level data "
-            "(contact-tracing pairs, household contacts, clinical surveillance records).\n"
-            "- Score 2 if the paper estimates the parameter as a model output (transmission model calibration), "
-            "or uses the parameter value from another study as an input assumption.\n"
-            "- Score 0–1 if the paper only mentions the parameter in the introduction/background without reporting a new estimate."
+            "- Score 4 if the paper directly reports or estimates the target parameter (CFR, mortality rate, "
+            "death rate, survival) from its own patient-level or population-level data.\n"
+            "- Score 3 if the paper reports clinical outcomes including deaths/survival among a defined cohort, "
+            "enabling CFR calculation, even if CFR is not the primary endpoint.\n"
+            "- Score 2 if the paper reports related outcomes (ICU admission, severity, hospitalization) "
+            "without explicit mortality data, or uses the parameter from another study as input.\n"
+            "- Score 0–1 if the paper only mentions the parameter in background/introduction without any quantitative death/survival data."
         ),
     }
     config = {**default_config, **(screening_config or {})}
@@ -283,7 +285,14 @@ async def screen_papers_batch_async(
     all_prompts: list[tuple[dict[str, Any], Any]] = []
     for paper in papers:
         title = paper.get("Title", "").strip()
-        content = (paper.get(content_key) or "").strip() or content_fallback
+        abstract = (paper.get(content_key) or "").strip()
+        content = abstract or content_fallback
+
+        # Auto-detect empty abstract → use title_only/lenient mode
+        effective_stage = screening_stage
+        if not abstract and screening_stage == "title_abstract":
+            effective_stage = "title_only"
+            stage_mode = "lenient"
         keywords = (paper.get("Keywords") or "").strip() or "(No keywords available)"
         prompt_kwargs: dict[str, str] = {
             "research_question": research_question,

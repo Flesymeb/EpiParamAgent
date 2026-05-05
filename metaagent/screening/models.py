@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field, model_validator
 DEFAULT_THRESHOLDS: dict[str, dict[str, int]] = {
     "strong": {
         "disease_min": 4,
-        "parameter_min": 4,
+        "parameter_min": 2,
         "evidence_min": 2,
         "population_min": 2,
         "location_min": 2,
