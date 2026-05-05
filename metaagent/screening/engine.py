@@ -640,6 +640,7 @@ def _parse_json_result(content: str, model_class: type) -> Any:
         "location": "location_relevance", "location_relevancy": "location_relevance",
         "evidence": "original_evidence", "original_evidence_score": "original_evidence",
         "evidence_relevance": "original_evidence", "evidence_quality": "original_evidence",
+        "original_empirical_evidence": "original_evidence",
         "parameter": "parameter_relevance", "parameter_relevancy": "parameter_relevance",
         "overall": "overall_score", "overall_justify": "overall_justification",
     }
@@ -683,17 +684,17 @@ def _parse_json_result(content: str, model_class: type) -> Any:
     if "confidence" in data and isinstance(data["confidence"], str):
         data["confidence"] = float(data["confidence"])
 
-    # Inject defaults for missing required fields (GLM sometimes skips dimensions)
-    if "original_evidence" not in data:
-        data["original_evidence"] = {"score": 2, "justification": "Not explicitly assessed by model"}
+    # Fill truly missing required Pydantic fields with neutral defaults
+    # GLM output is inconsistent — sometimes skips original_evidence or parameter_relevance
+    for dim, default_score in [
+        ("disease_relevance", 2), ("population_relevance", 2),
+        ("location_relevance", 2), ("original_evidence", 2),
+        ("parameter_relevance", 2),
+    ]:
+        if dim not in data:
+            data[dim] = {"score": default_score, "justification": "Model did not explicitly assess this dimension"}
     if "overall_justification" not in data:
         data["overall_justification"] = data.get("justification", "No overall justification provided")
-
-    # Fill missing 5D dimensions with defaults
-    for dim in ["disease_relevance", "population_relevance", "location_relevance",
-                "parameter_relevance"]:
-        if dim not in data:
-            data[dim] = {"score": 2, "justification": f"Not assessed for {dim}"}
 
     return model_class(**data)
 
