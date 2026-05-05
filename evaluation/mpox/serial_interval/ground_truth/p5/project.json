@@ -19,8 +19,9 @@
   "transmission_focus": "serial intervals",
   "transmission_exclude": "none",
   "search_count": "59",
-  "included_count": "10",
+  "included_count": 8,
   "annotator_id": 4,
   "parameter_relevance": "serial intervals",
-  "parameter_exclude": "none"
+  "parameter_exclude": "none",
+  "note": "[FIXED: 2 COVID papers (35907777, 35171991) removed — not mpox; actual mpox SI count = 8]"
 }
