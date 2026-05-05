@@ -43,8 +43,6 @@ venv.bak/
 *.ipynb
 
 # Environment variables
-.env
-.env.local
 .env.*.local
 
 # Testing
@@ -119,16 +117,13 @@ temp/
 
 # Node / frontend
 node_modules/
-dev/workbench/frontend/dist/
-dev/workbench/frontend/tailwind.config.js
-dev/workbench/frontend/tailwind.config.d.ts
-dev/workbench/frontend/vite.config.js
-dev/workbench/frontend/vite.config.d.ts
+workbench/frontend/dist/
+workbench/frontend/tailwind.config.js
+workbench/frontend/tailwind.config.d.ts
+workbench/frontend/vite.config.js
+workbench/frontend/vite.config.d.ts
 
 # Local workflow outputs
-dev/coding_sheet/output/
-dev/tmp_manifest_test/
-
 
 # video files
 *.mp4
@@ -148,11 +143,23 @@ misc/
 
 paper_pool/
 
-dev/tools/paper_fetch/papers
-
-
 # old versions
 old/
+dev/
 
 # Evaluation — ignore run outputs and large data; pmids.txt tracked via git add -f
-evaluation/
+paper_pool/
+metaagent/screening/.env.local
+metaagent/coding/.env.local
+.env.local
+.env
+
+# Evaluation — track structure only, ignore run data
+evaluation/*/*/coding/p*/coding_runs/
+evaluation/*/*/coding/p*/*.json
+evaluation/*/*/coding/p*/*.csv
+evaluation/*/*/screening/*.csv
+evaluation/*/*/screening/*.xlsx
+evaluation/*/*/ground_truth/*.csv
+evaluation/_legacy/
+evaluation/*.zip

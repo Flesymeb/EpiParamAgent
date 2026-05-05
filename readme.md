@@ -1,94 +1,104 @@
 # MetaAgent-Epi
 
-Epidemiology-oriented meta-analysis workspace with three active modules under `dev/`:
+LLM-powered epidemiological systematic review automation with three active modules:
 
-- `literature_search`: search, screening, evaluation
-- `coding_sheet`: PDF-to-coding-sheet extraction
-- `workbench`: local analysis and visualization console
+- `metaagent/screening/`: literature search, screening, evaluation
+- `metaagent/coding/`: PDF-to-coding-sheet extraction
+- `workbench/`: local analysis and visualization console
 
-## Start Here
+## Quick Start
 
-For the current developer workflow, read:
+```bash
+# Run the CLI
+python -m metaagent.cli
 
-- [`dev/START.md`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/START.md)
+# Or use the shell entry point
+./metaagent.sh
+```
+
+## Project Structure
+
+```
+MetaAgent-Epi/
+├── metaagent/              # Python package
+│   ├── cli/                # Click CLI commands (screening, coding, pubmed, pdf)
+│   ├── screening/          # LLM screening engine + cascade retrieval
+│   ├── coding/             # Coding sheet extraction pipeline
+│   ├── pubmed/             # PubMed + data source API clients
+│   ├── analysis/           # Meta-analysis pooling statistics
+│   ├── prompts/            # LLM prompt templates (5d, binary, peco, etc.)
+│   └── epidemiology/       # Epidemiological utilities
+├── tools/                  # Standalone scripts and utilities
+│   ├── screening_prepare.py    # Build screening-ready datasets
+│   ├── screening_evaluation.py # Evaluate screening against ground truth
+│   ├── screening_report.py     # Generate academic reports
+│   ├── pubmed_manager.py       # PubMed batch operations
+│   ├── evaluate_coding.py      # Coding evaluation and pooling
+│   └── extract_coding.py       # Coding sheet extraction CLI
+├── configs/                # YAML configuration files
+│   ├── screening_profiles/     # Experiment profiles (per disease/parameter)
+│   ├── codebooks/              # Coding codebook definitions
+│   └── coding_prompts/         # Stage A/B coding prompts
+├── workbench/              # Web UI dashboard (FastAPI + React)
+├── evaluation/             # Ground truth + experiment results
+├── dataset/                # Raw datasets
+├── docs/                   # Documentation
+├── tests/                  # Integration tests
+└── paper_pool/             # Cached PDFs and markdown (gitignored)
+```
 
 ## Module Map
 
-### `dev/literature_search`
+### `metaagent/screening/`
 
 Purpose:
-- build screening-ready raw datasets
-- run title/abstract and optional full-text screening
-- evaluate results against ground truth
+- Run title/abstract and optional full-text screening
+- Cascade retrieval for uncertain papers (Tier 1→2→3)
+- Multi-strategy comparison (5d, binary, binary_baseline, binary_noguidance, peco)
+- Cost tracking (tokens, time, USD)
 
-Primary entrypoints:
-- [`run_prepare_raw.ps1`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/ops/run_prepare_raw.ps1)
-- [`run_screening_eval.ps1`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/ops/run_screening_eval.ps1)
-- [`run_pipeline.ps1`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/ops/run_pipeline.ps1)
+CLI commands:
+```bash
+metaagent screening run --input papers.csv --output screened.csv --strategy peco
+metaagent screening run --input papers.csv --output screened.csv --strategy 5d --cascade
+```
 
-Reference:
-- [`dev/literature_search/README.md`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/literature_search/README.md)
-
-### `dev/coding_sheet`
-
-Purpose:
-- acquire PDFs / markdown inputs
-- run Stage A / Stage B extraction
-- export coding sheet outputs
-
-Primary entrypoints:
-- [`extract_epi.py`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/coding_sheet/cli/extract_epi.py)
-- [`run_codebook_extract.ps1`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/coding_sheet/run_codebook_extract.ps1)
-
-Reference:
-- [`dev/coding_sheet/README.md`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/coding_sheet/README.md)
-
-### `dev/workbench`
+### `metaagent/coding/`
 
 Purpose:
-- inspect screening runs
-- inspect failure cases and metrics
-- visualize manifests and outputs from active modules
+- Stage A (indexing) + Stage B (extraction) from full-text PDFs
+- Codebook-driven configurable extraction
+- Export to XLSX with quality scoring
 
-Primary entrypoint:
-- [`run_workbench.ps1`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/workbench/scripts/ops/run_workbench.ps1)
+### `workbench/`
 
-Reference:
-- [`dev/workbench/README.md`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/dev/workbench/README.md)
+Purpose:
+- Inspect screening runs and failure cases
+- Visualize metrics and manifests
 
 ## Runtime Config
 
-Runtime env is loaded in this order:
-
-1. `dev/.env`
-2. `dev/.env.local`
-3. `dev/<module>/.env`
-4. `dev/<module>/.env.local`
-
-Rules:
-- shared defaults go in `dev/.env`
-- machine-local secrets go in `dev/.env.local`
-- module-only overrides go in module-local `.env.local`
+Runtime env is loaded from:
+1. `.env` -- shared defaults
+2. `.env.local` -- machine-local secrets
+3. `configs/` -- YAML profiles and codebooks
 
 ## Shared Infrastructure
 
-Shared code lives under `dev/tools`:
-
-- `common`: runtime config and provenance helpers
-- `paper_fetch`: PDF download tooling
-- `mineru`: PDF-to-Markdown helpers
+- `tools/common/`: runtime config and provenance helpers
+- `tools/paper_fetch/`: PDF download tooling (Sci-Hub)
+- `tools/mineru/`: PDF-to-Markdown parsing (MinerU API)
 
 ## Canonical Workflow
 
-For screening experiments, the supported path is:
+For screening experiments:
+1. Prepare raw dataset: `python tools/screening_prepare.py`
+2. Run screening: `metaagent screening run --input ... --output ...`
+3. Evaluate: `python tools/screening_evaluation.py`
+4. Analyze: open `workbench/`
 
-1. raw / GT changed -> `run_prepare_raw.ps1`
-2. formal experiment -> `run_screening_eval.ps1`
-3. optional one-command wrapper -> `run_pipeline.ps1`
-4. analysis / failure cases -> `run_workbench.ps1`
+## Legacy
 
-## Design Notes
-
-Key workflow and documentation decisions are tracked in:
-
-- [`docs/DECISIONS.md`](D:/AILab/MAS/Meta-Analysis/MetaAgent-Epi/docs/DECISIONS.md)
+The `dev/` directory contains the previous workspace structure and will be removed
+once the migration is fully validated. All functionality has been migrated to the
+new package layout.
