@@ -1,0 +1,110 @@
+[
+  {
+    "proj": "p10",
+    "strategy": "keyword",
+    "included": 1,
+    "total": 599,
+    "tp": 1,
+    "fn": 27,
+    "fp": 0,
+    "recall": 0.03571428571428571,
+    "precision": 1.0,
+    "f1": 0.0689655172413793
+  },
+  {
+    "proj": "p10",
+    "strategy": "binary_strict",
+    "included": 93,
+    "total": 599,
+    "tp": 22,
+    "fn": 6,
+    "fp": 71,
+    "recall": 0.7857142857142857,
+    "precision": 0.23655913978494625,
+    "f1": 0.3636363636363636
+  },
+  {
+    "proj": "p10",
+    "strategy": "5d",
+    "included": 40,
+    "total": 599,
+    "tp": 19,
+    "fn": 9,
+    "fp": 21,
+    "recall": 0.6785714285714286,
+    "precision": 0.475,
+    "f1": 0.5588235294117648
+  },
+  {
+    "proj": "p13",
+    "strategy": "keyword",
+    "included": 4,
+    "total": 111,
+    "tp": 3,
+    "fn": 48,
+    "fp": 1,
+    "recall": 0.058823529411764705,
+    "precision": 0.75,
+    "f1": 0.10909090909090909
+  },
+  {
+    "proj": "p13",
+    "strategy": "binary_strict",
+    "included": 83,
+    "total": 111,
+    "tp": 49,
+    "fn": 2,
+    "fp": 34,
+    "recall": 0.9607843137254902,
+    "precision": 0.5903614457831325,
+    "f1": 0.7313432835820897
+  },
+  {
+    "proj": "p13",
+    "strategy": "5d",
+    "included": 80,
+    "total": 111,
+    "tp": 42,
+    "fn": 9,
+    "fp": 38,
+    "recall": 0.8235294117647058,
+    "precision": 0.525,
+    "f1": 0.6412213740458015
+  },
+  {
+    "proj": "p14",
+    "strategy": "keyword",
+    "included": 3,
+    "total": 94,
+    "tp": 1,
+    "fn": 8,
+    "fp": 2,
+    "recall": 0.1111111111111111,
+    "precision": 0.3333333333333333,
+    "f1": 0.16666666666666666
+  },
+  {
+    "proj": "p14",
+    "strategy": "binary_strict",
+    "included": 94,
+    "total": 94,
+    "tp": 9,
+    "fn": 0,
+    "fp": 85,
+    "recall": 1.0,
+    "precision": 0.09574468085106383,
+    "f1": 0.17475728155339806
+  },
+  {
+    "proj": "p14",
+    "strategy": "5d",
+    "included": 56,
+    "total": 94,
+    "tp": 8,
+    "fn": 1,
+    "fp": 48,
+    "recall": 0.8888888888888888,
+    "precision": 0.14285714285714285,
+    "f1": 0.24615384615384617
+  }
+]
