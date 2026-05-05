@@ -14,7 +14,7 @@ from typing import Any
 import yaml
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-PROFILE_DIR = BASE_DIR / "configs" / "screening_profiles"
+PROFILE_DIR = BASE_DIR / "configs"
 
 
 def _normalize_topic(topic: str) -> str:
@@ -117,9 +117,9 @@ def _merge_profile(defaults: dict[str, Any], profile_id: str, topic: str, diseas
 def load_profile_registry() -> dict[str, ScreeningProfile]:
     registry: dict[str, ScreeningProfile] = {}
     if not PROFILE_DIR.exists():
-        raise FileNotFoundError(f"Missing screening profile directory: {PROFILE_DIR}")
+        raise FileNotFoundError(f"Missing configs directory: {PROFILE_DIR}")
 
-    for yaml_file in sorted(PROFILE_DIR.glob("*.yaml")):
+    for yaml_file in sorted(PROFILE_DIR.rglob("screening_profiles/*.yaml")):
         with open(yaml_file, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f) or {}
         topic = _normalize_topic(data.get("topic") or yaml_file.stem)

@@ -6,7 +6,7 @@ from datetime import datetime
 from pathlib import Path
 
 MODULE_ROOT = Path(__file__).resolve().parents[1]
-REPO_ROOT = MODULE_ROOT.parents[1]  # MetaAgent-Epi/
+REPO_ROOT = MODULE_ROOT.parent  # MetaAgent-Epi/
 SCREENING_SRC = REPO_ROOT
 
 sys.path.insert(0, str(MODULE_ROOT))

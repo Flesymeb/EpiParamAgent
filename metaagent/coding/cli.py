@@ -33,23 +33,19 @@ def extract(disease, topic, profile, stage, fetch_mode, out, codebook):
     if codebook:
         cb_path = Path(codebook)
     else:
-        cb_map = {
-            ("covid19", "fatality"):            "configs/codebook_fatality.yaml",
-            ("covid19", "serial_interval"):     "configs/codebook_serial_interval.yaml",
-            ("covid19", "reproduction_number"): "configs/codebook_reproduction_number.yaml",
-            ("mpox", "fatality"):               "configs/codebook_mpox_fatality.yaml",
-            ("mpox", "serial_interval"):        "configs/codebook_mpox_serial_interval.yaml",
-            ("mpox", "reproduction_number"):    "configs/codebook_mpox_reproduction_number.yaml",
-        }
-        cb_rel = cb_map.get((disease, topic))
-        if not cb_rel:
-            raise click.BadParameter(f"No codebook mapping for disease={disease}, topic={topic}")
-        cb_path = REPO_ROOT / "configs" / disease / "codebooks" / cb_rel.name
+        cb_path = REPO_ROOT / "configs" / disease / "codebooks" / f"{topic}.yaml"
+        if not cb_path.exists():
+            raise click.BadParameter(f"Codebook not found: {cb_path}")
 
-    # Resolve pmids.txt
+    # Resolve pmids.txt — try profile registry first for correct project dir
     if profile:
-        project_id = profile.lower()
-        pmids_path = REPO_ROOT / "evaluation" / disease / topic / "coding" / project_id / "pmids.txt"
+        from metaagent.screening.profile_registry import get_profile
+        p = get_profile(profile.upper())
+        if p:
+            project_dir = p.project_dir_name
+        else:
+            project_dir = profile.lower()
+        pmids_path = REPO_ROOT / "evaluation" / disease / topic / "coding" / project_dir / "pmids.txt"
         if not pmids_path.exists():
             raise click.BadParameter(f"pmids.txt not found: {pmids_path}")
     else:

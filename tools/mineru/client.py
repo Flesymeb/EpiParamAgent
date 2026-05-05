@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 import os
+import subprocess
+import tempfile
 import time
 import zipfile
 from contextlib import contextmanager
@@ -94,7 +96,7 @@ def _request_with_retry(
         except transient_types as exc:
             last_exc = exc
             if attempt >= attempts:
-                raise
+                break
             delay = base_delay * (2 ** (attempt - 1))
             logger.warning(
                 'MinerU request failed (%s %s) attempt %d/%d: %s; retrying in %.1fs',
@@ -107,9 +109,75 @@ def _request_with_retry(
             )
             time.sleep(delay)
 
+    # All requests attempts failed — try curl as fallback for GET downloads
+    if method.upper() == "GET" and last_exc is not None:
+        return _curl_get(url, headers=headers, timeout_s=timeout_s, cfg=cfg)
+
     if last_exc:
         raise last_exc
     raise RuntimeError(f'Unexpected retry loop exit for MinerU request: {method} {url}')
+
+
+class _CurlResponse:
+    """Minimal requests.Response-compatible wrapper for curl output."""
+    def __init__(self, status_code: int, content: bytes, text: str = ""):
+        self.status_code = status_code
+        self.content = content
+        self.text = text
+
+
+def _curl_get(url: str, headers: Optional[dict[str, str]] = None, timeout_s: int = 60, cfg: Optional[MineruConfig] = None):
+    """Use curl subprocess as fallback when Python SSL fails.
+
+    Clash TUN mode may hijack DNS and return fake IPs for CDN domains.
+    We resolve the real IP via DNS-over-HTTPS and use --connect-to to
+    force curl to connect through the proxy to the correct IP.
+    """
+    cmd = ["curl", "-sS", "--max-time", str(timeout_s), "--noproxy", "", "-o", "-"]
+
+    # Resolve real IP for CDN domains that may be DNS-hijacked
+    host = url.split("//")[-1].split("/")[0].split(":")[0]
+    real_ip = _resolve_real_ip(host)
+    if real_ip:
+        cmd += ["--connect-to", f"{host}:443:{real_ip}:443"]
+
+    if headers:
+        for k, v in (headers or {}).items():
+            cmd += ["-H", f"{k}: {v}"]
+    cmd.append(url)
+    try:
+        result = subprocess.run(cmd, capture_output=True, timeout=timeout_s + 5)
+        return _CurlResponse(
+            status_code=200 if result.returncode == 0 else 500,
+            content=result.stdout,
+            text=result.stderr.decode(errors="ignore") if result.stderr else "",
+        )
+    except Exception as exc:
+        raise RuntimeError(f"curl fallback also failed for {url}: {exc}")
+
+
+def _resolve_real_ip(host: str) -> str | None:
+    """Resolve real IP via DNS-over-HTTPS to bypass Clash fake IP."""
+    import json as _json
+    from urllib.request import Request as _Req, urlopen as _urlopen
+    try:
+        req = _Req(
+            f"https://dns.google/resolve?name={host}&type=A",
+            headers={"Accept": "application/json"},
+        )
+        with _urlopen(req, timeout=5) as resp:
+            data = _json.loads(resp.read())
+        answers = data.get("Answer", [])
+        for a in answers:
+            if a.get("type") == 1:  # A record
+                return a["data"]
+        # If CNAME, follow it
+        for a in answers:
+            if a.get("type") == 5:  # CNAME
+                return _resolve_real_ip(a["data"])
+    except Exception:
+        pass
+    return None
 
 
 @dataclass(frozen=True)
