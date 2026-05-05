@@ -137,6 +137,15 @@ def se_from_record(row: dict, fallback_sd: float | None = None) -> float | None:
         # Even with NR uncertainty, we can impute if fallback_sd + n available
         if fallback_sd is not None and fallback_sd > 0 and n is not None and n > 0:
             return fallback_sd / math.sqrt(n)
+        # For proportion data (CFR, IFR) without CI: use binomial SE = sqrt(p*(1-p)/n)
+        pe = _f(row.get("point_estimate"))
+        if pe is not None and n is not None and n > 0:
+            # If point_estimate is percentage (>1), convert to proportion
+            p = pe / 100.0 if pe > 1.0 else pe
+            if 0 < p < 1:
+                se = math.sqrt(p * (1 - p) / n)
+                if math.isfinite(se) and se > 0:
+                    return se
         return None
 
     # ── CI / CrI ────────────────────────────────────────────────────────────
