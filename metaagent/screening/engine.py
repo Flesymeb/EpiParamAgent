@@ -284,7 +284,13 @@ async def screen_papers_batch_async(
         output_schema = BinaryDecision
     else:
         output_schema = ScreeningDecision
-    structured_llm = llm_model.with_structured_output(output_schema)
+
+    # Use JSON mode instead of function calling (works with more proxies/models)
+    json_schema = output_schema.model_json_schema()
+    schema_hint = _build_json_schema_hint(output_schema)
+    system_text += f"\n\nYou MUST respond with a single JSON object matching this schema. No other text.\n{schema_hint}"
+
+    structured_llm = llm_model.bind(response_format={"type": "json_object"})
 
     all_prompts: list[tuple[dict[str, Any], Any]] = []
     for paper in papers:
@@ -346,14 +352,20 @@ async def screen_papers_batch_async(
                         continue
                     decision, cost = result
                     _write_cost(paper, cost)
-                    if isinstance(decision, BinaryDecision):
-                        _write_binary_result(paper, decision)
-                    elif isinstance(decision, PECODecision):
-                        _write_peco_result(paper, decision)
+                    # Parse JSON response into Pydantic model
+                    try:
+                        content = decision.content if hasattr(decision, 'content') else str(decision)
+                        parsed = _parse_json_result(content, output_schema)
+                    except Exception:
+                        parsed = decision  # fallback: may already be parsed
+                    if isinstance(parsed, BinaryDecision):
+                        _write_binary_result(paper, parsed)
+                    elif isinstance(parsed, PECODecision):
+                        _write_peco_result(paper, parsed)
                     else:
                         _write_structured_result(
                             paper,
-                            decision,
+                            parsed,
                             thresholds=config.get("thresholds"),
                             stage_mode=stage_mode,
                             evidence_floor=evidence_floor,
@@ -390,11 +402,17 @@ async def screen_papers_batch_async(
                     try:
                         raw = await invoke_with_retry_async(structured_llm, prompt)
                         if isinstance(raw, tuple):
-                            result, cost = raw
+                            llm_result, cost = raw
                             _write_cost(paper, cost)
                         else:
-                            result = raw
-                        if isinstance(result, BinaryDecision):
+                            llm_result = raw
+                        # Parse JSON response
+                        try:
+                            content = llm_result.content if hasattr(llm_result, 'content') else str(llm_result)
+                            parsed = _parse_json_result(content, output_schema)
+                        except Exception:
+                            parsed = llm_result
+                        if isinstance(llm_result, BinaryDecision):
                             _write_binary_result(paper, result)
                         elif isinstance(result, PECODecision):
                             _write_peco_result(paper, result)
@@ -500,6 +518,61 @@ def _write_cost(paper: dict[str, Any], cost: dict[str, Any]) -> None:
     paper["completion_tokens"] = cost.get("completion_tokens", 0)
     paper["total_tokens"] = cost.get("total_tokens", 0)
     paper["wall_time_ms"] = cost.get("wall_time_ms", 0)
+
+
+def _build_json_schema_hint(model_class: type) -> str:
+    """Build a compact JSON schema description for the LLM prompt."""
+    schema = model_class.model_json_schema()
+    props = schema.get("properties", {})
+    required = schema.get("required", [])
+    lines = ["{"]
+    for name, prop in props.items():
+        ptype = prop.get("type", "any")
+        desc = (prop.get("description", "") or "")[:80]
+        req = "required" if name in required else "optional"
+        if ptype == "object":
+            subprops = prop.get("properties", {})
+            sub = ", ".join(f'"{k}"' for k in subprops)
+            lines.append(f'  "{name}": {{ {sub} }},  // {req}, {desc}')
+        elif ptype == "array":
+            items = prop.get("items", {})
+            lines.append(f'  "{name}": [...],  // {req}, {desc}')
+        elif ptype == "boolean":
+            lines.append(f'  "{name}": true|false,  // {req}, {desc}')
+        elif ptype == "number":
+            lines.append(f'  "{name}": 0.0,  // {req}, {desc}')
+        elif ptype == "integer":
+            lines.append(f'  "{name}": 0,  // {req}, {desc}')
+        else:
+            lines.append(f'  "{name}": "...",  // {req}, {desc}')
+    lines.append("}")
+    return "\n".join(lines)
+
+
+def _parse_json_result(content: str, model_class: type) -> Any:
+    """Parse LLM JSON output into a Pydantic model, with fallbacks."""
+    import json as _json
+    # Try direct parse
+    try:
+        return model_class(**_json.loads(content))
+    except Exception:
+        pass
+    # Try to extract JSON from markdown code blocks
+    import re
+    m = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', content, re.DOTALL)
+    if m:
+        try:
+            return model_class(**_json.loads(m.group(1)))
+        except Exception:
+            pass
+    # Try to find any JSON object in the text
+    m2 = re.search(r'\{.*\}', content, re.DOTALL)
+    if m2:
+        try:
+            return model_class(**_json.loads(m2.group(0)))
+        except Exception:
+            pass
+    raise ValueError(f"Could not parse JSON from response: {content[:200]}")
 
 
 def _mark_paper_error(paper: dict[str, Any], error: Exception) -> None:
