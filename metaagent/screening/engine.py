@@ -73,15 +73,11 @@ def init_llm_model(model_override: str | None = None) -> Any:
     print(f"SSL Verify: {cfg.verify_ssl}\n")
     print(f"Force streaming: {cfg.force_streaming}\n")
 
-    http_client = httpx.Client(verify=cfg.verify_ssl, timeout=cfg.timeout_s)
-    http_async_client = httpx.AsyncClient(verify=cfg.verify_ssl, timeout=cfg.timeout_s)
     return ChatOpenAI(
         model=llm_model,
         temperature=cfg.temperature,
         api_key=cfg.api_key,
         base_url=api_base,
-        http_client=http_client,
-        http_async_client=http_async_client,
         max_retries=3,
         request_timeout=cfg.timeout_s,
         streaming=cfg.force_streaming,
