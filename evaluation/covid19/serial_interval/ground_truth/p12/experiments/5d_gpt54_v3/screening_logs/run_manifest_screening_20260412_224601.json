@@ -1,0 +1,101 @@
+{
+  "timestamp_utc": "2026-04-12T14:46:01.507356+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search",
+  "argv": [
+    "scripts/cli/screening_llm_batch.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "P12",
+    "--experiment",
+    "5d_gpt54_v3",
+    "--strategy",
+    "5d",
+    "--batch-size",
+    "30",
+    "--batch-concurrency",
+    "1"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "d644f2a750baebef79c3c8326552d072bb5e5878",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "P12",
+    "batch_size": 30,
+    "batch_concurrency": 1,
+    "auto_fulltext": true,
+    "fulltext_only": false,
+    "research_question": "What are the serial interval and generation time of COVID-19?",
+    "strategy": "5d",
+    "experiment": "5d_gpt54_v3"
+  },
+  "inputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/serial_interval/p12/project_12_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-04-01T09:25:55.331391+00:00",
+      "type": "file",
+      "size_bytes": 283867,
+      "sha256": "83c6970a16ff05393862fcb550d88c2d0c1df9d22e57dce355eb48b791a57448"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/serial_interval/p12/project_12_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-04-01T09:25:54.902366+00:00",
+      "type": "file",
+      "size_bytes": 7837,
+      "sha256": "efa74cd2f78eeb8de679e099218cd4a3354113afb87a30f49b7160208eda8083"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/serial_interval/p12/experiments/5d_gpt54_v3/project_12_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-04-12T14:46:01.506354+00:00",
+      "type": "file",
+      "size_bytes": 448336,
+      "sha256": "a6bd3ff06d0137f5132aa8520be19ac67670fcf3e11a1c633c7415d98aa863ac"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/serial_interval/p12/experiments/5d_gpt54_v3/screening_logs/screening_report_20260412_224601.txt",
+      "exists": true,
+      "mtime_utc": "2026-04-12T14:46:01.507188+00:00",
+      "type": "file",
+      "size_bytes": 17095,
+      "sha256": "ed65849440a15dc0be2d542a8b2d8889fd100bee0a16f06ff30b1edd26f9ce55"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": "openai",
+      "model": "openai/gpt-5.4",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 300,
+      "verify_ssl": false,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": true
+    }
+  },
+  "extra": {
+    "paper_count": 145,
+    "ground_truth_count": 20,
+    "ground_truth_in_pool": 20,
+    "strong_count": 26,
+    "possible_count": 43,
+    "unlikely_count": 75,
+    "error_count": 0,
+    "fulltext_error_count": 1
+  }
+}

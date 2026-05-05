@@ -1,0 +1,51 @@
+{
+  "timestamp_utc": "2026-05-04T16:26:54.379066+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_prepare_raw.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP12",
+    "--query",
+    "monkeypox or mpox, pregnan*, maternal, wom#n , child*, congenital*, vertical*, transmi*, neonat*, p?ediatric, infect*, smallpox, vaccin* or immuni#ation, prevent*, safe*, tecovirimat, treat*, and breastfeeding",
+    "--include-gt",
+    "--fix-missing"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "1684f3dbd11d7208abbd34671c17ef96fffde46d",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP12",
+    "topic": "",
+    "query": "monkeypox or mpox, pregnan*, maternal, wom#n , child*, congenital*, vertical*, transmi*, neonat*, p?ediatric, infect*, smallpox, vaccin* or immuni#ation, prevent*, safe*, tecovirimat, treat*, and breastfeeding",
+    "date_range": "",
+    "retmax": "all",
+    "include_gt": true,
+    "fix_missing": true,
+    "medline_only": false
+  },
+  "inputs": [],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/fatality/p12/project_12_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-04T16:26:54.372371+00:00",
+      "type": "file",
+      "size_bytes": 9610692,
+      "sha256": "b350694c3a4eb113768661d0cdd564bb2dce5ffbcd5ebe3aeca0eff4d45a9ac0"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 6218,
+    "ground_truth_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/fatality/p12/project_12_groundtruth.csv"
+  }
+}

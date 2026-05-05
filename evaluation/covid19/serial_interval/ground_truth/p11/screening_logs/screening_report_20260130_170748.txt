@@ -1,0 +1,621 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-01-30 17:07:48
+研究问题: What are the serial interval and generation time of SARS-CoV-2 estimated from contact tracing or household transmission studies?
+输入文件: D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi\evaluation\screening\GT_1\GT_export\serial_interval\p11\project_11_raw.csv
+输出文件: D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi\evaluation\screening\GT_1\GT_export\serial_interval\p11\project_11_screened.csv
+模型配置: openai/gpt-5.2
+批处理大小: 10
+批次并发: 3
+Full-text: need_fulltext=32 | screened=30
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │    114   │   13.6%  │
+│ 🤔 Possible candidates   │     25   │    3.0%  │
+│ 😐 Unlikely candidates   │    700   │   83.2%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │    841   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+Full-text failures
+================================================================================
+[01] PMID=33068511 | no_id | A Patient In The Incubation Period Of Sars-Cov-2 Submitted To Openheart Surgery.
+[02] PMID=34283506 | no_id | Best Practices For Administering Monoclonal Antibody Therapy For Coronavirus (COVID-19) (Archived)
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  3.90  │   97.5%  │ 12/ 3/ 6/15/803                 │
+│ Population      │  3.53  │   90.7%  │ 10/15/53/201/560                 │
+│ Location        │  2.95  │   61.6%  │ 18/60/244/142/375                 │
+│ Evidence        │  2.41  │   57.6%  │ 159/108/89/199/284                 │
+│ Transmission    │  0.96  │   18.7%  │ 499/166/17/26/131                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (114 篇)
+================================================================================
+
+1. PMID: 32392331 [Score: 4/4]
+   Title: Household Transmission of SARS-CoV-2, Zhuhai, China, 2020.
+   Overall: This is a household transmission/contact-follow-up study of SARS-CoV-2 that explicitly estimates serial interval (and incubation period) from observed household transmission pairs. It provides original empirical estimates in humans with clear setting and methods.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+2. PMID: 32145466 [Score: 4/4]
+   Title: Serial interval of novel coronavirus (COVID-19) infections.
+   Overall: Directly estimates the COVID-19 serial interval from infector–infectee pairs (a contact-tracing-like transmission pair dataset) using original empirical data and appropriate adjustment for epidemic growth. Generation time is mentioned in keywords but not estimated/reported in the abstract; however serial interval estimation is central and explicit.
+   维度评分: D=4 P=4 L=2 E=3 T=4
+
+3. PMID: 36513688 [Score: 4/4]
+   Title: Inferring time-varying generation time, serial interval, and incubation period distributions for COVID-19.
+   Overall: This study explicitly estimates serial interval and infers time-varying generation time using reconstructed transmission pairs from case investigations/contact tracing data in China. It directly addresses the target parameters (serial interval and generation time) with original human empirical data.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+4. PMID: 35107418 [Score: 4/4]
+   Title: Serial Intervals and Household Transmission of SARS-CoV-2 Omicron Variant, South Korea, 2021.
+   Overall: This paper explicitly studies SARS-CoV-2 (Omicron) and directly estimates the serial interval using household transmission pairs, derived from contact/household investigation data in South Korea. It appears to be an original empirical report with relevant transmission metrics (serial interval) central to the objective.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+5. PMID: 35176230 [Score: 4/4]
+   Title: Generation time of the alpha and delta SARS-CoV-2 variants: an epidemiological analysis.
+   Overall: The paper is explicitly about SARS-CoV-2 and centrally estimates generation time (intrinsic and household) using prospective household transmission data, which is directly aligned with the review question. It provides original empirical estimates stratified by variant (alpha vs delta) from a defined human study population in the UK.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+6. PMID: 36843225 [Score: 4/4]
+   Title: Household transmission of SARS-CoV-2 during the Omicron wave in Shanghai, China: A case-ascertained study.
+   Overall: This is an empirical household transmission (case-ascertained/contact-tracing style) study of SARS-CoV-2 Omicron in Shanghai that explicitly estimates the serial interval (with a numerical estimate) along with other transmission parameters. It directly matches the review’s target outcome and setting (household transmission).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+7. PMID: 36878009 [Score: 4/4]
+   Title: Serial Intervals and Incubation Periods of SARS-CoV-2 Omicron and Delta Variants, Singapore.
+   Overall: This paper explicitly evaluates SARS-CoV-2 (Omicron BA.1/BA.2 and Delta) and reports serial interval estimates, which directly matches the target outcome. It appears to be an original empirical estimation study in a defined human population in Singapore, though the abstract does not explicitly state contact tracing or household-transmission design.
+   维度评分: D=4 P=3 L=4 E=3 T=4
+
+8. PMID: 36068236 [Score: 4/4]
+   Title: Genomic surveillance of SARS-CoV-2 Omicron variants on a university campus.
+   Overall: This study directly estimates and compares serial intervals for SARS-CoV-2 variants (Omicron vs Delta) using empirical surveillance data, including household-linked symptomatic infections. It is human-based and includes original quantitative transmission timing estimates, making it highly aligned with the review question (even though generation time is not explicitly reported).
+   维度评分: D=4 P=4 L=2 E=4 T=4
+
+9. PMID: 34865022 [Score: 4/4]
+   Title: Transmission Dynamics of the Delta Variant of SARS-CoV-2 Infections in South Korea.
+   Overall: This is an empirical human study of SARS-CoV-2 Delta transmission in South Korea using local case/outbreak and household-contact data. It explicitly estimates the serial interval, directly matching the review’s target outcomes (serial interval/generation time), though generation time is not mentioned in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+10. PMID: 35138250 [Score: 4/4]
+   Title: Inference of the SARS-CoV-2 generation time using UK household data.
+   Overall: This paper is explicitly about estimating the SARS-CoV-2 generation time distribution using UK household transmission data and provides quantitative estimates (means/SDs with credible intervals), including temporal variation. It squarely matches the target outcome (generation time) and data source type (household study).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+11. PMID: 37457248 [Score: 4/4]
+   Title: Improved time-varying reproduction numbers using the generation interval for COVID-19.
+   Overall: This study explicitly analyzes SARS-CoV-2 infector–infectee surveillance data and directly estimates both generation interval and serial interval, which are central to the review question. It is human, clearly location-specified (South Korea), and presents original empirical estimates rather than a narrative review or purely theoretical work.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+12. PMID: 32771633 [Score: 4/4]
+   Title: Transmission onset distribution of COVID-19.
+   Overall: This study is centrally about transmission timing in SARS-CoV-2 using infector–infectee (contact-tracing-like) pairs, and it explicitly estimates the serial interval. While it does not explicitly state “generation time,” its transmission onset inference plus serial interval estimation make it highly relevant to the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+13. PMID: 34378341 [Score: 4/4]
+   Title: Household transmission of COVID-19 among the earliest cases in Antananarivo, Madagascar.
+   Overall: This is a human household/contact tracing transmission study of SARS-CoV-2 with original data and explicit estimation of the serial interval from infector–infected pairs. It directly matches the review’s target design (household transmission) and target metric (serial interval), though generation time is not explicitly reported in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+14. PMID: 36511336 [Score: 4/4]
+   Title: Transmission dynamics of SARS-CoV-2 Omicron variant infections in Hangzhou, Zhejiang, China, January-February 2022.
+   Overall: This study explicitly analyzes a SARS-CoV-2 (Omicron BA.1.1) outbreak in Hangzhou using epidemiological data to construct 113 transmission pairs, and it directly estimates generation time (including time-varying forward generation time) as a key transmission parameter. It appears to be original empirical analysis from outbreak/contact-tracing style data, making it a strong match to the review question (though serial interval is not explicitly reported in the abstract).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+15. PMID: 34986169 [Score: 4/4]
+   Title: Transmission and containment of the SARS-CoV-2 Delta variant of concern in Guangzhou, China: A population-based study.
+   Overall: This population-based outbreak investigation in Guangzhou (May–June 2021) explicitly estimates the serial interval distribution for SARS-CoV-2 Delta using surveillance/contact-tracing style epidemiologic data. It provides original empirical estimates (including serial interval and incubation period), though it does not mention generation time specifically in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+16. PMID: 35816497 [Score: 4/4]
+   Title: Contact tracing of COVID-19 in Karnataka, India: Superspreading and determinants of infectiousness and symptomatic infection.
+   Overall: This is a human SARS-CoV-2 contact tracing study in India that explicitly estimates serial interval (mean 5.4 days) as part of its main transmission analyses. It provides original empirical estimates derived from traced transmission pairs/contacts, aligning closely with the review question (serial interval/generation time from contact tracing/household studies). Generation time is not mentioned, but serial interval is directly reported.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+17. PMID: 36892159 [Score: 4/4]
+   Title: Comparing the incubation period, serial interval, and infectiousness profile between SARS-CoV-2 Omicron and Delta variants.
+   Overall: This study explicitly analyzes SARS-CoV-2 Omicron vs Delta transmission in Hong Kong using contact tracing and constructed transmission pairs, and it directly estimates the serial interval (and related infectiousness profile). It appears to provide strong original empirical evidence relevant to serial-interval estimation, though generation time is not explicitly mentioned in the provided text.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+18. PMID: 32366488 [Score: 4/4]
+   Title: Nosocomial outbreak of COVID-19 pneumonia in Wuhan, China.
+   Overall: The paper is clearly about SARS-CoV-2/COVID-19 in humans and reports outbreak cluster data from a Wuhan hospital and affected family members. It explicitly reports a serial-interval-type measure (“clinical onset serial interval”, mean 5.2 days) derived from transmission chains, which is closely aligned with the review outcome, though it does not explicitly estimate generation time.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+19. PMID: 34390731 [Score: 4/4]
+   Title: Shrinkage in serial intervals across transmission generations of COVID-19.
+   Overall: The study is explicitly about COVID-19 and focuses centrally on estimating serial intervals from contact tracing data, including how SI changes across transmission generations while adjusting for isolation. It appears to provide original empirical estimates (e.g., shrinkage factor with CI) using Hong Kong surveillance contact tracing data. Generation time is not mentioned, but serial interval is a primary outcome and clearly aligned with the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+20. PMID: 33578019 [Score: 4/4]
+   Title: Epidemiological and clinical characteristics of 214 families with COVID-19 in Wuhan, China.
+   Overall: This retrospective household/family cluster study in Wuhan explicitly reports an estimated serial interval (median 5 days with 95% CI) for COVID-19, based on data collected from 214 families. It provides original empirical evidence from human household transmission, directly aligning with the review focus (serial interval/generation time from contact tracing/household studies), although generation time is not mentioned.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+21. PMID: 35101637 [Score: 4/4]
+   Title: Contact tracing period and epidemiological characteristics of an outbreak of the SARS-CoV-2 Delta variant in Guangzhou.
+   Overall: This is a contact tracing outbreak investigation of SARS-CoV-2 Delta with original data and explicit estimation of the serial interval (a core outcome). While generation time is not stated, the serial interval estimation makes it highly relevant to the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+22. PMID: 32796323 [Score: 4/4]
+   Title: Analysis of community-acquired COVID-19 cases in Taiwan.
+   Overall: This is an empirical human study of SARS-CoV-2 in Taiwan that explicitly estimates serial interval from community/contact-tracing data. It directly addresses a key outcome (serial interval), though generation time is not explicitly reported in the abstract.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+23. PMID: 32767657 [Score: 4/4]
+   Title: Evidence for pre-symptomatic transmission of coronavirus disease 2019 (COVID-19) in China.
+   Overall: This study directly estimates the SARS-CoV-2 serial interval using empirical cluster data, aligning closely with the review’s key outcome and data source type (cluster/contact-tracing inference). It is clearly COVID-19, human-based, and provides original quantitative estimates, making it a strong candidate. Generation time is not explicitly estimated, but serial interval is central and explicitly reported.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+24. PMID: 36995713 [Score: 4/4]
+   Title: Transmission Characteristics and Inactivated Vaccine Effectiveness Against Transmission of SARS-CoV-2 Omicron BA.5 Variants in Urumqi, China.
+   Overall: This human cohort study of a SARS-CoV-2 Omicron BA.5 outbreak uses contact tracing/close-contact data and explicitly estimates the generation interval (generation time) with credible intervals. It therefore directly addresses the review question (even if serial interval is not explicitly reported in the abstract).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+25. PMID: 33001833 [Score: 4/4]
+   Title: Epidemiological Parameters of COVID-19: Case Series Study.
+   Overall: This study explicitly estimates the serial interval for COVID-19 using infector–infectee pairs (n=1,015) derived from official case reports, fitting parametric distributions. It is human, multi-country, and provides original parameter estimates directly aligned with the review outcome (serial interval), though generation time is not explicitly reported.
+   维度评分: D=4 P=4 L=3 E=4 T=4
+
+26. PMID: 34635093 [Score: 4/4]
+   Title: Calculating the serial interval of SARS-CoV-2 in Lebanon using 2020 contact-tracing data.
+   Overall: Directly estimates SARS-CoV-2 serial interval using verified infector–infectee pairs from contact tracing (core outcome and design match). Human population and specific setting (Lebanon) are clear, and the analysis is based on original empirical surveillance/contact-tracing data.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+27. PMID: 36483256 [Score: 4/4]
+   Title: Dynamic characteristics of a COVID-19 outbreak in Nanjing, Jiangsu province, China.
+   Overall: This is an empirical outbreak investigation of SARS-CoV-2 Delta in humans that explicitly estimates the serial interval from observed case data. Although generation time is not reported, serial interval is a core target metric and appears central to the study’s objectives.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+28. PMID: 35144724 [Score: 4/4]
+   Title: Early chains of transmission of COVID-19 in France, January to March 2020.
+   Overall: Directly uses human contact tracing data to characterize SARS-CoV-2 transmission and explicitly estimates the serial interval (a core outcome for this review). Although generation time is not explicitly mentioned, the serial interval estimate from traced infector–infectee pairs makes it a high-priority transmission-parameter study.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+29. PMID: 35393009 [Score: 4/4]
+   Title: Secondary Attack Rate, Transmission and Incubation Periods, and Serial Interval of SARS-CoV-2 Omicron Variant, Spain.
+   Overall: This study uses contact tracing data on SARS-CoV-2 Omicron in Spain and explicitly reports a reduced serial interval (and incubation period) along with transmission metrics. It appears to provide original empirical estimates directly aligned with the review question (serial interval/generation-time-related timing from contact tracing). Generation time is not explicitly stated in the abstract, but serial interval is central.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+30. PMID: 34039296 [Score: 4/4]
+   Title: Transmission dynamics and control of two epidemic waves of SARS-CoV-2 in South Korea.
+   Overall: This is an empirical COVID-19 transmission-dynamics study in humans in South Korea that explicitly estimates serial intervals (mean ~3 days) and discusses contact tracing/case finding. It does not explicitly mention generation time, but serial interval estimation is central enough to be a strong match to the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+31. PMID: 34423821 [Score: 4/4]
+   Title: Joint Estimation of Generation Time and Incubation Period for Coronavirus Disease 2019.
+   Overall: This study directly estimates generation time (and derives serial interval) for COVID-19 using empirical human-to-human transmission pairs (n=80) from China, matching the review’s target outcomes and study design (transmission pairs/contact tracing-type data). It provides original quantitative estimates and uncertainty intervals, making it highly aligned with the research question.
+   维度评分: D=4 P=4 L=3 E=4 T=4
+
+32. PMID: 36524247 [Score: 4/4]
+   Title: Estimation of the incubation period and generation time of SARS-CoV-2 Alpha and Delta variants from contact tracing data.
+   Overall: This study explicitly estimates intrinsic generation time and household serial interval for SARS-CoV-2 (Alpha and Delta) using contact tracing and household cluster data, which directly matches the review question. It reports original empirical estimates with credible intervals and clear human population context in a specific location.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+33. PMID: 33881667 [Score: 4/4]
+   Title: Transmission of SARS-CoV-2 before and after symptom onset: impact of nonpharmaceutical interventions in China.
+   Overall: The paper explicitly analyzes SARS-CoV-2 serial interval data in China and uses it to estimate changes in transmission timing (presymptomatic vs post-symptomatic) before/after NPIs. It appears to provide original empirical estimates based on serial interval observations, making it directly relevant to serial interval-based transmission timing (and potentially generation time inference).
+   维度评分: D=4 P=3 L=3 E=3 T=4
+
+34. PMID: 36190206 [Score: 4/4]
+   Title: COVID-19 in one region of New Zealand: a descriptive epidemiological study.
+   Overall: This is an original descriptive epidemiologic/contact-linking study of SARS-CoV-2 in New Zealand that directly estimates the serial interval from identified infector–infectee pairs. It aligns closely with the review question (serial interval from contact tracing/household transmission), though it does not explicitly mention generation time.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+35. PMID: 33899740 [Score: 4/4]
+   Title: High infectiousness immediately before COVID-19 symptom onset highlights the importance of continued contact tracing.
+   Overall: This study is explicitly about SARS-CoV-2 transmission timing and states generation time as a key quantity, inferred from known infector–infectee pairs (contact tracing-type data). It provides original empirical estimation via a mechanistic modeling approach, though the abstract does not clearly state the exact dataset provenance or geographic location and does not explicitly mention serial interval.
+   维度评分: D=4 P=4 L=2 E=3 T=4
+
+36. PMID: 36413921 [Score: 4/4]
+   Title: Correlation between times to SARS-CoV-2 symptom onset and secondary transmission undermines epidemic control efforts.
+   Overall: The study explicitly focuses on SARS-CoV-2 transmission dynamics and directly estimates the generation interval from a dataset of identified transmission pairs (consistent with contact tracing-type data). It provides original empirical estimates (mean generation interval and its uncertainty), making it highly aligned with the review question (generation time/interval).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+37. PMID: 32512664 [Score: 4/4]
+   Title: Epidemiological characteristics of and containment measures for COVID-19 in Busan, Korea.
+   Overall: This is a COVID-19 epidemiological investigation with contact tracing and household contact data and explicitly estimates the serial interval (mean 5.54 days). It does not mention generation time/generation interval in the abstract, but it directly addresses one of the key transmission timing parameters of interest using empirical data.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+38. PMID: 32460229 [Score: 4/4]
+   Title: Estimation of the time-varying reproduction number of COVID-19 outbreak in China.
+   Overall: This study is clearly about COVID-19 in humans in China and analyzes observed transmission chains with onset/infection dates. It explicitly reports a serial interval estimate (mean and SD), making it relevant for serial interval extraction (though generation time is not explicitly reported).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+39. PMID: 36824395 [Score: 4/4]
+   Title: Estimating the serial intervals of SARS-CoV-2 Omicron BA.4, BA.5, and BA.2.12.1 variants in Hong Kong.
+   Overall: This study explicitly analyzes SARS-CoV-2 (Omicron subvariants) using contact tracing data to estimate serial intervals, which is central to the review question. It provides original empirical estimates (with adjustment for right truncation/sampling bias) in a specific human population and location. It does not mention generation time, but serial interval is directly reported.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+40. PMID: 38259438 [Score: 4/4]
+   Title: Transmission characteristics and inactivated vaccine effectiveness against transmission of the SARS-CoV-2 Omicron BA.2 variant in Shenzhen, China.
+   Overall: This is an empirical human contact-tracing/close-contact cohort study of SARS-CoV-2 Omicron BA.2 in Shenzhen. It explicitly estimates and reports both the generation interval and serial interval (primary outcomes of interest), meeting all core relevance dimensions.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+41. PMID: 37796802 [Score: 4/4]
+   Title: Household transmission investigation for Corona Virus Disease 2019 (COVID-19) in a rural and urban population of north India.
+   Overall: Meets all core criteria for the review question: human SARS-CoV-2 household contact tracing study with original empirical data and explicit serial interval estimation. Although generation time is not reported, serial interval is central and quantitatively reported, making it highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+42. PMID: 35144721 [Score: 4/4]
+   Title: Shorter serial intervals in SARS-CoV-2 cases with Omicron BA.1 variant compared with Delta variant, the Netherlands, 13 to 26 December 2021.
+   Overall: Directly estimates and compares SARS-CoV-2 serial intervals using observed transmission pairs, including within-household analyses, which aligns with contact-tracing/household transmission evidence. Generation time is not mentioned, but serial interval is central and quantified with substantial original data.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+43. PMID: 32568070 [Score: 4/4]
+   Title: Evidence for transmission of COVID-19 prior to symptom onset.
+   Overall: Directly addresses SARS-CoV-2 transmission timing using contact tracing data and provides explicit serial interval estimates with uncertainty for two locations. This aligns closely with the review focus (serial interval/generation time from contact tracing/household-type transmission data), although generation time itself is not explicitly estimated.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+44. PMID: 33760817 [Score: 4/4]
+   Title: Model-free estimation of COVID-19 transmission dynamics from a complete outbreak.
+   Overall: Meets all core criteria: SARS-CoV-2 in humans, contact-tracing outbreak dataset from New Zealand, and provides an explicit serial interval estimate (mean and SD). Generation time is not explicitly mentioned in the abstract, but serial interval estimation from linked transmission pairs directly matches the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+45. PMID: 32776726 [Score: 4/4]
+   Title: Epidemiological Characteristics of COVID-19 Outbreak at Fitness Centers in Cheonan, Korea.
+   Overall: This is an outbreak investigation with contact tracing and household/family transmission components, and it explicitly estimates the mean serial interval (5.2 days). It provides original empirical data and transmission dynamics measures (time-dependent reproduction number), making it directly relevant to serial interval estimation for SARS-CoV-2.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+46. PMID: 33750783 [Score: 4/4]
+   Title: Infectivity, susceptibility, and risk factors associated with SARS-CoV-2 transmission under intensive contact tracing in Hunan, China.
+   Overall: This is a contact-tracing study of SARS-CoV-2 in humans with original empirical data, and it explicitly estimates a key target metric (generation time, with distributional summaries). It is directly aligned with the review question (serial interval and/or generation time from contact tracing/household transmission).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+47. PMID: 32725765 [Score: 4/4]
+   Title: COVID-19 outbreak following a single patient exposure at an entertainment site: An epidemiological study.
+   Overall: This is an empirical COVID-19 outbreak investigation using contact tracing/cluster data and it explicitly estimates the serial interval (a primary parameter of interest). While generation time is not mentioned, the presence of SI estimated from traced transmission pairs makes it a strong candidate for the review.
+   维度评分: D=4 P=4 L=3 E=4 T=4
+
+48. PMID: 33208219 [Score: 4/4]
+   Title: Transmission dynamics of COVID-19 among index case family clusters in Beijing, China.
+   Overall: This study is a household/family-cluster investigation of SARS-CoV-2 in Beijing reporting an explicit serial interval estimate with uncertainty, based on original contact/cluster data. Although generation time is not reported, serial interval estimation from family clusters directly matches the review question’s target evidence.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+49. PMID: 35426357 [Score: 4/4]
+   Title: Transmission dynamics of COVID-19 in household and community settings in the United Kingdom, January to March 2020.
+   Overall: This is a human, UK-based prospective household/contact follow-up study explicitly estimating the serial interval (mean 4.67 days) for COVID-19/SARS-CoV-2. It matches the review question’s design requirements (contact tracing/household transmission) and includes original empirical estimates; generation time is not explicitly mentioned, but serial interval is central.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+50. PMID: 32353347 [Score: 4/4]
+   Title: Epidemiology and transmission of COVID-19 in 391 cases and 1286 of their close contacts in Shenzhen, China: a retrospective cohort study.
+   Overall: Meets all core criteria: SARS-CoV-2 in humans, original contact-tracing cohort data, and explicitly reports serial interval as a key transmission metric. Although generation time is not explicitly mentioned in the abstract, the serial interval estimate from close contacts makes it directly relevant to the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+51. PMID: 36929985 [Score: 4/4]
+   Title: Bayesian reconstruction of household transmissions to infer the serial interval of COVID-19 by variants of concern: analysis from a prospective community cohort study (Virus Watch).
+   Overall: 该研究以SARS‑CoV‑2/COVID-19为对象，基于英格兰与威尔士Virus Watch前瞻性队列的家庭传播数据，使用贝叶斯方法重建“谁感染谁”，并按VOC估计家庭内serial interval（含负值比例）。核心结局即serial interval，且为原始实证数据分析，和研究问题高度一致。
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+52. PMID: 32738143 [Score: 4/4]
+   Title: The First 100 Days of Severe Acute Respiratory Syndrome Coronavirus 2 (SARS-CoV-2) Control in Vietnam.
+   Overall: This is a SARS-CoV-2 human epidemiology study in Vietnam using contact tracing-derived infector–infectee pairs to calculate the serial interval (reported as 3.24 days). It provides original empirical estimates directly aligned with the review outcome, though it does not explicitly estimate generation time in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+53. PMID: 36466467 [Score: 4/4]
+   Title: A four-generation family transmission chain of COVID-19 along the China-Myanmar border in October to November 2021.
+   Overall: This is an empirical contact investigation/household transmission study of COVID-19 that explicitly estimates generation time (3 days) from a clearly described multi-generation transmission chain. Although serial interval is not explicitly reported, the presence of generation time estimation makes it directly relevant to the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+54. PMID: 32372755 [Score: 4/4]
+   Title: Estimating the generation interval for coronavirus disease (COVID-19) based on symptom onset data, March 2020.
+   Overall: Directly addresses the review question by estimating SARS-CoV-2 generation interval and serial interval from outbreak cluster data, acknowledging transmission network uncertainty and contact tracing detail. Provides original empirical estimates for two locations with credible intervals and related transmission quantities.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+55. PMID: 34399085 [Score: 4/4]
+   Title: Severe Acute Respiratory Syndrome Coronavirus 2 Transmission in Georgia, USA, February 1-July 13, 2020.
+   Overall: Directly addresses SARS-CoV-2 transmission using contact tracing-derived transmission pairs and provides empirical serial interval estimates over time. This matches the review question’s required design (contact tracing) and outcome (serial interval). Generation time is not explicitly mentioned in the abstract but serial interval is a core target metric.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+56. PMID: 35486812 [Score: 4/4]
+   Title: A Novel Tool for Real-time Estimation of Epidemiological Parameters of Communicable Diseases Using Contact-Tracing Data: Development and Deployment.
+   Overall: Meets core criteria: SARS-CoV-2/COVID-19 in humans, uses original contact-tracing data, and centrally estimates the serial interval with explicit methods and results. While generation time is not explicitly reported in the abstract, the study is still highly relevant to serial-interval estimation from contact-tracing.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+57. PMID: 33372427 [Score: 4/4]
+   Title: The Serial Interval of COVID-19 in Korea: 1,567 Pairs of Symptomatic Cases from Contact Tracing.
+   Overall: This is a contact-tracing study of COVID-19 in humans that explicitly estimates the serial interval using a large number of infector–infectee pairs and reports multiple serial interval estimates. It directly matches the review’s target parameter and study design (contact tracing).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+58. PMID: 33034281 [Score: 4/4]
+   Title: Epidemiological parameters of COVID-19 and its implication for infectivity among patients in China, 1 January to 11 February 2020.
+   Overall: This study explicitly estimates both serial interval and generation interval for SARS-CoV-2 using case data and transmission pairs (consistent with contact-tracing style inference). It is human, China-based, and reports quantitative estimates with uncertainty, making it a strong match to the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+59. PMID: 34011278 [Score: 4/4]
+   Title: Lessons learned from the investigation of a COVID-19 cluster in Creil, France: effectiveness of targeting symptomatic cases and conducting contact tracing around them.
+   Overall: 该研究为法国Creil一处职业社区COVID-19聚集性疫情调查，基于主动病例发现与围绕确诊病例的接触者追踪，报告了“median serial interval=3 days (0–15)”。为人群实证研究且与接触者追踪直接相关，但摘要未见对generation time/generation interval的估计，仅明确提供serial interval。
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+60. PMID: 33267823 [Score: 4/4]
+   Title: Estimating transmission dynamics and serial interval of the first wave of COVID-19 infections under different control measures: a statistical analysis in Tunisia from February 29 to May 5, 2020.
+   Overall: This study explicitly targets SARS-CoV-2 and estimates the serial interval using contact tracing infector–infectee pairs (central to the analysis). It provides original empirical estimates (SI distribution/mean) and uses those to estimate Rt under different control measures in Tunisia. While generation time is not mentioned, the serial interval component matches the review question directly.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+61. PMID: 33044319 [Score: 4/4]
+   Title: Effectiveness of Containment Measures Against COVID-19 in Singapore: Implications for Other National Containment Efforts.
+   Overall: Meets all core criteria: human COVID-19 study using contact tracing/surveillance data and explicitly estimating serial interval distribution parameters (primary, quantified outcome). Although generation time is not stated, serial interval is central and empirically estimated, making it a strong candidate for this review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+62. PMID: 33650470 [Score: 4/4]
+   Title: Epidemiology and transmission characteristics of early COVID-19 cases, 20 January-19 March 2020, in Bavaria, Germany.
+   Overall: This is an empirical epidemiologic investigation of SARS-CoV-2 in humans and explicitly estimates the serial interval using identified index–secondary case pairs. It aligns closely with the review question (serial interval from contact-tracing-like linked pairs), though it does not report generation time.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+63. PMID: 32283156 [Score: 4/4]
+   Title: Rapid asymptomatic transmission of COVID-19 during the incubation period demonstrating strong infectivity in a cluster of youngsters aged 16-23 years outside Wuhan and characteristics of young patients with COVID-19: A prospective contact-tracing study.
+   Overall: This is a prospective contact-tracing investigation of a COVID-19 cluster and explicitly reports a serial interval estimate (median 1 day, range 0–4). While generation time is not explicitly mentioned, the serial interval from traced transmission pairs directly matches the review’s target outcomes and data source.
+   维度评分: D=4 P=4 L=3 E=4 T=4
+
+64. PMID: 34486710 [Score: 4/4]
+   Title: Epidemiological characteristics of COVID-19 cases among Indians residing in Kuwait.
+   Overall: This is a COVID-19 contact-tracing study in humans (Indian community in Kuwait) that explicitly estimates the serial interval from 216 infector–infectee pairs. It directly addresses a key transmission timing parameter requested (serial interval), though generation time is not mentioned in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+65. PMID: 32627172 [Score: 4/4]
+   Title: Estimation of incubation period and generation time based on observed length-biased epidemic cohort with censoring for COVID-19 outbreak in China.
+   Overall: 研究疾病为COVID-19且核心目标之一是估计generation time，并明确讨论serial interval与generation time的关系并提出估计器，属于与研究问题高度匹配的参数估计工作。虽然数据来源更像旅行/队列长度偏倚与删失数据而非典型“接触者追踪/家庭”设计，但仍直接产出generation time/serial interval相关估计，值得进入全文筛查确认数据来源与是否为接触者链数据。
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+66. PMID: 32473049 [Score: 4/4]
+   Title: Estimation of the serial interval and basic reproduction number of COVID-19 in Qom, Iran, and three other countries: A data-driven analysis in the early phase of the outbreak.
+   Overall: This paper explicitly estimates the serial interval for COVID-19 using close-contact data in Qom, Iran, which directly matches the review’s target parameters and data sources (contact tracing/close contacts). It does not clearly estimate generation time directly (mentions generation time only in sensitivity analysis), but serial interval estimation is central and empirical.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+67. PMID: 33572542 [Score: 4/4]
+   Title: Subcritical Transmission in the Early Stage of COVID-19 in Korea.
+   Overall: This is an empirical human COVID-19 transmission analysis from Korea using individual case data, and it explicitly estimates the serial interval (central to the paper). It does not explicitly mention estimating generation time/interval, but it is still strongly relevant for serial-interval evidence from early outbreak contact-tracing-style data.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+68. PMID: 33750740 [Score: 4/4]
+   Title: Evolving Epidemiological Characteristics of COVID-19 in Hong Kong From January to August 2020: Retrospective Study.
+   Overall: This retrospective study explicitly estimates SARS-CoV-2 serial interval distributions from infector–infectee pairs and examines temporal changes, consistent with contact tracing/cluster-based transmission data. It appears to provide original empirical estimates directly relevant to the review question (serial interval), though generation time is not explicitly stated in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+69. PMID: 36240226 [Score: 4/4]
+   Title: An investigation of a hundred COVID-19 cases and close contacts in Ethiopia, May to June, 2020: A prospective case-ascertained study.
+   Overall: 该研究为埃塞俄比亚的前瞻性病例-接触者调查（100例确诊病例与300名密切接触者），属于接触者追踪/密切接触者研究框架。摘要明确报告了“median serial interval”为11天（IQR 8–11.8），与研究问题高度吻合；未见明确“generation time/interval”估计。
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+70. PMID: 36199779 [Score: 4/4]
+   Title: Estimation of the Serial Interval and the Effective Reproductive Number of COVID-19 Outbreak Using Contact Data in Burkina Faso, a Sub-Saharan African Country.
+   Overall: This study explicitly estimates the COVID-19 serial interval using contact tracing-derived infector–infectee pairs in Burkina Faso and reports distributional parameters. It is original empirical human outbreak analysis; while it focuses on serial interval (not explicitly generation time), it is still highly aligned with the review question’s target metrics.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+71. PMID: 35929470 [Score: 4/4]
+   Title: Serial interval in households infected with SARS-CoV-2 variant B.1.1.529 (Omicron) is even shorter compared to Delta.
+   Overall: This letter presents an original household-cluster analysis of SARS-CoV-2 in Germany and directly estimates serial interval distributions and means across variants (wild-type through Omicron BA.1/BA.2). It squarely matches the review focus on serial interval estimates from household transmission data (generation time is discussed but not newly estimated here).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+72. PMID: 33496243 [Score: 4/4]
+   Title: Estimating Transmission Parameters for COVID-19 Clusters by Using Symptom Onset Data, Singapore, January-April 2020.
+   Overall: This study explicitly focuses on SARS-CoV-2/COVID-19 and directly estimates serial intervals and the generation interval from observed infector–infectee pairs in Singapore clusters. It appears to use original empirical transmission-pair data, making it a strong match to the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+73. PMID: 32556265 [Score: 4/4]
+   Title: Reconstruction of Transmission Pairs for Novel Coronavirus Disease 2019 (COVID-19) in Mainland China: Estimation of Superspreading Events, Serial Interval, and Hazard of Infection.
+   Overall: This paper reconstructs transmission pairs from confirmed COVID-19 cases and explicitly estimates serial interval distributions (overall and stratified by household vs nonhousehold), directly matching the review’s target outcomes and data sources (contact-tracing/household transmission). It does not explicitly mention generation time/generation interval in the abstract, but serial interval estimation from transmission pairs is central and based on original empirical data.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+74. PMID: 32815514 [Score: 4/4]
+   Title: Epidemiological Investigation of the First 135 COVID-19 Cases in Brunei: Implications for Surveillance, Control, and Travel Restrictions.
+   Overall: This paper explicitly investigates SARS-CoV-2/COVID-19 in humans using original epidemiologic data from an outbreak investigation. It directly estimates the serial interval (SI), which is a core transmission timing metric of interest (though generation time is not mentioned). Because SI is explicitly calculated and central to the analysis, it is a strong candidate for full-text review in a review of SI/GT estimates from tracing investigations.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+75. PMID: 32422201 [Score: 4/4]
+   Title: Investigation of a COVID-19 outbreak in Germany resulting from a single travel-associated primary case: a case series.
+   Overall: This outbreak investigation in Germany uses contact tracing (and sequencing to clarify links) and explicitly reports the median serial interval (4.0 days) alongside other transmission parameters. It is human, SARS-CoV-2-specific, and provides original empirical estimates consistent with the review’s target outcomes (serial interval; generation time not explicitly stated but transmission generations are described).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+76. PMID: 34175549 [Score: 4/4]
+   Title: Estimating the generation interval and inferring the latent period of COVID-19 from the contact tracing data.
+   Overall: This study is directly about estimating the generation interval (and related latent/incubation periods) for COVID-19 using contact tracing data, which matches the review question closely. It reports original empirical estimates with uncertainty intervals, making it a strong candidate despite the location not being specified in the excerpt.
+   维度评分: D=4 P=4 L=2 E=4 T=4
+
+77. PMID: 32347198 [Score: 4/4]
+   Title: Epidemiological characteristics of the first 53 laboratory-confirmed cases of COVID-19 epidemic in Hong Kong, 13 February 2020.
+   Overall: This is an empirical COVID-19 transmission study using close-contact data and explicitly estimates serial interval from identified infector–infectee pairs, which directly matches the review’s target metrics (serial interval). Generation time is not mentioned/estimated in the abstract, but serial interval estimation is central.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+78. PMID: 33490015 [Score: 4/4]
+   Title: Serial Interval and Generation Interval for Imported and Local Infectors, Respectively, Estimated Using Reported Contact-Tracing Data of COVID-19 in China.
+   Overall: This study explicitly analyzes COVID-19 contact-tracing transmission chains in China to estimate serial interval and generation interval, reporting numerical estimates with confidence intervals. It is directly aligned with the review question and provides original empirical estimates from human transmission chains.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+79. PMID: 33001839 [Score: 4/4]
+   Title: Transmission Dynamics of the COVID-19 Epidemic at the District Level in India: Prospective Observational Study.
+   Overall: This study explicitly aims to estimate the SARS-CoV-2 serial interval using contact tracing data in a specific district in India and reports quantitative estimates. While it does not estimate generation time, it directly reports serial interval, making it highly relevant to the review question’s key outcomes and study designs (contact tracing).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+80. PMID: 32689956 [Score: 4/4]
+   Title: Basic epidemiological parameter values from data of real-world in mega-cities: the characteristics of COVID-19 in Beijing, China.
+   Overall: This is an empirical COVID-19 contact-tracing/close-contact study in Beijing that explicitly reports an average serial interval (7.6 days) alongside other transmission parameters. It appears directly aligned with estimating key timing parameters from real-world contact data, though generation time is not explicitly mentioned in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+81. PMID: 33906635 [Score: 4/4]
+   Title: Estimation of the serial interval and proportion of pre-symptomatic transmission events of COVID- 19 in Ireland using contact tracing data.
+   Overall: This study is explicitly about SARS-CoV-2/COVID-19 and centrally estimates the serial interval using contact tracing data, matching the review question closely. It provides original empirical estimates from identified transmission pairs in Ireland; generation time is not directly estimated but serial interval is a primary outcome.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+82. PMID: 34886794 [Score: 4/4]
+   Title: Propagation of a hospital-associated cluster of COVID-19 in Malaysia.
+   Overall: This is an original contact-tracing outbreak investigation of SARS-CoV-2 in a Malaysian hospital-associated cluster and explicitly reports a serial interval estimate with confidence intervals. It directly addresses a core outcome of interest (serial interval), though it does not explicitly mention generation time.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+83. PMID: 33729905 [Score: 4/4]
+   Title: Transmission dynamics and timing of key events for SARS-CoV-2 infection in healthcare workers.
+   Overall: This is an original human contact-based study explicitly estimating the serial interval for SARS-CoV-2 from identified infector–infectee pairs in a hospital setting. Generation time is not mentioned/estimated, but serial interval is a primary objective and clearly reported with uncertainty intervals. Location details are incomplete in the abstract but not required for eligibility.
+   维度评分: D=4 P=4 L=2 E=4 T=4
+
+84. PMID: 32594928 [Score: 4/4]
+   Title: Estimation of incubation period and serial interval of COVID-19: analysis of 178 cases and 131 transmission chains in Hubei province, China.
+   Overall: This study uses human contact tracing data from Hubei, China to estimate the serial interval of COVID-19 with reported point estimates and confidence intervals. It provides original empirical estimates directly aligned with the review’s outcomes (serial interval; generation time not mentioned).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+85. PMID: 35938094 [Score: 4/4]
+   Title: A comparative analysis of epidemiological characteristics of MERS-CoV and SARS-CoV-2 in Saudi Arabia.
+   Overall: This study explicitly analyzes SARS-CoV-2 (COVID-19) in Saudi Arabia using contact tracing data and directly estimates the serial interval (with numeric results and CIs). It does not explicitly estimate generation time, but serial interval estimation from traced infector–infectee pairs is central and highly aligned with the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+86. PMID: 35791373 [Score: 4/4]
+   Title: Intrinsic generation time of the SARS-CoV-2 Omicron variant: An observational study of household transmission.
+   Overall: This observational household transmission study uses contact tracing data to estimate SARS-CoV-2 Omicron generation time and serial interval, which directly matches the review question. It reports original empirical estimates (with CrIs) in a defined human population and location.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+87. PMID: 32876267 [Score: 4/4]
+   Title: Incubation period and serial interval of Covid-19 in a chain of infections in Bahia Blanca (Argentina).
+   Overall: This study directly estimates the serial interval for SARS-CoV-2 using linked primary–secondary case onset data from local transmission (consistent with contact-tracing style pair data). It is original empirical human data with clear location/time context. It does not mention generation time explicitly, but the serial interval estimate matches the review outcome of interest.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+88. PMID: 32793929 [Score: 4/4]
+   Title: Infectivity, susceptibility, and risk factors associated with SARS-CoV-2 transmission under intensive contact tracing in Hunan, China.
+   Overall: This study explicitly investigates SARS-CoV-2 transmission using intensive contact tracing data from Hunan, China, including a large number of infectors and contacts. It directly estimates the mean generation time (with distributional summaries) and characterizes infectiousness relative to symptom onset, which is central to the review question. It appears to present original empirical estimates from human contact tracing/household exposure data.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+89. PMID: 32511615 [Score: 4/4]
+   Title: Household transmissions of SARS-CoV-2 in the time of unprecedented travel lockdown in China.
+   Overall: This is an empirical SARS-CoV-2 transmission study in humans using reconstructed transmission clusters from public health reports, explicitly estimating serial interval overall and by household vs non-household settings. It does not clearly report generation time/generation interval in the abstract, but the serial interval component directly matches the review question and the household/contact tracing-like reconstruction is central.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+90. PMID: 35495649 [Score: 4/4]
+   Title: SARS-CoV-2 Delta Variant in Jingmen City, Hubei Province, China, 2021: Children Susceptible and Vaccination Breakthrough Infection.
+   Overall: This is an empirical outbreak investigation of SARS-CoV-2 Delta in Jingmen (China) with explicit estimation of the mean serial interval (2.6 days) and household transmission metrics. It does not explicitly mention generation time, but the serial interval estimate from field investigation/contact tracing-like data makes it highly pertinent to the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+91. PMID: 34796276 [Score: 4/4]
+   Title: Household serial interval of COVID-19 and the effect of Variant B.1.1.7: analyses from prospective community cohort study (Virus Watch).
+   Overall: This prospective UK household cohort (Virus Watch) explicitly estimates the COVID-19 household serial interval from identified infector–infectee pairs, directly matching the review’s target outcome and study design (household transmission/contact-like pairing). It does not report generation time, but serial interval estimation is central and based on original empirical data.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+92. PMID: 33554183 [Score: 4/4]
+   Title: Epidemiological and Clinical Characteristics of COVID-19 in Adolescents and Young Adults.
+   Overall: Meets all core criteria: COVID-19 in humans with original data and an explicit serial interval estimate reported in the abstract. While not clearly a contact-tracing/household transmission study design, it includes epidemiologic transmission information (family transmission) and provides a serial interval estimate, making it highly relevant to the review question.
+   维度评分: D=4 P=4 L=3 E=4 T=4
+
+93. PMID: 35887689 [Score: 4/4]
+   Title: Proportion of Pre-Symptomatic Transmission Events Associated with COVID-19 in South Korea.
+   Overall: The study explicitly concerns SARS-CoV-2/COVID-19 in South Korea and uses individual-level case records to stratify/estimate the serial interval distribution across two periods, then uses these to estimate the proportion of pre-symptomatic transmission. Although it focuses on pre-symptomatic transmission proportion, serial interval estimation appears central and based on empirical data; generation time is not explicitly mentioned.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+94. PMID: 33101882 [Score: 4/4]
+   Title: Characteristics and evaluation of the effectiveness of monitoring and control measures for the first 69 Patients with COVID-19 from 18 January 2020 to 2 March in Wuxi, China.
+   Overall: Meets key criteria: SARS-CoV-2/COVID-19 in humans with original empirical analysis and explicit estimation of serial interval. While it is not explicitly labeled as contact tracing/household study in the abstract, it includes exposure history and family clusters, consistent with transmission-pair based estimation.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+95. PMID: 37744496 [Score: 4/4]
+   Title: Super-spreading social events for COVID-19 transmission: evidence from the investigation of six early clusters in Bahrain.
+   Overall: This is an empirical cluster/contact-tracing investigation of COVID-19 in Bahrain that explicitly estimates the serial interval (and incubation period) from infector–infectee pairs. It directly matches the review’s target outcome (serial interval) and study design (contact tracing/cluster investigation), though generation time is not explicitly reported.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+96. PMID: 40477158 [Score: 4/4]
+   Title: Estimating the time interval between transmission generations and the presymptomatic period by contact tracing surveillance data from 31 provinces in the mainland of China.
+   Overall: The study explicitly focuses on COVID-19/SARS-CoV-2 and aims to estimate transmission-generation interval (generation time) and compares with serial interval, using contact tracing/surveillance data from 31 provinces in China. It reports original empirical estimates (e.g., mean TG 5.2 days with CI) based on a fitted distribution and an SEIHR model calibrated with 3453 cases, making it highly aligned with the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+97. PMID: 32511424 [Score: 4/4]
+   Title: Evolving epidemiology of novel coronavirus diseases 2019 and possible interruption of local transmission outside Hubei Province in China: a descriptive and modeling study.
+   Overall: Meets all core criteria: SARS-CoV-2/COVID-19 in humans with original empirical analysis and explicit serial interval estimation. Although data are not clearly described as contact tracing/household pairs in the abstract, the serial interval is directly estimated and central to the transmission analysis, making it a strong candidate for full-text review.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+98. PMID: 35968394 [Score: 4/4]
+   Title: Natural history and cycle threshold values analysis of COVID-19 in Xiamen City, China.
+   Overall: This paper directly estimates and reports the key outcomes of interest (serial interval and generation time) for SARS-CoV-2 using onset/exposure timing and intergenerational transmission relationships in a real outbreak setting. It appears to be an original empirical analysis in humans with clear location context.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+99. PMID: 32694200 [Score: 4/4]
+   Title: Serial interval of SARS-CoV-2 was shortened over time by nonpharmaceutical interventions.
+   Overall: This study is explicitly about SARS-CoV-2/COVID-19 and centrally estimates serial interval distributions using an empirical line-list of transmission pairs (contact-tracing type data) in China. It does not explicitly mention generation time, but serial interval estimation is a primary focus and directly matches the review’s target outcomes.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+100. PMID: 34388398 [Score: 4/4]
+   Title: Serial intervals in SARS-CoV-2 B.1.617.2 variant cases.
+   Overall: 研究对象为人群SARS-CoV-2（Delta）病例，使用新加坡家庭传播配对（接触追踪/暴露史审查）直接估计并比较serial interval分布，符合本综述关注的“接触追踪/家庭研究中的序列间隔/代际时间”证据类型。虽未直接估计“generation time”，但明确将serial interval作为generation interval的代理并做统计推断。
+   维度评分: D=4 P=4 L=3 E=4 T=4
+
+101. PMID: 34906289 [Score: 4/4]
+   Title: Serial Interval and Transmission Dynamics during SARS-CoV-2 Delta Variant Predominance, South Korea.
+   Overall: This paper directly estimates the serial interval for SARS-CoV-2 Delta in a defined population and location, which matches the key outcome. While the abstract does not explicitly state contact tracing or household design, the estimation of serial interval and transmission chains/superspreading implies use of linked transmission data, making it a strong candidate for full-text screening.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+102. PMID: 35336939 [Score: 4/4]
+   Title: Estimation of Serial Interval and Reproduction Number to Quantify the Transmissibility of SARS-CoV-2 Omicron Variant in South Korea.
+   Overall: This study explicitly estimates the SARS-CoV-2 Omicron serial interval from reconstructed transmission pairs (contact-tracing-like data) in South Korea, which directly matches the review outcome. It does not mention generation time explicitly, but the serial interval estimation is central and based on original empirical transmission data.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+103. PMID: 32191173 [Score: 4/4]
+   Title: Serial Interval of COVID-19 among Publicly Reported Confirmed Cases.
+   Overall: This study explicitly targets the COVID-19 serial interval and reports quantitative estimates from a large set of confirmed cases. While it is not clearly described as contact tracing or household transmission in the abstract, it is directly measuring the key transmission timing metric of interest (serial interval) using original case-pair data.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+104. PMID: 37216529 [Score: 4/4]
+   Title: Inferring the differences in incubation-period and generation-interval distributions of the Delta and Omicron variants of SARS-CoV-2.
+   Overall: The paper is explicitly about estimating serial and generation intervals for SARS-CoV-2 variants using transmission/serial-interval data from the Netherlands, and reports quantitative generation-interval estimates with uncertainty. It is an empirical reanalysis rather than a review, and the key outcomes directly match the review question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+105. PMID: 39013785 [Score: 4/4]
+   Title: Insights into COVID-19 epidemiology and control from temporal changes in serial interval distributions in Hong Kong.
+   Overall: This study explicitly analyzes SARS-CoV-2/COVID-19 transmission using detailed contact tracing data in Hong Kong and reconstructs infector–infectee pairs to estimate time-varying serial interval distributions across multiple epidemic waves. Serial interval is a central outcome and is quantitatively estimated (with credible intervals), indicating strong alignment with the review question (serial interval/generation time from contact tracing/household-type transmission data).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+106. PMID: 32928322 [Score: 4/4]
+   Title: Epidemiological profile and transmission dynamics of COVID-19 in the Philippines.
+   Overall: This study explicitly concerns COVID-19 (SARS-CoV-2) and reports a key target transmission parameter for this review: the serial interval with uncertainty estimates. It appears to use original case-based data from the Philippines and provides transmission dynamics estimates, making it a strong candidate even though generation time is not reported in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+107. PMID: 32822290 [Score: 4/4]
+   Title: Epidemiology of COVID-19 Outbreak on Cruise Ship Quarantined at Yokohama, Japan, February 2020.
+   Overall: This is an empirical human outbreak investigation of SARS-CoV-2 on a specific cruise ship in Japan and explicitly reports a serial interval estimate (median 2 days) for same-cabin cases, which aligns with contact/household-like transmission. It does not explicitly mention generation time, but the serial interval estimate is directly relevant to the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+108. PMID: 32452648 [Score: 4/4]
+   Title: Estimating the serial interval of the novel coronavirus disease (COVID-19) based on the public surveillance data in Shenzhen, China, from 19 January to 22 February 2020.
+   Overall: Directly estimates SARS-CoV-2/COVID-19 serial interval using observed transmission chains (contact-tracing style surveillance data) with explicit SI results. Meets core criteria strongly; generation time is not mentioned, but serial interval is central and empirically estimated.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+109. PMID: 34814093 [Score: 4/4]
+   Title: The early phase of the COVID-19 epidemic in Lombardy, Italy.
+   Overall: This is an empirical COVID-19 outbreak investigation using case and close-contact interview data in Lombardy, explicitly estimating the serial interval (mean 6.6 days). It does not mention generation time, but serial interval estimation from contact tracing data is directly aligned with the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+110. PMID: 32604404 [Score: 4/4]
+   Title: Suppression of a SARS-CoV-2 outbreak in the Italian municipality of Vo'.
+   Overall: The paper is explicitly about SARS-CoV-2/COVID-19 in humans in Vo’, Italy, and reports an estimated mean serial interval (7.2 days, with 95% CI), indicating direct relevance to transmission timing parameters. While it does not explicitly mention generation time in the abstract, the explicit serial interval estimate from contact network data makes it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+111. PMID: 34594686 [Score: 4/4]
+   Title: Serial Interval and Reproductive Number of COVID-19 Among 116 Infector-infectee Pairs - Jingzhou City, Hubei Province, China, 2020.
+   Overall: The study directly estimates the serial interval for COVID-19 using a set of identified infector–infectee pairs, which aligns closely with the review question’s focus on serial interval/generation time from contact-tracing-style transmission pairs. While generation time is not explicitly mentioned, the serial interval estimation from transmission pairs makes it highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+112. PMID: 32566233 [Score: 4/4]
+   Title: Serial interval and time-varying reproduction number estimation for COVID-19 in western Iran.
+   Overall: This study is explicitly about COVID-19 and centrally estimates the serial interval using identified infector–infectee pairs from contact tracing in Iran, providing empirical SI estimates. It mentions generation time in keywords but the abstract describes SI estimation (and R estimation) rather than a distinct generation time estimate.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+113. PMID: 32710618 [Score: 4/4]
+   Title: Serial interval distribution of SARS-CoV-2 infection in Brazil.
+   Overall: This research letter directly estimates the SARS-CoV-2 serial interval using identified infector–infectee pairs from Brazil, fitting distributions including negative intervals. It uses original human contact-pair data and is centrally focused on the transmission timing metric of interest (serial interval).
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+114. PMID: 33900189 [Score: 4/4]
+   Title: SARS-CoV-2 Serial Interval Variation, Montana, USA, March 1-July 31, 2020.
+   Overall: The study explicitly focuses on estimating SARS-CoV-2 serial interval using a large set of transmission pairs in Montana, consistent with contact-tracing style linked infector–infectee data. It does not mention generation time, but the serial interval outcome is central and empirically estimated.
+   维度评分: D=4 P=4 L=4 E=4 T=4

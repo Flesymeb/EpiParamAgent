@@ -1,0 +1,98 @@
+{
+  "timestamp_utc": "2026-03-31T11:36:32.708566+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search",
+  "argv": [
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search\\scripts\\ops\\..\\\\cli\\screening_llm_batch.py",
+    "--project-root",
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "--profile",
+    "P6",
+    "--batch-size",
+    "20",
+    "--batch-concurrency",
+    "3",
+    "--topic",
+    "fatality",
+    "--skip-no-abstract"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "P6",
+    "batch_size": 20,
+    "batch_concurrency": 3,
+    "auto_fulltext": false,
+    "fulltext_only": false,
+    "research_question": "What is the mortality or case fatality rate of COVID-19?"
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p6\\project_6_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T08:37:57.165403+00:00",
+      "type": "file",
+      "size_bytes": 4273411,
+      "sha256": "bfd99d9326db9a18f517ad660f1e9dda423bc37bd88e12b16b6866fd7fb39825"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p6\\project_6_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:11:25.835687+00:00",
+      "type": "file",
+      "size_bytes": 13573,
+      "sha256": "6453f05d9b920de93415557a85040b892f6155d48affcfb9bd3d08f2137646a4"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p6\\project_6_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T11:36:32.690402+00:00",
+      "type": "file",
+      "size_bytes": 6926361,
+      "sha256": "d67347c5ddb145bae96da4766e7a7184186feb041ded5e27a6ac35837decbd15"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p6\\screening_logs\\screening_report_20260331_193632.txt",
+      "exists": true,
+      "mtime_utc": "2026-03-31T11:36:32.707514+00:00",
+      "type": "file",
+      "size_bytes": 159235,
+      "sha256": "f73b0a5514d94991c57694722965fc1cca1888674ab9ad7fdce7fb58a8713d94"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": "openai",
+      "model": "gpt-5.4",
+      "api_base": "https://claudecodelab.zeabur.app/openai/v1",
+      "timeout_s": 120,
+      "verify_ssl": false,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": true
+    }
+  },
+  "extra": {
+    "paper_count": 2253,
+    "ground_truth_count": 32,
+    "ground_truth_in_pool": 32,
+    "strong_count": 294,
+    "possible_count": 289,
+    "unlikely_count": 1486,
+    "error_count": 184,
+    "fulltext_error_count": 0
+  }
+}

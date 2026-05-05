@@ -1,0 +1,910 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-03-31 16:51:05
+研究问题: What are the fatality and severity outcomes of SARS-CoV-2 infection?
+输入文件: D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi\evaluation\screening\GT_1\GT_export\fatality\p4\project_4_raw.csv
+输出文件: D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi\evaluation\screening\GT_1\GT_export\fatality\p4\project_4_screened.csv
+模型配置: openai/openai/gpt-5.4
+批处理大小: 20
+批次并发: 3
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │    173   │   50.1%  │
+│ 🤔 Possible candidates   │     49   │   14.2%  │
+│ 😐 Unlikely candidates   │    123   │   35.7%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │    345   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  3.94  │   98.0%  │  1/ 2/ 4/ 3/335                 │
+│ Population      │  3.65  │   94.8%  │  4/ 1/13/76/251                 │
+│ Location        │  3.40  │   82.3%  │  6/29/26/43/241                 │
+│ Evidence        │  2.67  │   65.8%  │ 40/58/20/85/142                 │
+│ Parameter       │  3.29  │   77.7%  │  3/30/44/56/212                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (173 篇)
+================================================================================
+
+1. PMID: 32234121 [Score: 4/4]
+   Title: Estimating the infection and case fatality ratio for coronavirus disease (COVID-19) using age-adjusted data from the outbreak on the Diamond Princess cruise ship, February 2020.
+   Overall: This paper is highly relevant because it explicitly studies COVID-19 in human populations using real-world outbreak data and directly estimates fatality outcomes (CFR and IFR). The abstract presents quantitative empirical estimates, though the degree of wholly original data collection versus secondary analysis is slightly less explicit.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+2. PMID: 32257772 [Score: 4/4]
+   Title: Cross-Country Comparison of Case Fatality Rates of COVID-19/SARS-COV-2.
+   Overall: This study is highly aligned with the review question because it explicitly examines COVID-19/SARS-CoV-2 and directly quantifies case fatality rates across countries. It is based on real-world human population data and reports original comparative analysis, though it focuses on aggregated national data rather than individual-level clinical outcomes.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+3. PMID: 32437052 [Score: 4/4]
+   Title: Increase in COVID-19 cases and case-fatality and case-recovery rates in Europe: A cross-temporal meta-analysis.
+   Overall: This study is highly relevant to the review because it explicitly investigates COVID-19 in human populations across Europe and reports quantified case-fatality outcomes. It also provides original empirical analysis using real-world surveillance data, although the evidence is based on aggregated public data rather than primary patient-level collection.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+4. PMID: 32332856 [Score: 4/4]
+   Title: COVID-19 in persons with haematological cancers.
+   Overall: This study is highly relevant to the review question because it is an original human cohort study of SARS-CoV-2/COVID-19 in a defined clinical population and reports explicit severity and fatality outcomes. The abstract provides direct quantitative evidence on deaths and case fatality rates in a real-world setting.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+5. PMID: 32297983 [Score: 4/4]
+   Title: Case fatality rate analysis of Italian COVID-19 outbreak.
+   Overall: This study is highly relevant because it explicitly examines COVID-19/SARS-CoV-2 in human populations within a real-world Italian outbreak context. It directly analyzes case fatality rates and deaths, which are core target outcomes, and appears to present original regional empirical analysis.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+6. PMID: 33320895 [Score: 4/4]
+   Title: COVID-19: Spatial analysis of hospital case-fatality rate in France.
+   Overall: This paper is highly relevant to the review question because it directly studies COVID-19/SARS-CoV-2 in human populations using original hospital data from France. It explicitly analyzes fatality and severity outcomes, including case-fatality rates, mortality, ICU admission, and intubation, in a real-world geographic context.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+7. PMID: 32611978 [Score: 4/4]
+   Title: SARS-CoV-2 in Italy: Population Density Correlates with Morbidity and Mortality.
+   Overall: This study is highly relevant to the review because it explicitly examines COVID-19 in human populations in Italy using empirical regional data. It directly reports fatality-related outcomes, including deaths, mortality, and case-fatality rate, although its main emphasis is on ecological correlates such as population density and medical supplies.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+8. PMID: 32554773 [Score: 4/4]
+   Title: Incidence and case fatality rate of COVID-19 in patients with active epilepsy.
+   Overall: This study is highly relevant because it directly examines COVID-19 in a human clinical population and reports explicit fatality outcomes, including CFR and deaths during hospitalization. It also presents original observational data from a real-world setting, making it closely aligned with the review question on SARS-CoV-2 fatality and severity outcomes.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+9. PMID: 32234343 [Score: 4/4]
+   Title: Monitoring transmissibility and mortality of COVID-19 in Europe.
+   Overall: This study is highly relevant to the review because it explicitly examines COVID-19 in human populations using real-world European surveillance data and reports case fatality rate estimates. Although its main emphasis also includes transmissibility, the mortality parameter of interest is directly measured and quantified in the abstract.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+10. PMID: 32339723 [Score: 4/4]
+   Title: Estimating the instant case fatality rate of COVID-19 in China.
+   Overall: This study is highly relevant because it directly analyzes COVID-19 in a human population using real-world data from China and reports original empirical estimates of case fatality rate. The fatality outcome is explicit and central in both the title and abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+11. PMID: 32374903 [Score: 4/4]
+   Title: SARS-CoV-2 viral spike G614 mutation exhibits higher case fatality rate.
+   Overall: This study is highly relevant to the review because it explicitly investigates SARS-CoV-2 and reports case fatality rate as a central outcome. It appears to provide original country-level analysis in a real-world human context, though the emphasis is on viral mutation-associated pathogenicity rather than direct patient-level clinical cohorts.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+12. PMID: 32354565 [Score: 4/4]
+   Title: [Case fatality rate of COVID-19: absence of epidemiological pattern].
+   Overall: This study is highly relevant because it explicitly examines COVID-19 in human populations across real-world country settings and reports fatality-related outcomes. It provides original empirical analysis of mortality and case fatality measures, which closely match the review’s target severity and fatality parameters.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+13. PMID: 32033064 [Score: 4/4]
+   Title: The Rate of Underascertainment of Novel Coronavirus (2019-nCoV) Infection: Estimation Using Japanese Passengers Data on Evacuation Flights.
+   Overall: This study is highly relevant because it explicitly examines 2019-nCoV infection in a real human population and provides original empirical estimation using evacuation-flight data. Most importantly, it directly reports infection fatality risk, which closely matches the review’s target fatality outcomes.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+14. PMID: 32379502 [Score: 4/4]
+   Title: Estimating The Infection Fatality Rate Among Symptomatic COVID-19 Cases In The United States.
+   Overall: This study is highly relevant because it directly examines SARS-CoV-2/COVID-19 in a human US population and reports a primary quantitative analysis. It explicitly estimates infection fatality and case fatality outcomes, which are central target parameters for the review.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+15. PMID: 32357994 [Score: 4/4]
+   Title: Case Fatality Rate of Cancer Patients with COVID-19 in a New York Hospital System.
+   Overall: This study is highly aligned with the review question because it reports original hospital-based human data on COVID-19 patients and directly quantifies fatality outcomes. The abstract explicitly provides case fatality rates, death counts, mortality associations, and ICU support, all within a clear real-world setting.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+16. PMID: 32753136 [Score: 4/4]
+   Title: Sex Differences in Case Fatality Rate of COVID-19: Insights From a Multinational Registry.
+   Overall: This study is highly relevant to the review question because it directly examines COVID-19 in a large human cohort and reports quantified mortality outcomes as the primary endpoint. It uses original multinational registry data in a real-world setting, making it strongly aligned with fatality/severity outcome screening.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+17. PMID: 32444481 [Score: 4/4]
+   Title: Temporal estimates of case-fatality rate for COVID-19 outbreaks in Canada and the United States.
+   Overall: This paper is highly relevant to the review question because it explicitly studies COVID-19/SARS-CoV-2 in human populations and reports primary empirical estimates of case-fatality rates. The title and abstract directly quantify fatality outcomes in real-world national settings, making the target parameter highly central.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+18. PMID: 32473875 [Score: 4/4]
+   Title: Intellectual and developmental disability and COVID-19 case-fatality trends: TriNetX analysis.
+   Overall: This study is highly relevant because it explicitly examines COVID-19 in a human patient population using original empirical data. It directly reports fatality outcomes, including number of deaths and case-fatality rates, with age-stratified comparisons for people with and without IDD.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+19. PMID: 32301155 [Score: 4/4]
+   Title: COVID-19 in solid organ transplant recipients: A single-center case series from Spain.
+   Overall: This paper is highly relevant because it directly studies SARS-CoV-2 infection in a human clinical cohort and reports original real-world data from Spain. The abstract explicitly includes a quantified case-fatality rate and severe outcome information, making it strongly aligned with fatality and severity endpoints.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+20. PMID: 32419720 [Score: 4/4]
+   Title: Understanding COVID-19: Digit ratio (2D:4D) and sex differences in national case fatality rates.
+   Overall: This study is strongly relevant on disease and target outcomes because it explicitly examines COVID-19 case fatality rates and mortality patterns. It also provides original ecological analysis in a clear geographic setting, although the population and outcomes are analyzed mainly at the national level rather than as direct individual clinical severity data.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+21. PMID: 32175421 [Score: 4/4]
+   Title: Early estimation of the case fatality rate of COVID-19 in mainland China: a data-driven analysis.
+   Overall: This paper is highly aligned with the review question because it explicitly examines COVID-19 in human populations using original empirical data from mainland China. Its main outcome is case fatality rate, reported quantitatively across regions, which directly matches the target fatality/severity parameters.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+22. PMID: 33623566 [Score: 4/4]
+   Title: Space-time COVID-19 monitoring in Morocco.
+   Overall: This study is highly relevant because it explicitly examines COVID-19 in human populations using original national surveillance data from Morocco. It directly reports fatality-related outcomes, including mortality and case fatality rate, in a real-world geographic setting.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+23. PMID: 33102412 [Score: 4/4]
+   Title: SARS-CoV-2 Infections in the World: An Estimation of the Infected Population and a Measure of How Higher Detection Rates Save Lives.
+   Overall: This study is highly relevant to the review because it explicitly examines SARS-CoV-2 in human populations using real-world cross-country data and reports fatality-related outcomes, especially deaths and infection fatality ratio. Although it is primarily an estimation/regression study rather than direct clinical cohort data, the abstract provides clear original empirical analysis tied to severity/fatality questions.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+24. PMID: 32525826 [Score: 4/4]
+   Title: Short epidemiological overview of the current situation on COVID-19 pandemic in Southeast European (SEE) countries.
+   Overall: This paper is highly relevant to the review because it explicitly studies COVID-19 in human populations and reports directly relevant fatality outcomes, including fatal cases and CFR, in a real-world regional setting. Although the article has an overview style, the abstract includes empirical cross-country epidemiological data rather than only commentary.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+25. PMID: 32592974 [Score: 4/4]
+   Title: Association of particulate matter pollution and case fatality rate of COVID-19 in 49 Chinese cities.
+   Overall: This study is highly aligned with the review question because it explicitly investigates COVID-19/SARS-CoV-2 in human populations using original empirical data from real-world settings. Its main reported outcome is case fatality rate, a core fatality parameter of interest, quantified across multiple Chinese cities.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+26. PMID: 32426362 [Score: 4/4]
+   Title: Covid-19: A Dynamic Analysis of Fatality Risk in Italy.
+   Overall: This study is highly relevant to the review question because it explicitly examines Covid-19 fatality risk using real-world human data from Italy. It reports primary analysis of official surveillance data and directly addresses mortality-related outcomes, especially case fatality ratio and deaths.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+27. PMID: 32397286 [Score: 4/4]
+   Title: Using Early Data to Estimate the Actual Infection Fatality Ratio from COVID-19 in France.
+   Overall: This paper is highly relevant to the review question because it explicitly studies COVID-19 in a human population and directly estimates infection fatality ratio using French empirical data. Although the evidence is generated through modeling, it is still original primary analysis tied to observed deaths and infections in a real-world setting.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+28. PMID: 32868985 [Score: 4/4]
+   Title: Correlation between immunity from BCG and the morbidity and mortality of COVID-19.
+   Overall: This study is highly aligned with the review question at title-and-abstract level. It explicitly examines COVID-19 in human populations using original cross-country empirical data and directly reports mortality-related outcomes including deaths and case fatality rate.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+29. PMID: 32510525 [Score: 4/4]
+   Title: Global prediction of unreported SARS-CoV2 infection from observed COVID-19 cases.
+   Overall: This study is highly relevant because it explicitly examines SARS-CoV-2 in human populations using real-world regional data and reports original quantitative estimates. It is especially pertinent to the review question because it directly estimates infection fatality rate and uses deaths as core inputs, although its main emphasis is epidemiologic modeling rather than clinical severity endpoints such as ICU admission or ventilation.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+30. PMID: 32913365 [Score: 4/4]
+   Title: Monitoring trends and differences in COVID-19 case-fatality rates using decomposition methods: Contributions of age structure and age-specific fatality.
+   Overall: This study is highly aligned with the review question because it explicitly examines COVID-19 case-fatality outcomes in human populations using real-world geographic data. It reports original quantitative analysis of CFR variation and age-specific fatality, which directly addresses fatality severity outcomes of SARS-CoV-2 infection.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+31. PMID: 32593339 [Score: 4/4]
+   Title: COVID-19 in children and adolescents in Europe: a multinational, multicentre cohort study.
+   Overall: This study is highly relevant to the review question. It provides original human data on SARS-CoV-2 infection in a real-world European cohort and directly reports key severity and fatality outcomes, including ICU admission, mechanical ventilation, and case-fatality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+32. PMID: 32600222 [Score: 4/4]
+   Title: COVID-19, Australia: Epidemiology Report 19 (Fortnightly reporting period ending 21 June 2020).
+   Overall: This study is highly relevant to the review because it explicitly examines COVID-19 in a human population using real-world Australian surveillance data. It reports original empirical evidence on key fatality and severity outcomes, including deaths, case fatality rate, hospitalisation, and intensive care.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+33. PMID: 32853230 [Score: 4/4]
+   Title: Characteristics and outcomes of a cohort of COVID-19 patients in the Province of Reggio Emilia, Italy.
+   Overall: This study is highly aligned with the review question because it directly examines SARS-CoV-2/COVID-19 in a human population using original cohort data from a defined geographic setting. It explicitly reports fatality and severity endpoints, including death rates, case fatality rate, and hospitalization outcomes.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+34. PMID: 33062732 [Score: 4/4]
+   Title: World one-hundred days after COVID-19 outbreak: Incidence, case fatality rate, and trend.
+   Overall: This study is highly aligned with the review question because it explicitly examines COVID-19 and reports fatality-related outcomes, especially deaths and CFR, across multiple countries. It uses real-world human population data and presents original quantitative trend analyses, although it is ecological/global surveillance analysis rather than patient-level clinical severity research.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+35. PMID: 32353762 [Score: 4/4]
+   Title: Epidemiological characteristics of coronavirus disease 2019 (COVID-19) patients in IRAN: A single center study.
+   Overall: This study is highly relevant because it directly examines COVID-19 patients in a real-world hospital setting and reports original empirical fatality data. The abstract explicitly provides CFR, death counts, and mortality risk factors, which align closely with the review question on fatality and severity outcomes of SARS-CoV-2 infection.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+36. PMID: 32584330 [Score: 4/4]
+   Title: IMPACT OF COMORBIDITIES IN MEXICAN SARS-COV-2-POSITIVE PATIENTS: A RETROSPECTIVE ANALYSIS IN A NATIONAL COHORT.
+   Overall: This study is highly relevant because it directly examines SARS-CoV-2 infection in a large human national cohort and reports original empirical data from Mexico. The abstract explicitly includes fatality and severity endpoints, including CFR, death risk, ICU admission, and intubation, which closely align with the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+37. PMID: 32231374 [Score: 4/4]
+   Title: Data-based analysis, modelling and forecasting of the COVID-19 outbreak.
+   Overall: This study is highly relevant to the review question because it explicitly examines COVID-19 in a human population using real-world outbreak data from Hubei, China. It reports original empirical modelling estimates of fatality-related outcomes, including case fatality ratio, mortality rates, and deaths, which directly match the target parameters.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+38. PMID: 32573776 [Score: 4/4]
+   Title: Outcomes of novel coronavirus disease 2019 (COVID-19) infection in 107 patients with cancer from Wuhan, China.
+   Overall: This paper is highly relevant because it directly investigates COVID-19 in a human hospital-based cohort and reports original empirical data from Wuhan. It explicitly quantifies both severity and fatality-related outcomes, including severe COVID-19, overall survival, and case fatality rate among infected cancer patients.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+39. PMID: 33331525 [Score: 4/4]
+   Title: Population-based seroprevalence of SARS-CoV-2 and the herd immunity threshold in Maranhão.
+   Overall: This paper is highly relevant because it explicitly studies SARS-CoV-2 in a human population using original, population-based field data from Brazil. Most importantly, it directly reports infection fatality rate estimates, which are central to the review question on fatality and severity outcomes.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+40. PMID: 32511425 [Score: 4/4]
+   Title: Case fatality risk of novel coronavirus diseases 2019 in China.
+   Overall: This study is highly relevant to the review question because it directly evaluates fatality and severity outcomes of confirmed COVID-19 cases in a human population. The abstract presents original empirical data from a defined geographic setting and explicitly quantifies CFR, deaths, and severity-related differences.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+41. PMID: 33085731 [Score: 4/4]
+   Title: The confounded crude case-fatality rates (CFR) for COVID-19 hide more than they reveal-a comparison of age-specific and age-adjusted CFRs between seven countries.
+   Overall: This study is highly relevant to the review question because it explicitly examines SARS-CoV-2/COVID-19 fatality outcomes in human populations using real-world country data. It reports original comparative analysis of deaths and case-fatality rates, with CFR as the central parameter of interest.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+42. PMID: 32552623 [Score: 4/4]
+   Title: COVID-19, Australia: Epidemiology Report 18 (Fortnightly reporting period ending 7 June 2020).
+   Overall: This is a highly relevant SARS-CoV-2 study based on national human surveillance data from Australia. It reports original empirical evidence and explicitly includes fatality and severity outcomes such as deaths, case fatality rate, hospitalisation, and intensive care.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+43. PMID: 32802995 [Score: 4/4]
+   Title: Changing epidemiology of SARS-CoV in the context of COVID-19 pandemic.
+   Overall: This study is highly relevant to the review question because it explicitly examines SARS-CoV-2/COVID-19 using human population data from real-world geographic settings and reports mortality-related outcomes including deaths and CFR. Although the paper also contains broader evolutionary discussion, the abstract clearly presents original epidemiologic analysis of fatality outcomes.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+44. PMID: 32574303 [Score: 4/4]
+   Title: A Simulation of a COVID-19 Epidemic Based on a Deterministic SEIR Model.
+   Overall: This study is highly relevant to SARS-CoV-2 severity/fatality screening because it explicitly examines COVID-19 in a real geographic setting and reports multiple fatality outcomes, including deaths and IFR. Relevance is slightly tempered by its deterministic modeling design rather than direct observational clinical data, but the target outcomes are clearly central.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+45. PMID: 32835143 [Score: 4/4]
+   Title: Sensitivity of UK Covid-19 deaths to the timing of suppression measures and their relaxation.
+   Overall: This paper is highly relevant to the review question because it explicitly concerns COVID-19 in a real-world UK setting and directly reports modeled fatality and severity-related outcomes, including deaths, case fatality assumptions, and ICU demand. Relevance is slightly tempered by the fact that it is a modeling study rather than direct observational clinical data, but the target outcomes are clearly central.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+46. PMID: 32952144 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 infection in India: Findings from the national serosurvey, May-June 2020.
+   Overall: This study is highly relevant because it explicitly investigates SARS-CoV-2 infection in a large human population using original national serosurvey data from India. It also directly reports a target outcome parameter, the infection fatality ratio, with numerical estimates and confidence intervals.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+47. PMID: 32734152 [Score: 4/4]
+   Title: A logistic model for age-specific COVID-19 case-fatality rates.
+   Overall: This study is highly relevant to the review question because it explicitly focuses on COVID-19 case-fatality rates, uses human data from real-world settings, and reports primary quantitative analysis. Although it is a modeling paper based on existing datasets rather than a clinical cohort report, the target fatality parameter is central and clearly stated.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+48. PMID: 32647593 [Score: 4/4]
+   Title: Epidemiology of COVID-19 Infection in Oman: Analysis of the First 1304 Cases.
+   Overall: This study is highly relevant because it directly examines confirmed COVID-19 cases in a human population using original national surveillance data from Oman. The abstract explicitly reports severity distribution and case fatality rate, which are central fatality and severity outcomes for the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+49. PMID: 32722715 [Score: 4/4]
+   Title: Estimation of SARS-CoV-2 mortality during the early stages of an epidemic: A modeling study in Hubei, China, and six regions in Europe.
+   Overall: This study is highly relevant to the review question because it explicitly examines SARS-CoV-2 mortality outcomes in human populations across real geographic settings. It reports original primary analysis of surveillance data and provides quantitative fatality estimates (CFR, sCFR, IFR), which directly match the target parameters.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+50. PMID: 32560071 [Score: 4/4]
+   Title: COVID-19 Infection Fatality Rate Associated with Incidence-A Population-Level Analysis of 19 Spanish Autonomous Communities.
+   Overall: This study is highly aligned with the review question because it explicitly examines SARS-CoV-2 in human populations and reports quantified fatality outcomes, especially infection fatality rate. It uses original empirical data from a real-world regional analysis in Spain, with direct relevance to severity and fatality outcomes.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+51. PMID: 33537125 [Score: 4/4]
+   Title: Age, neutrophil lymphocyte ratio, and radiographic assessment of the quantity of lung edema (RALE) score to predict in-hospital mortality in COVID-19 patients: a retrospective study.
+   Overall: This paper is highly relevant to the review question because it is an original human COVID-19 study conducted in a real clinical setting and directly evaluates mortality outcomes. The title and abstract provide explicit evidence for disease focus, patient population, and target severity/fatality parameter.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+52. PMID: 32537957 [Score: 4/4]
+   Title: Risk Factors for Mortality and Respiratory Support in Elderly Patients Hospitalized with COVID-19 in Korea.
+   Overall: This study is highly aligned with the review question because it examines SARS-CoV-2 infection in hospitalized older adults and directly reports fatality and severity outcomes. The abstract provides original clinical data from a defined human population in Korea, including CFR and respiratory support outcomes such as mechanical ventilation.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+53. PMID: 33351802 [Score: 4/4]
+   Title: COVID-19 pandemic in Djibouti: Epidemiology and the response strategy followed to contain the virus during the first two months, 17 March to 16 May 2020.
+   Overall: This is a highly relevant empirical study of human SARS-CoV-2 infection in a defined geographic population. The abstract explicitly reports original COVID-19 surveillance data from Djibouti, including deaths and case fatality ratio, which directly matches the review’s interest in fatality and severity outcomes.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+54. PMID: 32455807 [Score: 4/4]
+   Title: The COVID-19 Infection in Italy: A Statistical Study of an Abnormally Severe Disease.
+   Overall: This study is highly relevant to the review because it explicitly examines COVID-19 in human populations using real-world data from Italy and directly evaluates fatality-related outcomes including CFR, IFR, and deaths. Although it appears to be a statistical modeling/analysis paper rather than a clinical cohort report, the abstract indicates original empirical analysis of primary outbreak data tied closely to severity and fatality outcomes.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+55. PMID: 32517645 [Score: 4/4]
+   Title: COVID-19, Australia: Epidemiology Report 17 (Fortnightly reporting period ending 24 May 2020).
+   Overall: This study is highly relevant because it explicitly concerns COVID-19/SARS-CoV-2 in a human population and reports real-world Australian surveillance data. It directly includes fatality and severity outcomes such as deaths, case fatality rate, hospitalisation, and intensive care, with only slight caution because the report appears to be routine surveillance rather than a full analytic research article.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+56. PMID: 32239761 [Score: 4/4]
+   Title: COVID-19 in a designated infectious diseases hospital outside Hubei Province, China.
+   Overall: This study is highly relevant because it is an original hospital-based analysis of human COVID-19 cases in a defined geographic setting. It explicitly reports severity-related outcomes and a quantified case fatality ratio, which directly match the review question on fatality and severity outcomes of SARS-CoV-2 infection.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+57. PMID: 32695323 [Score: 4/4]
+   Title: SARS-CoV-2 infection in dialysis patients in northern Italy: a single-centre experience.
+   Overall: This paper is highly relevant across all screening dimensions. It is an original human cohort study of SARS-CoV-2 infection in a real clinical setting and explicitly quantifies fatality and severity outcomes, including case fatality rate, hospitalization, oxygen requirement, intubation, and cause of death.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+58. PMID: 32203977 [Score: 4/4]
+   Title: Case-Fatality Rate and Characteristics of Patients Dying in Relation to COVID-19 in Italy.
+   Overall: This title is highly aligned with the review question because it explicitly concerns COVID-19 case-fatality and deaths in a defined real-world human setting. Although assessment is based only on title and keywords and some uncertainty remains about the exact study design and reported endpoints, the available metadata strongly indicates direct relevance.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+59. PMID: 33553234 [Score: 4/4]
+   Title: The Burden of Malnutrition and Fatal COVID-19: A Global Burden of Disease Analysis.
+   Overall: This study is highly relevant to the review question because it explicitly investigates SARS-CoV-2/COVID-19 and directly analyzes fatality outcomes using COVID-19 CFRs. It is a real-world human population study with original empirical analysis at the country level, though its ecological design uses aggregated secondary data.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+60. PMID: 33036702 [Score: 4/4]
+   Title: COVID-19 in seniors: Findings and lessons from mass screening in a nursing home.
+   Overall: This study is highly relevant to the review question because it directly examines SARS-CoV-2 infection in a human nursing home population using original outbreak data from France. It explicitly reports fatality and severity-related outcomes, including mortality rate, case fatality rate, and clinical characteristics among infected residents and staff.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+61. PMID: 32295661 [Score: 4/4]
+   Title: Investigating the Determinants of High Case-Fatality Rate for Coronavirus Disease 2019 in Italy.
+   Overall: This study is highly relevant because it explicitly examines COVID-19 and focuses centrally on case-fatality rate, a key fatality outcome of interest. It uses human population data in a real-world geographic setting and appears to report original comparative analysis, although the abstract provides limited methodological detail.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+62. PMID: 32865152 [Score: 4/4]
+   Title: A Retrospective Analysis and Comparison of Prisoners and Community-Based Patients with COVID-19 Requiring Intensive Care During the First Phase of the Pandemic in West Texas.
+   Overall: This paper is highly relevant because it directly studies human COVID-19 patients in a real ICU setting using original retrospective data. It explicitly reports key target outcomes for the review, especially case fatality and intensive care severity context.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+63. PMID: 32234107 [Score: 4/4]
+   Title: Epidemiologic Features of 135 Patients With Coronavirus Disease (COVID-19) in Tianjin, China.
+   Overall: This paper is highly aligned with the review question because it is an original human epidemiologic study of COVID-19 in a defined geographic population. The abstract explicitly reports death counts and case fatality rate, providing direct evidence on fatality outcomes.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+64. PMID: 32444358 [Score: 4/4]
+   Title: Incidence, clinical outcomes, and transmission dynamics of severe coronavirus disease 2019 in California and Washington: prospective cohort study.
+   Overall: This study is highly relevant to the review question because it is an original human cohort study of confirmed COVID-19 in defined US populations and directly quantifies severity and fatality outcomes. The abstract explicitly reports ICU admission, mortality, and case fatality ratio, with clear real-world geographic context.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+65. PMID: 32542041 [Score: 4/4]
+   Title: A novel cohort analysis approach to determining the case fatality rate of COVID-19 and other infectious diseases.
+   Overall: This study is highly relevant on disease and target parameter because it explicitly focuses on COVID-19 case fatality rate and death counts. It appears to use original empirical/model-based analysis with human outbreak data in a real-world setting, though the abstract emphasizes methodological modeling more than detailed clinical population description.
+   维度评分: D=4 P=3 L=3 E=3 Param=4
+
+66. PMID: 32168464 [Score: 4/4]
+   Title: Estimating Risk for Death from Coronavirus Disease, China, January-February 2020.
+   Overall: This paper is highly relevant because it explicitly examines COVID-19 in human populations using real-world data from China and directly estimates death risk, a core fatality outcome. It appears to provide original empirical analysis and the target parameter is central in both the title and abstract.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+67. PMID: 32481256 [Score: 4/4]
+   Title: The computation of case fatality rate for novel coronavirus (COVID-19) based on Bayes theorem: An observational study.
+   Overall: This study is highly aligned with the review question because it explicitly examines COVID-19 in human populations using real-world outbreak data and focuses centrally on case fatality rate. Although it is primarily a methodological/observational analysis of aggregated surveillance data rather than patient-level clinical outcomes, it directly reports a target fatality parameter.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+68. PMID: 32571972 [Score: 4/4]
+   Title: COVID-19 in an international European liver transplant recipient cohort.
+   Overall: This study is highly relevant because it directly examines SARS-CoV-2 infection in a human European cohort and reports original empirical data. It explicitly provides fatality and severity outcomes, including case fatality rates and severe respiratory complications, which closely match the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+69. PMID: 32511437 [Score: 4/4]
+   Title: Impact of Social Vulnerability on COVID-19 Incidence and Outcomes in the United States.
+   Overall: This study is highly relevant because it directly investigates COVID-19 in human populations using original U.S. county-level empirical data. It explicitly reports a key target parameter, case fatality rate, with quantitative results in a real-world geographic setting.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+70. PMID: 34686216 [Score: 4/4]
+   Title: Epidemiological and clinical characteristics of patients with suspected COVID-19 admitted in Metro Manila, Philippines.
+   Overall: This study is highly relevant to the review question because it is an original human COVID-19 hospital study conducted in a defined real-world setting. The abstract explicitly reports fatality outcomes among confirmed SARS-CoV-2 cases, including deaths and case fatality rate, alongside clinical characteristics.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+71. PMID: 32295652 [Score: 4/4]
+   Title: Preparedness is Essential for Western Pacific Islands During the COVID-19 Pandemic.
+   Overall: This study is highly relevant to the review because it explicitly examines COVID-19 in human populations and reports fatality outcomes, including deaths and CFR, in a real-world regional setting. Although it is based on analysis of WHO situation reports rather than clinical cohorts, it still provides original empirical epidemiologic evidence directly tied to the target parameters.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+72. PMID: 32621066 [Score: 4/4]
+   Title: Analysis of Austrian COVID-19 deaths by age and sex.
+   Overall: This study is highly relevant to the review question because it explicitly concerns COVID-19, uses human population data from Austria, and focuses on death and infection fatality outcomes. It appears to provide original empirical analysis of reported deaths, although the abstract gives only limited methodological detail.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+73. PMID: 32511493 [Score: 4/4]
+   Title: Urban Air Pollution May Enhance COVID-19 Case-Fatality and Mortality Rates in the United States.
+   Overall: This study is highly aligned with the review question because it explicitly examines COVID-19 in human populations using original nationwide US data. It directly reports fatality and mortality outcomes, with quantified case-fatality and death-rate estimates in a real-world geographic context.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+74. PMID: 32240634 [Score: 4/4]
+   Title: Estimates of the severity of coronavirus disease 2019: a model-based analysis.
+   Overall: This study is highly relevant to the review because it directly analyzes COVID-19 severity and fatality outcomes in human populations using real-world data from multiple settings. The abstract explicitly reports quantified CFR, IFR, death risk, and hospitalization-related severity estimates, with original empirical modeling based on collected case data.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+75. PMID: 33481734 [Score: 4/4]
+   Title: COVID-19 with and without pneumonia: clinical outcomes in the internal medicine ward.
+   Overall: This study is highly relevant to the review question because it directly examines hospitalized human COVID-19 patients and reports explicit fatality and severity outcomes, including mortality, severe/critical disease, ICU admission, and invasive mechanical ventilation. It is a real-world prospective cohort from Buenos Aires and provides original empirical outcome data.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+76. PMID: 32575825 [Score: 4/4]
+   Title: Deaths in SARS-Cov-2 Positive Patients in Italy: The Influence of Underlying Health Conditions on Lethality.
+   Overall: This paper is highly relevant to the review question because it explicitly studies SARS-CoV-2 infection in humans using original regional epidemiologic data. It directly reports fatality and mortality-related outcomes, including case fatality rate and determinants of death, in a real-world population.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+77. PMID: 32479787 [Score: 4/4]
+   Title: Clinical characteristics, outcomes, and risk factors for mortality in patients with cancer and COVID-19 in Hubei, China: a multicentre, retrospective, cohort study.
+   Overall: This study is highly relevant to the review question because it directly examines SARS-CoV-2/COVID-19 in a human clinical cohort and reports explicit fatality and severity outcomes. It also provides original multicentre empirical data from a defined geographic setting, including death, case-fatality, ICU admission, and prognostic factors.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+78. PMID: 32293449 [Score: 4/4]
+   Title: Prognostic value of NT-proBNP in patients with severe COVID-19.
+   Overall: This study is highly relevant because it explicitly investigates severe COVID-19 in hospitalized human patients and reports original clinical data. It directly measures a target outcome of interest— in-hospital death/case fatality rate—while evaluating NT-proBNP as a prognostic factor in a real-world care setting.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+79. PMID: 32403011 [Score: 4/4]
+   Title: Case fatality rate in patients with COVID-19 infection and its relationship with length of follow up.
+   Overall: This title is highly aligned with the review question because it explicitly addresses COVID-19 and case fatality rate in human patients. Uncertainty remains because assessment is based only on title and keywords, but the target outcome relevance is clear and strong.
+   维度评分: D=4 P=4 L=3 E=3 Param=4
+
+80. PMID: 33954263 [Score: 4/4]
+   Title: Assessing the age- and gender-dependence of the severity and case fatality rates of COVID-19 disease in Spain.
+   Overall: This study is highly aligned with the review question because it explicitly examines COVID-19 severity and case fatality rates in a human population using data from Spain. The abstract reports original quantitative analysis of fatality-related outcomes, with clear attention to age- and gender-specific differences.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+81. PMID: 32334207 [Score: 4/4]
+   Title: Real-time estimation and prediction of mortality caused by COVID-19 with patient information based algorithm.
+   Overall: This study is highly relevant to the review question because it explicitly examines COVID-19 in human populations and quantifies mortality-related outcomes across real-world settings. Although it is primarily a modeling and prediction study rather than a clinical cohort report, the abstract presents original empirical analysis of death-rate and fatality outcomes using outbreak data.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+82. PMID: 32709574 [Score: 4/4]
+   Title: [Analysis of fatality rates case of SARS-CoV-2 infection in the Autonomous Communities of Spain].
+   Overall: This study is highly aligned with the review question because it directly examines SARS-CoV-2 infection in human populations and quantifies fatality outcomes. It uses original empirical data from Spain in a real-world setting and reports explicit mortality/fatality measures stratified by demographic and geographic factors.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+83. PMID: 32164400 [Score: 4/4]
+   Title: [Epidemiological characteristics of confirmed COVID-19 cases in Tianjin].
+   Overall: This study is highly aligned with the review question because it investigates human COVID-19 cases in a real-world setting using original case data. It explicitly reports both fatality and severity-related outcomes, including case fatality rate and risk factors for severe illness.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+84. PMID: 32451257 [Score: 4/4]
+   Title: Importance of timely management of patients in reducing fatality rate of coronavirus disease 2019.
+   Overall: This study is highly relevant because it explicitly examines COVID-19 in human populations and reports quantified fatality outcomes in a real-world geographic context. It appears to provide original comparative empirical analysis of case fatality rates, though the exact study design is only partly clear from the abstract.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+85. PMID: 33335428 [Score: 4/4]
+   Title: Survival of Hospitalized COVID-19 Patients in Northern Italy: A Population-Based Cohort Study by the ITA-COVID-19 Network.
+   Overall: This paper is highly aligned with the review question because it examines SARS-CoV-2/COVID-19 in a large human cohort and reports explicit fatality outcomes. It is a real-world, population-based primary study with quantified mortality estimates, making it strongly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+86. PMID: 32691023 [Score: 4/4]
+   Title: COVID-19 Pandemic: Global Impact and Potential Implications for Cardiovascular Disease in Canada.
+   Overall: This study is highly relevant because it explicitly investigates COVID-19 in human populations using real-world global and Canadian data. It reports original quantitative analysis centered on case fatality rates, which directly matches the review’s focus on fatality outcomes, though it is ecological rather than patient-level.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+87. PMID: 32602676 [Score: 4/4]
+   Title: Clinical and Epidemiological Features of SARS-CoV-2 Patients in SARI Ward of a Tertiary Care Centre in New Delhi.
+   Overall: This study is highly relevant because it explicitly examines hospitalized SARS-CoV-2 patients in a real clinical setting and reports original empirical data. It directly quantifies key severity and fatality outcomes, including ICU care, mechanical ventilation, death, and case fatality rate.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+88. PMID: 33445940 [Score: 4/4]
+   Title: Data from the first wave of Covid-19 from the Central Military Hospital, Prague, Czech Republic.
+   Overall: This study is highly relevant because it directly examines hospitalized human Covid-19 cases in a real clinical setting and reports original outcome data. The abstract explicitly includes severity distribution and case fatality, which closely align with the review question on fatality and severity outcomes of SARS-CoV-2 infection.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+89. PMID: 32551315 [Score: 4/4]
+   Title: Can judgments according to case fatality rate be correct all the time during epidemics? Estimated cases based on CFR in different scenarios and some lessons from early case fatality rate of coronavirus disease 2019 in Iran.
+   Overall: This study is highly relevant to the review because it explicitly examines COVID-19 in a human population, uses real-world data from Iran, and reports quantified fatality-related outcomes including CFR and deaths. Although it is a descriptive analysis of official statistics rather than a clinical cohort, the title and abstract provide clear original empirical evidence directly tied to fatality outcomes.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+90. PMID: 32425234 [Score: 4/4]
+   Title: Corticosteroids, But Not TNF Antagonists, Are Associated With Adverse COVID-19 Outcomes in Patients With Inflammatory Bowel Diseases: Results From an International Registry.
+   Overall: This study is highly relevant to the review question because it examines confirmed COVID-19 in a human international registry and reports original empirical data. It directly quantifies severity and fatality outcomes, including ICU admission, ventilator use, death, and case fatality rate, although within the specific subpopulation of patients with inflammatory bowel disease.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+91. PMID: 33294108 [Score: 4/4]
+   Title: Epidemiological characteristics and treatment outcomes of hospitalized patients with COVID-19 in Ethiopia.
+   Overall: This study is highly relevant to the review question because it directly examines COVID-19 in a human population and reports explicit fatality and severity outcomes, including case fatality rate and ICU mortality. It is based on empirical analysis of real-world Ethiopian surveillance data, though the data source is a retrospective review of released records rather than a more detailed prospective clinical dataset.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+92. PMID: 32461818 [Score: 4/4]
+   Title: COVID-19 Pandemic: Marked Global Disparities in Fatalities According to Geographic Location and Universal Health Care.
+   Overall: This study is highly aligned with the review question because it explicitly examines COVID-19 in human populations and reports quantified fatality outcomes, especially mortality and CFR. It also uses a real-world global geographic context and appears to provide original comparative analysis based on observed pandemic data.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+93. PMID: 32593867 [Score: 4/4]
+   Title: Outcomes of 3,737 COVID-19 patients treated with hydroxychloroquine/azithromycin and other regimens in Marseille, France: A retrospective analysis.
+   Overall: This study is highly relevant to the review question because it explicitly examines COVID-19 in a large human patient cohort and reports primary empirical data from a real-world clinical setting. The abstract directly includes key fatality and severity outcomes, including case fatality rate, death, ICU transfer, and prolonged hospitalization.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+94. PMID: 32628137 [Score: 4/4]
+   Title: Association between chronic ACE inhibitor exposure and decreased odds of severe disease in patients with COVID-19.
+   Overall: This paper is highly relevant to the review because it is an original human cohort study of COVID-19 in a real clinical setting. The abstract explicitly reports severity and fatality outcomes, including ICU admission, death, and case fatality rate, making it strongly aligned with the target parameters.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+95. PMID: 38624634 [Score: 4/4]
+   Title: Assessment of the potential role of atmospheric particulate pollution and airborne transmission in intensifying the first wave pandemic impact of SARS-CoV-2/COVID-19 in Northern Italy.
+   Overall: This paper is highly relevant at title-and-abstract screening because it explicitly studies SARS-CoV-2/COVID-19 in human populations using real-world Italian epidemiologic data. It reports original empirical analyses with directly relevant severity/fatality outcomes, especially mortality rate and case fatality rate, although these are examined in relation to air pollution rather than as standalone prognostic outcomes.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+96. PMID: 32577684 [Score: 4/4]
+   Title: Tocilizumab for treatment of mechanically ventilated patients with COVID-19.
+   Overall: This study is highly relevant to the review question because it directly examines COVID-19 in a human clinical cohort and reports original outcome data. The abstract explicitly includes key fatality and severity endpoints, including hazard of death, survival post-intubation, case fatality rate, and mechanically ventilated status.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+97. PMID: 32220208 [Score: 4/4]
+   Title: Epidemiology of Covid-19 in a Long-Term Care Facility in King County, Washington.
+   Overall: This study is highly relevant to the review question because it explicitly examines Covid-19 in a human outbreak setting and reports original empirical data. It directly includes key severity and fatality outcomes, notably hospitalization rates and case fatality among infected residents, in a defined geographic population.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+98. PMID: 32393161 [Score: 4/4]
+   Title: COVID-19, Australia: Epidemiology Report 14 (Reporting week to 23:59 AEST 3 May 2020).
+   Overall: This report is highly relevant because it explicitly concerns COVID-19 in a human population and presents real-world Australian epidemiologic data. It directly reports deaths and case fatality rate, which are central target outcomes for the review, though the title/abstract suggest surveillance reporting rather than a more detailed analytic study.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+99. PMID: 32438898 [Score: 4/4]
+   Title: COVID-19, Australia: Epidemiology Report 15 (Reporting week to 23:59 AEST 10 May 2020).
+   Overall: This study is highly relevant because it explicitly addresses COVID-19 in a human population using real-world Australian surveillance data. It reports direct fatality outcomes, including deaths and crude case fatality rate, making it strongly aligned with the review question on fatality and severity outcomes.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+100. PMID: 32305488 [Score: 4/4]
+   Title: Flattening-the-curve associated with reduced COVID-19 case fatality rates- an ecological analysis of 65 countries.
+   Overall: Based on the title and keywords alone, this study appears highly relevant to the review question because it explicitly addresses COVID-19 case fatality rates in a multi-country real-world analysis. There is still some uncertainty inherent to title-only screening, especially regarding study design details and exact outcome definitions, but the target parameter is directly named.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+101. PMID: 32600948 [Score: 4/4]
+   Title: COVID-19 outcomes among people with intellectual and developmental disability living in residential group homes in New York State.
+   Overall: This study is highly relevant because it directly examines COVID-19 in a human population using real-world New York State data. It reports original quantified fatality and severity-related outcomes, especially case-fatality and mortality, which align closely with the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+102. PMID: 32417117 [Score: 4/4]
+   Title: [COVID19-Tracker: a shiny app to analise data on SARS-CoV-2 epidemic in Spain].
+   Overall: This study is strongly relevant on disease, setting, and target outcome dimensions because it explicitly analyzes COVID-19/SARS-CoV-2 surveillance data in Spain and includes mortality and case fatality rate. It appears to provide original empirical analysis of human population data, although the focus is a surveillance application rather than clinical severity outcomes at the patient level.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+103. PMID: 33042826 [Score: 4/4]
+   Title: Outcomes of COVID-19 in Patients With Lung Cancer Treated in a Tertiary Hospital in Madrid.
+   Overall: This study is highly relevant to the review question because it is an original human clinical study of SARS-CoV-2 infection in a defined hospital population. The abstract explicitly reports key fatality and severity outcomes, including case-fatality rate, mortality, ARDS, hospitalization, and invasive mechanical ventilation.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+104. PMID: 32678882 [Score: 4/4]
+   Title: Kidney allograft recipients, immunosuppression, and coronavirus disease-2019: a report of consecutive cases from a New York City transplant center.
+   Overall: This study is highly relevant because it is an original human clinical study of SARS-CoV-2/Covid-19 in a real-world transplant-center setting. It explicitly reports fatality outcomes, including deaths and case fatality rates, which directly match the review question on fatality and severity outcomes.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+105. PMID: 32835147 [Score: 4/4]
+   Title: A simple approach to estimate the instantaneous case fatality ratio: Using the publicly available COVID-19 surveillance data in Canada as an example.
+   Overall: This study is strongly aligned with the review question because it explicitly examines COVID-19 and directly reports a fatality outcome (case fatality ratio) using Canadian surveillance data. It appears to be an original empirical/modelling analysis in a real-world human population, although the abstract emphasizes methodology and reported-case fatality rather than broader clinical severity outcomes.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+106. PMID: 32597046 [Score: 4/4]
+   Title: Prognostic Accuracy of the SIRS, qSOFA, and NEWS for Early Detection of Clinical Deterioration in SARS-CoV-2 Infected Patients.
+   Overall: This study is highly relevant to the review question because it focuses on SARS-CoV-2 infection in human patients and reports original clinical data. It explicitly evaluates mortality and critical outcomes, making it strongly aligned with fatality and severity outcome screening criteria.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+107. PMID: 32485871 [Score: 4/4]
+   Title: Estimating the Risk of COVID-19 Death During the Course of the Outbreak in Korea, February-May 2020.
+   Overall: This study is highly relevant because it directly analyzes SARS-CoV-2/COVID-19 mortality outcomes in a human population using original empirical surveillance data from Korea. The main reported endpoint is case fatality risk, with explicit quantitative estimates across regions and nationally.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+108. PMID: 32446978 [Score: 4/4]
+   Title: 30-day mortality in patients hospitalized with COVID-19 during the first wave of the Italian epidemic: A prospective cohort study.
+   Overall: This study is highly relevant to the review question because it directly examines fatality outcomes among hospitalized COVID-19 patients using original prospective cohort data. The abstract explicitly reports mortality, case-fatality rate, and clinical severity-related findings in a real-world human setting.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+109. PMID: 33796197 [Score: 4/4]
+   Title: The first sixty days of COVID-19 in a humanitarian response setting: a descriptive epidemiological analysis of the outbreak in South Sudan.
+   Overall: This study is highly relevant because it explicitly examines SARS-CoV-2/COVID-19 in a human population using original outbreak data from a real-world setting. It directly reports target severity and fatality outcomes, including symptom severity distribution and case fatality rate.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+110. PMID: 32343939 [Score: 4/4]
+   Title: COVID-19, Australia: Epidemiology Report 12 (Reporting week to 23:59 AEST 19 April 2020).
+   Overall: This paper is highly relevant because it explicitly concerns COVID-19 in a human population and reports real-world surveillance data from Australia. It directly includes fatality outcomes, specifically deaths and crude case fatality rate, though the abstract emphasizes epidemiologic reporting more than broader severity endpoints such as ICU admission or ventilation.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+111. PMID: 33224915 [Score: 4/4]
+   Title: Lifestyle Acquired Immunity, Decentralized Intelligent Infrastructures, and Revised Healthcare Expenditures May Limit Pandemic Catastrophe: A Lesson From COVID-19.
+   Overall: This is a COVID-19 study in real-world human populations using original country-level statistical analysis. It is strongly relevant because it explicitly analyzes case fatality rate and discusses fatalities, although the focus is ecological rather than individual clinical severity outcomes.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+112. PMID: 32850929 [Score: 4/4]
+   Title: Early Epidemiological Features of COVID-19 in Nepal and Public Health Response.
+   Overall: This study is highly relevant because it explicitly examines COVID-19 in a human population in Nepal using empirical epidemiologic data. It directly reports a fatality outcome (eight deaths; case-fatality rate 0.5%) in a real-world setting, although the paper also includes broader epidemiologic and public health response content.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+113. PMID: 32836898 [Score: 4/4]
+   Title: [The first COVID-19 hotspot in a retirement home in Hamburg].
+   Overall: This study is highly aligned with the review question because it examines a human SARS-CoV-2 outbreak in a real-world nursing home setting and presents original empirical data. The abstract explicitly reports fatality outcomes, including 8 deaths among 39 infected residents and an approximate case fatality rate of 20%, making the target parameter directly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+114. PMID: 33425835 [Score: 4/4]
+   Title: Patient Flow Dynamics in Hospital Systems During Times of COVID-19: Cox Proportional Hazard Regression Analysis.
+   Overall: This study is highly relevant to the review because it analyzes a human COVID-19 cohort in a real hospital setting and reports original empirical data. It explicitly includes fatality-related outcomes such as hospital death hazard, case fatality rate, and mortality rate, alongside severity-related hospitalization metrics.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+115. PMID: 33282058 [Score: 4/4]
+   Title: Overcoming COVID-19 in West African countries: is herd immunity an option?
+   Overall: This study is strongly aligned with the review question because it explicitly addresses COVID-19 mortality outcomes, especially deaths and case fatality rate, in human populations. It uses a real-world regional setting and reports a primary forecasting analysis, though the main output is projected deaths rather than observed clinical severity outcomes such as ICU admission or ventilation.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+116. PMID: 32064853 [Score: 4/4]
+   Title: [The epidemiological characteristics of an outbreak of 2019 novel coronavirus diseases (COVID-19) in China].
+   Overall: This study is highly relevant to the review question because it explicitly examines COVID-19 in a large human population using original nationwide surveillance data from China. The abstract directly reports fatality and severity-related outcomes, including deaths, case-fatality rate, and clinical severity distribution.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+117. PMID: 33134966 [Score: 4/4]
+   Title: Baseline Characteristics and Associated Factors of Mortality in COVID-19 Patients; an Analysis of 16000 Cases in Tehran, Iran.
+   Overall: This paper is highly aligned with the review question because it is an original multicenter human study of COVID-19 in a real hospital setting and directly quantifies fatality and severity-related outcomes. The abstract explicitly reports mortality, CFR, death rates, and ICU/CCU findings, making the target parameters central rather than incidental.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+118. PMID: 32537954 [Score: 4/4]
+   Title: Prognostic Factors for Severe Coronavirus Disease 2019 in Daegu, Korea.
+   Overall: This paper is highly relevant based on the title and abstract. It is an original human study of confirmed COVID-19 patients in a real-world hospital setting and explicitly analyzes severe disease outcomes including ICU care and death, which align closely with fatality and severity outcomes of SARS-CoV-2 infection.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+119. PMID: 32522141 [Score: 4/4]
+   Title: COVID-19, Australia: Epidemiology Report 16 (Reporting week to 23:59 AEST 17 May 2020).
+   Overall: This study is highly relevant because it explicitly concerns COVID-19 in a human population and reports real-world Australian surveillance data. It directly includes fatality outcomes, including total deaths and crude case fatality rate, which are central to the review question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+120. PMID: 32414594 [Score: 4/4]
+   Title: Clinical course of coronavirus disease 2019 in 11 patients after thoracic surgery and challenges in diagnosis.
+   Overall: This study is highly relevant because it explicitly examines COVID-19 in human patients and reports original clinical outcome data. The abstract directly includes fatality and severity endpoints, including deaths, severe cases, and case fatality rate, although geographic detail is not clearly stated.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+121. PMID: 36753103 [Score: 4/4]
+   Title: [Impact of mitigation measures on the COVID-19 pandemic in Chile: preliminary data for the period April 14 to May 14].
+   Overall: This study is highly relevant to the review question because it explicitly addresses SARS-CoV-2/COVID-19 in a human population and reports key severity and fatality outcomes, including deaths, case fatality rate, and intensive care demand. Although it is a modeling study rather than direct clinical cohort data, it uses empirical Chilean epidemic data in a real-world setting and the target outcomes are clearly central in the abstract.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+122. PMID: 32407411 [Score: 4/4]
+   Title: Geo-temporal distribution of 1,688 Chinese healthcare workers infected with COVID-19 in severe conditions-A secondary data analysis.
+   Overall: The study is highly relevant because it explicitly examines COVID-19 in a human population, reports real-world geographic data from China, and quantifies severity and case fatality outcomes. Although it is based on secondary analysis rather than newly collected primary data, it still provides original empirical analysis directly aligned with the review question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+123. PMID: 32362270 [Score: 4/4]
+   Title: COVID-19, Australia: Epidemiology Report 13 (Reporting week to 23:59 AEST 26 April 2020).
+   Overall: This study is highly relevant because it explicitly examines COVID-19 in a human population within a real-world national setting and reports direct fatality outcomes, including deaths and case fatality rate. It appears to provide empirical epidemiologic surveillance data, though the report format makes the degree of original analysis slightly less explicit than a standard primary research paper.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+124. PMID: 32233161 [Score: 4/4]
+   Title: Analysis on 54 Mortality Cases of Coronavirus Disease 2019 in the Republic of Korea from January 19 to March 10, 2020.
+   Overall: This study is highly relevant because it explicitly examines COVID-19 in a human population and reports core fatality outcomes, including mortality counts and case fatality rate. It is based in a clear real-world setting in Korea and appears to provide original descriptive epidemiologic data, although the abstract gives limited methodological detail.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+125. PMID: 32496252 [Score: 4/4]
+   Title: An epidemiological study of laboratory confirmed COVID-19 cases admitted in a tertiary care hospital of Pune, Maharashtra.
+   Overall: This study is highly relevant because it explicitly examines hospitalized human COVID-19 cases in a defined real-world setting and reports original empirical data. It directly includes target fatality outcomes such as case fatality rate, mortality, and death-related risk factors, making it strongly aligned with the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+126. PMID: 33605254 [Score: 4/4]
+   Title: First Reported Death of a Postpartum Woman Due to Coronavirus Disease 2019 in Nepal: A Lesson Learnt.
+   Overall: This paper is highly relevant because it directly reports an original human COVID-19 case with a fatal outcome. It also provides clear real-world clinical and geographic context in Nepal, matching the review focus on fatality and severity outcomes of SARS-CoV-2 infection.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+127. PMID: 32576344 [Score: 4/4]
+   Title: [Logistic regression analysis of death risk factors of patients with severe and critical coronavirus disease 2019 and their predictive value].
+   Overall: This paper is highly aligned with the review question because it directly analyzes death risk factors and mortality among hospitalized severe/critical COVID-19 patients using original human data from Wuhan. The abstract explicitly reports fatality-related outcomes and a severity-related intervention measure (mechanical ventilation), with clear empirical results.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+128. PMID: 32546258 [Score: 4/4]
+   Title: Invasive mechanical ventilation in COVID-19 patient management: the experience with 469 patients in Wuhan.
+   Overall: Based on the title and keywords alone, this study is highly relevant to the review question. The metadata clearly indicates SARS-CoV-2/COVID-19, a human patient cohort in a real-world Wuhan setting, original empirical data, and a directly relevant severity outcome (invasive mechanical ventilation), though the absence of an abstract limits certainty about the exact reported endpoints.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+129. PMID: 32442285 [Score: 4/4]
+   Title: Association of Renin-angiotensin-aldosterone System Inhibitors With Coronavirus Disease 2019 (COVID-19)- Related Outcomes in Korea: A Nationwide Population-based Cohort Study.
+   Overall: This study is highly relevant to the review question because it explicitly examines COVID-19 in a human nationwide cohort and reports original empirical data from Korea. The abstract includes directly relevant fatality and severity outcomes, especially in-hospital mortality and ventilation-related measures.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+130. PMID: 32125452 [Score: 4/4]
+   Title: Clinical predictors of mortality due to COVID-19 based on an analysis of data of 150 patients from Wuhan, China.
+   Overall: Based on title and keywords alone, this study is highly relevant to the review question: it explicitly concerns COVID-19, analyzes 150 human patients in Wuhan, and focuses on mortality. While title-only screening always carries some uncertainty without an abstract, the available metadata strongly indicates a real-world primary study reporting a target fatality outcome.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+131. PMID: 32391877 [Score: 4/4]
+   Title: Characteristics and clinical significance of myocardial injury in patients with severe coronavirus disease 2019.
+   Overall: The paper is highly relevant because it is an original human study of hospitalized severe COVID-19 patients and explicitly reports mortality outcomes. Although the geographic setting is not specified in the provided text, the abstract clearly presents real-world clinical data on death risk and severity-related prognostic factors.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+132. PMID: 32289565 [Score: 4/4]
+   Title: Epidemiological and clinical features of 125 Hospitalized Patients with COVID-19 in Fuyang, Anhui, China.
+   Overall: This study is highly relevant because it is an original human COVID-19 hospital-based study in a real geographic setting. The abstract explicitly reports key severity and fatality outcomes, including ICU transfer and deaths, alongside clinical characteristics.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+133. PMID: 32618693 [Score: 4/4]
+   Title: Clinical Features of Coronavirus Disease 2019 Patients With Mechanical Ventilation: A Nationwide Study in China.
+   Overall: This study is highly relevant to the review question because it explicitly examines COVID-19 in hospitalized human patients and reports original nationwide clinical data from China. It directly quantifies severity and fatality-related outcomes, including invasive mechanical ventilation and in-hospital death, making the parameter relevance especially strong.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+134. PMID: 32376592 [Score: 4/4]
+   Title: [Tracheal intubation in patients with severe and critical COVID-19: analysis of 18 cases].
+   Overall: This paper is highly relevant because it reports original human clinical data on severe/critical COVID-19 patients and explicitly includes mortality and invasive mechanical ventilation outcomes. The only limitation at title/abstract stage is that the geographic location is not stated, though the study clearly reflects a real-world clinical setting.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+135. PMID: 32427613 [Score: 4/4]
+   Title: Extracorporeal Membrane Oxygenation for Coronavirus Disease 2019-Induced Acute Respiratory Distress Syndrome: A Multicenter Descriptive Study.
+   Overall: This study is highly relevant because it explicitly examines SARS-CoV-2/COVID-19 in a human ICU population using original multicenter clinical data from real hospitals. It directly reports severe disease management and quantified mortality outcomes, which align closely with fatality and severity outcomes of interest.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+136. PMID: 32105632 [Score: 4/4]
+   Title: Clinical course and outcomes of critically ill patients with SARS-CoV-2 pneumonia in Wuhan, China: a single-centered, retrospective, observational study.
+   Overall: This study is highly relevant to the review question because it is an original human study of SARS-CoV-2 infection in a real clinical setting. It explicitly reports fatality and severity outcomes, including 28-day mortality, ARDS, and mechanical ventilation among critically ill patients.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+137. PMID: 32543710 [Score: 4/4]
+   Title: Impact of comorbidities on patients with COVID-19: A large retrospective study in Zhejiang, China.
+   Overall: This study is highly relevant to the review question because it is an original human COVID-19 cohort from a real-world setting and directly reports severe clinical outcomes. The abstract explicitly includes ICU admission, invasive ventilation, death, and severe cases, which align closely with fatality and severity outcomes of SARS-CoV-2 infection.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+138. PMID: 32125362 [Score: 4/4]
+   Title: Epidemiologic Features and Clinical Course of Patients Infected With SARS-CoV-2 in Singapore.
+   Overall: This study is highly relevant to the review question because it reports original human data on PCR-confirmed SARS-CoV-2 cases in a real-world hospital setting. The abstract explicitly provides severity outcomes including oxygen requirement, intensive care, respiratory deterioration, and deaths (none observed), which directly inform fatality and severity assessment.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+139. PMID: 32410714 [Score: 4/4]
+   Title: Patients with COVID-19 in 19 ICUs in Wuhan, China: a cross-sectional study.
+   Overall: This study is highly relevant to the review question because it explicitly examines COVID-19 in a human hospital population and reports original multicenter ICU data from Wuhan. It directly quantifies severe clinical outcomes and fatality, including invasive mechanical ventilation and mortality among critically ill patients.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+140. PMID: 32582740 [Score: 4/4]
+   Title: A Retrospective Analysis of the Clinical and Epidemiological Characteristics of COVID-19 Patients in Henan Provincial People's Hospital, Zhengzhou, China.
+   Overall: This paper is highly relevant because it is an original human study of confirmed COVID-19 patients in a defined real-world setting. The abstract explicitly reports severity comparisons, mechanical ventilation use, and death, which directly align with fatality and severity outcomes of SARS-CoV-2 infection.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+141. PMID: 32425003 [Score: 4/4]
+   Title: Clinical characteristics of 34 COVID-19 patients admitted to intensive care unit in Hangzhou, China.
+   Overall: This paper is highly aligned with the review question because it is an original human study of COVID-19 ICU patients in a real clinical setting. It explicitly reports severity-related outcomes through ICU care and invasive mechanical ventilation status, along with clinical characteristics of severe disease.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+142. PMID: 32984539 [Score: 4/4]
+   Title: Evaluation of organ function in patients with severe COVID-19 infections.
+   Overall: This study is highly relevant because it is an original human clinical analysis focused on severe COVID-19 patients and explicitly compares survival versus non-survival outcomes. It also reports ventilation status and prognostic markers related to severity, although the geographic setting is not specified.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+143. PMID: 32766546 [Score: 4/4]
+   Title: Characteristics, risk factors and outcomes among the first consecutive 1096 patients diagnosed with COVID-19 in Kuwait.
+   Overall: This study is highly aligned with the review question because it is an original human COVID-19 cohort in a real-world national setting and explicitly reports both mortality and ICU admission outcomes. The title and abstract provide direct quantitative evidence on fatality and severity, along with risk factor analyses for those endpoints.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+144. PMID: 32546437 [Score: 4/4]
+   Title: Clinical characteristics and outcomes of the first 63 adult patients hospitalized with COVID-19: An experience from Oman.
+   Overall: This study is highly relevant to the review question because it directly examines SARS-CoV-2 infection in a human hospital cohort using original empirical data from Oman. It explicitly reports key fatality and severity outcomes, including mortality, ICU admission, and mechanical ventilation, along with associated clinical characteristics.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+145. PMID: 32535147 [Score: 4/4]
+   Title: Ibuprofen use and clinical outcomes in COVID-19 patients.
+   Overall: This study is highly relevant because it directly examines confirmed COVID-19 patients in a real-world human cohort and reports original empirical outcome data. The abstract explicitly includes fatality and severity endpoints, especially mortality and respiratory support/mechanical ventilation, which closely match the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+146. PMID: 32552751 [Score: 4/4]
+   Title: Epidemiological and clinical features of 2019 novel coronavirus diseases (COVID-19) in the South of Iran.
+   Overall: This is a primary human COVID-19 study conducted in a real clinical setting in Iran. It directly reports severity-related clinical findings, ICU involvement, and mortality, making it highly relevant to fatality and severity outcomes of SARS-CoV-2 infection.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+147. PMID: 32463545 [Score: 4/4]
+   Title: Obesity and COVID-19: An Italian Snapshot.
+   Overall: This paper is highly relevant to the review question because it is an original human COVID-19 study conducted in a real clinical setting. It explicitly reports severity outcomes central to the target parameters, especially ventilation requirement and ICU-level care, although mortality/fatality is not mentioned.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+148. PMID: 32250385 [Score: 4/4]
+   Title: Baseline Characteristics and Outcomes of 1591 Patients Infected With SARS-CoV-2 Admitted to ICUs of the Lombardy Region, Italy.
+   Overall: This study is highly relevant to the review question because it is an original human case series of laboratory-confirmed SARS-CoV-2 infection in a defined clinical setting. It directly reports severity and fatality outcomes, including ICU mortality and mechanical ventilation, in a real-world regional cohort.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+149. PMID: 32448405 [Score: 4/4]
+   Title: Characteristics of patients with COVID-19 pneumonia at Hvidovre Hospital, March-April 2020.
+   Overall: This study is highly relevant to the review question because it directly examines hospitalized human SARS-CoV-2 cases and reports primary empirical severity and fatality outcomes. The abstract provides explicit quantified endpoints for death and invasive mechanical ventilation in a real-world hospital setting.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+150. PMID: 32351196 [Score: 4/4]
+   Title: Initial experiences from patients with COVID-19 on ventilatory support in Denmark.
+   Overall: This study is highly relevant because it is an original human COVID-19 ICU case series from Denmark with explicit mortality and severity endpoints. The abstract directly reports ICU care, invasive mechanical ventilation, prolonged respiratory support, and deaths among SARS-CoV-2 patients.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+151. PMID: 32526083 [Score: 4/4]
+   Title: Abnormal liver function tests predict transfer to intensive care unit and death in COVID-19.
+   Overall: This study is highly relevant because it explicitly examines hospitalized human COVID-19 patients and reports original multicentre empirical data. It directly quantifies key severity and fatality outcomes, including death, ICU transfer, and mechanical ventilation, although the geographic setting is not specified.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+152. PMID: 33186355 [Score: 4/4]
+   Title: Epidemiology, risk factors and clinical course of SARS-CoV-2 infected patients in a Swiss university hospital: An observational retrospective study.
+   Overall: This paper is highly relevant to the review because it is an original human study of laboratory-confirmed SARS-CoV-2 infection in a real clinical setting. It explicitly reports a key severity endpoint—mechanical ventilation—with quantified outcome data and associated risk factors.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+153. PMID: 32900326 [Score: 4/4]
+   Title: Characteristics, treatment, outcomes and cause of death of invasively ventilated patients with COVID-19 ARDS in Milan, Italy.
+   Overall: This paper is highly relevant to the review question because it studies confirmed COVID-19 patients in ICU care and reports explicit severity and fatality outcomes. The abstract provides original hospital-based empirical data on invasive mechanical ventilation, ICU outcomes, short-term mortality, and mortality risk factors in a defined clinical population.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+154. PMID: 32352401 [Score: 4/4]
+   Title: Clinical features, laboratory characteristics, and outcomes of patients hospitalized with coronavirus disease 2019 (COVID-19): Early report from the United States.
+   Overall: This is a highly relevant original hospital-based COVID-19 study in humans. The abstract explicitly reports severity and fatality-related outcomes, including ICU admission, mechanical ventilation, and deaths, within a real-world U.S. clinical setting.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+155. PMID: 32471884 [Score: 4/4]
+   Title: Characterization and clinical course of 1000 patients with coronavirus disease 2019 in New York: retrospective case series.
+   Overall: This paper is highly relevant to the review question because it is an original human COVID-19 case series conducted in a real clinical setting. The abstract explicitly reports key fatality and severity outcomes, including mortality, ICU care, and mechanical ventilation/intubation.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+156. PMID: 32452888 [Score: 4/4]
+   Title: ICU and Ventilator Mortality Among Critically Ill Adults With Coronavirus Disease 2019.
+   Overall: This paper is highly relevant to the review question because it directly examines SARS-CoV-2/COVID-19 in a human hospital cohort and reports quantified mortality and mechanical ventilation outcomes. It is original empirical evidence from a defined real-world ICU setting, with fatality and severity outcomes as central endpoints.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+157. PMID: 32227758 [Score: 4/4]
+   Title: Covid-19 in Critically Ill Patients in the Seattle Region - Case Series.
+   Overall: This paper is highly relevant to the review question because it is an original human study of confirmed Covid-19 patients in a real clinical setting and directly reports key severity and fatality outcomes. The abstract explicitly quantifies ICU-level severity, mechanical ventilation, and death among critically ill patients.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+158. PMID: 32444880 [Score: 4/4]
+   Title: Clinical Features and Outcomes of 105 Hospitalized Patients With COVID-19 in Seattle, Washington.
+   Overall: This study is highly relevant because it directly examines SARS-CoV-2 infection in a human hospital cohort and reports original empirical data from a defined geographic setting. The abstract explicitly includes key target outcomes for the review, especially mortality, ICU-defined severe disease, and mechanical ventilation.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+159. PMID: 32407284 [Score: 4/4]
+   Title: Characteristics and Outcomes of Coronavirus Disease Patients under Nonsurge Conditions, Northern California, USA, March-April 2020.
+   Overall: This study is highly relevant because it directly examines hospitalized COVID-19 patients in a real-world US setting and reports original empirical outcome data. The abstract explicitly provides mortality and ICU-related severity measures, which closely match the review's target parameters.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+160. PMID: 32960645 [Score: 4/4]
+   Title: Patient Trajectories Among Persons Hospitalized for COVID-19 : A Cohort Study.
+   Overall: This study is highly aligned with the review question: it is an original human cohort study of hospitalized COVID-19 patients in a defined U.S. setting. The abstract explicitly quantifies death and severe disease outcomes, making it strongly relevant to fatality and severity outcomes of SARS-CoV-2 infection.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+161. PMID: 32379729 [Score: 4/4]
+   Title: Characteristics and Clinical Outcomes of Adult Patients Hospitalized with COVID-19 - Georgia, March 2020.
+   Overall: This study is highly relevant to the review question because it explicitly examines SARS-CoV-2/COVID-19 in a human hospitalized cohort using original empirical data from Georgia hospitals. It directly reports key severity and fatality outcomes, specifically invasive mechanical ventilation and in-hospital death.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+162. PMID: 32445512 [Score: 4/4]
+   Title: Severe Obesity as an Independent Risk Factor for COVID-19 Mortality in Hospitalized Patients Younger than 50.
+   Overall: This study is highly aligned with the review question because it explicitly examines SARS-CoV-2/COVID-19 in a human hospitalized population and reports original empirical mortality data. The abstract provides quantified fatality outcomes and effect estimates in a real-world clinical setting.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+163. PMID: 32540837 [Score: 4/4]
+   Title: New York Inner City Hospital COVID-19 Experience and Current Data: Retrospective Analysis at the Epicenter of the American Coronavirus Outbreak.
+   Overall: This study is highly relevant to the review question because it directly examines confirmed SARS-CoV-2 patients in a real hospital setting and reports original empirical data. It explicitly quantifies mortality and mechanical ventilation outcomes and analyzes correlates of both fatality and severity.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+164. PMID: 32461326 [Score: 4/4]
+   Title: Baseline characteristics and outcomes of patients with COVID-19 admitted to intensive care units in Vancouver, Canada: a case series.
+   Overall: This paper is highly relevant to the review question because it reports original human data on laboratory-confirmed COVID-19 patients in ICUs and provides explicit severity and fatality outcomes. The abstract includes quantified mortality and invasive mechanical ventilation results in a defined real-world setting.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+165. PMID: 32422233 [Score: 4/4]
+   Title: Severe obesity, increasing age and male sex are independently associated with worse in-hospital outcomes, and higher in-hospital mortality, in a cohort of patients with COVID-19 in the Bronx, New York.
+   Overall: This study is highly relevant to the review question: it directly examines COVID-19 in a human hospital cohort, reports original empirical data from a defined geographic setting, and explicitly quantifies mortality and severity-related outcomes. The title and abstract provide clear evidence for both fatality and severe in-hospital outcome parameters.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+166. PMID: 32444366 [Score: 4/4]
+   Title: Factors associated with hospital admission and critical illness among 5279 people with coronavirus disease 2019 in New York City: prospective cohort study.
+   Overall: This study is highly relevant to the review question because it directly examines SARS-CoV-2 infection in a large human cohort and reports original empirical data from a real clinical setting. It explicitly quantifies severity and fatality-related outcomes, including mortality, ICU-level critical illness, and mechanical ventilation.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+167. PMID: 33708136 [Score: 4/4]
+   Title: Correlation of Coagulation Parameters With Clinical Outcomes During the Coronavirus-19 Surge in New York: Observational Cohort.
+   Overall: This study is highly relevant because it directly examines hospitalized COVID-19 patients in a real clinical setting and reports original empirical data. The abstract explicitly includes mortality and illness severity outcomes, with quantified death results and analyses of predictors related to survival.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+168. PMID: 32320003 [Score: 4/4]
+   Title: Presenting Characteristics, Comorbidities, and Outcomes Among 5700 Patients Hospitalized With COVID-19 in the New York City Area.
+   Overall: This study is highly relevant to the review question. It is an original human case series of confirmed SARS-CoV-2 infection in a defined US hospital system and explicitly quantifies fatality and severity outcomes such as ICU care, mechanical ventilation, and death.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+169. PMID: 32617986 [Score: 4/4]
+   Title: Characteristics and clinical outcomes of COVID-19 patients in an underserved-inner city population: A single tertiary center cohort.
+   Overall: This study is highly relevant because it is an original human COVID-19 cohort conducted in a real clinical setting. The abstract explicitly reports fatality and severity-related outcomes, including inpatient mortality and mechanical ventilation, with quantified associations.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+170. PMID: 32869342 [Score: 4/4]
+   Title: Neutrophil calprotectin identifies severe pulmonary disease in COVID-19.
+   Overall: This study is highly relevant to the review question because it explicitly examines COVID-19 in hospitalized human patients and reports original empirical data. It directly addresses severity outcomes through mechanical ventilation and respiratory deterioration, although mortality/fatality outcomes are not mentioned and geographic detail is limited.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+171. PMID: 32543702 [Score: 4/4]
+   Title: Clinical Characteristics and Morbidity Associated With Coronavirus Disease 2019 in a Series of Patients in Metropolitan Detroit.
+   Overall: This study is highly aligned with the review question because it examines confirmed COVID-19 cases in a human clinical population using original empirical data from a defined US setting. The abstract directly quantifies key severity and fatality outcomes, including ICU admission, mechanical ventilation, and mortality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+172. PMID: 34196877 [Score: 4/4]
+   Title: Incidence, risk factors and outcome of acute kidney injury (AKI) in patients with COVID-19.
+   Overall: This paper is highly aligned with the review question because it is an original human COVID-19 study in a real clinical setting and explicitly reports mortality outcomes. Although the main focus is AKI as a complication, the abstract directly quantifies death-related severity outcomes among SARS-CoV-2 patients.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+173. PMID: 32511575 [Score: 3/4]
+   Title: Why estimating population-based case fatality rates during epidemics may be misleading.
+   Overall: This paper is highly relevant on disease and fatality-outcome dimensions because it explicitly addresses SARS-CoV-2/COVID-19 mortality ratios and CFR interpretation. Relevance is moderated by limited explicit evidence on human population details and geography, and by the study appearing primarily as modeling with available data rather than clearly presenting direct clinical severity outcome datasets.
+   维度评分: D=4 P=2 L=2 E=3 Param=4

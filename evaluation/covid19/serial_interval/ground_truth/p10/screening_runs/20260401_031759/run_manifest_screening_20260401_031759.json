@@ -1,0 +1,92 @@
+{
+  "timestamp_utc": "2026-03-31T19:17:59.412380+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+  "argv": [
+    "dev/literature_search/scripts/cli/screening_llm_batch.py",
+    "--project-root",
+    ".",
+    "--profile",
+    "P10",
+    "--resume-possible-fulltext"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "P10",
+    "batch_size": 20,
+    "batch_concurrency": 1,
+    "auto_fulltext": true,
+    "fulltext_only": true,
+    "research_question": "What are the serial interval and generation interval/time estimates reported for SARS-CoV-2, including original strains and variants (e.g. Delta, Omicron)?"
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10\\project_10_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T16:06:37.420031+00:00",
+      "type": "file",
+      "size_bytes": 2191256,
+      "sha256": "8372fc184ad991ae20297a696dc517152175fe260f848b5b572ec279e44bcacc"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10\\project_10_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:14:10.110602+00:00",
+      "type": "file",
+      "size_bytes": 10315,
+      "sha256": "5a5f087b0b905bf84e02e7c85d49dd32d16b9640d42345df942cdfc039d4cd4d"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10\\project_10_screened_stage2_possible_fulltext.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T19:17:59.410012+00:00",
+      "type": "file",
+      "size_bytes": 11642,
+      "sha256": "31ce08f1da891c55364b438cc5d7ff7d42238b8ae4621630f435e59f6cd32610"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10\\screening_logs\\screening_report_20260401_031759.txt",
+      "exists": true,
+      "mtime_utc": "2026-03-31T19:17:59.411378+00:00",
+      "type": "file",
+      "size_bytes": 4283,
+      "sha256": "92f7a8ff05e7c37d39e537fd9da9937e90a0311ec48a84b1663decdb813fac78"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": "openai",
+      "model": "openai/gpt-5.4",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 120,
+      "verify_ssl": false,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": true
+    }
+  },
+  "extra": {
+    "paper_count": 3,
+    "ground_truth_count": 28,
+    "ground_truth_in_pool": 28,
+    "strong_count": 1,
+    "possible_count": 2,
+    "unlikely_count": 0,
+    "error_count": 0,
+    "fulltext_error_count": 1
+  }
+}

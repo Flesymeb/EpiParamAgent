@@ -1,0 +1,79 @@
+{
+  "timestamp_utc": "2026-03-31T09:03:56.484685+00:00",
+  "workflow": "screening_evaluation",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search",
+  "argv": [
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search\\scripts\\ops\\..\\\\cli\\screening_evaluation.py",
+    "screening-performance",
+    "--project-root",
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "--profile",
+    "P5",
+    "--topic",
+    "fatality"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "command": "screening-performance",
+    "profile": "P5",
+    "topic": "fatality"
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p5\\project_5_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:11:06.609482+00:00",
+      "type": "file",
+      "size_bytes": 22818,
+      "sha256": "2c2f5ebd6db9d47a3b0731b6829fee5f9c79fe0f44d3dc5af52a347e6e14afb3"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p5\\project_5_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T09:03:54.306972+00:00",
+      "type": "file",
+      "size_bytes": 5352325,
+      "sha256": "d42ed59e7c29717801b35f65d38edc0a93f587092e8024c9cee24967a125d402"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p5",
+      "exists": true,
+      "mtime_utc": "2026-03-31T08:37:47.878495+00:00",
+      "type": "dir",
+      "file_count": 9,
+      "dir_digest": "ebc1d9fa0fd344d0b7d0bd85253214fd0c62da2182a0a896fba959d114b239c5",
+      "dir_digest_truncated": false
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "summary": {
+      "ground_truth_count": 48,
+      "screened_count": 1882,
+      "tp": 9,
+      "fp": 13,
+      "fn": 39,
+      "tn": 1821,
+      "strong_count": 8,
+      "possible_count": 1,
+      "unlikely_count": 39,
+      "not_found_count": 0,
+      "sensitivity": 0.1875,
+      "specificity": 0.992912,
+      "precision": 0.409091,
+      "npv": 0.979032,
+      "f1": 0.257143,
+      "accuracy": 0.97237
+    }
+  }
+}

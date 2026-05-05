@@ -1,0 +1,51 @@
+{
+  "timestamp_utc": "2026-05-04T16:05:39.499374+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_prepare_raw.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP4",
+    "--query",
+    "((“Monkeypox epidemiology” [All Fields OR ((“monkeypox” [MeSH Terms] OR “monkeypox” [All Fields]) AND (“epidemiology” [MeSH Subheading] OR “epidemiology” [All Fields] OR “surveillance” [All Fields] OR “epidemiology” [MeSH Terms] OR “surveillance” [All Fields] OR “surveillances” [All Fields] OR “surveilled” [All Fields] OR “surveillance” [All Fields]))) AND (“nigeria” [MeSH Terms] OR “nigeria” [All Fields] OR “nigeria s” [All Fields])) OR ((“monkeypox” [MeSH Terms] OR “monkeypox” [All Fields] OR “Monkeypox outbreak” [All Fields]) AND “nigeria*” [All Fields])",
+    "--include-gt",
+    "--fix-missing"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "1684f3dbd11d7208abbd34671c17ef96fffde46d",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP4",
+    "topic": "",
+    "query": "((“Monkeypox epidemiology” [All Fields OR ((“monkeypox” [MeSH Terms] OR “monkeypox” [All Fields]) AND (“epidemiology” [MeSH Subheading] OR “epidemiology” [All Fields] OR “surveillance” [All Fields] OR “epidemiology” [MeSH Terms] OR “surveillance” [All Fields] OR “surveillances” [All Fields] OR “surveilled” [All Fields] OR “surveillance” [All Fields]))) AND (“nigeria” [MeSH Terms] OR “nigeria” [All Fields] OR “nigeria s” [All Fields])) OR ((“monkeypox” [MeSH Terms] OR “monkeypox” [All Fields] OR “Monkeypox outbreak” [All Fields]) AND “nigeria*” [All Fields])",
+    "date_range": "",
+    "retmax": "all",
+    "include_gt": true,
+    "fix_missing": true,
+    "medline_only": false
+  },
+  "inputs": [],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/fatality/p4/project_4_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-04T16:05:39.498443+00:00",
+      "type": "file",
+      "size_bytes": 524887,
+      "sha256": "8cb3280d9fcabafa027eb06a0b66875e270240fcd96877603e17a712199f383a"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 331,
+    "ground_truth_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/fatality/p4/project_4_groundtruth.csv"
+  }
+}

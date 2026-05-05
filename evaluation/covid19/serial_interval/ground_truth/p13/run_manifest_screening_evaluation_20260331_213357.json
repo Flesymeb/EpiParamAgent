@@ -1,0 +1,115 @@
+{
+  "timestamp_utc": "2026-03-31T13:33:57.145557+00:00",
+  "workflow": "screening_evaluation",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search",
+  "argv": [
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search\\scripts\\ops\\..\\\\cli\\screening_evaluation.py",
+    "screening-performance",
+    "--project-root",
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "--profile",
+    "P13",
+    "--topic",
+    "serial_interval"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "command": "screening-performance",
+    "profile": "P13",
+    "topic": "serial_interval"
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\project_13_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:14:47.928905+00:00",
+      "type": "file",
+      "size_bytes": 20225,
+      "sha256": "ccac79edf85b80642b7795fdb151668a178c0c23a397bc9f6f8299c0bfd1f8e3"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\project_13_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T13:33:54.582196+00:00",
+      "type": "file",
+      "size_bytes": 357905,
+      "sha256": "c29bb9121f14831ce3d8d6b77776364af7aa8e83d51aab2c0e02f2f7aeec54d1"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13",
+      "exists": true,
+      "mtime_utc": "2026-03-31T13:33:57.144536+00:00",
+      "type": "dir",
+      "file_count": 43,
+      "dir_digest": "02a7b92b9831904792582f9649a8cb52e43a60303b01fb27388975273ccb69a6",
+      "dir_digest_truncated": false
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\paper_summary.tsv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T13:33:57.144536+00:00",
+      "type": "file",
+      "size_bytes": 305,
+      "sha256": "04fe3c29fd24891453beb016c6eecc346003e00018ace111e897aa1ae7ad9347"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "summary": {
+      "topic": "serial_interval",
+      "project_label": "P13",
+      "ground_truth_count": 51,
+      "screened_count": 111,
+      "tp": 42,
+      "fp": 27,
+      "fn": 9,
+      "tn": 33,
+      "strong_count": 39,
+      "possible_count": 3,
+      "unlikely_count": 9,
+      "not_found_count": 0,
+      "sensitivity": 0.823529,
+      "specificity": 0.55,
+      "precision": 0.608696,
+      "npv": 0.785714,
+      "f1": 0.7,
+      "accuracy": 0.675676,
+      "workload_reduction": 0.378378,
+      "nns": 1.642857,
+      "mcc": 0.383828,
+      "wss95": 0.328378,
+      "recall_ci_low": 0.697459,
+      "recall_ci_high": 0.904276,
+      "precision_ci_low": 0.49074,
+      "precision_ci_high": 0.715187,
+      "workload_reduction_ci_low": 0.288288,
+      "workload_reduction_ci_high": 0.468468,
+      "nns_ci_low": 1.382979,
+      "nns_ci_high": 2.032258,
+      "recall_ci_display": "82.4% [69.7%, 90.4%]",
+      "precision_display": "60.9%",
+      "workload_reduction_display": "37.8%",
+      "nns_display": "1.64",
+      "precision_ci_display": "60.9% [49.1%, 71.5%]",
+      "workload_reduction_ci_display": "37.8% [28.8%, 46.8%]",
+      "nns_ci_display": "1.64 [1.38, 2.03]",
+      "specificity_display": "55.0%",
+      "npv_display": "78.6%",
+      "f1_display": "70.0%",
+      "accuracy_display": "67.6%",
+      "mcc_display": "0.384",
+      "wss95_display": "32.8%"
+    },
+    "paper_summary_tsv": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\paper_summary.tsv"
+  }
+}

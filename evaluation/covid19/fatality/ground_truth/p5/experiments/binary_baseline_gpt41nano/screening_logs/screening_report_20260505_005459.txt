@@ -1,0 +1,2825 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-05-05 00:54:59
+研究问题: What seroprevalence or antibody studies can support inference of SARS-CoV-2 infection fatality rates?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/covid19/GT_1/GT_export/fatality/p5/project_5_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/covid19/GT_1/GT_export/fatality/p5/experiments/binary_baseline_gpt41nano/project_5_screened.csv
+模型配置: openai/z-ai/glm-5.1
+批处理大小: 20
+批次并发: 8
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │    556   │   29.5%  │
+│ 🤔 Possible candidates   │      0   │    0.0%  │
+│ 😐 Unlikely candidates   │   1326   │   70.5%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │   1882   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  0.00  │    0.0%  │  0/ 0/ 0/ 0/ 0                 │
+│ Population      │  0.00  │    0.0%  │  0/ 0/ 0/ 0/ 0                 │
+│ Location        │  0.00  │    0.0%  │  0/ 0/ 0/ 0/ 0                 │
+│ Evidence        │  0.00  │    0.0%  │  0/ 0/ 0/ 0/ 0                 │
+│ Parameter       │  0.00  │    0.0%  │  0/ 0/ 0/ 0/ 0                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (556 篇)
+================================================================================
+
+1. PMID: 32526206 [Score: 4/4]
+   Title: SARS-CoV-2 Reverse Genetics Reveals a Variable Infection Gradient in the Respiratory Tract.
+   Overall: The paper studies SARS-CoV-2 infection, which is relevant to COVID-19, and discusses infection gradients, which relate to seroprevalence or serological aspects of the disease.
+   维度评分: D= P= L= E= Param=
+
+2. PMID: 32780998 [Score: 4/4]
+   Title: SARS-CoV-2-specific ELISA development.
+   Overall: The paper reports on a serological assay for SARS-CoV-2, which directly relates to seroprevalence and antibody survey parameters for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+3. PMID: 32883673 [Score: 4/4]
+   Title: Are we underestimating seroprevalence of SARS-CoV-2?
+   Overall: The title and keywords indicate the paper discusses SARS-CoV-2 and seroepidemiologic studies, aligning with the specified parameters for seroprevalence research.
+   维度评分: D= P= L= E= Param=
+
+4. PMID: 32472745 [Score: 4/4]
+   Title: SARS-CoV-2 and human milk: What is the evidence?
+   Overall: The paper reports on SARS-CoV-2 in human milk, including detection of the virus and antibodies, directly relating to serological and viral presence parameters in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+5. PMID: 32755524 [Score: 4/4]
+   Title: [SARS-CoV-2 and Microbiological Diagnostic Dynamics in COVID-19 Pandemic].
+   Overall: The paper discusses SARS-CoV-2 and reports on antibody testing, which aligns with the parameters for seroprevalence and serological surveys in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+6. PMID: 32726200 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2-Specific Antibodies, Faroe Islands.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2 antibodies, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+7. PMID: 32302058 [Score: 4/4]
+   Title: Laboratory testing of SARS-CoV, MERS-CoV, and SARS-CoV-2 (2019-nCoV): Current status, challenges, and countermeasures.
+   Overall: The paper discusses serological testing for SARS-CoV-2, which aligns with the specified parameters for seroprevalence and serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+8. PMID: 32720214 [Score: 4/4]
+   Title: Dynamic Changes of Antibodies to SARS-CoV-2 in COVID-19 Patients at Early Stage of Outbreak.
+   Overall: The paper studies SARS-CoV-2 antibodies in COVID-19 patients and reports on antibody detection, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+9. PMID: 32947121 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2-specific antibodies in cancer outpatients in Madrid (Spain): A single center, prospective, cohort study and a review of available data.
+   Overall: The paper studies seroprevalence of SARS-CoV-2 antibodies in a specific patient group, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+10. PMID: 32420937 [Score: 4/4]
+   Title: Current laboratory diagnostics of coronavirus disease 2019 (COVID-19).
+   Overall: The paper discusses serological testing for COVID-19, reporting on antibody development, which aligns with the parameter of seroprevalence or related measures.
+   维度评分: D= P= L= E= Param=
+
+11. PMID: 32593741 [Score: 4/4]
+   Title: Diagnostic strategies for SARS-CoV-2 infection and interpretation of microbiological results.
+   Overall: The paper discusses serology and antibody testing for SARS-CoV-2, directly relating to the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+12. PMID: 32900690 [Score: 4/4]
+   Title: COVID-19 in Peritoneal Dialysis Patients.
+   Overall: The title indicates a focus on COVID-19 in a specific patient group, and keywords include COVID-19 and relevant clinical context, suggesting the study may report on seroprevalence or related parameters.
+   维度评分: D= P= L= E= Param=
+
+13. PMID: 32428207 [Score: 4/4]
+   Title: Longitudinal Monitoring of SARS-CoV-2 IgM and IgG Seropositivity to Detect COVID-19.
+   Overall: The paper reports on serological testing for SARS-CoV-2, including data on IgM and IgG seroconversion, which aligns with the specified parameters for seroprevalence and serological surveys in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+14. PMID: 32687805 [Score: 4/4]
+   Title: Serology testing in the COVID-19 pandemic response.
+   Overall: The paper discusses serology testing in the context of COVID-19, aligning with the specified parameters of seroprevalence and serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+15. PMID: 32727884 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence among parturient women in Philadelphia.
+   Overall: The paper directly studies SARS-CoV-2 seroprevalence among pregnant women, reporting on antibody prevalence, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+16. PMID: 32412044 [Score: 4/4]
+   Title: Antibody Testing for COVID-19.
+   Overall: The paper focuses on antibody testing for COVID-19, which relates directly to serological surveys and antibody prevalence in the context of SARS-CoV-2, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+17. PMID: 32414781 [Score: 4/4]
+   Title: Serology assays to manage COVID-19.
+   Overall: The title indicates a focus on serology assays related to COVID-19, which likely involves seroprevalence or antibody detection studies, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+18. PMID: 32878898 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence in oncology healthcare professionals and patients with cancer at a tertiary care centre during the COVID-19 pandemic.
+   Overall: The paper studies SARS-CoV-2 seroprevalence in a specific population, reporting antibody prevalence, which aligns with the parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+19. PMID: 32254064 [Score: 4/4]
+   Title: Deployment of convalescent plasma for the prevention and treatment of COVID-19.
+   Overall: The paper discusses COVID-19 and reports on the use of convalescent plasma, which involves serological aspects related to SARS-CoV-2, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+20. PMID: 32894217 [Score: 4/4]
+   Title: Quantifying antibody kinetics and RNA detection during early-phase SARS-CoV-2 infection by time since symptom onset.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody detection, fitting the specified parameters for seroprevalence and serological surveys.
+   维度评分: D= P= L= E= Param=
+
+21. PMID: 32898715 [Score: 4/4]
+   Title: The kinetics of viral load and antibodies to SARS-CoV-2.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, including serological data, relevant to the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+22. PMID: 32741406 [Score: 4/4]
+   Title: Seroprevalence of severe acute respiratory coronavirus virus 2 (SARS-CoV-2) antibodies among healthcare workers with differing levels of coronavirus disease 2019 (COVID-19) patient exposure.
+   Overall: The paper studies SARS-CoV-2 antibodies among healthcare workers, reporting seroprevalence, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+23. PMID: 32475012 [Score: 4/4]
+   Title: Testing For SARS-CoV-2: The Day the World Turned its Attention to the Clinical Laboratory.
+   Overall: The abstract discusses serological tests for COVID-19, which aligns with the parameter of seroprevalence and serological surveys related to SARS-CoV-2.
+   维度评分: D= P= L= E= Param=
+
+24. PMID: 32652475 [Score: 4/4]
+   Title: Quantification of SARS-CoV-2 antibodies with eight commercially available immunoassays.
+   Overall: The paper studies SARS-CoV-2 antibodies using serological assays, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+25. PMID: 34045376 [Score: 4/4]
+   Title: Convalescent plasma therapy for Covid-19: A systematic review.
+   Overall: The paper studies COVID-19 and reports on serological outcomes related to convalescent plasma therapy, which involves antibodies against SARS-CoV-2, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+26. PMID: 32790181 [Score: 4/4]
+   Title: Closing the serological gap in the diagnostic testing for COVID-19: The value of anti-SARS-CoV-2 IgA antibodies.
+   Overall: The paper studies SARS-CoV-2 antibodies, including IgA, in a COVID-19 population, reporting on serological parameters relevant to the review.
+   维度评分: D= P= L= E= Param=
+
+27. PMID: 32705575 [Score: 4/4]
+   Title: Serologic Response to SARS-CoV-2 in COVID-19 Patients with Different Severity.
+   Overall: The paper studies COVID-19 and reports on serologic antibody responses, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+28. PMID: 32828701 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence in a Belgian cohort of patients with cystic fibrosis.
+   Overall: The paper reports on seroprevalence of anti-SARS-CoV-2 antibodies in a cohort of patients with cystic fibrosis, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+29. PMID: 32764107 [Score: 4/4]
+   Title: Epidemiology of SARS-CoV-2 antibodies among firefighters/paramedics of a US fire department: a cross-sectional study.
+   Overall: The paper studies SARS-CoV-2 antibodies among a specific population, reporting seroprevalence, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+30. PMID: 32588125 [Score: 4/4]
+   Title: [Seroprevalence and SARS-CoV-2 testing in healthcare occupations].
+   Overall: The paper discusses seroprevalence and SARS-CoV-2 testing, directly relating to the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+31. PMID: 32827125 [Score: 4/4]
+   Title: A highly specific and sensitive serological assay detects SARS-CoV-2 antibody levels in COVID-19 patients that correlate with neutralization.
+   Overall: The paper studies SARS-CoV-2 and reports on serological testing, specifically antibody detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+32. PMID: 32681308 [Score: 4/4]
+   Title: Evaluations of the serological test in the diagnosis of 2019 novel coronavirus (SARS-CoV-2) infections during the COVID-19 outbreak.
+   Overall: The paper studies serological testing for SARS-CoV-2, reporting on antibody detection, which aligns with the specified parameters for seroprevalence or serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+33. PMID: 32430429 [Score: 4/4]
+   Title: Serology characteristics of SARS-CoV-2 infection after exposure and post-symptom onset.
+   Overall: The paper studies serology characteristics of SARS-CoV-2 infection, reporting antibody detection and seroconversion, which directly relates to the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+34. PMID: 32890937 [Score: 4/4]
+   Title: Unexpected diagnosis of COVID-19-associated disorders by SARS-CoV-2-specific serology.
+   Overall: The paper reports on serological testing for SARS-CoV-2, which is relevant to the parameter of seroprevalence or serological survey in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+35. PMID: 32828791 [Score: 4/4]
+   Title: Analysis of COVID-19 convalescent plasma for SARS-CoV-2 IgG using two commercial immunoassays.
+   Overall: The paper studies SARS-CoV-2 IgG antibodies, which relates to seroprevalence, and reports on antibody detection assays, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+36. PMID: 32840002 [Score: 4/4]
+   Title: Persistence of SARS-CoV-2 nasopharyngeal swab PCR positivity in COVID-19 convalescent plasma donors.
+   Overall: The paper studies SARS-CoV-2 and reports on serological testing, specifically antibody responses, which aligns with the parameters for seroprevalence or serological surveys in COVID-19. Therefore, it should be included in the review.
+   维度评分: D= P= L= E= Param=
+
+37. PMID: 32434945 [Score: 4/4]
+   Title: DNA vaccine protection against SARS-CoV-2 in rhesus macaques.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, fitting the criteria for inclusion in the review.
+   维度评分: D= P= L= E= Param=
+
+38. PMID: 32942795 [Score: 4/4]
+   Title: Value and Validity of Coronavirus Antibody Testing.
+   Overall: The paper discusses antibody testing for COVID-19, which aligns with the parameter of serological surveys and antibody prevalence related to SARS-CoV-2.
+   维度评分: D= P= L= E= Param=
+
+39. PMID: 32555388 [Score: 4/4]
+   Title: Convergent antibody responses to SARS-CoV-2 in convalescent individuals.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, including neutralizing antibodies, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+40. PMID: 32927357 [Score: 4/4]
+   Title: Clinical performance of four immunoassays for antibodies to SARS-CoV-2, including a prospective analysis for the diagnosis of COVID-19 in a real-life routine care setting.
+   Overall: The paper studies SARS-CoV-2 antibodies and reports on serological assays, fitting the criteria for seroprevalence or serological survey related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+41. PMID: 32746953 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 antibodies in healthcare workers at a London NHS Trust.
+   Overall: The paper studies SARS-CoV-2 antibodies in healthcare workers, reporting seroprevalence, which aligns with the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+42. PMID: 32883593 [Score: 4/4]
+   Title: SARS-CoV-2 serology and virology trends in donors and recipients of convalescent plasma.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody prevalence and viral load, fitting the specified parameters for seroprevalence and serological survey in COVID-19 cases.
+   维度评分: D= P= L= E= Param=
+
+43. PMID: 32826924 [Score: 4/4]
+   Title: An adenovirus-vectored COVID-19 vaccine confers protection from SARS-COV-2 challenge in rhesus macaques.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses following vaccination, which aligns with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+44. PMID: 32504735 [Score: 4/4]
+   Title: Detection of SARS-CoV-2 antibodies using commercial assays and seroconversion patterns in hospitalized patients.
+   Overall: The paper studies SARS-CoV-2 antibodies using serological assays, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+45. PMID: 32727446 [Score: 4/4]
+   Title: SARS-CoV-2 specific serological pattern in healthcare workers of an Italian COVID-19 forefront hospital.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2 in healthcare workers, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+46. PMID: 32750664 [Score: 4/4]
+   Title: Evaluation of the Quotient® MosaiQ™ COVID-19 antibody microarray for the detection of IgG and IgM antibodies to SARS-CoV-2 virus in humans.
+   Overall: The paper studies COVID-19 and reports on serological testing, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+47. PMID: 32866811 [Score: 4/4]
+   Title: Comparative evaluation of SARS-CoV-2 IgG assays in India.
+   Overall: The paper evaluates serological assays for SARS-CoV-2, reporting on antibody prevalence, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+48. PMID: 32450106 [Score: 4/4]
+   Title: Safety, tolerability, and immunogenicity of a recombinant adenovirus type-5 vectored COVID-19 vaccine: a dose-escalation, open-label, non-randomised, first-in-human trial.
+   Overall: The paper studies a COVID-19 vaccine and reports on antibody responses, including neutralising antibodies, which aligns with the parameter of seroprevalence or antibody survey in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+49. PMID: 32603801 [Score: 4/4]
+   Title: Validation of a commercially available SARS-CoV-2 serological immunoassay.
+   Overall: The paper reports on serological testing for SARS-CoV-2, specifically evaluating IgG and IgA antibodies, which aligns with the parameter of seroprevalence or serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+50. PMID: 33121625 [Score: 4/4]
+   Title: Measuring the Serologic Response to Severe Acute Respiratory Syndrome Coronavirus 2: Methods and Meaning.
+   Overall: The paper discusses COVID-19 serology, which aligns with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+51. PMID: 32553061 [Score: 4/4]
+   Title: Meta-analysis of diagnostic performance of serological tests for SARS-CoV-2 antibodies up to 25 April 2020 and public health implications.
+   Overall: The paper is a systematic review and meta-analysis of serological tests for SARS-CoV-2 antibodies, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+52. PMID: 32343415 [Score: 4/4]
+   Title: Long-term coexistence of SARS-CoV-2 with antibody response in COVID-19 patients.
+   Overall: The paper studies SARS-CoV-2 infection and reports on antibody responses, including IgG, in COVID-19 patients, fitting the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+53. PMID: 32659413 [Score: 4/4]
+   Title: Systematic review with meta-analysis of the accuracy of diagnostic tests for COVID-19.
+   Overall: The paper reports on the sensitivity and specificity of diagnostic tests for COVID-19, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+54. PMID: 32430309 [Score: 4/4]
+   Title: Serology for SARS-CoV-2: Apprehensions, opportunities, and the path forward.
+   Overall: The paper discusses serological testing for SARS-CoV-2, which relates to antibody prevalence, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+55. PMID: 32235945 [Score: 4/4]
+   Title: Virological assessment of hospitalized patients with COVID-2019.
+   Overall: The paper studies COVID-19 and reports on viral load and shedding, which are relevant to seroprevalence and serological surveys.
+   维度评分: D= P= L= E= Param=
+
+56. PMID: 32957073 [Score: 4/4]
+   Title: Evaluation of the performance of SARS-CoV-2 serological tools and their positioning in COVID-19 diagnostic strategies.
+   Overall: The paper studies SARS-CoV-2 and reports on serological tools, aligning with the specified parameters for COVID-19 seroprevalence.
+   维度评分: D= P= L= E= Param=
+
+57. PMID: 32815769 [Score: 4/4]
+   Title: Sensitive and Specific Detection of SARS-CoV-2 Antibodies Using a High-Throughput, Fully Automated Liquid-Handling Robotic System.
+   Overall: The paper reports on the serological detection of SARS-CoV-2 antibodies with high sensitivity and specificity, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+58. PMID: 32808111 [Score: 4/4]
+   Title: Evaluation of three immunochromatographic tests for rapid detection of antibodies against SARS-CoV-2.
+   Overall: The paper evaluates serological tests for SARS-CoV-2 antibodies, directly relating to COVID-19 and seroprevalence parameters, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+59. PMID: 32879033 [Score: 4/4]
+   Title: Quantitative SARS-CoV-2 Serology in Children With Multisystem Inflammatory Syndrome (MIS-C).
+   Overall: The paper studies SARS-CoV-2 serological responses in children with MIS-C, reporting antibody titers, which directly relates to the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+60. PMID: 32653662 [Score: 4/4]
+   Title: Virus shedding dynamics in asymptomatic and mildly symptomatic patients infected with SARS-CoV-2.
+   Overall: The paper studies SARS-CoV-2 infection and reports on virus shedding duration, but it does not focus on seroprevalence or antibody prevalence, so it should be excluded.
+   维度评分: D= P= L= E= Param=
+
+61. PMID: 32590234 [Score: 4/4]
+   Title: Test, test, test for COVID-19 antibodies: the importance of sensitivity, specificity and predictive powers.
+   Overall: The paper discusses serological testing for COVID-19, which relates directly to the parameter of seroprevalence and serological surveys in COVID-19. It provides relevant insights into antibody testing accuracy, making it suitable for the review.
+   维度评分: D= P= L= E= Param=
+
+62. PMID: 33014893 [Score: 4/4]
+   Title: Serum SARS-COV-2 Nucleocapsid Protein: A Sensitivity and Specificity Early Diagnostic Marker for SARS-COV-2 Infection.
+   Overall: The paper studies SARS-CoV-2 infection and reports on serological parameters (serum N protein levels), fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+63. PMID: 32563180 [Score: 4/4]
+   Title: Performance of six SARS-CoV-2 immunoassays in comparison with microneutralisation.
+   Overall: The paper reports on serological assays for SARS-CoV-2, including antibody detection, which aligns with the parameter of seroprevalence or serological surveys.
+   维度评分: D= P= L= E= Param=
+
+64. PMID: 32485620 [Score: 4/4]
+   Title: Evaluation of the EUROIMMUN Anti-SARS-CoV-2 ELISA Assay for detection of IgA and IgG antibodies.
+   Overall: The paper evaluates an antibody assay for SARS-CoV-2, reporting on serological detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+65. PMID: 32807944 [Score: 4/4]
+   Title: ORF8 and ORF3b antibodies are accurate serological markers of early and late SARS-CoV-2 infection.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, including serological markers, which aligns with the specified parameters for seroprevalence and serological surveys.
+   维度评分: D= P= L= E= Param=
+
+66. PMID: 32762798 [Score: 4/4]
+   Title: Diagnosis of COVID-19 in a Dengue-Endemic Area.
+   Overall: The paper studies COVID-19 and reports on serological testing, which aligns with the parameters for seroprevalence or serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+67. PMID: 32593133 [Score: 4/4]
+   Title: Assessment of SARS-CoV-2 serological tests for the diagnosis of COVID-19 through the evaluation of three immunoassays: Two automated immunoassays (Euroimmun and Abbott) and one rapid lateral flow immunoassay (NG Biotech).
+   Overall: The paper studies SARS-CoV-2 serological tests and reports on antibody detection, fitting the disease and parameter criteria for seroprevalence or serological surveys.
+   维度评分: D= P= L= E= Param=
+
+68. PMID: 32496919 [Score: 4/4]
+   Title: Serodiagnostics for Severe Acute Respiratory Syndrome-Related Coronavirus 2 : A Narrative Review.
+   Overall: The paper discusses seroepidemiologic studies and serologic tests for SARS-CoV-2, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+69. PMID: 32564906 [Score: 4/4]
+   Title: SARS-CoV-2 infection among asymptomatic homebound subjects in Milan, Italy.
+   Overall: The title indicates a study on SARS-CoV-2 infection, and keywords suggest focus on viral detection, which may relate to seroprevalence or infection status, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+70. PMID: 33412810 [Score: 4/4]
+   Title: Evaluating a SARS-CoV-2 screening strategy based on serological tests.
+   Overall: The paper studies SARS-CoV-2 and reports on serological testing, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+71. PMID: 32229605 [Score: 4/4]
+   Title: Evaluation of Nucleocapsid and Spike Protein-Based Enzyme-Linked Immunosorbent Assays for Detecting Antibodies against SARS-CoV-2.
+   Overall: The paper studies SARS-CoV-2 antibodies using serological assays, directly relating to COVID-19 and seroprevalence parameters.
+   维度评分: D= P= L= E= Param=
+
+72. PMID: 32663788 [Score: 4/4]
+   Title: Comparison of the diagnostic sensitivity of SARS-CoV-2 nucleoprotein and glycoprotein-based antibody tests.
+   Overall: The paper studies SARS-CoV-2 antibody tests and reports on their sensitivity, which relates to seroprevalence and serological surveys for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+73. PMID: 32745595 [Score: 4/4]
+   Title: Antibody response against SARS-CoV-2 spike protein and nucleoprotein evaluated by four automated immunoassays and three ELISAs.
+   Overall: The paper studies seroprevalence and antibody response in COVID-19 patients using serological assays, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+74. PMID: 32675000 [Score: 4/4]
+   Title: Concordance between two rapid diagnostic tests for the detection of antibodies against SARS-CoV-2.
+   Overall: The paper studies SARS-CoV-2 antibodies using rapid diagnostic tests, which aligns with the disease and parameter criteria for serological surveys.
+   维度评分: D= P= L= E= Param=
+
+75. PMID: 32620182 [Score: 4/4]
+   Title: Severe Acute Respiratory Syndrome Coronavirus 2 Prevalence, Seroprevalence, and Exposure among Evacuees from Wuhan, China, 2020.
+   Overall: The paper studies SARS-CoV-2 seroprevalence among evacuees, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+76. PMID: 32731911 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 and Infection Fatality Ratio, Orleans and Jefferson Parishes, Louisiana, USA, May 2020.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+77. PMID: 32661058 [Score: 4/4]
+   Title: Structural basis of a shared antibody response to SARS-CoV-2.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, which relates to seroprevalence and serological responses to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+78. PMID: 32463475 [Score: 4/4]
+   Title: [Rapid point-of-care serology testing for sars-cov-2].
+   Overall: The paper discusses serology testing for SARS-CoV-2, which aligns with the parameter of seroprevalence or serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+79. PMID: 32702365 [Score: 4/4]
+   Title: Comparison of serologic and molecular SARS-CoV 2 results in a large cohort in Southern Tuscany demonstrates a role for serologic testing to increase diagnostic sensitivity.
+   Overall: The paper studies SARS-CoV-2 and reports on serological testing, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+80. PMID: 32769023 [Score: 4/4]
+   Title: Comparison of different serological assays for SARS-CoV-2 in real life.
+   Overall: The paper evaluates serological assays for SARS-CoV-2, reporting on antibody detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+81. PMID: 32389784 [Score: 4/4]
+   Title: Dynamic profile for the detection of anti-SARS-CoV-2 antibodies using four immunochromatographic assays.
+   Overall: The paper studies anti-SARS-CoV-2 antibodies in COVID-19 patients, reporting on antibody detection over time, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+82. PMID: 32645326 [Score: 4/4]
+   Title: Structures of Human Antibodies Bound to SARS-CoV-2 Spike Reveal Common Epitopes and Recurrent Features of Antibodies.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, including serological aspects, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+83. PMID: 32855547 [Score: 4/4]
+   Title: Evaluation of SARS-CoV-2 serology assays reveals a range of test performance.
+   Overall: The paper evaluates serological assays for SARS-CoV-2, reporting on test performance and antibody detection, which aligns with the parameters for seroprevalence studies related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+84. PMID: 32769024 [Score: 4/4]
+   Title: Evaluation of a novel multiplexed assay for determining IgG levels and functional activity to SARS-CoV-2.
+   Overall: The paper reports on serological assays for SARS-CoV-2, including antibody detection, which aligns with the parameter of seroprevalence or serological surveys.
+   维度评分: D= P= L= E= Param=
+
+85. PMID: 32525850 [Score: 4/4]
+   Title: SARS-CoV-2 Infections and Serologic Responses from a Sample of U.S. Navy Service Members - USS Theodore Roosevelt, April 2020.
+   Overall: The paper reports on serological responses and antibody prevalence related to COVID-19, fitting the specified parameters for seroprevalence and serological surveys.
+   维度评分: D= P= L= E= Param=
+
+86. PMID: 32868447 [Score: 4/4]
+   Title: A SARS-CoV-2 vaccine candidate would likely match all currently circulating variants.
+   Overall: The paper studies SARS-CoV-2 and reports on the genetic diversity relevant to vaccine development, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+87. PMID: 32583766 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 specific neutralising antibodies in blood donors from the Lodi Red Zone in Lombardy, Italy, as at 06 April 2020.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2 antibodies in blood donors, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+88. PMID: 32763810 [Score: 4/4]
+   Title: Clinical application of Chemiluminescence Microparticle Immunoassay for SARS-CoV-2 infection diagnosis.
+   Overall: The paper studies SARS-CoV-2 infection and reports on antibody detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+89. PMID: 32427569 [Score: 4/4]
+   Title: [Opportunity of periodic monitoring of COVID-19 patients, asymptomatic virus carriers, and postinfectious individuals with IgM/IgG rapid antibody tests among healthcare workers during SARS-CoV-2 pandemic].
+   Overall: The paper discusses COVID-19 and reports on antibody testing, fitting the criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+90. PMID: 32659710 [Score: 4/4]
+   Title: Comparison of commercial lateral flow immunoassays and ELISA for SARS-CoV-2 antibody detection.
+   Overall: The paper studies SARS-CoV-2 antibody detection using serological tests, including ELISA and lateral flow immunoassays, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+91. PMID: 32453687 [Score: 4/4]
+   Title: Position paper on the preparation of immune plasma to be used in the treatment of patients with COVID-19.
+   Overall: The paper discusses COVID-19 and involves serological aspects related to plasma from convalescent donors, aligning with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+92. PMID: 32671890 [Score: 4/4]
+   Title: Serological chemiluminescence immunoassay for the diagnosis of SARS-CoV-2 infection.
+   Overall: The paper studies SARS-CoV-2 antibodies (IgM and IgG) in COVID-19 patients, reporting seropositivity and antibody prevalence, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+93. PMID: 32505777 [Score: 4/4]
+   Title: Brief clinical evaluation of six high-throughput SARS-CoV-2 IgG antibody assays.
+   Overall: The paper evaluates serological assays for SARS-CoV-2 IgG antibodies, directly relating to the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+94. PMID: 32381641 [Score: 4/4]
+   Title: Performance Characteristics of the Abbott Architect SARS-CoV-2 IgG Assay and Seroprevalence in Boise, Idaho.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2 using serological testing, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+95. PMID: 32679298 [Score: 4/4]
+   Title: Performance evaluation of Abbott ARCHITECT SARS-CoV-2 IgG immunoassay in comparison with indirect immunofluorescence and virus microneutralization test.
+   Overall: The paper evaluates a serological assay for SARS-CoV-2 antibodies, reporting on its sensitivity, specificity, and correlation with neutralization activity, which directly relates to seroprevalence and serological surveys for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+96. PMID: 32919222 [Score: 4/4]
+   Title: Performance evaluation of two SARS-CoV-2 IgG/IgM rapid tests (Covid-Presto and NG-Test) and one IgG automated immunoassay (Abbott).
+   Overall: The paper evaluates serological tests for SARS-CoV-2, reporting on antibody detection parameters, which aligns with the review criteria.
+   维度评分: D= P= L= E= Param=
+
+97. PMID: 32267220 [Score: 4/4]
+   Title: Severe Acute Respiratory Syndrome Coronavirus 2-Specific Antibody Responses in Coronavirus Disease Patients.
+   Overall: The paper studies SARS-CoV-2 and reports on serological assays, including antibody detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+98. PMID: 32467617 [Score: 4/4]
+   Title: Serum IgA, IgM, and IgG responses in COVID-19.
+   Overall: The paper's focus on antibody responses in COVID-19 directly relates to seroprevalence and serological parameters in the context of COVID-19, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+99. PMID: 32358956 [Score: 4/4]
+   Title: Longitudinal Change of Severe Acute Respiratory Syndrome Coronavirus 2 Antibodies in Patients with Coronavirus Disease 2019.
+   Overall: The paper studies SARS-CoV-2 (COVID-19) and reports on antibody prevalence, fitting the specified parameters for serological survey in COVID-19 patients.
+   维度评分: D= P= L= E= Param=
+
+100. PMID: 32880263 [Score: 4/4]
+   Title: COVID-19 antibody testing: From hype to immunological reality.
+   Overall: The paper discusses COVID-19 and reports on antibody testing, which relates to seroprevalence and serological surveys, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+101. PMID: 32798445 [Score: 4/4]
+   Title: Replication-Competent Vesicular Stomatitis Virus Vaccine Vector Protects against SARS-CoV-2-Mediated Pathogenesis in Mice.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, fitting the parameters for seroprevalence or serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+102. PMID: 32979911 [Score: 4/4]
+   Title: Validity of a Serological Diagnostic Kit for SARS-CoV-2 Available in Iran.
+   Overall: The paper studies SARS-CoV-2 and reports on serological testing, including sensitivity and specificity, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+103. PMID: 32858060 [Score: 4/4]
+   Title: Evaluation of SARS-CoV-2 prototype serologic test in hospitalized patients.
+   Overall: The paper studies serological assays for SARS-CoV-2, reports on antibody detection, and involves COVID-19 patients, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+104. PMID: 32627216 [Score: 4/4]
+   Title: Characteristics and serological patterns of COVID-19 convalescent plasma donors: optimal donors and timing of donation.
+   Overall: The paper studies SARS-CoV-2 antibodies and reports on serological patterns in convalescent plasma donors, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+105. PMID: 32534509 [Score: 4/4]
+   Title: Management of COVID-19 Virus Infection by Convalescent Plasma.
+   Overall: The title indicates the study is about COVID-19 and involves convalescent plasma, which is related to serological aspects of the disease, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+106. PMID: 32817357 [Score: 4/4]
+   Title: A comparison of four serological assays for detecting anti-SARS-CoV-2 antibodies in human serum samples from different populations.
+   Overall: The paper studies SARS-CoV-2 antibodies using serological assays, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+107. PMID: 32611915 [Score: 4/4]
+   Title: Development of indigenous IgG ELISA for the detection of anti-SARS-CoV-2 IgG.
+   Overall: The paper reports on a serological survey for SARS-CoV-2, specifically measuring anti-SARS-CoV-2 IgG antibodies, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+108. PMID: 32330303 [Score: 4/4]
+   Title: Characteristics of patients with coronavirus disease (COVID-19) confirmed using an IgM-IgG antibody test.
+   Overall: The paper reports on serological testing (IgM-IgG antibody test) for COVID-19, fitting the parameter of seroprevalence or serological survey in COVID-19 patients.
+   维度评分: D= P= L= E= Param=
+
+109. PMID: 32873791 [Score: 4/4]
+   Title: Serological identification of SARS-CoV-2 infections among children visiting a hospital during the initial Seattle outbreak.
+   Overall: The paper studies SARS-CoV-2 infections among children using serological surveys, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+110. PMID: 32513859 [Score: 4/4]
+   Title: Performance Characteristics of Four High-Throughput Immunoassays for Detection of IgG Antibodies against SARS-CoV-2.
+   Overall: The paper reports on serological testing for SARS-CoV-2, specifically evaluating IgG antibody detection, which aligns with the parameter of seroprevalence or serological survey in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+111. PMID: 32876244 [Score: 4/4]
+   Title: EPICOVID19 protocol: repeated serological surveys on SARS-CoV-2 antibodies in Brazil.
+   Overall: The study directly assesses SARS-CoV-2 antibody prevalence in Brazil, fitting the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+112. PMID: 32789505 [Score: 4/4]
+   Title: Effect of an Inactivated Vaccine Against SARS-CoV-2 on Safety and Immunogenicity Outcomes: Interim Analysis of 2 Randomized Clinical Trials.
+   Overall: The paper reports on a serological survey measuring neutralizing antibody responses to a COVID-19 vaccine, which aligns with the parameter of seroprevalence or antibody survey related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+113. PMID: 32684340 [Score: 4/4]
+   Title: Clinical application of rapid diagnostic test kit for SARS-CoV-2 antibodies into the field of patient care.
+   Overall: The paper studies SARS-CoV-2 antibodies and reports on antibody detection, fitting the criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+114. PMID: 32632160 [Score: 4/4]
+   Title: An evaluation of COVID-19 serological assays informs future diagnostics and exposure assessment.
+   Overall: The paper directly studies COVID-19 and reports on serological assays, fitting the specified parameters for inclusion in the review.
+   维度评分: D= P= L= E= Param=
+
+115. PMID: 32856766 [Score: 4/4]
+   Title: Clinical sensitivity and interpretation of PCR and serological COVID-19 diagnostics for patients presenting to the hospital.
+   Overall: The paper studies SARS-CoV-2 diagnostics and reports on serological testing, fitting the criteria for seroprevalence or serological survey related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+116. PMID: 32475877 [Score: 4/4]
+   Title: The Potential Transmission of SARS-CoV-2 from Patients with Negative RT-PCR Swab Tests to Others: Two Related Clusters of COVID-19 Outbreak.
+   Overall: The paper reports on serological detection of SARS-CoV-2 antibodies, which relates to seroprevalence in COVID-19 cases, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+117. PMID: 32619956 [Score: 4/4]
+   Title: Analysis of adjunctive serological detection to nucleic acid test for severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) infection diagnosis.
+   Overall: The paper reports on serological testing (IgM/IgG antibody test) for SARS-CoV-2, which is relevant to the parameter of seroprevalence or antibody prevalence in COVID-19 patients.
+   维度评分: D= P= L= E= Param=
+
+118. PMID: 32977117 [Score: 4/4]
+   Title: Comparison of 2 fully automated tests detecting antibodies against nucleocapsid N and spike S1/S2 proteins in COVID-19.
+   Overall: The paper studies SARS-CoV-2 antibodies in COVID-19 patients, reporting on seroprevalence, thus meeting the inclusion criteria.
+   维度评分: D= P= L= E= Param=
+
+119. PMID: 32780804 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 Antibodies in Health Care Personnel in the New York City Area.
+   Overall: The paper studies SARS-CoV-2 seropositivity among health care personnel, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+120. PMID: 32767262 [Score: 4/4]
+   Title: Screening of SARS-CoV-2 in 299 Hospitalized Children with Hemato-oncological Diseases: A Multicenter Survey in Hubei, China.
+   Overall: The paper reports on serological testing for SARS-CoV-2 antibodies in children with hemato-oncological diseases, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+121. PMID: 32723430 [Score: 4/4]
+   Title: Rapid Screening Evaluation of SARS-CoV-2 IgG Assays Using Z-Scores to Standardize Results.
+   Overall: The paper focuses on serologic analysis of SARS-CoV-2 antibodies and discusses standardization of serological test results, aligning with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+122. PMID: 32427334 [Score: 4/4]
+   Title: Sensitivity in Detection of Antibodies to Nucleocapsid and Spike Proteins of Severe Acute Respiratory Syndrome Coronavirus 2 in Patients With Coronavirus Disease 2019.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody detection, which aligns with the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+123. PMID: 32569635 [Score: 4/4]
+   Title: Differences of Severe Acute Respiratory Syndrome Coronavirus 2 Shedding Duration in Sputum and Nasopharyngeal Swab Specimens Among Adult Inpatients With Coronavirus Disease 2019.
+   Overall: The paper studies SARS-CoV-2 shedding duration in respiratory specimens of COVID-19 patients, reporting on viral RNA detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+124. PMID: 32638712 [Score: 4/4]
+   Title: Real-world evaluation of a novel technology for quantitative simultaneous antibody detection against multiple SARS-CoV-2 antigens in a cohort of patients presenting with COVID-19 syndrome.
+   Overall: The paper reports on serological testing for SARS-CoV-2, including antibody detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+125. PMID: 32706417 [Score: 4/4]
+   Title: Characteristics and roles of severe acute respiratory syndrome coronavirus 2-specific antibodies in patients with different severities of coronavirus 19.
+   Overall: The paper studies SARS-CoV-2-specific antibodies (IgA, IgM, IgG) in COVID-19 patients, reporting on antibody prevalence and levels related to disease severity, fitting the criteria for seroprevalence studies in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+126. PMID: 32829098 [Score: 4/4]
+   Title: Monitoring antibody response following SARS-CoV-2 infection: diagnostic efficiency of 4 automated immunoassays.
+   Overall: The paper studies SARS-CoV-2 and reports on serological assays, which relate to seroprevalence and antibody detection, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+127. PMID: 32495088 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 Antibodies Among Healthcare Workers at a Tertiary Academic Hospital in New York City.
+   Overall: The title indicates a seroprevalence study related to SARS-CoV-2, fitting the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+128. PMID: 32890908 [Score: 4/4]
+   Title: Two serological approaches for detection of antibodies to SARS-CoV-2 in different scenarios: a screening tool and a point-of-care test.
+   Overall: The paper studies serological detection of antibodies to SARS-CoV-2, fitting the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+129. PMID: 32791199 [Score: 4/4]
+   Title: Protocol for a national probability survey using home specimen collection methods to assess prevalence and incidence of SARS-CoV-2 infection and antibody response.
+   Overall: The paper reports on a serological survey for SARS-CoV-2, including antibody testing, which directly relates to the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+130. PMID: 32553070 [Score: 4/4]
+   Title: Severe Acute Respiratory Syndrome Coronavirus 2 among Asymptomatic Workers Screened for Work Resumption, China.
+   Overall: The paper studies SARS-CoV-2 among asymptomatic workers and reports on infection status, fitting the criteria for seroprevalence or serological survey related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+131. PMID: 33412811 [Score: 4/4]
+   Title: [Seroprevalence of anti-SARS-CoV-2 IgG/IgM antibodies in Borgosesia (Piedmont Region, Northern Italy) population: a surveillance strategy in post-lockdown period?].
+   Overall: The paper reports on seroprevalence of anti-SARS-CoV-2 IgG/IgM antibodies in a population, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+132. PMID: 32810840 [Score: 4/4]
+   Title: Performance evaluation of serological assays to determine the immunoglobulin status in SARS-CoV-2 infected patients.
+   Overall: The paper evaluates serological assays for SARS-CoV-2, reporting on immunoglobulin detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+133. PMID: 33412809 [Score: 4/4]
+   Title: The risk of over-diagnosis in serological testing. Implications for communications strategies.
+   Overall: The paper discusses serological tests for SARS-CoV-2 and reports on prevalence estimates, fitting the criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+134. PMID: 32583852 [Score: 4/4]
+   Title: Review of Current Advances in Serologic Testing for COVID-19.
+   Overall: The paper directly studies serological methods for COVID-19, reporting on antibody detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+135. PMID: 32758311 [Score: 4/4]
+   Title: Low seroprevalence of SARS-CoV-2 infection among healthcare workers of the largest children hospital in Milan during the pandemic wave.
+   Overall: The title indicates a seroprevalence study related to SARS-CoV-2 infection, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+136. PMID: 32867108 [Score: 4/4]
+   Title: Study of a SARS-CoV-2 Outbreak in a Belgian Military Education and Training Center in Maradi, Niger.
+   Overall: The paper reports on serological testing (antibodies) in the context of COVID-19 among military personnel, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+137. PMID: 32861816 [Score: 4/4]
+   Title: Seroprevalence of SARS-Cov-2 in 646 professionals at the Rothschild Foundation Hospital (ProSeCoV study).
+   Overall: The title indicates a seroprevalence study related to SARS-CoV-2, fitting the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+138. PMID: 32771946 [Score: 4/4]
+   Title: Serological detection of 2019-nCoV respond to the epidemic: A useful complement to nucleic acid testing.
+   Overall: The paper studies serological detection of COVID-19, reporting on antibody detection, which matches the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+139. PMID: 32539107 [Score: 4/4]
+   Title: Hospital-Wide SARS-CoV-2 Antibody Screening in 3056 Staff in a Tertiary Center in Belgium.
+   Overall: The study reports on SARS-CoV-2 antibody prevalence among hospital staff, directly addressing the seroprevalence parameter in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+140. PMID: 32691863 [Score: 4/4]
+   Title: Diagnostic accuracy of Augurix COVID-19 IgG serology rapid test.
+   Overall: The paper studies COVID-19 and reports on SARS-CoV-2 IgG serology, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+141. PMID: 32416599 [Score: 4/4]
+   Title: Comparison of four new commercial serologic assays for determination of SARS-CoV-2 IgG.
+   Overall: The paper studies SARS-CoV-2 IgG serological assays, directly relevant to the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+142. PMID: 32700670 [Score: 4/4]
+   Title: Convalescent plasma treatment for SARS-CoV-2 infection: analysis of the first 436 donors in England, 22 April to 12 May 2020.
+   Overall: The paper reports on serological responses in individuals with confirmed SARS-CoV-2 infection, including antibody response and neutralising antibodies, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+143. PMID: 32382737 [Score: 4/4]
+   Title: A Peptide-Based Magnetic Chemiluminescence Enzyme Immunoassay for Serological Diagnosis of Coronavirus Disease 2019.
+   Overall: The paper reports on a serological test for COVID-19, specifically detecting antibodies (IgG and IgM), which matches the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+144. PMID: 32906596 [Score: 4/4]
+   Title: The Light and Shadow of Rapid Serological Tests for SARS-CoV-2 Infection: Results from a Study in a Large Emergency Department.
+   Overall: The paper reports on serological testing for SARS-CoV-2 infection, providing data on antibody prevalence, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+145. PMID: 32672954 [Score: 4/4]
+   Title: Rapid Gel Card Agglutination Assays for Serological Analysis Following SARS-CoV-2 Infection in Humans.
+   Overall: The paper discusses serological testing for SARS-CoV-2 antibodies, directly relating to the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+146. PMID: 32850506 [Score: 4/4]
+   Title: Value of Viral Nucleic Acid in Sputum and Feces and Specific IgM/IgG in Serum for the Diagnosis of Coronavirus Disease 2019.
+   Overall: The paper studies COVID-19 and reports on serological tests (IgM/IgG), which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+147. PMID: 32811605 [Score: 4/4]
+   Title: Frequency of COVID-19 IgG Antibodies among Special Police Squad Lahore, Pakistan.
+   Overall: The paper directly studies COVID-19 and reports on seroprevalence of IgG antibodies, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+148. PMID: 32203189 [Score: 4/4]
+   Title: Characterization of the receptor-binding domain (RBD) of 2019 novel coronavirus: implication for development of RBD protein as a viral attachment inhibitor and vaccine.
+   Overall: The paper studies the receptor-binding domain (RBD) of SARS-CoV-2 and reports on antibody responses and neutralization, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+149. PMID: 32684119 [Score: 4/4]
+   Title: Work at inpatient care units is associated with an increased risk of SARS-CoV-2 infection; a cross-sectional study of 8679 healthcare workers in Sweden.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2 among healthcare workers, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+150. PMID: 32762746 [Score: 4/4]
+   Title: COVID19 antibody detection using lateral flow assay tests in a cohort of convalescent plasma donors.
+   Overall: The paper studies COVID-19 and reports on seropositivity using antibody detection, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+151. PMID: 32970782 [Score: 4/4]
+   Title: Comparative assessment of multiple COVID-19 serological technologies supports continued evaluation of point-of-care lateral flow assays in hospital and community healthcare settings.
+   Overall: The paper studies SARS-CoV-2 and reports on serological testing, including sensitivity and specificity, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+152. PMID: 32419875 [Score: 4/4]
+   Title: [Antibody tests for COVID-19: What the results tell us].
+   Overall: The paper discusses serological testing for SARS-CoV-2, including antibody detection, which aligns with the parameter of seroprevalence or related serological surveys.
+   维度评分: D= P= L= E= Param=
+
+153. PMID: 32580948 [Score: 4/4]
+   Title: Clinical and Analytical Performance of an Automated Serological Test That Identifies S1/S2-Neutralizing IgG in COVID-19 Patients Semiquantitatively.
+   Overall: The paper studies SARS-CoV-2 and reports on serological testing, specifically measuring antibodies, which aligns with the parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+154. PMID: 32790658 [Score: 4/4]
+   Title: Notes from the Field: Seroprevalence Estimates of SARS-CoV-2 Infection in Convenience Sample - Oregon, May 11-June 15, 2020.
+   Overall: The title indicates a seroprevalence estimate of SARS-CoV-2 infection, aligning with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+155. PMID: 32531713 [Score: 4/4]
+   Title: Neutrophil to CD4+ lymphocyte ratio as a potential biomarker in predicting virus negative conversion time in COVID-19.
+   Overall: The paper studies COVID-19 and reports on a serological parameter (neutrophil to CD4+ lymphocyte ratio) related to disease progression, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+156. PMID: 32470316 [Score: 4/4]
+   Title: Investigation and Serologic Follow-Up of Contacts of an Early Confirmed Case-Patient with COVID-19, Washington, USA.
+   Overall: The paper reports serological testing (ELISA) for SARS-CoV-2 antibodies among contacts of a COVID-19 case, fitting the parameters for seroprevalence or serological survey related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+157. PMID: 32717210 [Score: 4/4]
+   Title: Point-of-care serological assays for delayed SARS-CoV-2 case identification among health-care workers in the UK: a prospective multicentre cohort study.
+   Overall: The study investigates SARS-CoV-2 seroprevalence among healthcare workers using serological assays, directly aligning with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+158. PMID: 32886230 [Score: 4/4]
+   Title: Antibody response and the clinical presentation of patients with COVID-19 in Croatia: the importance of a two-step testing approach.
+   Overall: The paper studies COVID-19 and reports on serological testing, including antibody response, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+159. PMID: 32364358 [Score: 4/4]
+   Title: [The diagnostic value of rapid anti IgM and IgG detecting tests in the identification of patients with SARS CoV-2 virus infection].
+   Overall: The paper studies SARS-CoV-2 infection and reports on antibody prevalence using serological tests, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+160. PMID: 32860790 [Score: 4/4]
+   Title: Asymptomatic Severe Acute Respiratory Syndrome Coronavirus 2 Infection in Patients With Inflammatory Bowel Disease Under Biologic Treatment.
+   Overall: The title and keywords indicate the study focuses on COVID-19 and seroprevalence, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+161. PMID: 32891640 [Score: 4/4]
+   Title: Kinetics of Viral Clearance and Antibody Production Across Age Groups in Children with Severe Acute Respiratory Syndrome Coronavirus 2 Infection.
+   Overall: The paper studies SARS-CoV-2 infection and reports on antibody production, including seropositivity and antibody response, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+162. PMID: 32504945 [Score: 4/4]
+   Title: Alltest rapid lateral flow immunoassays is reliable in diagnosing SARS-CoV-2 infection from 14 days after symptom onset: A prospective single-center study.
+   Overall: The paper studies serological testing for SARS-CoV-2 infection, reporting on antibody prevalence, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+163. PMID: 32520284 [Score: 4/4]
+   Title: Trends in the prevalence of COVID-19 infection in Rio Grande do Sul, Brazil: repeated serological surveys.
+   Overall: The paper studies COVID-19 and reports on serological surveys to estimate the prevalence of infection, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+164. PMID: 32631501 [Score: 4/4]
+   Title: Passive immunotherapy with convalescent plasma against COVID-19? What about the evidence base and clinical trials?
+   Overall: The paper's title and keywords indicate it discusses COVID-19 and plasma therapy, which is a form of immunotherapy, likely involving serological aspects. It appears relevant to the review parameters.
+   维度评分: D= P= L= E= Param=
+
+165. PMID: 32905808 [Score: 4/4]
+   Title: Interim analysis of the clinical performance of five SARS-Cov-2 serology assays.
+   Overall: The paper's title and keywords indicate it studies SARS-CoV-2 serology assays related to COVID-19, fitting the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+166. PMID: 32386354 [Score: 4/4]
+   Title: Can dried blood spots (DBS) contribute to conducting comprehensive SARS-CoV-2 antibody tests?
+   Overall: The paper's title and keywords indicate it focuses on SARS-CoV-2 antibody testing, which aligns with the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+167. PMID: 32943594 [Score: 4/4]
+   Title: Role of Screening for COVID-19 in Hemodialysis Wards, Results of a Single Center Study.
+   Overall: The paper reports on SARS-CoV-2 infection and includes testing methods such as PCR and antibody assays, which are relevant to seroprevalence studies in COVID-19 patients.
+   维度评分: D= P= L= E= Param=
+
+168. PMID: 32412582 [Score: 4/4]
+   Title: Reopening Society and the Need for Real-Time Assessment of COVID-19 at the Community Level.
+   Overall: The title and keywords indicate a focus on COVID-19 and seroepidemiologic studies, aligning with the review parameters.
+   维度评分: D= P= L= E= Param=
+
+169. PMID: 32514854 [Score: 4/4]
+   Title: [Biological therapy after COVID-19 infection : No reactivation of a COVID-19 infection with positive SARS-CoV-2 antibody status under biological therapy].
+   Overall: The paper discusses COVID-19 infection and reports on SARS-CoV-2 antibody status, fitting the specified parameters for seroprevalence or antibody status in relation to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+170. PMID: 32785885 [Score: 4/4]
+   Title: Diagnosis of COVID-19 using multiple antibody assays in two cases with negative PCR results from nasopharyngeal swabs.
+   Overall: The paper discusses serological assays for COVID-19 diagnosis, directly relating to the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+171. PMID: 32658430 [Score: 4/4]
+   Title: The Detection of Novel Coronavirus Antibodies is an Important Supplementary Detection Method for Screening of High-Risk Population.
+   Overall: The paper discusses antibody detection related to COVID-19, fitting the disease and parameter criteria for serological surveys.
+   维度评分: D= P= L= E= Param=
+
+172. PMID: 32731151 [Score: 4/4]
+   Title: Diagnostic value of combined nucleic acid and antibody detection in suspected COVID-19 cases.
+   Overall: The paper studies COVID-19 and reports on antibody detection (IgG and IgM), fitting the specified parameters for seroprevalence in COVID-19 cases.
+   维度评分: D= P= L= E= Param=
+
+173. PMID: 32553841 [Score: 4/4]
+   Title: Four point-of-care lateral flow immunoassays for diagnosis of COVID-19 and for assessing dynamics of antibody responses to SARS-CoV-2.
+   Overall: The paper studies COVID-19 and reports on antibody responses using serological tests, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+174. PMID: 32611558 [Score: 4/4]
+   Title: Diagnostic accuracy of serological tests for covid-19: systematic review and meta-analysis.
+   Overall: The paper directly studies the diagnostic accuracy of serological tests for COVID-19, reporting sensitivity and specificity, fitting the specified parameters for the systematic review.
+   维度评分: D= P= L= E= Param=
+
+175. PMID: 32249203 [Score: 4/4]
+   Title: Microneedle array delivered recombinant coronavirus vaccines: Immunogenicity and rapid translational development.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, which aligns with the parameters for seroprevalence or serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+176. PMID: 32504745 [Score: 4/4]
+   Title: High SARS-CoV-2 antibody prevalence among healthcare workers exposed to COVID-19 patients.
+   Overall: The paper reports on SARS-CoV-2 seroprevalence among healthcare workers, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+177. PMID: 32301749 [Score: 4/4]
+   Title: Analytical performances of a chemiluminescence immunoassay for SARS-CoV-2 IgM/IgG and antibody kinetics.
+   Overall: The paper studies COVID-19 and reports on antibody (IgM and IgG) prevalence, fitting the parameters for serological survey and antibody prevalence in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+178. PMID: 32916509 [Score: 4/4]
+   Title: Beyond COVID-19: DO MS/NMO-SD patients treated with anti-CD20 therapies develop SARS-CoV2 antibodies?
+   Overall: The paper studies SARS-CoV-2 antibodies in MS/NMO-SD patients, reporting serology results, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+179. PMID: 32430094 [Score: 4/4]
+   Title: The dynamics of humoral immune responses following SARS-CoV-2 infection and the potential for reinfection.
+   Overall: The abstract discusses SARS-CoV-2 serology and immune responses, directly relating to the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+180. PMID: 32633869 [Score: 4/4]
+   Title: The "scar" of a pandemic: Cumulative incidence of COVID-19 during the first trimester of pregnancy.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2 during the first trimester of pregnancy, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+181. PMID: 32434708 [Score: 4/4]
+   Title: SARS-CoV-2-specific antibody detection in healthcare workers in Germany with direct contact to COVID-19 patients.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2 antibodies in healthcare workers, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+182. PMID: 32700672 [Score: 4/4]
+   Title: SARS-CoV-2 IgG seroprevalence in blood donors located in three different federal states, Germany, March to June 2020.
+   Overall: The paper reports on seroprevalence of IgG antibodies against SARS-CoV-2 in Germany, fitting the disease and parameter criteria for the review.
+   维度评分: D= P= L= E= Param=
+
+183. PMID: 32734860 [Score: 4/4]
+   Title: Letter to the editor: COVID-19: how accurate are seroprevalence studies?
+   Overall: The title and keywords indicate the paper discusses COVID-19 and seroprevalence, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+184. PMID: 32375025 [Score: 4/4]
+   Title: Structural Basis for Potent Neutralization of Betacoronaviruses by Single-Domain Camelid Antibodies.
+   Overall: The paper discusses SARS-CoV-2 and reports on antibody prevalence, fitting the specified parameters for the review.
+   维度评分: D= P= L= E= Param=
+
+185. PMID: 32495914 [Score: 4/4]
+   Title: No infectious risk of COVID-19 patients with long-term fecal 2019-nCoV nucleic acid positive.
+   Overall: The paper studies COVID-19 patients with positive fecal nucleic acid tests and reports on serological markers, fitting the criteria for seroprevalence or antibody prevalence in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+186. PMID: 32611913 [Score: 4/4]
+   Title: National sero-surveillance to monitor the trend of SARS-CoV-2 infection transmission in India: Protocol for community-based surveillance.
+   Overall: The paper reports on a serological survey for SARS-CoV-2, estimating seroprevalence, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+187. PMID: 32620180 [Score: 4/4]
+   Title: Disappearance of SARS-CoV-2 Antibodies in Infants Born to Women with COVID-19, Wuhan, China.
+   Overall: The paper studies SARS-CoV-2 antibodies in infants, reporting on serological parameters related to COVID-19, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+188. PMID: 32878912 [Score: 4/4]
+   Title: Expansion of SARS-CoV-2-Specific Antibody-Secreting Cells and Generation of Neutralizing Antibodies in Hospitalized COVID-19 Patients.
+   Overall: The paper studies SARS-CoV-2-specific antibody responses in COVID-19 patients, directly addressing the seroprevalence parameter in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+189. PMID: 32777699 [Score: 4/4]
+   Title: SARS-CoV-2 IgG antibody responses in New York City.
+   Overall: The paper studies SARS-CoV-2 and reports on IgG antibody responses, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+190. PMID: 32805631 [Score: 4/4]
+   Title: Immune response to SARS-CoV-2 in health care workers following a COVID-19 outbreak: A prospective longitudinal study.
+   Overall: The paper studies SARS-CoV-2 antibodies in healthcare workers following COVID-19, reporting serologic responses over time, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+191. PMID: 32797108 [Score: 4/4]
+   Title: High seroprevalence for SARS-CoV-2 among household members of essential workers detected using a dried blood spot assay.
+   Overall: The paper studies SARS-CoV-2 and reports on seroprevalence using serological testing, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+192. PMID: 32251798 [Score: 4/4]
+   Title: Diagnostic value and dynamic variance of serum antibody in coronavirus disease 2019.
+   Overall: The paper studies serological testing (antibody detection) in COVID-19, reporting on antibody prevalence and dynamics, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+193. PMID: 32524515 [Score: 4/4]
+   Title: Perceived versus proven SARS-CoV-2-specific immune responses in health-care professionals.
+   Overall: The paper studies SARS-CoV-2 seroprevalence among health-care professionals, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+194. PMID: 32628534 [Score: 4/4]
+   Title: Clinical Validity of Serum Antibodies to SARS-CoV-2 : A Case-Control Study.
+   Overall: The paper studies SARS-CoV-2 antibodies and reports on seroprevalence, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+195. PMID: 32650948 [Score: 4/4]
+   Title: Assessment of SARS-CoV-2 in human semen-a cohort study.
+   Overall: The study investigates SARS-CoV-2 in human semen and reports on viral RNA detection, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+196. PMID: 32734854 [Score: 4/4]
+   Title: Authors' response: COVID-19: how accurate are seroprevalence studies?
+   Overall: The title and keywords indicate the paper discusses COVID-19 and seroprevalence, directly aligning with the review parameters.
+   维度评分: D= P= L= E= Param=
+
+197. PMID: 32762796 [Score: 4/4]
+   Title: Repeated leftover serosurvey of SARS-CoV-2 IgG antibodies, Greece, March and April 2020.
+   Overall: The paper reports a serosurvey for SARS-CoV-2 IgG antibodies, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+198. PMID: 32780376 [Score: 4/4]
+   Title: [The prevalence rate of anti-SARS-CoV-2-IgG is 1.2% - Screening in asymptomatic outpatients in Germany (Northrhine-Westfalia)].
+   Overall: The paper reports on the seroprevalence of SARS-CoV-2 antibodies in asymptomatic outpatients, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+199. PMID: 32732391 [Score: 4/4]
+   Title: High Prevalence of Asymptomatic COVID-19 Infection in Hemodialysis Patients Detected Using Serologic Screening.
+   Overall: This paper studies COVID-19 and reports seroprevalence in a hemodialysis population, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+200. PMID: 32821033 [Score: 4/4]
+   Title: SARS-CoV-2 growth, furin-cleavage-site adaptation and neutralization using serum from acutely infected hospitalized COVID-19 patients.
+   Overall: The paper reports on serological surveys and antibody responses in COVID-19 patients, directly relating to seroprevalence and serological parameters in SARS-CoV-2 infections.
+   维度评分: D= P= L= E= Param=
+
+201. PMID: 32776617 [Score: 4/4]
+   Title: COVID-19 as a Blood Clotting Disorder Masquerading as a Respiratory Illness: A Cerebrovascular Perspective and Therapeutic Implications for Stroke Thrombectomy.
+   Overall: The paper discusses COVID-19 and reports on blood clotting, which aligns with the specified parameters of seroprevalence or serological studies related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+202. PMID: 32510168 [Score: 4/4]
+   Title: Clinical performance of different SARS-CoV-2 IgG antibody tests.
+   Overall: The paper studies SARS-CoV-2 antibody tests, specifically IgG, and reports on serological assays, fitting the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+203. PMID: 32571980 [Score: 4/4]
+   Title: Using influenza surveillance networks to estimate state-specific prevalence of SARS-CoV-2 in the United States.
+   Overall: The paper discusses estimating SARS-CoV-2 prevalence using surveillance data, which aligns with the parameter of seroprevalence estimation for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+204. PMID: 32645348 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence in COVID-19 hotspots.
+   Overall: The title indicates a study on SARS-CoV-2 seroprevalence during COVID-19, aligning with the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+205. PMID: 32662342 [Score: 4/4]
+   Title: The laboratory's role in combating COVID-19.
+   Overall: The paper discusses serological testing for COVID-19, which aligns with the parameter of seroprevalence or serological surveys related to SARS-CoV-2.
+   维度评分: D= P= L= E= Param=
+
+206. PMID: 32505774 [Score: 4/4]
+   Title: SARS-CoV-2 antibody characterization in emergency department, hospitalized and convalescent patients by two semi-quantitative immunoassays.
+   Overall: The paper reports on serological assays for SARS-CoV-2 antibodies, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+207. PMID: 32881855 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 Among Frontline Health Care Personnel in a Multistate Hospital Network - 13 Academic Medical Centers, April-June 2020.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2 among healthcare personnel, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+208. PMID: 32641730 [Score: 4/4]
+   Title: Seroprevalence of antibodies against SARS-CoV-2 among health care workers in a large Spanish reference hospital.
+   Overall: The paper studies SARS-CoV-2 seroprevalence among healthcare workers, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+209. PMID: 32849650 [Score: 4/4]
+   Title: Longer Duration of SARS-CoV-2 Infection in a Case of Mild COVID-19 With Weak Production of the Specific IgM and IgG Antibodies.
+   Overall: The paper studies SARS-CoV-2 infection duration and reports on antibody responses, directly relating to the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+210. PMID: 32758438 [Score: 4/4]
+   Title: Risk of COVID-19 in health-care workers in Denmark: an observational cohort study.
+   Overall: The study reports on seroprevalence of antibodies against SARS-CoV-2 in healthcare workers, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+211. PMID: 32579877 [Score: 4/4]
+   Title: Antibody Responses to SARS-CoV-2 at 8 Weeks Postinfection in Asymptomatic Patients.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, fitting the specified parameters for seroprevalence or serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+212. PMID: 32623350 [Score: 4/4]
+   Title: Multiplex detection and dynamics of IgG antibodies to SARS-CoV2 and the highly pathogenic human coronaviruses SARS-CoV and MERS-CoV.
+   Overall: The paper reports on serological detection of IgG antibodies to SARS-CoV-2, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+213. PMID: 32413330 [Score: 4/4]
+   Title: Detection of SARS-CoV-2-Specific Humoral and Cellular Immunity in COVID-19 Convalescent Individuals.
+   Overall: The paper studies SARS-CoV-2-specific antibody responses in COVID-19 patients, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+214. PMID: 32504052 [Score: 4/4]
+   Title: Seroprevalence of immunoglobulin M and G antibodies against SARS-CoV-2 in China.
+   Overall: The paper studies SARS-CoV-2 and reports on seroprevalence of IgM and IgG antibodies, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+215. PMID: 32593608 [Score: 4/4]
+   Title: Dynamics of SARS-CoV-2 RT-PCR positivity and seroprevalence among high-risk healthcare workers and hospital staff.
+   Overall: The paper studies SARS-CoV-2 infection and reports on seroprevalence among healthcare workers, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+216. PMID: 32578948 [Score: 4/4]
+   Title: SARS-CoV-2 environmental contamination associated with persistently infected COVID-19 patients.
+   Overall: The paper studies SARS-CoV-2 environmental contamination in COVID-19 patients, reporting on viral RNA detection, which relates to seroprevalence or serological aspects in COVID-19 patients.
+   维度评分: D= P= L= E= Param=
+
+217. PMID: 32486477 [Score: 4/4]
+   Title: Development of a Portable, Ultra-Rapid and Ultra-Sensitive Cell-Based Biosensor for the Direct Detection of the SARS-CoV-2 S1 Spike Protein Antigen.
+   Overall: The paper reports on a serological assay for SARS-CoV-2, specifically detecting the S1 spike protein, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+218. PMID: 32699972 [Score: 4/4]
+   Title: Mild Cytokine Elevation, Moderate CD4+ T Cell Response and Abundant Antibody Production in Children with COVID-19.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, fitting the criteria for serological survey and antibody prevalence in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+219. PMID: 32436320 [Score: 4/4]
+   Title: The role of SARS-CoV-2 antibodies in COVID-19: Healing in most, harm at times.
+   Overall: The title and keywords indicate the paper discusses SARS-CoV-2 antibodies in the context of COVID-19, which aligns with the focus on seroprevalence or antibody-related parameters.
+   维度评分: D= P= L= E= Param=
+
+220. PMID: 32459192 [Score: 4/4]
+   Title: Molecular, serological, and biochemical diagnosis and monitoring of COVID-19: IFCC taskforce evaluation of the latest evidence.
+   Overall: The paper discusses serological testing for COVID-19, which aligns with the specified parameters for seroprevalence and serological surveys in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+221. PMID: 32729494 [Score: 4/4]
+   Title: Clinically practiced and commercially viable nanobio engineered analytical methods for COVID-19 diagnosis.
+   Overall: The paper discusses serological tests and diagnostic methods for COVID-19, which aligns with the parameter of seroprevalence or serological surveys.
+   维度评分: D= P= L= E= Param=
+
+222. PMID: 32477373 [Score: 4/4]
+   Title: Implications of COVID-19 Outbreak on Immune Therapies in Multiple Sclerosis Patients-Lessons Learned From SARS and MERS.
+   Overall: The paper discusses COVID-19 and reports on seroprevalence or antibody responses related to SARS-CoV-2, fitting the specified parameters for the review.
+   维度评分: D= P= L= E= Param=
+
+223. PMID: 32584420 [Score: 4/4]
+   Title: LIPS method for the detection of SARS-CoV-2 antibodies to spike and nucleocapsid proteins.
+   Overall: The paper reports on serological detection of SARS-CoV-2 antibodies, directly relevant to the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+224. PMID: 32568341 [Score: 4/4]
+   Title: Development of a lateral flow immunoassay strip for rapid detection of IgG antibody against SARS-CoV-2 virus.
+   Overall: The paper reports on a serological assay for SARS-CoV-2, specifically detecting IgG antibodies, which aligns with the parameter of seroprevalence or serological surveys for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+225. PMID: 32882666 [Score: 4/4]
+   Title: SARS-CoV-2 antibodies, serum inflammatory biomarkers and clinical severity of hospitalized COVID-19 patients.
+   Overall: The paper studies SARS-CoV-2 antibodies and reports on antibody levels in COVID-19 patients, fitting the parameters for seroprevalence or serological survey in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+226. PMID: 32771639 [Score: 4/4]
+   Title: Clinical immunity in discharged medical patients with COVID-19.
+   Overall: The paper studies COVID-19 and reports on antibody presence and immunity, fitting the specified parameters for seroprevalence and serological survey.
+   维度评分: D= P= L= E= Param=
+
+227. PMID: 32526218 [Score: 4/4]
+   Title: Evaluation of the EDI enzyme linked immunosorbent assays for the detection of SARS-CoV-2 IgM and IgG antibodies in human plasma.
+   Overall: The paper evaluates serological testing for SARS-CoV-2 antibodies, directly relating to the specified parameters and disease.
+   维度评分: D= P= L= E= Param=
+
+228. PMID: 32830472 [Score: 4/4]
+   Title: Seroprevalence of Anti-SARS-CoV-2 Antibodies among Outpatients in Southwestern Seoul, Korea.
+   Overall: The paper studies SARS-CoV-2 antibodies and reports seroprevalence, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+229. PMID: 32849619 [Score: 4/4]
+   Title: Impact of Hydroxychloroquine on Antibody Responses to the SARS-CoV-2 Coronavirus.
+   Overall: The title and keywords indicate the study focuses on SARS-CoV-2 and antibody responses, fitting the disease and parameter criteria for the review.
+   维度评分: D= P= L= E= Param=
+
+230. PMID: 33230504 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Hong Kong and in residents evacuated from Hubei province, China: a multicohort study.
+   Overall: The paper directly studies SARS-CoV-2 and reports on seroprevalence, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+231. PMID: 32701941 [Score: 4/4]
+   Title: Estimated Community Seroprevalence of SARS-CoV-2 Antibodies - Two Georgia Counties, April 28-May 3, 2020.
+   Overall: The paper reports on SARS-CoV-2 seroprevalence in a community, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+232. PMID: 32750135 [Score: 4/4]
+   Title: Estimation Without Representation: Early Severe Acute Respiratory Syndrome Coronavirus 2 Seroprevalence Studies and the Path Forward.
+   Overall: The paper discusses seroprevalence of COVID-19, which aligns with the specified parameters, making it relevant for inclusion.
+   维度评分: D= P= L= E= Param=
+
+233. PMID: 32947206 [Score: 4/4]
+   Title: Retrospective clinical evaluation of 4 lateral flow assays for the detection of SARS-CoV-2 IgG.
+   Overall: The paper evaluates serological assays for SARS-CoV-2 IgG detection, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+234. PMID: 32323974 [Score: 4/4]
+   Title: Rapid and Sensitive Detection of anti-SARS-CoV-2 IgG, Using Lanthanide-Doped Nanoparticles-Based Lateral Flow Immunoassay.
+   Overall: The paper reports on the detection of anti-SARS-CoV-2 IgG in human serum, directly studying the seroprevalence parameter in relation to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+235. PMID: 32911317 [Score: 4/4]
+   Title: Detection of antibodies against SARS-CoV-2 spike protein by gold nanospikes in an opto-microfluidic chip.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody detection, fitting the specified parameters for seroprevalence or serological surveys.
+   维度评分: D= P= L= E= Param=
+
+236. PMID: 32591970 [Score: 4/4]
+   Title: Coronavirus disease 2019 (COVID-19) in a patient with ankylosing spondylitis treated with secukinumab: a case-based review.
+   Overall: The paper discusses COVID-19 and reports on SARS-CoV-2 infection in patients, including those on secukinumab, with some data on clinical course, fitting the parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+237. PMID: 32584464 [Score: 4/4]
+   Title: Antibody tests for identification of current and past infection with SARS-CoV-2.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody testing, which aligns with the specified parameters for disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+238. PMID: 32703908 [Score: 4/4]
+   Title: Structural basis for neutralization of SARS-CoV-2 and SARS-CoV by a potent therapeutic antibody.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody neutralization, directly relevant to the disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+239. PMID: 32360743 [Score: 4/4]
+   Title: Lower detection rates of SARS-COV2 antibodies in cancer patients versus health care workers after symptomatic COVID-19.
+   Overall: The title indicates a study related to SARS-CoV-2 antibodies, which aligns with the serological survey parameter, making it relevant for inclusion.
+   维度评分: D= P= L= E= Param=
+
+240. PMID: 32634587 [Score: 4/4]
+   Title: COVID-19 exposure risk for family members of healthcare workers: An observational study.
+   Overall: The paper reports on serological testing (IgG) for SARS-CoV-2 among family members of healthcare workers, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+241. PMID: 32913364 [Score: 4/4]
+   Title: A comprehensive, longitudinal analysis of humoral responses specific to four recombinant antigens of SARS-CoV-2 in severe and non-severe COVID-19 patients.
+   Overall: The paper studies serological responses (antibody responses) to SARS-CoV-2, which aligns with the parameter of seroprevalence or serological survey in COVID-19 patients.
+   维度评分: D= P= L= E= Param=
+
+242. PMID: 32873904 [Score: 4/4]
+   Title: Difference in levels of SARS-CoV-2 S1 and S2 subunits- and nucleocapsid protein-reactive SIgM/IgM, IgG and SIgA/IgA antibodies in human milk.
+   Overall: The paper studies SARS-CoV-2 antibodies in human milk, directly relating to seroprevalence and serological responses in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+243. PMID: 32408337 [Score: 4/4]
+   Title: Infection of dogs with SARS-CoV-2.
+   Overall: The paper reports on serological evidence of SARS-CoV-2 infection in dogs, directly relating to the parameter of seroprevalence in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+244. PMID: 32613257 [Score: 4/4]
+   Title: [Basic principles of replication and immunology of SARS-CoV-2].
+   Overall: The paper discusses seroconversion and immune response related to SARS-CoV-2, fitting the specified parameters for seroprevalence studies.
+   维度评分: D= P= L= E= Param=
+
+245. PMID: 32510340 [Score: 4/4]
+   Title: Diagnostic methods and potential portable biosensors for coronavirus disease 2019.
+   Overall: The paper discusses serological detection methods for COVID-19, including antibody detection, which aligns with the parameter of seroprevalence or serological surveys.
+   维度评分: D= P= L= E= Param=
+
+246. PMID: 32597750 [Score: 4/4]
+   Title: Antibody Responses after Classroom Exposure to Teacher with Coronavirus Disease, March 2020.
+   Overall: The paper studies COVID-19 and reports serologic results, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+247. PMID: 32659292 [Score: 4/4]
+   Title: Immunoglobulin fragment F(ab')2 against RBD potently neutralizes SARS-CoV-2 in vitro.
+   Overall: The paper reports on serological responses and antibody efficacy against SARS-CoV-2, aligning with the parameters of seroprevalence and antibody studies related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+248. PMID: 32871850 [Score: 4/4]
+   Title: Preliminary Data of a Quantitative Point of Care Test for SARS-CoV-2 Antibodies From Greece.
+   Overall: The paper reports on SARS-CoV-2 antibodies and provides data on antibody prevalence, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+249. PMID: 32958395 [Score: 4/4]
+   Title: Survey of the current status of subclinical coronavirus disease 2019 (COVID-19).
+   Overall: The paper reports on SARS-CoV-2 IgG antibody prevalence, which is a serological survey related to COVID-19, fitting the specified parameters for the systematic review.
+   维度评分: D= P= L= E= Param=
+
+250. PMID: 32561270 [Score: 4/4]
+   Title: Analysis of a SARS-CoV-2-Infected Individual Reveals Development of Potent Neutralizing Antibodies with Limited Somatic Mutation.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, including neutralization activity, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+251. PMID: 32403010 [Score: 4/4]
+   Title: Evaluation of two automated and three rapid lateral flow immunoassays for the detection of anti-SARS-CoV-2 antibodies.
+   Overall: The paper studies SARS-CoV-2 antibodies using serological assays, reporting on antibody detection, which aligns with the review parameters.
+   维度评分: D= P= L= E= Param=
+
+252. PMID: 32732168 [Score: 4/4]
+   Title: SARS-CoV-2 infection among healthcare workers of a gastroenterological service in a tertiary care facility.
+   Overall: The paper reports on SARS-CoV-2 infection among healthcare workers and includes serological testing data, fitting the criteria for the review.
+   维度评分: D= P= L= E= Param=
+
+253. PMID: 32693415 [Score: 4/4]
+   Title: Protecting Breastfeeding during the COVID-19 Pandemic.
+   Overall: The paper discusses COVID-19 and reports on serological aspects related to SARS-CoV-2, making it relevant for the review.
+   维度评分: D= P= L= E= Param=
+
+254. PMID: 32815342 [Score: 4/4]
+   Title: Antibody response in a family with COVID-19.
+   Overall: The paper reports on serological testing for SARS-CoV-2, including antibody detection, in a family cohort, which aligns with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+255. PMID: 32569631 [Score: 4/4]
+   Title: Impact of heat-inactivation on the detection of SARS-CoV-2 IgM and IgG antibody by ELISA.
+   Overall: The paper studies SARS-CoV-2 antibodies (IgM and IgG) using serological methods, which aligns with the parameter of seroprevalence or serological survey in COVID-19. Therefore, it should be included in the review.
+   维度评分: D= P= L= E= Param=
+
+256. PMID: 32388476 [Score: 4/4]
+   Title: Is copper beneficial for COVID-19 patients?
+   Overall: The paper discusses copper's role in immunity and its antiviral activity against SARS-CoV-2, directly relating to the specified parameters and disease.
+   维度评分: D= P= L= E= Param=
+
+257. PMID: 32681141 [Score: 4/4]
+   Title: Recurrence of positive SARS-CoV-2 viral RNA in recovered COVID-19 patients during medical isolation observation.
+   Overall: The paper reports on SARS-CoV-2 RNA testing in recovered COVID-19 patients, which directly relates to seroprevalence or antibody prevalence in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+258. PMID: 32484860 [Score: 4/4]
+   Title: Clinical Performance of the Roche SARS-CoV-2 Serologic Assay.
+   Overall: The paper's title and keywords indicate it studies SARS-CoV-2 serology, fitting the disease and parameter criteria for serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+259. PMID: 32473953 [Score: 4/4]
+   Title: Diagnostic performance of seven rapid IgG/IgM antibody tests and the Euroimmun IgA/IgG ELISA in COVID-19 patients.
+   Overall: The paper studies seroprevalence of antibodies (IgG/IgM) in COVID-19 patients, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+260. PMID: 32628990 [Score: 4/4]
+   Title: Serologic Detection of SARS-CoV-2 Infections in Hemodialysis Centers: A Multicenter Retrospective Study in Wuhan, China.
+   Overall: The paper reports on serological testing for SARS-CoV-2 infection, providing data on antibody prevalence in a specific patient population, which aligns with the parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+261. PMID: 32898153 [Score: 4/4]
+   Title: Detection and quantification of SARS-CoV-2 by droplet digital PCR in real-time PCR negative nasopharyngeal swabs from suspected COVID-19 patients.
+   Overall: The paper reports on the detection of SARS-CoV-2 using ddPCR, a serological survey method, in suspected COVID-19 patients, which aligns with the parameters of interest.
+   维度评分: D= P= L= E= Param=
+
+262. PMID: 32694083 [Score: 4/4]
+   Title: Apparent and occult infections of medical staff in a COVID-19 designated hospital.
+   Overall: The paper studies COVID-19 among medical staff and reports on serological testing, which relates to seroprevalence and serological surveys in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+263. PMID: 32484887 [Score: 4/4]
+   Title: Clinical Performance of the Elecsys Electrochemiluminescent Immunoassay for the Detection of SARS-CoV-2 Total Antibodies.
+   Overall: The paper focuses on SARS-CoV-2 and serology, aligning with the review parameters.
+   维度评分: D= P= L= E= Param=
+
+264. PMID: 32622905 [Score: 4/4]
+   Title: Longitudinal anti-SARS-CoV-2 antibody profile and neutralization activity of a COVID-19 patient.
+   Overall: The paper studies serological responses and antibody prevalence in a COVID-19 patient, directly relating to the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+265. PMID: 32667733 [Score: 4/4]
+   Title: Analytical and clinical validation of an ELISA for specific SARS-CoV-2 IgG, IgA, and IgM antibodies.
+   Overall: The paper reports on serological testing for SARS-CoV-2 antibodies, which aligns with the parameter of seroprevalence or antibody surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+266. PMID: 32554043 [Score: 4/4]
+   Title: Combination of serological total antibody and RT-PCR test for detection of SARS-COV-2 infections.
+   Overall: The paper studies SARS-CoV-2 and reports on serological testing, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+267. PMID: 32868226 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 antibodies among healthy blood donors in Karachi, Pakistan.
+   Overall: The paper studies SARS-CoV-2 antibodies in blood donors, reporting seroprevalence, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+268. PMID: 32421144 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2-Specific Antibodies Among Adults in Los Angeles County, California, on April 10-11, 2020.
+   Overall: The paper studies SARS-CoV-2 antibodies in a population, reporting seroprevalence, fitting the criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+269. PMID: 32402061 [Score: 4/4]
+   Title: Clinical Performance of Two SARS-CoV-2 Serologic Assays.
+   Overall: The paper reports on serological assays for SARS-CoV-2, including sensitivity and specificity data, which aligns with the parameters of interest.
+   维度评分: D= P= L= E= Param=
+
+270. PMID: 32665645 [Score: 4/4]
+   Title: SARS-CoV-2 proteome microarray for global profiling of COVID-19 specific IgG and IgM responses.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, including IgG and IgM, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+271. PMID: 32707511 [Score: 4/4]
+   Title: SARS-CoV-2-IgG response is different in COVID-19 outpatients and asymptomatic contact persons.
+   Overall: The paper studies SARS-CoV-2 seroprevalence in PCR-confirmed individuals, including asymptomatic contact persons, and reports antibody responses, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+272. PMID: 32656638 [Score: 4/4]
+   Title: Changes of hematological and immunological parameters in COVID-19 patients.
+   Overall: The paper studies COVID-19 and reports on serological parameters, specifically immunoglobulin G antibodies, which aligns with the review parameters.
+   维度评分: D= P= L= E= Param=
+
+273. PMID: 32104917 [Score: 4/4]
+   Title: Development and clinical application of a rapid IgM-IgG combined antibody test for SARS-CoV-2 infection diagnosis.
+   Overall: The paper reports on serological testing for SARS-CoV-2 infection, including antibody detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+274. PMID: 32679056 [Score: 4/4]
+   Title: Lower prevalence of antibodies neutralizing SARS-CoV-2 in group O French blood donors.
+   Overall: The paper reports on seroprevalence of antibodies against SARS-CoV-2 in blood donors, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+275. PMID: 32198501 [Score: 4/4]
+   Title: Profiling Early Humoral Response to Diagnose Novel Coronavirus Disease (COVID-19).
+   Overall: The paper studies serological responses (antibodies) to SARS-CoV-2, directly relating to seroprevalence and antibody detection in COVID-19 cases, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+276. PMID: 32704169 [Score: 4/4]
+   Title: A SARS-CoV-2 surrogate virus neutralization test based on antibody-mediated blockage of ACE2-spike protein-protein interaction.
+   Overall: The paper reports on a serological test for SARS-CoV-2, specifically detecting neutralizing antibodies, which aligns with the parameter of seroprevalence or antibody survey in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+277. PMID: 32747185 [Score: 4/4]
+   Title: Serologic responses to SARS-CoV-2 infection among hospital staff with mild disease in eastern France.
+   Overall: The paper studies SARS-CoV-2 infection and reports on antibody responses, fitting the disease and parameter criteria for serological survey.
+   维度评分: D= P= L= E= Param=
+
+278. PMID: 32283141 [Score: 4/4]
+   Title: Serological immunochromatographic approach in diagnosis with SARS-CoV-2 infected COVID-19 patients.
+   Overall: The paper reports on serological testing for SARS-CoV-2, specifically using an immunochromatographic assay, which aligns with the parameter of serological surveys in COVID-19 patients.
+   维度评分: D= P= L= E= Param=
+
+279. PMID: 32621339 [Score: 4/4]
+   Title: SARS-CoV-2 surveillance for a non-human primate breeding research facility.
+   Overall: The paper reports on serological testing for SARS-CoV-2 in a non-human primate population, aligning with the parameters of seroprevalence or antibody survey related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+280. PMID: 32664919 [Score: 4/4]
+   Title: A tertiary center experience of multiple myeloma patients with COVID-19: lessons learned and the path forward.
+   Overall: The paper reports on serological response to SARS-CoV-2 in COVID-19 patients with multiple myeloma, including antibody development, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+281. PMID: 32553273 [Score: 4/4]
+   Title: A SARS-CoV-2 Infection Model in Mice Demonstrates Protection by Neutralizing Antibodies.
+   Overall: The paper studies SARS-CoV-2 infection in mice and reports on antibody-mediated protection, which involves serological parameters relevant to the disease.
+   维度评分: D= P= L= E= Param=
+
+282. PMID: 32527802 [Score: 4/4]
+   Title: The receptor binding domain of the viral spike protein is an immunodominant and highly specific target of antibodies in SARS-CoV-2 patients.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, fitting the parameters for seroprevalence in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+283. PMID: 32534208 [Score: 4/4]
+   Title: Serologic testing of coronaviruses from MERS-CoV to SARS-CoV-2: Learning from the past and anticipating the future.
+   Overall: The paper's title and keywords indicate it discusses serologic testing related to SARS-CoV-2, fitting the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+284. PMID: 32408338 [Score: 4/4]
+   Title: Pathogenesis and transmission of SARS-CoV-2 in golden hamsters.
+   Overall: The paper studies SARS-CoV-2 infection in an animal model and reports on viral RNA detection, which aligns with the parameter of seroprevalence or antibody prevalence in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+285. PMID: 32416961 [Score: 4/4]
+   Title: Biochemical characterization of SARS-CoV-2 nucleocapsid protein.
+   Overall: The paper reports on the presence of antibodies against the N protein in COVID-19 patients' sera, which relates to seroprevalence and serological surveys for SARS-CoV-2.
+   维度评分: D= P= L= E= Param=
+
+286. PMID: 32376395 [Score: 4/4]
+   Title: SARS-CoV-2 infection among patients with systemic autoimmune diseases.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2 among patients with autoimmune diseases, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+287. PMID: 32485157 [Score: 4/4]
+   Title: Diagnostic performances and thresholds: The key to harmonization in serological SARS-CoV-2 assays?
+   Overall: The paper studies SARS-CoV-2 antibodies and reports on serological assays, fitting the disease and parameter criteria for seroprevalence or serological surveys.
+   维度评分: D= P= L= E= Param=
+
+288. PMID: 32979941 [Score: 4/4]
+   Title: Robust T Cell Immunity in Convalescent Individuals with Asymptomatic or Mild COVID-19.
+   Overall: The paper studies SARS-CoV-2-specific T cell responses in convalescent individuals, including those with asymptomatic or mild COVID-19, and reports on immune parameters relevant to seroprevalence and immune response.
+   维度评分: D= P= L= E= Param=
+
+289. PMID: 32676935 [Score: 4/4]
+   Title: Subacute thyroiditis in a patient infected with SARS-COV-2: an endocrine complication linked to the COVID-19 pandemic.
+   Overall: The paper reports on a serological survey related to SARS-CoV-2 infection, specifically discussing thyroiditis as a complication, which aligns with the parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+290. PMID: 32387320 [Score: 4/4]
+   Title: Tocilizumab therapy reduced intensive care unit admissions and/or mortality in COVID-19 patients.
+   Overall: The paper studies COVID-19 and reports on a serological parameter (outcome related to ICU admissions and mortality), fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+291. PMID: 32502646 [Score: 4/4]
+   Title: Comparison of diagnostic accuracies of rapid serological tests and ELISA to molecular diagnostics in patients with suspected coronavirus disease 2019 presenting to the hospital.
+   Overall: The paper studies COVID-19 and reports on serological tests (LFAs and ELISA), assessing their diagnostic performance, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+292. PMID: 32937590 [Score: 4/4]
+   Title: Acetylated K676 TGFBIp as a severity diagnostic blood biomarker for SARS-CoV-2 pneumonia.
+   Overall: The paper studies SARS-CoV-2 and reports on a serological biomarker (TGFBIp K676Ac) related to COVID-19 severity, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+293. PMID: 32360497 [Score: 4/4]
+   Title: The SARS-CoV-2 seroprevalence is the key factor for deconfinement in France.
+   Overall: The paper studies SARS-CoV-2 and reports on seroprevalence, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+294. PMID: 32335168 [Score: 4/4]
+   Title: Dynamics of anti-SARS-Cov-2 IgM and IgG antibodies among COVID-19 patients.
+   Overall: The title and keywords indicate the study focuses on antibody response (IgM and IgG) in COVID-19 patients, directly relating to seroprevalence parameters in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+295. PMID: 32526083 [Score: 4/4]
+   Title: Abnormal liver function tests predict transfer to intensive care unit and death in COVID-19.
+   Overall: The paper studies COVID-19 and reports on abnormal liver function tests, which are relevant to the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+296. PMID: 32739485 [Score: 4/4]
+   Title: Large-scale, molecular and serological SARS-CoV-2 screening of healthcare workers in a 4-site public hospital in Belgium after COVID-19 outbreak.
+   Overall: The paper studies SARS-CoV-2 screening and reports seroprevalence among healthcare workers, directly aligning with the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+297. PMID: 32921712 [Score: 4/4]
+   Title: COVID-19: What happened to the healthcare workers of a research and teaching hospital in Milan, Italy?
+   Overall: The paper reports on SARS-CoV-2 infection among healthcare workers, including testing data and prevalence, which aligns with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+298. PMID: 32493475 [Score: 4/4]
+   Title: A randomized multicenter clinical trial to evaluate the efficacy of melatonin in the prophylaxis of SARS-CoV-2 infection in high-risk contacts (MeCOVID Trial): A structured summary of a study protocol for a randomised controlled trial.
+   Overall: The study directly investigates SARS-CoV-2 infection and reports on prophylactic intervention, fitting the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+299. PMID: 32476258 [Score: 4/4]
+   Title: Clinical outcomes and serologic response in solid organ transplant recipients with COVID-19: A case series from the United States.
+   Overall: The paper studies COVID-19 and reports on serologic response, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+300. PMID: 32605363 [Score: 4/4]
+   Title: SARS-CoV-2 Coronavirus Nucleocapsid Antigen-Detecting Half-Strip Lateral Flow Assay Toward the Development of Point of Care Tests Using Commercially Available Reagents.
+   Overall: The paper focuses on developing a SARS-CoV-2 antigen detection assay, which is relevant to the parameter of serological or antigen prevalence studies for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+301. PMID: 32534626 [Score: 4/4]
+   Title: Seroprevalence of anti-SARS-CoV-2 IgG antibodies in Geneva, Switzerland (SEROCoV-POP): a population-based study.
+   Overall: The paper studies SARS-CoV-2 and reports on seroprevalence of anti-SARS-CoV-2 IgG antibodies, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+302. PMID: 32464584 [Score: 4/4]
+   Title: The underpinning biology relating to multiple sclerosis disease modifying treatments during the COVID-19 pandemic.
+   Overall: The paper discusses SARS-CoV-2 and COVID-19 in relation to immune responses, which is relevant to the parameter of seroprevalence or antibody-related studies during the COVID-19 pandemic.
+   维度评分: D= P= L= E= Param=
+
+303. PMID: 32781165 [Score: 4/4]
+   Title: SARS-CoV-2-related mortality in a rural Latin American population.
+   Overall: The paper reports a seroprevalence survey indicating SARS-CoV-2 antibodies in the population, directly relating to the parameter of seroprevalence.
+   维度评分: D= P= L= E= Param=
+
+304. PMID: 32642806 [Score: 4/4]
+   Title: Baricitinib as rescue therapy in a patient with COVID-19 with no complete response to sarilumab.
+   Overall: The paper discusses COVID-19 and reports on the use of baricitinib, which is relevant to seroprevalence or serological studies related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+305. PMID: 32641783 [Score: 4/4]
+   Title: Population-based surveys of antibodies against SARS-CoV-2 in Southern Brazil.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2 antibodies in Brazil, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+306. PMID: 32493739 [Score: 4/4]
+   Title: Kawasaki-like multisystem inflammatory syndrome in children during the covid-19 pandemic in Paris, France: prospective observational study.
+   Overall: The study reports on SARS-CoV-2 infection in children with Kawasaki-like syndrome, including serological evidence (IgG antibodies), fitting the parameters for seroprevalence in COVID-19 among children.
+   维度评分: D= P= L= E= Param=
+
+307. PMID: 32335175 [Score: 4/4]
+   Title: Reliability and usefulness of a rapid IgM-IgG antibody test for the diagnosis of SARS-CoV-2 infection: A preliminary report.
+   Overall: The paper focuses on SARS-CoV-2 and reports on antibody testing, which aligns with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+308. PMID: 32893789 [Score: 4/4]
+   Title: Seroconversion in Newly Diagnosed Cases of Coronavirus Disease.
+   Overall: The study directly investigates seroconversion in COVID-19 patients, reporting antibody prevalence over time, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+309. PMID: 32715672 [Score: 4/4]
+   Title: IgG Seroprevalence of COVID-19 among Individuals without a History of the Coronavirus Disease Infection in Daegu, Korea.
+   Overall: The paper reports on seroprevalence of COVID-19, which directly matches the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+310. PMID: 32723434 [Score: 4/4]
+   Title: Frequency and clinical correlates of antiphospholipid antibodies arising in patients with SARS-CoV-2 infection: findings from a multicentre study on 122 cases.
+   Overall: The paper studies COVID-19 and reports on serological parameters, specifically antiphospholipid antibodies, in COVID-19 patients, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+311. PMID: 32425648 [Score: 4/4]
+   Title: A preliminary study on serological assay for severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) in 238 admitted hospital patients.
+   Overall: The paper studies SARS-CoV-2 and reports on serological assay, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+312. PMID: 32743723 [Score: 4/4]
+   Title: Early-onset symptomatic neonatal COVID-19 infection with high probability of vertical transmission.
+   Overall: The paper reports on neonatal COVID-19 with serological evidence, directly relating to the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+313. PMID: 32663703 [Score: 4/4]
+   Title: Are antiphospholipid antibodies associated with thrombotic complications in critically ill COVID-19 patients?
+   Overall: The paper studies COVID-19 and reports on serological markers, including antiphospholipid antibodies, in critically ill patients, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+314. PMID: 32603629 [Score: 4/4]
+   Title: Serological characteristics of COVID-19 patients.
+   Overall: The title and keywords indicate a focus on serological characteristics related to COVID-19, which aligns with the parameter of seroprevalence or serological surveys for SARS-CoV-2.
+   维度评分: D= P= L= E= Param=
+
+315. PMID: 32733489 [Score: 4/4]
+   Title: Complement Inhibition in Coronavirus Disease (COVID)-19: A Neglected Therapeutic Option.
+   Overall: The title and keywords indicate the paper discusses COVID-19 and serological or immune response aspects related to the disease, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+316. PMID: 32882501 [Score: 4/4]
+   Title: Normal antibody response after COVID-19 during treatment with cladribine.
+   Overall: The paper studies COVID-19 and reports on antibody response, fitting the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+317. PMID: 32871063 [Score: 4/4]
+   Title: Humoral Immune Response to SARS-CoV-2 in Iceland.
+   Overall: The paper studies SARS-CoV-2 and reports on seroprevalence, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+318. PMID: 32719488 [Score: 4/4]
+   Title: Assessing the extent of SARS-CoV-2 circulation through serological studies.
+   Overall: The title indicates a focus on SARS-CoV-2 circulation through serological studies, aligning with the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+319. PMID: 32574789 [Score: 4/4]
+   Title: Predictive factors of mortality in patients treated with tocilizumab for acute respiratory distress syndrome related to coronavirus disease 2019 (COVID-19).
+   Overall: The paper studies COVID-19 patients and reports on serological biomarkers, fitting the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+320. PMID: 32645347 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 in Spain (ENE-COVID): a nationwide, population-based seroepidemiological study.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2 in Spain, directly studying the disease and reporting antibody prevalence, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+321. PMID: 32701920 [Score: 4/4]
+   Title: Correct management and low rate of contagiousness of healthcare workers in a University Hospital in Southern Italy: from contact tracing to serological investigation.
+   Overall: The paper reports on serological investigation and seroprevalence among healthcare workers related to COVID-19, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+322. PMID: 32603501 [Score: 4/4]
+   Title: Antibody responses against SARS-CoV-2 in COVID-19 patients.
+   Overall: The paper studies antibody responses against SARS-CoV-2 in COVID-19 patients, directly relating to serological parameters for the disease.
+   维度评分: D= P= L= E= Param=
+
+323. PMID: 32796119 [Score: 4/4]
+   Title: Clinical and laboratory evaluation of SARS-CoV-2 lateral flow assays for use in a national COVID-19 seroprevalence survey.
+   Overall: The paper evaluates serological tests for SARS-CoV-2, reporting on antibody detection, which aligns with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+324. PMID: 32868370 [Score: 4/4]
+   Title: 'Immunity Passports' for SARS-CoV-2: an online experimental study of the impact of antibody test terminology on perceived risk and behaviour.
+   Overall: The study reports on seroprevalence related to SARS-CoV-2 and antibody testing, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+325. PMID: 32807934 [Score: 4/4]
+   Title: A dynamic COVID-19 immune signature includes associations with poor prognosis.
+   Overall: The paper studies COVID-19 and reports on immune signatures, including cytokines and antibodies, which are relevant to seroprevalence and serological parameters.
+   维度评分: D= P= L= E= Param=
+
+326. PMID: 32305588 [Score: 4/4]
+   Title: Cytokine storm and immunomodulatory therapy in COVID-19: Role of chloroquine and anti-IL-6 monoclonal antibodies.
+   Overall: The paper discusses COVID-19 and immunomodulatory agents, which may include serological aspects, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+327. PMID: 32719685 [Score: 4/4]
+   Title: Targeting GM-CSF in COVID-19 Pneumonia: Rationale and Strategies.
+   Overall: The paper discusses COVID-19 and reports on cytokine levels, specifically GM-CSF, in the context of the disease, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+328. PMID: 32661423 [Score: 4/4]
+   Title: Neutralizing nanobodies bind SARS-CoV-2 spike RBD and block interaction with ACE2.
+   Overall: The paper studies SARS-CoV-2 and reports on neutralizing nanobodies that bind the spike RBD and block interaction with ACE2, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+329. PMID: 32771084 [Score: 4/4]
+   Title: Seroprevalence and presentation of SARS-CoV-2 in pregnancy.
+   Overall: The title indicates a focus on SARS-CoV-2 seroprevalence in pregnancy, aligning with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+330. PMID: 32680648 [Score: 4/4]
+   Title: Using Serology with Models to Clarify the Trajectory of the SARS-CoV-2 Emerging Outbreak.
+   Overall: The title indicates a focus on serology and SARS-CoV-2, aligning with the specified parameters for seroprevalence studies related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+331. PMID: 32814701 [Score: 4/4]
+   Title: The Urgency of Conducting Serological Studies for COVID-19.
+   Overall: The paper discusses serological studies related to COVID-19, aligning with the specified parameters for seroprevalence and serological surveys.
+   维度评分: D= P= L= E= Param=
+
+332. PMID: 32776963 [Score: 4/4]
+   Title: Modeling the role of asymptomatics in infection spread with application to SARS-CoV-2.
+   Overall: The paper studies SARS-CoV-2 and reports on seroepidemiologic aspects, including asymptomatic infections, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+333. PMID: 32417311 [Score: 4/4]
+   Title: The role of serology for COVID-19 control: Population, kinetics and test performance do matter.
+   Overall: The title indicates a focus on serology for COVID-19, which aligns with the parameter of serological surveys or antibody prevalence related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+334. PMID: 32794113 [Score: 4/4]
+   Title: Coronavirus disease 2019 (COVID-19) in autoimmune and inflammatory conditions: clinical characteristics of poor outcomes.
+   Overall: The paper studies COVID-19 and reports on seroprevalence or antibody-related parameters in patients with autoimmune conditions, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+335. PMID: 32383254 [Score: 4/4]
+   Title: Evaluation of SARS-CoV-2 neutralizing antibodies using a CPE-based colorimetric live virus micro-neutralization assay in human serum samples.
+   Overall: The paper studies SARS-CoV-2 and reports on serological testing (neutralization assay) in human serum samples, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+336. PMID: 32530392 [Score: 4/4]
+   Title: The prevalence of severe acute respiratory coronavirus virus 2 (SARS-CoV-2) IgG antibodies in intensive care unit (ICU) healthcare personnel (HCP) and its implications-a single-center, prospective, pilot study.
+   Overall: The title indicates a study on SARS-CoV-2 IgG antibody prevalence, which aligns with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+337. PMID: 32838448 [Score: 4/4]
+   Title: [Period Prevalence of SARS-CoV-2 in an Unselected Sample of Pregnant Women in Jena, Thuringia].
+   Overall: The study reports on SARS-CoV-2 seroprevalence in pregnant women, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+338. PMID: 33154264 [Score: 4/4]
+   Title: Prevalence of COVID-19 antibodies in healthcare workers at the peak of the pandemic in Mumbai, India: A preliminary study.
+   Overall: The paper reports on seroprevalence of COVID-19 antibodies in healthcare workers, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+339. PMID: 32820721 [Score: 4/4]
+   Title: Differential occupational risks to healthcare workers from SARS-CoV-2 observed during a prospective observational study.
+   Overall: The study reports serology (IgG antibodies) among healthcare workers during COVID-19, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+340. PMID: 32519921 [Score: 4/4]
+   Title: COVID-19 in a severe eosinophilic asthmatic receiving benralizumab - a case study.
+   Overall: The paper reports a case of COVID-19 in a patient with severe eosinophilic asthma, which is relevant to the disease and parameter of interest, although it is a case study rather than a broad epidemiological study.
+   维度评分: D= P= L= E= Param=
+
+341. PMID: 32329432 [Score: 4/4]
+   Title: COVID-19 Serosurveillance May Facilitate Return-to-Work Decisions.
+   Overall: The paper discusses serosurveillance related to COVID-19, which aligns with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+342. PMID: 32464586 [Score: 4/4]
+   Title: Favorable outcome after COVID-19 infection in a multiple sclerosis patient initiated on ocrelizumab during the pandemic.
+   Overall: The paper's title indicates it discusses COVID-19 in a patient with multiple sclerosis, and ocrelizumab is mentioned, which is relevant to the disease and treatment context. Although it does not explicitly mention seroprevalence or related parameters, it is relevant to COVID-19 in a specific patient population.
+   维度评分: D= P= L= E= Param=
+
+343. PMID: 32755528 [Score: 4/4]
+   Title: Household Clustering of SARS-CoV-2 in Community Settings: A Study from Rural Ecuador.
+   Overall: The study reports on SARS-CoV-2 seroprevalence in household settings, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+344. PMID: 32768701 [Score: 4/4]
+   Title: Low-dose subcutaneous tocilizumab to prevent disease progression in patients with moderate COVID-19 pneumonia and hyperinflammation.
+   Overall: The paper studies COVID-19 and reports on serological parameters such as CRP, which is relevant for seroprevalence or serological surveys, thus fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+345. PMID: 32557555 [Score: 4/4]
+   Title: Unexpected kinetics of anti-SARS-CoV-2 total antibodies in two patients with chronic lymphocytic leukemia.
+   Overall: The title and keywords indicate the study involves SARS-CoV-2 antibodies, which aligns with the serological parameter, and it relates to COVID-19, fitting the disease criteria.
+   维度评分: D= P= L= E= Param=
+
+346. PMID: 32710669 [Score: 4/4]
+   Title: Validation and performance comparison of three SARS-CoV-2 antibody assays.
+   Overall: The paper reports on serological testing for SARS-CoV-2, including antibody detection, which aligns with the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+347. PMID: 32388947 [Score: 4/4]
+   Title: [Analysis of the first cluster of cases in a family of COVID-19 in Gansu Province].
+   Overall: The paper studies COVID-19 and reports on serological testing (IgM antibodies), fitting the specified parameters for seroprevalence in COVID-19 cases.
+   维度评分: D= P= L= E= Param=
+
+348. PMID: 32785259 [Score: 4/4]
+   Title: Convalescent serum therapy for COVID-19: A 19th century remedy for a 21st century disease.
+   Overall: The paper discusses COVID-19 and involves serological aspects related to antibodies, fitting the criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+349. PMID: 32584894 [Score: 4/4]
+   Title: Prevalence of serum IgG antibodies against SARS-CoV-2 among clinic staff.
+   Overall: The paper studies SARS-CoV-2 IgG antibody prevalence among healthcare workers, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+350. PMID: 32475799 [Score: 4/4]
+   Title: A case of COVID-19 with long duration of viral shedding.
+   Overall: The title indicates a focus on COVID-19 and viral shedding, which aligns with the parameters of interest.
+   维度评分: D= P= L= E= Param=
+
+351. PMID: 32763195 [Score: 4/4]
+   Title: SeroTracker: a global SARS-CoV-2 seroprevalence dashboard.
+   Overall: The title indicates a focus on SARS-CoV-2 seroprevalence, aligning with the specified parameters, and keywords support this focus.
+   维度评分: D= P= L= E= Param=
+
+352. PMID: 32553914 [Score: 4/4]
+   Title: Exposure and seroconversion to severe acute respiratory syndrome coronavirus 2 among obstetrical healthcare providers following a contained outbreak.
+   Overall: The title indicates a study on seroconversion to SARS-CoV-2 among healthcare providers, aligning with the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+353. PMID: 32843121 [Score: 4/4]
+   Title: Antibody evidence of SARS-CoV-2 infection in healthcare workers in the Bronx.
+   Overall: The title indicates the study assesses antibody evidence of SARS-CoV-2 infection, which aligns with the seroprevalence parameter, and it involves healthcare workers, fitting the disease context.
+   维度评分: D= P= L= E= Param=
+
+354. PMID: 32686766 [Score: 4/4]
+   Title: Serosurvey of SARS-CoV-2 among hospital visitors in China.
+   Overall: The title indicates a serosurvey of SARS-CoV-2, which aligns with the parameter of serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+355. PMID: 32646770 [Score: 4/4]
+   Title: Clinical characteristics and predictors of survival in adults with coronavirus disease 2019 receiving tocilizumab.
+   Overall: The paper studies COVID-19 and reports on antibody prevalence, fitting the specified parameters for seroprevalence or serological surveys.
+   维度评分: D= P= L= E= Param=
+
+356. PMID: 33521714 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Hong Kong returnees - Authors' reply.
+   Overall: The title indicates a focus on SARS-CoV-2 seroprevalence, fitting the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+357. PMID: 33521713 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Hong Kong returnees.
+   Overall: The title indicates a seroprevalence study related to SARS-CoV-2, fitting the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+358. PMID: 32721528 [Score: 4/4]
+   Title: Early administration of interleukin-6 inhibitors for patients with severe COVID-19 disease is associated with decreased intubation, reduced mortality, and increased discharge.
+   Overall: The paper studies COVID-19 and reports on serological parameters related to treatment timing, which is relevant for the review.
+   维度评分: D= P= L= E= Param=
+
+359. PMID: 32875709 [Score: 4/4]
+   Title: Leveraging mRNA Sequences and Nanoparticles to Deliver SARS-CoV-2 Antigens In Vivo.
+   Overall: The paper discusses SARS-CoV-2 and reports on antibody responses induced by mRNA vaccines, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+360. PMID: 32454188 [Score: 4/4]
+   Title: Correlation between viral RNA shedding and serum antibodies in individuals with coronavirus disease 2019.
+   Overall: The title indicates a study on COVID-19 that examines viral RNA shedding and serum antibodies, which aligns with the disease and parameters of interest.
+   维度评分: D= P= L= E= Param=
+
+361. PMID: 33207437 [Score: 4/4]
+   Title: Environmental virus detection associated with asymptomatic SARS-CoV-2-infected individuals with positive anal swabs.
+   Overall: The paper reports on serological and pathogen detection in asymptomatic SARS-CoV-2 infected individuals, including antibody detection, which aligns with the review parameters.
+   维度评分: D= P= L= E= Param=
+
+362. PMID: 32760081 [Score: 4/4]
+   Title: Feasibility study of mitigation and suppression strategies for controlling COVID-19 outbreaks in London and Wuhan.
+   Overall: The paper reports on seroprevalence data in Wuhan, providing relevant information on antibody prevalence related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+363. PMID: 32650143 [Score: 4/4]
+   Title: Seroconversion and indolent course of COVID-19 in patients with multiple sclerosis treated with fingolimod and teriflunomide.
+   Overall: The title and keywords indicate the study involves COVID-19 and seroconversion, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+364. PMID: 32689586 [Score: 4/4]
+   Title: Acute ophthalmic artery occlusion in a COVID-19 patient on apixaban.
+   Overall: The paper studies COVID-19 and reports on a parameter related to thrombosis and anticoagulation, which aligns with the review criteria.
+   维度评分: D= P= L= E= Param=
+
+365. PMID: 32221133 [Score: 4/4]
+   Title: Detection of serum immunoglobulin M and immunoglobulin G antibodies in 2019 novel coronavirus infected patients from different stages.
+   Overall: The title indicates the study involves serological testing (IgM and IgG antibodies) in COVID-19 patients, directly relating to seroprevalence in the context of SARS-CoV-2.
+   维度评分: D= P= L= E= Param=
+
+366. PMID: 32553187 [Score: 4/4]
+   Title: Seroconversion in household members of COVID-19 outpatients.
+   Overall: The title indicates a study on seroconversion related to COVID-19, fitting the disease and parameter criteria for serological studies.
+   维度评分: D= P= L= E= Param=
+
+367. PMID: 32617986 [Score: 4/4]
+   Title: Characteristics and clinical outcomes of COVID-19 patients in an underserved-inner city population: A single tertiary center cohort.
+   Overall: The study reports on COVID-19 patients and includes data on biomarkers such as CRP levels, which are relevant to serological or antibody prevalence studies.
+   维度评分: D= P= L= E= Param=
+
+368. PMID: 32739486 [Score: 4/4]
+   Title: Characterising differential antibody response is integral to future SARS-CoV-2 serostudies.
+   Overall: The title and keywords indicate the paper studies antibody responses related to SARS-CoV-2, aligning with the serological parameters for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+369. PMID: 32460086 [Score: 4/4]
+   Title: B-cell depleting therapies may affect susceptibility to acute respiratory illness among patients with multiple sclerosis during the early COVID-19 epidemic in Iran.
+   Overall: The paper studies COVID-19 and reports on seroprevalence or related parameters, specifically examining susceptibility to COVID-19 among patients with MS on B-cell depleting therapies, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+370. PMID: 32654422 [Score: 4/4]
+   Title: Use of tocilizumab in kidney transplant recipients with COVID-19.
+   Overall: The paper studies COVID-19 and reports on serological markers (CRP) post-treatment, fitting the parameters for seroprevalence or serological survey in COVID-19 patients.
+   维度评分: D= P= L= E= Param=
+
+371. PMID: 32853597 [Score: 4/4]
+   Title: SARS-CoV-2 IgG and IgA antibody response is gender dependent; and IgG antibodies rapidly decline early on.
+   Overall: The paper studies SARS-CoV-2 antibody responses, specifically IgG and IgA, which aligns with the serological parameters of interest in COVID-19. Despite no abstract, the title and keywords suggest relevance to seroprevalence or antibody response.
+   维度评分: D= P= L= E= Param=
+
+372. PMID: 32721505 [Score: 4/4]
+   Title: Immunological detection of serum antibodies in pediatric medical workers exposed to varying levels of SARS-CoV-2.
+   Overall: The title indicates a serological survey related to SARS-CoV-2, and the keywords include COVID-19, SARS-CoV-2, antibodies, and prevalence, which align with the review parameters.
+   维度评分: D= P= L= E= Param=
+
+373. PMID: 32769230 [Score: 4/4]
+   Title: Epidemiological and Clinical Profile of Pediatric Inflammatory Multisystem Syndrome - Temporally Associated with SARS-CoV-2 (PIMS-TS) in Indian Children.
+   Overall: The paper studies SARS-CoV-2 in children and reports on antibody presence, fitting the parameters for seroprevalence or serological survey related to COVID-19 in children.
+   维度评分: D= P= L= E= Param=
+
+374. PMID: 32754908 [Score: 4/4]
+   Title: Delayed virus-specific antibody responses associate with COVID-19 mortality.
+   Overall: The title indicates a focus on antibody responses in COVID-19, which aligns with the serological parameters of interest for SARS-CoV-2.
+   维度评分: D= P= L= E= Param=
+
+375. PMID: 32690352 [Score: 4/4]
+   Title: Experience with tocilizumab in severe COVID-19 pneumonia after 80 days of follow-up: A retrospective cohort study.
+   Overall: The study involves COVID-19 and reports on serological responses, specifically the use of tocilizumab in severe COVID-19 pneumonia, which may include serological data relevant to the parameter.
+   维度评分: D= P= L= E= Param=
+
+376. PMID: 32826331 [Score: 4/4]
+   Title: IL-6 trans-signaling induces plasminogen activator inhibitor-1 from vascular endothelial cells in cytokine release syndrome.
+   Overall: The paper discusses COVID-19 and reports on cytokine levels, including IL-6, which aligns with the specified parameters for serological and cytokine studies related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+377. PMID: 32421292 [Score: 4/4]
+   Title: The 5% of the Population at High Risk for Severe COVID-19 Infection Is Identifiable and Needs to Be Taken Into Account When Reopening the Economy.
+   Overall: The paper discusses COVID-19 and reports on seroprevalence and antibody surveys, fitting the specified parameters for the systematic review.
+   维度评分: D= P= L= E= Param=
+
+378. PMID: 32653078 [Score: 4/4]
+   Title: Pandemic peak SARS-CoV-2 infection and seroconversion rates in London frontline health-care workers.
+   Overall: The title and keywords indicate the study focuses on SARS-CoV-2 infection and seroconversion rates, aligning with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+379. PMID: 32651113 [Score: 4/4]
+   Title: Recombinant SARS-CoV-2 spike S1-Fc fusion protein induced high levels of neutralizing responses in nonhuman primates.
+   Overall: The paper reports on serological responses (antibody titers and neutralizing activity) related to SARS-CoV-2, fitting the parameters for seroprevalence or antibody survey in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+380. PMID: 32909272 [Score: 4/4]
+   Title: Prevalence of SARS-COVID-19 serum IgG antibodies amongst staff on an acute surgical unit.
+   Overall: The study title indicates it assesses SARS-CoV-2 IgG antibody prevalence, fitting the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+381. PMID: 32320064 [Score: 4/4]
+   Title: Evaluation of the auxiliary diagnostic value of antibody assays for the detection of novel coronavirus (SARS-CoV-2).
+   Overall: The paper studies SARS-CoV-2 and reports on antibody assays, which are relevant to seroprevalence and serological surveys for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+382. PMID: 32710647 [Score: 4/4]
+   Title: Antibody responses to SARS-CoV-2 in healthy individuals returning to Shenzhen.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody prevalence, fitting the specified parameters for serological survey in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+383. PMID: 32845861 [Score: 4/4]
+   Title: SARS-CoV-2 serosurvey in health care workers of the Veneto Region.
+   Overall: The paper studies SARS-CoV-2 seroprevalence in health care workers, reporting antibody prevalence, which aligns with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+384. PMID: 32860964 [Score: 4/4]
+   Title: Treatment with tocilizumab or corticosteroids for COVID-19 patients with hyperinflammatory state: a multicentre cohort study (SAM-COVID-19).
+   Overall: The paper studies COVID-19 and reports on serological parameters related to the disease, fitting the criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+385. PMID: 32531475 [Score: 4/4]
+   Title: Clinical evaluation of serological IgG antibody response on the Abbott Architect for established SARS-CoV-2 infection.
+   Overall: The paper studies SARS-CoV-2 infection and reports on antibody prevalence (serological response), fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+386. PMID: 32374457 [Score: 4/4]
+   Title: The anti-HIV drug nelfinavir mesylate (Viracept) is a potent inhibitor of cell fusion caused by the SARSCoV-2 spike (S) glycoprotein warranting further evaluation as an antiviral against COVID-19 infections.
+   Overall: The paper studies SARS-CoV-2 and reports on the use of nelfinavir mesylate, an antiviral agent, which relates to the parameters of interest.
+   维度评分: D= P= L= E= Param=
+
+387. PMID: 32568413 [Score: 4/4]
+   Title: Diagnostic efficacy of anti-SARS-CoV-2 IgG/IgM test for COVID-19: A meta-analysis.
+   Overall: The paper studies serological testing (antibody detection) for COVID-19, reporting on the diagnostic efficacy of anti-SARS-CoV-2 IgG/IgM, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+388. PMID: 32674822 [Score: 4/4]
+   Title: Efficacy of a Test-Retest Strategy in Residents and Health Care Personnel of a Nursing Home Facing a COVID-19 Outbreak.
+   Overall: The paper reports on serological testing for antibodies against SARS-CoV-2 in a nursing home setting, directly addressing the parameter of seroprevalence or antibody prevalence related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+389. PMID: 32745068 [Score: 4/4]
+   Title: Evaluation of three fully-automated SARS-CoV-2 antibody assays.
+   Overall: The paper evaluates serological assays for SARS-CoV-2 antibodies, directly relating to COVID-19 and seroprevalence parameters.
+   维度评分: D= P= L= E= Param=
+
+390. PMID: 32701196 [Score: 4/4]
+   Title: Influence of immunosuppression on seroconversion against SARS-CoV-2 in two kidney transplant recipients.
+   Overall: The paper studies SARS-CoV-2 infection in transplant recipients and reports on antibody development, fitting the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+391. PMID: 32652161 [Score: 4/4]
+   Title: Comparison of test performance of commercial anti-SARS-CoV-2 immunoassays in serum and plasma samples.
+   Overall: The paper evaluates serological assays for anti-SARS-CoV-2 antibodies, directly relating to COVID-19 and seroprevalence parameters.
+   维度评分: D= P= L= E= Param=
+
+392. PMID: 32790206 [Score: 4/4]
+   Title: Low postpandemic wave SARS-CoV-2 seroprevalence in Kuala Lumpur and Selangor, Malaysia.
+   Overall: The title indicates a seroprevalence study related to COVID-19, fitting the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+393. PMID: 32647285 [Score: 4/4]
+   Title: Detection of SARS-CoV-2 in formalin-fixed paraffin-embedded tissue sections using commercially available reagents.
+   Overall: The paper studies SARS-CoV-2 detection in tissue samples, which is relevant to seroprevalence and serological surveys in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+394. PMID: 32866113 [Score: 4/4]
+   Title: Frequency of serological non-responders and false-negative RT-PCR results in SARS-CoV-2 testing: a population-based study.
+   Overall: The paper studies SARS-CoV-2 and reports on serological testing, specifically antibody prevalence, in COVID-19 patients, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+395. PMID: 32458479 [Score: 4/4]
+   Title: Diagnostic performance of immunochromatography assay for rapid detection of IgM and IgG in coronavirus disease 2019.
+   Overall: The paper reports on serological testing for COVID-19, specifically evaluating an immunochromatography assay for IgM and IgG detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+396. PMID: 32910980 [Score: 4/4]
+   Title: Evaluation of Abbott anti-SARS-CoV-2 CMIA IgG and Euroimmun ELISA IgG/IgA assays in a clinical lab.
+   Overall: The paper evaluates serological assays for SARS-CoV-2, reporting specificity, which aligns with the parameter of seroprevalence or serological survey related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+397. PMID: 32540900 [Score: 4/4]
+   Title: Broad neutralization of SARS-related viruses by human monoclonal antibodies.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, including neutralization, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+398. PMID: 32663041 [Score: 4/4]
+   Title: Anti-SARS-CoV-2 antibody testing in IBD healthcare professionals: are we currently able to provide COVID-free IBD clinics?
+   Overall: The paper reports on seroprevalence of anti-SARS-CoV-2 antibodies, which directly relates to the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+399. PMID: 32592502 [Score: 4/4]
+   Title: Analysis of the diagnostic value of serum specific antibody testing for coronavirus disease 2019.
+   Overall: The paper studies COVID-19 and reports on antibody testing, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+400. PMID: 32931734 [Score: 4/4]
+   Title: A Single-Dose Intranasal ChAd Vaccine Protects Upper and Lower Respiratory Tracts against SARS-CoV-2.
+   Overall: The paper reports on serological responses (IgA, antibodies) to SARS-CoV-2, fitting the parameters of seroprevalence or serological survey in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+401. PMID: 32648546 [Score: 4/4]
+   Title: Cumulative incidence and diagnosis of SARS-CoV-2 infection in New York.
+   Overall: The paper reports on seroprevalence and antibody testing related to SARS-CoV-2 infection, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+402. PMID: 32580529 [Score: 4/4]
+   Title: The Strategic Alliance between Clinical and Molecular Science in the War against SARS-CoV-2, with the Rapid-Diagnostics Test as an Indispensable Weapon for Front Line Doctors.
+   Overall: The paper discusses serological assays for SARS-CoV-2, aligning with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+403. PMID: 32527714 [Score: 4/4]
+   Title: Differential Diagnosis and Clinical Management of a Case of COVID-19 in a Patient With Stage III Lung Cancer Treated With Radio-chemotherapy and Durvalumab.
+   Overall: The paper's title and keywords indicate it studies COVID-19 in a patient with lung cancer, which is relevant to the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+404. PMID: 32587000 [Score: 4/4]
+   Title: Could a blood 'observatory' stop pandemics?
+   Overall: The title and keywords indicate a focus on COVID-19 and epidemiological monitoring, which likely involves seroprevalence or serological surveys, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+405. PMID: 32916926 [Score: 4/4]
+   Title: Improved Detection of Antibodies against SARS-CoV-2 by Microsphere-Based Antibody Assay.
+   Overall: The paper reports on seroprevalence of anti-SARS-CoV-2 antibodies, fitting the specified parameters for the systematic review.
+   维度评分: D= P= L= E= Param=
+
+406. PMID: 32829745 [Score: 4/4]
+   Title: Face masks for the prevention of COVID-19 - Rationale and design of the randomised controlled trial DANMASK-19.
+   Overall: The paper reports on a randomized controlled trial investigating the efficacy of face masks in preventing SARS-CoV-2 infection, directly related to COVID-19 and serological testing, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+407. PMID: 32389374 [Score: 4/4]
+   Title: [Cov19, seroprevalence studies and Individuals Protection Committees: aren't the technological and organizational challenges enough ?].
+   Overall: The title and keywords indicate the paper studies COVID-19 and seroepidemiologic aspects, fitting the criteria for seroprevalence studies related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+408. PMID: 32701938 [Score: 4/4]
+   Title: Population Point Prevalence of SARS-CoV-2 Infection Based on a Statewide Random Sample - Indiana, April 25-29, 2020.
+   Overall: The paper reports on seroprevalence and active infection prevalence of SARS-CoV-2, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+409. PMID: 32574261 [Score: 4/4]
+   Title: Humoral Immune Responses in COVID-19 Patients: A Window on the State of the Art.
+   Overall: The paper discusses antibody responses in COVID-19 patients, aligning with the parameter of serological surveys and antibody prevalence in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+410. PMID: 32847748 [Score: 4/4]
+   Title: Clinical features of neonates born to mothers with coronavirus disease-2019: A systematic review of 105 neonates.
+   Overall: The paper reports on serological and nucleic acid testing for SARS-CoV-2 in neonates born to mothers with COVID-19, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+411. PMID: 32436994 [Score: 4/4]
+   Title: Clinical outcomes in COVID-19 patients treated with tocilizumab: An individual patient data systematic review.
+   Overall: The paper reports on individual patient data related to COVID-19 and includes analysis of parameters such as IL-6 and CRP levels, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+412. PMID: 32661393 [Score: 4/4]
+   Title: Humoral and circulating follicular helper T cell responses in recovered patients with COVID-19.
+   Overall: The paper studies serological responses in recovered COVID-19 patients, reporting on antibody prevalence and immune responses, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+413. PMID: 32767137 [Score: 4/4]
+   Title: Universal screening of high-risk neonates, parents, and staff at a neonatal intensive care unit during the SARS-CoV-2 pandemic.
+   Overall: The paper reports on SARS-CoV-2 testing and serology in a neonatal intensive care setting, directly relating to the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+414. PMID: 33406577 [Score: 4/4]
+   Title: SARS-CoV-2 neutralizing antibody levels are correlated with severity of COVID-19 pneumonia.
+   Overall: The paper studies SARS-CoV-2 and reports on neutralizing antibody levels, which are relevant to the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+415. PMID: 32709909 [Score: 4/4]
+   Title: Patients with immune-mediated inflammatory diseases receiving cytokine inhibitors have low prevalence of SARS-CoV-2 seroconversion.
+   Overall: The paper studies SARS-CoV-2 seroconversion in a specific patient population, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+416. PMID: 32777861 [Score: 4/4]
+   Title: A cross-sectional study of immune seroconversion to SARS-CoV-2 in frontline maternity health professionals.
+   Overall: The study reports seroconversion to SARS-CoV-2 among healthcare workers, which aligns with the parameter of seroprevalence or serological survey related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+417. PMID: 32585617 [Score: 4/4]
+   Title: COVID-19 in 7 multiple sclerosis patients in treatment with ANTI-CD20 therapies.
+   Overall: The paper reports on serology status against SARS-CoV-2 in COVID-19 patients, which aligns with the parameter of seroprevalence or serological survey.
+   维度评分: D= P= L= E= Param=
+
+418. PMID: 32619328 [Score: 4/4]
+   Title: Antiphospholipid antibodies in patients with COVID-19: A relevant observation?
+   Overall: The paper studies COVID-19 and reports on antibody prevalence, specifically antiphospholipid antibodies, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+419. PMID: 32386808 [Score: 4/4]
+   Title: Prevalence of IgG antibodies to SARS-CoV-2 among emergency department employees.
+   Overall: The title indicates a seroprevalence study of IgG antibodies to SARS-CoV-2 among healthcare workers, fitting the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+420. PMID: 32719750 [Score: 4/4]
+   Title: Low Humoral Immune Response and Ineffective Clearance of SARS-Cov-2 in a COVID-19 Patient With CLL During a 69-Day Follow-Up.
+   Overall: The paper studies COVID-19 and reports on serological findings, including antibody responses, in a patient with a relevant disease during a follow-up period, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+421. PMID: 33047077 [Score: 4/4]
+   Title: Enzyme-Linked Immunosorbent Assay for the Detection of Severe Acute Respiratory Syndrome Coronavirus 2 (SARS-CoV-2) IgM/IgA and IgG Antibodies Among Healthcare Workers.
+   Overall: The paper studies SARS-CoV-2 seroprevalence among healthcare workers using serological tests, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+422. PMID: 32005618 [Score: 4/4]
+   Title: Seroprevalence of MERS-CoV in healthy adults in western Saudi Arabia, 2011-2016.
+   Overall: The paper reports on seroprevalence of MERS-CoV, which is a coronavirus, and involves serological testing, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+423. PMID: 32552831 [Score: 4/4]
+   Title: Challenge infection model for MERS-CoV based on naturally infected camels.
+   Overall: The paper reports on seroprevalence of MERS-CoV in camels, which is relevant to the parameter of seroprevalence.
+   维度评分: D= P= L= E= Param=
+
+424. PMID: 32766597 [Score: 4/4]
+   Title: High SARS-CoV-2 seroprevalence in health care workers but relatively low numbers of deaths in urban Malawi.
+   Overall: The paper reports on SARS-CoV-2 seroprevalence in Malawi, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+425. PMID: 32729953 [Score: 4/4]
+   Title: Time-dependent changes in the seroprevalence of COVID-19 in asymptomatic liver disease outpatients in an area in Japan undergoing a second wave of COVID-19.
+   Overall: The paper studies COVID-19 seroprevalence using serological surveys, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+426. PMID: 32837985 [Score: 4/4]
+   Title: Development of cell-based pseudovirus entry assay to identify potential viral entry inhibitors and neutralizing antibodies against SARS-CoV-2.
+   Overall: The paper reports on a serological assay involving SARS-CoV-2, specifically using pseudovirus neutralization, which relates to antibody detection and seroprevalence studies.
+   维度评分: D= P= L= E= Param=
+
+427. PMID: 32073157 [Score: 4/4]
+   Title: Antibodies to coronaviruses are higher in older compared with younger adults and binding antibodies are more sensitive than neutralizing antibodies in identifying coronavirus-associated illnesses.
+   Overall: The paper studies human coronaviruses and reports on antibody prevalence, including binding antibodies, in the context of respiratory illness, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+428. PMID: 32904990 [Score: 4/4]
+   Title: Clinical and immunologic features among COVID-19-affected mother-infant pairs: antibodies to SARS-CoV-2 detected in breast milk.
+   Overall: The paper reports on serological findings related to SARS-CoV-2 antibodies in breast milk, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+429. PMID: 32376700 [Score: 4/4]
+   Title: Detecting and Monitoring Porcine Hemagglutinating Encephalomyelitis Virus, an Underresearched Betacoronavirus.
+   Overall: The paper reports on seroprevalence of a coronavirus (PHEV) in pigs, which is relevant to the parameter 'seroprevalence' and the disease 'coronavirus'.
+   维度评分: D= P= L= E= Param=
+
+430. PMID: 33033717 [Score: 4/4]
+   Title: Prepare for the Future: Dissecting the Spike to Seek Broadly Neutralizing Antibodies and Universal Vaccine for Pandemic Coronaviruses.
+   Overall: The paper discusses SARS-CoV-2 and reports on antibody responses, aligning with the parameters for serological studies related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+431. PMID: 32984615 [Score: 4/4]
+   Title: Reliability of serological tests for COVID-19: comparison of three immunochromatography test kits for SARS-CoV-2 antibodies.
+   Overall: The paper evaluates serological tests for SARS-CoV-2 antibodies in COVID-19 patients, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+432. PMID: 32989419 [Score: 4/4]
+   Title: The Antibody Response to SARS-CoV-2 Infection.
+   Overall: The paper reports on serological testing for SARS-CoV-2 antibodies, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+433. PMID: 32692365 [Score: 4/4]
+   Title: Seroprevalence of Antibodies to SARS-CoV-2 in 10 Sites in the United States, March 23-May 12, 2020.
+   Overall: The paper reports on seroprevalence of antibodies to SARS-CoV-2 in the US, fitting the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+434. PMID: 32908997 [Score: 4/4]
+   Title: Serological Responses to Human Virome Define Clinical Outcomes of Italian Patients Infected with SARS-CoV-2.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, fitting the parameters for seroprevalence in COVID-19 patients.
+   维度评分: D= P= L= E= Param=
+
+435. PMID: 32793933 [Score: 4/4]
+   Title: Specificity and Performance of Nucleocapsid and Spike-based SARS-CoV-2 Serologic Assays.
+   Overall: The paper reports on serological assays for SARS-CoV-2, including evaluation of sensitivity and specificity, which aligns with the parameters of interest.
+   维度评分: D= P= L= E= Param=
+
+436. PMID: 32382418 [Score: 4/4]
+   Title: Detection of IgM and IgG antibodies in patients with coronavirus disease 2019.
+   Overall: The paper studies SARS-CoV-2 and reports on IgM and IgG antibody responses, fitting the criteria for serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+437. PMID: 32954232 [Score: 4/4]
+   Title: Tracing asymptomatic SARS-CoV-2 carriers among 3674 hospital staff:a cross-sectional survey.
+   Overall: The paper reports on serological testing (IgM/IgG antibodies) among hospital staff, which aligns with the parameter of seroprevalence or serological survey related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+438. PMID: 32838083 [Score: 4/4]
+   Title: The Cumulative Rate of SARS-CoV-2 Infection in Chinese Hemodialysis Patients.
+   Overall: The paper reports on serological testing for SARS-CoV-2 antibodies in a specific patient population, providing data on antibody prevalence, which aligns with the review parameters.
+   维度评分: D= P= L= E= Param=
+
+439. PMID: 32974370 [Score: 4/4]
+   Title: COVID-19 Infection Among Healthcare Workers: Serological Findings Supporting Routine Testing.
+   Overall: The paper studies COVID-19 among healthcare workers and reports on serological findings, including antibody testing, which aligns with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+440. PMID: 32438677 [Score: 4/4]
+   Title: Antibody Tests in Detecting SARS-CoV-2 Infection: A Meta-Analysis.
+   Overall: The paper reports on serological surveys and antibody testing for SARS-CoV-2, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+441. PMID: 32511302 [Score: 4/4]
+   Title: Analysis of SARS-CoV-2 Antibodies in COVID-19 Convalescent Blood using a Coronavirus Antigen Microarray.
+   Overall: The paper studies SARS-CoV-2 antibodies in convalescent blood, directly relating to serological surveys for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+442. PMID: 32867328 [Score: 4/4]
+   Title: Prevalence of Antibodies to SARS-CoV-2 in Italian Adults and Associated Risk Factors.
+   Overall: The paper reports on seroprevalence of anti-SARS-CoV-2 antibodies in a population, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+443. PMID: 32909004 [Score: 4/4]
+   Title: Rapid 'mix and read' assay for scalable detection of SARS-CoV-2 antibodies in patient plasma.
+   Overall: The paper reports on a serological assay for SARS-CoV-2 antibodies, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+444. PMID: 32679691 [Score: 4/4]
+   Title: Rapid Quantification of SARS-CoV-2-Neutralizing Antibodies Using Propagation-Defective Vesicular Stomatitis Virus Pseudotypes.
+   Overall: The paper reports on a serological survey measuring neutralizing antibodies in COVID-19 convalescent patients, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+445. PMID: 32560071 [Score: 4/4]
+   Title: COVID-19 Infection Fatality Rate Associated with Incidence-A Population-Level Analysis of 19 Spanish Autonomous Communities.
+   Overall: The paper reports on SARS-CoV-2 seroprevalence and estimates the infection fatality rate, fitting the specified parameters and disease.
+   维度评分: D= P= L= E= Param=
+
+446. PMID: 30064709 [Score: 4/4]
+   Title: Herd level estimation of probability of disease freedom applied on the Norwegian control program for bovine respiratory syncytial virus and bovine coronavirus.
+   Overall: The study involves serological testing for BRSV and BCV antibodies, which are relevant to the disease and parameter of interest, making it suitable for inclusion.
+   维度评分: D= P= L= E= Param=
+
+447. PMID: 33017875 [Score: 4/4]
+   Title: Confidence intervals for the COVID-19 neutralizing antibody retention rate in the Korean population.
+   Overall: The paper studies COVID-19 and reports antibody prevalence using serological tests, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+448. PMID: 32542208 [Score: 4/4]
+   Title: Rapid Detection of IgM Antibodies against the SARS-CoV-2 Virus via Colloidal Gold Nanoparticle-Based Lateral-Flow Assay.
+   Overall: The paper studies the detection of IgM antibodies against SARS-CoV-2, which is relevant to serological surveys for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+449. PMID: 32511369 [Score: 4/4]
+   Title: A Modular Microarray Imaging System for Highly Specific COVID-19 Antibody Testing.
+   Overall: The paper reports on a serological survey related to COVID-19, specifically involving antibody detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+450. PMID: 32743610 [Score: 4/4]
+   Title: High Community SARS-CoV-2 Antibody Seroprevalence in a Ski Resort Community, Blaine County, Idaho, US. Preliminary Results.
+   Overall: The study reports on SARS-CoV-2 antibody seroprevalence, directly matching the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+451. PMID: 32511839 [Score: 4/4]
+   Title: Molecular and serological investigation of cat viral infectious diseases in China from 2016 to 2019.
+   Overall: The paper reports on serological surveys and prevalence of viral infections in cats, which aligns with the specified parameters of seroprevalence and serological surveys related to COVID-19 or SARS-CoV-2.
+   维度评分: D= P= L= E= Param=
+
+452. PMID: 33527081 [Score: 4/4]
+   Title: Virological Characterization of the First 2 COVID-19 Patients Diagnosed in Italy: Phylogenetic Analysis, Virus Shedding Profile From Different Body Sites, and Antibody Response Kinetics.
+   Overall: The paper reports on serological analysis and antibody response in COVID-19 patients, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+453. PMID: 35960681 [Score: 4/4]
+   Title: Estimated prevalence and viral transmissibility in subjects with asymptomatic SARS-CoV-2 infections in Wuhan, China.
+   Overall: The paper estimates seroprevalence of antibodies against SARS-CoV-2, directly addressing the specified parameter in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+454. PMID: 32939231 [Score: 4/4]
+   Title: High seroprevalence of SARS-CoV-2 in elderly care employees in Sweden.
+   Overall: The paper studies SARS-CoV-2 seroprevalence among employees, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+455. PMID: 32513867 [Score: 4/4]
+   Title: Antibody signature induced by SARS-CoV-2 spike protein immunogens in rabbits.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, including neutralization, which aligns with the review parameters.
+   维度评分: D= P= L= E= Param=
+
+456. PMID: 32582598 [Score: 4/4]
+   Title: Are They Just Two Children COVID-19 Cases Confused With Flu?
+   Overall: The paper reports on serological evidence of SARS-CoV-2 in children, aligning with the parameter of seroprevalence or antibody survey in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+457. PMID: 32913581 [Score: 4/4]
+   Title: Unlocking COVID therapeutic targets: A structure-based rationale against SARS-CoV-2, SARS-CoV and MERS-CoV Spike.
+   Overall: The paper studies SARS-CoV-2 Spike protein and discusses potential therapeutic targets, reporting on structural and sequence analysis relevant to seroprevalence and serological studies.
+   维度评分: D= P= L= E= Param=
+
+458. PMID: 32719810 [Score: 4/4]
+   Title: Immune Phenotyping Based on the Neutrophil-to-Lymphocyte Ratio and IgG Level Predicts Disease Severity and Outcome for Patients With COVID-19.
+   Overall: The paper studies COVID-19 and reports on IgG antibody levels, fitting the criteria for the review.
+   维度评分: D= P= L= E= Param=
+
+459. PMID: 32869030 [Score: 4/4]
+   Title: A single immunization with spike-functionalized ferritin vaccines elicits neutralizing antibody responses against SARS-CoV-2 in mice.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, fitting the parameters for seroprevalence or antibody response in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+460. PMID: 32922049 [Score: 4/4]
+   Title: Coinfection of SARS-CoV-2 and Other Respiratory Pathogens.
+   Overall: The paper reports on serological and molecular detection of respiratory pathogens in COVID-19 patients, which aligns with the parameter of seroprevalence or serological surveys related to SARS-CoV-2.
+   维度评分: D= P= L= E= Param=
+
+461. PMID: 32676623 [Score: 4/4]
+   Title: SARS-CoV-2 Seroprevalence Among Parturient Women.
+   Overall: The paper studies SARS-CoV-2 seroprevalence in pregnant women, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+462. PMID: 32864605 [Score: 4/4]
+   Title: Development and effectiveness of pseudotyped SARS-CoV-2 system as determined by neutralizing efficiency and entry inhibition test in vitro.
+   Overall: The paper reports on a serological assay related to SARS-CoV-2, specifically assessing neutralizing antibodies in convalescent serum samples, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+463. PMID: 32760733 [Score: 4/4]
+   Title: Multisystem Inflammatory Syndrome With Complete Kawasaki Disease Features Associated With SARS-CoV-2 Infection in a Young Adult. A Case Report.
+   Overall: The paper reports on SARS-CoV-2 serology in the context of a multisystem inflammatory syndrome, which is relevant to the review parameters.
+   维度评分: D= P= L= E= Param=
+
+464. PMID: 32511572 [Score: 4/4]
+   Title: The RBD Of The Spike Protein Of SARS-Group Coronaviruses Is A Highly Specific Target Of SARS-CoV-2 Antibodies But Not Other Pathogenic Human and Animal Coronavirus Antibodies.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody prevalence using serological assays, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+465. PMID: 32511537 [Score: 4/4]
+   Title: COVID-19 serology at population scale: SARS-CoV-2-specific antibody responses in saliva.
+   Overall: The paper studies SARS-CoV-2 serology, specifically antibody responses in saliva, which directly relates to the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+466. PMID: 35960673 [Score: 4/4]
+   Title: Personnel protection strategy for healthcare workers in Wuhan during the COVID-19 epidemic.
+   Overall: The paper reports on serological testing for SARS-CoV-2 antibodies among healthcare workers, providing relevant seroprevalence data during the COVID-19 pandemic.
+   维度评分: D= P= L= E= Param=
+
+467. PMID: 32547909 [Score: 4/4]
+   Title: Prevalence of antibodies against COVID-19 in the staff of a COVID-19 regular ward.
+   Overall: The title indicates a study on antibody prevalence against COVID-19, which aligns with the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+468. PMID: 32743588 [Score: 4/4]
+   Title: Evidence of exposure to SARS-CoV-2 in cats and dogs from households in Italy.
+   Overall: The paper reports serological evidence of SARS-CoV-2 exposure in pets, aligning with the specified parameters for seroprevalence studies related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+469. PMID: 32501411 [Score: 4/4]
+   Title: SARS-CoV-2 infection serology: a useful tool to overcome lockdown?
+   Overall: The paper studies SARS-CoV-2 serology, reporting on antibody detection, which aligns with the specified parameters for seroprevalence and serological surveys in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+470. PMID: 32577702 [Score: 4/4]
+   Title: A tertiary center experience of multiple myeloma patients with COVID-19: lessons learned and the path forward.
+   Overall: The paper reports on serological response (antibody development) in COVID-19 patients with multiple myeloma, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+471. PMID: 32944166 [Score: 4/4]
+   Title: Pronounced difference in Covid-19 antibody prevalence indicates cluster transmission in Stockholm, Sweden.
+   Overall: The paper studies COVID-19 and reports on SARS-CoV-2 antibody prevalence, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+472. PMID: 33041707 [Score: 4/4]
+   Title: The Functional Medicine Approach to COVID-19: Primer on SARS-CoV-2 Testing.
+   Overall: The paper discusses serologic testing for SARS-CoV-2, which aligns with the parameter of serological surveys and antibody prevalence related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+473. PMID: 32511529 [Score: 4/4]
+   Title: A serological assay to detect SARS-CoV-2 antibodies in at-home collected finger-prick dried blood spots.
+   Overall: The paper reports on a serological assay for SARS-CoV-2 antibodies, directly related to the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+474. PMID: 32953275 [Score: 4/4]
+   Title: Collaborative networks enable the rapid establishment of serological assays for SARS-CoV-2 during nationwide lockdown in New Zealand.
+   Overall: The paper reports on serological assays for SARS-CoV-2, including antibody detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+475. PMID: 32511483 [Score: 4/4]
+   Title: Serological identification of SARS-CoV-2 infections among children visiting a hospital during the initial Seattle outbreak.
+   Overall: The paper reports on serological surveys related to SARS-CoV-2 infections, fitting the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+476. PMID: 32733782 [Score: 4/4]
+   Title: Seroprevalence of COVID-19 antibodies in the cleaning and oncological staff of a municipal clinic.
+   Overall: The paper studies COVID-19 antibody prevalence in a specific population, aligning with the parameters for seroprevalence studies related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+477. PMID: 32839786 [Score: 4/4]
+   Title: SARS-CoV-2 Antibody Responses Correlate with Resolution of RNAemia But Are Short-Lived in Patients with Mild Illness.
+   Overall: The paper studies SARS-CoV-2 antibody responses, including serological responses, in COVID-19 patients, fitting the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+478. PMID: 32443459 [Score: 4/4]
+   Title: Point-of-Care Diagnostic Tests for Detecting SARS-CoV-2 Antibodies: A Systematic Review and Meta-Analysis of Real-World Data.
+   Overall: The paper studies SARS-CoV-2 and reports on serological testing, which relates to antibody prevalence, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+479. PMID: 32837336 [Score: 4/4]
+   Title: Impact of COVID-19 on the performance of a radiation oncology department at a major comprehensive cancer centre in Poland during the first ten weeks of the epidemic.
+   Overall: The paper studies COVID-19 and reports on serological testing (antibodies), fitting the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+480. PMID: 32743592 [Score: 4/4]
+   Title: Kinetics and Isotype Assessment of Antibodies Targeting the Spike Protein Receptor Binding Domain of SARS-CoV-2 In COVID-19 Patients as a function of Age and Biological Sex.
+   Overall: The paper studies anti-RBD-S antibodies in COVID-19 patients, directly addressing the seroprevalence parameter in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+481. PMID: 33748431 [Score: 4/4]
+   Title: Antibody testing for COVID-19: A report from the National COVID Scientific Advisory Panel.
+   Overall: The paper studies COVID-19 and reports on serological testing (ELISA and LFIA), including antibody detection, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+482. PMID: 32511477 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence and neutralizing activity in donor and patient blood from the San Francisco Bay Area.
+   Overall: The paper reports on SARS-CoV-2 seroprevalence and antibody dynamics, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+483. PMID: 32577677 [Score: 4/4]
+   Title: Serology confirms SARS-CoV-2 infection in PCR-negative children presenting with Paediatric Inflammatory Multi-System Syndrome.
+   Overall: The paper studies SARS-CoV-2 infection in children using serological methods, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+484. PMID: 32656223 [Score: 4/4]
+   Title: Re-positive Cases of Nucleic Acid Tests in Discharged Patients With COVID-19: A Follow-Up Study.
+   Overall: The paper studies COVID-19 patients and reports on follow-up testing, including re-positive cases, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+485. PMID: 32511657 [Score: 4/4]
+   Title: Ultra-Sensitive High-Resolution Profiling of Anti-SARS-CoV-2 Antibodies for Detecting Early Seroconversion in COVID-19 Patients.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody prevalence, fitting the criteria for inclusion in the review.
+   维度评分: D= P= L= E= Param=
+
+486. PMID: 32511417 [Score: 4/4]
+   Title: Single-dose replicating RNA vaccine induces neutralizing antibodies against SARS-CoV-2 in nonhuman primates.
+   Overall: The paper reports on serological responses, specifically antibody responses, to a SARS-CoV-2 vaccine in nonhuman primates, fitting the criteria for seroprevalence or antibody survey in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+487. PMID: 32577675 [Score: 4/4]
+   Title: Serological Assays Estimate Highly Variable SARS-CoV-2 Neutralizing Antibody Activity in Recovered COVID19 Patients.
+   Overall: The paper studies SARS-CoV-2 serological assays and reports on antibody levels and seroprevalence in recovered COVID-19 patients, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+488. PMID: 32511497 [Score: 4/4]
+   Title: Test performance evaluation of SARS-CoV-2 serological assays.
+   Overall: The paper evaluates serological assays for SARS-CoV-2, directly related to seroprevalence and serological survey parameters in COVID-19 cases.
+   维度评分: D= P= L= E= Param=
+
+489. PMID: 32743600 [Score: 4/4]
+   Title: Dynamics and significance of the antibody response to SARS-CoV-2 infection.
+   Overall: The paper studies SARS-CoV-2 and reports on antibody responses, fitting the parameters for seroprevalence or serological survey related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+490. PMID: 32577662 [Score: 4/4]
+   Title: Relationship between Anti-Spike Protein Antibody Titers and SARS-CoV-2 In Vitro Virus Neutralization in Convalescent Plasma.
+   Overall: The paper studies serological parameters (anti-spike protein IgG titers) in relation to SARS-CoV-2, which aligns with the specified parameters for seroprevalence or antibody surveys.
+   维度评分: D= P= L= E= Param=
+
+491. PMID: 32823852 [Score: 4/4]
+   Title: EDTA-Anticoagulated Whole Blood for SARS-CoV-2 Antibody Testing by Electrochemiluminescence Immunoassay (ECLIA) and Enzyme-Linked Immunosorbent Assay (ELISA).
+   Overall: The paper studies SARS-CoV-2 antibodies using serological assays, which aligns with the parameter of seroprevalence or antibody survey in COVID-19. It reports on antibody detection in blood samples, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+492. PMID: 32817969 [Score: 4/4]
+   Title: Detection, prevalence, and duration of humoral responses to SARS-CoV-2 under conditions of limited population exposure.
+   Overall: The paper studies SARS-CoV-2 and reports on serological responses, including antibody prevalence, making it relevant for the review.
+   维度评分: D= P= L= E= Param=
+
+493. PMID: 32743612 [Score: 4/4]
+   Title: Rapid and sensitive detection of SARS-CoV-2 antibodies by biolayer interferometry.
+   Overall: The paper reports on the detection of SARS-CoV-2 antibodies and provides quantitative results, fitting the criteria for serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+494. PMID: 32706959 [Score: 4/4]
+   Title: Rapid Decay of Anti-SARS-CoV-2 Antibodies in Persons with Mild Covid-19.
+   Overall: The title indicates a study related to SARS-CoV-2 antibodies, which aligns with the specified disease and parameter, justifying inclusion.
+   维度评分: D= P= L= E= Param=
+
+495. PMID: 32984390 [Score: 4/4]
+   Title: The Rapid Coronavirus Antibody Test: Can We Improve Accuracy?
+   Overall: The paper's focus on SARS-CoV-2 antibodies and rapid testing aligns with the specified disease and parameter, indicating relevance for the review.
+   维度评分: D= P= L= E= Param=
+
+496. PMID: 32708872 [Score: 4/4]
+   Title: Neutralizing Antibody Production in Asymptomatic and Mild COVID-19 Patients, in Comparison with Pneumonic COVID-19 Patients.
+   Overall: The paper studies COVID-19 and reports on antibody production, including serological assays, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+497. PMID: 33518823 [Score: 4/4]
+   Title: Visualizing the invisible: The effect of asymptomatic transmission on the outbreak dynamics of COVID-19.
+   Overall: The paper reports on seroprevalence estimates related to COVID-19, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+498. PMID: 32817961 [Score: 4/4]
+   Title: Quantifying absolute neutralization titers against SARS-CoV-2 by a standardized virus neutralization assay allows for cross-cohort comparisons of COVID-19 sera.
+   Overall: The paper reports on a serological assay for SARS-CoV-2 neutralization titers, directly relevant to the parameter of serological surveys and antibody prevalence in COVID-19 research.
+   维度评分: D= P= L= E= Param=
+
+499. PMID: 32869035 [Score: 4/4]
+   Title: Visualizing the invisible: The effect of asymptomatic transmission on the outbreak dynamics of COVID-19.
+   Overall: The paper reports on seroprevalence studies related to COVID-19, specifically estimating antibody prevalence, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+500. PMID: 32793928 [Score: 4/4]
+   Title: Longitudinal analysis of clinical serology assay performance and neutralising antibody levels in COVID19 convalescents.
+   Overall: The paper studies SARS-CoV-2 serological assays and reports on antibody prevalence and neutralising antibody levels, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+501. PMID: 32708750 [Score: 4/4]
+   Title: The Spectrum of Clinical and Serological Features of COVID-19 in Urban Hemodialysis Patients.
+   Overall: The paper studies COVID-19 and reports on serological features, including antibody testing, in hemodialysis patients, fitting the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+502. PMID: 32670091 [Score: 4/4]
+   Title: The Modulation of Mucosal Antiviral Immunity by Immunobiotics: Could They Offer Any Benefit in the SARS-CoV-2 Pandemic?
+   Overall: The paper discusses SARS-CoV-2 and reports on immune responses related to the virus, fitting the criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+503. PMID: 32743576 [Score: 4/4]
+   Title: De novo design of modular and tunable allosteric biosensors.
+   Overall: The abstract discusses the development of biosensors for SARS-CoV-2, specifically mentioning sensors for the receptor-binding domain (RBD) of the SARS-CoV-2 Spike protein, which is relevant to COVID-19 diagnostics.
+   维度评分: D= P= L= E= Param=
+
+504. PMID: 32577669 [Score: 4/4]
+   Title: Plasma from recovered COVID19 subjects inhibits spike protein binding to ACE2 in a microsphere-based inhibition assay.
+   Overall: The paper studies SARS-CoV-2 antibodies and their functional activity, which aligns with the parameters for COVID-19 serological studies.
+   维度评分: D= P= L= E= Param=
+
+505. PMID: 32793916 [Score: 4/4]
+   Title: Evaluation of Serological SARS-CoV-2 Lateral Flow Assays for Rapid Point of Care Testing.
+   Overall: The paper evaluates serological assays for SARS-CoV-2 antibodies, directly relating to the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+506. PMID: 32743568 [Score: 4/4]
+   Title: Single-dose intranasal vaccination elicits systemic and mucosal immunity against SARS-CoV-2.
+   Overall: The paper studies SARS-CoV-2 and reports on serological responses, including mucosal IgA, which aligns with the parameters for seroprevalence or antibody responses related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+507. PMID: 32954173 [Score: 4/4]
+   Title: Highly Sensitive Fluorescence-Linked Immunosorbent Assay for the Determination of Human IgG in Serum Using Quantum Dot Nanobeads and Magnetic Fe3O4 Nanospheres.
+   Overall: The paper discusses the detection of SARS-CoV-2-specific IgG antibodies, which aligns with the parameter of seroprevalence or serological surveys related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+508. PMID: 32839781 [Score: 4/4]
+   Title: Universal PCR and antibody testing demonstrate little to no transmission of SARS-CoV-2 in a rural community.
+   Overall: The paper reports seroprevalence data for SARS-CoV-2 in a community, aligning with the specified parameter of seroprevalence.
+   维度评分: D= P= L= E= Param=
+
+509. PMID: 32818725 [Score: 4/4]
+   Title: Will all SARS-CoV-2 seroprevalence surveys provide the right picture?
+   Overall: The title indicates a focus on SARS-CoV-2 seroprevalence surveys, which aligns with the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+510. PMID: 32511385 [Score: 4/4]
+   Title: Yeast-Expressed SARS-CoV Recombinant Receptor-Binding Domain (RBD219-N1) Formulated with Aluminum Hydroxide Induces Protective Immunity and Reduces Immune Enhancement.
+   Overall: The paper studies SARS-CoV and reports on antibody responses and protection, which are relevant to seroprevalence and serological surveys for SARS-CoV.
+   维度评分: D= P= L= E= Param=
+
+511. PMID: 32793926 [Score: 4/4]
+   Title: Features and Functions of Systemic and Mucosal Humoral Immunity Among SARS-CoV-2 Convalescent Individuals.
+   Overall: The paper studies SARS-CoV-2 immune responses and reports on antibody responses, which aligns with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+512. PMID: 32511472 [Score: 4/4]
+   Title: Standardization of enzyme-linked immunosorbent assays for serosurveys of the SARS-CoV-2 pandemic using clinical and at-home blood sampling.
+   Overall: The paper discusses serological surveys for SARS-CoV-2, reporting on antibody detection methods, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+513. PMID: 32515499 [Score: 4/4]
+   Title: Higher levels of IL-6 early after tocilizumab distinguish survivors from nonsurvivors in COVID-19 pneumonia: A possible indication for deeper targeting of IL-6.
+   Overall: The paper studies COVID-19 and reports on serological parameters, specifically IL-6 levels, which are relevant to the review parameters.
+   维度评分: D= P= L= E= Param=
+
+514. PMID: 32511506 [Score: 4/4]
+   Title: A SARS-CoV-2 serological assay to determine the presence of blocking antibodies that compete for human ACE2 binding.
+   Overall: The paper studies SARS-CoV-2 serological responses and reports on antibody detection, fitting the parameters for seroprevalence in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+515. PMID: 32425634 [Score: 4/4]
+   Title: The dynamics of antibodies to SARS-CoV-2 in a case of SARS-CoV-2 infection.
+   Overall: The title indicates a study on SARS-CoV-2 infection and antibodies, which aligns with the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+516. PMID: 32817980 [Score: 4/4]
+   Title: Neutralizing antibodies correlate with protection from SARS-CoV-2 in humans during a fishery vessel outbreak with high attack rate.
+   Overall: The study reports on serological testing and antibody presence related to SARS-CoV-2, fitting the parameters for seroprevalence or serological survey in the context of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+517. PMID: 32953832 [Score: 4/4]
+   Title: SARS-CoV-2 antibodies titration: a reappraisal.
+   Overall: The title indicates a focus on SARS-CoV-2 antibodies titration, which relates to serological surveys and antibody prevalence, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+518. PMID: 32588002 [Score: 4/4]
+   Title: Detection of antibodies to the SARS-CoV-2 spike glycoprotein in both serum and saliva enhances detection of infection.
+   Overall: The paper studies SARS-CoV-2 antibody responses, which directly relates to the disease and parameter of interest, and reports on serological detection methods.
+   维度评分: D= P= L= E= Param=
+
+519. PMID: 32607518 [Score: 4/4]
+   Title: Evaluation of two commercial and two non-commercial immunoassays for the detection of prior infection to SARS-CoV-2.
+   Overall: The paper evaluates serological assays for SARS-CoV-2, reporting on antibody prevalence and seropositivity, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+520. PMID: 34594729 [Score: 4/4]
+   Title: Antibody Response to COVID-19 Virus - Heilongjiang Province and Gansu Province, China, 2020.
+   Overall: The paper studies serological responses (antibodies) to COVID-19, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+521. PMID: 35519100 [Score: 4/4]
+   Title: A facile assay for rapid detection of COVID-19 antibodies.
+   Overall: The paper reports on a serological assay for COVID-19 antibodies with data on sensitivity and specificity, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+522. PMID: 32628003 [Score: 4/4]
+   Title: Tocilizumab in patients with severe COVID-19: A single-center observational analysis.
+   Overall: The paper reports on COVID-19 patients and measures parameters related to serological markers (CRP), which are relevant for seroprevalence or serological surveys in COVID-19.
+   维度评分: D= P= L= E= Param=
+
+523. PMID: 32398901 [Score: 4/4]
+   Title: In the midst of the perfect storm: Swift public health actions needed in order to increase societal safety during the COVID-19 pandemic.
+   Overall: The paper discusses sero-prevalence in the context of COVID-19, aligning with the specified parameters for the review.
+   维度评分: D= P= L= E= Param=
+
+524. PMID: 32709608 [Score: 4/4]
+   Title: Covid-19: US cases are greatly underestimated, seroprevalence studies suggest.
+   Overall: The title indicates a focus on COVID-19 and seroprevalence studies, which aligns with the specified parameters for the review.
+   维度评分: D= P= L= E= Param=
+
+525. PMID: 32352406 [Score: 4/4]
+   Title: Prototype pathogen approach for pandemic preparedness: world on fire.
+   Overall: The paper's title and keywords indicate it addresses COVID-19, which is relevant to the disease criterion.
+   维度评分: D= P= L= E= Param=
+
+526. PMID: 32379918 [Score: 4/4]
+   Title: Coagulopathy of COVID-19 and antiphospholipid antibodies.
+   Overall: The title indicates a focus on COVID-19 and serological aspects, likely related to antibodies, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+527. PMID: 32923991 [Score: 4/4]
+   Title: Compassionate use of convalescent plasma for treatment of moderate and severe pneumonia in COVID-19 patients and association with IgG antibody levels in donated plasma.
+   Overall: The paper studies COVID-19 and reports on antibody levels in convalescent plasma, directly addressing the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+528. PMID: 32727468 [Score: 4/4]
+   Title: A new passive immune strategy based on IgY antibodies as a key element to control neonatal calf diarrhea in dairy farms.
+   Overall: The paper studies the use of IgY antibodies, which are relevant to serological parameters, in the context of infectious neonatal calf diarrhea, aligning with the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+529. PMID: 35241216 [Score: 4/4]
+   Title: Seroprevalence of IgG antibodies against SARS-CoV-2 - a serial prospective cross-sectional nationwide study of residual samples, Belgium, March to October 2020.
+   Overall: The paper studies SARS-CoV-2 seroprevalence using serological surveys, directly matching the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+530. PMID: 34877995 [Score: 4/4]
+   Title: Prevalence of COVID-19 infection in the prison system in Espírito Santo/Brazil: persons deprived of liberty and justice workers.
+   Overall: The paper reports on the seroprevalence of COVID-19 in a specific population, aligning with the parameters for serological surveys and COVID-19.
+   维度评分: D= P= L= E= Param=
+
+531. PMID: 32638883 [Score: 4/4]
+   Title: Seroprevalence of anti-SARS-CoV-2 among blood donors in Rio de Janeiro, Brazil.
+   Overall: The paper directly studies SARS-CoV-2 seroprevalence, reporting prevalence estimates among blood donors, fitting the specified disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+532. PMID: 34416142 [Score: 4/4]
+   Title: Assessment of initial SARS-CoV-2 seroprevalence in the most affected districts in the municipality of São Paulo, Brazil.
+   Overall: The paper directly studies SARS-CoV-2 seroprevalence in humans, reporting serological survey data, fitting the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+533. PMID: 32649743 [Score: 4/4]
+   Title: Severe Acute Respiratory Syndrome Coronavirus 2 Antibody Prevalence in Blood in a Large School Community Subject to a Coronavirus Disease 2019 Outbreak: A Cross-sectional Study.
+   Overall: The paper reports on SARS-CoV-2 antibody seroprevalence in a school community, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+534. PMID: 33654063 [Score: 4/4]
+   Title: The prevalence of antibodies to SARS-CoV-2 among blood donors in China.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2 antibodies, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+535. PMID: 32311142 [Score: 4/4]
+   Title: Serological tests facilitate identification of asymptomatic SARS-CoV-2 infection in Wuhan, China.
+   Overall: The title indicates a serological study related to SARS-CoV-2, which aligns with the disease and parameter criteria for seroprevalence or serological surveys.
+   维度评分: D= P= L= E= Param=
+
+536. PMID: 32813273 [Score: 4/4]
+   Title: Low prevalence of antibodies against SARS-CoV-2 among voluntary blood donors in Guangzhou, China.
+   Overall: The paper reports on serological testing for SARS-CoV-2 antibodies among blood donors, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+537. PMID: 32925526 [Score: 4/4]
+   Title: SARS-CoV-2 Antibody Seroprevalence in Industry Workers in Split-Dalmatia and Šibenik-Knin County, Croatia.
+   Overall: The paper directly studies SARS-CoV-2 antibody seroprevalence and reports specific serological data, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+538. PMID: 33501969 [Score: 4/4]
+   Title: Estimation of SARS-CoV-2 Infection Fatality Rate by Real-time Antibody Screening of Blood Donors.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2 using antibody testing, directly addressing the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+539. PMID: 33860747 [Score: 4/4]
+   Title: SARS-CoV-2 infection in schools in a northern French city: a retrospective serological cohort study in an area of high transmission, France, January to April 2020.
+   Overall: The paper reports on SARS-CoV-2 seroprevalence in a school setting, directly studying the parameter of serological survey related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+540. PMID: 32677025 [Score: 4/4]
+   Title: Novel coronavirus epidemic in the Hungarian population, a cross-sectional nationwide survey to support the exit policy in Hungary.
+   Overall: The paper reports on serological survey data related to SARS-CoV-2 in Hungary, providing seroprevalence estimates, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=
+
+541. PMID: 33197394 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in slums versus non-slums in Mumbai, India.
+   Overall: The title indicates a seroprevalence study related to SARS-CoV-2, fitting the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+542. PMID: 33175878 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 specific IgG antibodies in District Srinagar, northern India - A cross-sectional study.
+   Overall: The paper studies SARS-CoV-2 and reports on seroprevalence of IgG antibodies, fitting the specified parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+543. PMID: 33349310 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Guilan Province, Iran, April 2020.
+   Overall: The paper reports on SARS-CoV-2 seroprevalence, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+544. PMID: 33898863 [Score: 4/4]
+   Title: Estimation of seroprevalence of novel coronavirus disease (COVID-19) using preserved serum at an outpatient setting in Kobe, Japan: A cross-sectional study.
+   Overall: The paper directly studies COVID-19 and reports seroprevalence, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+545. PMID: 32674696 [Score: 4/4]
+   Title: Geographical Profiles of COVID-19 Outbreak in Tokyo: An Analysis of the Primary Care Clinic-Based Point-of-Care Antibody Testing.
+   Overall: The paper reports on seroprevalence of SARS-CoV-2, directly studying COVID-19 and reporting antibody prevalence, fitting the review criteria.
+   维度评分: D= P= L= E= Param=
+
+546. PMID: 33977017 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Utsunomiya City, Greater Tokyo, after the first pandemic in 2020.
+   Overall: The paper studies SARS-CoV-2 seroprevalence in Japan, directly addressing the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+547. PMID: 33177105 [Score: 4/4]
+   Title: Seroprevalence of anti-SARS-CoV-2 IgG antibodies in Kenyan blood donors.
+   Overall: The paper studies SARS-CoV-2 and reports seroprevalence of anti-SARS-CoV-2 IgG antibodies, fitting the review parameters.
+   维度评分: D= P= L= E= Param=
+
+548. PMID: 38336649 [Score: 4/4]
+   Title: Creation of a pandemic memory by tracing COVID-19 infections and immunity in Luxembourg (CON-VINCE).
+   Overall: The study reports on SARS-CoV-2 infection prevalence and includes serological data, fitting the criteria for the review.
+   维度评分: D= P= L= E= Param=
+
+549. PMID: 33737137 [Score: 4/4]
+   Title: Serial population-based serosurveys for COVID-19 in two neighbourhoods of Karachi, Pakistan.
+   Overall: The paper reports seroprevalence of COVID-19 in Karachi, Pakistan, using serological surveys, which directly matches the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+550. PMID: 33737535 [Score: 4/4]
+   Title: Characterizing the Qatar advanced-phase SARS-CoV-2 epidemic.
+   Overall: The paper reports on SARS-CoV-2 seroprevalence and antibody surveys, directly addressing the specified parameters for the disease of interest.
+   维度评分: D= P= L= E= Param=
+
+551. PMID: 33568663 [Score: 4/4]
+   Title: SARS-CoV-2 antibody prevalence in England following the first peak of the pandemic.
+   Overall: The paper reports on SARS-CoV-2 antibody prevalence in England, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+552. PMID: 33094713 [Score: 4/4]
+   Title: Detection of neutralising antibodies to SARS-CoV-2 to determine population exposure in Scottish blood donors between March and May 2020.
+   Overall: The paper studies SARS-CoV-2 and reports on serological testing for neutralising antibodies, fitting the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+553. PMID: 32821935 [Score: 4/4]
+   Title: Community Transmission of Severe Acute Respiratory Syndrome Coronavirus 2 Disproportionately Affects the Latinx Population During Shelter-in-Place in San Francisco.
+   Overall: The paper reports on SARS-CoV-2 antibody testing and provides estimates of seroprevalence among a community during shelter-in-place, fitting the criteria for serological survey and antibody prevalence related to COVID-19.
+   维度评分: D= P= L= E= Param=
+
+554. PMID: 33615345 [Score: 4/4]
+   Title: COVID-19 antibody seroprevalence in Santa Clara County, California.
+   Overall: The paper studies SARS-CoV-2 antibody seroprevalence in Santa Clara County, directly addressing the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+555. PMID: 33171096 [Score: 4/4]
+   Title: Racial and Workplace Disparities in Seroprevalence of SARS-CoV-2, Baton Rouge, Louisiana, USA.
+   Overall: The paper studies SARS-CoV-2 seroprevalence in Louisiana, USA, which aligns with the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+556. PMID: 34433423 [Score: 4/4]
+   Title: Low Seroprevalence of SARS-CoV-2 in Rhode Island blood donors during may 2020 as determined using multiple serological assay formats.
+   Overall: The paper studies SARS-CoV-2 seroprevalence in Rhode Island blood donors, reporting antibody prevalence, which aligns with the specified parameters.
+   维度评分: D= P= L= E= Param=

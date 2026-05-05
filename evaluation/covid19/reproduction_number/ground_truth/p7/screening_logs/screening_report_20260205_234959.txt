@@ -1,0 +1,775 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-02-05 23:49:59
+研究问题: What is the basic reproduction number (R0) of COVID-19?
+输入文件: D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi\evaluation\screening\GT_1\GT_export\reproduction_number\p7\project_7_raw.csv
+输出文件: D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi\evaluation\screening\GT_1\GT_export\reproduction_number\p7\project_7_screened.csv
+模型配置: openai/openai/gpt-4.1
+批处理大小: 10
+批次并发: 4
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │    146   │   25.4%  │
+│ 🤔 Possible candidates   │     47   │    8.2%  │
+│ 😐 Unlikely candidates   │    381   │   66.4%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │    574   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  3.91  │   97.4%  │  7/ 4/ 4/ 6/553                 │
+│ Population      │  3.87  │   97.9%  │  0/ 5/ 7/45/517                 │
+│ Location        │  3.51  │   83.1%  │  1/ 1/95/84/393                 │
+│ Evidence        │  3.00  │   73.3%  │ 11/108/34/139/282                 │
+│ Transmission    │  2.08  │   33.1%  │ 55/186/143/36/154                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (146 篇)
+================================================================================
+
+1. PMID: 31995857 [Score: 4/4]
+   Title: Early Transmission Dynamics in Wuhan, China, of Novel Coronavirus-Infected Pneumonia.
+   Overall: This study directly estimates the basic reproduction number (R0) of COVID-19 using original data from human cases in Wuhan. All core inclusion criteria are met at the highest level, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+2. PMID: 32959618 [Score: 4/4]
+   Title: Epidemic Landscape and Forecasting of SARS-CoV-2 in India.
+   Overall: This study is highly relevant: it directly estimates R0 for COVID-19 in India using original data, with explicit focus on transmission metrics. All core inclusion criteria are clearly met at the highest level.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+3. PMID: 32794161 [Score: 4/4]
+   Title: Epidemiology of SARS-CoV-2 in Egypt.
+   Overall: This study directly estimates R0 for COVID-19 in Egypt using original data and reports transmission metrics as a primary objective. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+4. PMID: 32353991 [Score: 4/4]
+   Title: Early Transmission Dynamics of Novel Coronavirus (COVID-19) in Nigeria.
+   Overall: This study directly estimates the basic reproduction number (R0) of COVID-19 in Nigeria using original outbreak data and robust statistical methods. All core inclusion criteria are fully met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+5. PMID: 32767657 [Score: 4/4]
+   Title: Evidence for pre-symptomatic transmission of coronavirus disease 2019 (COVID-19) in China.
+   Overall: This study is highly relevant: it directly estimates transmission parameters (including the reproductive number) for COVID-19 using original data from human cases in China. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+6. PMID: 32255761 [Score: 4/4]
+   Title: High Contagiousness and Rapid Spread of Severe Acute Respiratory Syndrome Coronavirus 2.
+   Overall: All core criteria are fully met: the study is centrally focused on COVID-19, uses original human data from a real-world setting, and explicitly estimates R0. This is a highly relevant primary study for the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+7. PMID: 32460229 [Score: 4/4]
+   Title: Estimation of the time-varying reproduction number of COVID-19 outbreak in China.
+   Overall: This study is highly relevant: it directly estimates R0 for COVID-19 in China using original data and multiple methods, with explicit focus on transmission metrics. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+8. PMID: 32694200 [Score: 4/4]
+   Title: Serial interval of SARS-CoV-2 was shortened over time by nonpharmaceutical interventions.
+   Overall: All core criteria are fully met: the study directly estimates R0 for COVID-19 in humans using original data from China. Transmission metrics are a central focus, and the study provides empirical evidence relevant to the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+9. PMID: 32928322 [Score: 4/4]
+   Title: Epidemiological profile and transmission dynamics of COVID-19 in the Philippines.
+   Overall: This study directly estimates the basic reproduction number (R0) of COVID-19 using original data from the Philippines. All core inclusion criteria are explicitly and centrally addressed, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+10. PMID: 32629880 [Score: 4/4]
+   Title: Early Phase of the COVID-19 Outbreak in Hungary and Post-Lockdown Scenarios.
+   Overall: This study is highly relevant: it centrally addresses COVID-19 in Hungary, uses original data and modeling, and explicitly focuses on transmission metrics including the reproduction number. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+11. PMID: 32493466 [Score: 4/4]
+   Title: Real-time monitoring the transmission potential of COVID-19 in Singapore, March 2020.
+   Overall: All core criteria are fully met: the study is highly relevant to COVID-19, focuses on human transmission in a real-world setting, provides original empirical estimates, and centrally reports the reproduction number. This is a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+12. PMID: 32353347 [Score: 4/4]
+   Title: Epidemiology and transmission of COVID-19 in 391 cases and 1286 of their close contacts in Shenzhen, China: a retrospective cohort study.
+   Overall: All core criteria are fully met: the study directly estimates R for COVID-19 using original data from a large human cohort in a real-world setting. Transmission metrics are central to the analysis, making this a highly relevant candidate.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+13. PMID: 32817662 [Score: 4/4]
+   Title: Age could be driving variable SARS-CoV-2 epidemic trajectories worldwide.
+   Overall: This study directly estimates R0 for COVID-19 using a model calibrated to real-world demographic data, with explicit focus on transmission metrics and geographic/population variation. It meets all core inclusion criteria for strong relevance.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+14. PMID: 32437930 [Score: 4/4]
+   Title: COVID-19 outbreak reproduction number estimations and forecasting in Marche, Italy.
+   Overall: This study is highly relevant: it directly estimates COVID-19 reproduction numbers using original data from a defined human population and geographic region. All core inclusion criteria are clearly met, with explicit focus on transmission metrics.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+15. PMID: 32574282 [Score: 4/4]
+   Title: Epidemiological and Clinical Characteristics of Patients With Coronavirus Disease-2019 in Shiyan City, China.
+   Overall: This study directly estimates the R0 of COVID-19 using original data from a defined human population in a real-world setting. All core inclusion criteria are met with high relevance, making it a strong candidate for the review.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+16. PMID: 32631426 [Score: 4/4]
+   Title: Transmission patterns of COVID-19 in the mainland of China and the efficacy of different control strategies: a data- and model-driven study.
+   Overall: This study is highly relevant: it directly estimates the reproduction number of COVID-19 using original data from China, focuses on human transmission, and provides detailed analysis of transmission metrics and intervention effects. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+17. PMID: 33412799 [Score: 4/4]
+   Title: Describing the epidemic trends of COVID-19 in the area covered by Agency for Health Protection of the Metropolitan Area of Milan.
+   Overall: This study directly estimates the reproduction number of COVID-19 using original data from a large human population in Milan. All core inclusion criteria are clearly and explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+18. PMID: 32512664 [Score: 4/4]
+   Title: Epidemiological characteristics of and containment measures for COVID-19 in Busan, Korea.
+   Overall: This study is highly relevant: it directly estimates transmission metrics (Rt), focuses on COVID-19 in humans, and reports original data from a real-world outbreak. All core inclusion criteria are clearly met, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+19. PMID: 32540727 [Score: 4/4]
+   Title: The effects of border control and quarantine measures on the spread of COVID-19.
+   Overall: This study centrally investigates COVID-19 transmission using R0, applies its model to real-world human populations and locations, and reports original modeling results based on empirical data. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+20. PMID: 32109273 [Score: 4/4]
+   Title: COVID-19 outbreak on the Diamond Princess cruise ship: estimating the epidemic potential and effectiveness of public health countermeasures.
+   Overall: This study is highly relevant: it directly estimates R0 for COVID-19 using original outbreak data, focuses on a human population in a real-world setting, and transmission metrics are central to the analysis. All core criteria are fully met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+21. PMID: 32277878 [Score: 4/4]
+   Title: First-wave COVID-19 transmissibility and severity in China outside Hubei after control measures, and second-wave scenario planning: a modelling impact assessment.
+   Overall: This study is highly relevant: it directly estimates transmission metrics (Rt) for COVID-19 in human populations using original data from multiple real-world locations. All core inclusion criteria are clearly met, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+22. PMID: 32562601 [Score: 4/4]
+   Title: Household secondary attack rate of COVID-19 and associated determinants in Guangzhou, China: a retrospective cohort study.
+   Overall: All core criteria are fully met: the study directly estimates the reproduction number (R) for COVID-19 in a human population using original data from a real-world setting. Transmission metrics are a central focus, making this a highly relevant candidate.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+23. PMID: 32375776 [Score: 4/4]
+   Title: Quantifying the impact of physical distance measures on the transmission of COVID-19 in the UK.
+   Overall: This study is highly relevant: it directly estimates the basic reproduction number (R0) of COVID-19 in the UK using original empirical data from a human population. All core inclusion criteria are clearly and explicitly met, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+24. PMID: 32247326 [Score: 4/4]
+   Title: Evolving epidemiology and transmission dynamics of coronavirus disease 2019 outside Hubei province, China: a descriptive and modelling study.
+   Overall: This study is highly relevant: it directly estimates transmission metrics (Rt) for COVID-19 in humans using original data from a large, real-world dataset. All core inclusion criteria are clearly and explicitly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+25. PMID: 32461981 [Score: 4/4]
+   Title: Analysis of the Transmissibility Change of 2019-Novel Coronavirus Pneumonia and Its Potential Factors in China from 2019 to 2020.
+   Overall: This study is highly relevant: it directly estimates the basic reproduction number (R0) of COVID-19 in China using original empirical data, with explicit focus on transmission metrics. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+26. PMID: 32362645 [Score: 4/4]
+   Title: Prudent public health intervention strategies to control the coronavirus disease 2019 transmission in India: A mathematical model-based approach.
+   Overall: This study is highly relevant: it directly estimates and discusses R0 for COVID-19 in India using original modeling and provides explicit transmission metrics. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+27. PMID: 32559451 [Score: 4/4]
+   Title: Effectiveness of isolation, testing, contact tracing, and physical distancing on reducing transmission of SARS-CoV-2 in different settings: a mathematical modelling study.
+   Overall: This study is highly relevant: it focuses on COVID-19, uses human data, is set in a real-world location, and explicitly estimates the effective reproduction number under different interventions. While it is a modeling study, it is calibrated with empirical contact data, meeting the criteria for original evidence.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+28. PMID: 32097725 [Score: 4/4]
+   Title: Estimation of the reproductive number of novel coronavirus (COVID-19) and the probable outbreak size on the Diamond Princess cruise ship: A data-driven analysis.
+   Overall: This study directly estimates the R0 of COVID-19 using original outbreak data from a defined human population in a real-world setting. All core inclusion criteria are met at the highest level, making it highly relevant to the research question.
+   维度评分: D=4 P=3 L=3 E=4 T=4
+
+29. PMID: 33120515 [Score: 4/4]
+   Title: Impact of household quarantine on SARS-Cov-2 infection in mainland China: A mean-field modelling approach.
+   Overall: All core criteria are fully met: the study directly estimates R0 for COVID-19 using original data from a human population in a real-world setting. The estimation of R0 is a central focus, making this a highly relevant candidate.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+30. PMID: 32311320 [Score: 4/4]
+   Title: Impact assessment of non-pharmaceutical interventions against coronavirus disease 2019 and influenza in Hong Kong: an observational study.
+   Overall: This study directly estimates the effective reproduction number (Rt) for COVID-19 using original empirical data from Hong Kong. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+31. PMID: 32417744 [Score: 4/4]
+   Title: Monitoring disease transmissibility of 2019 novel coronavirus disease in Zhejiang, China.
+   Overall: This study is highly relevant: it directly estimates the reproduction number of COVID-19 in a defined human population using original data from Zhejiang, China. All core inclusion criteria are clearly and explicitly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+32. PMID: 32553309 [Score: 4/4]
+   Title: COVID-19 and tuberculosis: A mathematical model based forecasting in Delhi, India.
+   Overall: This study directly estimates R0 for COVID-19 in a human population using a mathematical model, with explicit focus on transmission metrics and local context. While the model is based on existing data, it provides original scenario analysis and R0 estimates, meeting all core inclusion criteria.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+33. PMID: 32936811 [Score: 4/4]
+   Title: Impact of COVID-19 epidemic curtailment strategies in selected Indian states: An analysis by reproduction number and doubling time with incidence modelling.
+   Overall: This study is highly relevant: it centrally estimates R0 for COVID-19 in humans using original data from Indian states. All core inclusion criteria are clearly and explicitly met, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+34. PMID: 32601677 [Score: 4/4]
+   Title: Epidemiological characteristics of the first 100 cases of coronavirus disease 2019 (COVID-19) in Hong Kong Special Administrative Region, China, a city with a stringent containment policy.
+   Overall: This study is highly relevant: it directly investigates COVID-19 transmission in humans in a real-world setting, reports original data, and explicitly estimates the reproduction number. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+35. PMID: 32664866 [Score: 4/4]
+   Title: Early epidemiological assessment of the transmission potential and virulence of coronavirus disease 2019 (COVID-19) in Wuhan City, China, January-February, 2020.
+   Overall: This study is highly relevant: it directly estimates the basic reproduction number (R0) for COVID-19 in Wuhan using original data and statistical modeling. All core inclusion criteria are clearly and explicitly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+36. PMID: 32776726 [Score: 4/4]
+   Title: Epidemiological Characteristics of COVID-19 Outbreak at Fitness Centers in Cheonan, Korea.
+   Overall: This study directly estimates the reproduction number of COVID-19 using original outbreak data from a real-world setting, with explicit focus on transmission metrics. All core inclusion criteria are fully met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+37. PMID: 32452648 [Score: 4/4]
+   Title: Estimating the serial interval of the novel coronavirus disease (COVID-19) based on the public surveillance data in Shenzhen, China, from 19 January to 22 February 2020.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 in humans using original surveillance data from Shenzhen. All core inclusion criteria are clearly and explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+38. PMID: 32725765 [Score: 4/4]
+   Title: COVID-19 outbreak following a single patient exposure at an entertainment site: An epidemiological study.
+   Overall: This study is highly relevant: it directly investigates COVID-19 transmission in humans, reports original outbreak data, and explicitly estimates transmission metrics (Rt, SAR). All core criteria are clearly met, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+39. PMID: 32014114 [Score: 4/4]
+   Title: Nowcasting and forecasting the potential domestic and international spread of the 2019-nCoV outbreak originating in Wuhan, China: a modelling study.
+   Overall: This study is a highly relevant, original modelling analysis that directly estimates the basic reproduction number (R0) for COVID-19 using empirical data. All core inclusion criteria are clearly and explicitly met, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+40. PMID: 32372755 [Score: 4/4]
+   Title: Estimating the generation interval for coronavirus disease (COVID-19) based on symptom onset data, March 2020.
+   Overall: This study directly estimates the reproduction number (R0) for COVID-19 using original outbreak data from humans in real-world settings. All core inclusion criteria are clearly and explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+41. PMID: 32496253 [Score: 4/4]
+   Title: Distribution and growth rate of COVID-19 outbreak in Tamil Nadu: A log-linear regression approach.
+   Overall: This study directly estimates the basic reproduction number (R0) of COVID-19 using original data from a defined human population in a real-world setting. All core inclusion criteria are explicitly and centrally addressed, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+42. PMID: 33134239 [Score: 4/4]
+   Title: Effects of Coronavirus Disease (COVID-19) Related Contact Restrictions in Germany, March to May 2020, on the Mobility and Relation to Infection Patterns.
+   Overall: This study directly investigates COVID-19, reports original cohort data, and explicitly analyzes the reproduction number (R0) in relation to mobility and infection patterns. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+43. PMID: 32958001 [Score: 4/4]
+   Title: COVID19-world: a shiny application to perform comprehensive country-specific data visualization for SARS-CoV-2 epidemic.
+   Overall: This study directly addresses COVID-19 and the basic reproduction number using original analyses of real-world data at the country level. All core dimensions are highly relevant, and the application systematically produces R0 estimates, making it a strong candidate.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+44. PMID: 32517845 [Score: 4/4]
+   Title: The basic reproduction number and prediction of the epidemic size of the novel coronavirus (COVID-19) in Shahroud, Iran.
+   Overall: This study directly estimates the R0 of COVID-19 using original incidence data from a defined human population in a real-world setting. The transmission metric is central, and all core inclusion criteria are fully met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+45. PMID: 32627172 [Score: 4/4]
+   Title: Estimation of incubation period and generation time based on observed length-biased epidemic cohort with censoring for COVID-19 outbreak in China.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 using original empirical data from human cases in China. All core inclusion criteria are clearly and explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+46. PMID: 32497812 [Score: 4/4]
+   Title: Effect of a wet market on coronavirus disease (COVID-19) transmission dynamics in China, 2019-2020.
+   Overall: This study directly estimates the reproduction number (R) of COVID-19 using original data from China, with explicit focus on transmission dynamics and stratification by exposure. All core inclusion criteria are clearly and strongly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+47. PMID: 33351802 [Score: 4/4]
+   Title: COVID-19 pandemic in Djibouti: Epidemiology and the response strategy followed to contain the virus during the first two months, 17 March to 16 May 2020.
+   Overall: This study is highly relevant: it centrally investigates COVID-19 in humans in Djibouti, reports original epidemiological data, and explicitly quantifies the basic reproduction number (R0). All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+48. PMID: 32701162 [Score: 4/4]
+   Title: Association of Social Distancing, Population Density, and Temperature With the Instantaneous Reproduction Number of SARS-CoV-2 in Counties Across the United States.
+   Overall: All core criteria are fully met: the study directly estimates Rt for COVID-19 using original data from a large human population in real-world US settings. Transmission metrics are central, and the disease focus is explicit and primary.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+49. PMID: 32817697 [Score: 4/4]
+   Title: Spatial and temporal regularization to estimate COVID-19 reproduction number R(t): Promoting piecewise smoothness via convex optimization.
+   Overall: This study directly estimates the COVID-19 reproduction number using original analyses of real incidence data across multiple regions. All core criteria are explicitly and centrally addressed, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+50. PMID: 32190785 [Score: 4/4]
+   Title: Transmission potential of the novel coronavirus (COVID-19) onboard the diamond Princess Cruises Ship, 2020.
+   Overall: This study directly estimates the reproduction number of COVID-19 using original outbreak data from a well-defined human population in a real-world setting. All core inclusion criteria are clearly and explicitly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+51. PMID: 32320809 [Score: 4/4]
+   Title: Changes in testing rates could mask the novel coronavirus disease (COVID-19) growth rate.
+   Overall: The study centrally addresses COVID-19 and the estimation of R0 using empirical case data, with explicit mention of transmission metrics. While location is not specified, all other criteria are clearly met, making this a strong candidate.
+   维度评分: D=4 P=3 L=2 E=3 T=4
+
+52. PMID: 33378859 [Score: 4/4]
+   Title: Optimal control on COVID-19 eradication program in Indonesia under the effect of community awareness.
+   Overall: This study directly estimates and analyzes the basic reproduction number of COVID-19 using real incidence data from Indonesia. It meets all core criteria with high relevance, especially for disease and transmission metrics, and provides original model-based evidence.
+   维度评分: D=4 P=3 L=4 E=3 T=4
+
+53. PMID: 36753110 [Score: 4/4]
+   Title: [Estimation of serial interval and basic reproductive number for imported cases of COVID-19].
+   Overall: This study directly estimates the basic reproduction number (R0) of COVID-19 using original field data from human cases in a real-world setting. All core inclusion criteria are explicitly and centrally addressed, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+54. PMID: 32427104 [Score: 4/4]
+   Title: Modeling COVID-19 Latent Prevalence to Assess a Public Health Intervention at a State and Regional Scale: Retrospective Cohort Study.
+   Overall: All core criteria are fully met: the study is centrally focused on COVID-19, uses original empirical data from human populations in real locations, and explicitly estimates the basic reproduction number (R0). This makes it a highly relevant and strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+55. PMID: 32445710 [Score: 4/4]
+   Title: Individual quarantine versus active monitoring of contacts for the mitigation of COVID-19: a modelling study.
+   Overall: This study directly models COVID-19 transmission and estimates the reproductive number using real-world parameter estimates, meeting all core criteria. While it does not collect new primary data, it provides original model-based estimates calibrated to empirical data, making it highly relevant.
+   维度评分: D=4 P=4 L=2 E=3 T=4
+
+56. PMID: 32244261 [Score: 4/4]
+   Title: [Comparison of two epidemic patterns of COVID-19 and evaluation of prevention and control effectiveness: an analysis based on Guangzhou and Wenzhou].
+   Overall: This study is highly relevant: it directly analyzes COVID-19 transmission in humans using original data from two cities, and explicitly estimates the reproduction number. All core criteria are fully met, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+57. PMID: 32113196 [Score: 4/4]
+   Title: [Study on assessing early epidemiological parameters of COVID-19 epidemic in China].
+   Overall: This study directly estimates the basic reproduction number (R0) of COVID-19 in China using original case data and multiple statistical approaches. All core inclusion criteria are clearly and explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+58. PMID: 32689956 [Score: 4/4]
+   Title: Basic epidemiological parameter values from data of real-world in mega-cities: the characteristics of COVID-19 in Beijing, China.
+   Overall: This study directly estimates the basic reproduction number (R0) of COVID-19 using original data from a defined human population in a real-world setting. All core inclusion criteria are clearly and explicitly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+59. PMID: 32546245 [Score: 4/4]
+   Title: SOCRATES: an online tool leveraging a social contact data sharing initiative to assess mitigation strategies for COVID-19.
+   Overall: This study centrally addresses COVID-19 and transmission metrics (including R0), using original analyses of human social contact data. While it does not collect new data, it provides new empirical estimates and modeling based on real-world datasets, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=3 E=3 T=4
+
+60. PMID: 32842293 [Score: 4/4]
+   Title: [Comparison of epidemic characteristics between severe acute respiratory syndrome and coronavirus disease 2019].
+   Overall: This study directly compares COVID-19 and SARS using original epidemiological data, explicitly analyzing R0 for both diseases. All core inclusion criteria are clearly met, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+61. PMID: 36753101 [Score: 4/4]
+   Title: [Predictions of a SEIR model for COVID-19 cases in Cali-Colombia].
+   Overall: This study is highly relevant: it directly models COVID-19 transmission in humans in a real-world setting, explicitly estimates and discusses R0, and uses local case data for model validation. The only minor limitation is that some parameters are from literature, but original data is used for comparison.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+62. PMID: 32536760 [Score: 4/4]
+   Title: Analysis of the mitigation strategies for COVID-19: From mathematical modelling perspective.
+   Overall: This study directly models COVID-19 transmission and centrally analyzes R0, with original parameter estimation and model validation. While the population and location details are somewhat general, all core criteria are clearly met.
+   维度评分: D=4 P=3 L=2 E=3 T=4
+
+63. PMID: 32982061 [Score: 4/4]
+   Title: COVID-19 pandemic in India: a mathematical model study.
+   Overall: This study is highly relevant: it centrally estimates the basic reproduction number (R0) for COVID-19 in India using original data and mathematical modeling. All core inclusion criteria are clearly and explicitly met, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+64. PMID: 32574315 [Score: 4/4]
+   Title: COVID-19 UK Lockdown Forecasts and R 0.
+   Overall: This study directly estimates R0 for COVID-19 in the UK using original empirical data and reports detailed results. All core inclusion criteria are fully met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+65. PMID: 32987516 [Score: 4/4]
+   Title: Current trends and future prediction of novel coronavirus disease (COVID-19) epidemic in China: a dynamical modeling analysis.
+   Overall: This study directly estimates the R0 of COVID-19 in China using original modeling and real epidemic data. All core criteria are explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+66. PMID: 32231374 [Score: 4/4]
+   Title: Data-based analysis, modelling and forecasting of the COVID-19 outbreak.
+   Overall: This study is highly relevant: it directly estimates R0 for COVID-19 using original data from a human population in a real-world setting. All core inclusion criteria are clearly and explicitly met, with R0 estimation as a primary objective.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+67. PMID: 32511517 [Score: 4/4]
+   Title: Early transmission dynamics of COVID-19 in a southern hemisphere setting: Lima-Peru: February 29th-March 30th, 2020.
+   Overall: This study directly estimates the reproduction number (R) of COVID-19 in a defined human population using original empirical data from Lima, Peru. All core inclusion criteria are met at the highest level, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+68. PMID: 32035431 [Score: 4/4]
+   Title: Epidemiologic characteristics of early cases with 2019 novel coronavirus (2019-nCoV) disease in Korea.
+   Overall: This study is highly relevant: it directly investigates COVID-19 in humans in Korea, reports original empirical data, and explicitly estimates the reproduction number (R0). All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+69. PMID: 32482785 [Score: 4/4]
+   Title: Estimates of the ongoing need for social distancing and control measures post-"lockdown" from trajectories of COVID-19 cases and mortality.
+   Overall: This study directly estimates R0 for COVID-19 using original empirical data from multiple countries, with a clear focus on transmission metrics. All core inclusion criteria are met at the highest level, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+70. PMID: 32024089 [Score: 4/4]
+   Title: Estimating the Unreported Number of Novel Coronavirus (2019-nCoV) Cases in China in the First Half of January 2020: A Data-Driven Modelling Analysis of the Early Outbreak.
+   Overall: This study directly estimates the R0 of COVID-19 using original data from the early outbreak in China, meeting all core inclusion criteria. The focus on transmission metrics and empirical modelling makes it highly relevant to the research question.
+   维度评分: D=4 P=3 L=4 E=3 T=4
+
+71. PMID: 32678037 [Score: 4/4]
+   Title: Estimation of exponential growth rate and basic reproduction number of the coronavirus disease 2019 (COVID-19) in Africa.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 in Africa using original epidemic data and statistical modeling. All core inclusion criteria are clearly and explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+72. PMID: 32468343 [Score: 4/4]
+   Title: Estimation of reproduction numbers of COVID-19 in typical countries and epidemic trends under different prevention and control scenarios.
+   Overall: This study directly estimates R0 for COVID-19 in multiple countries using empirical data and modeling, meeting all core inclusion criteria. The focus on transmission metrics and explicit mention of R0 make it highly relevant.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+73. PMID: 32512670 [Score: 4/4]
+   Title: Estimation of the reproduction number and early prediction of the COVID-19 outbreak in India using a statistical computing approach.
+   Overall: This study is highly relevant: it directly estimates the basic reproduction number (R0) for COVID-19 in India using original case data and statistical modeling. All core inclusion criteria are clearly and explicitly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+74. PMID: 32380708 [Score: 4/4]
+   Title: Estimation of Unreported Novel Coronavirus (SARS-CoV-2) Infections from Reported Deaths: A Susceptible-Exposed-Infectious-Recovered-Dead Model.
+   Overall: This study directly estimates R0 for COVID-19 using original modeling and real-world data from China. All core criteria are explicitly met, with a central focus on transmission metrics and empirical estimation.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+75. PMID: 32980417 [Score: 4/4]
+   Title: European and US lockdowns and second waves during the COVID-19 pandemic.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 using real-world data and statistical modeling across multiple countries. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+76. PMID: 32456346 [Score: 4/4]
+   Title: Evaluating Transmission Heterogeneity and Super-Spreading Event of COVID-19 in a Metropolis of China.
+   Overall: This study directly estimates the reproductive number (R) of COVID-19 using original human case data from a real-world setting, with explicit focus on transmission metrics and heterogeneity. All core inclusion criteria are fully met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+77. PMID: 32417246 [Score: 4/4]
+   Title: Evaluation of COVID-19 epidemic outbreak caused by temporal contact-increase in South Korea.
+   Overall: All core criteria are fully met: the study centrally estimates R0 for COVID-19 in humans using original data from South Korea. Transmission metrics are a primary focus, making this a highly relevant candidate.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+78. PMID: 32574319 [Score: 4/4]
+   Title: Evaluation of the Secondary Transmission Pattern and Epidemic Prediction of COVID-19 in the Four Metropolitan Areas of China.
+   Overall: This study directly estimates and reports R0 for COVID-19 in multiple Chinese cities using original data and explicit transmission modeling. All core inclusion criteria are fully met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+79. PMID: 32435645 [Score: 4/4]
+   Title: Extended SIR Prediction of the Epidemics Trend of COVID-19 in Italy and Compared With Hunan, China.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 using original data from two real-world populations. All core inclusion criteria are fully met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+80. PMID: 32486011 [Score: 4/4]
+   Title: Forecast Possible Risk for COVID-19 Epidemic Dissemination Under Current Control Strategies in Japan.
+   Overall: All core criteria are fully met: the study centrally estimates R0 for COVID-19 in Japan using original data, with explicit focus on transmission metrics and human populations in a real-world setting. This is a highly relevant primary study for the review question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+81. PMID: 32498137 [Score: 4/4]
+   Title: Forecasting COVID-19 Transmission and Healthcare Capacity in Bali, Indonesia.
+   Overall: This study is highly relevant: it directly estimates the reproduction number for COVID-19 in Bali using original data and an SEIR model. All core inclusion criteria are clearly met, with explicit focus on transmission metrics and empirical analysis.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+82. PMID: 32752627 [Score: 4/4]
+   Title: Forecasting the daily and cumulative number of cases for the COVID-19 pandemic in India.
+   Overall: All core criteria are fully met: the study directly estimates R0 for COVID-19 using original data from humans in India. The focus on transmission metrics and empirical calibration makes it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+83. PMID: 32970786 [Score: 4/4]
+   Title: Global convergence of COVID-19 basic reproduction number and estimation from early-time SIR dynamics.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 using empirical data and SIR modeling across multiple countries. All core inclusion criteria are clearly and explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+84. PMID: 32395492 [Score: 4/4]
+   Title: Imitation dynamics in the mitigation of the novel coronavirus disease (COVID-19) outbreak in Wuhan, China from 2019 to 2020.
+   Overall: This study directly estimates R0 for COVID-19 in Wuhan using original data and modeling, with explicit focus on transmission metrics. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+85. PMID: 32404476 [Score: 4/4]
+   Title: Estimating the burden of SARS-CoV-2 in France.
+   Overall: This study directly estimates the reproductive number (R0) for COVID-19 in France using original analysis of empirical data. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+86. PMID: 32952299 [Score: 4/4]
+   Title: Forecast analysis of the epidemics trend of COVID-19 in the USA by a generalized fractional-order SEIR model.
+   Overall: This study directly estimates and analyzes the basic reproduction number (R0) for COVID-19 in the USA using real data and a compartmental model. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+87. PMID: 32727547 [Score: 4/4]
+   Title: Impact of lockdown on COVID-19 epidemic in Île-de-France and possible exit strategies.
+   Overall: All core criteria are fully met: the study is centrally focused on COVID-19, reports original empirical estimates, and explicitly quantifies the basic reproduction number (R0) in a defined human population and location. It is highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+88. PMID: 32496246 [Score: 4/4]
+   Title: Impact of nonpharmacological interventions on COVID-19 transmission dynamics in India.
+   Overall: This study directly estimates R0 and Rt for COVID-19 in India using original data, with a clear focus on transmission dynamics and population-level interventions. All core inclusion criteria are fully met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+89. PMID: 32446721 [Score: 4/4]
+   Title: Inferring super-spreading from transmission clusters of COVID-19 in Hong Kong, Japan, and Singapore.
+   Overall: This study directly estimates R0 for COVID-19 using original empirical data from human populations in specific locations. All core inclusion criteria are clearly and explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+90. PMID: 32753078 [Score: 4/4]
+   Title: Is Nigeria really on top of COVID-19? Message from effective reproduction number.
+   Overall: This study directly estimates the basic reproduction number (R0) of COVID-19 in Nigeria using original empirical data and transmission models. All core inclusion criteria are clearly and explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+91. PMID: 32684175 [Score: 4/4]
+   Title: Mathematical model describing CoViD-19 in São Paulo, Brazil - evaluating isolation as control mechanism and forecasting epidemiological scenarios of release.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 in São Paulo using real-world data and a mathematical model. All core dimensions are highly relevant, and the study provides original parameter estimation based on local data.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+92. PMID: 32844134 [Score: 4/4]
+   Title: Mathematical modelling on diffusion and control of COVID-19.
+   Overall: This paper is highly relevant: it directly estimates the basic reproduction number (R0) for COVID-19 using original empirical data from multiple locations. All core inclusion criteria are clearly met, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+93. PMID: 32891155 [Score: 4/4]
+   Title: Mathematical models for devising the optimal SARS-CoV-2 strategy for eradication in China, South Korea, and Italy.
+   Overall: This study directly estimates R0 for COVID-19 in multiple countries using original modeling based on real data. All core inclusion criteria are clearly met, with explicit focus on disease, transmission, and empirical estimation.
+   维度评分: D=4 P=3 L=4 E=3 T=4
+
+94. PMID: 32987501 [Score: 4/4]
+   Title: Modeling analysis of COVID-19 based on morbidity data in Anhui, China.
+   Overall: This study is highly relevant: it directly estimates the basic reproduction number (R0) for COVID-19 using original morbidity data from a defined human population in Anhui, China. All core inclusion criteria are clearly and explicitly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+95. PMID: 32415422 [Score: 4/4]
+   Title: Modeling COVID-19 and Its Impacts on U.S. Immigration and Customs Enforcement (ICE) Detention Facilities, 2020.
+   Overall: This study directly estimates R0 for COVID-19 in a specific human setting using original data and a transmission model, with R0 as a central outcome. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+96. PMID: 32987574 [Score: 4/4]
+   Title: Modeling the transmission dynamics and the impact of the control interventions for the COVID-19 epidemic outbreak.
+   Overall: This study directly estimates the basic reproduction number of COVID-19 using real-world data and models transmission dynamics, meeting all core inclusion criteria at the highest level. It is highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+97. PMID: 32987508 [Score: 4/4]
+   Title: Modelling and assessing the effects of medical resources on transmission of novel coronavirus (COVID-19) in Wuhan, China.
+   Overall: This study directly estimates R0 for COVID-19 in Wuhan using original data and modeling, with explicit focus on transmission metrics. All core inclusion criteria are clearly and strongly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+98. PMID: 32838059 [Score: 4/4]
+   Title: Modelling of reproduction number for COVID-19 in India and high incidence states.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 in India and its states using original case data and established methods. All core inclusion criteria are clearly and explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+99. PMID: 32987547 [Score: 4/4]
+   Title: Modelling the effects of media coverage and quarantine on the COVID-19 infections in the UK.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 in the UK using original case data and presents R0 as a central outcome. All core inclusion criteria are fully met with explicit, detailed evidence.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+100. PMID: 32292527 [Score: 4/4]
+   Title: On a Statistical Transmission Model in Analysis of the Early Phase of COVID-19 Outbreak.
+   Overall: This study is highly relevant: it directly estimates R0 for COVID-19 using original outbreak data from humans in a real-world setting, with explicit focus on transmission metrics. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+101. PMID: 32342242 [Score: 4/4]
+   Title: Outbreak dynamics of COVID-19 in China and the United States.
+   Overall: This study is highly relevant: it centrally investigates COVID-19, reports original model-based estimates of R0 using real-world data, and focuses on human populations in real geographic settings. The transmission metric (R0) is a primary outcome, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+102. PMID: 32617358 [Score: 4/4]
+   Title: Parameter estimation and prediction for coronavirus disease outbreak 2019 (COVID-19) in Algeria.
+   Overall: This study directly estimates R0 for COVID-19 in Algeria using original data and an SEIR model. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+103. PMID: 32019669 [Score: 4/4]
+   Title: Pattern of early human-to-human transmission of Wuhan 2019 novel coronavirus (2019-nCoV), December 2019 to January 2020.
+   Overall: This study directly estimates the R0 of COVID-19 using original data from the early outbreak in Wuhan, with explicit focus on human transmission and clear reporting of transmission metrics. It meets all core inclusion criteria at the highest level.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+104. PMID: 32987548 [Score: 4/4]
+   Title: Phase-adjusted estimation of the COVID-19 outbreak in South Korea under multi-source data and adjustment measures: a modelling study.
+   Overall: This study directly estimates the basic reproduction number (R0) of COVID-19 using original data from South Korea, with explicit focus on transmission metrics and empirical evidence. All core inclusion criteria are clearly and strongly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+105. PMID: 32738248 [Score: 4/4]
+   Title: Predicting COVID-19 spread in the face of control measures in West Africa.
+   Overall: This study is highly relevant: it explicitly investigates COVID-19 transmission in humans in West Africa, uses original data for model calibration, and reports the reproduction number as a central outcome. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+106. PMID: 32521641 [Score: 4/4]
+   Title: Prediction of Epidemic Peak and Infected Cases for COVID-19 Disease in Malaysia, 2020.
+   Overall: All core criteria are fully met: the study directly estimates R0 for COVID-19 in a real population using original data and modeling. The transmission metric is a central focus, and the context is highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+107. PMID: 32183172 [Score: 4/4]
+   Title: Prediction of the Epidemic Peak of Coronavirus Disease in Japan, 2020.
+   Overall: This study directly estimates the R0 of COVID-19 in Japan using original data and a compartmental model, meeting all core inclusion criteria with high relevance. It is a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+108. PMID: 32334115 [Score: 4/4]
+   Title: Preliminary estimates of the reproduction number of the coronavirus disease (COVID-19) outbreak in Republic of Korea and Italy by 5 March 2020.
+   Overall: This study directly estimates R0 for COVID-19 in two countries using original data and a stochastic model. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+109. PMID: 32970773 [Score: 4/4]
+   Title: Preliminary estimation of temporal and spatiotemporal dynamic measures of COVID-19 transmission in Thailand.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 in Thailand using original data and spatiotemporal analysis. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+110. PMID: 32007643 [Score: 4/4]
+   Title: Preliminary estimation of the basic reproduction number of novel coronavirus (2019-nCoV) in China, from 2019 to 2020: A data-driven analysis in the early phase of the outbreak.
+   Overall: This study directly estimates the basic reproduction number (R0) of COVID-19 using original outbreak data from China. All core inclusion criteria are met at the highest level, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+111. PMID: 32048815 [Score: 4/4]
+   Title: Preliminary prediction of the basic reproduction number of the Wuhan novel coronavirus 2019-nCoV.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 using human case data from Wuhan, China. All core criteria are clearly met, with explicit focus on disease, transmission, and original empirical analysis.
+   维度评分: D=4 P=3 L=3 E=3 T=4
+
+112. PMID: 32617309 [Score: 4/4]
+   Title: Real-time estimation of the reproduction number of the novel coronavirus disease (COVID-19) in China in 2020 based on incidence data.
+   Overall: This study directly estimates the reproduction number (R0) of COVID-19 in human populations using original incidence data from China. All core inclusion criteria are clearly and explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+113. PMID: 32075152 [Score: 4/4]
+   Title: Real-Time Estimation of the Risk of Death from Novel Coronavirus (COVID-19) Infection: Inference Using Exported Cases.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 using original data and statistical modeling, with explicit focus on transmission metrics and human populations. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=3 E=4 T=4
+
+114. PMID: 32674112 [Score: 4/4]
+   Title: Reconstruction of the full transmission dynamics of COVID-19 in Wuhan.
+   Overall: This study directly estimates the basic reproduction number (R0) of COVID-19 in Wuhan using original data and modeling, with explicit focus on transmission dynamics. All core inclusion criteria are fully met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+115. PMID: 32875176 [Score: 4/4]
+   Title: Replicating and projecting the path of COVID-19 with a model-implied reproduction number.
+   Overall: This study directly estimates and analyzes the reproduction number for COVID-19 using real-world data from multiple countries. All core criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+116. PMID: 32498721 [Score: 4/4]
+   Title: Risk estimation of the SARS-CoV-2 acute respiratory disease outbreak outside China.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 using original data and mathematical modeling, with explicit focus on transmission metrics in human populations and real-world locations. All core inclusion criteria are clearly met at the highest level.
+   维度评分: D=4 P=3 L=3 E=4 T=4
+
+117. PMID: 32841283 [Score: 4/4]
+   Title: Simulating the progression of the COVID-19 disease in Cameroon using SIR models.
+   Overall: All core criteria are clearly and explicitly met: the study centrally estimates R0 for COVID-19 in humans using original data from Cameroon. The focus on transmission metrics is explicit and central.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+118. PMID: 32235084 [Score: 4/4]
+   Title: Spatial-temporal distribution of COVID-19 in China and its prediction: A data-driven modeling analysis.
+   Overall: This study directly estimates R0 for COVID-19 in China using empirical data and modeling, with explicit focus on transmission metrics and spatial distribution. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+119. PMID: 32327608 [Score: 4/4]
+   Title: Spread and dynamics of the COVID-19 epidemic in Italy: Effects of emergency containment measures.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 in Italy using original data and spatially explicit modeling. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+120. PMID: 32844133 [Score: 4/4]
+   Title: The basic reproduction number of the new coronavirus pandemic with mortality for India, the Syrian Arab Republic, the United States, Yemen, China, France, Nigeria and Russia with different rate of cases.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 using real-world data from multiple countries, with a clear focus on transmission metrics. It meets all core inclusion criteria with high relevance across all dimensions.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+121. PMID: 32869008 [Score: 4/4]
+   Title: The Covid-19 outbreak in Spain. A simple dynamics model, some lessons, and a theoretical framework for control response.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 in Spain using original data and explicit transmission modeling. All core inclusion criteria are fully met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+122. PMID: 33120569 [Score: 4/4]
+   Title: The dynamics of COVID-19 spread: evidence from Lebanon.
+   Overall: This study directly estimates the initial reproductive transmission rate (R0) of COVID-19 in Lebanon using empirical data and models, meeting all core inclusion criteria. It is highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+123. PMID: 32834821 [Score: 4/4]
+   Title: The dynamics of COVID-19 with quarantined and isolation.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 using original empirical data from China. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=3 L=3 E=4 T=4
+
+124. PMID: 32836597 [Score: 4/4]
+   Title: The reproduction number of COVID-19 and its correlation with public health interventions.
+   Overall: This study is highly relevant: it directly estimates the basic reproduction number of COVID-19 using original data and modeling, with explicit focus on transmission metrics and real-world populations across Europe. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+125. PMID: 32498655 [Score: 4/4]
+   Title: The role of asymptomatic class, quarantine and isolation in the transmission of COVID-19.
+   Overall: This study is highly relevant: it centrally estimates and analyzes R0 for COVID-19 using original modeling and real outbreak data. All core inclusion criteria are clearly met, making it a strong candidate for the review.
+   维度评分: D=4 P=3 L=3 E=3 T=4
+
+126. PMID: 32798031 [Score: 4/4]
+   Title: Trends in adaptation of fifteen European countries population to SARS-CoV-2 in March-May 2020: Can Taiwanese experience be adopted?
+   Overall: This study directly estimates and analyzes the basic reproduction number (R0) of SARS-CoV-2 using original data from multiple European countries. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+127. PMID: 32373394 [Score: 4/4]
+   Title: Using the contact network model and Metropolis-Hastings sampling to reconstruct the COVID-19 spread on the "Diamond Princess".
+   Overall: This study directly estimates the basic reproduction number (R0) of COVID-19 using original outbreak data from a real-world human population. All core inclusion criteria are clearly and explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+128. PMID: 32836816 [Score: 4/4]
+   Title: Using traveller-derived cases in Henan Province to quantify the spread of COVID-19 in Wuhan, China.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 in Wuhan using original data and mathematical modeling. All core dimensions are highly relevant, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+129. PMID: 32257174 [Score: 4/4]
+   Title: When will the battle against novel coronavirus end in Wuhan: A SEIR modeling analysis.
+   Overall: This study directly estimates R0 for COVID-19 in Wuhan using original epidemic data and SEIR modeling. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+130. PMID: 32046137 [Score: 4/4]
+   Title: Estimation of the Transmission Risk of the 2019-nCoV and Its Implication for Public Health Interventions.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 using original modeling and real-world data, with a clear focus on human transmission in specific locations. All core criteria are explicitly met, making it a strong candidate for inclusion.
+   维度评分: D=4 P=3 L=3 E=3 T=4
+
+131. PMID: 34053269 [Score: 4/4]
+   Title: Novel coronavirus 2019-nCoV (COVID-19): early estimation of epidemiological parameters and epidemic size estimates.
+   Overall: This study is highly relevant: it directly estimates the R0 of COVID-19 using original data and a transmission model, with explicit focus on human populations and real-world locations. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+132. PMID: 32322691 [Score: 4/4]
+   Title: The transmissibility of novel Coronavirus in the early stages of the 2019-20 outbreak in Wuhan: Exploring initial point-source exposure sizes and durations using scenario analysis.
+   Overall: This study directly estimates R0 for COVID-19 in Wuhan using observed case data and scenario modeling, meeting all core inclusion criteria. The focus on R0 is explicit and central, and the study uses real-world data for calibration.
+   维度评分: D=4 P=3 L=4 E=3 T=4
+
+133. PMID: 32836817 [Score: 4/4]
+   Title: A fractional-order SEIHDR model for COVID-19 with inter-city networked coupling effects.
+   Overall: This study is highly relevant: it centrally investigates COVID-19, uses original empirical data from multiple real-world locations, and explicitly estimates and discusses the basic reproduction number (R0). All core inclusion criteria are clearly met.
+   维度评分: D=4 P=3 L=4 E=4 T=4
+
+134. PMID: 32111262 [Score: 4/4]
+   Title: A mathematical model for simulating the phase-based transmissibility of a novel coronavirus.
+   Overall: This study directly estimates the R0 of COVID-19 using a mathematical model, with explicit focus on SARS-CoV-2 and transmission metrics. While the population and location dimensions are somewhat less detailed, all core criteria for strong relevance are met.
+   维度评分: D=4 P=3 L=2 E=3 T=4
+
+135. PMID: 32233562 [Score: 4/4]
+   Title: A mathematical model for the novel coronavirus epidemic in Wuhan, China.
+   Overall: This study directly models COVID-19 transmission in Wuhan, explicitly estimates the basic reproduction number, and applies the model to real data. It meets all core inclusion criteria with high relevance.
+   维度评分: D=4 P=3 L=4 E=3 T=4
+
+136. PMID: 32834815 [Score: 4/4]
+   Title: A mathematical model of COVID-19 using fractional derivative: outbreak in India with dynamics of transmission and control.
+   Overall: This study directly estimates the basic reproduction number of COVID-19 in India using real data and mathematical modeling. It meets all core criteria with explicit focus on disease, transmission metrics, and use of original data, making it highly relevant.
+   维度评分: D=4 P=3 L=4 E=3 T=4
+
+137. PMID: 32958091 [Score: 4/4]
+   Title: A model of COVID-19 transmission to understand the effectiveness of the containment measures: application to data from France.
+   Overall: This study is highly relevant: it centrally investigates COVID-19, uses real-world data from France, and explicitly estimates and discusses R0 in relation to containment measures. The only minor uncertainty is whether the data are entirely original, but the modeling and scenario analysis are based on real data, meeting the core criteria.
+   维度评分: D=4 P=3 L=4 E=3 T=4
+
+138. PMID: 32574303 [Score: 4/4]
+   Title: A Simulation of a COVID-19 Epidemic Based on a Deterministic SEIR Model.
+   Overall: This study is highly relevant: it explicitly estimates R0 for COVID-19 in a real-world setting using original model-based analysis calibrated with empirical data. All core inclusion criteria are clearly met, though the empirical evidence is model-based rather than purely observational.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+139. PMID: 32837814 [Score: 4/4]
+   Title: A SIR-Poisson Model for COVID-19: Evolution and Transmission Inference in the Maghreb Central Regions.
+   Overall: This study directly estimates transmission metrics (R0) for COVID-19 using original case data from human populations in specific countries. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+140. PMID: 32875961 [Score: 4/4]
+   Title: Analysis and prediction of the COVID-19 outbreak in Pakistan.
+   Overall: This study directly estimates and reports R0 for COVID-19 in Pakistan, using original analysis and projections. All core inclusion criteria are clearly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+141. PMID: 32678056 [Score: 4/4]
+   Title: Basic reproduction number and predicted trends of coronavirus disease 2019 epidemic in the mainland of China.
+   Overall: This study is highly relevant: it centrally estimates the basic reproduction number (R0) of COVID-19 in China using original empirical data and transmission modeling. All core inclusion criteria are clearly met at the highest level.
+   维度评分: D=4 P=4 L=4 E=4 T=4
+
+142. PMID: 32536762 [Score: 4/4]
+   Title: Coronavirus pandemic: A predictive analysis of the peak outbreak epidemic in South Africa, Turkey, and Brazil.
+   Overall: This study is highly relevant: it centrally investigates COVID-19, explicitly estimates the basic reproduction number (R0), and applies original modeling to real-world populations in specific countries. All core inclusion criteria are clearly met.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+143. PMID: 32349259 [Score: 4/4]
+   Title: Covid-19 Outbreak Progression in Italian Regions: Approaching the Peak by the End of March in Northern Italy and First Week of April in Southern Italy.
+   Overall: This study is highly relevant: it centrally investigates COVID-19, estimates R0 using real epidemic data, and focuses on human populations in real-world Italian regions. The modeling approach is based on empirical data, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+144. PMID: 32233563 [Score: 4/4]
+   Title: Effect of delay in diagnosis on transmission of COVID-19.
+   Overall: This study is highly relevant: it directly addresses COVID-19, quantifies R0, and uses a dynamic model with sensitivity analyses. While the abstract does not confirm direct empirical data collection, it suggests the model is grounded in real-world context, meeting the criteria for strong_candidate.
+   维度评分: D=4 P=3 L=3 E=3 T=4
+
+145. PMID: 32614817 [Score: 4/4]
+   Title: Estimation of country-level basic reproductive ratios for novel Coronavirus (SARS-CoV-2/COVID-19) using synthetic contact matrices.
+   Overall: This study directly estimates the basic reproduction number (R0) for COVID-19 across multiple countries using original modeling and outbreak data. All core criteria are clearly and explicitly met, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 T=4
+
+146. PMID: 32983643 [Score: 4/4]
+   Title: Estimating the impact of mobility patterns on COVID-19 infection rates in 11 European countries.
+   Overall: This study directly estimates R0 for COVID-19 using original data and a Bayesian model, with explicit focus on transmission metrics in real populations and locations. All core inclusion criteria are clearly and strongly met.
+   维度评分: D=4 P=4 L=4 E=4 T=4

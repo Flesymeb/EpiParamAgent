@@ -1,0 +1,528 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-04-13 04:04:22
+研究问题: What seroprevalence or antibody studies can support inference of SARS-CoV-2 infection fatality rates?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/fatality/p5/project_5_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/fatality/p5/experiments/binary_gpt54_v4/project_5_screened.csv
+模型配置: openai/openai/gpt-5.4
+批处理大小: 30
+批次并发: 1
+Full-text: need_fulltext=437 | screened=338
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │     76   │    4.0%  │
+│ 🤔 Possible candidates   │      8   │    0.4%  │
+│ 😐 Unlikely candidates   │   1699   │   90.3%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │   1882   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+Full-text failures
+================================================================================
+[01] PMID=32274985 | download_failed | COVID-19: The Need for Immunoprevention at Industrial Scale.
+[02] PMID=32274988 | download_failed | An Urgent Need for "Common Cold Units" to Study COVID-19.
+[03] PMID=32534509 | download_failed | Management of COVID-19 Virus Infection by Convalescent Plasma.
+[04] PMID=33000119 | no_id | Cross-reaction of Sera from COVID-19 Patients with SARS-CoV Assays.
+[05] PMID=33247893 | download_failed | Perinatal transmission of SARS-CoV-2: Need of study by possible congenital infection.
+[06] PMID=32723468 | download_failed | Convalescent Plasma: Promise for COVID-19 Pandemic.
+[07] PMID=32603079 | no_id | Beware of False-Positive Results with SARS-CoV-2 Antibody Tests.
+[08] PMID=32811981 | download_failed | What the immune response to the coronavirus says about the prospects for a vaccine.
+[09] PMID=32358594 | download_failed | Convalescent serum lines up as first-choice treatment for coronavirus.
+[10] PMID=32657280 | download_failed | [Facing Covid-19: A doctor and veterinarian alliance].
+[11] PMID=32620885 | download_failed | Six months of coronavirus: the mysteries scientists are still racing to solve.
+[12] PMID=32488191 | download_failed | Thousands of people will help scientists to track the long-term health effects of the coronavirus crisis.
+[13] PMID=32658430 | download_failed | The Detection of Novel Coronavirus Antibodies is an Important Supplementary Detection Method for Screening of High-Risk Population.
+[14] PMID=32710003 | download_failed | Coronavirus vaccines leap through safety trials - but which will work is anybody's guess.
+[15] PMID=32623442 | download_failed | Going back in time for an antibody to fight COVID-19.
+[16] PMID=32456766 | no_id | Are patients with systemic lupus erythematosus more prone to result false-positive for SARS-CoV2 serology?
+[17] PMID=32633332 | download_failed | The complement inhibitors in COVID-19: future expectations.
+[18] PMID=32964950 | download_failed | Lung ultrasound signs and cytokine profile in Covid-19 patients: a case series.
+[19] PMID=32628651 | no_id | COVID-19 in hem/onc news.
+[20] PMID=32900010 | no_id | Kidney Transplantation and COVID-19.
+[21] PMID=32520467 | no_id | [Not Available].
+[22] PMID=33032392 | download_failed | Lessons from the Italian COVID-19 frontline.
+[23] PMID=32452355 | download_failed | COVID-19: the new challenge for rheumatologists. First update.
+[24] PMID=32456769 | no_id | Early tocilizumab treatment could improve survival among COVID-19 patients.
+[25] PMID=32697931 | download_failed | Detection of anti-heparin-PF4 complex antibodies in COVID-19 patients on heparin therapy.
+[26] PMID=32697930 | download_failed | Therapeutic choices in persons with haemophilia at the time of COVID-19.
+[27] PMID=32643349 | download_failed | Good news or bad news? The coronavirus pandemic has sickened and killed only a relatively few people but has affected us all.
+[28] PMID=32452345 | no_id | The differential response to anti IL-6 treatment in COVID-19: the genetic counterpart.
+[29] PMID=32895030 | download_failed | Therapeutic delivery: industry update covering June 2020.
+[30] PMID=33412791 | download_failed | The COVID-19 pandemic: a stress test for clinical epidemiology.
+[31] PMID=32782402 | download_failed | Antibody therapies could be a bridge to a coronavirus vaccine - but will the world benefit?
+[32] PMID=32444414 | download_failed | Antibodies against immunogenic epitopes with high sequence identity to SARS-CoV-2 in patients with autoimmune dermatomyositis.
+[33] PMID=32744721 | download_failed | Tocilizumab: do not be the next chloroquine!
+[34] PMID=32761912 | download_failed | Caveats in interpreting SARS-CoV-2 IgM+ /IgG- antibody profile in asymptomatic health care workers.
+[35] PMID=32492200 | download_failed | Remdesivir and tocilizumab: Mix or match.
+[36] PMID=32820261 | download_failed | Evidence lags behind excitement over blood plasma as a coronavirus treatment.
+[37] PMID=32381697 | download_failed | The race is on for antibodies that stop the new coronavirus.
+[38] PMID=32654404 | download_failed | Coronavirus disease 2019 (COVID-19) rash in a psoriatic patient treated with Secukinumab: Is there a role for Interleukin 17?
+[39] PMID=32527714 | download_failed | Differential Diagnosis and Clinical Management of a Case of COVID-19 in a Patient With Stage III Lung Cancer Treated With Radio-chemotherapy and Durvalumab.
+[40] PMID=32458425 | download_failed | Compassionate use of hzVSF-v13 in two patients with severe COVID-19.
+[41] PMID=32365207 | download_failed | Combined treatment of tocilizumab and chloroquine on severe COVID-19: a case report.
+[42] PMID=32593520 | download_failed | [Tocilizumab in a child with acute lymphoblastic leukaemia and COVID-19-related cytokine release syndrome].
+[43] PMID=32857015 | download_failed | A Simple Algorithm for Return to Workplace Employer Antibody Testing.
+[44] PMID=32587000 | download_failed | Could a blood 'observatory' stop pandemics?
+[45] PMID=32711969 | download_failed | Engineering antibody therapies for protective immunity.
+[46] PMID=32452542 | download_failed | Coronavirus 19 presenting with atypical Sweet's syndrome.
+[47] PMID=32816699 | download_failed | Challenge of diagnosing ANCA-associated vasculitis during COVID-19 pandemic: a missed 'window of opportunity'.
+[48] PMID=32709679 | download_failed | Vital corner of diagnostic challenge: eosinophilic granulomatosis with polyangiitis or COVID-19 pneumonia?
+[49] PMID=32479824 | download_failed | Baseline Disease Activity and Steroid Therapy Stratify Risk of COVID-19 in Patients With Inflammatory Bowel Disease.
+[50] PMID=32534339 | download_failed | A chilblain epidemic during the COVID-19 pandemic. A sign of natural resistance to SARS-CoV-2?
+[51] PMID=32782400 | download_failed | Russia's fast-track coronavirus vaccine draws outrage over safety.
+[52] PMID=32409766 | download_failed | Dozens of coronavirus drugs are in development - what happens next?
+[53] PMID=32311489 | download_failed | Weathering the Cytokine Storm in Susceptible Patients with Severe SARS-CoV-2 Infection.
+[54] PMID=32500858 | download_failed | Serum Concentrations of Interleukin 6 in the General Adult Population: Possible Implications for Anti-IL-6 Therapy in SARS-Cov-2 Infection and IL-6-Related Diseases.
+[55] PMID=32654064 | download_failed | Control of SARS-CoV-2 infection in rituximab-treated neuroimmunological patients.
+[56] PMID=32894406 | download_failed | A Study of Two Cases Co-Infected with SARS-CoV-2 and Human Immunodeficiency Virus.
+[57] PMID=32343598 | download_failed | Serological tests for COVID-19 antibodies: Limitations must be recognized.
+[58] PMID=32760027 | download_failed | Focus shifts to antibody cocktails for COVID-19 cytokine storm.
+[59] PMID=32690058 | download_failed | Detection of IgG antibody during the follow-up in patients with COVID-19 infection.
+[60] PMID=32574020 | no_id | Biologics and Small Molecules in the Treatment of COVID-19.
+[61] PMID=32556278 | download_failed | Real-life experience of tocilizumab use in COVID-19 patients.
+[62] PMID=32488946 | download_failed | No antibody response in acral cutaneous manifestations associated with COVID-19?
+[63] PMID=32349579 | download_failed | COVID-19: the use of immunotherapy in metastatic lung cancer.
+[64] PMID=32368790 | download_failed | Philadelphia-positive acute lymphoblastic leukaemia (ALL) in Italy during the COVID-19 pandemic: a Campus ALL study.
+[65] PMID=32702997 | download_failed | IL-6 (Interleukin 6) Blockade and Heart Rate Corrected QT Interval Prolongation in COVID-19.
+[66] PMID=32638109 | download_failed | Mild COVID-19 infection in an NMO patient treated with tocilizumab: a confirmation of anti-IL-6 protective role?
+[67] PMID=32469280 | download_failed | COVID-19: Gene Transfer to the Rescue?
+[68] PMID=32859531 | download_failed | Coronavirus disease associated immune thrombocytopenia: Causation or correlation?
+[69] PMID=32788678 | download_failed | Tillman Gerngross.
+[70] PMID=32655057 | download_failed | Coronavirus-antibody immune complex: A nanostructure appraisal possible cause of nephropathology.
+[71] PMID=32792373 | download_failed | Antibodies may curb pandemic before vaccines.
+[72] PMID=32525558 | download_failed | New IgM seroconversion and positive RT-PCR test after exposure to the virus in recovered COVID-19 patient.
+[73] PMID=33623573 | download_failed | Availability of drugs for severe COVID-19 in sub-Saharan Africa.
+[74] PMID=32659385 | download_failed | Incidence of invasive pulmonary aspergillosis among critically ill COVID-19 patients.
+[75] PMID=32769153 | download_failed | Mild COVID-19 in ANCA-associated vasculitis treated with rituximab.
+[76] PMID=32627226 | download_failed | Potential role of IL-17 blocking agents in the treatment of severe COVID-19?
+[77] PMID=32984390 | download_failed | The Rapid Coronavirus Antibody Test: Can We Improve Accuracy?
+[78] PMID=32362491 | download_failed | Neutralizing Antibodies against SARS-CoV-2 and Other Human Coronaviruses: (Trends in Immunology 41, 355-359; 2020).
+[79] PMID=32313207 | download_failed | Human monoclonal antibodies block the binding of SARS-CoV-2 spike protein to angiotensin converting enzyme 2 receptor.
+[80] PMID=32425634 | download_failed | The dynamics of antibodies to SARS-CoV-2 in a case of SARS-CoV-2 infection.
+[81] PMID=32901211 | download_failed | Immunization with the receptor-binding domain of SARS-CoV-2 elicits antibodies cross-neutralizing SARS-CoV-2 and SARS-CoV without antibody-dependent enhancement.
+[82] PMID=32286538 | download_failed | Human antibodies can neutralize SARS-CoV-2.
+[83] PMID=32854738 | download_failed | Efficacy of tocilizumab treatment in severely ill COVID-19 patients.
+[84] PMID=32835238 | download_failed | Detection of IgM and IgG antibodies against SARS-CoV-2 in patients with autoimmune diseases.
+[85] PMID=32339362 | download_failed | No evidence of increased risk for Coronavirus Disease 2019 (COVID-19) in patients treated with Dupilumab for atopic dermatitis in a high-epidemic area - Bergamo, Lombardy, Italy.
+[86] PMID=32636189 | download_failed | Covid-19: Herd immunity is "unethical and unachievable," say experts after report of 5% seroprevalence in Spain.
+[87] PMID=32709608 | download_failed | Covid-19: US cases are greatly underestimated, seroprevalence studies suggest.
+[88] PMID=32737112 | download_failed | Targeting IL-6 in COVID-19. Response to: 'Rational use of tocilizumab in COVID-19' by Jain and Sharma.
+[89] PMID=32796043 | download_failed | COVID-19 Global Rheumatology Alliance Registry, anti-IL-6 therapy, shared decision-making and patient outcomes. Response to: 'Correspondence on 'Characteristics associated with hospitalisation for COVID-19 in people with rheumatic disease: data from the COVID-19 Global Rheumatology Alliance physician-reported registry' by Gianfrancesco et al. Compassionate use of tocilizumab in severe COVID-19 with hyperinflammation prior to advent of clinical trials - a real-world district general hospital experience' by Khan et al, 'Comment on 'Characteristics associated with hospitalisation for COVID-19 in people with rheumatic disease: data from the COVID-19 global rheumatology alliance physician-reported registry' by Gianfrancesco M et al' by Andreica et al and 'COVID-19 outcomes in patients with systemic autoimmune diseases treated with immunomodulatory drugs' by Ansarin et al.
+[90] PMID=32658337 | download_failed | Heparin induced thrombocytopenia antibodies in Covid-19.
+[91] PMID=32816700 | download_failed | Response to: 'High dosage of Methylprednisolone as a rescue, second-line treatment in COVID-19 patients who failed to respond to Tocilizumab' by Conticini et al.
+[92] PMID=32873553 | download_failed | Correspondence on 'Interleukin-6 receptor blockade with subcutaneous tocilizumab in severe COVID-19 pneumonia and hyperinflammation: a case-control study' by Potere et al.
+[93] PMID=32816701 | download_failed | High dosage of methylprednisolone as a rescue, second-line treatment in COVID-19 patients who failed to respond to tocilizumab.
+[94] PMID=32873552 | download_failed | Response to: 'Correspondence on 'Interleukin-6 blockade with subcutaneous tocilizumab in severe COVID-19 pneumonia and hyperinflammation: a case-control study' by Potere et al' by Buckley.
+[95] PMID=32835301 | download_failed | Psychosis in a patient with anti-NMDA-receptor antibodies experiencing significant stress related to COVID-19.
+[96] PMID=32352406 | download_failed | Prototype pathogen approach for pandemic preparedness: world on fire.
+[97] PMID=32379918 | download_failed | Coagulopathy of COVID-19 and antiphospholipid antibodies.
+[98] PMID=32531248 | download_failed | Structural Basis for Potent Neutralization of Betacoronaviruses by Single-Domain Camelid Antibodies.
+[99] PMID=32641838 | download_failed | Coronavirus vaccine developers wary of errant antibodies.
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  3.97  │   99.1%  │  0/ 1/ 2/ 3/332                 │
+│ Population      │  3.40  │   88.5%  │  3/11/25/109/190                 │
+│ Location        │  2.85  │   70.1%  │ 10/45/46/121/116                 │
+│ Evidence        │  2.43  │   57.7%  │ 88/42/13/28/167                 │
+│ Parameter       │  0.87  │    9.5%  │ 153/130/23/10/22                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (76 篇)
+================================================================================
+
+1. PMID: 32726200 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2-Specific Antibodies, Faroe Islands.
+   Overall: Include: this is a population-based seroprevalence study using randomly selected participants from the Faroe Islands, providing antibody prevalence estimates relevant for estimating cumulative SARS-CoV-2 infections and thus informing infection fatality rate inference.
+   维度评分: D= P= L= E= Param=
+
+2. PMID: 32564906 [Score: 4/4]
+   Title: SARS-CoV-2 infection among asymptomatic homebound subjects in Milan, Italy.
+   Overall: The full text strongly supports relevance: it is an original human field study in Milan focused on SARS-CoV-2 infection and antibody detection among asymptomatic subjects. Crucially, it reports population-level antibody positivity estimates (about 10%) from primary data, making it highly pertinent to seroprevalence evidence that could inform infection fatality rate inference.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+3. PMID: 32731911 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 and Infection Fatality Ratio, Orleans and Jefferson Parishes, Louisiana, USA, May 2020.
+   Overall: This paper reports a SARS-CoV-2 seroprevalence study in a defined population and explicitly calculates an infection fatality ratio (1.63%). It directly provides data relevant for inferring SARS-CoV-2 infection fatality rates.
+   维度评分: D= P= L= E= Param=
+
+4. PMID: 32525850 [Score: 4/4]
+   Title: SARS-CoV-2 Infections and Serologic Responses from a Sample of U.S. Navy Service Members - USS Theodore Roosevelt, April 2020.
+   Overall: This study reports SARS-CoV-2 serologic testing in an outbreak cohort, providing antibody prevalence data that can inform infection estimates in a defined population. Although it is a convenience sample of young Navy personnel and not ideal for general-population IFR, it is still relevant seroprevalence evidence for infection fatality inference.
+   维度评分: D= P= L= E= Param=
+
+5. PMID: 32583766 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 specific neutralising antibodies in blood donors from the Lodi Red Zone in Lombardy, Italy, as at 06 April 2020.
+   Overall: Include: This is a SARS-CoV-2 seroprevalence/antibody study in a defined population (blood donors in the Lodi Red Zone) reporting neutralizing antibody prevalence and overall evidence of exposure, which can inform infection estimates relevant to IFR inference. Although based on blood donors rather than a fully representative population sample, it still provides usable seroprevalence data.
+   维度评分: D= P= L= E= Param=
+
+6. PMID: 32381641 [Score: 4/4]
+   Title: Performance Characteristics of the Abbott Architect SARS-CoV-2 IgG Assay and Seroprevalence in Boise, Idaho.
+   Overall: Include: this study reports SARS-CoV-2 seroprevalence in a defined community sample from Boise, Idaho (4,856 individuals, 1.79% seropositive) and provides assay performance characteristics needed to interpret prevalence estimates, making it relevant for informing infection fatality rate inference.
+   维度评分: D= P= L= E= Param=
+
+7. PMID: 32495088 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 Antibodies Among Healthcare Workers at a Tertiary Academic Hospital in New York City.
+   Overall: The full text strongly supports relevance: it is an original human serology study of SARS-CoV-2 in a defined real-world population in New York City. It directly reports antibody prevalence/seropositivity estimates, making it highly pertinent for evidence syntheses using seroprevalence data to inform infection fatality rate inference.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+8. PMID: 33412811 [Score: 4/4]
+   Title: [Seroprevalence of anti-SARS-CoV-2 IgG/IgM antibodies in Borgosesia (Piedmont Region, Northern Italy) population: a surveillance strategy in post-lockdown period?].
+   Overall: Include: this is a population-based cross-sectional seroprevalence study of SARS-CoV-2 antibodies in a defined municipality, providing prevalence estimates that can inform infection counts for IFR inference. Although participation was incomplete and based on adult volunteers, it still offers usable seroepidemiologic data.
+   维度评分: D= P= L= E= Param=
+
+9. PMID: 32758311 [Score: 4/4]
+   Title: Low seroprevalence of SARS-CoV-2 infection among healthcare workers of the largest children hospital in Milan during the pandemic wave.
+   Overall: The full text strongly supports relevance to the review question. It is an original human seroprevalence study of SARS-CoV-2 in a defined real-world population in Milan, reporting explicit anti-SARS-CoV-2 IgG prevalence estimates and subgroup antibody prevalence data that could inform infection fatality rate inference, although the population is a healthcare-worker hospital cohort rather than the general population.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+10. PMID: 32861816 [Score: 4/4]
+   Title: Seroprevalence of SARS-Cov-2 in 646 professionals at the Rothschild Foundation Hospital (ProSeCoV study).
+   Overall: The full text strongly supports relevance to the review question. It is an original human seroprevalence study of SARS-CoV-2 antibodies in a defined workforce in Paris, with a directly reported antibody prevalence estimate (12.1%) and subgroup comparisons that could inform infection-fatality inference frameworks, albeit in a hospital-worker population rather than the general population.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+11. PMID: 32790658 [Score: 4/4]
+   Title: Notes from the Field: Seroprevalence Estimates of SARS-CoV-2 Infection in Convenience Sample - Oregon, May 11-June 15, 2020.
+   Overall: The full text strongly supports relevance to the review question. It is an original human seroepidemiologic study of SARS-CoV-2 in Oregon that directly reports population-level antibody seroprevalence estimates, including an overall estimate and age-stratified results, in a real-world geographic setting.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+12. PMID: 32860790 [Score: 4/4]
+   Title: Asymptomatic Severe Acute Respiratory Syndrome Coronavirus 2 Infection in Patients With Inflammatory Bowel Disease Under Biologic Treatment.
+   Overall: The full text strongly supports relevance to the review question. It is an original human study in a real-world Italian setting that directly measures SARS-CoV-2 antibody seroprevalence in a patient cohort and reports a population-level seroprevalence estimate with supporting serology data.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+13. PMID: 32520284 [Score: 4/4]
+   Title: Trends in the prevalence of COVID-19 infection in Rio Grande do Sul, Brazil: repeated serological surveys.
+   Overall: This paper describes repeated population-based serological surveys estimating SARS-CoV-2 antibody prevalence in probability samples, which is directly relevant for inferring infection fatality rates. Although the abstract is a study protocol/design paper, it outlines seroprevalence data collection suitable for IFR estimation.
+   维度评分: D= P= L= E= Param=
+
+14. PMID: 32700672 [Score: 4/4]
+   Title: SARS-CoV-2 IgG seroprevalence in blood donors located in three different federal states, Germany, March to June 2020.
+   Overall: This is a SARS-CoV-2 seroprevalence study reporting IgG prevalence estimates with time period and geographic location, which can inform infection burden estimates relevant to IFR inference. Although based on blood donors rather than a fully representative population sample, it still provides usable serology data for review.
+   维度评分: D= P= L= E= Param=
+
+15. PMID: 32762796 [Score: 4/4]
+   Title: Repeated leftover serosurvey of SARS-CoV-2 IgG antibodies, Greece, March and April 2020.
+   Overall: This is a population serosurvey measuring SARS-CoV-2 IgG seroprevalence and it explicitly reports infection fatality rate estimates for Greece in March and April 2020. It directly supports inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D= P= L= E= Param=
+
+16. PMID: 32780376 [Score: 4/4]
+   Title: [The prevalence rate of anti-SARS-CoV-2-IgG is 1.2% - Screening in asymptomatic outpatients in Germany (Northrhine-Westfalia)].
+   Overall: This is a SARS-CoV-2 seroprevalence study measuring IgG antibodies in an asymptomatic outpatient population, which can contribute prevalence data relevant to inferring infection fatality rates. Although the sample is small and not a general-population survey, it still provides usable seroprevalence evidence.
+   维度评分: D= P= L= E= Param=
+
+17. PMID: 32504052 [Score: 4/4]
+   Title: Seroprevalence of immunoglobulin M and G antibodies against SARS-CoV-2 in China.
+   Overall: This is a large SARS-CoV-2 seroprevalence study measuring IgM/IgG in human populations in Wuhan and other regions of China, providing cumulative infection prevalence estimates that could be paired with deaths to infer IFR. Although some subcohorts are special populations (e.g., healthcare workers, hemodialysis patients), it includes population-level seroepidemiologic data relevant to IFR estimation.
+   维度评分: D= P= L= E= Param=
+
+18. PMID: 32790086 [Score: 4/4]
+   Title: Results from a survey in healthy blood donors in South Eastern Italy indicate that we are far away from herd immunity to SARS-CoV-2.
+   Overall: This is a SARS-CoV-2 seroprevalence study reporting antibody prevalence in a defined population (healthy blood donors in Apulia, Italy). Such serology data can be used to infer cumulative infection prevalence, which is relevant for estimating infection fatality rates, though the blood donor population may have representativeness limitations.
+   维度评分: D= P= L= E= Param=
+
+19. PMID: 33230504 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Hong Kong and in residents evacuated from Hubei province, China: a multicohort study.
+   Overall: Include: this is a SARS-CoV-2 seroprevalence study in defined populations (Hong Kong general population and Hubei returnees) with assay performance characteristics reported, which can inform estimation of cumulative infections needed for infection fatality rate inference.
+   维度评分: D= P= L= E= Param=
+
+20. PMID: 32701941 [Score: 4/4]
+   Title: Estimated Community Seroprevalence of SARS-CoV-2 Antibodies - Two Georgia Counties, April 28-May 3, 2020.
+   Overall: This is a community-based SARS-CoV-2 seroprevalence study using probability sampling and weighted population estimates, which can inform estimation of cumulative infections for IFR inference. It is not a convenience sample limited to special populations, so it is relevant for the review.
+   维度评分: D= P= L= E= Param=
+
+21. PMID: 32958395 [Score: 4/4]
+   Title: Survey of the current status of subclinical coronavirus disease 2019 (COVID-19).
+   Overall: Include: this is a SARS-CoV-2 IgG seroprevalence study reporting antibody prevalence (2.4%) in a defined population, which can inform estimates of cumulative infection for IFR inference. Although the sample is a convenience population from medical institutions rather than a general-population survey, it still provides usable seroprevalence data.
+   维度评分: D= P= L= E= Param=
+
+22. PMID: 32868226 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 antibodies among healthy blood donors in Karachi, Pakistan.
+   Overall: This is a SARS-CoV-2 seroprevalence study measuring antibodies in a defined population (healthy blood donors) with sample size and time frame reported. Although limited in representativeness because it includes only adult male blood donors, it can still contribute seroprevalence data relevant for infection fatality rate inference if used with appropriate caution.
+   维度评分: D= P= L= E= Param=
+
+23. PMID: 32421144 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2-Specific Antibodies Among Adults in Los Angeles County, California, on April 10-11, 2020.
+   Overall: Include: this is a population seroepidemiologic study estimating SARS-CoV-2 IgG/IgM antibody prevalence in a defined general population (adults in Los Angeles County), which can be used to infer cumulative infections and support infection fatality rate estimation.
+   维度评分: D= P= L= E= Param=
+
+24. PMID: 32679056 [Score: 4/4]
+   Title: Lower prevalence of antibodies neutralizing SARS-CoV-2 in group O French blood donors.
+   Overall: This is a SARS-CoV-2 seroprevalence study using blood donors, reporting antibody prevalence in a defined population and time period. Such serology data can contribute to estimating infection counts for infection fatality rate inference, despite potential representativeness limitations of blood donors.
+   维度评分: D= P= L= E= Param=
+
+25. PMID: 32739485 [Score: 4/4]
+   Title: Large-scale, molecular and serological SARS-CoV-2 screening of healthcare workers in a 4-site public hospital in Belgium after COVID-19 outbreak.
+   Overall: The full text strongly supports relevance: it is an original human SARS-CoV-2 study conducted in a real-world hospital workforce in Belgium and explicitly reports anti-SARS-CoV-2 seroprevalence estimates. The study’s central outcome—overall and subgroup seroprevalence among healthcare workers—directly matches the review’s target parameter.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+26. PMID: 32534626 [Score: 4/4]
+   Title: Seroprevalence of anti-SARS-CoV-2 IgG antibodies in Geneva, Switzerland (SEROCoV-POP): a population-based study.
+   Overall: This is a population-based SARS-CoV-2 seroprevalence study using antibody testing in a general community sample, which can support estimation of cumulative infections needed for infection fatality rate inference. The sampling design and adjusted seroprevalence estimates make it directly relevant to IFR analyses.
+   维度评分: D= P= L= E= Param=
+
+27. PMID: 32781165 [Score: 4/4]
+   Title: SARS-CoV-2-related mortality in a rural Latin American population.
+   Overall: Include because this study reports a SARS-CoV-2 seroprevalence survey (45% antibody prevalence) alongside population mortality data in the same rural community, which can support inference about infection fatality. Although mortality attribution relies partly on verbal autopsy rather than fully confirmed COVID-19 deaths, it is still relevant for IFR-related evidence.
+   维度评分: D= P= L= E= Param=
+
+28. PMID: 32641783 [Score: 4/4]
+   Title: Population-based surveys of antibodies against SARS-CoV-2 in Southern Brazil.
+   Overall: This is a population-based seroprevalence study using probability-sampled household surveys, which is directly relevant for estimating cumulative SARS-CoV-2 infections needed for IFR inference. The assay performance is reported, and the study provides prevalence estimates over multiple rounds, making it suitable for inclusion.
+   维度评分: D= P= L= E= Param=
+
+29. PMID: 32715672 [Score: 4/4]
+   Title: IgG Seroprevalence of COVID-19 among Individuals without a History of the Coronavirus Disease Infection in Daegu, Korea.
+   Overall: This is a SARS-CoV-2 seroprevalence study estimating prior infection in a defined population and discussing undiagnosed cases, which can inform infection fatality rate estimation. Although the sample is small and not representative (hospital visitors at a single center), it still provides antibody prevalence data relevant to IFR inference.
+   维度评分: D= P= L= E= Param=
+
+30. PMID: 32871063 [Score: 4/4]
+   Title: Humoral Immune Response to SARS-CoV-2 in Iceland.
+   Overall: This is a large population-based seroepidemiologic study in Iceland that estimates SARS-CoV-2 seroprevalence and explicitly derives an infection fatality estimate (0.3%). It directly supports inference of infection fatality rates from antibody data.
+   维度评分: D= P= L= E= Param=
+
+31. PMID: 32645347 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 in Spain (ENE-COVID): a nationwide, population-based seroepidemiological study.
+   Overall: This is a large, nationwide, population-based seroepidemiological study with random sampling and validated antibody testing, providing seroprevalence estimates directly useful for estimating SARS-CoV-2 infection fatality rates. Its national and regional prevalence estimates in Spain make it highly relevant for IFR inference.
+   维度评分: D= P= L= E= Param=
+
+32. PMID: 32771084 [Score: 4/4]
+   Title: Seroprevalence and presentation of SARS-CoV-2 in pregnancy.
+   Overall: The full text strongly supports relevance to the review question. It is an original human seroprevalence study of SARS-CoV-2 antibodies in a defined real-world population, reporting clear antibody prevalence estimates that could inform inference about infection burden and, indirectly, infection fatality patterns within this subgroup.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+33. PMID: 32530392 [Score: 4/4]
+   Title: The prevalence of severe acute respiratory coronavirus virus 2 (SARS-CoV-2) IgG antibodies in intensive care unit (ICU) healthcare personnel (HCP) and its implications-a single-center, prospective, pilot study.
+   Overall: The full text strongly supports relevance to the review question. It is an original human serology study on SARS-CoV-2 in a real healthcare setting and directly reports an antibody prevalence/seroconversion estimate (0.83%), which is the key target parameter for seroprevalence-based inference.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+34. PMID: 32763195 [Score: 4/4]
+   Title: SeroTracker: a global SARS-CoV-2 seroprevalence dashboard.
+   Overall: The full text strongly supports relevance to SARS-CoV-2 seroprevalence evidence: the disease and target parameter are explicit and central, and the work is clearly situated in real-world human populations across multiple geographies. Although it is a dashboard and evidence synthesis rather than a single primary serosurvey, it reports original empirical extraction and synthesis of seroprevalence estimates that are directly relevant for informing infection fatality rate analyses.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+35. PMID: 32553914 [Score: 4/4]
+   Title: Exposure and seroconversion to severe acute respiratory syndrome coronavirus 2 among obstetrical healthcare providers following a contained outbreak.
+   Overall: The full text strongly supports relevance: it is an original human prospective cohort study of SARS-CoV-2 in a defined real-world healthcare population and directly reports antibody positivity and seroconversion rates. Although the population is a specific occupational cohort rather than a general population sample, the antibody prevalence data are explicit and could inform SARS-CoV-2 infection burden estimation in that group.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+36. PMID: 32843121 [Score: 4/4]
+   Title: Antibody evidence of SARS-CoV-2 infection in healthcare workers in the Bronx.
+   Overall: The full text strongly supports relevance to the review question. It is an original human SARS-CoV-2 antibody study in a defined real-world population and directly reports seropositivity prevalence estimates that could inform infection fatality rate inference, although the population is healthcare workers rather than the general community.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+37. PMID: 32686766 [Score: 4/4]
+   Title: Serosurvey of SARS-CoV-2 among hospital visitors in China.
+   Overall: The full text strongly supports relevance to the review question. It is an original human serosurvey of SARS-CoV-2 in defined real-world populations in Wuhan and Guangzhou, and it directly reports antibody seroprevalence estimates that could inform inference about cumulative infection burden and, indirectly, infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+38. PMID: 32653078 [Score: 4/4]
+   Title: Pandemic peak SARS-CoV-2 infection and seroconversion rates in London frontline health-care workers.
+   Overall: The full text strongly supports relevance: it is an original human field study of SARS-CoV-2 in a defined London health-care worker cohort and centrally reports seropositivity and seroconversion proportions. Although the population is a specific occupational group rather than the general population, the serological prevalence data are explicit and potentially informative for inference on infection burden.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+39. PMID: 32909272 [Score: 4/4]
+   Title: Prevalence of SARS-COVID-19 serum IgG antibodies amongst staff on an acute surgical unit.
+   Overall: The full text strongly supports relevance to the review question. It is an original human field study of SARS-CoV-2 that reports a clear antibody prevalence estimate (15/215; 7%) in a defined healthcare worker population in Leicester, UK, which is directly pertinent to seroprevalence evidence.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+40. PMID: 32710647 [Score: 4/4]
+   Title: Antibody responses to SARS-CoV-2 in healthy individuals returning to Shenzhen.
+   Overall: This is a cross-sectional serology study in a defined population sample (1589 asymptomatic returnees to Shenzhen) reporting antibody prevalence, which can inform estimates of cumulative SARS-CoV-2 infection. Although the sample is specialized and early-pandemic, it is still a seroprevalence/antibody study potentially usable for IFR inference with caution.
+   维度评分: D= P= L= E= Param=
+
+41. PMID: 32790206 [Score: 4/4]
+   Title: Low postpandemic wave SARS-CoV-2 seroprevalence in Kuala Lumpur and Selangor, Malaysia.
+   Overall: The full text strongly supports relevance to the review question. It is an original human study in a defined real-world Malaysian setting that directly measures and reports SARS-CoV-2 seroprevalence using validated serological assays, including crude and age-standardized estimates that could inform infection fatality rate inference.
+   维度评分: D=4 P=3 L=4 E=4 Param=4
+
+42. PMID: 32648546 [Score: 4/4]
+   Title: Cumulative incidence and diagnosis of SARS-CoV-2 infection in New York.
+   Overall: This is a large population seroprevalence study estimating cumulative SARS-CoV-2 infection incidence in New York using antibody testing with weighting and test-performance adjustment. Such population-level infection estimates can be paired with mortality data to infer infection fatality rates.
+   维度评分: D= P= L= E= Param=
+
+43. PMID: 32701938 [Score: 4/4]
+   Title: Population Point Prevalence of SARS-CoV-2 Infection Based on a Statewide Random Sample - Indiana, April 25-29, 2020.
+   Overall: This study uses a statewide random sample and measures SARS-CoV-2 IgG seroprevalence (plus PCR prevalence) in the general population, providing population-based infection estimates. The abstract explicitly reports an inferred infection-fatality ratio, making it directly relevant to supporting SARS-CoV-2 IFR estimation.
+   维度评分: D= P= L= E= Param=
+
+44. PMID: 32386808 [Score: 4/4]
+   Title: Prevalence of IgG antibodies to SARS-CoV-2 among emergency department employees.
+   Overall: The full text strongly supports relevance: it is an original human study in a defined real-world setting and directly measures SARS-CoV-2 IgG antibody prevalence among emergency department employees. Although the population is occupational rather than general population and results are reported in aggregate from a service program, the study clearly provides seropositivity data that could inform SARS-CoV-2 infection burden estimation.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+45. PMID: 32692365 [Score: 4/4]
+   Title: Seroprevalence of Antibodies to SARS-CoV-2 in 10 Sites in the United States, March 23-May 12, 2020.
+   Overall: Include: this is a multi-site SARS-CoV-2 seroprevalence study estimating population antibody prevalence and inferred cumulative infections, which can support infection fatality rate estimation when paired with deaths from the same places and periods. Although it uses convenience residual sera rather than a representative population sample, it remains relevant evidence for IFR inference.
+   维度评分: D= P= L= E= Param=
+
+46. PMID: 32560071 [Score: 4/4]
+   Title: COVID-19 Infection Fatality Rate Associated with Incidence-A Population-Level Analysis of 19 Spanish Autonomous Communities.
+   Overall: Include: this study uses serological survey data from a large SARS-CoV-2 serosurvey in Spain to estimate regional infection fatality rates, directly relevant to seroprevalence/antibody evidence supporting IFR inference.
+   维度评分: D= P= L= E= Param=
+
+47. PMID: 32743610 [Score: 4/4]
+   Title: High Community SARS-CoV-2 Antibody Seroprevalence in a Ski Resort Community, Blaine County, Idaho, US. Preliminary Results.
+   Overall: This is a community-based SARS-CoV-2 seroprevalence study estimating antibody prevalence in a defined population, which can be paired with deaths in the same area/timeframe to inform infection fatality rate inference. Despite volunteer-based recruitment and preliminary status, it provides relevant population seroprevalence data.
+   维度评分: D= P= L= E= Param=
+
+48. PMID: 32547909 [Score: 4/4]
+   Title: Prevalence of antibodies against COVID-19 in the staff of a COVID-19 regular ward.
+   Overall: The full text strongly supports relevance: it is an original human SARS-CoV-2 serology study conducted in a real-world hospital setting and directly reports antibody prevalence among a defined population. Although the sample is very small and highly specific to healthcare staff, it still provides explicit seroprevalence-type evidence relevant to SARS-CoV-2 infection occurrence.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+49. PMID: 32944166 [Score: 4/4]
+   Title: Pronounced difference in Covid-19 antibody prevalence indicates cluster transmission in Stockholm, Sweden.
+   Overall: This is a SARS-CoV-2 seroprevalence study reporting antibody prevalence in defined community populations, which can contribute prevalence data relevant to infection fatality rate inference. Although limited to two residential areas and likely not population-representative of all Stockholm, it still provides usable serology evidence.
+   维度评分: D= P= L= E= Param=
+
+50. PMID: 32511477 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence and neutralizing activity in donor and patient blood from the San Francisco Bay Area.
+   Overall: Include: this study reports SARS-CoV-2 seroprevalence estimates in defined population samples (blood donors and hospitalized non-respiratory patients), which can contribute to estimating cumulative infection prevalence for IFR inference. It also provides antibody assay/neutralization data relevant to interpreting serologic evidence.
+   维度评分: D= P= L= E= Param=
+
+51. PMID: 32817969 [Score: 4/4]
+   Title: Detection, prevalence, and duration of humoral responses to SARS-CoV-2 under conditions of limited population exposure.
+   Overall: Include. This is a SARS-CoV-2 seroprevalence/antibody study with community testing (5,882 individuals) estimating population exposure, which can inform infection prevalence and potentially support IFR inference, despite also focusing on assay performance and antibody durability.
+   维度评分: D= P= L= E= Param=
+
+52. PMID: 32839781 [Score: 4/4]
+   Title: Universal PCR and antibody testing demonstrate little to no transmission of SARS-CoV-2 in a rural community.
+   Overall: This is a community-based seroprevalence study measuring prior SARS-CoV-2 infection with antibody testing in a defined population, which can inform infection denominator estimates for IFR inference. Although prevalence was extremely low, it still fits the review’s scope of seroprevalence/antibody studies.
+   维度评分: D= P= L= E= Param=
+
+53. PMID: 35241216 [Score: 4/4]
+   Title: Seroprevalence of IgG antibodies against SARS-CoV-2 - a serial prospective cross-sectional nationwide study of residual samples, Belgium, March to October 2020.
+   Overall: This is a nationwide, serial SARS-CoV-2 seroprevalence study in Belgium using population-weighted residual samples and adjustment for test performance. It provides prevalence estimates over time in a defined population, which can be paired with mortality data to support infection fatality rate inference.
+   维度评分: D= P= L= E= Param=
+
+54. PMID: 34877995 [Score: 4/4]
+   Title: Prevalence of COVID-19 infection in the prison system in Espírito Santo/Brazil: persons deprived of liberty and justice workers.
+   Overall: Include: this is a SARS-CoV-2 seroprevalence study using IgG/IgM antibody testing in a defined population, providing infection prevalence estimates that could inform IFR inference. Although limited to a prison-system population rather than the general population, it is still relevant seroepidemiologic evidence.
+   维度评分: D= P= L= E= Param=
+
+55. PMID: 32638883 [Score: 4/4]
+   Title: Seroprevalence of anti-SARS-CoV-2 among blood donors in Rio de Janeiro, Brazil.
+   Overall: Include: this is a SARS-CoV-2 seroprevalence study reporting antibody prevalence estimates with adjustment for test sensitivity/specificity and population weighting. Although based on blood donors rather than a fully representative population sample, it can still inform infection fatality rate inference with appropriate attention to selection bias.
+   维度评分: D= P= L= E= Param=
+
+56. PMID: 34416142 [Score: 4/4]
+   Title: Assessment of initial SARS-CoV-2 seroprevalence in the most affected districts in the municipality of São Paulo, Brazil.
+   Overall: Include: this is a population-based household seroprevalence survey with randomly selected households and reported weighted SARS-CoV-2 antibody prevalence, which can support estimation of cumulative infections for IFR inference. Although limited to six heavily affected districts and adults only, it still provides usable seroprevalence data from a defined population.
+   维度评分: D= P= L= E= Param=
+
+57. PMID: 33654063 [Score: 4/4]
+   Title: The prevalence of antibodies to SARS-CoV-2 among blood donors in China.
+   Overall: This is a SARS-CoV-2 seroprevalence study measuring antibodies in a defined population (blood donors) with reported prevalence estimates by city, which can be used to infer cumulative infection rates. Although blood donors are not fully representative of the general population, the data are still relevant for IFR-related evidence synthesis.
+   维度评分: D= P= L= E= Param=
+
+58. PMID: 32813273 [Score: 4/4]
+   Title: Low prevalence of antibodies against SARS-CoV-2 among voluntary blood donors in Guangzhou, China.
+   Overall: This is a SARS-CoV-2 seroprevalence study, measuring antibodies in a defined population (blood donors in Guangzhou) with a reported prevalence estimate. Although blood donors are not fully representative of the general population, the study can still inform infection fatality rate inference when used with appropriate caution about selection bias.
+   维度评分: D= P= L= E= Param=
+
+59. PMID: 33501969 [Score: 4/4]
+   Title: Estimation of SARS-CoV-2 Infection Fatality Rate by Real-time Antibody Screening of Blood Donors.
+   Overall: Include: this is a nationwide SARS-CoV-2 seroprevalence study using antibody testing in blood donors and explicitly estimates infection fatality rate from seroprevalence and death data. It directly addresses the review question on antibody studies supporting IFR inference.
+   维度评分: D= P= L= E= Param=
+
+60. PMID: 33203887 [Score: 4/4]
+   Title: Infection fatality rate of SARS-CoV2 in a super-spreading event in Germany.
+   Overall: Include: this is a population-based seroepidemiological study using IgG serology plus PCR to estimate cumulative SARS-CoV-2 infections and directly derive an infection fatality rate. It provides exactly the kind of seroprevalence-based evidence relevant to IFR inference.
+   维度评分: D= P= L= E= Param=
+
+61. PMID: 32677025 [Score: 4/4]
+   Title: Novel coronavirus epidemic in the Hungarian population, a cross-sectional nationwide survey to support the exit policy in Hungary.
+   Overall: This is a nationwide, population-representative cross-sectional serosurvey measuring SARS-CoV-2 antibodies, with prevalence estimates for prior exposure in Hungary. Such seroprevalence data can be used to infer cumulative infections and support infection fatality rate estimation.
+   维度评分: D= P= L= E= Param=
+
+62. PMID: 33197394 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in slums versus non-slums in Mumbai, India.
+   Overall: The full text strongly supports relevance to the review question. It is an original human serosurvey of SARS-CoV-2 in a defined geographic population and explicitly reports seroprevalence estimates, even linking them to inferred infection fatality rates in slum and non-slum areas.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+63. PMID: 33175878 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 specific IgG antibodies in District Srinagar, northern India - A cross-sectional study.
+   Overall: This is a SARS-CoV-2 IgG seroprevalence study in a defined population (District Srinagar) reporting standardized prevalence estimates and infection counts, which can be used to infer infection fatality rates. Although the sample is hospital visitors rather than a fully population-based sample, it still provides relevant seroprevalence data for IFR estimation.
+   维度评分: D= P= L= E= Param=
+
+64. PMID: 33349310 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Guilan Province, Iran, April 2020.
+   Overall: This is a population seroprevalence study of SARS-CoV-2 antibodies in a defined geographic area (Guilan Province, Iran), providing prevalence estimates that can be used alongside mortality data to infer infection fatality rates.
+   维度评分: D= P= L= E= Param=
+
+65. PMID: 33898863 [Score: 4/4]
+   Title: Estimation of seroprevalence of novel coronavirus disease (COVID-19) using preserved serum at an outpatient setting in Kobe, Japan: A cross-sectional study.
+   Overall: This is a cross-sectional SARS-CoV-2 seroprevalence study in a defined population (Kobe, Japan) reporting antibody prevalence estimates with confidence intervals. Such serology data can be used to infer cumulative infections and therefore support infection fatality rate estimation, despite potential representativeness limitations from using outpatient preserved sera.
+   维度评分: D= P= L= E= Param=
+
+66. PMID: 33977017 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Utsunomiya City, Greater Tokyo, after the first pandemic in 2020.
+   Overall: This is a population-based seroepidemiological study using a random household sample to estimate SARS-CoV-2 antibody prevalence in a defined community. Such seroprevalence data can be paired with deaths in the same population and period to inform infection fatality rate estimates.
+   维度评分: D= P= L= E= Param=
+
+67. PMID: 33177105 [Score: 4/4]
+   Title: Seroprevalence of anti-SARS-CoV-2 IgG antibodies in Kenyan blood donors.
+   Overall: This is a population seroprevalence study of anti-SARS-CoV-2 IgG with adjusted prevalence estimates and defined sampling period/location, which can be used alongside mortality data to infer infection fatality rates. Although based on blood donors rather than a fully representative household sample, it still provides relevant seroepidemiologic evidence.
+   维度评分: D= P= L= E= Param=
+
+68. PMID: 38336649 [Score: 4/4]
+   Title: Creation of a pandemic memory by tracing COVID-19 infections and immunity in Luxembourg (CON-VINCE).
+   Overall: This is a population-based prospective cohort with repeated SARS-CoV-2 serology and PCR in a representative adult sample, reporting weighted infection prevalence/period prevalence. Such seroprevalence data can support inference of infection fatality rates, even though IFR is not directly estimated in the abstract.
+   维度评分: D= P= L= E= Param=
+
+69. PMID: 33737137 [Score: 4/4]
+   Title: Serial population-based serosurveys for COVID-19 in two neighbourhoods of Karachi, Pakistan.
+   Overall: This is a population-based serial seroprevalence study using random sampling and antibody testing, and it explicitly reports infection fatality rate estimates across survey phases. It directly supports inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D= P= L= E= Param=
+
+70. PMID: 33737535 [Score: 4/4]
+   Title: Characterizing the Qatar advanced-phase SARS-CoV-2 epidemic.
+   Overall: Include: this paper reports SARS-CoV-2 antibody seroprevalence in a large sample (32,970 residual clinical blood specimens) and provides mortality/severity data from national databases, which can support inference of infection fatality rates. Although the serosample is based on residual clinical specimens rather than a fully random population sample, it still contains relevant seroepidemiologic evidence.
+   维度评分: D= P= L= E= Param=
+
+71. PMID: 33568663 [Score: 4/4]
+   Title: SARS-CoV-2 antibody prevalence in England following the first peak of the pandemic.
+   Overall: This is a large population-based SARS-CoV-2 seroprevalence study in England reporting antibody prevalence estimates and explicitly deriving age- and sex-specific infection fatality ratios. It directly supports inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D= P= L= E= Param=
+
+72. PMID: 33094713 [Score: 4/4]
+   Title: Detection of neutralising antibodies to SARS-CoV-2 to determine population exposure in Scottish blood donors between March and May 2020.
+   Overall: This is a SARS-CoV-2 seroprevalence study measuring neutralising antibodies in a defined population sample (Scottish blood donors), providing population exposure estimates that can inform infection fatality rate inference. Although blood donors are not fully representative, such serosurveys are typically relevant for IFR estimation.
+   维度评分: D= P= L= E= Param=
+
+73. PMID: 32821935 [Score: 4/4]
+   Title: Community Transmission of Severe Acute Respiratory Syndrome Coronavirus 2 Disproportionately Affects the Latinx Population During Shelter-in-Place in San Francisco.
+   Overall: Include: this is a community-based study that performed antibody testing (Abbott ARCHITECT IgG) alongside PCR in a defined population and reports cumulative incidence/seroprevalence estimates. These data can contribute to inference on SARS-CoV-2 infection burden relevant to IFR estimation, even though the paper’s main focus is transmission disparities rather than fatality.
+   维度评分: D= P= L= E= Param=
+
+74. PMID: 33615345 [Score: 4/4]
+   Title: COVID-19 antibody seroprevalence in Santa Clara County, California.
+   Overall: This is a population seroprevalence study of SARS-CoV-2 antibodies in a community sample and explicitly discusses implications for infection fatality rates by estimating cumulative infections. It directly provides seroprevalence data that can support IFR inference.
+   维度评分: D= P= L= E= Param=
+
+75. PMID: 33171096 [Score: 4/4]
+   Title: Racial and Workplace Disparities in Seroprevalence of SARS-CoV-2, Baton Rouge, Louisiana, USA.
+   Overall: Include: this is a population seroprevalence study using antibody testing in a defined community, reporting census-weighted SARS-CoV-2 seroprevalence. Such prevalence estimates can be paired with mortality data from the same population and period to inform infection fatality rate inference.
+   维度评分: D= P= L= E= Param=
+
+76. PMID: 34433423 [Score: 4/4]
+   Title: Low Seroprevalence of SARS-CoV-2 in Rhode Island blood donors during may 2020 as determined using multiple serological assay formats.
+   Overall: Include: this is a SARS-CoV-2 seroprevalence study reporting population antibody prevalence (0.6%) using multiple validated serological assays with adjustment for test performance. Although based on blood donors rather than a fully representative population sample, it can still inform IFR estimation with appropriate consideration of selection bias.
+   维度评分: D= P= L= E= Param=

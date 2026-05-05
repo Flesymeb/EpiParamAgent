@@ -1,0 +1,51 @@
+{
+  "timestamp_utc": "2026-05-04T17:01:36.551551+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_prepare_raw.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP9",
+    "--query",
+    "(monkeypox* OR mpx OR mpox OR hmpxv OR mpxv OR chimpanzeepox* OR chimppox* OR monkeyorthopox* OR simianpox* OR simianorthopox*)",
+    "--include-gt",
+    "--fix-missing"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "6de890c2e610b02674b906ab19890c22a7863235",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP9",
+    "topic": "",
+    "query": "(monkeypox* OR mpx OR mpox OR hmpxv OR mpxv OR chimpanzeepox* OR chimppox* OR monkeyorthopox* OR simianpox* OR simianorthopox*)",
+    "date_range": "",
+    "retmax": "all",
+    "include_gt": true,
+    "fix_missing": true,
+    "medline_only": false
+  },
+  "inputs": [],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/reproduction_number/p9/project_9_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-04T17:01:36.543552+00:00",
+      "type": "file",
+      "size_bytes": 11436193,
+      "sha256": "08da6e7edb0108eb1b3abb8c3eceff5e5e2c473050c85a18165f1bad8633b9ec"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 7292,
+    "ground_truth_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/reproduction_number/p9/project_9_groundtruth.csv"
+  }
+}

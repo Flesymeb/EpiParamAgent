@@ -1,0 +1,51 @@
+{
+  "timestamp_utc": "2026-05-04T16:31:35.399017+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_prepare_raw.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP6",
+    "--query",
+    "(monkeypox OR mpox OR mpx) AND (incubation OR serial OR symptoms OR onset OR rash)",
+    "--include-gt",
+    "--fix-missing"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "1684f3dbd11d7208abbd34671c17ef96fffde46d",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP6",
+    "topic": "",
+    "query": "(monkeypox OR mpox OR mpx) AND (incubation OR serial OR symptoms OR onset OR rash)",
+    "date_range": "",
+    "retmax": "all",
+    "include_gt": true,
+    "fix_missing": true,
+    "medline_only": false
+  },
+  "inputs": [],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/serial_interval/p6/project_6_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-04T16:31:35.395162+00:00",
+      "type": "file",
+      "size_bytes": 4740380,
+      "sha256": "96699fa51f6714aeb7cc54d02c42d564150d18158997c487ae867de4217bd187"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 2610,
+    "ground_truth_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/serial_interval/p6/project_6_groundtruth.csv"
+  }
+}

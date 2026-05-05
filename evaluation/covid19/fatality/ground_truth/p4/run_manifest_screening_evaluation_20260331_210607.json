@@ -1,0 +1,115 @@
+{
+  "timestamp_utc": "2026-03-31T13:06:07.869294+00:00",
+  "workflow": "screening_evaluation",
+  "module": "literature_search",
+  "cwd": "C:\\Users\\CodexSandboxOffline\\.codex\\.sandbox\\cwd\\b2a12858df871bea",
+  "argv": [
+    ".\\dev\\literature_search\\scripts\\cli\\screening_evaluation.py",
+    "screening-performance",
+    "--project-root",
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "--profile",
+    "P4",
+    "--topic",
+    "fatality"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "command": "screening-performance",
+    "profile": "P4",
+    "topic": "fatality"
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p4\\project_4_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:10:19.431561+00:00",
+      "type": "file",
+      "size_bytes": 23235,
+      "sha256": "3d74742b947aaab33cfc250b0144d5b120a7085ad19427ef917baf61d6a012f6"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p4\\project_4_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T08:51:05.017442+00:00",
+      "type": "file",
+      "size_bytes": 1136783,
+      "sha256": "dd7b7c83729f6de5cae0c0dfdb24d321d76fc8aadc8f23797ecbcf564c6e51f2"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p4",
+      "exists": true,
+      "mtime_utc": "2026-03-31T09:36:23.379128+00:00",
+      "type": "dir",
+      "file_count": 20,
+      "dir_digest": "646eca5b8fb6363e21ed7361f45cb2b59c9855113b3591ce9383bba08b230089",
+      "dir_digest_truncated": false
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p4\\paper_summary.tsv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T13:06:07.867262+00:00",
+      "type": "file",
+      "size_bytes": 302,
+      "sha256": "16e905f65c0538da5738121336d94fa109bd1e9de8445ac6aaf658bb8a71593d"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "summary": {
+      "topic": "fatality",
+      "project_label": "P4",
+      "ground_truth_count": 56,
+      "screened_count": 345,
+      "tp": 56,
+      "fp": 166,
+      "fn": 0,
+      "tn": 123,
+      "strong_count": 47,
+      "possible_count": 9,
+      "unlikely_count": 0,
+      "not_found_count": 0,
+      "sensitivity": 1.0,
+      "specificity": 0.425606,
+      "precision": 0.252252,
+      "npv": 1.0,
+      "f1": 0.402878,
+      "accuracy": 0.518841,
+      "workload_reduction": 0.356522,
+      "nns": 3.964286,
+      "mcc": 0.327658,
+      "wss95": 0.306522,
+      "recall_ci_low": 0.935806,
+      "recall_ci_high": 1.0,
+      "precision_ci_low": 0.199667,
+      "precision_ci_high": 0.313265,
+      "workload_reduction_ci_low": 0.307246,
+      "workload_reduction_ci_high": 0.408696,
+      "nns_ci_low": 3.227273,
+      "nns_ci_high": 5.069767,
+      "recall_ci_display": "100.0% [93.6%, 100.0%]",
+      "precision_display": "25.2%",
+      "workload_reduction_display": "35.7%",
+      "nns_display": "3.96",
+      "precision_ci_display": "25.2% [20.0%, 31.3%]",
+      "workload_reduction_ci_display": "35.7% [30.7%, 40.9%]",
+      "nns_ci_display": "3.96 [3.23, 5.07]",
+      "specificity_display": "42.6%",
+      "npv_display": "100.0%",
+      "f1_display": "40.3%",
+      "accuracy_display": "51.9%",
+      "mcc_display": "0.328",
+      "wss95_display": "30.7%"
+    },
+    "paper_summary_tsv": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p4\\paper_summary.tsv"
+  }
+}

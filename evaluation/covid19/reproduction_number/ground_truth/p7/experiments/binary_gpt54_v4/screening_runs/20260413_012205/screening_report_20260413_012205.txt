@@ -1,0 +1,610 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-04-13 01:22:05
+研究问题: What is the basic reproduction number (R0) of COVID-19?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/reproduction_number/p7/project_7_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/reproduction_number/p7/experiments/binary_gpt54_v4/project_7_screened.csv
+模型配置: openai/openai/gpt-5.4
+批处理大小: 30
+批次并发: 1
+Full-text: need_fulltext=5 | screened=5
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │    113   │   19.7%  │
+│ 🤔 Possible candidates   │      1   │    0.2%  │
+│ 😐 Unlikely candidates   │    460   │   80.1%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │    574   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  4.00  │  100.0%  │  0/ 0/ 0/ 0/ 5                 │
+│ Population      │  3.80  │  100.0%  │  0/ 0/ 0/ 1/ 4                 │
+│ Location        │  3.40  │   80.0%  │  0/ 0/ 1/ 1/ 3                 │
+│ Evidence        │  2.40  │   40.0%  │  0/ 2/ 1/ 0/ 2                 │
+│ Parameter       │  1.80  │   40.0%  │  2/ 1/ 0/ 0/ 2                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (113 篇)
+================================================================================
+
+1. PMID: 31995857 [Score: 4/4]
+   Title: Early Transmission Dynamics in Wuhan, China, of Novel Coronavirus-Infected Pneumonia.
+   Overall: Include because this paper directly estimates the basic reproduction number (R0) of COVID-19 in the early Wuhan outbreak, reporting R0=2.2 (95% CI, 1.4 to 3.9). It is therefore highly relevant to a review focused on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+2. PMID: 32959618 [Score: 4/4]
+   Title: Epidemic Landscape and Forecasting of SARS-CoV-2 in India.
+   Overall: Include because this paper directly estimates the basic reproduction number (R0) of COVID-19 in India, reporting multiple R0 estimates (range 1.43–1.85). It is clearly relevant to a review focused on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+3. PMID: 32794161 [Score: 4/4]
+   Title: Epidemiology of SARS-CoV-2 in Egypt.
+   Overall: Include because this paper directly estimates the basic reproduction number (R0) of COVID-19 in Egypt, which matches the review question. The abstract explicitly reports R0 values and describes how they were calculated and reviewed over time.
+   维度评分: D= P= L= E= Param=
+
+4. PMID: 32255761 [Score: 4/4]
+   Title: High Contagiousness and Rapid Spread of Severe Acute Respiratory Syndrome Coronavirus 2.
+   Overall: Include because this paper directly estimates the basic reproduction number (R0) of COVID-19/SARS-CoV-2 in Wuhan, reporting a median R0 of 5.7 with a 95% CI. It is clearly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+5. PMID: 32460229 [Score: 4/4]
+   Title: Estimation of the time-varying reproduction number of COVID-19 outbreak in China.
+   Overall: Include because this paper directly estimates the basic reproduction number (R0) of COVID-19, alongside controlled/time-varying reproduction numbers, using multiple statistical methods in China. It is clearly relevant to a review asking what the R0 of COVID-19 is.
+   维度评分: D= P= L= E= Param=
+
+6. PMID: 32928322 [Score: 4/4]
+   Title: Epidemiological profile and transmission dynamics of COVID-19 in the Philippines.
+   Overall: Include because the abstract reports a COVID-19 reproductive number estimate (2.41 before quarantine, 0.89 during quarantine), which is directly relevant to estimating transmission potential. Although it may reflect time-varying reproduction rather than strictly basic R0, it provides quantitative reproduction number data for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+7. PMID: 32629880 [Score: 4/4]
+   Title: Early Phase of the COVID-19 Outbreak in Hungary and Post-Lockdown Scenarios.
+   Overall: The paper explicitly addresses the COVID-19 outbreak and mentions reproduction number in the context of epidemiological analysis and modeling. It appears relevant to a review on estimating or discussing COVID-19 R0, even though it also includes broader scenario modeling.
+   维度评分: D= P= L= E= Param=
+
+8. PMID: 32817662 [Score: 4/4]
+   Title: Age could be driving variable SARS-CoV-2 epidemic trajectories worldwide.
+   Overall: Include because this paper explicitly reports SARS-CoV-2 basic reproduction number (R0) estimates, albeit modeled across countries/regions. It is directly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+9. PMID: 32574282 [Score: 4/4]
+   Title: Epidemiological and Clinical Characteristics of Patients With Coronavirus Disease-2019 in Shiyan City, China.
+   Overall: Include because the abstract explicitly reports an estimate of the reproductive number (R0=1.81) for COVID-19, which directly addresses the review question. Although it is under containment strategies and mixed with clinical findings, it still provides a relevant transmissibility estimate.
+   维度评分: D= P= L= E= Param=
+
+10. PMID: 32540727 [Score: 4/4]
+   Title: The effects of border control and quarantine measures on the spread of COVID-19.
+   Overall: Include: this paper directly addresses COVID-19 transmission dynamics and explicitly uses/provides an R0 value (R0 = 2.92, with comparison to 1.4) in its modeling of spread. It is therefore relevant to a review on the basic reproduction number of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+11. PMID: 32109273 [Score: 4/4]
+   Title: COVID-19 outbreak on the Diamond Princess cruise ship: estimating the epidemic potential and effectiveness of public health countermeasures.
+   Overall: This paper directly estimates the basic reproduction number (R0) of COVID-19 using an SEIR model, reporting an initial R0 of 14.8 on the Diamond Princess. It is therefore highly relevant to a review focused on COVID-19 R0 estimates.
+   维度评分: D= P= L= E= Param=
+
+12. PMID: 32375776 [Score: 4/4]
+   Title: Quantifying the impact of physical distance measures on the transmission of COVID-19 in the UK.
+   Overall: Include because the paper directly reports and estimates COVID-19 reproduction number values (pre-lockdown R0 and post-intervention changes) in the context of SARS-CoV-2 transmission. It is relevant to a review on the basic reproduction number of COVID-19, even though it also focuses on the impact of physical distancing measures.
+   维度评分: D= P= L= E= Param=
+
+13. PMID: 32917290 [Score: 4/4]
+   Title: Early Insights from Statistical and Mathematical Modeling of Key Epidemiologic Parameters of COVID-19.
+   Overall: Include because this paper reports key epidemiologic parameter estimates for COVID-19, explicitly including reproductive number estimates. It is directly relevant to a review on the basic reproduction number (R0) of COVID-19, even though it summarizes a range of estimates from multiple sources.
+   维度评分: D= P= L= E= Param=
+
+14. PMID: 32461981 [Score: 4/4]
+   Title: Analysis of the Transmissibility Change of 2019-Novel Coronavirus Pneumonia and Its Potential Factors in China from 2019 to 2020.
+   Overall: Include because this paper directly estimates the basic reproduction number of COVID-19 in China, reporting an average R0 of 3.44 (95% CI 2.87–4.0) and time-varying transmissibility estimates. It is clearly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+15. PMID: 32097725 [Score: 4/4]
+   Title: Estimation of the reproductive number of novel coronavirus (COVID-19) and the probable outbreak size on the Diamond Princess cruise ship: A data-driven analysis.
+   Overall: This paper directly estimates the basic reproduction number (R0) of COVID-19, reporting an early-stage R0 of 2.28 (95% CI 2.06–2.52). Although the setting is the Diamond Princess cruise ship, it is still directly relevant to the review question on COVID-19 R0 estimates.
+   维度评分: D= P= L= E= Param=
+
+16. PMID: 33120515 [Score: 4/4]
+   Title: Impact of household quarantine on SARS-Cov-2 infection in mainland China: A mean-field modelling approach.
+   Overall: Include because this paper explicitly estimates the basic reproduction number (R0) of SARS-CoV-2/COVID-19, reporting an approximate value of 2.05 with a 95% CI. It is directly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+17. PMID: 32417744 [Score: 4/4]
+   Title: Monitoring disease transmissibility of 2019 novel coronavirus disease in Zhejiang, China.
+   Overall: Include because the paper directly evaluates COVID-19 transmissibility using reproduction numbers in Zhejiang, which is relevant to estimating R0/reproduction metrics for COVID-19. Although it emphasizes instantaneous/time-varying reproduction numbers rather than only basic R0, it contains primary epidemiologic estimation data pertinent to the review question.
+   维度评分: D= P= L= E= Param=
+
+18. PMID: 32936811 [Score: 4/4]
+   Title: Impact of COVID-19 epidemic curtailment strategies in selected Indian states: An analysis by reproduction number and doubling time with incidence modelling.
+   Overall: This paper estimates COVID-19 reproduction numbers using epidemiologic data and reports R0/R(t) values for selected Indian states, which is directly relevant to a review on the basic reproduction number of COVID-19. Although it also examines intervention effects and time-varying transmission, it includes explicit estimation of reproduction number metrics.
+   维度评分: D= P= L= E= Param=
+
+19. PMID: 32664866 [Score: 4/4]
+   Title: Early epidemiological assessment of the transmission potential and virulence of coronavirus disease 2019 (COVID-19) in Wuhan City, China, January-February, 2020.
+   Overall: Include because this paper directly estimates the basic reproduction number of COVID-19 in Wuhan, reporting R at 3.49 (95% CrI 3.39-3.62). It is directly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+20. PMID: 32452648 [Score: 4/4]
+   Title: Estimating the serial interval of the novel coronavirus disease (COVID-19) based on the public surveillance data in Shenzhen, China, from 19 January to 22 February 2020.
+   Overall: Include because the paper directly estimates the basic reproduction number (R0) of COVID-19, reporting an estimate of 2.6 (95% CI: 2.4–2.8) in Shenzhen. Although focused on serial interval, it explicitly provides an R0 estimate relevant to the review question.
+   维度评分: D= P= L= E= Param=
+
+21. PMID: 32014114 [Score: 4/4]
+   Title: Nowcasting and forecasting the potential domestic and international spread of the 2019-nCoV outbreak originating in Wuhan, China: a modelling study.
+   Overall: Include because this modelling study explicitly estimates the basic reproduction number (R0) of COVID-19/2019-nCoV, reporting a value of 2.68 (95% CrI 2.47-2.86). It directly addresses the review question.
+   维度评分: D= P= L= E= Param=
+
+22. PMID: 32517845 [Score: 4/4]
+   Title: The basic reproduction number and prediction of the epidemic size of the novel coronavirus (COVID-19) in Shahroud, Iran.
+   Overall: Include because this paper explicitly estimates the basic reproduction number (R0) of COVID-19, reporting an early-stage R0 of 2.7 (95% CI 2.1-3.4) in Shahroud, Iran. It directly addresses the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+23. PMID: 32627172 [Score: 4/4]
+   Title: Estimation of incubation period and generation time based on observed length-biased epidemic cohort with censoring for COVID-19 outbreak in China.
+   Overall: Include because the paper explicitly estimates the basic reproduction number (R0) of COVID-19 in the early outbreak phase, reporting a value of 2.96 (95% CI 2.15–3.86). It is directly relevant to the review question, even though its main methodological focus is incubation period and generation time estimation.
+   维度评分: D= P= L= E= Param=
+
+24. PMID: 32497812 [Score: 4/4]
+   Title: Effect of a wet market on coronavirus disease (COVID-19) transmission dynamics in China, 2019-2020.
+   Overall: Include: this paper directly estimates COVID-19 reproduction numbers during the early outbreak, including a human-to-human transmission estimate of 2.37, which is relevant to the review question on R0/basic transmission potential.
+   维度评分: D= P= L= E= Param=
+
+25. PMID: 32320809 [Score: 4/4]
+   Title: Changes in testing rates could mask the novel coronavirus disease (COVID-19) growth rate.
+   Overall: Include: The abstract explicitly discusses estimating the basic reproduction number (R0) of COVID-19 from early epidemic growth rates. Although focused on how testing changes may bias those estimates, it is directly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+26. PMID: 33378859 [Score: 4/4]
+   Title: Optimal control on COVID-19 eradication program in Indonesia under the effect of community awareness.
+   Overall: Include because the study explicitly analyzes the basic reproduction number for COVID-19 and estimates infection parameters by fitting a transmission model to incidence data from Indonesian provinces. Although it is primarily a modeling and optimal control paper, it directly addresses R0 as an outcome of interest.
+   维度评分: D= P= L= E= Param=
+
+27. PMID: 36753110 [Score: 4/4]
+   Title: [Estimation of serial interval and basic reproductive number for imported cases of COVID-19].
+   Overall: This paper directly estimates the basic reproduction number (R0) of COVID-19, reporting an R0 of 1.7 (95% CI 1.06–2.7) for imported cases in Pereira, Colombia. It is therefore directly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+28. PMID: 32427104 [Score: 4/4]
+   Title: Modeling COVID-19 Latent Prevalence to Assess a Public Health Intervention at a State and Regional Scale: Retrospective Cohort Study.
+   Overall: Include. The abstract explicitly states that the study computed pandemic characteristics including the basic reproduction number using SIR models for COVID-19 in North Carolina and the Charlotte region, which is directly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+29. PMID: 32113196 [Score: 4/4]
+   Title: [Study on assessing early epidemiological parameters of COVID-19 epidemic in China].
+   Overall: This paper directly addresses the review question by estimating the basic reproduction number (R0) of COVID-19 and reporting multiple R0 estimates with confidence intervals from early epidemic data in China. It is therefore relevant for inclusion in a systematic review on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+30. PMID: 32689956 [Score: 4/4]
+   Title: Basic epidemiological parameter values from data of real-world in mega-cities: the characteristics of COVID-19 in Beijing, China.
+   Overall: Include because the study directly reports the basic reproduction number (R0) of COVID-19 (R0 = 2.0) based on real-world epidemiological data from Beijing. It is therefore directly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+31. PMID: 32842293 [Score: 4/4]
+   Title: [Comparison of epidemic characteristics between severe acute respiratory syndrome and coronavirus disease 2019].
+   Overall: Include because the abstract explicitly reports and compares the basic reproduction number (R0) for COVID-19 in Wuhan, which is directly relevant to the review question. Although it is a comparative study with SARS, it contains COVID-19 R0 data.
+   维度评分: D= P= L= E= Param=
+
+32. PMID: 32235480 [Score: 4/4]
+   Title: A Simulation on Potential Secondary Spread of Novel Coronavirus in an Exported Country Using a Stochastic Epidemic SEIR Model.
+   Overall: Include: the abstract explicitly reports a calculated mean basic reproduction number (R0) for COVID-19 (6.5, IQR 5.6–7.2). Although based on a simulation of exported spread outside China, it directly addresses the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+33. PMID: 32536760 [Score: 4/4]
+   Title: Analysis of the mitigation strategies for COVID-19: From mathematical modelling perspective.
+   Overall: Include because this paper explicitly formulates and analyzes a COVID-19 transmission model with an R0 expression, estimates parameters using available data, and performs sensitivity analysis on R0. It is directly relevant to a review of the basic reproduction number of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+34. PMID: 32982061 [Score: 4/4]
+   Title: COVID-19 pandemic in India: a mathematical model study.
+   Overall: This paper directly addresses COVID-19 basic reproduction number (R0), explicitly stating that it estimates the basic reproduction number from actual data in India. It is therefore relevant to a review focused on estimating R0 of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+35. PMID: 32574315 [Score: 4/4]
+   Title: COVID-19 UK Lockdown Forecasts and R 0.
+   Overall: Include because this paper directly estimates the basic reproduction number (R0) of COVID-19, reporting an explicit R0 value and 95% credible interval for the UK. It is clearly relevant to a review focused on COVID-19 R0 estimates.
+   维度评分: D= P= L= E= Param=
+
+36. PMID: 32987516 [Score: 4/4]
+   Title: Current trends and future prediction of novel coronavirus disease (COVID-19) epidemic in China: a dynamical modeling analysis.
+   Overall: Include because the abstract explicitly estimates the basic reproduction number (R0) of COVID-19 as 5.78 (95% CI: 5.71-5.89), which directly addresses the review question. It is a dynamical modeling study focused on COVID-19 transmission in China.
+   维度评分: D= P= L= E= Param=
+
+37. PMID: 32231374 [Score: 4/4]
+   Title: Data-based analysis, modelling and forecasting of the COVID-19 outbreak.
+   Overall: This paper directly addresses the review question by estimating the basic reproduction number (R0) of COVID-19 using epidemiological data from Hubei and a SIRD model, reporting multiple R0 estimates.
+   维度评分: D= P= L= E= Param=
+
+38. PMID: 32511517 [Score: 4/4]
+   Title: Early transmission dynamics of COVID-19 in a southern hemisphere setting: Lima-Peru: February 29th-March 30th, 2020.
+   Overall: Include because this paper directly estimates the COVID-19 reproduction number during the early epidemic phase in Lima, Peru, reporting R=2.3 (95% CI: 2.0–2.5). It is clearly relevant to a review on the basic reproduction number (R0) of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+39. PMID: 32035431 [Score: 4/4]
+   Title: Epidemiologic characteristics of early cases with 2019 novel coronavirus (2019-nCoV) disease in Korea.
+   Overall: Include because this paper directly estimates the reproduction number for COVID-19 (reported as 0.48), which is relevant to the review question on R0/basic transmission potential. Although it is an early Korea-specific estimate and may reflect effective control or context-specific transmission, it still provides a reproduction number estimate for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+40. PMID: 32482785 [Score: 4/4]
+   Title: Estimates of the ongoing need for social distancing and control measures post-"lockdown" from trajectories of COVID-19 cases and mortality.
+   Overall: Include because the paper explicitly estimates the reproduction number (reported as R0 in the abstract) for COVID-19, including pre-lockdown values across multiple countries. This is directly relevant to a review asking what the basic reproduction number of COVID-19 is.
+   维度评分: D= P= L= E= Param=
+
+41. PMID: 32024089 [Score: 4/4]
+   Title: Estimating the Unreported Number of Novel Coronavirus (2019-nCoV) Cases in China in the First Half of January 2020: A Data-Driven Modelling Analysis of the Early Outbreak.
+   Overall: This paper directly estimates the basic reproduction number (R0) of COVID-19/2019-nCoV, reporting an R0 of 2.56 (95% CI: 2.49-2.63). It is therefore directly relevant to the review question.
+   维度评分: D= P= L= E= Param=
+
+42. PMID: 32678037 [Score: 4/4]
+   Title: Estimation of exponential growth rate and basic reproduction number of the coronavirus disease 2019 (COVID-19) in Africa.
+   Overall: This paper directly estimates the basic reproduction number (R0) of COVID-19, reporting an R0 of 2.37 for Africa using epidemic growth data. It is therefore directly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+43. PMID: 32468343 [Score: 4/4]
+   Title: Estimation of reproduction numbers of COVID-19 in typical countries and epidemic trends under different prevention and control scenarios.
+   Overall: Include. The abstract explicitly states that the study calculated the basic reproduction number (R0) of COVID-19 in multiple countries, which directly addresses the review question.
+   维度评分: D= P= L= E= Param=
+
+44. PMID: 32512670 [Score: 4/4]
+   Title: Estimation of the reproduction number and early prediction of the COVID-19 outbreak in India using a statistical computing approach.
+   Overall: Include because this paper directly estimates the basic reproduction number (R0) of COVID-19, reporting an R0 value for India using case data and statistical modeling. It is clearly relevant to a review focused on COVID-19 R0 estimates.
+   维度评分: D= P= L= E= Param=
+
+45. PMID: 32380708 [Score: 4/4]
+   Title: Estimation of Unreported Novel Coronavirus (SARS-CoV-2) Infections from Reported Deaths: A Susceptible-Exposed-Infectious-Recovered-Dead Model.
+   Overall: Include because the study directly estimates the basic reproduction number (R0) of COVID-19, reporting R0 = 2.43 (95% CI 2.42–2.44). It is clearly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+46. PMID: 32417246 [Score: 4/4]
+   Title: Evaluation of COVID-19 epidemic outbreak caused by temporal contact-increase in South Korea.
+   Overall: Include because the study explicitly estimates the basic reproduction number (R0) of COVID-19 (reported as 1.77) using epidemic modeling in South Korea. This directly addresses the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+47. PMID: 32574319 [Score: 4/4]
+   Title: Evaluation of the Secondary Transmission Pattern and Epidemic Prediction of COVID-19 in the Four Metropolitan Areas of China.
+   Overall: This paper should be included because it explicitly estimates the basic reproduction number (R0) of COVID-19, reporting R0 values for four metropolitan areas in China using an SEIR model. It directly addresses the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+48. PMID: 32435645 [Score: 4/4]
+   Title: Extended SIR Prediction of the Epidemics Trend of COVID-19 in Italy and Compared With Hunan, China.
+   Overall: Include: this paper directly estimates the basic reproduction number (R0) of COVID-19, reporting values for Italy and Hunan using an eSIR model. It is therefore directly relevant to a review on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+49. PMID: 32486011 [Score: 4/4]
+   Title: Forecast Possible Risk for COVID-19 Epidemic Dissemination Under Current Control Strategies in Japan.
+   Overall: Include because the paper explicitly estimates the basic reproduction number (R0) of COVID-19 in Japan, reporting a quantitative value with a 95% confidence interval. This directly addresses the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+50. PMID: 32752627 [Score: 4/4]
+   Title: Forecasting the daily and cumulative number of cases for the COVID-19 pandemic in India.
+   Overall: This paper is relevant because it explicitly models COVID-19 transmission dynamics and reports estimated basic reproduction numbers (R0) for four Indian states. Since the review asks about the basic reproduction number of COVID-19, it should be included.
+   维度评分: D= P= L= E= Param=
+
+51. PMID: 32970786 [Score: 4/4]
+   Title: Global convergence of COVID-19 basic reproduction number and estimation from early-time SIR dynamics.
+   Overall: This paper directly addresses the review question by estimating the basic reproduction number (R0) of COVID-19, reporting an uncontrolled R0 of 4.5 from early SIR dynamics across countries. It is therefore clearly relevant for inclusion.
+   维度评分: D= P= L= E= Param=
+
+52. PMID: 32395492 [Score: 4/4]
+   Title: Imitation dynamics in the mitigation of the novel coronavirus disease (COVID-19) outbreak in Wuhan, China from 2019 to 2020.
+   Overall: Include because this paper directly estimates the basic reproduction number (R0) of COVID-19, reporting R0 = 2.5 (95% CI: 2.4–2.7). It is a mathematical modelling study focused on COVID-19 transmission in Wuhan and is relevant to the review question.
+   维度评分: D= P= L= E= Param=
+
+53. PMID: 32404476 [Score: 4/4]
+   Title: Estimating the burden of SARS-CoV-2 in France.
+   Overall: Include because the abstract explicitly reports the reproductive number for SARS-CoV-2/COVID-19 in France, including a pre-lockdown estimate of 2.90 and a post-lockdown estimate of 0.67. This is directly relevant to a review on the basic reproduction number (R0) of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+54. PMID: 32952299 [Score: 4/4]
+   Title: Forecast analysis of the epidemics trend of COVID-19 in the USA by a generalized fractional-order SEIR model.
+   Overall: Include because the abstract explicitly states that the basic reproduction number (R0) is derived for a COVID-19 transmission model. This is directly relevant to a review focused on estimating or reporting R0 of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+55. PMID: 32727547 [Score: 4/4]
+   Title: Impact of lockdown on COVID-19 epidemic in Île-de-France and possible exit strategies.
+   Overall: Include because the study explicitly estimates the COVID-19 reproduction number prior to lockdown (3.18 [3.09, 3.24]) using a transmission model. This directly addresses the review question on basic reproduction number (R0) of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+56. PMID: 32496246 [Score: 4/4]
+   Title: Impact of nonpharmacological interventions on COVID-19 transmission dynamics in India.
+   Overall: Include because the study explicitly estimates the basic reproduction number (R0) of COVID-19, reporting R0 = 2.38 (95% CI 1.79–3.07) in India. This directly addresses the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+57. PMID: 32865005 [Score: 4/4]
+   Title: Incubation Period and Reproduction Number for Novel Coronavirus 2019 (COVID-19) Infections in India.
+   Overall: The full text is highly relevant to the review question because it is an original empirical analysis of COVID-19 transmission in a real-world human population in India. Crucially, it explicitly reports reproduction number estimates, including pre-lockdown and post-lockdown values with confidence intervals, making the target parameter central to the study.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+58. PMID: 32446721 [Score: 4/4]
+   Title: Inferring super-spreading from transmission clusters of COVID-19 in Hong Kong, Japan, and Singapore.
+   Overall: This paper directly estimates the basic reproductive number (R0) of COVID-19 using empirical transmission cluster data from Hong Kong, Japan, and Singapore. It is therefore relevant to a review focused on COVID-19 R0 estimates.
+   维度评分: D= P= L= E= Param=
+
+59. PMID: 32753078 [Score: 4/4]
+   Title: Is Nigeria really on top of COVID-19? Message from effective reproduction number.
+   Overall: Include because the study explicitly estimates the basic reproduction number (R0) of COVID-19, reporting an R0 of 2.42 (95% credible interval 2.37–2.47) for Nigeria. This directly addresses the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+60. PMID: 32684175 [Score: 4/4]
+   Title: Mathematical model describing CoViD-19 in São Paulo, Brazil - evaluating isolation as control mechanism and forecasting epidemiological scenarios of release.
+   Overall: Include because this COVID-19 modeling study explicitly estimates the basic reproduction number, reporting R0 = 6.8 for São Paulo, Brazil. It is directly relevant to a review focused on COVID-19 R0 estimates.
+   维度评分: D= P= L= E= Param=
+
+61. PMID: 32844134 [Score: 4/4]
+   Title: Mathematical modelling on diffusion and control of COVID-19.
+   Overall: Include because the paper explicitly estimates the basic reproduction number (R0) of COVID-19 in Wuhan, reporting time-varying values with confidence intervals. This directly addresses the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+62. PMID: 32891155 [Score: 4/4]
+   Title: Mathematical models for devising the optimal SARS-CoV-2 strategy for eradication in China, South Korea, and Italy.
+   Overall: Include because this paper directly estimates the basic reproduction number (R0) of SARS-CoV-2/COVID-19, reporting country-specific R0 values for Wuhan, South Korea, and Italy using an SEIR model. It is directly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+63. PMID: 32987501 [Score: 4/4]
+   Title: Modeling analysis of COVID-19 based on morbidity data in Anhui, China.
+   Overall: Include: this paper directly estimates the basic reproduction number (R0) of COVID-19, reporting an initial R0 of 2.9764 and changes over time using an SEI/QR model based on Anhui morbidity data. It is clearly relevant to the review question.
+   维度评分: D= P= L= E= Param=
+
+64. PMID: 32987574 [Score: 4/4]
+   Title: Modeling the transmission dynamics and the impact of the control interventions for the COVID-19 epidemic outbreak.
+   Overall: This paper should be included because it explicitly estimates the basic reproduction number (R0) of COVID-19 using a compartmental model and published data. It directly addresses the review question, even though it also evaluates control interventions.
+   维度评分: D= P= L= E= Param=
+
+65. PMID: 32987508 [Score: 4/4]
+   Title: Modelling and assessing the effects of medical resources on transmission of novel coronavirus (COVID-19) in Wuhan, China.
+   Overall: Include because this paper directly estimates the basic reproduction number (R0) of COVID-19 (reported as 2.71) using a mathematical transmission model. It is clearly relevant to a review focused on COVID-19 R0 estimates.
+   维度评分: D= P= L= E= Param=
+
+66. PMID: 32838059 [Score: 4/4]
+   Title: Modelling of reproduction number for COVID-19 in India and high incidence states.
+   Overall: Include: this paper directly estimates the basic reproduction number (R0) of COVID-19, reporting an R0 for India and several high-incidence states using the exponential growth method. It is clearly relevant to a review asking what the R0 of COVID-19 is.
+   维度评分: D= P= L= E= Param=
+
+67. PMID: 32987547 [Score: 4/4]
+   Title: Modelling the effects of media coverage and quarantine on the COVID-19 infections in the UK.
+   Overall: Include: this paper directly estimates the basic reproduction number (R0) for COVID-19, reporting R0 = 4.2816 (95% CI: 3.8882–4.6750) using UK case data. It is clearly relevant to a review focused on COVID-19 R0 estimates.
+   维度评分: D= P= L= E= Param=
+
+68. PMID: 32292527 [Score: 4/4]
+   Title: On a Statistical Transmission Model in Analysis of the Early Phase of COVID-19 Outbreak.
+   Overall: This paper directly addresses the review question by estimating the basic reproduction number (R0) of COVID-19 in the early outbreak phase, reporting values between 2.7 and 4.2 with 95% confidence intervals.
+   维度评分: D= P= L= E= Param=
+
+69. PMID: 32342242 [Score: 4/4]
+   Title: Outbreak dynamics of COVID-19 in China and the United States.
+   Overall: Include because the paper directly estimates the basic reproduction number (R0) of COVID-19, reporting an R0 of 5.30 ± 0.95 for the early U.S. outbreak using an SEIR/network model. This is directly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+70. PMID: 32617358 [Score: 4/4]
+   Title: Parameter estimation and prediction for coronavirus disease outbreak 2019 (COVID-19) in Algeria.
+   Overall: This paper directly estimates the basic reproduction number (R0) of COVID-19, reporting R0 = 4.1 using an SEIR model for Algeria. It is therefore relevant to a review focused on COVID-19 R0 estimates.
+   维度评分: D= P= L= E= Param=
+
+71. PMID: 32019669 [Score: 4/4]
+   Title: Pattern of early human-to-human transmission of Wuhan 2019 novel coronavirus (2019-nCoV), December 2019 to January 2020.
+   Overall: Include: this paper directly estimates the basic reproduction number (R0) of COVID-19/2019-nCoV, reporting an R0 of around 2.2, which is exactly relevant to the review question.
+   维度评分: D= P= L= E= Param=
+
+72. PMID: 32987548 [Score: 4/4]
+   Title: Phase-adjusted estimation of the COVID-19 outbreak in South Korea under multi-source data and adjustment measures: a modelling study.
+   Overall: Include because this modelling study explicitly estimates the basic reproduction number (R0) of COVID-19 in South Korea, reporting R0 = 4.79 (95% CrI 4.38–5.2). This directly addresses the review question on COVID-19 basic reproduction number.
+   维度评分: D= P= L= E= Param=
+
+73. PMID: 32521641 [Score: 4/4]
+   Title: Prediction of Epidemic Peak and Infected Cases for COVID-19 Disease in Malaysia, 2020.
+   Overall: Include because this paper directly estimates and reports the basic reproduction number for COVID-19 (R0 = 2.28 ± 0.13) using an SEIR model in Malaysia. It is clearly relevant to a review focused on COVID-19 R0 estimates.
+   维度评分: D= P= L= E= Param=
+
+74. PMID: 32183172 [Score: 4/4]
+   Title: Prediction of the Epidemic Peak of Coronavirus Disease in Japan, 2020.
+   Overall: Include because this study directly estimates the basic reproduction number (R0) of COVID-19 in Japan, reporting R0 = 2.6 (95% CI 2.4–2.8). It is clearly relevant to a review focused on COVID-19 R0 estimates.
+   维度评分: D= P= L= E= Param=
+
+75. PMID: 32334115 [Score: 4/4]
+   Title: Preliminary estimates of the reproduction number of the coronavirus disease (COVID-19) outbreak in Republic of Korea and Italy by 5 March 2020.
+   Overall: Include: this paper directly estimates the basic reproduction number (R0) of COVID-19, reporting R0 estimates for outbreaks in South Korea and Italy. It is clearly relevant to a review focused on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+76. PMID: 32970773 [Score: 4/4]
+   Title: Preliminary estimation of temporal and spatiotemporal dynamic measures of COVID-19 transmission in Thailand.
+   Overall: This paper directly estimates the basic reproduction number (R0) of COVID-19 in Thailand, reporting a range of 2.23–5.90 and a mean of 3.75. It is therefore directly relevant to a review on the R0 of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+77. PMID: 32007643 [Score: 4/4]
+   Title: Preliminary estimation of the basic reproduction number of novel coronavirus (2019-nCoV) in China, from 2019 to 2020: A data-driven analysis in the early phase of the outbreak.
+   Overall: This paper directly addresses the review question by estimating the basic reproduction number (R0) of COVID-19/2019-nCoV in China during the early outbreak phase. The abstract provides explicit R0 estimates and methods used to derive them, making it relevant for inclusion.
+   维度评分: D= P= L= E= Param=
+
+78. PMID: 32048815 [Score: 4/4]
+   Title: Preliminary prediction of the basic reproduction number of the Wuhan novel coronavirus 2019-nCoV.
+   Overall: This paper directly estimates the basic reproduction number (R0) of COVID-19/2019-nCoV using an SEIR model and reports numerical R0 ranges. It is therefore highly relevant to a review focused on the basic reproduction number of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+79. PMID: 32617309 [Score: 4/4]
+   Title: Real-time estimation of the reproduction number of the novel coronavirus disease (COVID-19) in China in 2020 based on incidence data.
+   Overall: Include: this paper directly estimates COVID-19 reproduction numbers using incidence data and reports early average values around 2.6-2.8, which are relevant to the review question on basic reproduction number (R0). Although it emphasizes time-varying reproduction numbers, it provides transmissibility estimates from the early epidemic period that are pertinent for R0-related evidence.
+   维度评分: D= P= L= E= Param=
+
+80. PMID: 32075152 [Score: 4/4]
+   Title: Real-Time Estimation of the Risk of Death from Novel Coronavirus (COVID-19) Infection: Inference Using Exported Cases.
+   Overall: Include because the abstract explicitly estimates the basic reproduction number (R0) of COVID-19, reporting values of 2.1 and 3.2 under two scenarios. This directly addresses the review question.
+   维度评分: D= P= L= E= Param=
+
+81. PMID: 32674112 [Score: 4/4]
+   Title: Reconstruction of the full transmission dynamics of COVID-19 in Wuhan.
+   Overall: Include because this study directly estimates the basic reproduction number (R0) of COVID-19, reporting an early-outbreak R0 of 3.54 in Wuhan. It is clearly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+82. PMID: 32498721 [Score: 4/4]
+   Title: Risk estimation of the SARS-CoV-2 acute respiratory disease outbreak outside China.
+   Overall: Include because this paper directly estimates the basic reproduction number (R0) of SARS-CoV-2/COVID-19, reporting an R0 of 4.1192 (95% CI 4.0473-4.1912) using a mathematical model based on Hubei case data.
+   维度评分: D= P= L= E= Param=
+
+83. PMID: 32841283 [Score: 4/4]
+   Title: Simulating the progression of the COVID-19 disease in Cameroon using SIR models.
+   Overall: Include because the paper explicitly evaluates the basic reproduction number (R0) of COVID-19, reporting an estimate of about 1.5 in Cameroon using an SIR model. This directly addresses the review question.
+   维度评分: D= P= L= E= Param=
+
+84. PMID: 32235084 [Score: 4/4]
+   Title: Spatial-temporal distribution of COVID-19 in China and its prediction: A data-driven modeling analysis.
+   Overall: Include because the abstract explicitly reports an estimate of the basic reproduction number (R0) for COVID-19 ([2.23, 2.51]) using an SEIR model, which directly addresses the review question.
+   维度评分: D= P= L= E= Param=
+
+85. PMID: 32327608 [Score: 4/4]
+   Title: Spread and dynamics of the COVID-19 epidemic in Italy: Effects of emergency containment measures.
+   Overall: Include. This paper directly estimates the reproduction number for COVID-19 in Italy using a transmission model, reporting a generalized reproduction number of 3.60 in the absence of containment, which is relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+86. PMID: 32844133 [Score: 4/4]
+   Title: The basic reproduction number of the new coronavirus pandemic with mortality for India, the Syrian Arab Republic, the United States, Yemen, China, France, Nigeria and Russia with different rate of cases.
+   Overall: Include: this paper directly estimates the basic reproduction number (R0) of COVID-19 using a SIRD model across multiple countries and reports explicit R0 values, which is directly relevant to the review question.
+   维度评分: D= P= L= E= Param=
+
+87. PMID: 32869008 [Score: 4/4]
+   Title: The Covid-19 outbreak in Spain. A simple dynamics model, some lessons, and a theoretical framework for control response.
+   Overall: Include: This paper directly estimates the basic reproduction number (R0) of COVID-19, reporting an R0 for Spain of 2.5 ± 0.1 (95% CI 2.3–2.7). It is therefore directly relevant to a review on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+88. PMID: 33120569 [Score: 4/4]
+   Title: The dynamics of COVID-19 spread: evidence from Lebanon.
+   Overall: Include because the abstract explicitly states that the study determines the initial reproductive transmission rate in Lebanon for COVID-19 using transmission models. This is directly relevant to a review on estimating the basic reproduction number (R0) of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+89. PMID: 32834821 [Score: 4/4]
+   Title: The dynamics of COVID-19 with quarantined and isolation.
+   Overall: Include: this paper is directly about COVID-19 transmission dynamics and explicitly reports an estimated basic reproduction number (R0 ≈ 6.6361) using real case data from China. It is therefore relevant to a review on the basic reproduction number of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+90. PMID: 32836597 [Score: 4/4]
+   Title: The reproduction number of COVID-19 and its correlation with public health interventions.
+   Overall: Include because the paper explicitly reports an estimate of the basic reproduction number (R0) of COVID-19 (4.22 ± 1.69 during the early outbreak) and focuses on reproduction number estimation using an SEIR model. Although it also examines time-varying/effective reproduction numbers and interventions, it directly addresses the review question.
+   维度评分: D= P= L= E= Param=
+
+91. PMID: 32498655 [Score: 4/4]
+   Title: The role of asymptomatic class, quarantine and isolation in the transmission of COVID-19.
+   Overall: Include because this paper explicitly calculates and estimates the basic reproduction number (R0) for COVID-19, using Wuhan outbreak data. It directly addresses the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+92. PMID: 32798031 [Score: 4/4]
+   Title: Trends in adaptation of fifteen European countries population to SARS-CoV-2 in March-May 2020: Can Taiwanese experience be adopted?
+   Overall: Include because the abstract explicitly reports and discusses the basic reproduction number (R0) of SARS-CoV-2, including estimated values under different containment modes. This is directly relevant to a review on the basic reproduction number of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+93. PMID: 32373394 [Score: 4/4]
+   Title: Using the contact network model and Metropolis-Hastings sampling to reconstruct the COVID-19 spread on the "Diamond Princess".
+   Overall: Include because the paper directly estimates the basic reproduction number (R0) of COVID-19, reporting R0 values for the Diamond Princess outbreak. It is clearly relevant to a review focused on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+94. PMID: 32836816 [Score: 4/4]
+   Title: Using traveller-derived cases in Henan Province to quantify the spread of COVID-19 in Wuhan, China.
+   Overall: Include because the paper directly estimates the basic reproduction number (R0) of COVID-19 in Wuhan, reporting an R0 of 7.53. It is therefore directly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+95. PMID: 32257174 [Score: 4/4]
+   Title: When will the battle against novel coronavirus end in Wuhan: A SEIR modeling analysis.
+   Overall: Include because this paper directly estimates the basic reproduction number (R0) of COVID-19 using an SEIR model in Wuhan, reporting R0 = 1.44. This is directly relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+96. PMID: 32046137 [Score: 4/4]
+   Title: Estimation of the Transmission Risk of the 2019-nCoV and Its Implication for Public Health Interventions.
+   Overall: This paper directly estimates COVID-19 transmission using a mathematical model and reports a reproduction number (control reproduction number 6.47, 95% CI 5.71-7.23). It is therefore relevant to a review focused on the basic reproduction number (R0) of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+97. PMID: 34053269 [Score: 4/4]
+   Title: Novel coronavirus 2019-nCoV (COVID-19): early estimation of epidemiological parameters and epidemic size estimates.
+   Overall: This paper directly addresses the review question by estimating the basic reproduction number (R0) of COVID-19, reporting an R0 of 3.11 with a 95% CI of 2.39-4.13. It is therefore directly relevant for inclusion in a review of COVID-19 R0 estimates.
+   维度评分: D= P= L= E= Param=
+
+98. PMID: 32322691 [Score: 4/4]
+   Title: The transmissibility of novel Coronavirus in the early stages of the 2019-20 outbreak in Wuhan: Exploring initial point-source exposure sizes and durations using scenario analysis.
+   Overall: Include: this paper directly models COVID-19 transmissibility in Wuhan and explicitly estimates the basic reproduction number (R0), reporting plausible R0 ranges (e.g., 2–2.7 and 2–3). It is clearly relevant to a review focused on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+99. PMID: 32836817 [Score: 4/4]
+   Title: A fractional-order SEIHDR model for COVID-19 with inter-city networked coupling effects.
+   Overall: Include because the paper explicitly studies COVID-19 transmission dynamics and discusses the basic reproduction number (R0), including stability results based on R0 ≤ 1. It is therefore directly relevant to a review on the basic reproduction number of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+100. PMID: 32111262 [Score: 4/4]
+   Title: A mathematical model for simulating the phase-based transmissibility of a novel coronavirus.
+   Overall: Include because this paper directly estimates the basic reproduction number (R0) of COVID-19/SARS-CoV-2, reporting R0 values derived from a mathematical transmission model. It is clearly relevant to a review asking what the R0 of COVID-19 is.
+   维度评分: D= P= L= E= Param=
+
+101. PMID: 32233562 [Score: 4/4]
+   Title: A mathematical model for the novel coronavirus epidemic in Wuhan, China.
+   Overall: Include: the title, keywords, and abstract indicate this is a COVID-19 mathematical modeling study focused on transmission dynamics and explicitly lists 'basic reproduction number' as a keyword, suggesting it addresses R0.
+   维度评分: D= P= L= E= Param=
+
+102. PMID: 32834815 [Score: 4/4]
+   Title: A mathematical model of COVID-19 using fractional derivative: outbreak in India with dynamics of transmission and control.
+   Overall: Include because the paper is a COVID-19 transmission modeling study and explicitly analyzes a threshold parameter/basic reproduction number, which is directly relevant to estimating R0. Although framed as a fractional-order model in India, it appears to contain R0-related results pertinent to the review question.
+   维度评分: D= P= L= E= Param=
+
+103. PMID: 32958091 [Score: 4/4]
+   Title: A model of COVID-19 transmission to understand the effectiveness of the containment measures: application to data from France.
+   Overall: Include because the paper is about COVID-19 transmission modeling and explicitly uses/discusses the basic reproduction number (R0) in the context of French data. It appears relevant to a review on estimating or reporting COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+104. PMID: 32574303 [Score: 4/4]
+   Title: A Simulation of a COVID-19 Epidemic Based on a Deterministic SEIR Model.
+   Overall: Include because the paper explicitly reports estimates of the COVID-19 basic/effective reproduction ratio, including an initial R0 of 3, using an SEIR model calibrated to Lombardy data. Although it is a simulation study and not a rigorous case study, it directly addresses the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+105. PMID: 32837814 [Score: 4/4]
+   Title: A SIR-Poisson Model for COVID-19: Evolution and Transmission Inference in the Maghreb Central Regions.
+   Overall: The paper models COVID-19 transmission and reports estimated average contacts/transmission values of around 2–3 for the studied countries, which appear to function as basic reproduction number estimates relevant to the review question on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+106. PMID: 32875961 [Score: 4/4]
+   Title: Analysis and prediction of the COVID-19 outbreak in Pakistan.
+   Overall: Include. The abstract reports estimated COVID-19 reproduction numbers (R0) for Pakistan before and after lockdown easing (1.07 and 1.86), which is directly relevant to a review on the basic reproduction number of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+107. PMID: 32678056 [Score: 4/4]
+   Title: Basic reproduction number and predicted trends of coronavirus disease 2019 epidemic in the mainland of China.
+   Overall: Include: this paper directly estimates the basic reproduction number (R0) of COVID-19 in mainland China using an SEIQR model and reports multiple R0 values over time, which is directly relevant to the review question.
+   维度评分: D= P= L= E= Param=
+
+108. PMID: 32963585 [Score: 4/4]
+   Title: Controlling the Spread of COVID-19: Optimal Control Analysis.
+   Overall: Include because the abstract explicitly states that the basic reproduction number for COVID-19 was computed. Although this is a mathematical modeling and optimal control study rather than an empirical estimation study, it is still directly relevant to a review on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+109. PMID: 32349259 [Score: 4/4]
+   Title: Covid-19 Outbreak Progression in Italian Regions: Approaching the Peak by the End of March in Northern Italy and First Week of April in Southern Italy.
+   Overall: Include because this paper explicitly estimates the basic reproduction number (R0) of COVID-19 across Italian regions using exponential growth and SEIR modeling. It directly addresses the review question by reporting multiple R0 values.
+   维度评分: D= P= L= E= Param=
+
+110. PMID: 32233563 [Score: 4/4]
+   Title: Effect of delay in diagnosis on transmission of COVID-19.
+   Overall: Include: this paper directly studies COVID-19 transmission using a dynamic model and explicitly examines changes in the basic reproduction number. It is relevant to a review on the basic reproduction number (R0) of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+111. PMID: 32614817 [Score: 4/4]
+   Title: Estimation of country-level basic reproductive ratios for novel Coronavirus (SARS-CoV-2/COVID-19) using synthetic contact matrices.
+   Overall: This paper directly estimates the basic reproductive ratio (R0) of COVID-19, including country-specific R0 values for 152 countries using a transmission model. It is therefore highly relevant to a review focused on the basic reproduction number of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+112. PMID: 32983643 [Score: 4/4]
+   Title: Estimating the impact of mobility patterns on COVID-19 infection rates in 11 European countries.
+   Overall: Include because the paper explicitly models and estimates the basic reproductive number (R0) of COVID-19 and examines how mobility changes affect it across 11 European countries. This is directly relevant to a review focused on COVID-19 R0.
+   维度评分: D= P= L= E= Param=
+
+113. PMID: 32536761 [Score: 4/4]
+   Title: Novel Corona virus disease infection in Tunisia: Mathematical model and the impact of the quarantine strategy.
+   Overall: Include: the abstract explicitly states that the study estimates or analyzes the basic reproduction number (R0) for COVID-19 using a mathematical model. This is directly relevant to a review asking what the basic reproduction number of COVID-19 is.
+   维度评分: D= P= L= E= Param=

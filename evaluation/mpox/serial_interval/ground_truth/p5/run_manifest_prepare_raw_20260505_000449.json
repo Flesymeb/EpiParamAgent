@@ -1,0 +1,51 @@
+{
+  "timestamp_utc": "2026-05-04T16:04:49.760044+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_prepare_raw.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP5",
+    "--query",
+    "(“monkeypox” or “monkey pox” or “MPXV”) and (“serial interval” or “incubation period” or “latent period”)",
+    "--include-gt",
+    "--fix-missing"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "1684f3dbd11d7208abbd34671c17ef96fffde46d",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP5",
+    "topic": "",
+    "query": "(“monkeypox” or “monkey pox” or “MPXV”) and (“serial interval” or “incubation period” or “latent period”)",
+    "date_range": "",
+    "retmax": "all",
+    "include_gt": true,
+    "fix_missing": true,
+    "medline_only": false
+  },
+  "inputs": [],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/serial_interval/p5/project_5_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-04T16:04:49.759858+00:00",
+      "type": "file",
+      "size_bytes": 184125,
+      "sha256": "cd6ec53a2b59e9f546b38c54455546bf60ecb2e07276f40a2051d0a26c0b15cc"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 85,
+    "ground_truth_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/serial_interval/p5/project_5_groundtruth.csv"
+  }
+}

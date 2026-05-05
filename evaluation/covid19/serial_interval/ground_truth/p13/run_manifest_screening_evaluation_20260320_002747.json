@@ -1,0 +1,75 @@
+{
+  "timestamp_utc": "2026-03-19T16:27:47.937370+00:00",
+  "workflow": "screening_evaluation",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search",
+  "argv": [
+    "d:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search\\scripts\\cli\\screening_evaluation.py",
+    "screening-performance",
+    "--ground-truth",
+    "d:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\project_13_groundtruth.csv",
+    "--screened-results",
+    "d:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\project_13_screened.csv"
+  ],
+  "python_version": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "513805fa5f2fdc3bc6b299f862ff3a3d0e566745",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "command": "screening-performance"
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\project_13_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:14:47.928905+00:00",
+      "type": "file",
+      "size_bytes": 20225,
+      "sha256": "ccac79edf85b80642b7795fdb151668a178c0c23a397bc9f6f8299c0bfd1f8e3"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\project_13_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-30T09:15:43.095160+00:00",
+      "type": "file",
+      "size_bytes": 350867,
+      "sha256": "fc8978f5e698117bfea6a1c18481489d2e935d716898c16e17c10770ec1ca10e"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13",
+      "exists": true,
+      "mtime_utc": "2026-01-30T09:15:43.096672+00:00",
+      "type": "dir",
+      "file_count": 5,
+      "dir_digest": "43e1b97894bcad9a883e82521c20d52f2e093ddfab64192a36cd224085e9730d",
+      "dir_digest_truncated": false
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "summary": {
+      "ground_truth_count": 51,
+      "screened_count": 111,
+      "tp": 43,
+      "fp": 30,
+      "fn": 8,
+      "tn": 30,
+      "strong_count": 41,
+      "possible_count": 2,
+      "unlikely_count": 8,
+      "not_found_count": 0,
+      "sensitivity": 0.843137,
+      "specificity": 0.5,
+      "precision": 0.589041,
+      "npv": 0.789474,
+      "f1": 0.693548,
+      "accuracy": 0.657658
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "pmid": "32035431",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Materials and Methods",
+        "subsections": [
+          "Study design"
+        ],
+        "evidence_hint": "Materials and Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Epidemiologic characteristics"
+        ],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Summary of epidemiologic characteristics of 2019 novel coronavirus disease using early 28 cases in Korea",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Results / Table 1"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Korea",
+      "period_raw": "January 20, 2020 to February 10, 2020",
+      "population_raw": "28 confirmed cases (16 index, 9 first-generation, 3 second-generation)",
+      "sample_size_raw": "28",
+      "method_raw": "Epidemiologic investigation report by Korea Centers for Disease Control and Prevention (KCDC), and additional data confirmed and announced by the press",
+      "evidence": "Materials and Methods / Results / Table 1"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "6.6",
+        "uncertainty_raw": "3-15",
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results / Table 1"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.0",
+        "uncertainty_raw": null,
+        "distribution_raw": null,
+        "unit_raw": "days",
+        "evidence": "Results / Table 1"
+      }
+    ],
+    "field_evidence": {
+      "region": "Abstract / Materials and Methods / Results",
+      "period": "Abstract / Materials and Methods / Results",
+      "population": "Abstract / Results / Table 1",
+      "sample_size": "Abstract / Results / Table 1",
+      "method": "Materials and Methods",
+      "parameter_type": "Materials and Methods / Results / Table 1",
+      "estimate_measure": "Results / Table 1",
+      "point_estimate": "Results / Table 1",
+      "uncertainty": "Results / Table 1",
+      "distribution": null,
+      "unit": "Results / Table 1"
+    }
+  }
+}

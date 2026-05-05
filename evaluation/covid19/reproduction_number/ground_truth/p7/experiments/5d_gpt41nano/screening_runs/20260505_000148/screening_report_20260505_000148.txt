@@ -1,0 +1,880 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-05-05 00:01:48
+研究问题: What is the basic reproduction number (R0) of COVID-19?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/covid19/GT_1/GT_export/reproduction_number/p7/project_7_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/covid19/GT_1/GT_export/reproduction_number/p7/experiments/5d_gpt41nano/project_7_screened.csv
+模型配置: openai/z-ai/glm-5.1
+批处理大小: 20
+批次并发: 2
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │    167   │   29.1%  │
+│ 🤔 Possible candidates   │      9   │    1.6%  │
+│ 😐 Unlikely candidates   │    398   │   69.3%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │    574   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  3.71  │   87.6%  │ 11/ 1/59/ 3/500                 │
+│ Population      │  3.55  │   81.2%  │  6/27/75/ 1/465                 │
+│ Location        │  3.21  │   73.0%  │  1/13/141/130/289                 │
+│ Evidence        │  2.92  │   63.6%  │  0/44/165/157/208                 │
+│ Parameter       │  2.35  │   31.4%  │  4/147/243/ 5/175                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (167 篇)
+================================================================================
+
+1. PMID: 31995857 [Score: 4/4]
+   Title: Early Transmission Dynamics in Wuhan, China, of Novel Coronavirus-Infected Pneumonia.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics in humans in Wuhan and reports original estimates of R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+2. PMID: 32959618 [Score: 4/4]
+   Title: Epidemic Landscape and Forecasting of SARS-CoV-2 in India.
+   Overall: The study explicitly investigates SARS-CoV-2 in India, reports original empirical estimates of R0, and focuses on the early epidemic phase, making it highly relevant for understanding COVID-19 transmission dynamics in this context.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+3. PMID: 32794161 [Score: 4/4]
+   Title: Epidemiology of SARS-CoV-2 in Egypt.
+   Overall: The study explicitly investigates COVID-19 in humans within Egypt, reports original empirical data, and explicitly mentions R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+4. PMID: 32382154 [Score: 4/4]
+   Title: Modeling shield immunity to reduce COVID-19 epidemic spread.
+   Overall: The study explicitly addresses COVID-19 and models related to disease transmission, including R0, with relevance to human populations and real-world context. It appears to be based on primary modeling analysis. Therefore, it is highly relevant for understanding the basic reproduction number of COVID-19.
+   维度评分: D=4 P=4 L=3 E=3 Param=4
+
+5. PMID: 32339844 [Score: 4/4]
+   Title: Impact of temperature on the dynamics of the COVID-19 outbreak in China.
+   Overall: The study explicitly investigates COVID-19, uses human population data from China, reports original empirical data, and examines the impact of temperature on epidemic dynamics, which is relevant to understanding R0. It is highly pertinent for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+6. PMID: 33959956 [Score: 4/4]
+   Title: Quarantine alone or in combination with other public health measures to control COVID-19: a rapid review.
+   Overall: The study explicitly addresses COVID-19, involves human populations, reports original empirical data, and discusses quarantine effects relevant to R0. It is highly pertinent to the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+7. PMID: 32251668 [Score: 4/4]
+   Title: Gastrointestinal Manifestations of SARS-CoV-2 Infection and Virus Load in Fecal Samples From a Hong Kong Cohort: Systematic Review and Meta-analysis.
+   Overall: The study provides relevant data on SARS-CoV-2 infection and viral shedding in humans, but does not explicitly address the basic reproduction number (R0), which is the focus of the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+8. PMID: 32353991 [Score: 4/4]
+   Title: Early Transmission Dynamics of Novel Coronavirus (COVID-19) in Nigeria.
+   Overall: The study explicitly investigates COVID-19 transmission in Nigeria, reports original empirical data, and explicitly estimates R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+9. PMID: 33141862 [Score: 4/4]
+   Title: Proportion of asymptomatic infection among COVID-19 positive persons and their transmission potential: A systematic review and meta-analysis.
+   Overall: The study explicitly investigates COVID-19, involves human populations, reports original empirical data, and discusses transmission dynamics relevant to R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+10. PMID: 32255761 [Score: 4/4]
+   Title: High Contagiousness and Rapid Spread of Severe Acute Respiratory Syndrome Coronavirus 2.
+   Overall: The study explicitly investigates COVID-19, reports original empirical data, focuses on human populations in Wuhan, and directly estimates R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+11. PMID: 32544961 [Score: 4/4]
+   Title: Preventing COVID-19 Transmission on Labor and Delivery: A Decision Analysis.
+   Overall: The study explicitly addresses COVID-19 and discusses relevant parameters, focusing on healthcare strategies during the pandemic. While it does not directly report R0 estimates, it is highly relevant for understanding COVID-19 transmission dynamics and resource allocation, making it a pertinent source for the review.
+   维度评分: D=4 P=4 L=3 E=3 Param=4
+
+12. PMID: 32460229 [Score: 4/4]
+   Title: Estimation of the time-varying reproduction number of COVID-19 outbreak in China.
+   Overall: The study explicitly investigates COVID-19, uses human data from China, reports original empirical estimates of R0, and explicitly mentions the basic reproduction number, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+13. PMID: 32694200 [Score: 4/4]
+   Title: Serial interval of SARS-CoV-2 was shortened over time by nonpharmaceutical interventions.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics, reports original empirical data, and focuses on relevant parameters within a real-world context, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+14. PMID: 32928322 [Score: 4/4]
+   Title: Epidemiological profile and transmission dynamics of COVID-19 in the Philippines.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics and reports R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+15. PMID: 32493466 [Score: 4/4]
+   Title: Real-time monitoring the transmission potential of COVID-19 in Singapore, March 2020.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics in Singapore, reports original empirical data, and explicitly discusses the reproduction number, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+16. PMID: 32353347 [Score: 4/4]
+   Title: Epidemiology and transmission of COVID-19 in 391 cases and 1286 of their close contacts in Shenzhen, China: a retrospective cohort study.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics, reports original empirical data, involves human populations in a specific geographic setting, and explicitly reports R0-related metrics, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+17. PMID: 32817662 [Score: 4/4]
+   Title: Age could be driving variable SARS-CoV-2 epidemic trajectories worldwide.
+   Overall: The study explicitly investigates SARS-CoV-2 transmission dynamics, including R0, across human populations in multiple countries, providing primary empirical modeling evidence. It is highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+18. PMID: 32437930 [Score: 4/4]
+   Title: COVID-19 outbreak reproduction number estimations and forecasting in Marche, Italy.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics and reports original empirical data on R0-related parameters in a specific geographic region, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+19. PMID: 32574282 [Score: 4/4]
+   Title: Epidemiological and Clinical Characteristics of Patients With Coronavirus Disease-2019 in Shiyan City, China.
+   Overall: The study explicitly investigates COVID-19, reports original empirical data from human cases in a specific location, and explicitly mentions R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+20. PMID: 32631426 [Score: 4/4]
+   Title: Transmission patterns of COVID-19 in the mainland of China and the efficacy of different control strategies: a data- and model-driven study.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics, reports original empirical data, and explicitly discusses the effective reproduction number, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+21. PMID: 32771089 [Score: 4/4]
+   Title: Potential effects of disruption to HIV programmes in sub-Saharan Africa caused by COVID-19: results from multiple mathematical models.
+   Overall: The study explicitly mentions COVID-19 and models epidemic effects, providing primary data relevant to disease transmission, thus it is highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+22. PMID: 32512664 [Score: 4/4]
+   Title: Epidemiological characteristics of and containment measures for COVID-19 in Busan, Korea.
+   Overall: The study explicitly investigates COVID-19 in humans within Korea, reports original empirical data, and explicitly mentions the reproduction number, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+23. PMID: 32387384 [Score: 4/4]
+   Title: Modeling behavioral change and COVID-19 containment in Mexico: A trade-off between lockdown and compliance.
+   Overall: The study explicitly addresses COVID-19 transmission dynamics in humans within Mexico, using original modeling data, and discusses contact rates relevant to R0. It is highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+24. PMID: 32179701 [Score: 4/4]
+   Title: Substantial undocumented infection facilitates the rapid dissemination of novel coronavirus (SARS-CoV-2).
+   Overall: The study explicitly addresses SARS-CoV-2, involves human populations, uses original empirical data, and discusses contagiousness relevant to R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+25. PMID: 32356867 [Score: 4/4]
+   Title: Contact Tracing Assessment of COVID-19 Transmission Dynamics in Taiwan and Risk at Different Exposure Periods Before and After Symptom Onset.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics, including transmissibility, in humans within Taiwan, providing original empirical data, and focuses on relevant epidemiological parameters such as attack rates, which are closely related to R0.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+26. PMID: 32109273 [Score: 4/4]
+   Title: COVID-19 outbreak on the Diamond Princess cruise ship: estimating the epidemic potential and effectiveness of public health countermeasures.
+   Overall: The study directly addresses the R0 of COVID-19 in a real-world outbreak setting, providing original empirical estimates and detailed analysis, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+27. PMID: 32467353 [Score: 4/4]
+   Title: Reduction of secondary transmission of SARS-CoV-2 in households by face mask use, disinfection and social distancing: a cohort study in Beijing, China.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics, reports original empirical data on relevant interventions, involves human populations in a real-world setting, and discusses transmission parameters directly related to R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+28. PMID: 32277878 [Score: 4/4]
+   Title: First-wave COVID-19 transmissibility and severity in China outside Hubei after control measures, and second-wave scenario planning: a modelling impact assessment.
+   Overall: The study explicitly investigates COVID-19 transmissibility and reports original empirical estimates of the reproduction number in relevant locations, making it highly pertinent to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+29. PMID: 32562601 [Score: 4/4]
+   Title: Household secondary attack rate of COVID-19 and associated determinants in Guangzhou, China: a retrospective cohort study.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics, reports original empirical data, involves human populations in a specific geographic location, and discusses R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+30. PMID: 32375776 [Score: 4/4]
+   Title: Quantifying the impact of physical distance measures on the transmission of COVID-19 in the UK.
+   Overall: The study explicitly investigates COVID-19, reports original empirical data, focuses on humans in the UK, and explicitly estimates R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+31. PMID: 32247326 [Score: 4/4]
+   Title: Evolving epidemiology and transmission dynamics of coronavirus disease 2019 outside Hubei province, China: a descriptive and modelling study.
+   Overall: The study directly investigates COVID-19 transmission outside Hubei, reports original empirical data, and explicitly estimates the reproduction number, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+32. PMID: 32461981 [Score: 4/4]
+   Title: Analysis of the Transmissibility Change of 2019-Novel Coronavirus Pneumonia and Its Potential Factors in China from 2019 to 2020.
+   Overall: The study explicitly investigates COVID-19 transmissibility and R0 in China using original data, making it highly relevant for understanding the basic reproduction number of COVID-19.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+33. PMID: 32827715 [Score: 4/4]
+   Title: Epidemiological and clinical characteristics of SARS-CoV-2 infections at a testing site in Berlin, Germany, March and April 2020-a cross-sectional study.
+   Overall: The study explicitly investigates SARS-CoV-2 in humans within a specific location, reports original empirical data, and discusses relevant epidemiological factors, making it highly relevant for understanding COVID-19 transmission dynamics.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+34. PMID: 33104736 [Score: 4/4]
+   Title: A mathematical model of COVID-19 transmission in a tertiary hospital and assessment of the effects of different intervention strategies.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics within a hospital setting using primary modeling data, and discusses measures affecting the basic reproduction number, making it highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+35. PMID: 32362645 [Score: 4/4]
+   Title: Prudent public health intervention strategies to control the coronavirus disease 2019 transmission in India: A mathematical model-based approach.
+   Overall: The study explicitly addresses COVID-19 transmission in humans within India, focusing on R0 through modeling. While it does not report original empirical data, it directly discusses the key parameter and disease relevance, making it highly pertinent for understanding COVID-19 transmission dynamics.
+   维度评分: D=4 P=4 L=3 E=3 Param=4
+
+36. PMID: 32970656 [Score: 4/4]
+   Title: Disparities in COVID-19 Incidence, Hospitalizations, and Testing, by Area-Level Deprivation - Utah, March 3-July 9, 2020.
+   Overall: The study explicitly investigates COVID-19 in humans within Utah, providing original empirical data on infection and testing related to social determinants, and explicitly mentions SARS-CoV-2, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+37. PMID: 32559451 [Score: 4/4]
+   Title: Effectiveness of isolation, testing, contact tracing, and physical distancing on reducing transmission of SARS-CoV-2 in different settings: a mathematical modelling study.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics, uses empirical data, and explicitly reports on R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+38. PMID: 32880019 [Score: 4/4]
+   Title: The association between the incidence of COVID-19 and the distance from the virus epicenter in Iran.
+   Overall: The study directly investigates COVID-19 incidence in humans within Iran, using original empirical data, and discusses geographic and demographic factors relevant to disease spread, including potential implications for transmission dynamics.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+39. PMID: 32097725 [Score: 4/4]
+   Title: Estimation of the reproductive number of novel coronavirus (COVID-19) and the probable outbreak size on the Diamond Princess cruise ship: A data-driven analysis.
+   Overall: The study explicitly investigates the R0 of COVID-19 using original empirical data from a real outbreak setting, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+40. PMID: 33120515 [Score: 4/4]
+   Title: Impact of household quarantine on SARS-Cov-2 infection in mainland China: A mean-field modelling approach.
+   Overall: The study explicitly investigates SARS-CoV-2, uses original empirical data, focuses on human populations in a specific geographic area, and reports an estimated R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+41. PMID: 32692736 [Score: 4/4]
+   Title: Impact of self-imposed prevention measures and short-term government-imposed social distancing on mitigating and delaying a COVID-19 epidemic: A modelling study.
+   Overall: The study explicitly discusses COVID-19 and models transmission dynamics relevant to R0 estimation, making it pertinent for understanding the epidemic's basic reproduction number. However, it does not directly report R0 values but focuses on modeling interventions' effects, thus providing indirect but relevant insights.
+   维度评分: D=4 P=4 L=2 E=3 Param=4
+
+42. PMID: 32936811 [Score: 4/4]
+   Title: Impact of COVID-19 epidemic curtailment strategies in selected Indian states: An analysis by reproduction number and doubling time with incidence modelling.
+   Overall: The study explicitly investigates COVID-19 in humans within India, reports original empirical analysis of R0, and explicitly mentions the reproduction number in the abstract, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+43. PMID: 32601677 [Score: 4/4]
+   Title: Epidemiological characteristics of the first 100 cases of coronavirus disease 2019 (COVID-19) in Hong Kong Special Administrative Region, China, a city with a stringent containment policy.
+   Overall: The study explicitly investigates COVID-19 epidemiology, including reproduction number, in a real-world setting with original data, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+44. PMID: 32664866 [Score: 4/4]
+   Title: Early epidemiological assessment of the transmission potential and virulence of coronavirus disease 2019 (COVID-19) in Wuhan City, China, January-February, 2020.
+   Overall: The study explicitly investigates COVID-19 transmission parameters, including R0, using original empirical data from human populations in Wuhan, China, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+45. PMID: 32776726 [Score: 4/4]
+   Title: Epidemiological Characteristics of COVID-19 Outbreak at Fitness Centers in Cheonan, Korea.
+   Overall: The study explicitly investigates COVID-19, involves human cases, reports original empirical data, and explicitly discusses R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+46. PMID: 32452648 [Score: 4/4]
+   Title: Estimating the serial interval of the novel coronavirus disease (COVID-19) based on the public surveillance data in Shenzhen, China, from 19 January to 22 February 2020.
+   Overall: The study explicitly investigates COVID-19, uses human data from a specific location, reports original empirical findings, and explicitly states the R0 value, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+47. PMID: 32014114 [Score: 4/4]
+   Title: Nowcasting and forecasting the potential domestic and international spread of the 2019-nCoV outbreak originating in Wuhan, China: a modelling study.
+   Overall: The study explicitly investigates the transmissibility of 2019-nCoV, reports original empirical modeling data, and focuses on human populations in specific geographic locations, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+48. PMID: 32372755 [Score: 4/4]
+   Title: Estimating the generation interval for coronavirus disease (COVID-19) based on symptom onset data, March 2020.
+   Overall: The study explicitly investigates COVID-19 transmission parameters, including the reproduction number, using original outbreak data from human populations in real-world settings, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+49. PMID: 32496253 [Score: 4/4]
+   Title: Distribution and growth rate of COVID-19 outbreak in Tamil Nadu: A log-linear regression approach.
+   Overall: The study explicitly investigates COVID-19 in humans, reports original empirical data, and explicitly discusses R0 estimates, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+50. PMID: 32469610 [Score: 4/4]
+   Title: Mortality and Advanced Support Requirement for Patients With Cancer With COVID-19: A Mathematical Dynamic Model for Latin America.
+   Overall: The study explicitly investigates COVID-19, focuses on human patients in Latin America, reports original empirical modeling including R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+51. PMID: 32958001 [Score: 4/4]
+   Title: COVID19-world: a shiny application to perform comprehensive country-specific data visualization for SARS-CoV-2 epidemic.
+   Overall: The study explicitly addresses COVID-19 and R0, uses real-world data, and focuses on human populations, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+52. PMID: 32517845 [Score: 4/4]
+   Title: The basic reproduction number and prediction of the epidemic size of the novel coronavirus (COVID-19) in Shahroud, Iran.
+   Overall: The study explicitly investigates COVID-19's R0 in a specific location using original data, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+53. PMID: 32991604 [Score: 4/4]
+   Title: Effectiveness of the non-pharmaceutical public health interventions against COVID-19; a protocol of a systematic review and realist review.
+   Overall: The study explicitly addresses COVID-19 and R0, involves human populations, and aims to synthesize primary empirical data through systematic review, making it highly relevant for understanding R0 in COVID-19.
+   维度评分: D=4 P=4 L=3 E=3 Param=4
+
+54. PMID: 32493494 [Score: 4/4]
+   Title: Controlled, double-blind, randomized trial to assess the efficacy and safety of hydroxychloroquine chemoprophylaxis in SARS CoV2 infection in healthcare personnel in the hospital setting: A structured summary of a study protocol for a randomised controlled trial.
+   Overall: The study explicitly investigates COVID-19 in humans within a real-world hospital setting, reports original empirical data, and focuses on infection outcomes relevant to R0 estimation, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+55. PMID: 32627172 [Score: 4/4]
+   Title: Estimation of incubation period and generation time based on observed length-biased epidemic cohort with censoring for COVID-19 outbreak in China.
+   Overall: The study explicitly investigates COVID-19, uses original empirical data from an outbreak in China, and reports an R0 estimate, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+56. PMID: 32347198 [Score: 4/4]
+   Title: Epidemiological characteristics of the first 53 laboratory-confirmed cases of COVID-19 epidemic in Hong Kong, 13 February 2020.
+   Overall: The study explicitly investigates COVID-19 epidemiology with primary data, focusing on transmission parameters relevant to R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+57. PMID: 32369029 [Score: 4/4]
+   Title: Estimation of the Probability of Reinfection With COVID-19 by the Susceptible-Exposed-Infectious-Removed-Undetectable-Susceptible Model.
+   Overall: The study explicitly investigates COVID-19 and reports on R0 through original modeling, making it highly relevant. However, the lack of geographic context and focus on reinfection rather than initial transmission limits its direct applicability to R0 estimation for COVID-19.
+   维度评分: D=4 P=4 L=2 E=3 Param=4
+
+58. PMID: 32834583 [Score: 4/4]
+   Title: Association between weather data and COVID-19 pandemic predicting mortality rate: Machine learning approaches.
+   Overall: The study explicitly investigates COVID-19 and its transmission factors using original data analysis, making it relevant. However, the lack of specific geographic context and direct mention of R0 limits the overall relevance score.
+   维度评分: D=4 P=4 L=2 E=3 Param=4
+
+59. PMID: 32497812 [Score: 4/4]
+   Title: Effect of a wet market on coronavirus disease (COVID-19) transmission dynamics in China, 2019-2020.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics and reports original estimates of R, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+60. PMID: 33351802 [Score: 4/4]
+   Title: COVID-19 pandemic in Djibouti: Epidemiology and the response strategy followed to contain the virus during the first two months, 17 March to 16 May 2020.
+   Overall: The study explicitly reports original empirical data on COVID-19 in humans, including R0, in Djibouti, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+61. PMID: 32701162 [Score: 4/4]
+   Title: Association of Social Distancing, Population Density, and Temperature With the Instantaneous Reproduction Number of SARS-CoV-2 in Counties Across the United States.
+   Overall: The study explicitly investigates SARS-CoV-2 transmission and reproduction numbers in US counties, providing original empirical data relevant to the research question on COVID-19's R0.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+62. PMID: 32817697 [Score: 4/4]
+   Title: Spatial and temporal regularization to estimate COVID-19 reproduction number R(t): Promoting piecewise smoothness via convex optimization.
+   Overall: The study explicitly addresses the basic reproduction number of COVID-19, uses real data, and focuses on human populations and geographic regions, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+63. PMID: 32190785 [Score: 4/4]
+   Title: Transmission potential of the novel coronavirus (COVID-19) onboard the diamond Princess Cruises Ship, 2020.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics and reports on reproduction number estimates based on original outbreak data, making it highly relevant for understanding R0 in confined settings.
+   维度评分: D=4 P=4 L=3 E=3 Param=4
+
+64. PMID: 32320809 [Score: 4/4]
+   Title: Changes in testing rates could mask the novel coronavirus disease (COVID-19) growth rate.
+   Overall: The study explicitly addresses COVID-19 and R0 estimation using primary data, indicating high relevance. However, the lack of specific geographic focus and limited detail on empirical data slightly reduce the overall relevance score.
+   维度评分: D=4 P=4 L=2 E=3 Param=4
+
+65. PMID: 33378859 [Score: 4/4]
+   Title: Optimal control on COVID-19 eradication program in Indonesia under the effect of community awareness.
+   Overall: The study explicitly investigates COVID-19, uses human data, reports original empirical modeling, and explicitly addresses R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+66. PMID: 36753110 [Score: 4/4]
+   Title: [Estimation of serial interval and basic reproductive number for imported cases of COVID-19].
+   Overall: The study explicitly investigates COVID-19, uses primary data from human cases, is geographically situated, and reports on R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+67. PMID: 32405103 [Score: 4/4]
+   Title: Estimating excess 1-year mortality associated with the COVID-19 pandemic according to underlying conditions and age: a population-based cohort study.
+   Overall: The study explicitly investigates COVID-19 mortality, uses primary data, and discusses relevant modeling scenarios, making it highly relevant to the research question about R0.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+68. PMID: 32445710 [Score: 4/4]
+   Title: Individual quarantine versus active monitoring of contacts for the mitigation of COVID-19: a modelling study.
+   Overall: The study is highly relevant to understanding COVID-19 transmission dynamics and includes original empirical modeling data. However, it does not specify geographic location, and its primary focus is on modeling interventions rather than directly estimating R0. It provides valuable insights into transmission parameters but does not explicitly report R0 in the abstract.
+   维度评分: D=4 P=4 L=2 E=3 Param=4
+
+69. PMID: 32422201 [Score: 4/4]
+   Title: Investigation of a COVID-19 outbreak in Germany resulting from a single travel-associated primary case: a case series.
+   Overall: The study directly investigates COVID-19 transmission in humans within Germany, reports original empirical data, and discusses transmission parameters relevant to R0 estimation, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+70. PMID: 33282060 [Score: 4/4]
+   Title: Elevated levels of D-dimer in patients with COVID-19: prognosis value.
+   Overall: The study is highly relevant to COVID-19 and reports original empirical data, but it does not focus on R0 directly. It provides valuable prognostic information but not on the basic reproduction number.
+   维度评分: D=4 P=4 L=2 E=3 Param=4
+
+71. PMID: 32113196 [Score: 4/4]
+   Title: [Study on assessing early epidemiological parameters of COVID-19 epidemic in China].
+   Overall: The study explicitly investigates COVID-19, uses human case data from China, reports original empirical analysis, and explicitly estimates R0, making it highly relevant for understanding the basic reproduction number of COVID-19.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+72. PMID: 32762735 [Score: 4/4]
+   Title: Use of medical face masks versus particulate respirators as a component of personal protective equipment for health care workers in the context of the COVID-19 pandemic.
+   Overall: The study explicitly discusses R0 of COVID-19 in the abstract, indicating high relevance, though it primarily reviews existing estimates rather than presenting new empirical data.
+   维度评分: D=4 P=4 L=3 E=3 Param=4
+
+73. PMID: 32689956 [Score: 4/4]
+   Title: Basic epidemiological parameter values from data of real-world in mega-cities: the characteristics of COVID-19 in Beijing, China.
+   Overall: The study explicitly investigates COVID-19 in humans within Beijing, reports original empirical data, and explicitly states the basic reproduction number, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+74. PMID: 33331612 [Score: 4/4]
+   Title: Transmission of severe acute respiratory syndrome coronavirus 2 through asymptomatic carriers and aerosols: A major public health challenge.
+   Overall: The study explicitly discusses R0 and COVID-19 transmission, indicating relevance to the research question, though it does not specify original empirical data or geographic context.
+   维度评分: D=4 P=4 L=2 E=3 Param=4
+
+75. PMID: 32546245 [Score: 4/4]
+   Title: SOCRATES: an online tool leveraging a social contact data sharing initiative to assess mitigation strategies for COVID-19.
+   Overall: The study explicitly addresses COVID-19 and R0, with relevant data analysis and modeling. However, geographic relevance is uncertain, and it relies on existing social contact data rather than new empirical data, leading to a moderate overall relevance assessment.
+   维度评分: D=4 P=4 L=2 E=3 Param=4
+
+76. PMID: 38624634 [Score: 4/4]
+   Title: Assessment of the potential role of atmospheric particulate pollution and airborne transmission in intensifying the first wave pandemic impact of SARS-CoV-2/COVID-19 in Northern Italy.
+   Overall: The study explicitly investigates the epidemiology of COVID-19 in Italy, correlates environmental factors with infection data, and discusses transmission mechanisms, including the potential role of airborne transmission in conveying SARS-CoV-2, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+77. PMID: 32842293 [Score: 4/4]
+   Title: [Comparison of epidemic characteristics between severe acute respiratory syndrome and coronavirus disease 2019].
+   Overall: The study explicitly discusses COVID-19 and reports on R0 with original epidemiological data from human populations in real-world settings, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+78. PMID: 36753101 [Score: 4/4]
+   Title: [Predictions of a SEIR model for COVID-19 cases in Cali-Colombia].
+   Overall: The study explicitly investigates COVID-19 in humans, in a specific location, using original empirical modeling data, and explicitly reports R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+79. PMID: 32235480 [Score: 4/4]
+   Title: A Simulation on Potential Secondary Spread of Novel Coronavirus in an Exported Country Using a Stochastic Epidemic SEIR Model.
+   Overall: The study explicitly investigates COVID-19, uses original empirical data, and reports R0 estimates, making it highly relevant for understanding the basic reproduction number of COVID-19.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+80. PMID: 32536760 [Score: 4/4]
+   Title: Analysis of the mitigation strategies for COVID-19: From mathematical modelling perspective.
+   Overall: The study explicitly investigates COVID-19 transmission modeling with original data and analysis, focusing on R0, making it highly relevant for understanding COVID-19's basic reproduction number.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+81. PMID: 32982061 [Score: 4/4]
+   Title: COVID-19 pandemic in India: a mathematical model study.
+   Overall: The study explicitly investigates COVID-19 in India, uses original empirical data, and explicitly reports on the basic reproduction number, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+82. PMID: 32574315 [Score: 4/4]
+   Title: COVID-19 UK Lockdown Forecasts and R 0.
+   Overall: The study explicitly investigates R0 of COVID-19 using original empirical data within the UK context, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+83. PMID: 32987516 [Score: 4/4]
+   Title: Current trends and future prediction of novel coronavirus disease (COVID-19) epidemic in China: a dynamical modeling analysis.
+   Overall: The study explicitly investigates COVID-19, reports original empirical modeling data, and explicitly estimates R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+84. PMID: 32231374 [Score: 4/4]
+   Title: Data-based analysis, modelling and forecasting of the COVID-19 outbreak.
+   Overall: The study explicitly investigates COVID-19, uses human epidemiological data from China, and reports original modeling results estimating R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+85. PMID: 32511517 [Score: 4/4]
+   Title: Early transmission dynamics of COVID-19 in a southern hemisphere setting: Lima-Peru: February 29th-March 30th, 2020.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics in humans within a specific geographic location, providing original empirical estimates of R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+86. PMID: 32035431 [Score: 4/4]
+   Title: Epidemiologic characteristics of early cases with 2019 novel coronavirus (2019-nCoV) disease in Korea.
+   Overall: The study explicitly investigates COVID-19 cases in Korea and reports original data including R0 estimates, making it highly relevant for understanding the basic reproduction number of COVID-19.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+87. PMID: 32482785 [Score: 4/4]
+   Title: Estimates of the ongoing need for social distancing and control measures post-"lockdown" from trajectories of COVID-19 cases and mortality.
+   Overall: The study explicitly addresses the R0 of COVID-19 using original data across multiple countries, making it highly relevant for understanding the basic reproduction number in the context of the pandemic.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+88. PMID: 32024089 [Score: 4/4]
+   Title: Estimating the Unreported Number of Novel Coronavirus (2019-nCoV) Cases in China in the First Half of January 2020: A Data-Driven Modelling Analysis of the Early Outbreak.
+   Overall: The study directly addresses the research question by estimating R0 for COVID-19 (2019-nCoV) using original data and modeling in China, making it highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+89. PMID: 32678037 [Score: 4/4]
+   Title: Estimation of exponential growth rate and basic reproduction number of the coronavirus disease 2019 (COVID-19) in Africa.
+   Overall: The study explicitly investigates COVID-19, reports original empirical data, focuses on human populations in Africa, and explicitly estimates R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+90. PMID: 32468343 [Score: 4/4]
+   Title: Estimation of reproduction numbers of COVID-19 in typical countries and epidemic trends under different prevention and control scenarios.
+   Overall: The study explicitly investigates COVID-19 and reports original estimates of R0 across multiple countries, making it highly relevant for understanding the basic reproduction number of COVID-19.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+91. PMID: 32512670 [Score: 4/4]
+   Title: Estimation of the reproduction number and early prediction of the COVID-19 outbreak in India using a statistical computing approach.
+   Overall: The study explicitly investigates COVID-19 and R0 using original data and models focused on India, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+92. PMID: 32380708 [Score: 4/4]
+   Title: Estimation of Unreported Novel Coronavirus (SARS-CoV-2) Infections from Reported Deaths: A Susceptible-Exposed-Infectious-Recovered-Dead Model.
+   Overall: The study explicitly investigates COVID-19, uses human data from China, reports original empirical estimates, and explicitly estimates R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+93. PMID: 32980417 [Score: 4/4]
+   Title: European and US lockdowns and second waves during the COVID-19 pandemic.
+   Overall: The study explicitly investigates the reproductive number of COVID-19 using empirical data across multiple countries, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+94. PMID: 32456346 [Score: 4/4]
+   Title: Evaluating Transmission Heterogeneity and Super-Spreading Event of COVID-19 in a Metropolis of China.
+   Overall: The study explicitly investigates COVID-19 transmission and reports original empirical data on R0 in a specific population, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+95. PMID: 32417246 [Score: 4/4]
+   Title: Evaluation of COVID-19 epidemic outbreak caused by temporal contact-increase in South Korea.
+   Overall: The study explicitly investigates COVID-19, uses original empirical data, focuses on a human population in a specific location, and reports on R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+96. PMID: 32574319 [Score: 4/4]
+   Title: Evaluation of the Secondary Transmission Pattern and Epidemic Prediction of COVID-19 in the Four Metropolitan Areas of China.
+   Overall: The study explicitly investigates COVID-19, reports original empirical estimates of R0 in human populations within Chinese metropolitan areas, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+97. PMID: 32435645 [Score: 4/4]
+   Title: Extended SIR Prediction of the Epidemics Trend of COVID-19 in Italy and Compared With Hunan, China.
+   Overall: The study explicitly investigates COVID-19, uses original empirical data, focuses on human populations in specific locations, and reports on R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+98. PMID: 32486011 [Score: 4/4]
+   Title: Forecast Possible Risk for COVID-19 Epidemic Dissemination Under Current Control Strategies in Japan.
+   Overall: The study explicitly investigates COVID-19 in Japan, reports original empirical estimates of R0, and is centered on human populations in a real-world setting, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+99. PMID: 32498137 [Score: 4/4]
+   Title: Forecasting COVID-19 Transmission and Healthcare Capacity in Bali, Indonesia.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics in Bali, Indonesia, reports original empirical modeling data, and explicitly states the effective reproduction number, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+100. PMID: 32752627 [Score: 4/4]
+   Title: Forecasting the daily and cumulative number of cases for the COVID-19 pandemic in India.
+   Overall: The study explicitly investigates COVID-19 in human populations within India, reports original empirical modeling data, and explicitly discusses R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+101. PMID: 32970786 [Score: 4/4]
+   Title: Global convergence of COVID-19 basic reproduction number and estimation from early-time SIR dynamics.
+   Overall: The study explicitly investigates COVID-19's basic reproduction number using original data and models across multiple countries, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+102. PMID: 32395492 [Score: 4/4]
+   Title: Imitation dynamics in the mitigation of the novel coronavirus disease (COVID-19) outbreak in Wuhan, China from 2019 to 2020.
+   Overall: The study explicitly investigates COVID-19 and reports an estimated R0 based on original data in a real-world setting, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+103. PMID: 32952299 [Score: 4/4]
+   Title: Forecast analysis of the epidemics trend of COVID-19 in the USA by a generalized fractional-order SEIR model.
+   Overall: The study explicitly focuses on COVID-19, models human populations, derives R0, and uses real data for prediction, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+104. PMID: 32727547 [Score: 4/4]
+   Title: Impact of lockdown on COVID-19 epidemic in Île-de-France and possible exit strategies.
+   Overall: The study explicitly investigates COVID-19, uses original empirical data, focuses on human populations in a specific location, and reports on the reproductive number, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+105. PMID: 32496246 [Score: 4/4]
+   Title: Impact of nonpharmacological interventions on COVID-19 transmission dynamics in India.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics in India, reports original empirical estimates of R0, and is centered on human populations in a real-world setting, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+106. PMID: 32446721 [Score: 4/4]
+   Title: Inferring super-spreading from transmission clusters of COVID-19 in Hong Kong, Japan, and Singapore.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics and reports original empirical estimates of R0, making it highly relevant to the research question.
+   维度评分: D=4 P=2 L=3 E=4 Param=4
+
+107. PMID: 32753078 [Score: 4/4]
+   Title: Is Nigeria really on top of COVID-19? Message from effective reproduction number.
+   Overall: The study explicitly investigates COVID-19 in Nigeria, reports original empirical estimates of R0, and is focused on a real-world population, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+108. PMID: 32684175 [Score: 4/4]
+   Title: Mathematical model describing CoViD-19 in São Paulo, Brazil - evaluating isolation as control mechanism and forecasting epidemiological scenarios of release.
+   Overall: The study explicitly investigates COVID-19 in humans, uses original empirical data, and reports on R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+109. PMID: 32844134 [Score: 4/4]
+   Title: Mathematical modelling on diffusion and control of COVID-19.
+   Overall: The study explicitly investigates COVID-19 and R0 using original data and models, with clear relevance to the research question and geographic context.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+110. PMID: 32891155 [Score: 4/4]
+   Title: Mathematical models for devising the optimal SARS-CoV-2 strategy for eradication in China, South Korea, and Italy.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics, reports original modeling data including R0 estimates, and focuses on human populations in specific locations, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+111. PMID: 32987501 [Score: 4/4]
+   Title: Modeling analysis of COVID-19 based on morbidity data in Anhui, China.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics, reports original empirical modeling using human morbidity data from a specific location, and explicitly estimates R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+112. PMID: 32415422 [Score: 4/4]
+   Title: Modeling COVID-19 and Its Impacts on U.S. Immigration and Customs Enforcement (ICE) Detention Facilities, 2020.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics, including R0, within a human population in the U.S., using original modeling data, making it highly relevant for understanding COVID-19's basic reproduction number in this context.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+113. PMID: 32987574 [Score: 4/4]
+   Title: Modeling the transmission dynamics and the impact of the control interventions for the COVID-19 epidemic outbreak.
+   Overall: The study explicitly investigates COVID-19, focuses on human populations, uses original data analysis, and explicitly reports R0 estimates, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+114. PMID: 32987508 [Score: 4/4]
+   Title: Modelling and assessing the effects of medical resources on transmission of novel coronavirus (COVID-19) in Wuhan, China.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics, reports original empirical modeling data, and explicitly estimates R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+115. PMID: 32838059 [Score: 4/4]
+   Title: Modelling of reproduction number for COVID-19 in India and high incidence states.
+   Overall: The study directly addresses the research question by providing empirical estimates of R0 for COVID-19 in India, with clear relevance across all dimensions.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+116. PMID: 32987547 [Score: 4/4]
+   Title: Modelling the effects of media coverage and quarantine on the COVID-19 infections in the UK.
+   Overall: The study explicitly investigates COVID-19, reports original empirical modeling data, focuses on human populations in the UK, and directly estimates R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+117. PMID: 32292527 [Score: 4/4]
+   Title: On a Statistical Transmission Model in Analysis of the Early Phase of COVID-19 Outbreak.
+   Overall: The study explicitly investigates COVID-19, uses original empirical data, focuses on humans in a real-world setting, and reports on the basic reproduction number R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+118. PMID: 32342242 [Score: 4/4]
+   Title: Outbreak dynamics of COVID-19 in China and the United States.
+   Overall: The study explicitly investigates COVID-19 outbreak dynamics, reports original empirical modeling data, involves human populations in specific locations, and explicitly discusses R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+119. PMID: 32617358 [Score: 4/4]
+   Title: Parameter estimation and prediction for coronavirus disease outbreak 2019 (COVID-19) in Algeria.
+   Overall: The study explicitly investigates COVID-19 in humans, estimates R0 directly, and provides original modeling analysis, making it highly relevant for understanding the basic reproduction number of COVID-19.
+   维度评分: D=4 P=4 L=3 E=3 Param=4
+
+120. PMID: 32019669 [Score: 4/4]
+   Title: Pattern of early human-to-human transmission of Wuhan 2019 novel coronavirus (2019-nCoV), December 2019 to January 2020.
+   Overall: The study explicitly investigates COVID-19's R0 with clear evidence, relevant population, and geographic context, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+121. PMID: 32987548 [Score: 4/4]
+   Title: Phase-adjusted estimation of the COVID-19 outbreak in South Korea under multi-source data and adjustment measures: a modelling study.
+   Overall: The study explicitly addresses the basic reproduction number of COVID-19 using original data and modeling in a specific geographic context, making it highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+122. PMID: 32738248 [Score: 4/4]
+   Title: Predicting COVID-19 spread in the face of control measures in West Africa.
+   Overall: The study explicitly addresses COVID-19 transmission and control in humans within West Africa, providing original empirical modeling data, and explicitly discusses the basic reproduction number, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+123. PMID: 32521641 [Score: 4/4]
+   Title: Prediction of Epidemic Peak and Infected Cases for COVID-19 Disease in Malaysia, 2020.
+   Overall: The study directly addresses the basic reproduction number of COVID-19 with empirical data in a specific geographic context, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+124. PMID: 32183172 [Score: 4/4]
+   Title: Prediction of the Epidemic Peak of Coronavirus Disease in Japan, 2020.
+   Overall: The study explicitly investigates COVID-19 and R0 using original empirical data from Japan, making it highly relevant for understanding the basic reproduction number of COVID-19 in a real-world context.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+125. PMID: 32334115 [Score: 4/4]
+   Title: Preliminary estimates of the reproduction number of the coronavirus disease (COVID-19) outbreak in Republic of Korea and Italy by 5 March 2020.
+   Overall: The study explicitly investigates COVID-19, reports original empirical estimates of R0 in human populations in specific locations, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+126. PMID: 32970773 [Score: 4/4]
+   Title: Preliminary estimation of temporal and spatiotemporal dynamic measures of COVID-19 transmission in Thailand.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics, reports original empirical estimates of R0 in a specific location, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+127. PMID: 32007643 [Score: 4/4]
+   Title: Preliminary estimation of the basic reproduction number of novel coronavirus (2019-nCoV) in China, from 2019 to 2020: A data-driven analysis in the early phase of the outbreak.
+   Overall: The study explicitly investigates the basic reproduction number of COVID-19 (2019-nCoV) using original data and modeling in a relevant geographic context, making it highly pertinent for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+128. PMID: 32048815 [Score: 4/4]
+   Title: Preliminary prediction of the basic reproduction number of the Wuhan novel coronavirus 2019-nCoV.
+   Overall: The study explicitly investigates the basic reproduction number of COVID-19 using original empirical data and is highly relevant across all dimensions, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+129. PMID: 32617309 [Score: 4/4]
+   Title: Real-time estimation of the reproduction number of the novel coronavirus disease (COVID-19) in China in 2020 based on incidence data.
+   Overall: The study explicitly investigates COVID-19 transmissibility, reports original empirical data, focuses on human populations in China, and explicitly discusses the reproduction number, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+130. PMID: 32075152 [Score: 4/4]
+   Title: Real-Time Estimation of the Risk of Death from Novel Coronavirus (COVID-19) Infection: Inference Using Exported Cases.
+   Overall: The study explicitly investigates COVID-19, involves human data, reports original empirical estimates including R0, and is grounded in real-world data, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+131. PMID: 32674112 [Score: 4/4]
+   Title: Reconstruction of the full transmission dynamics of COVID-19 in Wuhan.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics, reports original empirical data, and clearly states the basic reproduction number, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+132. PMID: 32875176 [Score: 4/4]
+   Title: Replicating and projecting the path of COVID-19 with a model-implied reproduction number.
+   Overall: The study explicitly investigates COVID-19 and models the reproduction number R0, providing primary empirical modeling evidence in relevant populations and locations, making it highly pertinent for the research question.
+   维度评分: D=4 P=4 L=3 E=3 Param=4
+
+133. PMID: 32498721 [Score: 4/4]
+   Title: Risk estimation of the SARS-CoV-2 acute respiratory disease outbreak outside China.
+   Overall: The study explicitly investigates the reproductive number of COVID-19 using original empirical data and focuses on human transmission in specific geographic contexts, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+134. PMID: 32841283 [Score: 4/4]
+   Title: Simulating the progression of the COVID-19 disease in Cameroon using SIR models.
+   Overall: The study explicitly investigates COVID-19 in humans within Cameroon, reports original empirical analysis, and explicitly assesses R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+135. PMID: 32235084 [Score: 4/4]
+   Title: Spatial-temporal distribution of COVID-19 in China and its prediction: A data-driven modeling analysis.
+   Overall: The study explicitly investigates COVID-19, involves human populations in China, reports original empirical data, and explicitly reports R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+136. PMID: 32327608 [Score: 4/4]
+   Title: Spread and dynamics of the COVID-19 epidemic in Italy: Effects of emergency containment measures.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics in Italy, reports original empirical modeling data, and explicitly estimates the basic reproduction number, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+137. PMID: 32844133 [Score: 4/4]
+   Title: The basic reproduction number of the new coronavirus pandemic with mortality for India, the Syrian Arab Republic, the United States, Yemen, China, France, Nigeria and Russia with different rate of cases.
+   Overall: The study explicitly investigates the basic reproduction number of COVID-19 using original data and modeling across multiple countries, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+138. PMID: 32869008 [Score: 4/4]
+   Title: The Covid-19 outbreak in Spain. A simple dynamics model, some lessons, and a theoretical framework for control response.
+   Overall: The study explicitly investigates COVID-19 in humans within Spain, reports original empirical data, and explicitly discusses R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+139. PMID: 32834821 [Score: 4/4]
+   Title: The dynamics of COVID-19 with quarantined and isolation.
+   Overall: The study explicitly investigates COVID-19, uses real-world data, reports original empirical modeling, and explicitly estimates R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+140. PMID: 32836597 [Score: 4/4]
+   Title: The reproduction number of COVID-19 and its correlation with public health interventions.
+   Overall: The study explicitly investigates COVID-19's reproduction number using original empirical data within real-world European contexts, making it highly relevant for understanding R0 of COVID-19.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+141. PMID: 32498655 [Score: 4/4]
+   Title: The role of asymptomatic class, quarantine and isolation in the transmission of COVID-19.
+   Overall: The study explicitly addresses the basic reproduction number of COVID-19 through original modeling and analysis, with clear relevance to the research question.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+142. PMID: 32798031 [Score: 4/4]
+   Title: Trends in adaptation of fifteen European countries population to SARS-CoV-2 in March-May 2020: Can Taiwanese experience be adopted?
+   Overall: The study explicitly investigates SARS-CoV-2 in human populations in Europe, reports original empirical data, and explicitly discusses R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+143. PMID: 32959788 [Score: 4/4]
+   Title: Using posterior predictive distributions to analyse epidemic models: COVID-19 in Mexico City.
+   Overall: The study explicitly addresses COVID-19, involves human populations in a real-world setting, reports original modeling analysis, and focuses on epidemic parameters, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+144. PMID: 32373394 [Score: 4/4]
+   Title: Using the contact network model and Metropolis-Hastings sampling to reconstruct the COVID-19 spread on the "Diamond Princess".
+   Overall: The study explicitly investigates COVID-19, involves human populations in a real-world setting, reports original empirical data, and explicitly estimates R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+145. PMID: 32836816 [Score: 4/4]
+   Title: Using traveller-derived cases in Henan Province to quantify the spread of COVID-19 in Wuhan, China.
+   Overall: The study explicitly investigates COVID-19 transmission in Wuhan using original data and models, and explicitly reports R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+146. PMID: 32257174 [Score: 4/4]
+   Title: When will the battle against novel coronavirus end in Wuhan: A SEIR modeling analysis.
+   Overall: The study explicitly investigates COVID-19 in humans within Wuhan, China, using original empirical data and modeling to estimate R0, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+147. PMID: 32046137 [Score: 4/4]
+   Title: Estimation of the Transmission Risk of the 2019-nCoV and Its Implication for Public Health Interventions.
+   Overall: The study explicitly estimates R0 for COVID-19 using original data and modeling, with clear relevance to the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+148. PMID: 32355435 [Score: 4/4]
+   Title: Mathematical modeling of the spread of the coronavirus disease 2019 (COVID-19) taking into account the undetected infections. The case of China.
+   Overall: The study directly addresses COVID-19, uses empirical data from China, and explicitly discusses parameters related to disease spread, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+149. PMID: 34053269 [Score: 4/4]
+   Title: Novel coronavirus 2019-nCoV (COVID-19): early estimation of epidemiological parameters and epidemic size estimates.
+   Overall: The study explicitly addresses the basic reproduction number of COVID-19 with primary data and clear focus, making it highly relevant for the review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+150. PMID: 32322691 [Score: 4/4]
+   Title: The transmissibility of novel Coronavirus in the early stages of the 2019-20 outbreak in Wuhan: Exploring initial point-source exposure sizes and durations using scenario analysis.
+   Overall: The study explicitly investigates COVID-19 transmissibility, reports original data, and focuses on human populations in Wuhan, making it highly relevant for estimating R0.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+151. PMID: 32987496 [Score: 4/4]
+   Title: A discrete stochastic model of the COVID-19 outbreak: Forecast and control.
+   Overall: The study explicitly investigates COVID-19 transmission dynamics and estimates related parameters using original data, making it highly relevant for understanding R0.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+152. PMID: 32836817 [Score: 4/4]
+   Title: A fractional-order SEIHDR model for COVID-19 with inter-city networked coupling effects.
+   Overall: The study explicitly addresses COVID-19, uses real data, involves human populations, discusses geographic locations, and explicitly reports on R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+153. PMID: 32111262 [Score: 4/4]
+   Title: A mathematical model for simulating the phase-based transmissibility of a novel coronavirus.
+   Overall: The study explicitly investigates SARS-CoV-2 transmissibility, reports original empirical estimates of R0, and focuses on human populations, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+154. PMID: 32233562 [Score: 4/4]
+   Title: A mathematical model for the novel coronavirus epidemic in Wuhan, China.
+   Overall: The study explicitly addresses COVID-19 and the basic reproduction number through modeling and analysis, with clear relevance across all dimensions, making it highly pertinent for understanding R0 of COVID-19.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+155. PMID: 32834815 [Score: 4/4]
+   Title: A mathematical model of COVID-19 using fractional derivative: outbreak in India with dynamics of transmission and control.
+   Overall: The study explicitly investigates COVID-19 transmission, uses original empirical data, focuses on human populations in India, and explicitly discusses the basic reproduction number, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+156. PMID: 32958091 [Score: 4/4]
+   Title: A model of COVID-19 transmission to understand the effectiveness of the containment measures: application to data from France.
+   Overall: The study explicitly investigates COVID-19 and its reproductive number using original modeling and data from France, making it highly relevant for understanding R0 in the context of COVID-19.
+   维度评分: D=4 P=4 L=3 E=3 Param=4
+
+157. PMID: 32574303 [Score: 4/4]
+   Title: A Simulation of a COVID-19 Epidemic Based on a Deterministic SEIR Model.
+   Overall: The paper explicitly investigates COVID-19 in humans, with original empirical modeling focused on R0 estimation in a specific location, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+158. PMID: 32875961 [Score: 4/4]
+   Title: Analysis and prediction of the COVID-19 outbreak in Pakistan.
+   Overall: The study explicitly investigates COVID-19 in humans, reports original empirical estimates of R0 in a specific location, and clearly states the parameter of interest, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+159. PMID: 32678056 [Score: 4/4]
+   Title: Basic reproduction number and predicted trends of coronavirus disease 2019 epidemic in the mainland of China.
+   Overall: The study explicitly investigates COVID-19, reports original empirical data, focuses on human populations in China, and explicitly estimates R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+160. PMID: 32963585 [Score: 4/4]
+   Title: Controlling the Spread of COVID-19: Optimal Control Analysis.
+   Overall: The study explicitly investigates COVID-19, involves human populations, reports original modeling data, and explicitly discusses R0, making it highly relevant for understanding the basic reproduction number of COVID-19.
+   维度评分: D=4 P=4 L=2 E=3 Param=4
+
+161. PMID: 32536762 [Score: 4/4]
+   Title: Coronavirus pandemic: A predictive analysis of the peak outbreak epidemic in South Africa, Turkey, and Brazil.
+   Overall: The study explicitly addresses COVID-19, involves human populations in specific locations, and discusses the basic reproduction number, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+162. PMID: 32349259 [Score: 4/4]
+   Title: Covid-19 Outbreak Progression in Italian Regions: Approaching the Peak by the End of March in Northern Italy and First Week of April in Southern Italy.
+   Overall: The study explicitly investigates COVID-19's R0 in Italy using original empirical modeling, making it highly relevant across all dimensions.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+163. PMID: 32614817 [Score: 4/4]
+   Title: Estimation of country-level basic reproductive ratios for novel Coronavirus (SARS-CoV-2/COVID-19) using synthetic contact matrices.
+   Overall: The study explicitly investigates COVID-19, uses human population data, provides country-specific estimates, reports original empirical modeling, and directly estimates R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+164. PMID: 32983643 [Score: 4/4]
+   Title: Estimating the impact of mobility patterns on COVID-19 infection rates in 11 European countries.
+   Overall: The study explicitly investigates COVID-19, focuses on human populations in Europe, uses original empirical data, and directly addresses R0, making it highly relevant for the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+165. PMID: 32536761 [Score: 4/4]
+   Title: Novel Corona virus disease infection in Tunisia: Mathematical model and the impact of the quarantine strategy.
+   Overall: The study explicitly investigates COVID-19, uses original empirical modeling focused on human populations, and explicitly discusses R0, making it highly relevant for understanding the basic reproduction number of COVID-19.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+166. PMID: 32917290 [Score: 3/4]
+   Title: Early Insights from Statistical and Mathematical Modeling of Key Epidemiologic Parameters of COVID-19.
+   Overall: The study explicitly discusses epidemiologic parameters related to COVID-19, including the reproductive number, and reports original estimates, making it relevant for understanding R0. However, the lack of explicit population and location details slightly limits its relevance for specific epidemiological contexts.
+   维度评分: D=4 P=2 L=2 E=3 Param=4
+
+167. PMID: 32233563 [Score: 3/4]
+   Title: Effect of delay in diagnosis on transmission of COVID-19.
+   Overall: The study explicitly discusses COVID-19 and R0 in the context of modeling, making it relevant for understanding transmission dynamics, though it lacks specific geographic or population data.
+   维度评分: D=4 P=2 L=2 E=3 Param=4

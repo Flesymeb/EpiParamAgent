@@ -1,0 +1,120 @@
+{
+  "timestamp_utc": "2026-04-12T13:07:17.815386+00:00",
+  "workflow": "screening_evaluation",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search",
+  "argv": [
+    "scripts/cli/screening_evaluation.py",
+    "screening-performance",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "P12",
+    "--screened-results",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/serial_interval/p12/project_12_screened.csv",
+    "--ground-truth",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/serial_interval/p12/project_12_groundtruth.csv"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "d644f2a750baebef79c3c8326552d072bb5e5878",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "command": "screening-performance",
+    "profile": "P12",
+    "topic": "",
+    "threshold_overrides": {}
+  },
+  "inputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/serial_interval/p12/project_12_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-04-01T09:25:54.902366+00:00",
+      "type": "file",
+      "size_bytes": 7837,
+      "sha256": "efa74cd2f78eeb8de679e099218cd4a3354113afb87a30f49b7160208eda8083"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/serial_interval/p12/project_12_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-04-01T09:25:55.324391+00:00",
+      "type": "file",
+      "size_bytes": 450954,
+      "sha256": "e11588299d0e54f7ae37776b4e645c350ac724cbcb26dc3b3d2ffe391f3eb919"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/serial_interval/p12",
+      "exists": true,
+      "mtime_utc": "2026-04-12T13:04:52.132357+00:00",
+      "type": "dir",
+      "file_count": 20,
+      "dir_digest": "44110cec464946a015510bab75deec54d132add932530e47b5b395de80d03eda",
+      "dir_digest_truncated": false
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/serial_interval/p12/paper_summary.tsv",
+      "exists": true,
+      "mtime_utc": "2026-04-12T13:07:17.815297+00:00",
+      "type": "file",
+      "size_bytes": 306,
+      "sha256": "2d3f52d10d44024c868727aa3fdd7f89e809eefac0f8dfc7125b6b712f3b3477"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "summary": {
+      "topic": "serial_interval",
+      "project_label": "P12",
+      "ground_truth_count": 20,
+      "screened_count": 145,
+      "tp": 15,
+      "fp": 16,
+      "fn": 5,
+      "tn": 109,
+      "strong_count": 15,
+      "possible_count": 0,
+      "unlikely_count": 5,
+      "not_found_count": 0,
+      "sensitivity": 0.75,
+      "specificity": 0.872,
+      "precision": 0.483871,
+      "npv": 0.95614,
+      "f1": 0.588235,
+      "accuracy": 0.855172,
+      "workload_reduction": 0.786207,
+      "nns": 2.066667,
+      "mcc": 0.523151,
+      "wss95": 0.736207,
+      "recall_ci_low": 0.531299,
+      "recall_ci_high": 0.888138,
+      "precision_ci_low": 0.319703,
+      "precision_ci_high": 0.651596,
+      "workload_reduction_ci_low": 0.717241,
+      "workload_reduction_ci_high": 0.848276,
+      "nns_ci_low": 1.52381,
+      "nns_ci_high": 3.285714,
+      "recall_ci_display": "75.0% [53.1%, 88.8%]",
+      "precision_display": "48.4%",
+      "workload_reduction_display": "78.6%",
+      "nns_display": "2.07",
+      "precision_ci_display": "48.4% [32.0%, 65.2%]",
+      "workload_reduction_ci_display": "78.6% [71.7%, 84.8%]",
+      "nns_ci_display": "2.07 [1.52, 3.29]",
+      "specificity_display": "87.2%",
+      "npv_display": "95.6%",
+      "f1_display": "58.8%",
+      "accuracy_display": "85.5%",
+      "mcc_display": "0.523",
+      "wss95_display": "73.6%",
+      "threshold_mode": "original_labels",
+      "threshold_overrides": ""
+    },
+    "paper_summary_tsv": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/serial_interval/p12/paper_summary.tsv"
+  }
+}

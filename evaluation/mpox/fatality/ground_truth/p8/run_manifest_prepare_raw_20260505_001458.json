@@ -1,0 +1,51 @@
+{
+  "timestamp_utc": "2026-05-04T16:14:58.389208+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_prepare_raw.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP8",
+    "--query",
+    "(\"Monkeypox\" OR \"Monkeypox virus\" OR \"Monkey pox\" OR \"MPXV\" OR \"variole simienne\" OR \"variole du singe\") AND (\"Epidemiology\" OR \"Clinical features\" OR \"Sign and Symptoms\" OR \"Clinical characteristics\" OR \"Cases\" OR \"Transmission\")",
+    "--include-gt",
+    "--fix-missing"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "1684f3dbd11d7208abbd34671c17ef96fffde46d",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP8",
+    "topic": "",
+    "query": "(\"Monkeypox\" OR \"Monkeypox virus\" OR \"Monkey pox\" OR \"MPXV\" OR \"variole simienne\" OR \"variole du singe\") AND (\"Epidemiology\" OR \"Clinical features\" OR \"Sign and Symptoms\" OR \"Clinical characteristics\" OR \"Cases\" OR \"Transmission\")",
+    "date_range": "",
+    "retmax": "all",
+    "include_gt": true,
+    "fix_missing": true,
+    "medline_only": false
+  },
+  "inputs": [],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/fatality/p8/project_8_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-04T16:14:58.385214+00:00",
+      "type": "file",
+      "size_bytes": 6263200,
+      "sha256": "0ec5db9f7c6e1b2b19bedb6610b2e6fc2ffe299bee52aef14a3c9ab82d5a20e5"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 3726,
+    "ground_truth_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/fatality/p8/project_8_groundtruth.csv"
+  }
+}

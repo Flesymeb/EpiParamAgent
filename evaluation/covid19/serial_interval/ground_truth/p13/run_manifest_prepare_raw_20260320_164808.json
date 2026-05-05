@@ -1,0 +1,56 @@
+{
+  "timestamp_utc": "2026-03-20T08:48:08.115754+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+  "argv": [
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search\\scripts\\ops\\..\\\\cli\\screening_prepare_raw.py",
+    "--project-root",
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "--profile",
+    "P13"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "508cd0cb9ef7acbd1112359300dc7f0b40def461",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "P13",
+    "topic": "",
+    "query": "",
+    "date_range": "",
+    "retmax": "all",
+    "include_gt": false,
+    "fix_missing": false,
+    "medline_only": false
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\project_13_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-20T08:48:08.114808+00:00",
+      "type": "file",
+      "size_bytes": 230284,
+      "sha256": "af81b5f0a4267be51fbcdb54d464951e1b78f9b4985aee72848e3e4d40c4bcf2"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\project_13_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-20T08:48:08.114808+00:00",
+      "type": "file",
+      "size_bytes": 230284,
+      "sha256": "af81b5f0a4267be51fbcdb54d464951e1b78f9b4985aee72848e3e4d40c4bcf2"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 111,
+    "ground_truth_path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\project_13_groundtruth.csv"
+  }
+}

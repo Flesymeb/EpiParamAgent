@@ -1,0 +1,880 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-05-05 00:32:21
+研究问题: What seroprevalence or antibody studies can support inference of SARS-CoV-2 infection fatality rates?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/covid19/GT_1/GT_export/fatality/p5/project_5_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/covid19/GT_1/GT_export/fatality/p5/experiments/binary_baseline/project_5_screened.csv
+模型配置: openai/z-ai/glm-5.1
+批处理大小: 20
+批次并发: 2
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │    167   │    8.9%  │
+│ 🤔 Possible candidates   │      0   │    0.0%  │
+│ 😐 Unlikely candidates   │   1715   │   91.1%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │   1882   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  0.00  │    0.0%  │  0/ 0/ 0/ 0/ 0                 │
+│ Population      │  0.00  │    0.0%  │  0/ 0/ 0/ 0/ 0                 │
+│ Location        │  0.00  │    0.0%  │  0/ 0/ 0/ 0/ 0                 │
+│ Evidence        │  0.00  │    0.0%  │  0/ 0/ 0/ 0/ 0                 │
+│ Parameter       │  0.00  │    0.0%  │  0/ 0/ 0/ 0/ 0                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (167 篇)
+================================================================================
+
+1. PMID: 32726200 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2-Specific Antibodies, Faroe Islands.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports seroprevalence of specific antibodies in a population sample (0.6%, adjusted 0.7%). It matches both the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+2. PMID: 32947121 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2-specific antibodies in cancer outpatients in Madrid (Spain): A single center, prospective, cohort study and a review of available data.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence/seropositivity of IgG/IgM antibodies in a defined population (cancer outpatients), including an overall seroprevalence estimate of 31.4%.
+   维度评分: D= P= L= E= Param=
+
+3. PMID: 32727884 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence among parturient women in Philadelphia.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence among parturient women in Philadelphia, finding 80/1,293 (6.2%) with SARS-CoV-2 antibodies. It matches both the disease and seroprevalence parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+4. PMID: 32878898 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence in oncology healthcare professionals and patients with cancer at a tertiary care centre during the COVID-19 pandemic.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence/seropositivity of anti-SARS-CoV-2 antibodies among oncology healthcare professionals and cancer patients. It is therefore on-topic for a review of COVID-19 seroprevalence.
+   维度评分: D= P= L= E= Param=
+
+5. PMID: 32741406 [Score: 4/4]
+   Title: Seroprevalence of severe acute respiratory coronavirus virus 2 (SARS-CoV-2) antibodies among healthcare workers with differing levels of coronavirus disease 2019 (COVID-19) patient exposure.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody seroprevalence among healthcare workers (1.6% among 734 employees). It matches the review focus on COVID-19 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+6. PMID: 32828701 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence in a Belgian cohort of patients with cystic fibrosis.
+   Overall: This paper directly studies SARS-CoV-2 and measures anti-SARS-CoV-2 antibodies in a defined cohort, reporting seroprevalence/seropositivity results. It matches both the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+7. PMID: 32764107 [Score: 4/4]
+   Title: Epidemiology of SARS-CoV-2 antibodies among firefighters/paramedics of a US fire department: a cross-sectional study.
+   Overall: This cross-sectional study directly concerns SARS-CoV-2/COVID-19 and explicitly estimates antibody seroprevalence among firefighters/paramedics (8.9% seropositive). It therefore matches both the disease and seroprevalence parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+8. PMID: 32746953 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 antibodies in healthcare workers at a London NHS Trust.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody seroprevalence/seropositivity in healthcare workers (31.6% among 2,167 HCWs). It matches both the disease and seroprevalence parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+9. PMID: 32727446 [Score: 4/4]
+   Title: SARS-CoV-2 specific serological pattern in healthcare workers of an Italian COVID-19 forefront hospital.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence/seropositivity of IgM and IgG antibodies in healthcare workers, which matches the review parameter.
+   维度评分: D= P= L= E= Param=
+
+10. PMID: 32620182 [Score: 4/4]
+   Title: Severe Acute Respiratory Syndrome Coronavirus 2 Prevalence, Seroprevalence, and Exposure among Evacuees from Wuhan, China, 2020.
+   Overall: This study directly concerns SARS-CoV-2/COVID-19 and explicitly reports seroprevalence among evacuees, including detection of antibodies in the cohort. It fits the review scope of estimating antibody prevalence/seroprevalence.
+   维度评分: D= P= L= E= Param=
+
+11. PMID: 32731911 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 and Infection Fatality Ratio, Orleans and Jefferson Parishes, Louisiana, USA, May 2020.
+   Overall: This paper directly studies SARS-CoV-2 and reports a seroprevalence estimate (overall census-weighted seroprevalence 6.9%) in Louisiana. It clearly matches the review focus on COVID-19 seroprevalence/seroepidemiology.
+   维度评分: D= P= L= E= Param=
+
+12. PMID: 32702365 [Score: 4/4]
+   Title: Comparison of serologic and molecular SARS-CoV 2 results in a large cohort in Southern Tuscany demonstrates a role for serologic testing to increase diagnostic sensitivity.
+   Overall: This study directly concerns SARS-CoV-2/COVID-19 and reports serological positivity proportions (seropositivity) in a defined cohort, including antibody-positive fractions among molecular-positive and molecular-negative patients. Although focused on diagnostic sensitivity, it provides estimates of the target parameter.
+   维度评分: D= P= L= E= Param=
+
+13. PMID: 32525850 [Score: 4/4]
+   Title: SARS-CoV-2 Infections and Serologic Responses from a Sample of U.S. Navy Service Members - USS Theodore Roosevelt, April 2020.
+   Overall: This paper directly studies SARS-CoV-2 infection and serologic responses in a defined population and reports antibody positivity/serologic findings among sampled service members. It is therefore relevant to COVID-19 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+14. PMID: 32583766 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 specific neutralising antibodies in blood donors from the Lodi Red Zone in Lombardy, Italy, as at 06 April 2020.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody prevalence/seroprevalence in blood donors, with 91/390 antibody positive and overall exposure estimates. It matches both the disease and seroprevalence parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+15. PMID: 32381641 [Score: 4/4]
+   Title: Performance Characteristics of the Abbott Architect SARS-CoV-2 IgG Assay and Seroprevalence in Boise, Idaho.
+   Overall: This paper directly studies SARS-CoV-2 and reports a seroprevalence estimate in a community sample from Boise, Idaho (87/4,856; 1.79% positivity). Although it also evaluates assay performance, it clearly includes the parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+16. PMID: 32303108 [Score: 4/4]
+   Title: Serological survey of SARS-CoV-2 for experimental, domestic, companion and wild animals excludes intermediate hosts of 35 different species of animals.
+   Overall: This paper directly studies SARS-CoV-2 and reports serological survey results (antibody testing) across multiple animal species. Although all samples were seronegative, it still estimates the seroprevalence/seropositivity parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+17. PMID: 32817357 [Score: 4/4]
+   Title: A comparison of four serological assays for detecting anti-SARS-CoV-2 antibodies in human serum samples from different populations.
+   Overall: This paper directly concerns SARS-CoV-2 and reports seropositivity/seroprevalence estimates in defined populations, including 32% in mildly symptomatic individuals and 3% in healthy blood donors. Although it also compares assay performance, it includes relevant seroepidemiologic prevalence data.
+   维度评分: D= P= L= E= Param=
+
+18. PMID: 32873791 [Score: 4/4]
+   Title: Serological identification of SARS-CoV-2 infections among children visiting a hospital during the initial Seattle outbreak.
+   Overall: This paper directly studies SARS-CoV-2 and reports serological screening results with an estimated period seroprevalence (~1%) among children visiting a hospital. It is therefore directly relevant to a review of COVID-19 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+19. PMID: 32876244 [Score: 4/4]
+   Title: EPICOVID19 protocol: repeated serological surveys on SARS-CoV-2 antibodies in Brazil.
+   Overall: This protocol directly concerns COVID-19 and is designed to measure the prevalence of SARS-CoV-2 antibodies through repeated population-based serological surveys in Brazil. It clearly reports an intended estimate of seroprevalence, matching the review parameter.
+   维度评分: D= P= L= E= Param=
+
+20. PMID: 32780804 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 Antibodies in Health Care Personnel in the New York City Area.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence/seropositivity of antibodies among health care personnel in New York City, matching the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+21. PMID: 32767262 [Score: 4/4]
+   Title: Screening of SARS-CoV-2 in 299 Hospitalized Children with Hemato-oncological Diseases: A Multicenter Survey in Hubei, China.
+   Overall: This study directly concerns SARS-CoV-2/COVID-19 and includes serum antibody testing in a defined population, reporting that all 163 tested children were antibody-negative. It therefore provides an estimate of seropositivity/antibody prevalence relevant to the review.
+   维度评分: D= P= L= E= Param=
+
+22. PMID: 32877853 [Score: 4/4]
+   Title: Prioritizing COVID-19 tests based on participatory surveillance and spatial scanning.
+   Overall: This study directly concerns COVID-19 and reports serology testing results, including the proportion antibody-positive (32% of 50 tested). Although the main focus is test prioritization and spatial surveillance, it provides an estimate of seropositivity relevant to the review.
+   维度评分: D= P= L= E= Param=
+
+23. PMID: 32495088 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 Antibodies Among Healthcare Workers at a Tertiary Academic Hospital in New York City.
+   Overall: The title explicitly indicates a study of SARS-CoV-2 antibody prevalence among healthcare workers, which directly matches the disease and seroprevalence parameter of interest. The keywords also support that this is a COVID-19 antibody prevalence study.
+   维度评分: D= P= L= E= Param=
+
+24. PMID: 32629544 [Score: 4/4]
+   Title: COVID-19 swab collection and serological screening in lipoprotein apheresis unit.
+   Overall: The title and keywords indicate this paper involves COVID-19 serological screening for SARS-CoV-2 antibodies in a defined patient unit, which aligns with studying seropositivity/serological survey. Although no abstract is available, it appears to report antibody screening rather than being purely methodological.
+   维度评分: D= P= L= E= Param=
+
+25. PMID: 32791199 [Score: 4/4]
+   Title: Protocol for a national probability survey using home specimen collection methods to assess prevalence and incidence of SARS-CoV-2 infection and antibody response.
+   Overall: This protocol directly concerns SARS-CoV-2 and is designed to estimate antibody prevalence/seroprevalence (and infection prevalence) in a national probability serosurvey. Although it is a protocol rather than completed results, it explicitly reports planned estimation of the review parameter.
+   维度评分: D= P= L= E= Param=
+
+26. PMID: 33412811 [Score: 4/4]
+   Title: [Seroprevalence of anti-SARS-CoV-2 IgG/IgM antibodies in Borgosesia (Piedmont Region, Northern Italy) population: a surveillance strategy in post-lockdown period?].
+   Overall: This is a cross-sectional population study directly about SARS-CoV-2 that measures and reports seroprevalence of anti-SARS-CoV-2 IgG/IgM antibodies (estimated prevalence 4.9%). It matches both the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+27. PMID: 32758311 [Score: 4/4]
+   Title: Low seroprevalence of SARS-CoV-2 infection among healthcare workers of the largest children hospital in Milan during the pandemic wave.
+   Overall: The title and keywords indicate this study directly concerns SARS-CoV-2 and reports seroprevalence among healthcare workers, which matches the review's disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+28. PMID: 32861816 [Score: 4/4]
+   Title: Seroprevalence of SARS-Cov-2 in 646 professionals at the Rothschild Foundation Hospital (ProSeCoV study).
+   Overall: The title explicitly states 'Seroprevalence of SARS-CoV-2' and the keywords include COVID-19, SARS-CoV-2, antibodies, and seroepidemiologic studies. This directly matches the review focus on SARS-CoV-2 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+29. PMID: 32771946 [Score: 4/4]
+   Title: Serological detection of 2019-nCoV respond to the epidemic: A useful complement to nucleic acid testing.
+   Overall: This paper directly studies COVID-19 and measures SARS-CoV-2 antibodies in a population, describing seroepidemiology/seropositivity across different groups. It reports the relevant serological parameter, so it fits the review criteria.
+   维度评分: D= P= L= E= Param=
+
+30. PMID: 32539107 [Score: 4/4]
+   Title: Hospital-Wide SARS-CoV-2 Antibody Screening in 3056 Staff in a Tertiary Center in Belgium.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports antibody prevalence/seropositivity among hospital staff, which matches the review parameter of seroprevalence.
+   维度评分: D= P= L= E= Param=
+
+31. PMID: 32906596 [Score: 4/4]
+   Title: The Light and Shadow of Rapid Serological Tests for SARS-CoV-2 Infection: Results from a Study in a Large Emergency Department.
+   Overall: This study directly concerns SARS-CoV-2 and reports antibody positivity/prevalence data (70/819, 8.5% anti-SARS-CoV-2 antibodies) in a defined patient population. Although focused on test performance, it also estimates the seroprevalence/seropositivity parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+32. PMID: 32811605 [Score: 4/4]
+   Title: Frequency of COVID-19 IgG Antibodies among Special Police Squad Lahore, Pakistan.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports seroprevalence of IgG antibodies in a defined population (special police squad in Lahore). It is a cross-sectional serosurvey with measured antibody positivity, matching the review criteria.
+   维度评分: D= P= L= E= Param=
+
+33. PMID: 32684119 [Score: 4/4]
+   Title: Work at inpatient care units is associated with an increased risk of SARS-CoV-2 infection; a cross-sectional study of 8679 healthcare workers in Sweden.
+   Overall: Include: This cross-sectional study directly concerns SARS-CoV-2/COVID-19 and measures IgG anti-SARS-CoV-2 seropositivity among healthcare workers, reporting an overall seropositive proportion of 6.6%, which is a seroprevalence estimate.
+   维度评分: D= P= L= E= Param=
+
+34. PMID: 32781180 [Score: 4/4]
+   Title: All that glisters is not COVID: Low prevalence of seroconversion against SARS-CoV-2 in a pediatric cohort of patients with chilblain-like lesions.
+   Overall: The title and keywords indicate this study directly concerns SARS-CoV-2/COVID-19 and evaluates seroconversion/antibodies in a pediatric cohort, implying reported seropositivity prevalence. This matches the review focus on COVID-19 seroprevalence-related parameters.
+   维度评分: D= P= L= E= Param=
+
+35. PMID: 32790658 [Score: 4/4]
+   Title: Notes from the Field: Seroprevalence Estimates of SARS-CoV-2 Infection in Convenience Sample - Oregon, May 11-June 15, 2020.
+   Overall: The title explicitly reports SARS-CoV-2 seroprevalence estimates in Oregon, and the keywords include COVID-19, SARS-CoV-2, antibodies, and seroepidemiologic studies. This directly matches the review topic and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+36. PMID: 32717210 [Score: 4/4]
+   Title: Point-of-care serological assays for delayed SARS-CoV-2 case identification among health-care workers in the UK: a prospective multicentre cohort study.
+   Overall: This study directly concerns SARS-CoV-2/COVID-19 and explicitly estimates seroprevalence among health-care workers (asymptomatic, symptomatic, and overall workforce). Although it also evaluates assay performance, it reports the review’s target parameter and should be included.
+   维度评分: D= P= L= E= Param=
+
+37. PMID: 32860790 [Score: 4/4]
+   Title: Asymptomatic Severe Acute Respiratory Syndrome Coronavirus 2 Infection in Patients With Inflammatory Bowel Disease Under Biologic Treatment.
+   Overall: The title explicitly concerns SARS-CoV-2 infection and the keywords include seroprevalence, indicating the paper likely reports antibody prevalence in a defined patient population. Based on title and keywords, it fits the review scope.
+   维度评分: D= P= L= E= Param=
+
+38. PMID: 32520284 [Score: 4/4]
+   Title: Trends in the prevalence of COVID-19 infection in Rio Grande do Sul, Brazil: repeated serological surveys.
+   Overall: This paper directly concerns COVID-19/SARS-CoV-2 and describes repeated serological surveys using antibody tests to estimate population prevalence/seroprevalence in Brazil. It matches both the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+39. PMID: 32943594 [Score: 4/4]
+   Title: Role of Screening for COVID-19 in Hemodialysis Wards, Results of a Single Center Study.
+   Overall: This study directly concerns SARS-CoV-2/COVID-19 and includes serologic testing (IgG/IgM) in a hemodialysis population, reporting the number of antibody-positive patients. It therefore provides an estimate of seropositivity within the screened cohort.
+   维度评分: D= P= L= E= Param=
+
+40. PMID: 32520728 [Score: 4/4]
+   Title: Anesthesiologists' and Intensive Care Providers' Exposure to COVID-19 Infection in a New York City Academic Center: A Prospective Cohort Study Assessing Symptoms and COVID-19 Antibody Testing.
+   Overall: This prospective cohort study directly concerns COVID-19 and reports SARS-CoV-2 antibody positivity among a defined population of healthcare providers (11/91, 12.1%). Because it estimates seropositivity/antibody prevalence, it fits the review criteria.
+   维度评分: D= P= L= E= Param=
+
+41. PMID: 32504745 [Score: 4/4]
+   Title: High SARS-CoV-2 antibody prevalence among healthcare workers exposed to COVID-19 patients.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports antibody seroprevalence (17.14% seropositive) among healthcare workers, which matches the review parameter.
+   维度评分: D= P= L= E= Param=
+
+42. PMID: 32633869 [Score: 4/4]
+   Title: The "scar" of a pandemic: Cumulative incidence of COVID-19 during the first trimester of pregnancy.
+   Overall: This study directly concerns COVID-19/SARS-CoV-2 and measures antibody positivity (IgM/IgG) in a cohort of pregnant women, reporting cumulative incidence/seroprevalence-related estimates. It therefore matches the review focus on SARS-CoV-2 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+43. PMID: 32434708 [Score: 4/4]
+   Title: SARS-CoV-2-specific antibody detection in healthcare workers in Germany with direct contact to COVID-19 patients.
+   Overall: This paper directly studies SARS-CoV-2 in healthcare workers and reports antibody seroprevalence (5/316, 1.6%). It matches both the disease and seroprevalence parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+44. PMID: 32700672 [Score: 4/4]
+   Title: SARS-CoV-2 IgG seroprevalence in blood donors located in three different federal states, Germany, March to June 2020.
+   Overall: This paper directly studies SARS-CoV-2 and reports IgG seroprevalence estimates in blood donors in Germany, which matches the review's disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+45. PMID: 32611913 [Score: 4/4]
+   Title: National sero-surveillance to monitor the trend of SARS-CoV-2 infection transmission in India: Protocol for community-based surveillance.
+   Overall: This paper is directly about SARS-CoV-2 and describes a community-based serosurveillance protocol to estimate seroprevalence in India. Protocols for planned seroprevalence surveys fit the review focus on studies reporting or estimating antibody prevalence.
+   维度评分: D= P= L= E= Param=
+
+46. PMID: 32777699 [Score: 4/4]
+   Title: SARS-CoV-2 IgG antibody responses in New York City.
+   Overall: This paper directly studies SARS-CoV-2 and reports an IgG antibody positivity rate (44%) in a large New York City patient sample, which is a seroprevalence/seropositivity measure relevant to the review.
+   维度评分: D= P= L= E= Param=
+
+47. PMID: 32805631 [Score: 4/4]
+   Title: Immune response to SARS-CoV-2 in health care workers following a COVID-19 outbreak: A prospective longitudinal study.
+   Overall: This prospective longitudinal study directly concerns SARS-CoV-2 and measures antibody/serologic responses in healthcare workers, including proportions developing IgG responses and seroconversion. It therefore reports seropositivity/serologic prevalence-related outcomes relevant to the review.
+   维度评分: D= P= L= E= Param=
+
+48. PMID: 32797108 [Score: 4/4]
+   Title: High seroprevalence for SARS-CoV-2 among household members of essential workers detected using a dried blood spot assay.
+   Overall: This paper directly studies SARS-CoV-2 and reports seropositivity/seroprevalence estimates in household members and a community sample using a serological assay. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+49. PMID: 32524515 [Score: 4/4]
+   Title: Perceived versus proven SARS-CoV-2-specific immune responses in health-care professionals.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody serology results, including baseline anti-SARS-CoV-2 IgG prevalence of about 1–2% among health-care professionals. It therefore matches the review focus on COVID-19 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+50. PMID: 32762796 [Score: 4/4]
+   Title: Repeated leftover serosurvey of SARS-CoV-2 IgG antibodies, Greece, March and April 2020.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence/serosurvey results based on IgG antibodies in Greece. It clearly estimates the parameter of interest (seroprevalence) and is therefore eligible for inclusion.
+   维度评分: D= P= L= E= Param=
+
+51. PMID: 32780376 [Score: 4/4]
+   Title: [The prevalence rate of anti-SARS-CoV-2-IgG is 1.2% - Screening in asymptomatic outpatients in Germany (Northrhine-Westfalia)].
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody seroprevalence/seropositivity in asymptomatic outpatients, estimating an anti-SARS-CoV-2 IgG prevalence of 1.2%. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+52. PMID: 32732391 [Score: 4/4]
+   Title: High Prevalence of Asymptomatic COVID-19 Infection in Hemodialysis Patients Detected Using Serologic Screening.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports seroprevalence of antibodies in a hemodialysis population (129/356, 36.2%). It matches the review focus on COVID-19 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+53. PMID: 32645348 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence in COVID-19 hotspots.
+   Overall: The title explicitly states 'SARS-CoV-2 seroprevalence,' and the keywords include 'Seroepidemiologic Studies' and 'Prevalence,' indicating the paper directly studies COVID-19 antibody prevalence/seroprevalence.
+   维度评分: D= P= L= E= Param=
+
+54. PMID: 32881855 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 Among Frontline Health Care Personnel in a Multistate Hospital Network - 13 Academic Medical Centers, April-June 2020.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports antibody seroprevalence among frontline health care personnel (194/3,248; 6.0%), matching the review’s disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+55. PMID: 32641730 [Score: 4/4]
+   Title: Seroprevalence of antibodies against SARS-CoV-2 among health care workers in a large Spanish reference hospital.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and explicitly estimates seroprevalence of antibodies among healthcare workers, reporting a seropositive proportion of 9.3%. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+56. PMID: 32758438 [Score: 4/4]
+   Title: Risk of COVID-19 in health-care workers in Denmark: an observational cohort study.
+   Overall: This study directly concerns SARS-CoV-2/COVID-19 and reports antibody seroprevalence/seropositivity estimates among health-care workers (and compares with blood donors). It is therefore directly relevant to a review of COVID-19 seroprevalence.
+   维度评分: D= P= L= E= Param=
+
+57. PMID: 32504052 [Score: 4/4]
+   Title: Seroprevalence of immunoglobulin M and G antibodies against SARS-CoV-2 in China.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports seroprevalence/seropositivity of IgM and IgG antibodies in multiple Chinese cohorts, matching the review topic exactly.
+   维度评分: D= P= L= E= Param=
+
+58. PMID: 32593608 [Score: 4/4]
+   Title: Dynamics of SARS-CoV-2 RT-PCR positivity and seroprevalence among high-risk healthcare workers and hospital staff.
+   Overall: This study directly concerns SARS-CoV-2/COVID-19 and explicitly reports seroprevalence among healthcare workers, with confirmed infections based on RT-PCR and/or serology. It matches the review focus on estimating antibody prevalence/seroprevalence.
+   维度评分: D= P= L= E= Param=
+
+59. PMID: 32830472 [Score: 4/4]
+   Title: Seroprevalence of Anti-SARS-CoV-2 Antibodies among Outpatients in Southwestern Seoul, Korea.
+   Overall: This paper directly concerns SARS-CoV-2/COVID-19 and reports anti-SARS-CoV-2 antibody seropositivity/seroprevalence (0.07%) in outpatients, matching the review parameter.
+   维度评分: D= P= L= E= Param=
+
+60. PMID: 32790086 [Score: 4/4]
+   Title: Results from a survey in healthy blood donors in South Eastern Italy indicate that we are far away from herd immunity to SARS-CoV-2.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence of anti-SARS-CoV-2 antibodies in healthy blood donors (9/904, 0.99%). It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+61. PMID: 33230504 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Hong Kong and in residents evacuated from Hubei province, China: a multicohort study.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and explicitly reports seroprevalence/seropositivity estimates in Hong Kong residents and Hubei returnees. It is therefore directly relevant to the review question.
+   维度评分: D= P= L= E= Param=
+
+62. PMID: 32701941 [Score: 4/4]
+   Title: Estimated Community Seroprevalence of SARS-CoV-2 Antibodies - Two Georgia Counties, April 28-May 3, 2020.
+   Overall: This paper directly studies SARS-CoV-2 and reports a community serologic survey with an estimated weighted seroprevalence (2.5%) in two Georgia counties. It matches both the disease and seroprevalence parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+63. PMID: 32634587 [Score: 4/4]
+   Title: COVID-19 exposure risk for family members of healthcare workers: An observational study.
+   Overall: This observational study directly concerns SARS-CoV-2/COVID-19 and reports seropositivity using rapid serological IgM/IgG testing among healthcare workers and their family members, providing relevant seroprevalence data.
+   维度评分: D= P= L= E= Param=
+
+64. PMID: 32572869 [Score: 4/4]
+   Title: [Screening of Mothers in a COVID-19 Low-Prevalence Region: Determination of SARS-CoV-2 Antibodies in 401 Mothers from Rostock by ELISA and Confirmation by Immunofluorescence].
+   Overall: This paper directly studies SARS-CoV-2 and measures antibody prevalence/seropositivity in a defined population (401 mothers), which is a seroprevalence-related parameter relevant to the review.
+   维度评分: D= P= L= E= Param=
+
+65. PMID: 32597750 [Score: 4/4]
+   Title: Antibody Responses after Classroom Exposure to Teacher with Coronavirus Disease, March 2020.
+   Overall: This paper directly concerns SARS-CoV-2 and includes serologic testing of exposed students, identifying past infection in 2 of 21 students. It therefore reports antibody-based seropositivity data relevant to seroprevalence/serological survey outcomes.
+   维度评分: D= P= L= E= Param=
+
+66. PMID: 32958395 [Score: 4/4]
+   Title: Survey of the current status of subclinical coronavirus disease 2019 (COVID-19).
+   Overall: This paper directly studies COVID-19 and reports SARS-CoV-2 IgG antibody prevalence (seroprevalence) in patients and healthcare workers. It fits the review focus on COVID-19 seroprevalence/seropositivity estimation.
+   维度评分: D= P= L= E= Param=
+
+67. PMID: 32988731 [Score: 4/4]
+   Title: Effectiveness of personal protective equipment in preventing severe acute respiratory syndrome coronavirus 2 infection among healthcare workers.
+   Overall: This prospective cohort directly studies SARS-CoV-2 and measures antibody status/seropositivity among healthcare workers through repeated serological testing. Although focused on PPE effectiveness, it reports serologic survey results relevant to SARS-CoV-2 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+68. PMID: 32732168 [Score: 4/4]
+   Title: SARS-CoV-2 infection among healthcare workers of a gastroenterological service in a tertiary care facility.
+   Overall: This study directly concerns SARS-CoV-2 infection in healthcare workers and reports serological antibody positivity (IgM/IgG rapid serological tests detected in 12.2% of participants). Although it also reports RT-PCR prevalence, it includes a seropositivity estimate relevant to the review.
+   维度评分: D= P= L= E= Param=
+
+69. PMID: 32628990 [Score: 4/4]
+   Title: Serologic Detection of SARS-CoV-2 Infections in Hemodialysis Centers: A Multicenter Retrospective Study in Wuhan, China.
+   Overall: This study directly concerns SARS-CoV-2/COVID-19 and reports prevalence of infection in a defined population using antibody testing, including serology-identified cases. It therefore provides a direct estimate relevant to seroprevalence/seropositivity in hemodialysis patients.
+   维度评分: D= P= L= E= Param=
+
+70. PMID: 32868226 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 antibodies among healthy blood donors in Karachi, Pakistan.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports seroprevalence of antibodies among healthy blood donors in Karachi, with quantitative seropositivity estimates. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+71. PMID: 32421144 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2-Specific Antibodies Among Adults in Los Angeles County, California, on April 10-11, 2020.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence of specific antibodies (IgG and IgM) in a population sample from Los Angeles County. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+72. PMID: 32707511 [Score: 4/4]
+   Title: SARS-CoV-2-IgG response is different in COVID-19 outpatients and asymptomatic contact persons.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody seropositivity rates (IgG positivity) in PCR-confirmed outpatients and asymptomatic contacts. It therefore provides data on the specified serological parameter relevant to seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+73. PMID: 32679056 [Score: 4/4]
+   Title: Lower prevalence of antibodies neutralizing SARS-CoV-2 in group O French blood donors.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence/seropositivity of neutralizing antibodies in French blood donors (overall prevalence 2.7%). It matches both the disease and antibody prevalence parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+74. PMID: 32739485 [Score: 4/4]
+   Title: Large-scale, molecular and serological SARS-CoV-2 screening of healthcare workers in a 4-site public hospital in Belgium after COVID-19 outbreak.
+   Overall: The title and keywords indicate this study involves serological screening for SARS-CoV-2 among healthcare workers and explicitly mentions seroprevalence, which matches the review’s disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+75. PMID: 32534626 [Score: 4/4]
+   Title: Seroprevalence of anti-SARS-CoV-2 IgG antibodies in Geneva, Switzerland (SEROCoV-POP): a population-based study.
+   Overall: This is a population-based SARS-CoV-2 serosurvey in Geneva that directly measures anti-SARS-CoV-2 IgG antibodies and reports weekly seroprevalence estimates. It clearly matches both the disease and seroprevalence parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+76. PMID: 32781165 [Score: 4/4]
+   Title: SARS-CoV-2-related mortality in a rural Latin American population.
+   Overall: Include: the paper directly studies SARS-CoV-2/COVID-19 in a defined population and explicitly reports a seroprevalence survey showing 45% antibody prevalence, which matches the review parameter.
+   维度评分: D= P= L= E= Param=
+
+77. PMID: 32407440 [Score: 4/4]
+   Title: Asymptomatic Seroconversion of Immunoglobulins to SARS-CoV-2 in a Pediatric Dialysis Unit.
+   Overall: This paper directly concerns SARS-CoV-2 and reports seroconversion/antibody positivity among patients and healthcare workers in a pediatric dialysis unit, which is relevant to seroprevalence/seropositivity. Although it is a case series in a specific setting, it still studies the target parameter.
+   维度评分: D= P= L= E= Param=
+
+78. PMID: 32641783 [Score: 4/4]
+   Title: Population-based surveys of antibodies against SARS-CoV-2 in Southern Brazil.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports population-based antibody seroprevalence estimates across three survey rounds in Southern Brazil. It is clearly a seroepidemiologic survey matching the review parameter.
+   维度评分: D= P= L= E= Param=
+
+79. PMID: 32715672 [Score: 4/4]
+   Title: IgG Seroprevalence of COVID-19 among Individuals without a History of the Coronavirus Disease Infection in Daegu, Korea.
+   Overall: This paper directly studies COVID-19 and reports an estimated IgG seroprevalence (7.6%) among individuals without prior diagnosis in Daegu, Korea. It clearly matches the review focus on SARS-CoV-2 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+80. PMID: 32871063 [Score: 4/4]
+   Title: Humoral Immune Response to SARS-CoV-2 in Iceland.
+   Overall: This paper directly studies SARS-CoV-2 and measures seropositivity/antibody prevalence in multiple Icelandic populations, estimating the proportion infected nationwide. It clearly reports the review parameter of seroprevalence/seroepidemiology.
+   维度评分: D= P= L= E= Param=
+
+81. PMID: 32719488 [Score: 4/4]
+   Title: Assessing the extent of SARS-CoV-2 circulation through serological studies.
+   Overall: The title and MeSH terms clearly indicate a SARS-CoV-2/COVID-19 serological or seroepidemiologic study, aimed at assessing virus circulation through antibodies. This matches the review’s disease and seroprevalence-related parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+82. PMID: 32376126 [Score: 4/4]
+   Title: Immune audit of COVID-19 at the department of ophthalmology of a tertiary hospital before deconfinement.
+   Overall: The title and keywords indicate a COVID-19 antibody audit in a hospital ophthalmology department, measuring IgG/IgM against SARS-CoV-2. This is consistent with a seroprevalence/seropositivity study in a defined population.
+   维度评分: D= P= L= E= Param=
+
+83. PMID: 32645347 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 in Spain (ENE-COVID): a nationwide, population-based seroepidemiological study.
+   Overall: This is a nationwide population-based seroepidemiological study of SARS-CoV-2 in Spain that directly estimates seroprevalence using antibody tests and reports prevalence estimates with confidence intervals.
+   维度评分: D= P= L= E= Param=
+
+84. PMID: 32701920 [Score: 4/4]
+   Title: Correct management and low rate of contagiousness of healthcare workers in a University Hospital in Southern Italy: from contact tracing to serological investigation.
+   Overall: This study directly concerns SARS-CoV-2/COVID-19 in healthcare workers and reports a serological outcome, including a 2% positivity rate and seroconversion rate. It therefore fits the review’s focus on COVID-19 antibody seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+85. PMID: 32771084 [Score: 4/4]
+   Title: Seroprevalence and presentation of SARS-CoV-2 in pregnancy.
+   Overall: The title explicitly indicates a study of SARS-CoV-2 seroprevalence in pregnancy, and the keywords include SARS-CoV-2 and Seroepidemiologic Studies. This directly matches the review focus on COVID-19 antibody prevalence/serosurveys.
+   维度评分: D= P= L= E= Param=
+
+86. PMID: 32530392 [Score: 4/4]
+   Title: The prevalence of severe acute respiratory coronavirus virus 2 (SARS-CoV-2) IgG antibodies in intensive care unit (ICU) healthcare personnel (HCP) and its implications-a single-center, prospective, pilot study.
+   Overall: The title and keywords indicate this study directly assesses the prevalence of SARS-CoV-2 IgG antibodies in ICU healthcare personnel, which is a seroprevalence measure for COVID-19. Therefore it matches both the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+87. PMID: 32838448 [Score: 4/4]
+   Title: [Period Prevalence of SARS-CoV-2 in an Unselected Sample of Pregnant Women in Jena, Thuringia].
+   Overall: This paper directly studies SARS-CoV-2 in pregnant women and reports antibody testing results, including IgG seropositivity/seroconversion rate (0.6%) and prevalence estimates. It therefore matches the review focus on COVID-19 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+88. PMID: 33154264 [Score: 4/4]
+   Title: Prevalence of COVID-19 antibodies in healthcare workers at the peak of the pandemic in Mumbai, India: A preliminary study.
+   Overall: This paper directly studies COVID-19 and reports antibody prevalence/seroprevalence in healthcare workers via a serosurvey in Mumbai. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+89. PMID: 32820721 [Score: 4/4]
+   Title: Differential occupational risks to healthcare workers from SARS-CoV-2 observed during a prospective observational study.
+   Overall: This prospective study directly concerns SARS-CoV-2/COVID-19 in healthcare workers and uses IgG antibody immunoassays/serology to identify prior infection, reporting proportions with evidence of infection. Although it also includes PCR data, it estimates serological positivity relevant to seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+90. PMID: 32755528 [Score: 4/4]
+   Title: Household Clustering of SARS-CoV-2 in Community Settings: A Study from Rural Ecuador.
+   Overall: This study directly concerns SARS-CoV-2 and includes antibody testing (IgG/IgM) in a population-based/community household setting, reporting seropositive proportions among household members. It therefore provides data relevant to seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+91. PMID: 32584894 [Score: 4/4]
+   Title: Prevalence of serum IgG antibodies against SARS-CoV-2 among clinic staff.
+   Overall: This paper directly studies SARS-CoV-2 and reports the prevalence/seropositivity of IgG antibodies among clinic staff (2.7-2.9%), which matches the review’s seroprevalence parameter.
+   维度评分: D= P= L= E= Param=
+
+92. PMID: 32553914 [Score: 4/4]
+   Title: Exposure and seroconversion to severe acute respiratory syndrome coronavirus 2 among obstetrical healthcare providers following a contained outbreak.
+   Overall: The title and keywords indicate a direct study of SARS-CoV-2 exposure and seroconversion among obstetrical healthcare providers after an outbreak. Seroconversion/viral antibodies are central serologic outcomes relevant to seroprevalence or seropositivity.
+   维度评分: D= P= L= E= Param=
+
+93. PMID: 32843121 [Score: 4/4]
+   Title: Antibody evidence of SARS-CoV-2 infection in healthcare workers in the Bronx.
+   Overall: The title and keywords indicate a direct study of SARS-CoV-2 antibody evidence among healthcare workers, with MeSH terms including Immunoglobulin G and Prevalence. This fits a seroprevalence/seropositivity study for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+94. PMID: 32686766 [Score: 4/4]
+   Title: Serosurvey of SARS-CoV-2 among hospital visitors in China.
+   Overall: The title explicitly describes a serosurvey of SARS-CoV-2, and the keywords include viral antibodies, IgG, and IgM, indicating measurement of seroprevalence/seropositivity for the specified disease.
+   维度评分: D= P= L= E= Param=
+
+95. PMID: 33521714 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Hong Kong returnees - Authors' reply.
+   Overall: The title explicitly states 'Seroprevalence of SARS-CoV-2' and the keywords include COVID-19/SARS-CoV-2 and seroepidemiologic studies, indicating direct relevance to SARS-CoV-2 antibody prevalence.
+   维度评分: D= P= L= E= Param=
+
+96. PMID: 33521713 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Hong Kong returnees.
+   Overall: The title explicitly states 'Seroprevalence of SARS-CoV-2,' directly matching the disease and parameter of interest. The keywords also include SARS-CoV-2 and seroepidemiologic studies, supporting inclusion.
+   维度评分: D= P= L= E= Param=
+
+97. PMID: 32553187 [Score: 4/4]
+   Title: Seroconversion in household members of COVID-19 outpatients.
+   Overall: The title and keywords indicate this study examines seroconversion/antibody status related to SARS-CoV-2 among household members of COVID-19 outpatients, which is directly relevant to seropositivity/serological outcomes for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+98. PMID: 32721505 [Score: 4/4]
+   Title: Immunological detection of serum antibodies in pediatric medical workers exposed to varying levels of SARS-CoV-2.
+   Overall: The title and keywords indicate this study measures serum antibodies to SARS-CoV-2 in pediatric medical workers and includes prevalence-related metadata, consistent with a seroprevalence/seropositivity study for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+99. PMID: 32653078 [Score: 4/4]
+   Title: Pandemic peak SARS-CoV-2 infection and seroconversion rates in London frontline health-care workers.
+   Overall: The title and keywords indicate a direct study of SARS-CoV-2 in frontline healthcare workers that measures seroconversion, which is a serological outcome relevant to seroprevalence/seropositivity. Therefore, it fits the review scope.
+   维度评分: D= P= L= E= Param=
+
+100. PMID: 32909272 [Score: 4/4]
+   Title: Prevalence of SARS-COVID-19 serum IgG antibodies amongst staff on an acute surgical unit.
+   Overall: The title explicitly indicates measurement of SARS-CoV-2 serum IgG antibody prevalence among staff, which is a seroprevalence outcome directly relevant to COVID-19. The keywords also support that this is a prevalence study involving COVID-19/SARS-CoV-2 and Immunoglobulin G.
+   维度评分: D= P= L= E= Param=
+
+101. PMID: 32710647 [Score: 4/4]
+   Title: Antibody responses to SARS-CoV-2 in healthy individuals returning to Shenzhen.
+   Overall: This cross-sectional study directly concerns SARS-CoV-2 and measures antibody positivity in a population sample of 1,589 asymptomatic individuals, providing an estimate relevant to seroprevalence/seropositivity. Therefore it fits the review focus on COVID-19 serological prevalence.
+   维度评分: D= P= L= E= Param=
+
+102. PMID: 32845861 [Score: 4/4]
+   Title: SARS-CoV-2 serosurvey in health care workers of the Veneto Region.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence/seropositivity in a defined population (health care workers), with a measured prevalence of 4.6% and confidence interval. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+103. PMID: 32790206 [Score: 4/4]
+   Title: Low postpandemic wave SARS-CoV-2 seroprevalence in Kuala Lumpur and Selangor, Malaysia.
+   Overall: The title directly reports SARS-CoV-2 seroprevalence in a defined population and location, and the keywords include COVID-19 serological testing and seroepidemiologic studies. This matches the review focus on COVID-19 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+104. PMID: 32663041 [Score: 4/4]
+   Title: Anti-SARS-CoV-2 antibody testing in IBD healthcare professionals: are we currently able to provide COVID-free IBD clinics?
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence of anti-SARS-CoV-2 antibodies in a defined population of healthcare professionals. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+105. PMID: 32648546 [Score: 4/4]
+   Title: Cumulative incidence and diagnosis of SARS-CoV-2 infection in New York.
+   Overall: This paper directly studies SARS-CoV-2 and reports population seroprevalence/cumulative incidence estimates based on an antibody serosurvey in New York State. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+106. PMID: 32701938 [Score: 4/4]
+   Title: Population Point Prevalence of SARS-CoV-2 Infection Based on a Statewide Random Sample - Indiana, April 25-29, 2020.
+   Overall: This paper directly studies SARS-CoV-2 in a statewide random sample and reports IgG seropositivity/seroprevalence (1.09%), which matches the review’s disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+107. PMID: 32709909 [Score: 4/4]
+   Title: Patients with immune-mediated inflammatory diseases receiving cytokine inhibitors have low prevalence of SARS-CoV-2 seroconversion.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody seroconversion/seroprevalence in a defined patient population compared with controls. That matches the review focus on COVID-19 serological prevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+108. PMID: 32777861 [Score: 4/4]
+   Title: A cross-sectional study of immune seroconversion to SARS-CoV-2 in frontline maternity health professionals.
+   Overall: This study directly examines SARS-CoV-2 and reports seropositivity/seroconversion prevalence using IgG antibody testing in maternity healthcare workers (overall 14.5% seropositive). It matches the review focus on COVID-19 seroprevalence/serological survey estimates.
+   维度评分: D= P= L= E= Param=
+
+109. PMID: 32386808 [Score: 4/4]
+   Title: Prevalence of IgG antibodies to SARS-CoV-2 among emergency department employees.
+   Overall: The title and MeSH terms indicate a seroepidemiologic prevalence study of IgG antibodies to SARS-CoV-2 among emergency department employees, which directly matches COVID-19 and seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+110. PMID: 33047077 [Score: 4/4]
+   Title: Enzyme-Linked Immunosorbent Assay for the Detection of Severe Acute Respiratory Syndrome Coronavirus 2 (SARS-CoV-2) IgM/IgA and IgG Antibodies Among Healthcare Workers.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence of anti-SARS-CoV-2 antibodies among healthcare workers (80/330, 24.24%). It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+111. PMID: 32766597 [Score: 4/4]
+   Title: High SARS-CoV-2 seroprevalence in health care workers but relatively low numbers of deaths in urban Malawi.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence based on IgG antibody testing in health care workers in Malawi, including an adjusted seroprevalence estimate of 12.3%.
+   维度评分: D= P= L= E= Param=
+
+112. PMID: 32729953 [Score: 4/4]
+   Title: Time-dependent changes in the seroprevalence of COVID-19 in asymptomatic liver disease outpatients in an area in Japan undergoing a second wave of COVID-19.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports seroprevalence estimates (including cumulative seroprevalence) in asymptomatic liver disease outpatients in Japan. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+113. PMID: 32904469 [Score: 4/4]
+   Title: Absence of SARS-CoV-2 infection in cats and dogs in close contact with a cluster of COVID-19 patients in a veterinary campus.
+   Overall: This cross-sectional study directly concerns SARS-CoV-2 and measures antibodies in cats and dogs exposed to COVID-19 cases, effectively assessing seropositivity/seroprevalence (reported as absence of detectable antibodies). It therefore reports the parameter of interest for the specified disease.
+   维度评分: D= P= L= E= Param=
+
+114. PMID: 32692365 [Score: 4/4]
+   Title: Seroprevalence of Antibodies to SARS-CoV-2 in 10 Sites in the United States, March 23-May 12, 2020.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports adjusted seroprevalence estimates of antibodies across 10 US sites. It is a cross-sectional serological survey that clearly matches the review parameter.
+   维度评分: D= P= L= E= Param=
+
+115. PMID: 32954232 [Score: 4/4]
+   Title: Tracing asymptomatic SARS-CoV-2 carriers among 3674 hospital staff:a cross-sectional survey.
+   Overall: This cross-sectional survey directly studies SARS-CoV-2 in hospital staff and reports antibody positivity rates (IgM/IgG) and asymptomatic infection prevalence, which are relevant seroprevalence/seropositivity measures.
+   维度评分: D= P= L= E= Param=
+
+116. PMID: 32838083 [Score: 4/4]
+   Title: The Cumulative Rate of SARS-CoV-2 Infection in Chinese Hemodialysis Patients.
+   Overall: This study directly examines SARS-CoV-2 and estimates cumulative infection using serological testing, reporting a seropositive rate (3.3%) among hemodialysis patients. It is therefore directly relevant to COVID-19 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+117. PMID: 32974370 [Score: 4/4]
+   Title: COVID-19 Infection Among Healthcare Workers: Serological Findings Supporting Routine Testing.
+   Overall: This study directly concerns SARS-CoV-2/COVID-19 and reports antibody testing results among healthcare workers, including IgG positivity proportions, which constitutes seroprevalence/seropositivity data.
+   维度评分: D= P= L= E= Param=
+
+118. PMID: 32867328 [Score: 4/4]
+   Title: Prevalence of Antibodies to SARS-CoV-2 in Italian Adults and Associated Risk Factors.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody seroprevalence (11.0%) in Italian adults, along with associated risk factors. It clearly matches the review focus on COVID-19 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+119. PMID: 32560071 [Score: 4/4]
+   Title: COVID-19 Infection Fatality Rate Associated with Incidence-A Population-Level Analysis of 19 Spanish Autonomous Communities.
+   Overall: Include because the study directly concerns COVID-19 and uses results from a large SARS-CoV-2 serosurvey, explicitly reporting regional seroprevalence estimates. Although the main focus is infection fatality rate, it reports the seroprevalence parameter relevant to the review.
+   维度评分: D= P= L= E= Param=
+
+120. PMID: 33017875 [Score: 4/4]
+   Title: Confidence intervals for the COVID-19 neutralizing antibody retention rate in the Korean population.
+   Overall: The paper is directly about COVID-19 and discusses population antibody rates in Korea, including estimation of confidence intervals for antibody prevalence/retention based on serologic testing data. This fits the review focus on SARS-CoV-2 seroprevalence/seropositivity estimates.
+   维度评分: D= P= L= E= Param=
+
+121. PMID: 32743610 [Score: 4/4]
+   Title: High Community SARS-CoV-2 Antibody Seroprevalence in a Ski Resort Community, Blaine County, Idaho, US. Preliminary Results.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports community antibody seroprevalence estimates (overall and stratified), matching the review’s disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+122. PMID: 35960681 [Score: 4/4]
+   Title: Estimated prevalence and viral transmissibility in subjects with asymptomatic SARS-CoV-2 infections in Wuhan, China.
+   Overall: This paper directly concerns SARS-CoV-2 and explicitly uses seroprevalence of antibodies against SARS-CoV-2 as part of estimating cumulative attack rate and asymptomatic infection burden. It therefore reports/estimates the requested serological prevalence parameter and should be included.
+   维度评分: D= P= L= E= Param=
+
+123. PMID: 32939231 [Score: 4/4]
+   Title: High seroprevalence of SARS-CoV-2 in elderly care employees in Sweden.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody seroprevalence/seropositivity among elderly care employees in Sweden (23% seropositive). It matches both the disease and seroprevalence parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+124. PMID: 32676623 [Score: 4/4]
+   Title: SARS-CoV-2 Seroprevalence Among Parturient Women.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence among parturient women, with 80/1,293 (6.2%) testing positive for antibodies. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+125. PMID: 35960673 [Score: 4/4]
+   Title: Personnel protection strategy for healthcare workers in Wuhan during the COVID-19 epidemic.
+   Overall: This paper directly studies SARS-CoV-2 and reports seropositivity/serological survey results among healthcare workers, including antibody prevalence estimates in different PPE exposure groups. It matches the review focus on COVID-19 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+126. PMID: 32547909 [Score: 4/4]
+   Title: Prevalence of antibodies against COVID-19 in the staff of a COVID-19 regular ward.
+   Overall: The title and keywords indicate a study of SARS-CoV-2/COVID-19 antibody prevalence in hospital staff, which directly matches the review focus on COVID-19 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+127. PMID: 32743588 [Score: 4/4]
+   Title: Evidence of exposure to SARS-CoV-2 in cats and dogs from households in Italy.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody positivity/seroprevalence in cats and dogs (neutralizing antibodies in 3.4% of dogs and 3.9% of cats). It is therefore a serological survey estimating the specified parameter.
+   维度评分: D= P= L= E= Param=
+
+128. PMID: 32944166 [Score: 4/4]
+   Title: Pronounced difference in Covid-19 antibody prevalence indicates cluster transmission in Stockholm, Sweden.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody prevalence in two Stockholm residential areas (4.1% and 30%), which is a seroprevalence estimate relevant to the review.
+   维度评分: D= P= L= E= Param=
+
+129. PMID: 32511483 [Score: 4/4]
+   Title: Serological identification of SARS-CoV-2 infections among children visiting a hospital during the initial Seattle outbreak.
+   Overall: This study directly examines SARS-CoV-2 and reports serological screening results with an estimated period seroprevalence (~1%) among children. It matches the review focus on COVID-19 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+130. PMID: 32733782 [Score: 4/4]
+   Title: Seroprevalence of COVID-19 antibodies in the cleaning and oncological staff of a municipal clinic.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and measures antibody prevalence/seroprevalence in defined staff groups using serological testing. It reports results on IgA/IgG positivity, which fits the review parameter.
+   维度评分: D= P= L= E= Param=
+
+131. PMID: 32511477 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence and neutralizing activity in donor and patient blood from the San Francisco Bay Area.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence/seropositivity estimates in blood donors and hospitalized patients, which matches the review parameter. It also includes antibody dynamics and neutralizing activity, further supporting relevance.
+   维度评分: D= P= L= E= Param=
+
+132. PMID: 32817969 [Score: 4/4]
+   Title: Detection, prevalence, and duration of humoral responses to SARS-CoV-2 under conditions of limited population exposure.
+   Overall: This paper directly studies SARS-CoV-2 and reports a community seroprevalence estimate, finding 1.24% antibody reactivity among 5,882 local community members. It therefore matches both the disease and seroprevalence parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+133. PMID: 32706959 [Score: 4/4]
+   Title: Rapid Decay of Anti-SARS-CoV-2 Antibodies in Persons with Mild Covid-19.
+   Overall: The title indicates a direct study of anti-SARS-CoV-2 antibodies in people with COVID-19, which is relevant to serological status. Although it focuses on antibody decay rather than population prevalence, it still directly reports serologic findings related to the specified disease and parameter.
+   维度评分: D= P= L= E= Param=
+
+134. PMID: 33518823 [Score: 4/4]
+   Title: Visualizing the invisible: The effect of asymptomatic transmission on the outbreak dynamics of COVID-19.
+   Overall: This paper directly concerns COVID-19 and uses antibody seroprevalence studies to estimate population infection/recovery fractions across multiple locations. It reports seroprevalence-based estimates, which matches the review parameter.
+   维度评分: D= P= L= E= Param=
+
+135. PMID: 32869035 [Score: 4/4]
+   Title: Visualizing the invisible: The effect of asymptomatic transmission on the outbreak dynamics of COVID-19.
+   Overall: This paper directly concerns COVID-19 and uses antibody seroprevalence studies to estimate the fraction of the population infected/recovered across multiple locations. It reports seroprevalence-derived population estimates, which matches the review parameter.
+   维度评分: D= P= L= E= Param=
+
+136. PMID: 32839781 [Score: 4/4]
+   Title: Universal PCR and antibody testing demonstrate little to no transmission of SARS-CoV-2 in a rural community.
+   Overall: This study directly investigates SARS-CoV-2 in a community sample and reports seroprevalence/estimated prevalence of prior infection based on antibody testing. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+137. PMID: 32818725 [Score: 4/4]
+   Title: Will all SARS-CoV-2 seroprevalence surveys provide the right picture?
+   Overall: The title explicitly refers to 'SARS-CoV-2 seroprevalence surveys,' directly matching the disease and parameter of interest. Although no abstract is available, the paper appears on-topic for a review of COVID-19 seroprevalence studies.
+   维度评分: D= P= L= E= Param=
+
+138. PMID: 32511472 [Score: 4/4]
+   Title: Standardization of enzyme-linked immunosorbent assays for serosurveys of the SARS-CoV-2 pandemic using clinical and at-home blood sampling.
+   Overall: This paper directly concerns SARS-CoV-2 and focuses on standardizing ELISA assays specifically for serosurveys, defining seropositivity thresholds to enable accurate estimation of seroprevalence. Although methodological, it explicitly targets measurement of the review parameter (seropositivity/seroprevalence).
+   维度评分: D= P= L= E= Param=
+
+139. PMID: 32709608 [Score: 4/4]
+   Title: Covid-19: US cases are greatly underestimated, seroprevalence studies suggest.
+   Overall: The title directly concerns COVID-19 and explicitly mentions seroprevalence studies, which matches the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+140. PMID: 35241216 [Score: 4/4]
+   Title: Seroprevalence of IgG antibodies against SARS-CoV-2 - a serial prospective cross-sectional nationwide study of residual samples, Belgium, March to October 2020.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports nationwide seroprevalence and seroincidence estimates of IgG antibodies in Belgium. It clearly matches the review focus on seroprevalence/seropositivity parameters.
+   维度评分: D= P= L= E= Param=
+
+141. PMID: 34877995 [Score: 4/4]
+   Title: Prevalence of COVID-19 infection in the prison system in Espírito Santo/Brazil: persons deprived of liberty and justice workers.
+   Overall: This study directly concerns COVID-19/SARS-CoV-2 and estimates prevalence using rapid IgG/IgM antibody tests in prison populations and staff, which fits a seroprevalence/seropositivity review.
+   维度评分: D= P= L= E= Param=
+
+142. PMID: 32638883 [Score: 4/4]
+   Title: Seroprevalence of anti-SARS-CoV-2 among blood donors in Rio de Janeiro, Brazil.
+   Overall: This paper directly studies SARS-CoV-2 and estimates antibody seroprevalence among blood donors in Rio de Janeiro, reporting crude, weighted, and adjusted prevalence values. It clearly matches the review focus on COVID-19 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+143. PMID: 34416142 [Score: 4/4]
+   Title: Assessment of initial SARS-CoV-2 seroprevalence in the most affected districts in the municipality of São Paulo, Brazil.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports an estimated seroprevalence (6%) from a population-based serosurvey in São Paulo. It clearly matches both the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+144. PMID: 32649743 [Score: 4/4]
+   Title: Severe Acute Respiratory Syndrome Coronavirus 2 Antibody Prevalence in Blood in a Large School Community Subject to a Coronavirus Disease 2019 Outbreak: A Cross-sectional Study.
+   Overall: This study directly concerns SARS-CoV-2/COVID-19 and explicitly measures antibody prevalence/seroprevalence in a school community, reporting positivity rates for students and staff.
+   维度评分: D= P= L= E= Param=
+
+145. PMID: 33654063 [Score: 4/4]
+   Title: The prevalence of antibodies to SARS-CoV-2 among blood donors in China.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody seroprevalence estimates among blood donors in multiple Chinese cities, matching the review’s disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+146. PMID: 32813273 [Score: 4/4]
+   Title: Low prevalence of antibodies against SARS-CoV-2 among voluntary blood donors in Guangzhou, China.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody prevalence/seropositivity in a defined population (blood donors), with 2 of 2199 samples positive. It is therefore a seroprevalence study relevant to the review.
+   维度评分: D= P= L= E= Param=
+
+147. PMID: 32925526 [Score: 4/4]
+   Title: SARS-CoV-2 Antibody Seroprevalence in Industry Workers in Split-Dalmatia and Šibenik-Knin County, Croatia.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody seroprevalence estimates in a defined population of industry workers in Croatia. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+148. PMID: 33501969 [Score: 4/4]
+   Title: Estimation of SARS-CoV-2 Infection Fatality Rate by Real-time Antibody Screening of Blood Donors.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody seroprevalence from nationwide blood donor screening (adjusted seroprevalence 1.9%). Although it also estimates infection fatality rate, it clearly includes the review parameter of seroprevalence.
+   维度评分: D= P= L= E= Param=
+
+149. PMID: 33860747 [Score: 4/4]
+   Title: SARS-CoV-2 infection in schools in a northern French city: a retrospective serological cohort study in an area of high transmission, France, January to April 2020.
+   Overall: This study directly examines SARS-CoV-2 and uses antibody testing to report seropositivity/antibody prevalence in school-associated populations, which matches the review’s seroprevalence parameter.
+   维度评分: D= P= L= E= Param=
+
+150. PMID: 33203887 [Score: 4/4]
+   Title: Infection fatality rate of SARS-CoV2 in a super-spreading event in Germany.
+   Overall: This study is directly about SARS-CoV-2 and includes a seroepidemiological survey using IgG analyses to estimate the proportion infected (15.5%), i.e., seroprevalence/seropositivity. Although focused on IFR, it reports the required antibody-based prevalence parameter.
+   维度评分: D= P= L= E= Param=
+
+151. PMID: 32677025 [Score: 4/4]
+   Title: Novel coronavirus epidemic in the Hungarian population, a cross-sectional nationwide survey to support the exit policy in Hungary.
+   Overall: This paper directly studies SARS-CoV-2 in the Hungarian population and reports serological testing results with an estimated seropositivity/prevalence of prior exposure. It is a nationwide cross-sectional serosurvey, which matches the review parameter of seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+152. PMID: 33197394 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in slums versus non-slums in Mumbai, India.
+   Overall: The title and keywords clearly indicate a SARS-CoV-2 seroprevalence/seroepidemiologic study in Mumbai, directly matching the disease and parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+153. PMID: 33175878 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 specific IgG antibodies in District Srinagar, northern India - A cross-sectional study.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports a seroprevalence estimate of specific IgG antibodies (3.6%) from a cross-sectional survey. It matches both the disease and parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+154. PMID: 33349310 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Guilan Province, Iran, April 2020.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence/seropositivity estimates in a population in Guilan Province, Iran. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+155. PMID: 33898863 [Score: 4/4]
+   Title: Estimation of seroprevalence of novel coronavirus disease (COVID-19) using preserved serum at an outpatient setting in Kobe, Japan: A cross-sectional study.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports seroprevalence estimates based on antibody testing in an outpatient sample in Kobe, Japan. It clearly matches the review topic of COVID-19 seroprevalence.
+   维度评分: D= P= L= E= Param=
+
+156. PMID: 32674696 [Score: 4/4]
+   Title: Geographical Profiles of COVID-19 Outbreak in Tokyo: An Analysis of the Primary Care Clinic-Based Point-of-Care Antibody Testing.
+   Overall: This paper directly studies COVID-19 and reports SARS-CoV-2 antibody seropositivity/seroprevalence estimates in a Tokyo clinic-based population, including overall and regional prevalence with confidence intervals.
+   维度评分: D= P= L= E= Param=
+
+157. PMID: 33977017 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Utsunomiya City, Greater Tokyo, after the first pandemic in 2020.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence/estimated population prevalence based on IgG antibody testing in a community sample. It clearly matches the review focus on COVID-19 seroepidemiology.
+   维度评分: D= P= L= E= Param=
+
+158. PMID: 33177105 [Score: 4/4]
+   Title: Seroprevalence of anti-SARS-CoV-2 IgG antibodies in Kenyan blood donors.
+   Overall: This paper directly studies SARS-CoV-2 and reports anti-SARS-CoV-2 IgG seroprevalence in Kenyan blood donors, including crude and adjusted national estimates. It matches both the disease and seroprevalence parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+159. PMID: 38336649 [Score: 4/4]
+   Title: Creation of a pandemic memory by tracing COVID-19 infections and immunity in Luxembourg (CON-VINCE).
+   Overall: This population-based COVID-19 cohort directly measures SARS-CoV-2 serology over time and reports prevalence estimates, including immune/antibody responses. It is therefore relevant to a review of SARS-CoV-2 seroprevalence/seropositivity.
+   维度评分: D= P= L= E= Param=
+
+160. PMID: 33737137 [Score: 4/4]
+   Title: Serial population-based serosurveys for COVID-19 in two neighbourhoods of Karachi, Pakistan.
+   Overall: This paper directly studies COVID-19 and reports population-based anti-SARS-CoV-2 antibody seroprevalence estimates from serial serosurveys in Karachi. It clearly matches both the disease and seroprevalence parameter criteria.
+   维度评分: D= P= L= E= Param=
+
+161. PMID: 33737535 [Score: 4/4]
+   Title: Characterizing the Qatar advanced-phase SARS-CoV-2 epidemic.
+   Overall: This paper directly studies SARS-CoV-2 in Qatar and reports antibody prevalence (24.0%) in a large sample, which is a seroprevalence measure relevant to the review. Although it also includes PCR-based epidemiology, it explicitly estimates the parameter of interest.
+   维度评分: D= P= L= E= Param=
+
+162. PMID: 33568663 [Score: 4/4]
+   Title: SARS-CoV-2 antibody prevalence in England following the first peak of the pandemic.
+   Overall: This paper directly studies SARS-CoV-2 and reports antibody prevalence (seroprevalence) in a large national sample in England, including an overall prevalence estimate of 6.0%. It matches both the disease and parameter criteria for inclusion.
+   维度评分: D= P= L= E= Param=
+
+163. PMID: 33094713 [Score: 4/4]
+   Title: Detection of neutralising antibodies to SARS-CoV-2 to determine population exposure in Scottish blood donors between March and May 2020.
+   Overall: This paper directly studies SARS-CoV-2 and reports serological findings in blood donors to assess population exposure, i.e., a serosurvey/seroprevalence-related estimate using neutralising antibodies.
+   维度评分: D= P= L= E= Param=
+
+164. PMID: 32821935 [Score: 4/4]
+   Title: Community Transmission of Severe Acute Respiratory Syndrome Coronavirus 2 Disproportionately Affects the Latinx Population During Shelter-in-Place in San Francisco.
+   Overall: This study directly concerns SARS-CoV-2 and includes antibody testing to estimate cumulative incidence based on PCR or antibody positivity in a community sample. That meets the review criterion of reporting an antibody-based prevalence/seroprevalence-related parameter.
+   维度评分: D= P= L= E= Param=
+
+165. PMID: 33615345 [Score: 4/4]
+   Title: COVID-19 antibody seroprevalence in Santa Clara County, California.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports community antibody seroprevalence estimates in Santa Clara County, including weighted and adjusted prevalence values.
+   维度评分: D= P= L= E= Param=
+
+166. PMID: 33171096 [Score: 4/4]
+   Title: Racial and Workplace Disparities in Seroprevalence of SARS-CoV-2, Baton Rouge, Louisiana, USA.
+   Overall: This paper directly studies SARS-CoV-2 and reports seroprevalence, including a census-weighted seroprevalence estimate of 3.6%. It matches both the disease and seroprevalence parameters for inclusion.
+   维度评分: D= P= L= E= Param=
+
+167. PMID: 34433423 [Score: 4/4]
+   Title: Low Seroprevalence of SARS-CoV-2 in Rhode Island blood donors during may 2020 as determined using multiple serological assay formats.
+   Overall: This paper directly studies SARS-CoV-2/COVID-19 and reports an estimated seroprevalence (approximately 0.6%) based on serological testing in Rhode Island blood donors. It is clearly within scope for a review of COVID-19 seroprevalence/seropositivity studies.
+   维度评分: D= P= L= E= Param=

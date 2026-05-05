@@ -1,0 +1,172 @@
+{
+  "timestamp_utc": "2026-03-31T14:09:21.230490+00:00",
+  "workflow": "screening_threshold_sweep",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+  "argv": [
+    "dev/literature_search/scripts/cli/screening_evaluation.py",
+    "threshold-sweep",
+    "--project-root",
+    ".",
+    "--profile",
+    "P7",
+    "--bucket",
+    "possible",
+    "--axis",
+    "parameter",
+    "--values",
+    "1,2,3,4"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "command": "threshold-sweep",
+    "profile": "P7",
+    "topic": "",
+    "bucket": "possible",
+    "axis": "parameter",
+    "values": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p7\\project_7_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:12:55.575531+00:00",
+      "type": "file",
+      "size_bytes": 37033,
+      "sha256": "b2e595b916a15e02be79038c4cf770cce8ee2b874256d24962256e21f701dfe4"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p7\\project_7_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T13:13:21.329247+00:00",
+      "type": "file",
+      "size_bytes": 1969166,
+      "sha256": "fd85f71eeab2c950b8858f66b45c284fa5e4355536058e267222b06008e461e5"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p7",
+      "exists": true,
+      "mtime_utc": "2026-03-31T14:09:21.229491+00:00",
+      "type": "dir",
+      "file_count": 16,
+      "dir_digest": "a97445dbe0b6be7a554fb18a0f1ac1d53bd31d9611f24a7b8f4c4324f668ae3f",
+      "dir_digest_truncated": false
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p7\\threshold_sweep_possible_parameter.tsv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T14:09:21.229491+00:00",
+      "type": "file",
+      "size_bytes": 1467,
+      "sha256": "d208a0260f4fc887538a3ccf3bcd1866cf9dbae62ab6034c6b7eb7f0919a9249"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "rows": [
+      {
+        "project": "P7",
+        "topic": "reproduction_number",
+        "bucket": "possible",
+        "axis": "parameter",
+        "value": "1",
+        "tp": "119",
+        "fp": "188",
+        "fn": "3",
+        "tn": "264",
+        "recall": "97.5%",
+        "precision": "38.8%",
+        "f1": "55.5%",
+        "wr": "46.5%",
+        "nns": "2.58",
+        "specificity": "58.4%",
+        "npv": "98.9%",
+        "accuracy": "66.7%",
+        "mcc": "0.459",
+        "wss95": "41.5%",
+        "thresholds": "{\"strong\": {\"disease_min\": 4, \"parameter_min\": 4, \"evidence_min\": 3, \"population_min\": 2, \"location_min\": 2}, \"possible\": {\"disease_min\": 3, \"parameter_min\": 1, \"evidence_min\": 2, \"population_min\": 2, \"location_min\": 2}}"
+      },
+      {
+        "project": "P7",
+        "topic": "reproduction_number",
+        "bucket": "possible",
+        "axis": "parameter",
+        "value": "2",
+        "tp": "107",
+        "fp": "62",
+        "fn": "15",
+        "tn": "390",
+        "recall": "87.7%",
+        "precision": "63.3%",
+        "f1": "73.5%",
+        "wr": "70.6%",
+        "nns": "1.58",
+        "specificity": "86.3%",
+        "npv": "96.3%",
+        "accuracy": "86.6%",
+        "mcc": "0.664",
+        "wss95": "65.6%",
+        "thresholds": "{\"strong\": {\"disease_min\": 4, \"parameter_min\": 4, \"evidence_min\": 3, \"population_min\": 2, \"location_min\": 2}, \"possible\": {\"disease_min\": 3, \"parameter_min\": 2, \"evidence_min\": 2, \"population_min\": 2, \"location_min\": 2}}"
+      },
+      {
+        "project": "P7",
+        "topic": "reproduction_number",
+        "bucket": "possible",
+        "axis": "parameter",
+        "value": "3",
+        "tp": "97",
+        "fp": "35",
+        "fn": "25",
+        "tn": "417",
+        "recall": "79.5%",
+        "precision": "73.5%",
+        "f1": "76.4%",
+        "wr": "77.0%",
+        "nns": "1.36",
+        "specificity": "92.3%",
+        "npv": "94.3%",
+        "accuracy": "89.5%",
+        "mcc": "0.698",
+        "wss95": "72.0%",
+        "thresholds": "{\"strong\": {\"disease_min\": 4, \"parameter_min\": 4, \"evidence_min\": 3, \"population_min\": 2, \"location_min\": 2}, \"possible\": {\"disease_min\": 3, \"parameter_min\": 3, \"evidence_min\": 2, \"population_min\": 2, \"location_min\": 2}}"
+      },
+      {
+        "project": "P7",
+        "topic": "reproduction_number",
+        "bucket": "possible",
+        "axis": "parameter",
+        "value": "4",
+        "tp": "85",
+        "fp": "21",
+        "fn": "37",
+        "tn": "431",
+        "recall": "69.7%",
+        "precision": "80.2%",
+        "f1": "74.6%",
+        "wr": "81.5%",
+        "nns": "1.25",
+        "specificity": "95.4%",
+        "npv": "92.1%",
+        "accuracy": "89.9%",
+        "mcc": "0.686",
+        "wss95": "76.5%",
+        "thresholds": "{\"strong\": {\"disease_min\": 4, \"parameter_min\": 4, \"evidence_min\": 3, \"population_min\": 2, \"location_min\": 2}, \"possible\": {\"disease_min\": 3, \"parameter_min\": 4, \"evidence_min\": 2, \"population_min\": 2, \"location_min\": 2}}"
+      }
+    ],
+    "threshold_sweep_tsv": "evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p7\\threshold_sweep_possible_parameter.tsv"
+  }
+}

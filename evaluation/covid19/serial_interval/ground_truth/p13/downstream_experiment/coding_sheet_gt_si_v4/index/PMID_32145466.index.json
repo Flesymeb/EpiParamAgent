@@ -1,0 +1,83 @@
+{
+  "pmid": "32145466",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction"
+      },
+      {
+        "section": "Materials and Methods",
+        "subsections": [],
+        "evidence_hint": "Methods"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion"
+      }
+    ],
+    "tables": [],
+    "study_meta": {
+      "region_raw": "China and other countries",
+      "period_raw": "early epidemic phase up to 12 February 2020",
+      "population_raw": "28 infector-infectee pairs (12 family clusters)",
+      "sample_size_raw": "28 pairs (18 certain, 10 probable)",
+      "method_raw": "Bayesian approach with doubly interval censored likelihood",
+      "evidence": "Abstract / Methods / Results"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.0",
+        "uncertainty_raw": "95% credible interval [CrI]: 3.1, 4.9",
+        "distribution_raw": "lognormal",
+        "unit_raw": "days",
+        "evidence": "Results"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.7",
+        "uncertainty_raw": "95% CrI: 3.7, 6.0",
+        "distribution_raw": "lognormal",
+        "unit_raw": "days",
+        "evidence": "Results"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "median",
+        "value_raw": "4.6",
+        "uncertainty_raw": "95% CI: 3.5, 5.9",
+        "distribution_raw": "Weibull",
+        "unit_raw": "days",
+        "evidence": "Results"
+      }
+    ],
+    "field_evidence": {
+      "region": "Introduction / Methods",
+      "period": "Methods",
+      "population": "Results",
+      "sample_size": "Abstract / Methods",
+      "method": "Methods",
+      "parameter_type": "Title / Abstract / Introduction",
+      "estimate_measure": "Results",
+      "point_estimate": "Results",
+      "uncertainty": "Results",
+      "distribution": "Results",
+      "unit": "Results"
+    }
+  }
+}

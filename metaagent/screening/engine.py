@@ -177,8 +177,8 @@ async def screen_papers_batch_async(
     """
     default_config = {
         "research_question": research_question,
-        "disease_focus": "(SARS-CoV-2 OR COVID-19 OR 2019-nCoV OR coronavirus) AND its (variant OR mutation OR lineage OR amino acid substitution)",
-        "disease_exclude": "studies that focus solely on other diseases or wild-type only without variant comparison",
+        "disease_focus": research_question or "(SARS-CoV-2 OR COVID-19 OR 2019-nCoV OR coronavirus)",
+        "disease_exclude": "studies that focus solely on other diseases",
         "parameter_focus": "target epidemiological parameters related to the research question (e.g., reproduction number, serial interval, fatality rate)",
         "parameter_exclude": "studies that discuss adjacent outcomes without actually reporting or estimating the target parameter",
         "parameter_scoring_note": (
@@ -602,6 +602,18 @@ def _parse_json_result(content: str, model_class: type) -> Any:
             remapped[k] = v
     data = remapped
 
+    # Aggressive key normalization: lowercase + replace spaces/hyphens with underscores
+    normalized = {}
+    for k, v in list(data.items()):
+        nk = k.strip().lower().replace(" ", "_").replace("-", "_")
+        # Merge duplicate normalized keys
+        if nk in normalized:
+            if isinstance(v, dict) and isinstance(normalized[nk], dict):
+                normalized[nk].update(v)
+        else:
+            normalized[nk] = v
+    data = normalized
+
     # Remap "evidence" -> "justification" in nested objects (GLM output format)
     for key in list(data.keys()):
         if isinstance(data[key], dict):
@@ -619,6 +631,20 @@ def _parse_json_result(content: str, model_class: type) -> Any:
                 "justification": "",
             }
 
+    # Remap 5D alternative field names
+    _5d_remap = {
+        "disease": "disease_relevance", "disease_relevancy": "disease_relevance",
+        "population": "population_relevance", "population_relevancy": "population_relevance",
+        "location": "location_relevance", "location_relevancy": "location_relevance",
+        "evidence": "original_evidence", "original_evidence_score": "original_evidence",
+        "evidence_relevance": "original_evidence", "evidence_quality": "original_evidence",
+        "parameter": "parameter_relevance", "parameter_relevancy": "parameter_relevance",
+        "overall": "overall_score", "overall_justify": "overall_justification",
+    }
+    for old_k, new_k in _5d_remap.items():
+        if old_k in data and new_k not in data:
+            data[new_k] = data.pop(old_k)
+
     # Convert flat scores (disease:4) to structured objects for 5D
     for dim_name in ["disease_relevance", "population_relevance",
                       "location_relevance", "original_evidence", "parameter_relevance"]:
@@ -627,6 +653,45 @@ def _parse_json_result(content: str, model_class: type) -> Any:
                 "score": int(data[dim_name]),
                 "justification": data.get("overall_justification", ""),
             }
+
+    # Convert string values to appropriate types (GLM outputs everything as strings)
+    for key in list(data.keys()):
+        if isinstance(data[key], str):
+            # Try integer
+            try:
+                data[key] = int(data[key])
+            except (ValueError, TypeError):
+                # Try float
+                try:
+                    data[key] = float(data[key])
+                except (ValueError, TypeError):
+                    pass
+
+    # Convert flat string/integer scores to structured dimension objects for 5D
+    dim_names = ["disease_relevance", "population_relevance", "location_relevance",
+                 "original_evidence", "parameter_relevance"]
+    for dim in dim_names:
+        if dim in data and isinstance(data[dim], (int, float, str)):
+            data[dim] = {
+                "score": int(float(data[dim])),
+                "justification": data.get("overall_justification", ""),
+            }
+
+    # Ensure confidence is float
+    if "confidence" in data and isinstance(data["confidence"], str):
+        data["confidence"] = float(data["confidence"])
+
+    # Inject defaults for missing required fields (GLM sometimes skips dimensions)
+    if "original_evidence" not in data:
+        data["original_evidence"] = {"score": 2, "justification": "Not explicitly assessed by model"}
+    if "overall_justification" not in data:
+        data["overall_justification"] = data.get("justification", "No overall justification provided")
+
+    # Fill missing 5D dimensions with defaults
+    for dim in ["disease_relevance", "population_relevance", "location_relevance",
+                "parameter_relevance"]:
+        if dim not in data:
+            data[dim] = {"score": 2, "justification": f"Not assessed for {dim}"}
 
     return model_class(**data)
 

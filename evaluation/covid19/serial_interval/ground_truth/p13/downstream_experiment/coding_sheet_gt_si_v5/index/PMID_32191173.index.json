@@ -1,0 +1,62 @@
+{
+  "pmid": "32191173",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Methods",
+        "subsections": [
+          "Study design"
+        ],
+        "evidence_hint": "Methods heading"
+      },
+      {
+        "section": "Results",
+        "subsections": [],
+        "evidence_hint": "Results heading"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion heading"
+      }
+    ],
+    "tables": [],
+    "study_meta": {
+      "region_raw": "mainland China outside of Hubei Province",
+      "period_raw": "January 21–February 8, 2020",
+      "population_raw": "confirmed cases of COVID-19",
+      "sample_size_raw": "468",
+      "method_raw": "data on COVID-19 transmission events reported in mainland China outside of Hubei Province",
+      "evidence": "Methods / Results"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "3.96",
+        "uncertainty_raw": "95% CI 3.53–4.39",
+        "distribution_raw": "normal distribution",
+        "unit_raw": "days",
+        "evidence": "Results / Abstract"
+      }
+    ],
+    "field_evidence": {
+      "region": "Methods / Results",
+      "period": "Methods / Results",
+      "population": "Methods / Results",
+      "sample_size": "Methods / Results",
+      "method": "Methods",
+      "parameter_type": "Abstract / Results",
+      "estimate_measure": "Results / Abstract",
+      "point_estimate": "Results / Abstract",
+      "uncertainty": "Results / Abstract",
+      "distribution": "Results",
+      "unit": "Results / Abstract"
+    }
+  }
+}

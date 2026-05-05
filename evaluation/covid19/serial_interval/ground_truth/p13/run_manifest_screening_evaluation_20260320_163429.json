@@ -1,0 +1,77 @@
+{
+  "timestamp_utc": "2026-03-20T08:34:29.922375+00:00",
+  "workflow": "screening_evaluation",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+  "argv": [
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search\\scripts\\cli\\screening_evaluation.py",
+    "screening-performance",
+    "--project-root",
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "--profile",
+    "P13"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "508cd0cb9ef7acbd1112359300dc7f0b40def461",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "command": "screening-performance",
+    "profile": "P13",
+    "topic": ""
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\project_13_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:14:47.928905+00:00",
+      "type": "file",
+      "size_bytes": 20225,
+      "sha256": "ccac79edf85b80642b7795fdb151668a178c0c23a397bc9f6f8299c0bfd1f8e3"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\project_13_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-19T16:31:12.197247+00:00",
+      "type": "file",
+      "size_bytes": 335188,
+      "sha256": "ae4dfff9f68854f2d174e3543491e95285a6dbbafdc494ba38605c193f30b236"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13",
+      "exists": true,
+      "mtime_utc": "2026-03-19T16:31:27.990610+00:00",
+      "type": "dir",
+      "file_count": 10,
+      "dir_digest": "487138043cb5fa32a1742c48520fd6e74b2370b12f5ee2d00a35db17fa00858c",
+      "dir_digest_truncated": false
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "summary": {
+      "ground_truth_count": 51,
+      "screened_count": 111,
+      "tp": 44,
+      "fp": 46,
+      "fn": 7,
+      "tn": 14,
+      "strong_count": 43,
+      "possible_count": 1,
+      "unlikely_count": 7,
+      "not_found_count": 0,
+      "sensitivity": 0.862745,
+      "specificity": 0.233333,
+      "precision": 0.488889,
+      "npv": 0.666667,
+      "f1": 0.624113,
+      "accuracy": 0.522523
+    }
+  }
+}

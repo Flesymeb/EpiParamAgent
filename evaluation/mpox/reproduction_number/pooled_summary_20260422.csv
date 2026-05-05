@@ -1,0 +1,3 @@
+topic,project,parameter_type,estimate_measure,include_median,impute_se,method,n_studies,n_excluded,n_imputed,pooled_mean,se_pooled,ci_lower,ci_upper,i2,tau2,p_het,run_used
+serial_interval,p12,serial_interval,mean,False,True,random,22,4,1,5.3842,0.2388,4.9161,5.8524,87.3,0.9361,0.0,20260421_163754_276
+serial_interval,p13,serial_interval,mean,False,True,random,70,8,8,5.2427,0.1495,4.9497,5.5356,81.4,0.9654,0.0,20260421_125302_527

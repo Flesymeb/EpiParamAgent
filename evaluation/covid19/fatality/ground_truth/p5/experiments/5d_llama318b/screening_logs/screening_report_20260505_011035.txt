@@ -1,0 +1,760 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-05-05 01:10:35
+研究问题: What seroprevalence or antibody studies can support inference of SARS-CoV-2 infection fatality rates?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/covid19/GT_1/GT_export/fatality/p5/project_5_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/covid19/GT_1/GT_export/fatality/p5/experiments/5d_llama318b/project_5_screened.csv
+模型配置: openai/z-ai/glm-5.1
+批处理大小: 20
+批次并发: 8
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │    143   │    7.6%  │
+│ 🤔 Possible candidates   │     97   │    5.2%  │
+│ 😐 Unlikely candidates   │   1642   │   87.2%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │   1882   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  2.82  │   67.8%  │ 455/30/121/61/1215                 │
+│ Population      │  3.76  │   91.1%  │  8/67/92/38/1677                 │
+│ Location        │  3.23  │   71.7%  │ 178/17/337/11/1339                 │
+│ Evidence        │  3.01  │   65.5%  │ 111/327/211/22/1211                 │
+│ Parameter       │  1.27  │   10.8%  │ 527/702/449/22/182                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (143 篇)
+================================================================================
+
+1. PMID: 32883673 [Score: 4/4]
+   Title: Are we underestimating seroprevalence of SARS-CoV-2?
+   Overall: The study appears to be highly relevant to the research question, with explicit mentions of SARS-CoV-2, human populations, seroprevalence, and real-world setting. However, the location relevance is uncertain due to the lack of explicit location information. Further evaluation is needed to confirm the study's relevance.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+2. PMID: 32726200 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2-Specific Antibodies, Faroe Islands.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data from a human population in a real-world geographic context, directly addressing the target parameter of interest.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+3. PMID: 32720214 [Score: 4/4]
+   Title: Dynamic Changes of Antibodies to SARS-CoV-2 in COVID-19 Patients at Early Stage of Outbreak.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on the dynamic changes of antibodies to SARS-CoV-2 in COVID-19 patients, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+4. PMID: 32947121 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2-specific antibodies in cancer outpatients in Madrid (Spain): A single center, prospective, cohort study and a review of available data.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence of SARS-CoV-2 antibodies in a specific population (cancer patients) in a real-world geographic context. The study's focus on seroprevalence makes it directly relevant to the target parameter.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+5. PMID: 32350047 [Score: 4/4]
+   Title: The Role of Antibody Testing for SARS-CoV-2: Is There One?
+   Overall: This study is highly relevant to the research question, as it explicitly investigates COVID-19 and SARS-CoV-2, concerns humans, is set in a real-world geographic context, and reports on serologic assays and antibody testing. However, it appears to be more of a review or commentary rather than a primary analysis, which may limit its relevance for inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+6. PMID: 32727884 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence among parturient women in Philadelphia.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data among a specific population (parturient women) in a real-world geographic context (Philadelphia). The study's focus on SARS-CoV-2 and its use of serological testing to estimate exposure within the community aligns with the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+7. PMID: 32878898 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence in oncology healthcare professionals and patients with cancer at a tertiary care centre during the COVID-19 pandemic.
+   Overall: This study is highly relevant to the research question as it investigates SARS-CoV-2 seroprevalence in a specific population, reports original empirical data, and is set in a real-world context. The study's focus on seroprevalence and antibody responses makes it directly relevant to the target parameter of interest.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+8. PMID: 32741406 [Score: 4/4]
+   Title: Seroprevalence of severe acute respiratory coronavirus virus 2 (SARS-CoV-2) antibodies among healthcare workers with differing levels of coronavirus disease 2019 (COVID-19) patient exposure.
+   Overall: The study is highly relevant to the research question as it reports original seroprevalence data from a real-world setting, focusing on COVID-19 and SARS-CoV-2 in a human population.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+9. PMID: 32828701 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence in a Belgian cohort of patients with cystic fibrosis.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data in a human population in a real-world geographic context, making it a strong candidate for inclusion in the systematic review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+10. PMID: 32746953 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 antibodies in healthcare workers at a London NHS Trust.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data from a specific population (healthcare workers) in a real-world geographic context (London NHS Trust). The study's focus on COVID-19 and seroprevalence makes it a strong candidate for inclusion in the systematic review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+11. PMID: 32727446 [Score: 4/4]
+   Title: SARS-CoV-2 specific serological pattern in healthcare workers of an Italian COVID-19 forefront hospital.
+   Overall: This study is highly relevant to the research question as it investigates SARS-CoV-2 seroprevalence in a relevant population, in a real-world setting, and reports original empirical data. The study's focus on seroprevalence and its relevance to the research question make it a strong candidate for inclusion in the systematic review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+12. PMID: 32750664 [Score: 4/4]
+   Title: Evaluation of the Quotient® MosaiQ™ COVID-19 antibody microarray for the detection of IgG and IgM antibodies to SARS-CoV-2 virus in humans.
+   Overall: The study is highly relevant to the research question as it explicitly investigates COVID-19 and SARS-CoV-2, concerns humans, and reports on the detection of antibodies to the virus. However, the lack of a specified geographic location is a limitation.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+13. PMID: 32731911 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 and Infection Fatality Ratio, Orleans and Jefferson Parishes, Louisiana, USA, May 2020.
+   Overall: This study is highly relevant to the research question as it investigates SARS-CoV-2 infection in a human population in a real-world geographic context, reports original empirical data, and targets the seroprevalence and infection fatality ratio parameters. The study's focus on a specific geographic location and population adds to its relevance.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+14. PMID: 32389784 [Score: 4/4]
+   Title: Dynamic profile for the detection of anti-SARS-CoV-2 antibodies using four immunochromatographic assays.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on the seroprevalence and antibody prevalence of SARS-CoV-2 in humans, which can support inference of infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+15. PMID: 32583766 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 specific neutralising antibodies in blood donors from the Lodi Red Zone in Lombardy, Italy, as at 06 April 2020.
+   Overall: This study is highly relevant to the research question as it investigates SARS-CoV-2 seroprevalence in a real-world setting, providing original empirical evidence that can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+16. PMID: 32763809 [Score: 4/4]
+   Title: Clinical evaluation of five different automated SARS-CoV-2 serology assays in a cohort of hospitalized COVID-19 patients.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on the clinical performance of serology assays for COVID-19, which can inform inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+17. PMID: 32267220 [Score: 4/4]
+   Title: Severe Acute Respiratory Syndrome Coronavirus 2-Specific Antibody Responses in Coronavirus Disease Patients.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on seroprevalence and antibody responses in patients with SARS-CoV-2 infections, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+18. PMID: 32358956 [Score: 4/4]
+   Title: Longitudinal Change of Severe Acute Respiratory Syndrome Coronavirus 2 Antibodies in Patients with Coronavirus Disease 2019.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence and antibody prevalence in patients with COVID-19, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+19. PMID: 32817357 [Score: 4/4]
+   Title: A comparison of four serological assays for detecting anti-SARS-CoV-2 antibodies in human serum samples from different populations.
+   Overall: This study is highly relevant to the research question as it investigates SARS-CoV-2 seroprevalence and antibody profiling in different subpopulations, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+20. PMID: 32876244 [Score: 4/4]
+   Title: EPICOVID19 protocol: repeated serological surveys on SARS-CoV-2 antibodies in Brazil.
+   Overall: The study is highly relevant to the research question as it investigates SARS-CoV-2 antibodies in a representative sample of the Brazilian population, providing essential information for the design of health policies.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+21. PMID: 32663903 [Score: 4/4]
+   Title: A virtual ELISA to quantitate COVID-19 antibodies in patient serum.
+   Overall: This study is highly relevant to the research question as it provides original empirical data on COVID-19 antibody quantitation, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+22. PMID: 32780804 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 Antibodies in Health Care Personnel in the New York City Area.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data from a real-world setting, focusing on the target disease and parameter. The study's population and location are also highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+23. PMID: 32706417 [Score: 4/4]
+   Title: Characteristics and roles of severe acute respiratory syndrome coronavirus 2-specific antibodies in patients with different severities of coronavirus 19.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on the seroprevalence of SARS-CoV-2-specific antibodies in patients with different severities of COVID-19, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+24. PMID: 32495088 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 Antibodies Among Healthcare Workers at a Tertiary Academic Hospital in New York City.
+   Overall: The title and keywords provide strong evidence for relevance, but the assessment is limited due to the lack of abstract text and sparse metadata.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+25. PMID: 32890908 [Score: 4/4]
+   Title: Two serological approaches for detection of antibodies to SARS-CoV-2 in different scenarios: a screening tool and a point-of-care test.
+   Overall: The study is highly relevant to the research question as it provides original empirical evidence on seroprevalence of SARS-CoV-2, which can support inference of infection fatality rates.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+26. PMID: 32791199 [Score: 4/4]
+   Title: Protocol for a national probability survey using home specimen collection methods to assess prevalence and incidence of SARS-CoV-2 infection and antibody response.
+   Overall: This study is highly relevant to the research question as it investigates SARS-CoV-2 infection and antibody response in a national probability sample of U.S. adults, providing robust estimates of seroprevalence and incidence. The study's methodology and results will inform the understanding of the spectrum of COVID-19 disease and inform resource needs for control of the ongoing epidemic.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+27. PMID: 33412809 [Score: 4/4]
+   Title: The risk of over-diagnosis in serological testing. Implications for communications strategies.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on the accuracy and reliability of serological tests, which is crucial for inferring SARS-CoV-2 infection fatality rates. The study's focus on seroprevalence and antibody prevalence, as well as its discussion of the uncertainty associated with these estimates, makes it directly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+28. PMID: 32758311 [Score: 4/4]
+   Title: Low seroprevalence of SARS-CoV-2 infection among healthcare workers of the largest children hospital in Milan during the pandemic wave.
+   Overall: The study appears to be highly relevant based on the title and keywords. However, the assessment is limited due to the lack of abstract text, and further evaluation would be necessary to confirm the study's relevance and quality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+29. PMID: 32861816 [Score: 4/4]
+   Title: Seroprevalence of SARS-Cov-2 in 646 professionals at the Rothschild Foundation Hospital (ProSeCoV study).
+   Overall: The study appears to be highly relevant to the research question, with explicit mentions of SARS-Cov-2, seroprevalence, and a human population. However, the location relevance is uncertain due to the lack of clear information on the study's setting. Further evaluation is needed to confirm the study's relevance and quality.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+30. PMID: 32771946 [Score: 4/4]
+   Title: Serological detection of 2019-nCoV respond to the epidemic: A useful complement to nucleic acid testing.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence and antibody responses in COVID-19 patients, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+31. PMID: 32539107 [Score: 4/4]
+   Title: Hospital-Wide SARS-CoV-2 Antibody Screening in 3056 Staff in a Tertiary Center in Belgium.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence of SARS-CoV-2 antibodies among hospital staff in a real-world setting, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+32. PMID: 32382737 [Score: 4/4]
+   Title: A Peptide-Based Magnetic Chemiluminescence Enzyme Immunoassay for Serological Diagnosis of Coronavirus Disease 2019.
+   Overall: This study is highly relevant to the research question as it reports original serological data on COVID-19, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+33. PMID: 32811605 [Score: 4/4]
+   Title: Frequency of COVID-19 IgG Antibodies among Special Police Squad Lahore, Pakistan.
+   Overall: This study is highly relevant to the research question because it provides original empirical data on seroprevalence and antibody prevalence in a specific population, which can inform inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+34. PMID: 32501664 [Score: 4/4]
+   Title: Waiting for Certainty on Covid-19 Antibody Tests - At What Cost?
+   Overall: The study appears to be relevant to the research question, but the evidence is limited due to the sparse metadata. Further assessment would be required to confirm the study's relevance and quality.
+   维度评分: D=4 P=4 L=2 E=3 Param=4
+
+35. PMID: 32790658 [Score: 4/4]
+   Title: Notes from the Field: Seroprevalence Estimates of SARS-CoV-2 Infection in Convenience Sample - Oregon, May 11-June 15, 2020.
+   Overall: The study appears to be highly relevant to the research question, with explicit mentions of SARS-CoV-2 infection, human populations, real-world setting, primary data, and seroprevalence estimates. However, the assessment is based on title and keywords only, and further evaluation of the study's content is necessary to confirm its relevance.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+36. PMID: 32717210 [Score: 4/4]
+   Title: Point-of-care serological assays for delayed SARS-CoV-2 case identification among health-care workers in the UK: a prospective multicentre cohort study.
+   Overall: This study is highly relevant to the research question, as it reports original empirical data on seroprevalence and antibody responses among health-care workers in the UK. The study's focus on seroprevalence and antibody responses makes it directly relevant to inferring SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+37. PMID: 32613620 [Score: 4/4]
+   Title: Chilblain-like lesions during the COVID-19 pandemic: a serological study on a case series.
+   Overall: The study appears to be highly relevant based on the title and keywords, but the evidence is limited due to the sparse metadata available. Further evaluation of the study's content is necessary to confirm its relevance to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+38. PMID: 32658430 [Score: 4/4]
+   Title: The Detection of Novel Coronavirus Antibodies is an Important Supplementary Detection Method for Screening of High-Risk Population.
+   Overall: The study appears highly relevant based on the title and keywords, but the assessment is limited due to the lack of abstract text and sparse metadata.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+39. PMID: 32553841 [Score: 4/4]
+   Title: Four point-of-care lateral flow immunoassays for diagnosis of COVID-19 and for assessing dynamics of antibody responses to SARS-CoV-2.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on seroprevalence and antibody responses to SARS-CoV-2, which can support inference of infection fatality rates. The study's focus on COVID-19 and SARS-CoV-2, human populations, and real-world geographic context further strengthen its relevance.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+40. PMID: 32434708 [Score: 4/4]
+   Title: SARS-CoV-2-specific antibody detection in healthcare workers in Germany with direct contact to COVID-19 patients.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data from a specific population (healthcare workers in Germany) and investigates COVID-19 and SARS-CoV-2, making it a strong candidate for inclusion in the systematic review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+41. PMID: 32700672 [Score: 4/4]
+   Title: SARS-CoV-2 IgG seroprevalence in blood donors located in three different federal states, Germany, March to June 2020.
+   Overall: This study is highly relevant as it reports original seroprevalence data in a real-world setting, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+42. PMID: 32734860 [Score: 4/4]
+   Title: Letter to the editor: COVID-19: how accurate are seroprevalence studies?
+   Overall: The study appears to be relevant to the research question, but the assessment is based on limited metadata. Further evaluation is needed to confirm the study's relevance and quality.
+   维度评分: D=4 P=3 L=2 E=4 Param=4
+
+43. PMID: 32611913 [Score: 4/4]
+   Title: National sero-surveillance to monitor the trend of SARS-CoV-2 infection transmission in India: Protocol for community-based surveillance.
+   Overall: This study is highly relevant to the research question as it explicitly investigates COVID-19, concerns humans, is set in a real-world geographic context, reports original empirical data, and explicitly reports seroprevalence. The study's focus on serosurveillance to monitor the trend of SARS-CoV-2 infection transmission in India makes it a strong candidate to support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+44. PMID: 32777699 [Score: 4/4]
+   Title: SARS-CoV-2 IgG antibody responses in New York City.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on SARS-CoV-2 seroprevalence and antibody responses in a real-world geographic context, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+45. PMID: 32797108 [Score: 4/4]
+   Title: High seroprevalence for SARS-CoV-2 among household members of essential workers detected using a dried blood spot assay.
+   Overall: This study is highly relevant to the research question as it investigates SARS-CoV-2 seroprevalence in a community setting, using a novel dried blood spot assay. The study provides original empirical evidence on seropositivity rates among household members of essential workers and convalescent cases, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+46. PMID: 32628534 [Score: 4/4]
+   Title: Clinical Validity of Serum Antibodies to SARS-CoV-2 : A Case-Control Study.
+   Overall: The study is highly relevant to the research question as it investigates SARS-CoV-2 antibodies, provides original empirical evidence, and reports seroprevalence and antibody prevalence estimates. The study's focus on clinical utility and diagnostic support in patients who test negative by NAAT but remain clinically suspicious for COVID-19 is also relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+47. PMID: 32762796 [Score: 4/4]
+   Title: Repeated leftover serosurvey of SARS-CoV-2 IgG antibodies, Greece, March and April 2020.
+   Overall: This study is highly relevant to the research question, as it provides original empirical data on seroprevalence and infection fatality rates in Greece during the COVID-19 pandemic. The study's focus on humans, real-world geographic context, and direct reporting of relevant parameters make it a strong candidate for inclusion in the systematic review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+48. PMID: 32645348 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence in COVID-19 hotspots.
+   Overall: Based on the title and keywords, this study appears to be highly relevant to the research question. However, the assessment is limited to title-only screening, and further evaluation of the abstract and full text is necessary to confirm the study's relevance and quality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+49. PMID: 32641730 [Score: 4/4]
+   Title: Seroprevalence of antibodies against SARS-CoV-2 among health care workers in a large Spanish reference hospital.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence of antibodies against SARS-CoV-2 among health care workers in a real-world setting, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+50. PMID: 32504052 [Score: 4/4]
+   Title: Seroprevalence of immunoglobulin M and G antibodies against SARS-CoV-2 in China.
+   Overall: This study is highly relevant to the research question, as it provides original seroprevalence data from a large population in China, which can support inference of SARS-CoV-2 infection fatality rates. The study's focus on serologic surveillance and its potential to provide a more faithful cumulative viral attack rate also aligns with the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+51. PMID: 32830472 [Score: 4/4]
+   Title: Seroprevalence of Anti-SARS-CoV-2 Antibodies among Outpatients in Southwestern Seoul, Korea.
+   Overall: This study is highly relevant to the research question as it investigates SARS-CoV-2 infection in a human population in a real-world setting, reports original empirical data, and focuses on seroprevalence of anti-SARS-CoV-2 antibodies, which is directly relevant to inferring infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+52. PMID: 32790086 [Score: 4/4]
+   Title: Results from a survey in healthy blood donors in South Eastern Italy indicate that we are far away from herd immunity to SARS-CoV-2.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data from a human population in a real-world geographic context, directly addressing the target parameter of interest.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+53. PMID: 32849619 [Score: 4/4]
+   Title: Impact of Hydroxychloroquine on Antibody Responses to the SARS-CoV-2 Coronavirus.
+   Overall: While the title and keywords suggest a high degree of relevance, the lack of an abstract and the focus on hydroxychloroquine's impact on antibody responses means that the study's relevance to the research question is uncertain. Further evaluation of the abstract or full text would be necessary to confirm its relevance.
+   维度评分: D=4 P=4 L=2 E=3 Param=4
+
+54. PMID: 33230504 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Hong Kong and in residents evacuated from Hubei province, China: a multicohort study.
+   Overall: This study is highly relevant to the research question as it provides original empirical data on seroprevalence of SARS-CoV-2 in Hong Kong and in residents evacuated from Hubei province, China, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+55. PMID: 32701941 [Score: 4/4]
+   Title: Estimated Community Seroprevalence of SARS-CoV-2 Antibodies - Two Georgia Counties, April 28-May 3, 2020.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on SARS-CoV-2 seroprevalence in a real-world geographic context, which can support inference of infection fatality rates. The study's focus on seroprevalence estimates and demographic characteristics of participants makes it directly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+56. PMID: 32750135 [Score: 4/4]
+   Title: Estimation Without Representation: Early Severe Acute Respiratory Syndrome Coronavirus 2 Seroprevalence Studies and the Path Forward.
+   Overall: The study is highly relevant to the disease and population of interest, but its location relevance is uncertain, and it does not report original empirical evidence. The study's parameter relevance is high, as it discusses seroprevalence and mortality rates, but its original evidence is limited to a viewpoint and guidance for improving seroprevalence studies.
+   维度评分: D=4 P=4 L=2 E=3 Param=4
+
+57. PMID: 32911317 [Score: 4/4]
+   Title: Detection of antibodies against SARS-CoV-2 spike protein by gold nanospikes in an opto-microfluidic chip.
+   Overall: This study is highly relevant to the research question as it presents a new method for detecting SARS-CoV-2 antibodies, which can support inference of infection fatality rates. The study's focus on developing a point-of-care testing tool for SARS-CoV-2 also aligns with the research question's emphasis on seroprevalence or antibody studies.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+58. PMID: 32958395 [Score: 4/4]
+   Title: Survey of the current status of subclinical coronavirus disease 2019 (COVID-19).
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence estimates and investigates the relationship between subclinical COVID-19 and background factors in a real-world setting.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+59. PMID: 32485155 [Score: 4/4]
+   Title: Comparison of the Elecsys® Anti-SARS-CoV-2 immunoassay with the EDI™ enzyme linked immunosorbent assays for the detection of SARS-CoV-2 antibodies in human plasma.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on SARS-CoV-2 antibody prevalence in COVID-19 patients, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+60. PMID: 32652938 [Score: 4/4]
+   Title: Recurrent pneumonia in a patient with new coronavirus infection after discharge from hospital for insufficient antibody production: a case report.
+   Overall: This study is highly relevant to the research question as it reports on a case of COVID-19 relapse in a patient with low anti-SARS-CoV-2 antibody levels, which may inform our understanding of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+61. PMID: 32628990 [Score: 4/4]
+   Title: Serologic Detection of SARS-CoV-2 Infections in Hemodialysis Centers: A Multicenter Retrospective Study in Wuhan, China.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence and antibody testing results for SARS-CoV-2 in a specific population (hemodialysis patients) and geographic location (Wuhan, China). The study's focus on SARS-CoV-2 infection and its clinical features makes it directly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+62. PMID: 32484887 [Score: 4/4]
+   Title: Clinical Performance of the Elecsys Electrochemiluminescent Immunoassay for the Detection of SARS-CoV-2 Total Antibodies.
+   Overall: The study appears highly relevant based on the title and keywords, but the assessment is limited due to the lack of abstract and sparse metadata.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+63. PMID: 32868226 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 antibodies among healthy blood donors in Karachi, Pakistan.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on SARS-CoV-2 seroprevalence among a specific population in a real-world geographic context.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+64. PMID: 32421144 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2-Specific Antibodies Among Adults in Los Angeles County, California, on April 10-11, 2020.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence of SARS-CoV-2-specific antibodies in a real-world geographic context, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+65. PMID: 32335168 [Score: 4/4]
+   Title: Dynamics of anti-SARS-Cov-2 IgM and IgG antibodies among COVID-19 patients.
+   Overall: While the title and keywords provide strong evidence for relevance, the assessment is based on sparse metadata, and further evaluation would be necessary to confirm the study's relevance to the research question.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+66. PMID: 32783920 [Score: 4/4]
+   Title: Distinct Early Serological Signatures Track with SARS-CoV-2 Survival.
+   Overall: This study is highly relevant to the research question as it investigates SARS-CoV-2 infection, reports original empirical data, and focuses on seroprevalence and antibody responses, which are directly related to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+67. PMID: 32534626 [Score: 4/4]
+   Title: Seroprevalence of anti-SARS-CoV-2 IgG antibodies in Geneva, Switzerland (SEROCoV-POP): a population-based study.
+   Overall: This study is highly relevant to the research question as it provides original empirical data on seroprevalence of anti-SARS-CoV-2 IgG antibodies in a real-world geographic context, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+68. PMID: 32641783 [Score: 4/4]
+   Title: Population-based surveys of antibodies against SARS-CoV-2 in Southern Brazil.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence and antibody responses in a real-world setting, which can inform inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+69. PMID: 32425648 [Score: 4/4]
+   Title: A preliminary study on serological assay for severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) in 238 admitted hospital patients.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on seroprevalence in relation to SARS-CoV-2 infection, which can support inference of infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+70. PMID: 32871063 [Score: 4/4]
+   Title: Humoral Immune Response to SARS-CoV-2 in Iceland.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on SARS-CoV-2 seroprevalence and antibody prevalence in a real-world setting, which can support inference of infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+71. PMID: 32719488 [Score: 4/4]
+   Title: Assessing the extent of SARS-CoV-2 circulation through serological studies.
+   Overall: The study appears to be highly relevant to the research question, with strong scores across all dimensions. However, the location relevance is uncertain due to the lack of explicit information in the title. Further evaluation of the abstract and full text is necessary to confirm the study's relevance and quality.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+72. PMID: 32645347 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 in Spain (ENE-COVID): a nationwide, population-based seroepidemiological study.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence of SARS-CoV-2 infection in a human population in a real-world geographic context, which can support inference of infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+73. PMID: 32771084 [Score: 4/4]
+   Title: Seroprevalence and presentation of SARS-CoV-2 in pregnancy.
+   Overall: The study appears to be highly relevant based on the title and keywords. However, the evidence is limited to title and keywords only, and further assessment would be needed to confirm the study's relevance and quality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+74. PMID: 32671013 [Score: 4/4]
+   Title: A Low Viral Dose in COVID-19 Patient: A Case Report.
+   Overall: This study is highly relevant to the research question as it reports on a case of SARS-CoV-2 infection with serological confirmation, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+75. PMID: 32706954 [Score: 4/4]
+   Title: Rapid Decay of Anti-SARS-CoV-2 Antibodies in Persons with Mild Covid-19.
+   Overall: The study appears to be highly relevant based on the title and keywords. However, the assessment is limited to title-only screening, and further evaluation of the abstract and full text may be necessary to confirm the study's relevance and quality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+76. PMID: 32838448 [Score: 4/4]
+   Title: [Period Prevalence of SARS-CoV-2 in an Unselected Sample of Pregnant Women in Jena, Thuringia].
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data in a human population, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+77. PMID: 32584894 [Score: 4/4]
+   Title: Prevalence of serum IgG antibodies against SARS-CoV-2 among clinic staff.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on seroprevalence and infection rates among healthcare workers in a real-world setting, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+78. PMID: 32763195 [Score: 4/4]
+   Title: SeroTracker: a global SARS-CoV-2 seroprevalence dashboard.
+   Overall: The study appears highly relevant based on the title and keywords, but the assessment is limited due to the lack of abstract text.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+79. PMID: 32553914 [Score: 4/4]
+   Title: Exposure and seroconversion to severe acute respiratory syndrome coronavirus 2 among obstetrical healthcare providers following a contained outbreak.
+   Overall: The title and keywords provide strong evidence for relevance, but the assessment is limited to title-only screening, which may not capture the full scope of the study.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+80. PMID: 32686766 [Score: 4/4]
+   Title: Serosurvey of SARS-CoV-2 among hospital visitors in China.
+   Overall: The title and keywords provide strong evidence for relevance, but the assessment is limited due to the lack of abstract text.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+81. PMID: 33521714 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Hong Kong returnees - Authors' reply.
+   Overall: The study appears to be highly relevant based on the title and keywords, but the evidence is limited due to the sparse metadata. Further assessment is required to confirm the study's relevance and quality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+82. PMID: 33521713 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Hong Kong returnees.
+   Overall: The study appears to be highly relevant based on the title and keywords. However, the assessment is limited due to the lack of abstract text, and further evaluation would be necessary to confirm the study's relevance and quality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+83. PMID: 32653078 [Score: 4/4]
+   Title: Pandemic peak SARS-CoV-2 infection and seroconversion rates in London frontline health-care workers.
+   Overall: The title and keywords provide strong evidence for relevance, but the assessment is limited to title-only screening, which may not capture the full scope of the study.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+84. PMID: 32909272 [Score: 4/4]
+   Title: Prevalence of SARS-COVID-19 serum IgG antibodies amongst staff on an acute surgical unit.
+   Overall: The title and keywords provide strong evidence for relevance, but the assessment is limited due to the lack of abstract text.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+85. PMID: 32845861 [Score: 4/4]
+   Title: SARS-CoV-2 serosurvey in health care workers of the Veneto Region.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on SARS-CoV-2 seroprevalence and antibody responses in a specific population, which can support inference of infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+86. PMID: 32701196 [Score: 4/4]
+   Title: Influence of immunosuppression on seroconversion against SARS-CoV-2 in two kidney transplant recipients.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on seroconversion against SARS-CoV-2 in a specific population (kidney transplant recipients) and in a real-world geographic context. The study's focus on seroconversion and antibody development makes it directly relevant to the target parameter.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+87. PMID: 32648546 [Score: 4/4]
+   Title: Cumulative incidence and diagnosis of SARS-CoV-2 infection in New York.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on SARS-CoV-2 seroprevalence and cumulative incidence in a real-world geographic context, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+88. PMID: 32916926 [Score: 4/4]
+   Title: Improved Detection of Antibodies against SARS-CoV-2 by Microsphere-Based Antibody Assay.
+   Overall: This study is highly relevant to the research question as it presents original empirical data on the development and evaluation of a novel antibody assay for detecting SARS-CoV-2 antibodies, which is directly related to the target parameter of seroprevalence or antibody studies supporting inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+89. PMID: 32389374 [Score: 4/4]
+   Title: [Cov19, seroprevalence studies and Individuals Protection Committees: aren't the technological and organizational challenges enough ?].
+   Overall: The title and keywords provide strong evidence for relevance across all dimensions. However, it's worth noting that the title-only policy requires caution, and further evaluation of the abstract and full text would be necessary to confirm these assessments.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+90. PMID: 32777861 [Score: 4/4]
+   Title: A cross-sectional study of immune seroconversion to SARS-CoV-2 in frontline maternity health professionals.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on seroprevalence and seroconversion in a specific population (frontline maternity health professionals) and geographic context (London, UK). The study's findings have significant implications for the risk of occupational transmission of SARS-CoV-2 for both staff and patients in maternity units, making it a valuable contribution to the understanding of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+91. PMID: 32386808 [Score: 4/4]
+   Title: Prevalence of IgG antibodies to SARS-CoV-2 among emergency department employees.
+   Overall: The study appears to be highly relevant to the research question, but the assessment is based on sparse metadata, and further evaluation of the abstract and full text is necessary to confirm the study's relevance and quality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+92. PMID: 33047077 [Score: 4/4]
+   Title: Enzyme-Linked Immunosorbent Assay for the Detection of Severe Acute Respiratory Syndrome Coronavirus 2 (SARS-CoV-2) IgM/IgA and IgG Antibodies Among Healthcare Workers.
+   Overall: This study is highly relevant to the research question as it investigates COVID-19, reports original seroprevalence data, and concerns a relevant population in a real-world context.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+93. PMID: 32766597 [Score: 4/4]
+   Title: High SARS-CoV-2 seroprevalence in health care workers but relatively low numbers of deaths in urban Malawi.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data from a real-world setting and uses this data to estimate infection fatality rates, which is a key parameter of interest.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+94. PMID: 32904990 [Score: 4/4]
+   Title: Clinical and immunologic features among COVID-19-affected mother-infant pairs: antibodies to SARS-CoV-2 detected in breast milk.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on seroprevalence and antibody prevalence in a human population, specifically pregnant patients and their infants, in a real-world geographic context. The study's focus on COVID-19 and its transmission through breastfeeding makes it a strong candidate for inclusion in the systematic review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+95. PMID: 32984615 [Score: 4/4]
+   Title: Reliability of serological tests for COVID-19: comparison of three immunochromatography test kits for SARS-CoV-2 antibodies.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on the seroprevalence and antibody prevalence of SARS-CoV-2, which can support inference of infection fatality rates. The study's focus on evaluating the performance of serological tests for COVID-19 makes it a valuable contribution to the field.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+96. PMID: 32989419 [Score: 4/4]
+   Title: The Antibody Response to SARS-CoV-2 Infection.
+   Overall: This study is highly relevant to the research question, as it provides original empirical evidence on seroprevalence and antibody responses to SARS-CoV-2 infection. The study's focus on serological testing for diagnosis and serosurveys makes it a strong candidate for inclusion in the systematic review.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+97. PMID: 32699861 [Score: 4/4]
+   Title: Antibody responses to SARS-CoV2 are distinct in children with MIS-C compared to adults with COVID-19.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on antibody responses in children with MIS-C and adults with COVID-19, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+98. PMID: 32382418 [Score: 4/4]
+   Title: Detection of IgM and IgG antibodies in patients with coronavirus disease 2019.
+   Overall: This study is highly relevant to the research question as it investigates SARS-CoV-2 infection in humans, reports original empirical data on seroprevalence, and explores its relation to disease severity and prognosis.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+99. PMID: 32974370 [Score: 4/4]
+   Title: COVID-19 Infection Among Healthcare Workers: Serological Findings Supporting Routine Testing.
+   Overall: This study is highly relevant to the research question as it investigates COVID-19 among frontline healthcare workers, reports original empirical data on seroprevalence and antibody prevalence, and provides insights into asymptomatic transmission, which is crucial for inferring SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+100. PMID: 32511302 [Score: 4/4]
+   Title: Analysis of SARS-CoV-2 Antibodies in COVID-19 Convalescent Blood using a Coronavirus Antigen Microarray.
+   Overall: This study is highly relevant to the research question as it explicitly investigates COVID-19, concerns humans, reports original empirical data, and focuses on seroprevalence. The study's aim to estimate the disease burden of COVID-19 using serologic methods makes it a strong candidate to support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+101. PMID: 32560071 [Score: 4/4]
+   Title: COVID-19 Infection Fatality Rate Associated with Incidence-A Population-Level Analysis of 19 Spanish Autonomous Communities.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on the association between SARS-CoV-2 seroprevalence and infection fatality rate in a large human population, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+102. PMID: 32743610 [Score: 4/4]
+   Title: High Community SARS-CoV-2 Antibody Seroprevalence in a Ski Resort Community, Blaine County, Idaho, US. Preliminary Results.
+   Overall: This study is highly relevant for the research question as it reports original seroprevalence data in a real-world setting, which can support inference of SARS-CoV-2 infection fatality rates. The study's focus on a specific community and its high seroprevalence rates make it a valuable contribution to the field.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+103. PMID: 32676623 [Score: 4/4]
+   Title: SARS-CoV-2 Seroprevalence Among Parturient Women.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data among parturient women, which can inform perinatal clinical practices and potentially be used to estimate seroprevalence within the community. The study's focus on SARS-CoV-2 and human population meets all the relevance criteria.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+104. PMID: 32511537 [Score: 4/4]
+   Title: COVID-19 serology at population scale: SARS-CoV-2-specific antibody responses in saliva.
+   Overall: This study is highly relevant to the research question, as it provides original empirical evidence on SARS-CoV-2 seroprevalence and antibody prevalence in a general population setting, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+105. PMID: 32547909 [Score: 4/4]
+   Title: Prevalence of antibodies against COVID-19 in the staff of a COVID-19 regular ward.
+   Overall: The study appears to be highly relevant to the research question, but the location relevance is uncertain due to the lack of explicit information. Further assessment is needed to confirm the study's relevance.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+106. PMID: 32944166 [Score: 4/4]
+   Title: Pronounced difference in Covid-19 antibody prevalence indicates cluster transmission in Stockholm, Sweden.
+   Overall: This study is highly relevant to the research question as it investigates COVID-19 antibody prevalence in two residential areas of Stockholm, Sweden, providing original empirical evidence that can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+107. PMID: 32953275 [Score: 4/4]
+   Title: Collaborative networks enable the rapid establishment of serological assays for SARS-CoV-2 during nationwide lockdown in New Zealand.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence and antibody prevalence in a real-world setting, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+108. PMID: 32839786 [Score: 4/4]
+   Title: SARS-CoV-2 Antibody Responses Correlate with Resolution of RNAemia But Are Short-Lived in Patients with Mild Illness.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on SARS-CoV-2-specific antibody responses in patients with mild illness, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+109. PMID: 32818035 [Score: 4/4]
+   Title: [Use of point-of-care technologies for the management of the COVID-19 pandemic in Colombia].
+   Overall: This study is highly relevant to the research question as it explicitly investigates COVID-19, concerns humans, is set in a specific geographic location, reports original empirical data, and explicitly reports seroprevalence and antibody prevalence. The study's focus on using point-of-care technologies and artificial intelligence for COVID-19 management may provide valuable insights into the epidemiological burden of the disease, including infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+110. PMID: 33748431 [Score: 4/4]
+   Title: Antibody testing for COVID-19: A report from the National COVID Scientific Advisory Panel.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on the performance of ELISA and LFIA devices in detecting SARS-CoV-2 antibodies, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+111. PMID: 32511477 [Score: 4/4]
+   Title: SARS-CoV-2 seroprevalence and neutralizing activity in donor and patient blood from the San Francisco Bay Area.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on SARS-CoV-2 seroprevalence and neutralizing activity in human populations, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+112. PMID: 32511657 [Score: 4/4]
+   Title: Ultra-Sensitive High-Resolution Profiling of Anti-SARS-CoV-2 Antibodies for Detecting Early Seroconversion in COVID-19 Patients.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence and antibody responses in COVID-19 patients, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+113. PMID: 32743600 [Score: 4/4]
+   Title: Dynamics and significance of the antibody response to SARS-CoV-2 infection.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on the seroprevalence and antibody prevalence of SARS-CoV-2 infection in a human population, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+114. PMID: 32817969 [Score: 4/4]
+   Title: Detection, prevalence, and duration of humoral responses to SARS-CoV-2 under conditions of limited population exposure.
+   Overall: This study is highly relevant to the research question, as it provides original empirical evidence on seroprevalence and antibody responses to SARS-CoV-2 in a real-world setting, which can support inference of infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+115. PMID: 32708872 [Score: 4/4]
+   Title: Neutralizing Antibody Production in Asymptomatic and Mild COVID-19 Patients, in Comparison with Pneumonic COVID-19 Patients.
+   Overall: The study is highly relevant to the research question as it investigates seroprevalence and antibody production in COVID-19 patients, which can support inference of SARS-CoV-2 infection fatality rates. However, the lack of geographic location information limits its location relevance.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+116. PMID: 32577669 [Score: 4/4]
+   Title: Plasma from recovered COVID19 subjects inhibits spike protein binding to ACE2 in a microsphere-based inhibition assay.
+   Overall: This study is highly relevant to the research question as it presents a novel serological test for COVID-19 and reports functional antibody responses in recovered patients, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+117. PMID: 32818725 [Score: 4/4]
+   Title: Will all SARS-CoV-2 seroprevalence surveys provide the right picture?
+   Overall: The title provides clear and explicit information about the study's relevance to the research question. However, the uncertainty of title-only screening and the lack of additional metadata mean that this assessment should be treated with caution.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+118. PMID: 32812013 [Score: 4/4]
+   Title: Author Correction: Seroprevalence of immunoglobulin M and G antibodies against SARS-CoV-2 in China.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data in a real-world setting, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+119. PMID: 34594729 [Score: 4/4]
+   Title: Antibody Response to COVID-19 Virus - Heilongjiang Province and Gansu Province, China, 2020.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on serological antibody responses against COVID-19 virus in humans, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+120. PMID: 32636189 [Score: 4/4]
+   Title: Covid-19: Herd immunity is "unethical and unachievable," say experts after report of 5% seroprevalence in Spain.
+   Overall: The study is highly relevant based on the title alone, but the evidence is limited due to the sparse metadata. Further assessment would be needed to confirm the study's relevance and quality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+121. PMID: 35241216 [Score: 4/4]
+   Title: Seroprevalence of IgG antibodies against SARS-CoV-2 - a serial prospective cross-sectional nationwide study of residual samples, Belgium, March to October 2020.
+   Overall: The study is highly relevant to the research question as it investigates SARS-CoV-2 seroprevalence in a human population in a specific location, reports original empirical data, and estimates seroprevalence and seroincidence rates, which are directly related to the target parameter of interest.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+122. PMID: 34877995 [Score: 4/4]
+   Title: Prevalence of COVID-19 infection in the prison system in Espírito Santo/Brazil: persons deprived of liberty and justice workers.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence of COVID-19 infection in a specific population (prisoners and prison workers) in a real-world geographic context, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+123. PMID: 32638883 [Score: 4/4]
+   Title: Seroprevalence of anti-SARS-CoV-2 among blood donors in Rio de Janeiro, Brazil.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on seroprevalence of anti-SARS-CoV-2 among blood donors in Rio de Janeiro, Brazil, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+124. PMID: 34416142 [Score: 4/4]
+   Title: Assessment of initial SARS-CoV-2 seroprevalence in the most affected districts in the municipality of São Paulo, Brazil.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on SARS-CoV-2 seroprevalence in a real-world geographic context, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+125. PMID: 32649743 [Score: 4/4]
+   Title: Severe Acute Respiratory Syndrome Coronavirus 2 Antibody Prevalence in Blood in a Large School Community Subject to a Coronavirus Disease 2019 Outbreak: A Cross-sectional Study.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data from a real-world outbreak setting, providing useful information for school reopenings and shedding light on the dynamics of SARS-CoV-2 transmission in a school community.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+126. PMID: 33654063 [Score: 4/4]
+   Title: The prevalence of antibodies to SARS-CoV-2 among blood donors in China.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data among a human population in a specific geographic context, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+127. PMID: 32925526 [Score: 4/4]
+   Title: SARS-CoV-2 Antibody Seroprevalence in Industry Workers in Split-Dalmatia and Šibenik-Knin County, Croatia.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on SARS-CoV-2 seroprevalence in a specific population, which can support inference of infection fatality rates. The study's focus on industry workers in Croatia provides a real-world context, and the reported seroprevalence rates are directly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+128. PMID: 33501969 [Score: 4/4]
+   Title: Estimation of SARS-CoV-2 Infection Fatality Rate by Real-time Antibody Screening of Blood Donors.
+   Overall: This study is highly relevant to the research question as it directly investigates SARS-CoV-2 infection fatality rates using seroprevalence data from a real-world population. The study's focus on estimating IFR and its use of seroprevalence data make it a strong candidate for inclusion in the systematic review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+129. PMID: 33203887 [Score: 4/4]
+   Title: Infection fatality rate of SARS-CoV2 in a super-spreading event in Germany.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on SARS-CoV-2 infection fatality rates in a specific geographic context, which can support inference of IFRs in similar settings.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+130. PMID: 32677025 [Score: 4/4]
+   Title: Novel coronavirus epidemic in the Hungarian population, a cross-sectional nationwide survey to support the exit policy in Hungary.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence estimates in a real-world setting, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+131. PMID: 33197394 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in slums versus non-slums in Mumbai, India.
+   Overall: The title and keywords provide clear and explicit information about the study, making it a strong candidate for inclusion. However, it's worth noting that the title-only screening has limitations, and further evaluation of the abstract and full text may be necessary to confirm the study's relevance and quality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+132. PMID: 33175878 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 specific IgG antibodies in District Srinagar, northern India - A cross-sectional study.
+   Overall: This study is highly relevant to the research question as it provides original empirical data on seroprevalence of SARS-CoV-2 specific IgG antibodies in a real-world geographic context, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+133. PMID: 33349310 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Guilan Province, Iran, April 2020.
+   Overall: This study is highly relevant to the research question as it reports original seroprevalence data in a human population, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+134. PMID: 33898863 [Score: 4/4]
+   Title: Estimation of seroprevalence of novel coronavirus disease (COVID-19) using preserved serum at an outpatient setting in Kobe, Japan: A cross-sectional study.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on seroprevalence of SARS-CoV-2 infection in a specific geographic location, which can inform inference of infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+135. PMID: 32674696 [Score: 4/4]
+   Title: Geographical Profiles of COVID-19 Outbreak in Tokyo: An Analysis of the Primary Care Clinic-Based Point-of-Care Antibody Testing.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence in a real-world setting, which can support inference of SARS-CoV-2 infection fatality rates. The study's focus on COVID-19 and SARS-CoV-2, as well as its use of seroprevalence and antibody testing, make it a strong candidate for inclusion in the systematic review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+136. PMID: 33977017 [Score: 4/4]
+   Title: Seroprevalence of SARS-CoV-2 in Utsunomiya City, Greater Tokyo, after the first pandemic in 2020.
+   Overall: This study is highly relevant to the research question as it reports original empirical data on SARS-CoV-2 seroprevalence in a real-world geographic context, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+137. PMID: 33177105 [Score: 4/4]
+   Title: Seroprevalence of anti-SARS-CoV-2 IgG antibodies in Kenyan blood donors.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on seroprevalence of anti-SARS-CoV-2 IgG antibodies in a real-world setting, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+138. PMID: 38336649 [Score: 4/4]
+   Title: Creation of a pandemic memory by tracing COVID-19 infections and immunity in Luxembourg (CON-VINCE).
+   Overall: This study is highly relevant to the research question as it reports original empirical data on seroprevalence and antibody responses in a real-world setting, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+139. PMID: 33737137 [Score: 4/4]
+   Title: Serial population-based serosurveys for COVID-19 in two neighbourhoods of Karachi, Pakistan.
+   Overall: This study is highly relevant to the research question as it provides original empirical data on seroprevalence and infection fatality rates in a real-world setting, making it a strong candidate for inclusion in the systematic review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+140. PMID: 33737535 [Score: 4/4]
+   Title: Characterizing the Qatar advanced-phase SARS-CoV-2 epidemic.
+   Overall: This study is highly relevant to the research question as it provides original empirical data on SARS-CoV-2 seroprevalence in Qatar, which can support inference of infection fatality rates. The study's focus on COVID-19, human population, and real-world geographic context make it a strong candidate for inclusion in the systematic review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+141. PMID: 33568663 [Score: 4/4]
+   Title: SARS-CoV-2 antibody prevalence in England following the first peak of the pandemic.
+   Overall: The study is highly relevant to the research question as it provides original empirical data on SARS-CoV-2 antibody prevalence in England, which can support inference of SARS-CoV-2 infection fatality rates. The study's focus on a real-world geographic context and its reporting of the target parameter make it a strong candidate for inclusion in the systematic review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+142. PMID: 33615345 [Score: 4/4]
+   Title: COVID-19 antibody seroprevalence in Santa Clara County, California.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on SARS-CoV-2 seroprevalence in a specific geographic location, which can support inference of infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+143. PMID: 34433423 [Score: 4/4]
+   Title: Low Seroprevalence of SARS-CoV-2 in Rhode Island blood donors during may 2020 as determined using multiple serological assay formats.
+   Overall: This study is highly relevant to the research question as it provides original empirical evidence on seroprevalence in a human population, which can support inference of SARS-CoV-2 infection fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4

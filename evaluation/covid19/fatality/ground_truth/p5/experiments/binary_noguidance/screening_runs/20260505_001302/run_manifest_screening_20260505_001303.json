@@ -1,0 +1,106 @@
+{
+  "timestamp_utc": "2026-05-04T16:13:03.034075+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search",
+  "argv": [
+    "scripts/cli/screening_llm_batch.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "P5",
+    "--topic",
+    "fatality",
+    "--model",
+    "openai/gpt-5.4",
+    "--strategy",
+    "binary_noguidance",
+    "--experiment",
+    "binary_noguidance",
+    "--skip-no-abstract",
+    "--batch-size",
+    "20",
+    "--batch-concurrency",
+    "2"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "1684f3dbd11d7208abbd34671c17ef96fffde46d",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "P5",
+    "batch_size": 20,
+    "batch_concurrency": 2,
+    "auto_fulltext": false,
+    "fulltext_only": false,
+    "research_question": "What seroprevalence or antibody studies can support inference of SARS-CoV-2 infection fatality rates?",
+    "strategy": "binary_noguidance",
+    "experiment": "binary_noguidance"
+  },
+  "inputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/covid19/GT_1/GT_export/fatality/p5/project_5_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-04-01T09:25:59.665652+00:00",
+      "type": "file",
+      "size_bytes": 3131337,
+      "sha256": "a814d424462b5bd565f40b4381888e3cbe1bf6bd8b40135a5b4d051eb307d6e1"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/covid19/GT_1/GT_export/fatality/p5/project_5_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-04-01T09:25:54.554345+00:00",
+      "type": "file",
+      "size_bytes": 22818,
+      "sha256": "2c2f5ebd6db9d47a3b0731b6829fee5f9c79fe0f44d3dc5af52a347e6e14afb3"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/covid19/GT_1/GT_export/fatality/p5/experiments/binary_noguidance/project_5_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-04T16:13:03.025867+00:00",
+      "type": "file",
+      "size_bytes": 3778675,
+      "sha256": "bac3b43c6b17ba88beaca365362e0324d8f7b2714512f6b5f10a77a51a5a2116"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/covid19/GT_1/GT_export/fatality/p5/experiments/binary_noguidance/screening_logs/screening_report_20260505_001302.txt",
+      "exists": true,
+      "mtime_utc": "2026-05-04T16:13:03.032868+00:00",
+      "type": "file",
+      "size_bytes": 675980,
+      "sha256": "e9f80fbd151777e9fd1b10a13c8cbe17a60b16130d9ae5b03f4b791c328aa8c1"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": "openai",
+      "model": "z-ai/glm-5.1",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 120,
+      "verify_ssl": false,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": true
+    }
+  },
+  "extra": {
+    "paper_count": 1882,
+    "ground_truth_count": 48,
+    "ground_truth_in_pool": 48,
+    "strong_count": 1452,
+    "possible_count": 0,
+    "unlikely_count": 430,
+    "error_count": 0,
+    "fulltext_error_count": 0
+  }
+}

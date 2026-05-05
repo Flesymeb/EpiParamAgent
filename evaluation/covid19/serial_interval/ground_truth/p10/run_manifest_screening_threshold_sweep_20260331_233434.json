@@ -1,0 +1,172 @@
+{
+  "timestamp_utc": "2026-03-31T15:34:34.372078+00:00",
+  "workflow": "screening_threshold_sweep",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+  "argv": [
+    "dev/literature_search/scripts/cli/screening_evaluation.py",
+    "threshold-sweep",
+    "--project-root",
+    ".",
+    "--profile",
+    "P10",
+    "--bucket",
+    "possible",
+    "--axis",
+    "parameter",
+    "--values",
+    "1,2,3,4"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "command": "threshold-sweep",
+    "profile": "P10",
+    "topic": "",
+    "bucket": "possible",
+    "axis": "parameter",
+    "values": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10\\project_10_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:14:10.110602+00:00",
+      "type": "file",
+      "size_bytes": 10315,
+      "sha256": "5a5f087b0b905bf84e02e7c85d49dd32d16b9640d42345df942cdfc039d4cd4d"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10\\project_10_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-30T06:39:34.097947+00:00",
+      "type": "file",
+      "size_bytes": 2091517,
+      "sha256": "ae8d7a6bf27aaf5e3206f3dba1131118d6384c08220c62a35936843a65bc2304"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10",
+      "exists": true,
+      "mtime_utc": "2026-03-31T15:34:35.387448+00:00",
+      "type": "dir",
+      "file_count": 11,
+      "dir_digest": "0006247e5905e9b128f598affdbac57e135f5cf961091c7bd67959ec53bca0ec",
+      "dir_digest_truncated": false
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10\\threshold_sweep_possible_parameter.tsv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T15:34:34.370696+00:00",
+      "type": "file",
+      "size_bytes": 1450,
+      "sha256": "e4f6c0aa55415d359af7be0d142ddd5ba0c61e04b20615b7dbb1f52330ed79a1"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "rows": [
+      {
+        "project": "P10",
+        "topic": "serial_interval",
+        "bucket": "possible",
+        "axis": "parameter",
+        "value": "1",
+        "tp": "26",
+        "fp": "118",
+        "fn": "2",
+        "tn": "453",
+        "recall": "92.9%",
+        "precision": "18.1%",
+        "f1": "30.2%",
+        "wr": "76.0%",
+        "nns": "5.54",
+        "specificity": "79.3%",
+        "npv": "99.6%",
+        "accuracy": "80.0%",
+        "mcc": "0.357",
+        "wss95": "71.0%",
+        "thresholds": "{\"strong\": {\"disease_min\": 4, \"parameter_min\": 4, \"evidence_min\": 3, \"population_min\": 2, \"location_min\": 2}, \"possible\": {\"disease_min\": 3, \"parameter_min\": 1, \"evidence_min\": 2, \"population_min\": 2, \"location_min\": 2}}"
+      },
+      {
+        "project": "P10",
+        "topic": "serial_interval",
+        "bucket": "possible",
+        "axis": "parameter",
+        "value": "2",
+        "tp": "25",
+        "fp": "37",
+        "fn": "3",
+        "tn": "534",
+        "recall": "89.3%",
+        "precision": "40.3%",
+        "f1": "55.6%",
+        "wr": "89.6%",
+        "nns": "2.48",
+        "specificity": "93.5%",
+        "npv": "99.4%",
+        "accuracy": "93.3%",
+        "mcc": "0.574",
+        "wss95": "84.6%",
+        "thresholds": "{\"strong\": {\"disease_min\": 4, \"parameter_min\": 4, \"evidence_min\": 3, \"population_min\": 2, \"location_min\": 2}, \"possible\": {\"disease_min\": 3, \"parameter_min\": 2, \"evidence_min\": 2, \"population_min\": 2, \"location_min\": 2}}"
+      },
+      {
+        "project": "P10",
+        "topic": "serial_interval",
+        "bucket": "possible",
+        "axis": "parameter",
+        "value": "3",
+        "tp": "21",
+        "fp": "22",
+        "fn": "7",
+        "tn": "549",
+        "recall": "75.0%",
+        "precision": "48.8%",
+        "f1": "59.2%",
+        "wr": "92.8%",
+        "nns": "2.05",
+        "specificity": "96.1%",
+        "npv": "98.7%",
+        "accuracy": "95.2%",
+        "mcc": "0.582",
+        "wss95": "87.8%",
+        "thresholds": "{\"strong\": {\"disease_min\": 4, \"parameter_min\": 4, \"evidence_min\": 3, \"population_min\": 2, \"location_min\": 2}, \"possible\": {\"disease_min\": 3, \"parameter_min\": 3, \"evidence_min\": 2, \"population_min\": 2, \"location_min\": 2}}"
+      },
+      {
+        "project": "P10",
+        "topic": "serial_interval",
+        "bucket": "possible",
+        "axis": "parameter",
+        "value": "4",
+        "tp": "21",
+        "fp": "19",
+        "fn": "7",
+        "tn": "552",
+        "recall": "75.0%",
+        "precision": "52.5%",
+        "f1": "61.8%",
+        "wr": "93.3%",
+        "nns": "1.90",
+        "specificity": "96.7%",
+        "npv": "98.7%",
+        "accuracy": "95.7%",
+        "mcc": "0.606",
+        "wss95": "88.3%",
+        "thresholds": "{\"strong\": {\"disease_min\": 4, \"parameter_min\": 4, \"evidence_min\": 3, \"population_min\": 2, \"location_min\": 2}, \"possible\": {\"disease_min\": 3, \"parameter_min\": 4, \"evidence_min\": 2, \"population_min\": 2, \"location_min\": 2}}"
+      }
+    ],
+    "threshold_sweep_tsv": "evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10\\threshold_sweep_possible_parameter.tsv"
+  }
+}

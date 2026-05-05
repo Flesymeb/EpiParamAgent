@@ -1,0 +1,115 @@
+{
+  "timestamp_utc": "2026-03-31T13:27:43.350912+00:00",
+  "workflow": "screening_evaluation",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search",
+  "argv": [
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search\\scripts\\ops\\..\\\\cli\\screening_evaluation.py",
+    "screening-performance",
+    "--project-root",
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "--profile",
+    "P8",
+    "--topic",
+    "reproduction_number"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "command": "screening-performance",
+    "profile": "P8",
+    "topic": "reproduction_number"
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p8\\project_8_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:13:23.785598+00:00",
+      "type": "file",
+      "size_bytes": 14813,
+      "sha256": "713d71cb6b7d143a643ef218ee5b27771c94c2a060f9decb44b7d45240861a6c"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p8\\project_8_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T13:27:40.173574+00:00",
+      "type": "file",
+      "size_bytes": 1837452,
+      "sha256": "10c32742ea5ef92ff95dc0ffbbea3c614c74bf81ee7a0fed08873a05c80370e0"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p8",
+      "exists": true,
+      "mtime_utc": "2026-03-31T13:27:43.350006+00:00",
+      "type": "dir",
+      "file_count": 12,
+      "dir_digest": "817c59ef97a03127d5081dd561c9e4c4c1afcabfb61d85011001a0d0ce002429",
+      "dir_digest_truncated": false
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p8\\paper_summary.tsv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T13:27:43.350006+00:00",
+      "type": "file",
+      "size_bytes": 310,
+      "sha256": "2377e5f2792e0945f9d5e346ceb6672f1a660ecbfa4c22dc623ec47888a256cc"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "summary": {
+      "topic": "reproduction_number",
+      "project_label": "P8",
+      "ground_truth_count": 44,
+      "screened_count": 575,
+      "tp": 41,
+      "fp": 204,
+      "fn": 3,
+      "tn": 327,
+      "strong_count": 35,
+      "possible_count": 6,
+      "unlikely_count": 3,
+      "not_found_count": 0,
+      "sensitivity": 0.931818,
+      "specificity": 0.615819,
+      "precision": 0.167347,
+      "npv": 0.990909,
+      "f1": 0.283737,
+      "accuracy": 0.64,
+      "workload_reduction": 0.573913,
+      "nns": 5.97561,
+      "mcc": 0.294392,
+      "wss95": 0.523913,
+      "recall_ci_low": 0.81775,
+      "recall_ci_high": 0.976541,
+      "precision_ci_low": 0.125819,
+      "precision_ci_high": 0.219145,
+      "workload_reduction_ci_low": 0.533913,
+      "workload_reduction_ci_high": 0.613913,
+      "nns_ci_low": 4.673077,
+      "nns_ci_high": 8.225806,
+      "recall_ci_display": "93.2% [81.8%, 97.7%]",
+      "precision_display": "16.7%",
+      "workload_reduction_display": "57.4%",
+      "nns_display": "5.98",
+      "precision_ci_display": "16.7% [12.6%, 21.9%]",
+      "workload_reduction_ci_display": "57.4% [53.4%, 61.4%]",
+      "nns_ci_display": "5.98 [4.67, 8.23]",
+      "specificity_display": "61.6%",
+      "npv_display": "99.1%",
+      "f1_display": "28.4%",
+      "accuracy_display": "64.0%",
+      "mcc_display": "0.294",
+      "wss95_display": "52.4%"
+    },
+    "paper_summary_tsv": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p8\\paper_summary.tsv"
+  }
+}

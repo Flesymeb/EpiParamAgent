@@ -1,0 +1,98 @@
+{
+  "timestamp_utc": "2026-03-31T13:13:21.335288+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search",
+  "argv": [
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search\\scripts\\ops\\..\\\\cli\\screening_llm_batch.py",
+    "--project-root",
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "--profile",
+    "P7",
+    "--batch-size",
+    "30",
+    "--batch-concurrency",
+    "5",
+    "--topic",
+    "reproduction_number",
+    "--skip-no-abstract"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "P7",
+    "batch_size": 30,
+    "batch_concurrency": 5,
+    "auto_fulltext": false,
+    "fulltext_only": false,
+    "research_question": "What is the basic reproduction number (R0) of COVID-19?"
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p7\\project_7_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-02-05T15:44:18.967679+00:00",
+      "type": "file",
+      "size_bytes": 1311286,
+      "sha256": "164c5e0a563d7ba84e038ec3b34efd621162f613107e5a7f11cd8db9fa78d84d"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p7\\project_7_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:12:55.575531+00:00",
+      "type": "file",
+      "size_bytes": 37033,
+      "sha256": "b2e595b916a15e02be79038c4cf770cce8ee2b874256d24962256e21f701dfe4"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p7\\project_7_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T13:13:21.329247+00:00",
+      "type": "file",
+      "size_bytes": 1969166,
+      "sha256": "fd85f71eeab2c950b8858f66b45c284fa5e4355536058e267222b06008e461e5"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p7\\screening_logs\\screening_report_20260331_211321.txt",
+      "exists": true,
+      "mtime_utc": "2026-03-31T13:13:21.334283+00:00",
+      "type": "file",
+      "size_bytes": 58164,
+      "sha256": "9bb518546241880cda681d298843075eb88e9e1fdaf005727726c245f393c03d"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": "openai",
+      "model": "openai/gpt-5.4",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 120,
+      "verify_ssl": false,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": true
+    }
+  },
+  "extra": {
+    "paper_count": 574,
+    "ground_truth_count": 122,
+    "ground_truth_in_pool": 122,
+    "strong_count": 102,
+    "possible_count": 30,
+    "unlikely_count": 442,
+    "error_count": 0,
+    "fulltext_error_count": 0
+  }
+}

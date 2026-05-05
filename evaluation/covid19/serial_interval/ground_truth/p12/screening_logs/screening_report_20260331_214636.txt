@@ -1,0 +1,180 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-03-31 21:46:36
+研究问题: What are the serial interval and generation time of COVID-19?
+输入文件: D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi\evaluation\screening\GT_1\GT_export\serial_interval\p12\project_12_raw.csv
+输出文件: D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi\evaluation\screening\GT_1\GT_export\serial_interval\p12\project_12_screened.csv
+模型配置: openai/openai/gpt-5.4
+批处理大小: 30
+批次并发: 5
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │     27   │   18.6%  │
+│ 🤔 Possible candidates   │      4   │    2.8%  │
+│ 😐 Unlikely candidates   │    114   │   78.6%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │    145   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  3.96  │   99.3%  │  0/ 1/ 0/ 3/141                 │
+│ Population      │  3.69  │   97.9%  │  0/ 1/ 2/38/104                 │
+│ Location        │  3.23  │   75.2%  │  4/12/20/19/90                 │
+│ Evidence        │  2.88  │   71.0%  │ 16/21/ 5/26/77                 │
+│ Parameter       │  1.21  │   22.1%  │ 67/43/ 3/ 2/30                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (27 篇)
+================================================================================
+
+1. PMID: 32594928 [Score: 4/4]
+   Title: Estimation of incubation period and serial interval of COVID-19: analysis of 178 cases and 131 transmission chains in Hubei province, China.
+   Overall: This study is highly relevant because it explicitly investigates COVID-19 in human populations using real-world outbreak data from Hubei, China. It reports original empirical estimates of the serial interval, which is one of the target parameters, with clear quantitative results in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+2. PMID: 32627172 [Score: 4/4]
+   Title: Estimation of incubation period and generation time based on observed length-biased epidemic cohort with censoring for COVID-19 outbreak in China.
+   Overall: This study is highly relevant to the review question because it explicitly concerns COVID-19 and directly addresses generation time, with serial interval also discussed as part of the estimation framework. It appears to present original primary analysis using real outbreak data from China, although the abstract emphasizes methodology and does not fully detail the study population.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+3. PMID: 32694200 [Score: 4/4]
+   Title: Serial interval of SARS-CoV-2 was shortened over time by nonpharmaceutical interventions.
+   Overall: This study is highly relevant to the review question because it explicitly investigates the serial interval of COVID-19/SARS-CoV-2 using empirical transmission-pair data from mainland China. The title and abstract directly report serial interval estimates and their temporal change, making the target parameter central to the paper.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+4. PMID: 32604404 [Score: 4/4]
+   Title: Suppression of a SARS-CoV-2 outbreak in the Italian municipality of Vo'.
+   Overall: This study is highly relevant because it is an original human SARS-CoV-2 outbreak investigation in a real Italian community setting. Crucially, the abstract explicitly reports a COVID-19 serial interval estimate, which directly matches the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+5. PMID: 32702717 [Score: 4/4]
+   Title: Evolution of effective serial interval of SARS-CoV-2 by non-pharmaceutical interventions.
+   Overall: This study is highly relevant because it explicitly investigates COVID-19/SARS-CoV-2, uses original human transmission-pair data from mainland China, and directly estimates serial intervals. The parameter of interest is the main focus of both the title and abstract, with clear empirical evidence in a real-world setting.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+6. PMID: 32191173 [Score: 4/4]
+   Title: Serial Interval of COVID-19 among Publicly Reported Confirmed Cases.
+   Overall: This paper is highly relevant because it explicitly investigates COVID-19 in human cases using original empirical data from China. Most importantly, it directly estimates the serial interval, which is a central target parameter for the review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+7. PMID: 32473049 [Score: 4/4]
+   Title: Estimation of the serial interval and basic reproduction number of COVID-19 in Qom, Iran, and three other countries: A data-driven analysis in the early phase of the outbreak.
+   Overall: This paper is highly relevant because it explicitly studies COVID-19 in human populations using real-world outbreak data and reports original empirical estimation of serial interval. Although R0 is also a major focus, the target parameter is directly named in the title and quantified in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+8. PMID: 32283156 [Score: 4/4]
+   Title: Rapid asymptomatic transmission of COVID-19 during the incubation period demonstrating strong infectivity in a cluster of youngsters aged 16-23 years outside Wuhan and characteristics of young patients with COVID-19: A prospective contact-tracing study.
+   Overall: This study is highly relevant because it is an original human contact-tracing investigation of COVID-19 transmission in a real-world setting. Crucially, the abstract explicitly reports the serial interval, which directly matches the review question, although generation time is not mentioned.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+9. PMID: 32568070 [Score: 4/4]
+   Title: Evidence for transmission of COVID-19 prior to symptom onset.
+   Overall: This study is highly relevant because it explicitly investigates COVID-19 in human populations using real-world contact tracing data from Singapore and Tianjin. It reports original empirical estimates of serial interval directly in the abstract, making it strongly aligned with the review question on COVID-19 serial interval and generation time.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+10. PMID: 32452648 [Score: 4/4]
+   Title: Estimating the serial interval of the novel coronavirus disease (COVID-19) based on the public surveillance data in Shenzhen, China, from 19 January to 22 February 2020.
+   Overall: This study is highly relevant to the review question. It is an original human epidemiologic analysis of COVID-19 using real-world surveillance data in Shenzhen, and the target parameter—serial interval—is the central focus and explicitly estimated in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+11. PMID: 32460229 [Score: 4/4]
+   Title: Estimation of the time-varying reproduction number of COVID-19 outbreak in China.
+   Overall: This study is highly relevant because it explicitly concerns COVID-19 in human populations using real-world outbreak data from China and reports original empirical analyses. Although the main title focus is reproduction number, the abstract directly estimates and reports the serial interval, making it strongly pertinent to the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+12. PMID: 34594686 [Score: 4/4]
+   Title: Serial Interval and Reproductive Number of COVID-19 Among 116 Infector-infectee Pairs - Jingzhou City, Hubei Province, China, 2020.
+   Overall: This study is highly relevant because it explicitly investigates COVID-19 in a human outbreak setting using original empirical data from a defined location. It directly reports the serial interval, which is one of the review’s target parameters, making it a strong match based on title and abstract alone.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+13. PMID: 32566233 [Score: 4/4]
+   Title: Serial interval and time-varying reproduction number estimation for COVID-19 in western Iran.
+   Overall: This paper is highly relevant because it is an original human study of COVID-19 in a defined real-world setting and explicitly estimates the serial interval. Although the abstract emphasizes serial interval more than generation time, serial interval is one of the target parameters and is directly quantified.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+14. PMID: 32247326 [Score: 4/4]
+   Title: Evolving epidemiology and transmission dynamics of coronavirus disease 2019 outside Hubei province, China: a descriptive and modelling study.
+   Overall: This is a highly relevant COVID-19 epidemiologic study based on original human case data from mainland China. It explicitly estimates and reports the serial interval, making it strongly aligned with the review question, although generation time is not mentioned separately.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+15. PMID: 32637423 [Score: 4/4]
+   Title: Strongly Heterogeneous Transmission of COVID-19 in Mainland China: Local and Regional Variation.
+   Overall: This study is highly relevant because it explicitly investigates COVID-19 transmission in human populations using original contact-tracing and case data from mainland China. Most importantly, the abstract directly reports an estimated serial interval, which is one of the target parameters of interest.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+16. PMID: 32611465 [Score: 4/4]
+   Title: The descriptive epidemiology of coronavirus disease 2019 during the epidemic period in Lu'an, China: achieving limited community transmission using proactive response strategies.
+   Overall: This study is highly relevant because it is an original empirical investigation of human COVID-19 cases in a real-world setting and explicitly reports serial interval estimates. The title and abstract provide direct evidence for all key screening dimensions, especially the target parameter of interest.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+17. PMID: 32171192 [Score: 4/4]
+   Title: [Epidemiological characteristics of COVID-19 family clustering in Zhejiang Province].
+   Overall: This study is highly relevant to the review because it is an original human epidemiologic analysis of COVID-19 in a real-world setting and explicitly reports serial interval estimates. Although it also focuses on family secondary attack rate and clustering, the serial interval parameter is directly measured and presented in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+18. PMID: 32689956 [Score: 4/4]
+   Title: Basic epidemiological parameter values from data of real-world in mega-cities: the characteristics of COVID-19 in Beijing, China.
+   Overall: This study is highly aligned with the review question because it explicitly investigates COVID-19 in a real-world human population using original case and contact data from Beijing. Crucially, the abstract directly reports an average serial interval estimate, making the target parameter clearly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+19. PMID: 32842292 [Score: 4/4]
+   Title: [Analysis on the cluster epidemic of coronavirus disease 2019 in Guangdong Province].
+   Overall: This paper is highly relevant to the review question because it explicitly studies COVID-19 in a real-world human population and reports original empirical analysis from Guangdong Province. Most importantly, the abstract clearly states that serial interval was calculated, making the target parameter directly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+20. PMID: 32353347 [Score: 4/4]
+   Title: Epidemiology and transmission of COVID-19 in 391 cases and 1286 of their close contacts in Shenzhen, China: a retrospective cohort study.
+   Overall: This is a highly relevant empirical human study of SARS-CoV-2 transmission in a real-world setting. The abstract explicitly reports a serial interval estimate based on original cohort and contact-tracing data, directly matching the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+21. PMID: 34814093 [Score: 4/4]
+   Title: The early phase of the COVID-19 epidemic in Lombardy, Italy.
+   Overall: This is a highly relevant empirical COVID-19 epidemiology study in a real human population in Lombardy, Italy. It uses original case and contact-tracing data and explicitly estimates the serial interval, which is a core target parameter for the review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+22. PMID: 32511616 [Score: 4/4]
+   Title: COVID-19 serial interval estimates based on confirmed cases in public reports from 86 Chinese cities.
+   Overall: This paper is highly relevant because it explicitly studies COVID-19 transmission using original case data from real-world human populations in China. Most importantly, the main parameter of interest—serial interval—is directly named in the title and analyzed in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+23. PMID: 33490015 [Score: 4/4]
+   Title: Serial Interval and Generation Interval for Imported and Local Infectors, Respectively, Estimated Using Reported Contact-Tracing Data of COVID-19 in China.
+   Overall: This study is highly relevant because it explicitly examines COVID-19 in human transmission chains using real-world contact-tracing data from China. It reports original empirical estimates of both serial interval and generation interval, which directly match the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+24. PMID: 32145466 [Score: 4/4]
+   Title: Serial interval of novel coronavirus (COVID-19) infections.
+   Overall: This study is highly relevant because it explicitly investigates COVID-19 and directly estimates the serial interval, the main parameter of interest. It uses original human transmission-pair data, though the geographic setting is not clearly specified in the available text.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+25. PMID: 32347198 [Score: 4/4]
+   Title: Epidemiological characteristics of the first 53 laboratory-confirmed cases of COVID-19 epidemic in Hong Kong, 13 February 2020.
+   Overall: This study is highly relevant because it explicitly investigates COVID-19 transmission in a human population using original empirical data from Hong Kong. It directly estimates the serial interval, which is a core target parameter for the review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+26. PMID: 32876267 [Score: 4/4]
+   Title: Incubation period and serial interval of Covid-19 in a chain of infections in Bahia Blanca (Argentina).
+   Overall: This study is highly relevant because it explicitly investigates COVID-19 in human cases using original empirical data from a defined real-world setting in Argentina. Most importantly, it directly estimates and reports the serial interval, which is one of the review's target parameters.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+27. PMID: 32556265 [Score: 4/4]
+   Title: Reconstruction of Transmission Pairs for Novel Coronavirus Disease 2019 (COVID-19) in Mainland China: Estimation of Superspreading Events, Serial Interval, and Hazard of Infection.
+   Overall: This study is highly relevant to the review question. It is an original human epidemiologic analysis of COVID-19 transmission in mainland China and explicitly estimates serial interval distributions from reconstructed transmission pairs; generation time is not mentioned, but serial interval is directly reported.
+   维度评分: D=4 P=4 L=4 E=4 Param=4

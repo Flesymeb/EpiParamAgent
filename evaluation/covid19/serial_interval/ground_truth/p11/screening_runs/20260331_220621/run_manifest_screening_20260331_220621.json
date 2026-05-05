@@ -1,0 +1,98 @@
+{
+  "timestamp_utc": "2026-03-31T14:06:21.599407+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search",
+  "argv": [
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search\\scripts\\ops\\..\\\\cli\\screening_llm_batch.py",
+    "--project-root",
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "--profile",
+    "P11",
+    "--batch-size",
+    "30",
+    "--batch-concurrency",
+    "5",
+    "--topic",
+    "serial_interval",
+    "--skip-no-abstract"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "P11",
+    "batch_size": 30,
+    "batch_concurrency": 5,
+    "auto_fulltext": false,
+    "fulltext_only": false,
+    "research_question": "What are the serial interval and generation time of SARS-CoV-2 estimated from contact tracing or household transmission studies?"
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p11\\project_11_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-30T07:18:56.081939+00:00",
+      "type": "file",
+      "size_bytes": 1694170,
+      "sha256": "9d9679f1998bf24831b19ef075dedf9a77822c7b4a2e71e9e0ad0ca9fbc13664"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p11\\project_11_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:14:30.269154+00:00",
+      "type": "file",
+      "size_bytes": 29484,
+      "sha256": "24a13fcec1ce192bae3b9fe6866ff44bef5ddda0ff2d119d5251e6f487316ddc"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p11\\project_11_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T14:06:21.591200+00:00",
+      "type": "file",
+      "size_bytes": 2678109,
+      "sha256": "777e388db85987f9a06d2c22c787c3669a328f3c0bdad1fb05e07af9eb0ec611"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p11\\screening_logs\\screening_report_20260331_220621.txt",
+      "exists": true,
+      "mtime_utc": "2026-03-31T14:06:21.598388+00:00",
+      "type": "file",
+      "size_bytes": 66098,
+      "sha256": "ed3875935ecc228437dfcd76debc59f3961ba559ae934017a353fc426c91257f"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": "openai",
+      "model": "openai/gpt-5.4",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 120,
+      "verify_ssl": false,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": true
+    }
+  },
+  "extra": {
+    "paper_count": 841,
+    "ground_truth_count": 76,
+    "ground_truth_in_pool": 76,
+    "strong_count": 116,
+    "possible_count": 24,
+    "unlikely_count": 701,
+    "error_count": 0,
+    "fulltext_error_count": 0
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "timestamp_utc": "2026-03-31T11:36:35.197389+00:00",
+  "workflow": "screening_evaluation",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search",
+  "argv": [
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search\\scripts\\ops\\..\\\\cli\\screening_evaluation.py",
+    "screening-performance",
+    "--project-root",
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "--profile",
+    "P6",
+    "--topic",
+    "fatality"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "command": "screening-performance",
+    "profile": "P6",
+    "topic": "fatality"
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p6\\project_6_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:11:25.835687+00:00",
+      "type": "file",
+      "size_bytes": 13573,
+      "sha256": "6453f05d9b920de93415557a85040b892f6155d48affcfb9bd3d08f2137646a4"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p6\\project_6_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T11:36:32.690402+00:00",
+      "type": "file",
+      "size_bytes": 6926361,
+      "sha256": "d67347c5ddb145bae96da4766e7a7184186feb041ded5e27a6ac35837decbd15"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p6",
+      "exists": true,
+      "mtime_utc": "2026-03-31T09:52:23.117545+00:00",
+      "type": "dir",
+      "file_count": 20,
+      "dir_digest": "2e4fd4d71f397ed52e1dd690f09e112e5cd8184f9856839cb53cce3561d7b0b0",
+      "dir_digest_truncated": false
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p6\\paper_summary.tsv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T11:36:35.197389+00:00",
+      "type": "file",
+      "size_bytes": 230,
+      "sha256": "1cc2fdd4211d80f751b8c2b0c102d4a41ab37454a564f78ac55b278788c04d76"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "summary": {
+      "topic": "fatality",
+      "project_label": "P6",
+      "ground_truth_count": 32,
+      "screened_count": 2253,
+      "tp": 29,
+      "fp": 554,
+      "fn": 3,
+      "tn": 1483,
+      "strong_count": 22,
+      "possible_count": 7,
+      "unlikely_count": 3,
+      "not_found_count": 0,
+      "sensitivity": 0.90625,
+      "specificity": 0.728031,
+      "precision": 0.049743,
+      "npv": 0.997981,
+      "f1": 0.094309,
+      "accuracy": 0.730788,
+      "workload_reduction": 0.659565,
+      "nns": 20.103448,
+      "mcc": 0.173984,
+      "wss95": 0.609565,
+      "recall_ci_low": 0.757818,
+      "recall_ci_high": 0.967598,
+      "recall_ci_display": "90.6% [75.8%, 96.8%]",
+      "precision_display": "5.0%",
+      "workload_reduction_display": "66.0%",
+      "nns_display": "20.10",
+      "specificity_display": "72.8%",
+      "npv_display": "99.8%",
+      "f1_display": "9.4%",
+      "accuracy_display": "73.1%",
+      "mcc_display": "0.174",
+      "wss95_display": "61.0%"
+    },
+    "paper_summary_tsv": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p6\\paper_summary.tsv"
+  }
+}

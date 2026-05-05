@@ -1,0 +1,410 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-04-12 23:24:16
+研究问题: What are the serial interval and generation time of COVID-19?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/serial_interval/p13/project_13_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/GT_1/GT_export/serial_interval/p13/experiments/binary_gpt54_v2/project_13_screened.csv
+模型配置: openai/openai/gpt-5.4
+批处理大小: 30
+批次并发: 1
+Full-text: need_fulltext=5 | screened=5
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │     73   │   65.8%  │
+│ 🤔 Possible candidates   │      2   │    1.8%  │
+│ 😐 Unlikely candidates   │     36   │   32.4%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │    111   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  4.00  │  100.0%  │  0/ 0/ 0/ 0/ 5                 │
+│ Population      │  3.40  │   80.0%  │  0/ 0/ 1/ 1/ 3                 │
+│ Location        │  3.60  │  100.0%  │  0/ 0/ 0/ 2/ 3                 │
+│ Evidence        │  2.60  │   60.0%  │  0/ 2/ 0/ 1/ 2                 │
+│ Parameter       │  3.20  │   80.0%  │  0/ 1/ 0/ 1/ 3                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (73 篇)
+================================================================================
+
+1. PMID: 31995857 [Score: 4/4]
+   Title: Early Transmission Dynamics in Wuhan, China, of Novel Coronavirus-Infected Pneumonia.
+   Overall: The abstract directly reports a mean serial interval of 7.5 days for early COVID-19 cases in Wuhan, which is central to the review question. It provides direct epidemiologic evidence on COVID-19 transmission timing.
+   维度评分: D= P= L= E= Param=
+
+2. PMID: 32145466 [Score: 4/4]
+   Title: Serial interval of novel coronavirus (COVID-19) infections.
+   Overall: The title and abstract explicitly state that the study estimates the serial interval of COVID-19 using infector-infectee pairs. This directly addresses the review question on COVID-19 serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+3. PMID: 32771633 [Score: 4/4]
+   Title: Transmission onset distribution of COVID-19.
+   Overall: The abstract directly reports estimation of the serial interval distribution for COVID-19 from infector-infectee pairs, which is a primary outcome of the review question. It also analyzes transmission timing relevant to generation dynamics.
+   维度评分: D= P= L= E= Param=
+
+4. PMID: 32959618 [Score: 4/4]
+   Title: Epidemic Landscape and Forecasting of SARS-CoV-2 in India.
+   Overall: Include because the abstract explicitly reports an estimate of the mean serial interval for SARS-CoV-2 in India (3.9 days). Although the main focus is epidemic forecasting and reproduction numbers, it directly provides serial interval evidence relevant to the review question.
+   维度评分: D= P= L= E= Param=
+
+5. PMID: 32366488 [Score: 4/4]
+   Title: Nosocomial outbreak of COVID-19 pneumonia in Wuhan, China.
+   Overall: Include because the abstract directly reports a transmission timing measure relevant to the review: the mean clinical onset serial interval (COSI) was 5.2±3.2 days in COVID-19 clusters. It also reports incubation period data, but the serial interval estimate is sufficient direct evidence.
+   维度评分: D= P= L= E= Param=
+
+6. PMID: 32694200 [Score: 4/4]
+   Title: Serial interval of SARS-CoV-2 was shortened over time by nonpharmaceutical interventions.
+   Overall: The title and abstract directly study the serial interval of COVID-19, estimating how it changed over time using transmission pairs in China. This is explicitly relevant to the review question on serial interval and generation time of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+7. PMID: 32771634 [Score: 4/4]
+   Title: Diagnostic serial interval as a novel indicator for contact tracing effectiveness exemplified with the SARS-CoV-2/COVID-19 outbreak in South Korea.
+   Overall: The abstract directly estimates the clinical onset serial interval for SARS-CoV-2/COVID-19 and discusses it as a proxy for transmission timing. Although it introduces a novel diagnostic serial interval, it still provides clear evidence relevant to serial interval estimation.
+   维度评分: D= P= L= E= Param=
+
+8. PMID: 32191173 [Score: 4/4]
+   Title: Serial Interval of COVID-19 among Publicly Reported Confirmed Cases.
+   Overall: The title and abstract directly estimate the serial interval distribution for COVID-19 cases in China, reporting mean and SD values. This is directly relevant to the review question on COVID-19 serial interval and generation time.
+   维度评分: D= P= L= E= Param=
+
+9. PMID: 32604404 [Score: 4/4]
+   Title: Suppression of a SARS-CoV-2 outbreak in the Italian municipality of Vo'.
+   Overall: Include because the abstract directly reports a COVID-19 serial interval estimate ('mean serial interval was 7.2 days') based on outbreak data in Vo'. This is directly relevant to the review question on serial interval and generation time.
+   维度评分: D= P= L= E= Param=
+
+10. PMID: 33001833 [Score: 4/4]
+   Title: Epidemiological Parameters of COVID-19: Case Series Study.
+   Overall: Include because the abstract directly reports estimation of COVID-19 serial interval from 1,015 infector-infectee pairs, which is central to the review question. It provides primary epidemiological parameter estimates relevant to serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+11. PMID: 32702717 [Score: 4/4]
+   Title: Evolution of effective serial interval of SARS-CoV-2 by non-pharmaceutical interventions.
+   Overall: The title and abstract directly study COVID-19 serial intervals, estimating how the effective serial interval changed over time using transmission pairs in mainland China. This is directly relevant to the review question on serial interval/generation time of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+12. PMID: 32876267 [Score: 4/4]
+   Title: Incubation period and serial interval of Covid-19 in a chain of infections in Bahia Blanca (Argentina).
+   Overall: The abstract explicitly estimates the serial interval of COVID-19 (with mean and median values) in a chain of infections in Argentina, directly addressing the review question. Although it also reports incubation period, serial interval is a primary outcome of the study.
+   维度评分: D= P= L= E= Param=
+
+13. PMID: 32869006 [Score: 4/4]
+   Title: Estimates of serial interval for COVID-19: A systematic review and meta-analysis.
+   Overall: This paper directly addresses the review question by systematically reviewing and meta-analyzing estimates of the COVID-19 serial interval. The abstract explicitly reports pooled serial interval estimates, making it clearly relevant.
+   维度评分: D= P= L= E= Param=
+
+14. PMID: 32372755 [Score: 4/4]
+   Title: Estimating the generation interval for coronavirus disease (COVID-19) based on symptom onset data, March 2020.
+   Overall: Include: The abstract directly states that the study estimates the COVID-19 generation interval and serial interval using outbreak data from Singapore and Tianjin, which is exactly the review question.
+   维度评分: D= P= L= E= Param=
+
+15. PMID: 32767657 [Score: 4/4]
+   Title: Evidence for pre-symptomatic transmission of coronavirus disease 2019 (COVID-19) in China.
+   Overall: Include because the abstract directly reports an estimated serial interval distribution for COVID-19 (mean 5.7 days, SD 3.5 days) based on 64 clusters. This is clear, direct evidence relevant to the review question on serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+16. PMID: 32473049 [Score: 4/4]
+   Title: Estimation of the serial interval and basic reproduction number of COVID-19 in Qom, Iran, and three other countries: A data-driven analysis in the early phase of the outbreak.
+   Overall: Include because the abstract explicitly estimates the COVID-19 serial interval in Qom, Iran (mean 4.55 days, SD 3.30 days) and discusses sensitivity to mean generation time, directly addressing the review question.
+   维度评分: D= P= L= E= Param=
+
+17. PMID: 32244365 [Score: 4/4]
+   Title: A Systematic Review of COVID-19 Epidemiology Based on Current Evidence.
+   Overall: The abstract directly reports estimates of the serial interval for COVID-19 (4–8 days), which is one of the review’s target outcomes. Although it is a broader epidemiological systematic review, it clearly contains relevant evidence on serial interval.
+   维度评分: D= P= L= E= Param=
+
+18. PMID: 32568070 [Score: 4/4]
+   Title: Evidence for transmission of COVID-19 prior to symptom onset.
+   Overall: The abstract directly estimates COVID-19 serial intervals from contact tracing data in Singapore and Tianjin, which is central to the review question. It also compares serial interval with incubation period to assess pre-symptomatic transmission.
+   维度评分: D= P= L= E= Param=
+
+19. PMID: 32353347 [Score: 4/4]
+   Title: Epidemiology and transmission of COVID-19 in 391 cases and 1286 of their close contacts in Shenzhen, China: a retrospective cohort study.
+   Overall: Include because the abstract directly reports a key estimate relevant to the review: the mean serial interval of COVID-19 was 6.3 days (95% CI 5.2-7.6). This is clear direct evidence on transmission timing, even though generation time is not explicitly mentioned.
+   维度评分: D= P= L= E= Param=
+
+20. PMID: 32512664 [Score: 4/4]
+   Title: Epidemiological characteristics of and containment measures for COVID-19 in Busan, Korea.
+   Overall: Include because the abstract directly reports an estimate of the COVID-19 serial interval (mean 5.54 days, 95% CI 4.08 to 7.01). This is directly relevant to the review question on serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+21. PMID: 32460229 [Score: 4/4]
+   Title: Estimation of the time-varying reproduction number of COVID-19 outbreak in China.
+   Overall: The abstract directly reports an estimate of the COVID-19 serial interval (mean 4.60 days, SD 5.55 days) based on identified transmission chains. Since serial interval is a primary outcome of the review, this paper is relevant despite its main focus on reproduction numbers.
+   维度评分: D= P= L= E= Param=
+
+22. PMID: 32452648 [Score: 4/4]
+   Title: Estimating the serial interval of the novel coronavirus disease (COVID-19) based on the public surveillance data in Shenzhen, China, from 19 January to 22 February 2020.
+   Overall: The title and abstract directly state that the study estimates the serial interval of COVID-19 using transmission chain data from Shenzhen. This is directly relevant to the review question on COVID-19 serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+23. PMID: 33034281 [Score: 4/4]
+   Title: Epidemiological parameters of COVID-19 and its implication for infectivity among patients in China, 1 January to 11 February 2020.
+   Overall: The abstract directly estimates both the serial interval and generation interval of COVID-19, which are the core outcomes of the review question. It reports median values and analyzes their variation, making it clearly relevant.
+   维度评分: D= P= L= E= Param=
+
+24. PMID: 32928322 [Score: 4/4]
+   Title: Epidemiological profile and transmission dynamics of COVID-19 in the Philippines.
+   Overall: Include because the abstract directly reports a COVID-19 serial interval estimate (mean 6.90 days, 95% CI 5.81-8.41). This is explicit evidence relevant to the review question on serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+25. PMID: 33490015 [Score: 4/4]
+   Title: Serial Interval and Generation Interval for Imported and Local Infectors, Respectively, Estimated Using Reported Contact-Tracing Data of COVID-19 in China.
+   Overall: The title and abstract directly report estimation of both the serial interval and generation interval of COVID-19 using contact-tracing data in China. This exactly matches the review question on COVID-19 serial interval and generation time.
+   维度评分: D= P= L= E= Param=
+
+26. PMID: 34594686 [Score: 4/4]
+   Title: Serial Interval and Reproductive Number of COVID-19 Among 116 Infector-infectee Pairs - Jingzhou City, Hubei Province, China, 2020.
+   Overall: The title and abstract directly report an estimate of the COVID-19 serial interval using 116 infector-infectee pairs, which is a core outcome of the review question. Although generation time is not mentioned, serial interval is explicitly analyzed and quantified.
+   维度评分: D= P= L= E= Param=
+
+27. PMID: 32247326 [Score: 4/4]
+   Title: Evolving epidemiology and transmission dynamics of coronavirus disease 2019 outside Hubei province, China: a descriptive and modelling study.
+   Overall: Include because the abstract directly reports an estimate of the COVID-19 serial interval (mean 5.1 days) and discusses transmission dynamics. This is clearly relevant to the review question on serial interval and generation time.
+   维度评分: D= P= L= E= Param=
+
+28. PMID: 32164400 [Score: 4/4]
+   Title: [Epidemiological characteristics of confirmed COVID-19 cases in Tianjin].
+   Overall: The abstract directly reports transmission timing information relevant to the review, including an average generation interval of 5 days. Although the main focus is broader epidemiological characteristics, it provides clear evidence on generation time-related measures for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+29. PMID: 32594928 [Score: 4/4]
+   Title: Estimation of incubation period and serial interval of COVID-19: analysis of 178 cases and 131 transmission chains in Hubei province, China.
+   Overall: The title and abstract explicitly state that the study estimates the serial interval of COVID-19 using contact tracing data and transmission chains. This directly addresses the review question on COVID-19 serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+30. PMID: 32987541 [Score: 4/4]
+   Title: Estimating the time interval between transmission generations when negative values occur in the serial interval data: using COVID-19 as an example.
+   Overall: The title and abstract directly address estimation of the time interval between transmission generations and use serial interval data for COVID-19. It reports a mean transmission generation time and discusses serial interval observations, which is directly relevant to the review question.
+   维度评分: D= P= L= E= Param=
+
+31. PMID: 32283156 [Score: 4/4]
+   Title: Rapid asymptomatic transmission of COVID-19 during the incubation period demonstrating strong infectivity in a cluster of youngsters aged 16-23 years outside Wuhan and characteristics of young patients with COVID-19: A prospective contact-tracing study.
+   Overall: Include because the abstract directly reports a COVID-19 serial interval estimate ('median serial-interval was 1 day [range, 0-4]') from a prospective contact-tracing cluster study. This is directly relevant to the review question on serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+32. PMID: 32917290 [Score: 4/4]
+   Title: Early Insights from Statistical and Mathematical Modeling of Key Epidemiologic Parameters of COVID-19.
+   Overall: The abstract directly reports and summarizes estimates of key epidemiologic parameters for COVID-19, including serial interval (4.0–7.5 days). Because serial interval is a primary outcome of the review, this paper is relevant.
+   维度评分: D= P= L= E= Param=
+
+33. PMID: 32192580 [Score: 4/4]
+   Title: Investigation of three clusters of COVID-19 in Singapore: implications for surveillance and response measures.
+   Overall: The abstract directly reports the serial interval for SARS-CoV-2 transmission pairs (3 to 8 days), which is directly relevant to estimating COVID-19 serial interval/generation time. Therefore, it should be included.
+   维度评分: D= P= L= E= Param=
+
+34. PMID: 33163739 [Score: 4/4]
+   Title: Estimating effective reproduction number using generation time versus serial interval, with application to covid-19 in the Greater Toronto Area, Canada.
+   Overall: The abstract directly estimates the COVID-19 generation time distribution (mean 3.99 days, SD 2.96 days) and explicitly discusses serial interval versus generation time. This is directly relevant to the review question on COVID-19 serial interval and generation time.
+   维度评分: D= P= L= E= Param=
+
+35. PMID: 32627172 [Score: 4/4]
+   Title: Estimation of incubation period and generation time based on observed length-biased epidemic cohort with censoring for COVID-19 outbreak in China.
+   Overall: The abstract explicitly focuses on estimating the generation time for COVID-19 and discusses serial intervals as part of the estimation approach. This directly addresses the review question on COVID-19 serial interval and generation time.
+   维度评分: D= P= L= E= Param=
+
+36. PMID: 32776726 [Score: 4/4]
+   Title: Epidemiological Characteristics of COVID-19 Outbreak at Fitness Centers in Cheonan, Korea.
+   Overall: The abstract directly reports an estimate of the mean serial interval for COVID-19 cases in this outbreak (5.2 ± 3.8 days), which is explicitly relevant to the review question. It therefore provides direct evidence on COVID-19 serial interval, even though generation time is not addressed.
+   维度评分: D= P= L= E= Param=
+
+37. PMID: 32725765 [Score: 4/4]
+   Title: COVID-19 outbreak following a single patient exposure at an entertainment site: An epidemiological study.
+   Overall: The abstract directly reports a COVID-19 serial interval estimate (4.4 days) from an outbreak investigation. Because serial interval is a primary outcome of the review question, this paper should be included.
+   维度评分: D= P= L= E= Param=
+
+38. PMID: 32511454 [Score: 4/4]
+   Title: The serial interval of COVID-19 from publicly reported confirmed cases.
+   Overall: The title and abstract directly report an estimate of the COVID-19 serial interval distribution from confirmed cases, which is exactly relevant to the review question on serial interval and generation time.
+   维度评分: D= P= L= E= Param=
+
+39. PMID: 33554183 [Score: 4/4]
+   Title: Epidemiological and Clinical Characteristics of COVID-19 in Adolescents and Young Adults.
+   Overall: The abstract directly reports a COVID-19 serial interval estimate (median 1.9 days) and discusses incubation period in a defined patient cohort. Because it provides clear evidence on serial interval, it is relevant to the review question.
+   维度评分: D= P= L= E= Param=
+
+40. PMID: 32566233 [Score: 4/4]
+   Title: Serial interval and time-varying reproduction number estimation for COVID-19 in western Iran.
+   Overall: The abstract explicitly states that the study aims to estimate the serial interval of COVID-19 and reports a mean and standard deviation based on infector-infectee pairs in Iran. This directly addresses the review question on COVID-19 serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+41. PMID: 32511615 [Score: 4/4]
+   Title: Household transmissions of SARS-CoV-2 in the time of unprecedented travel lockdown in China.
+   Overall: The abstract directly reports estimation of COVID-19 serial intervals, including mean serial intervals for household and non-household transmission settings. This is directly relevant to the review question on serial interval and generation time of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+42. PMID: 32577693 [Score: 4/4]
+   Title: Meta-analysis of several epidemic characteristics of COVID-19.
+   Overall: The abstract explicitly states that the study conducts a meta-analysis of COVID-19 serial interval estimates and provides pooled estimates. Since serial interval is a primary outcome of the review question, this paper is directly relevant.
+   维度评分: D= P= L= E= Param=
+
+43. PMID: 36753110 [Score: 4/4]
+   Title: [Estimation of serial interval and basic reproductive number for imported cases of COVID-19].
+   Overall: The title and abstract explicitly state that the study estimated the COVID-19 serial interval, reporting a mean serial interval of 3.8 days from confirmed transmission pairs. This directly addresses the review question on serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+44. PMID: 33024978 [Score: 4/4]
+   Title: Wrong person, place and time: viral load and contact network structure predict SARS-CoV-2 transmission and super-spreading events.
+   Overall: The abstract explicitly states that the study models key epidemiologic features including the duration between symptom onset in the transmitter and secondary case (serial interval) for SARS-CoV-2. This directly addresses the review question, even though generation time is not mentioned.
+   维度评分: D= P= L= E= Param=
+
+45. PMID: 33101882 [Score: 4/4]
+   Title: Characteristics and evaluation of the effectiveness of monitoring and control measures for the first 69 Patients with COVID-19 from 18 January 2020 to 2 March in Wuxi, China.
+   Overall: The abstract directly reports a mean serial interval for COVID-19 cases in Wuxi (6.31 days, 95% CI 5.12-7.50), which is central to the review question. Although generation time is not mentioned, serial interval evidence alone is sufficient for inclusion.
+   维度评分: D= P= L= E= Param=
+
+46. PMID: 32445710 [Score: 4/4]
+   Title: Individual quarantine versus active monitoring of contacts for the mitigation of COVID-19: a modelling study.
+   Overall: The abstract directly addresses COVID-19 serial interval, explicitly fitting the model to two estimates of the serial interval distribution (means 4.8 and 7.5 days). Although primarily a modelling study of interventions, it contains direct evidence relevant to serial interval estimation.
+   维度评分: D= P= L= E= Param=
+
+47. PMID: 32422201 [Score: 4/4]
+   Title: Investigation of a COVID-19 outbreak in Germany resulting from a single travel-associated primary case: a case series.
+   Overall: Include because the abstract directly reports a COVID-19 serial interval estimate (median 4.0 days, IQR 3.0-5.0) from an outbreak investigation. This is directly relevant to the review question on serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+48. PMID: 32511424 [Score: 4/4]
+   Title: Evolving epidemiology of novel coronavirus diseases 2019 and possible interruption of local transmission outside Hubei Province in China: a descriptive and modeling study.
+   Overall: Include because the abstract directly reports a COVID-19 serial interval estimate (mean 5.1 days) based on case data outside Hubei. This is direct evidence relevant to the review question on serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+49. PMID: 32815514 [Score: 4/4]
+   Title: Epidemiological Investigation of the First 135 COVID-19 Cases in Brunei: Implications for Surveillance, Control, and Travel Restrictions.
+   Overall: Include because the abstract directly reports estimation of the COVID-19 serial interval, including a mean SI of 5.4 days, which is central to the review question. Although generation time is not mentioned, serial interval is explicitly analyzed.
+   维度评分: D= P= L= E= Param=
+
+50. PMID: 32822290 [Score: 4/4]
+   Title: Epidemiology of COVID-19 Outbreak on Cruise Ship Quarantined at Yokohama, Japan, February 2020.
+   Overall: The abstract directly reports a COVID-19 transmission parameter relevant to the review: the median serial interval between cases in the same cabin was 2 days. Therefore, it provides clear evidence on serial interval for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+51. PMID: 32637423 [Score: 4/4]
+   Title: Strongly Heterogeneous Transmission of COVID-19 in Mainland China: Local and Regional Variation.
+   Overall: The abstract directly reports an estimated average serial interval for COVID-19 cases (4.8 days), which is a core outcome of the review question. Therefore, this paper is directly relevant.
+   维度评分: D= P= L= E= Param=
+
+52. PMID: 32611465 [Score: 4/4]
+   Title: The descriptive epidemiology of coronavirus disease 2019 during the epidemic period in Lu'an, China: achieving limited community transmission using proactive response strategies.
+   Overall: Include because the abstract directly reports a COVID-19 serial interval estimate: a mean serial interval of 6.5 days (95% CI 4.8-8.2). This is directly relevant to the review question on serial interval and generation time.
+   维度评分: D= P= L= E= Param=
+
+53. PMID: 33001839 [Score: 4/4]
+   Title: Transmission Dynamics of the COVID-19 Epidemic at the District Level in India: Prospective Observational Study.
+   Overall: Include because the abstract explicitly states that the study aimed to estimate the COVID-19 serial interval and reports serial interval estimates based on contact tracing data. This directly addresses the review question, even though it also focuses on R0 and transmission dynamics.
+   维度评分: D= P= L= E= Param=
+
+54. PMID: 32347198 [Score: 4/4]
+   Title: Epidemiological characteristics of the first 53 laboratory-confirmed cases of COVID-19 epidemic in Hong Kong, 13 February 2020.
+   Overall: The abstract directly estimates the COVID-19 serial interval using infector-infectee pairs and Bayesian methods, which is central to the review question. It reports a serial interval estimate and related transmission parameters for confirmed cases in Hong Kong.
+   维度评分: D= P= L= E= Param=
+
+55. PMID: 32417744 [Score: 4/4]
+   Title: Monitoring disease transmissibility of 2019 novel coronavirus disease in Zhejiang, China.
+   Overall: Include because the title/keywords explicitly mention serial interval, and the abstract describes monitoring COVID-19 transmissibility while accounting for transmission dynamics in Zhejiang. This suggests direct relevance to estimating parameters such as serial interval for COVID-19.
+   维度评分: D= P= L= E= Param=
+
+56. PMID: 32720639 [Score: 4/4]
+   Title: Authors' response: Estimating the generation interval for COVID-19 based on symptom onset data.
+   Overall: The full text strongly supports relevance to the review question. It is a COVID-19 human transmission study in a real-world Singapore setting and, despite being a reply article, it includes original re-analysis reporting explicit generation interval and serial interval estimates with uncertainty.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+57. PMID: 32113196 [Score: 4/4]
+   Title: [Study on assessing early epidemiological parameters of COVID-19 epidemic in China].
+   Overall: The abstract directly estimates a key transmission timing parameter for COVID-19, reporting the generation interval distribution and mean value. Since generation time is within scope of the review, this paper is clearly relevant.
+   维度评分: D= P= L= E= Param=
+
+58. PMID: 32171192 [Score: 4/4]
+   Title: [Epidemiological characteristics of COVID-19 family clustering in Zhejiang Province].
+   Overall: The abstract explicitly reports estimation of the COVID-19 serial interval in family clusters in Zhejiang Province, including a median serial interval of 4 days. This directly addresses the review question on serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+59. PMID: 33088292 [Score: 4/4]
+   Title: Meta-analysis of several epidemic characteristics of COVID-19.
+   Overall: The abstract explicitly states that the meta-analysis focuses on COVID-19 serial interval and provides pooled estimates based on studies from China. This directly addresses the review question on serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+60. PMID: 32511616 [Score: 4/4]
+   Title: COVID-19 serial interval estimates based on confirmed cases in public reports from 86 Chinese cities.
+   Overall: The title and abstract directly report serial interval estimates for COVID-19, defining and analyzing symptom onset intervals between infector-infectee pairs. This is directly relevant to the review question on COVID-19 serial interval and generation time.
+   维度评分: D= P= L= E= Param=
+
+61. PMID: 32689956 [Score: 4/4]
+   Title: Basic epidemiological parameter values from data of real-world in mega-cities: the characteristics of COVID-19 in Beijing, China.
+   Overall: Include because the abstract directly reports an estimate of the average serial interval for COVID-19 (7.6 days) based on Beijing case data. This is directly relevant to the review question on serial interval and generation time.
+   维度评分: D= P= L= E= Param=
+
+62. PMID: 32685697 [Score: 4/4]
+   Title: The contribution of pre-symptomatic infection to the transmission dynamics of COVID-2019.
+   Overall: The abstract directly uses and analyzes the COVID-19 serial interval to estimate pre-symptomatic transmission, which is clearly relevant to the review question on serial interval and generation time. It provides explicit serial-interval-based evidence rather than only tangential discussion of transmission.
+   维度评分: D= P= L= E= Param=
+
+63. PMID: 32842292 [Score: 4/4]
+   Title: [Analysis on the cluster epidemic of coronavirus disease 2019 in Guangdong Province].
+   Overall: Include because the abstract explicitly states that the study calculated the serial interval of COVID-19 using onset times of index and subsequent cases in clustered outbreaks. This directly addresses the review question on COVID-19 serial interval/generation time.
+   维度评分: D= P= L= E= Param=
+
+64. PMID: 32710618 [Score: 4/4]
+   Title: Serial interval distribution of SARS-CoV-2 infection in Brazil.
+   Overall: The full text strongly supports relevance to the review question. It is an original human population study of SARS-CoV-2 in Brazil using real surveillance-based infector-infectee pairs, and its primary aim is to estimate the serial interval distribution, with explicit numerical estimates and modelling of that parameter.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+65. PMID: 32392331 [Score: 4/4]
+   Title: Household Transmission of SARS-CoV-2, Zhuhai, China, 2020.
+   Overall: Include because the abstract directly reports a COVID-19 serial interval estimate (median 5.1 days) in household transmission, which is central to the review question. It also provides related transmission timing parameters, including the incubation period.
+   维度评分: D= P= L= E= Param=
+
+66. PMID: 32556265 [Score: 4/4]
+   Title: Reconstruction of Transmission Pairs for Novel Coronavirus Disease 2019 (COVID-19) in Mainland China: Estimation of Superspreading Events, Serial Interval, and Hazard of Infection.
+   Overall: Include because the abstract directly estimates the serial interval distribution of COVID-19 transmission pairs, which is central to the review question. It provides mean and standard deviation estimates for serial intervals in household and nonhousehold settings.
+   维度评分: D= P= L= E= Param=
+
+67. PMID: 34814093 [Score: 4/4]
+   Title: The early phase of the COVID-19 epidemic in Lombardy, Italy.
+   Overall: Include because the abstract explicitly reports an estimate of the COVID-19 serial interval in Lombardy (mean 6.6 days), which directly addresses the review question. It also analyzes transmission dynamics using case and contact data.
+   维度评分: D= P= L= E= Param=
+
+68. PMID: 33750783 [Score: 4/4]
+   Title: Infectivity, susceptibility, and risk factors associated with SARS-CoV-2 transmission under intensive contact tracing in Hunan, China.
+   Overall: Include because the abstract directly estimates a key transmission parameter relevant to the review: the mean generation time of SARS-CoV-2 (5.7 days). It also characterizes timing of infectiousness around symptom onset, indicating clear relevance to serial interval/generation time evidence.
+   维度评分: D= P= L= E= Param=
+
+69. PMID: 32796323 [Score: 4/4]
+   Title: Analysis of community-acquired COVID-19 cases in Taiwan.
+   Overall: Include because the abstract directly reports a key estimate relevant to the review question: the median serial interval for COVID-19 cases in Taiwan. It explicitly analyzes transmission dynamics and provides serial interval data from community-acquired cases.
+   维度评分: D= P= L= E= Param=
+
+70. PMID: 32397699 [Score: 4/4]
+   Title: [Study on transmission dynamic of 15 clusters of COVID-2019 cases in Ningbo].
+   Overall: The abstract directly evaluates COVID-19 generation time (Tg) in 15 transmission clusters and reports an estimated Tg of 6.93±3.70 days. This is directly relevant to the review question on serial interval/generation time of COVID-19.
+   维度评分: D= P= L= E= Param=
+
+71. PMID: 32738143 [Score: 4/4]
+   Title: The First 100 Days of Severe Acute Respiratory Syndrome Coronavirus 2 (SARS-CoV-2) Control in Vietnam.
+   Overall: Include because the abstract directly reports serial interval estimation for COVID-19, calculated from 33 infector-infectee pairs (3.24 days), which is central to the review question. It also uses this to assess presymptomatic transmission.
+   维度评分: D= P= L= E= Param=
+
+72. PMID: 33044319 [Score: 4/4]
+   Title: Effectiveness of Containment Measures Against COVID-19 in Singapore: Implications for Other National Containment Efforts.
+   Overall: Include because the abstract directly estimates the COVID-19 serial interval distribution in Singapore, reporting a mean serial interval and SD. This is directly relevant to the review question on serial interval and generation time.
+   维度评分: D= P= L= E= Param=
+
+73. PMID: 33234640 [Score: 4/4]
+   Title: Rapid review of available evidence on the serial interval and generation time of COVID-19.
+   Overall: The title and abstract directly focus on COVID-19 serial interval and generation time, reviewing and summarizing estimates for these parameters. This is explicitly relevant to the research question.
+   维度评分: D= P= L= E= Param=

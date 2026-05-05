@@ -1,0 +1,116 @@
+{
+  "timestamp_utc": "2026-03-31T15:27:31.018894+00:00",
+  "workflow": "screening_evaluation",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+  "argv": [
+    "dev/literature_search/scripts/cli/screening_evaluation.py",
+    "screening-performance",
+    "--project-root",
+    ".",
+    "--profile",
+    "P11"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "command": "screening-performance",
+    "profile": "P11",
+    "topic": "",
+    "threshold_overrides": {}
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p11\\project_11_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:14:30.269154+00:00",
+      "type": "file",
+      "size_bytes": 29484,
+      "sha256": "24a13fcec1ce192bae3b9fe6866ff44bef5ddda0ff2d119d5251e6f487316ddc"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p11\\project_11_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T14:06:21.591200+00:00",
+      "type": "file",
+      "size_bytes": 2678109,
+      "sha256": "777e388db85987f9a06d2c22c787c3669a328f3c0bdad1fb05e07af9eb0ec611"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p11",
+      "exists": true,
+      "mtime_utc": "2026-03-31T15:27:31.018894+00:00",
+      "type": "dir",
+      "file_count": 12,
+      "dir_digest": "36e1643acbde534ecc1eb063ac7068ea130a8f2da2910fe7362d8e1fd0715d98",
+      "dir_digest_truncated": false
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p11\\paper_summary.tsv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T15:27:31.018894+00:00",
+      "type": "file",
+      "size_bytes": 306,
+      "sha256": "3ec7d6a711c4ebae6f7b358f6bb7e43be9af0a13c844bedbc01020739cc04dd9"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "summary": {
+      "topic": "serial_interval",
+      "project_label": "P11",
+      "ground_truth_count": 76,
+      "screened_count": 841,
+      "tp": 71,
+      "fp": 69,
+      "fn": 5,
+      "tn": 696,
+      "strong_count": 65,
+      "possible_count": 6,
+      "unlikely_count": 5,
+      "not_found_count": 0,
+      "sensitivity": 0.934211,
+      "specificity": 0.909804,
+      "precision": 0.507143,
+      "npv": 0.992867,
+      "f1": 0.657407,
+      "accuracy": 0.91201,
+      "workload_reduction": 0.833532,
+      "nns": 1.971831,
+      "mcc": 0.649627,
+      "wss95": 0.783532,
+      "recall_ci_low": 0.855065,
+      "recall_ci_high": 0.971573,
+      "precision_ci_low": 0.42525,
+      "precision_ci_high": 0.588654,
+      "workload_reduction_ci_low": 0.808561,
+      "workload_reduction_ci_high": 0.857313,
+      "nns_ci_low": 1.701299,
+      "nns_ci_high": 2.355932,
+      "recall_ci_display": "93.4% [85.5%, 97.2%]",
+      "precision_display": "50.7%",
+      "workload_reduction_display": "83.4%",
+      "nns_display": "1.97",
+      "precision_ci_display": "50.7% [42.5%, 58.9%]",
+      "workload_reduction_ci_display": "83.4% [80.9%, 85.7%]",
+      "nns_ci_display": "1.97 [1.70, 2.36]",
+      "specificity_display": "91.0%",
+      "npv_display": "99.3%",
+      "f1_display": "65.7%",
+      "accuracy_display": "91.2%",
+      "mcc_display": "0.650",
+      "wss95_display": "78.4%",
+      "threshold_mode": "original_labels",
+      "threshold_overrides": ""
+    },
+    "paper_summary_tsv": "evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p11\\paper_summary.tsv"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "timestamp_utc": "2026-03-31T08:37:46.046361+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+  "argv": [
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search\\scripts\\ops\\..\\\\cli\\screening_prepare_raw.py",
+    "--project-root",
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "--profile",
+    "P5",
+    "--topic",
+    "fatality",
+    "--include-gt",
+    "--fix-missing"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": false
+  },
+  "params": {
+    "profile": "P5",
+    "topic": "fatality",
+    "query": "",
+    "date_range": "",
+    "retmax": "all",
+    "include_gt": true,
+    "fix_missing": true,
+    "medline_only": false
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p5\\project_5_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T08:37:46.043056+00:00",
+      "type": "file",
+      "size_bytes": 3131337,
+      "sha256": "a814d424462b5bd565f40b4381888e3cbe1bf6bd8b40135a5b4d051eb307d6e1"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p5\\project_5_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T08:37:46.043056+00:00",
+      "type": "file",
+      "size_bytes": 3131337,
+      "sha256": "a814d424462b5bd565f40b4381888e3cbe1bf6bd8b40135a5b4d051eb307d6e1"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 1882,
+    "ground_truth_path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p5\\project_5_groundtruth.csv"
+  }
+}

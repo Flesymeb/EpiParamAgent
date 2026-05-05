@@ -1,0 +1,162 @@
+{
+  "pmid": "32244365",
+  "index": {
+    "doc_structure": [
+      {
+        "section": "Abstract",
+        "subsections": [],
+        "evidence_hint": "Abstract"
+      },
+      {
+        "section": "Introduction",
+        "subsections": [],
+        "evidence_hint": "Introduction heading"
+      },
+      {
+        "section": "Materials and Methods",
+        "subsections": [
+          "Inclusion Criteria",
+          "Literature Search",
+          "Additional Analysis"
+        ],
+        "evidence_hint": "Methods heading"
+      },
+      {
+        "section": "Results",
+        "subsections": [
+          "Size of the Outbreak at Epicentre",
+          "Transmissibility of SARS-CoV-2",
+          "Susceptibility",
+          "Severity",
+          "Control Measures"
+        ],
+        "evidence_hint": "Results heading"
+      },
+      {
+        "section": "Discussion",
+        "subsections": [],
+        "evidence_hint": "Discussion heading"
+      },
+      {
+        "section": "Conclusions",
+        "subsections": [],
+        "evidence_hint": "Conclusions heading"
+      }
+    ],
+    "tables": [
+      {
+        "table_id": "Table 1",
+        "title_or_caption": "Estimated size of the outbreak and epidemic doubling time from selected studies.",
+        "table_type": "study_desc",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 1"
+      },
+      {
+        "table_id": "Table 2",
+        "title_or_caption": "Estimated basic reproduction number $( R _ { 0 } )$ from selected studies.",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 2"
+      },
+      {
+        "table_id": "Table 3",
+        "title_or_caption": "Estimated incubation period from selected studies.",
+        "table_type": "estimate",
+        "contains_serial_interval": false,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 3"
+      },
+      {
+        "table_id": "Table 4",
+        "title_or_caption": "Estimated serial interval from selected studies.",
+        "table_type": "estimate",
+        "contains_serial_interval": true,
+        "contains_generation_interval": false,
+        "contains_uncertainty": true,
+        "evidence_hint": "Table 4"
+      }
+    ],
+    "study_meta": {
+      "region_raw": "Global",
+      "period_raw": "2019-2020",
+      "population_raw": "Various countries including China, South Korea, and others",
+      "sample_size_raw": "Varies by study (e.g., 6 pairs, 7 pairs, 468 pairs)",
+      "method_raw": "Systematic review of published literature and preprints",
+      "evidence": "Abstract / Methods / Results"
+    },
+    "parameter_mentions": [
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4-8 days",
+        "uncertainty_raw": "5.3–19.0 days (95% CI)",
+        "distribution_raw": "NR",
+        "unit_raw": "days",
+        "evidence": "Abstract / Results / Table 4"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "3.96 days",
+        "uncertainty_raw": "3.53–4.39 days (95% CI)",
+        "distribution_raw": "NR",
+        "unit_raw": "days",
+        "evidence": "Results / Table 4"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "5.1 days",
+        "uncertainty_raw": "1.3–11.6 days (95% CI)",
+        "distribution_raw": "NR",
+        "unit_raw": "days",
+        "evidence": "Results / Table 4"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.0 days",
+        "uncertainty_raw": "3.1–4.9 days (95% CrI)",
+        "distribution_raw": "NR",
+        "unit_raw": "days",
+        "evidence": "Results / Table 4"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.6 days",
+        "uncertainty_raw": "3.5–5.9 days (95% CrI)",
+        "distribution_raw": "NR",
+        "unit_raw": "days",
+        "evidence": "Results / Table 4"
+      },
+      {
+        "param": "serial_interval",
+        "measure": "mean",
+        "value_raw": "4.4 days",
+        "uncertainty_raw": "2.9–6.7 days (95% CI)",
+        "distribution_raw": "NR",
+        "unit_raw": "days",
+        "evidence": "Results / Table 4"
+      }
+    ],
+    "field_evidence": {
+      "region": "Abstract / Methods / Results",
+      "period": "Abstract / Methods / Results",
+      "population": "Methods / Results",
+      "sample_size": "Results / Table 4",
+      "method": "Methods",
+      "parameter_type": "Abstract / Results / Table 4",
+      "estimate_measure": "Results / Table 4",
+      "point_estimate": "Results / Table 4",
+      "uncertainty": "Results / Table 4",
+      "distribution": "NR",
+      "unit": "Results / Table 4"
+    }
+  }
+}

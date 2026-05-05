@@ -1,0 +1,235 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-04-01 00:06:37
+研究问题: What are the serial interval and generation interval/time estimates reported for SARS-CoV-2 variants, especially Delta and Omicron?
+输入文件: D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi\evaluation\screening\GT_1\GT_export\serial_interval\p10\project_10_raw.csv
+输出文件: D:\AILab\MAS\Meta-Analysis\MetaAgent-Epi\evaluation\screening\GT_1\GT_export\serial_interval\p10\project_10_screened.csv
+模型配置: openai/openai/gpt-5.4
+批处理大小: 30
+批次并发: 5
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │     38   │    6.3%  │
+│ 🤔 Possible candidates   │      3   │    0.5%  │
+│ 😐 Unlikely candidates   │    558   │   93.2%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │    599   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  2.67  │   64.4%  │ 16/151/46/186/200                 │
+│ Population      │  3.43  │   83.8%  │ 21/26/50/82/420                 │
+│ Location        │  3.04  │   70.8%  │ 55/57/63/61/363                 │
+│ Evidence        │  3.61  │   90.8%  │ 20/17/18/64/480                 │
+│ Parameter       │  0.34  │    7.0%  │ 524/28/ 5/ 2/40                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (38 篇)
+================================================================================
+
+1. PMID: 35732195 [Score: 4/4]
+   Title: Serial Intervals for SARS-CoV-2 Omicron and Delta Variants, Belgium, November 19-December 31, 2021.
+   Overall: This paper is highly aligned with the review question because it explicitly reports serial interval estimates for SARS-CoV-2 variants, specifically Omicron BA.1 and Delta. It is a real-world human study in Belgium and appears to present original empirical analysis with direct comparison of the target parameter across variants.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+2. PMID: 35176230 [Score: 4/4]
+   Title: Generation time of the alpha and delta SARS-CoV-2 variants: an epidemiological analysis.
+   Overall: This study is highly relevant because it explicitly examines SARS-CoV-2 variants in humans using original UK household transmission data. It directly estimates and compares generation time for Alpha and Delta, which is a central target parameter for the review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+3. PMID: 34906289 [Score: 4/4]
+   Title: Serial Interval and Transmission Dynamics during SARS-CoV-2 Delta Variant Predominance, South Korea.
+   Overall: This paper is highly aligned with the review question because it explicitly examines the SARS-CoV-2 Delta variant and reports serial interval estimates in a human population. It also appears to present original empirical data from a real-world setting, with serial interval as a central outcome.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+4. PMID: 36878009 [Score: 4/4]
+   Title: Serial Intervals and Incubation Periods of SARS-CoV-2 Omicron and Delta Variants, Singapore.
+   Overall: This paper is highly aligned with the review question because it explicitly compares SARS-CoV-2 Omicron and Delta variants and directly reports serial interval estimates in a real-world human setting. It also appears to present original empirical analysis, although the abstract provides limited methodological detail.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+5. PMID: 35107418 [Score: 4/4]
+   Title: Serial Intervals and Household Transmission of SARS-CoV-2 Omicron Variant, South Korea, 2021.
+   Overall: This study is highly relevant because it explicitly reports a serial interval estimate for the SARS-CoV-2 Omicron variant using original household transmission data in a real-world human setting. The title and abstract directly match the review question on variant-specific serial or generation interval estimates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+6. PMID: 35144721 [Score: 4/4]
+   Title: Shorter serial intervals in SARS-CoV-2 cases with Omicron BA.1 variant compared with Delta variant, the Netherlands, 13 to 26 December 2021.
+   Overall: This study is highly aligned with the review question because it explicitly compares variant-specific serial intervals for Omicron BA.1 versus Delta using original human transmission-pair data in a real-world setting. The target epidemiologic parameter is central and directly reported in both the title and abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+7. PMID: 37216529 [Score: 4/4]
+   Title: Inferring the differences in incubation-period and generation-interval distributions of the Delta and Omicron variants of SARS-CoV-2.
+   Overall: This paper is highly relevant to the review because it explicitly examines SARS-CoV-2 Delta and Omicron variants and reports generation-interval and serial-interval information. It uses real-world transmission data from the Netherlands and provides variant-specific quantitative estimates central to the research question.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+8. PMID: 36892159 [Score: 4/4]
+   Title: Comparing the incubation period, serial interval, and infectiousness profile between SARS-CoV-2 Omicron and Delta variants.
+   Overall: This study is highly relevant because it explicitly compares SARS-CoV-2 Omicron and Delta variants and directly estimates serial interval from original transmission-pair data in a real-world human setting. It does not mention generation interval/time, but the serial interval outcome is central and clearly reported in the title and abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+9. PMID: 35393009 [Score: 4/4]
+   Title: Secondary Attack Rate, Transmission and Incubation Periods, and Serial Interval of SARS-CoV-2 Omicron Variant, Spain.
+   Overall: This study is highly relevant because it explicitly examines SARS-CoV-2 variants, especially Omicron with comparison to Delta, in a human real-world setting using original contact tracing data. The target parameter is directly named in the title and abstract, making it strongly aligned with the review question on variant-specific serial interval estimates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+10. PMID: 36824395 [Score: 4/4]
+   Title: Estimating the serial intervals of SARS-CoV-2 Omicron BA.4, BA.5, and BA.2.12.1 variants in Hong Kong.
+   Overall: This paper is highly aligned with the review question because it explicitly reports serial interval estimates for SARS-CoV-2 Omicron subvariants using original human contact tracing data in a real-world setting. The target parameter and variant-specific focus are both central and clearly stated in the title and abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+11. PMID: 35791373 [Score: 4/4]
+   Title: Intrinsic generation time of the SARS-CoV-2 Omicron variant: An observational study of household transmission.
+   Overall: This paper is highly aligned with the review question because it explicitly focuses on the SARS-CoV-2 Omicron variant and directly reports generation time and serial interval estimates. It uses original human household contact tracing data from a real-world setting, providing strong empirical relevance.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+12. PMID: 36524247 [Score: 4/4]
+   Title: Estimation of the incubation period and generation time of SARS-CoV-2 Alpha and Delta variants from contact tracing data.
+   Overall: This study is highly relevant to the review question because it explicitly analyzes SARS-CoV-2 variants and reports variant-specific generation time and serial interval estimates. It is based on original human contact tracing and household data from a real-world setting, with Alpha and Delta directly assessed in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+13. PMID: 36068236 [Score: 4/4]
+   Title: Genomic surveillance of SARS-CoV-2 Omicron variants on a university campus.
+   Overall: This study is highly relevant because it explicitly analyzes SARS-CoV-2 variants, specifically Omicron and Delta, in a human real-world setting using original surveillance and sequencing data. Most importantly, the abstract directly reports a variant-specific serial interval comparison, which is central to the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+14. PMID: 36843225 [Score: 4/4]
+   Title: Household transmission of SARS-CoV-2 during the Omicron wave in Shanghai, China: A case-ascertained study.
+   Overall: This study is highly relevant because it is an original human household transmission study focused specifically on the SARS-CoV-2 Omicron variant in a real-world setting. Crucially, the abstract explicitly reports a serial interval estimate for Omicron, which directly matches the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+15. PMID: 34865022 [Score: 4/4]
+   Title: Transmission Dynamics of the Delta Variant of SARS-CoV-2 Infections in South Korea.
+   Overall: This study is highly relevant to the review question because it explicitly examines SARS-CoV-2 Delta variant transmission in a human population using original outbreak and case data from South Korea. Crucially, the abstract directly reports a serial interval estimate, making it strongly aligned with the target epidemiologic parameters.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+16. PMID: 35336939 [Score: 4/4]
+   Title: Estimation of Serial Interval and Reproduction Number to Quantify the Transmissibility of SARS-CoV-2 Omicron Variant in South Korea.
+   Overall: This study is highly relevant because it explicitly examines the SARS-CoV-2 Omicron variant and directly estimates serial interval from original transmission-pair data in a real-world human outbreak setting. The target parameter is central in both the title and abstract, with clear quantitative results reported.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+17. PMID: 34986169 [Score: 4/4]
+   Title: Transmission and containment of the SARS-CoV-2 Delta variant of concern in Guangzhou, China: A population-based study.
+   Overall: This paper is highly relevant because it is an original human outbreak study explicitly focused on the SARS-CoV-2 Delta variant in a real-world setting. Crucially, the abstract directly reports estimated serial interval values, which are central to the review question, even though generation interval/time is not addressed.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+18. PMID: 35914518 [Score: 4/4]
+   Title: Epidemiology of Infections with SARS-CoV-2 Omicron BA.2 Variant, Hong Kong, January-March 2022.
+   Overall: This study is highly relevant because it explicitly examines a SARS-CoV-2 variant, Omicron BA.2, in a human population using real-world Hong Kong epidemic data. The abstract directly mentions serial interval and generation time, making it strongly aligned with the review question, although the brief abstract leaves slightly less detail about the underlying empirical design.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+19. PMID: 36511336 [Score: 4/4]
+   Title: Transmission dynamics of SARS-CoV-2 Omicron variant infections in Hangzhou, Zhejiang, China, January-February 2022.
+   Overall: This study is highly aligned with the review question because it explicitly examines SARS-CoV-2 Omicron BA.1.1 in humans using original outbreak data from a real-world setting. Most importantly, it directly reports variant-specific generation time estimates, making it strongly relevant to the target epidemiologic parameters.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+20. PMID: 35929470 [Score: 4/4]
+   Title: Serial interval in households infected with SARS-CoV-2 variant B.1.1.529 (Omicron) is even shorter compared to Delta.
+   Overall: Based on title-only evidence, this study is highly relevant to the review question because it explicitly addresses serial interval for SARS-CoV-2 variants, specifically Omicron versus Delta, in household transmission. Some uncertainty remains about study design details because no abstract is available, but the title provides strong direct alignment with the target disease, parameter, and likely real-world human setting.
+   维度评分: D=4 P=4 L=3 E=3 Param=4
+
+21. PMID: 36995713 [Score: 4/4]
+   Title: Transmission Characteristics and Inactivated Vaccine Effectiveness Against Transmission of SARS-CoV-2 Omicron BA.5 Variants in Urumqi, China.
+   Overall: This paper is highly relevant because it explicitly examines a SARS-CoV-2 variant (Omicron BA.5) in a human outbreak using original empirical data from a real-world setting. Most importantly, it directly reports a generation interval estimate for the variant in the abstract, which is a core target parameter for the review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+22. PMID: 35587653 [Score: 4/4]
+   Title: Selection for infectivity profiles in slow and fast epidemics, and the rise of SARS-CoV-2 variants.
+   Overall: This study is highly relevant because it explicitly concerns SARS-CoV-2 variants and directly addresses generation time, one of the target parameters. Although it appears more focused on methodological inference and growth advantage than serial interval specifically, the abstract clearly reports variant-specific generation-time findings from real-world human data.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+23. PMID: 35101637 [Score: 4/4]
+   Title: Contact tracing period and epidemiological characteristics of an outbreak of the SARS-CoV-2 Delta variant in Guangzhou.
+   Overall: This is a highly relevant SARS-CoV-2 variant study centered on a real-world Delta outbreak in humans using original contact-tracing data. Crucially, the abstract explicitly reports estimation of the serial interval, which is a core target parameter for the review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+24. PMID: 38259438 [Score: 4/4]
+   Title: Transmission characteristics and inactivated vaccine effectiveness against transmission of the SARS-CoV-2 Omicron BA.2 variant in Shenzhen, China.
+   Overall: This paper is highly relevant because it is an original human outbreak study focused specifically on the SARS-CoV-2 Omicron BA.2 variant in a real-world setting. Crucially, the abstract explicitly reports both generation interval and serial interval estimates, which directly match the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+25. PMID: 36620243 [Score: 4/4]
+   Title: How fast and how well the Omicron epidemic was curtailed. A Guangzhou experience to share.
+   Overall: This is a real-world human outbreak study of SARS-CoV-2 Omicron BA.2 that reports original empirical data from Guangzhou. It is highly relevant because the abstract explicitly provides a variant-specific generation time estimate, alongside other transmission characteristics.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+26. PMID: 36483256 [Score: 4/4]
+   Title: Dynamic characteristics of a COVID-19 outbreak in Nanjing, Jiangsu province, China.
+   Overall: This study is highly relevant because it explicitly examines a SARS-CoV-2 Delta variant outbreak in humans using original outbreak data from a real-world setting. Crucially, the abstract directly reports a serial interval estimate, which is a central target parameter for the review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+27. PMID: 36929985 [Score: 4/4]
+   Title: Bayesian reconstruction of household transmissions to infer the serial interval of COVID-19 by variants of concern: analysis from a prospective community cohort study (Virus Watch).
+   Overall: This study is highly aligned with the review question because it explicitly reports variant-specific serial interval estimates for SARS-CoV-2, including Delta and multiple Omicron sublineages. It uses original human household cohort data in a real-world setting and provides direct quantitative estimates in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+28. PMID: 35942746 [Score: 4/4]
+   Title: Estimating relative generation times and reproduction numbers of Omicron BA.1 and BA.2 with respect to Delta variant in Denmark.
+   Overall: This study is highly relevant because it explicitly analyzes SARS-CoV-2 variants—Omicron BA.1, BA.2, and Delta—and directly estimates variant-specific generation times in a real-world population setting. Although it focuses on relative generation times rather than serial interval and uses modeled surveillance data, the target parameter is central and explicitly reported in the abstract.
+   维度评分: D=4 P=3 L=4 E=3 Param=4
+
+29. PMID: 36736993 [Score: 4/4]
+   Title: A comparative study on epidemiological characteristics, transmissibility, and pathogenicity of three COVID-19 outbreaks caused by different variants.
+   Overall: This study is highly relevant because it explicitly compares SARS-CoV-2 variants and directly reports variant-specific serial interval estimates for Delta, Omicron BA.1, and Omicron BA.2. It also uses original empirical outbreak data in a real-world human setting, although generation interval/time is not mentioned.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+30. PMID: 36444451 [Score: 4/4]
+   Title: [Epidemiological characteristics of two local COVID-19 outbreaks caused by 2019-nCoV Omicron variant in Guangzhou, China].
+   Overall: This study is highly relevant because it is an original human outbreak investigation of SARS-CoV-2 Omicron in a real-world setting and explicitly estimates serial interval. It directly addresses the review question’s target parameter for a variant, although generation interval/time is not mentioned.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+31. PMID: 35495649 [Score: 4/4]
+   Title: SARS-CoV-2 Delta Variant in Jingmen City, Hubei Province, China, 2021: Children Susceptible and Vaccination Breakthrough Infection.
+   Overall: This study is highly relevant because it is an original human outbreak investigation of the SARS-CoV-2 Delta variant in a real-world setting. Most importantly, the abstract explicitly reports a serial interval estimate for the Delta outbreak, which directly matches the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+32. PMID: 36117340 [Score: 4/4]
+   Title: [Study of transmissibility of 2019-nCoV Omicron variant in Beijing].
+   Overall: This is a highly relevant SARS-CoV-2 variant study based on original human outbreak data from Beijing. It explicitly reports serial interval estimates for Omicron, which directly matches the review question, although it does not report generation interval/time.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+33. PMID: 35743340 [Score: 4/4]
+   Title: Clinical Time Delay Distributions of COVID-19 in 2020-2022 in the Republic of Korea: Inferences from a Nationwide Database Analysis.
+   Overall: This study is highly relevant because it provides original human population data from a real-world national setting and explicitly estimates serial interval in relation to the Delta variant. Although it also covers other clinical delay distributions, the title/abstract clearly report the target parameter and a variant-specific comparison.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+34. PMID: 36942330 [Score: 4/4]
+   Title: [Analysis on infection sources and transmission chains of three outbreaks caused by 2019-nCoV Omicron variant in Beijing, China].
+   Overall: This study is highly relevant because it explicitly examines human SARS-CoV-2 Omicron variant outbreaks in a real-world setting and reports original empirical outbreak data. Crucially, the abstract directly provides a serial interval estimate for Omicron, matching the review’s target parameter and variant focus.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+35. PMID: 35855956 [Score: 4/4]
+   Title: Transmission Potential of the Omicron Variant of Severe Acute Respiratory Syndrome Coronavirus 2 in South Korea, 25 November 2021-8 January 2022.
+   Overall: This paper is highly relevant because it explicitly studies the SARS-CoV-2 Omicron variant in a real-world human population and reports original empirical estimates. Most importantly, the abstract directly provides a serial interval estimate for Omicron, which is a central parameter for the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+36. PMID: 36950085 [Score: 4/4]
+   Title: A Small Surge in Incidence of SARS-CoV-2 Omicron Variant in the "Dynamic Zero" Period.
+   Overall: This is a highly relevant empirical human outbreak study of the SARS-CoV-2 Omicron variant in a real-world setting. Crucially, the abstract explicitly reports estimation of serial interval for Omicron, which directly matches the review’s target parameter and disease focus.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+37. PMID: 35968394 [Score: 4/4]
+   Title: Natural history and cycle threshold values analysis of COVID-19 in Xiamen City, China.
+   Overall: This study is highly relevant because it explicitly analyzes a SARS-CoV-2 variant outbreak (Delta) in a human population using original outbreak data from a real-world setting. Crucially, the abstract directly reports serial interval and generation time estimates, making it strongly aligned with the review question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+38. PMID: 34388398 [Score: 4/4]
+   Title: Serial intervals in SARS-CoV-2 B.1.617.2 variant cases.
+   Overall: This title is highly relevant to the review question because it explicitly concerns serial intervals in SARS-CoV-2 B.1.617.2 variant cases, with human and real-world context supported by the keywords. The main remaining uncertainty is whether the paper reports original empirical estimates, but title-only evidence strongly supports high overall relevance.
+   维度评分: D=4 P=4 L=4 E=3 Param=4

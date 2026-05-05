@@ -1,0 +1,2 @@
+Topic	#Project	GT	Pool	TP	FP	FN	TN	Recall (95% CI)	Precision (95% CI)	Workload Reduction (95% CI)	NNS (95% CI)	Specificity	NPV	F1	Accuracy	MCC	WSS@95
+reproduction_number	P8	44	575	41	204	3	327	93.2% [81.8%, 97.7%]	16.7% [12.6%, 21.9%]	57.4% [53.4%, 61.4%]	5.98 [4.67, 8.23]	61.6%	99.1%	28.4%	64.0%	0.294	52.4%

@@ -1,0 +1,98 @@
+{
+  "timestamp_utc": "2026-03-31T09:13:21.079139+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search",
+  "argv": [
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search\\scripts\\ops\\..\\\\cli\\screening_llm_batch.py",
+    "--project-root",
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "--profile",
+    "P5",
+    "--batch-size",
+    "20",
+    "--batch-concurrency",
+    "5",
+    "--topic",
+    "fatality",
+    "--skip-no-abstract"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "P5",
+    "batch_size": 20,
+    "batch_concurrency": 5,
+    "auto_fulltext": false,
+    "fulltext_only": false,
+    "research_question": "What seroprevalence or antibody studies can support inference of SARS-CoV-2 infection fatality rates?"
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p5\\project_5_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T08:37:46.043056+00:00",
+      "type": "file",
+      "size_bytes": 3131337,
+      "sha256": "a814d424462b5bd565f40b4381888e3cbe1bf6bd8b40135a5b4d051eb307d6e1"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p5\\project_5_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:11:06.609482+00:00",
+      "type": "file",
+      "size_bytes": 22818,
+      "sha256": "2c2f5ebd6db9d47a3b0731b6829fee5f9c79fe0f44d3dc5af52a347e6e14afb3"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p5\\project_5_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T09:13:21.062126+00:00",
+      "type": "file",
+      "size_bytes": 5402170,
+      "sha256": "dae108dd9928ae007f26d1737ac584908da9b3642824df7308cf0606fd9172be"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\fatality\\p5\\screening_logs\\screening_report_20260331_171321.txt",
+      "exists": true,
+      "mtime_utc": "2026-03-31T09:13:21.078103+00:00",
+      "type": "file",
+      "size_bytes": 58418,
+      "sha256": "f6ed6aded8d32085aec5da3acab296a0539dd0fbb97aeca8c66309cd9520d115"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": "openai",
+      "model": "openai/gpt-5.4",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 120,
+      "verify_ssl": false,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": true
+    }
+  },
+  "extra": {
+    "paper_count": 1882,
+    "ground_truth_count": 48,
+    "ground_truth_in_pool": 48,
+    "strong_count": 102,
+    "possible_count": 56,
+    "unlikely_count": 1724,
+    "error_count": 0,
+    "fulltext_error_count": 0
+  }
+}

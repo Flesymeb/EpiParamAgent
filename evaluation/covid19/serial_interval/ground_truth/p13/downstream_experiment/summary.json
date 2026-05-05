@@ -1,0 +1,38 @@
+{
+  "project_name": "P13 Serial Interval Robustness Pilot",
+  "screened_csv": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\project_13_screened.csv",
+  "gt_csv": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p13\\project_13_groundtruth.csv",
+  "paper_pool_pdf_dir": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\paper_pool\\pdfs",
+  "counts": {
+    "pool": 111,
+    "gt": 51,
+    "predicted_relevant": 90,
+    "tp": 44,
+    "fp": 46,
+    "fn": 7,
+    "tn": 14
+  },
+  "decision_mix": {
+    "strong_candidate": 76,
+    "unlikely_candidate": 21,
+    "possible_candidate": 14
+  },
+  "pdf_availability": {
+    "gt": {
+      "available": 2,
+      "missing": 49
+    },
+    "predicted_relevant": {
+      "available": 3,
+      "missing": 87
+    },
+    "tp": {
+      "available": 2,
+      "missing": 42
+    },
+    "fn": {
+      "available": 0,
+      "missing": 7
+    }
+  }
+}

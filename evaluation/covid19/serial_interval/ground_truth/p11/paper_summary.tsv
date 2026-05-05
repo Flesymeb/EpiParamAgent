@@ -1,0 +1,2 @@
+Topic	#Project	GT	Pool	TP	FP	FN	TN	Recall (95% CI)	Precision (95% CI)	Workload Reduction (95% CI)	NNS (95% CI)	Specificity	NPV	F1	Accuracy	MCC	WSS@95
+serial_interval	P11	76	841	71	69	5	696	93.4% [85.5%, 97.2%]	50.7% [42.5%, 58.9%]	83.4% [80.9%, 85.7%]	1.97 [1.70, 2.36]	91.0%	99.3%	65.7%	91.2%	0.650	78.4%

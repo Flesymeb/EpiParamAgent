@@ -1,0 +1,106 @@
+{
+  "timestamp_utc": "2026-03-31T12:37:23.939829+00:00",
+  "workflow": "screening_evaluation",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search",
+  "argv": [
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\dev\\literature_search\\scripts\\ops\\..\\\\cli\\screening_evaluation.py",
+    "screening-performance",
+    "--project-root",
+    "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "--profile",
+    "P17",
+    "--topic",
+    "reproduction_number"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "command": "screening-performance",
+    "profile": "P17",
+    "topic": "reproduction_number"
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p17\\project_17_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:13:45.512599+00:00",
+      "type": "file",
+      "size_bytes": 5396,
+      "sha256": "08b88aa8dd63c7064636183d388c1e62844aa4ee900df7633da1ca98436857b5"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p17\\project_17_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T12:37:21.649952+00:00",
+      "type": "file",
+      "size_bytes": 653791,
+      "sha256": "87176871b11df2c5ea03998ef5ed06d9ac140628032acd52058d60d182435bd4"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p17",
+      "exists": true,
+      "mtime_utc": "2026-03-31T12:37:23.938818+00:00",
+      "type": "dir",
+      "file_count": 12,
+      "dir_digest": "f14264eb53801932130aaecd5446fbaca404eafd38dbfb98aee752a18b5f7389",
+      "dir_digest_truncated": false
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p17\\paper_summary.tsv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T12:37:23.938818+00:00",
+      "type": "file",
+      "size_bytes": 240,
+      "sha256": "d9560289762c51a2212f9f32fa0db12fbf8845599a0915b736d9c4e84193ccc4"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "summary": {
+      "topic": "reproduction_number",
+      "project_label": "P17",
+      "ground_truth_count": 15,
+      "screened_count": 209,
+      "tp": 12,
+      "fp": 87,
+      "fn": 3,
+      "tn": 107,
+      "strong_count": 9,
+      "possible_count": 3,
+      "unlikely_count": 3,
+      "not_found_count": 0,
+      "sensitivity": 0.8,
+      "specificity": 0.551546,
+      "precision": 0.121212,
+      "npv": 0.972727,
+      "f1": 0.210526,
+      "accuracy": 0.569378,
+      "workload_reduction": 0.526316,
+      "nns": 8.25,
+      "mcc": 0.181725,
+      "wss95": 0.476316,
+      "recall_ci_low": 0.548146,
+      "recall_ci_high": 0.929525,
+      "recall_ci_display": "80.0% [54.8%, 93.0%]",
+      "precision_display": "12.1%",
+      "workload_reduction_display": "52.6%",
+      "nns_display": "8.25",
+      "specificity_display": "55.2%",
+      "npv_display": "97.3%",
+      "f1_display": "21.1%",
+      "accuracy_display": "56.9%",
+      "mcc_display": "0.182",
+      "wss95_display": "47.6%"
+    },
+    "paper_summary_tsv": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\reproduction_number\\p17\\paper_summary.tsv"
+  }
+}

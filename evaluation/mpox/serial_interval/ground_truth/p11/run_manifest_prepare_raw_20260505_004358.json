@@ -1,0 +1,51 @@
+{
+  "timestamp_utc": "2026-05-04T16:43:58.313929+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_prepare_raw.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP11",
+    "--query",
+    "(mpox OR monkeypox) AND  (serial interval OR transmission parameters)",
+    "--include-gt",
+    "--fix-missing"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "e339e6a15398c9263b2bd40ce2321d0bff969021",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP11",
+    "topic": "",
+    "query": "(mpox OR monkeypox) AND  (serial interval OR transmission parameters)",
+    "date_range": "",
+    "retmax": "all",
+    "include_gt": true,
+    "fix_missing": true,
+    "medline_only": false
+  },
+  "inputs": [],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/serial_interval/p11/project_11_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-04T16:43:58.313758+00:00",
+      "type": "file",
+      "size_bytes": 136092,
+      "sha256": "607735a061c9cabbcc24655b040c664f6d08c74064b04e5ae7d6cf5212b1b961"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 63,
+    "ground_truth_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/screening/mpox/GT_1/GT_export/serial_interval/p11/project_11_groundtruth.csv"
+  }
+}

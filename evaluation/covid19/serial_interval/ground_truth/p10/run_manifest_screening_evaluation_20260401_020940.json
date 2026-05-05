@@ -1,0 +1,116 @@
+{
+  "timestamp_utc": "2026-03-31T18:09:40.177742+00:00",
+  "workflow": "screening_evaluation",
+  "module": "literature_search",
+  "cwd": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+  "argv": [
+    "dev/literature_search/scripts/cli/screening_evaluation.py",
+    "screening-performance",
+    "--screened",
+    "evaluation/screening/GT_1/GT_export/serial_interval/p10/project_10_screened_final.csv",
+    "--ground-truth",
+    "evaluation/screening/GT_1/GT_export/serial_interval/p10/project_10_groundtruth.csv"
+  ],
+  "python_version": "3.11.8 | packaged by Anaconda, Inc. | (main, Feb 26 2024, 21:34:05) [MSC v.1916 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "git": {
+    "repo_root": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi",
+    "commit": "24c8af2c217efe5c0bff52b110854a13b4385a8c",
+    "branch": "main",
+    "dirty": true
+  },
+  "params": {
+    "command": "screening-performance",
+    "profile": "",
+    "topic": "",
+    "threshold_overrides": {}
+  },
+  "inputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10\\project_10_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-01-29T15:14:10.110602+00:00",
+      "type": "file",
+      "size_bytes": 10315,
+      "sha256": "5a5f087b0b905bf84e02e7c85d49dd32d16b9640d42345df942cdfc039d4cd4d"
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10\\project_10_screened_final.csv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T18:06:15.664957+00:00",
+      "type": "file",
+      "size_bytes": 2191990,
+      "sha256": "68e3fd0306b943e1f853d89272908ce06d4708f8400f4f234cc46f6967362198"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10",
+      "exists": true,
+      "mtime_utc": "2026-03-31T17:44:11.577248+00:00",
+      "type": "dir",
+      "file_count": 51,
+      "dir_digest": "97879498703b2f99c419d3a60162f8ca009c9b54d59a01b08f88f1ce64d1990b",
+      "dir_digest_truncated": false
+    },
+    {
+      "path": "D:\\AILab\\MAS\\Meta-Analysis\\MetaAgent-Epi\\evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10\\paper_summary.tsv",
+      "exists": true,
+      "mtime_utc": "2026-03-31T18:09:40.176698+00:00",
+      "type": "file",
+      "size_bytes": 301,
+      "sha256": "edf376a1997e76131155c50605dda89491445701c5e86481a89d886a6d6974d7"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "summary": {
+      "topic": "unknown",
+      "project_label": "custom",
+      "ground_truth_count": 28,
+      "screened_count": 599,
+      "tp": 21,
+      "fp": 19,
+      "fn": 7,
+      "tn": 552,
+      "strong_count": 21,
+      "possible_count": 0,
+      "unlikely_count": 7,
+      "not_found_count": 0,
+      "sensitivity": 0.75,
+      "specificity": 0.966725,
+      "precision": 0.525,
+      "npv": 0.987478,
+      "f1": 0.617647,
+      "accuracy": 0.956594,
+      "workload_reduction": 0.933222,
+      "nns": 1.904762,
+      "mcc": 0.606057,
+      "wss95": 0.883222,
+      "recall_ci_low": 0.566443,
+      "recall_ci_high": 0.873235,
+      "precision_ci_low": 0.374974,
+      "precision_ci_high": 0.670645,
+      "workload_reduction_ci_low": 0.913189,
+      "workload_reduction_ci_high": 0.953255,
+      "nns_ci_low": 1.478261,
+      "nns_ci_high": 2.727273,
+      "recall_ci_display": "75.0% [56.6%, 87.3%]",
+      "precision_display": "52.5%",
+      "workload_reduction_display": "93.3%",
+      "nns_display": "1.90",
+      "precision_ci_display": "52.5% [37.5%, 67.1%]",
+      "workload_reduction_ci_display": "93.3% [91.3%, 95.3%]",
+      "nns_ci_display": "1.90 [1.48, 2.73]",
+      "specificity_display": "96.7%",
+      "npv_display": "98.7%",
+      "f1_display": "61.8%",
+      "accuracy_display": "95.7%",
+      "mcc_display": "0.606",
+      "wss95_display": "88.3%",
+      "threshold_mode": "original_labels",
+      "threshold_overrides": ""
+    },
+    "paper_summary_tsv": "evaluation\\screening\\GT_1\\GT_export\\serial_interval\\p10\\paper_summary.tsv"
+  }
+}
