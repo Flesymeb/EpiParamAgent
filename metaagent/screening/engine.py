@@ -348,12 +348,9 @@ async def screen_papers_batch_async(
                         continue
                     decision, cost = result
                     _write_cost(paper, cost)
-                    # Parse JSON response into Pydantic model
-                    try:
-                        content = decision.content if hasattr(decision, 'content') else str(decision)
-                        parsed = _parse_json_result(content, output_schema)
-                    except Exception:
-                        parsed = decision  # fallback: may already be parsed
+                    # Parse JSON response from AIMessage into Pydantic model
+                    content_str = decision.content if hasattr(decision, 'content') else str(decision)
+                    parsed = _parse_json_result(content_str, output_schema)
                     if isinstance(parsed, BinaryDecision):
                         _write_binary_result(paper, parsed)
                     elif isinstance(parsed, PECODecision):
@@ -402,13 +399,10 @@ async def screen_papers_batch_async(
                             _write_cost(paper, cost)
                         else:
                             llm_result = raw
-                        # Parse JSON response
-                        try:
-                            content = llm_result.content if hasattr(llm_result, 'content') else str(llm_result)
-                            parsed = _parse_json_result(content, output_schema)
-                        except Exception:
-                            parsed = llm_result
-                        if isinstance(llm_result, BinaryDecision):
+                        # Parse JSON response from AIMessage
+                        content_str = llm_result.content if hasattr(llm_result, 'content') else str(llm_result)
+                        parsed = _parse_json_result(content_str, output_schema)
+                        if isinstance(parsed, BinaryDecision):
                             _write_binary_result(paper, result)
                         elif isinstance(result, PECODecision):
                             _write_peco_result(paper, result)
