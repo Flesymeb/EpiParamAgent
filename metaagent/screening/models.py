@@ -17,7 +17,7 @@ DEFAULT_THRESHOLDS: dict[str, dict[str, int]] = {
     },
     "possible": {
         "disease_min": 3,
-        "parameter_min": 3,
+        "parameter_min": 2,
         "evidence_min": 2,
         "population_min": 2,
         "location_min": 2,

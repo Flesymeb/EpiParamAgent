@@ -35,6 +35,7 @@ Assess the study on these dimensions:
   1 = Clearly a review, editorial, commentary, perspective, modeling-only study,
       or meta-analysis without original data collection.
   0 = No empirical content (opinion piece, news, letter without data).
+- **CRITICAL RULE**: If Publication Types include "Review", "Meta-Analysis", or "Systematic Review", evidence MUST be scored 0-1 regardless of abstract content. These are NOT original empirical studies.
 - Reviews, editorials, perspectives, and theory/modeling-only papers should score 0-1.
 - When uncertain, prefer score 2 with LOW confidence. Cascade Tier 2 will resolve
   the uncertainty using PubMed metadata (Publication Types, MeSH terms).

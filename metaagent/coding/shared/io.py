@@ -8,15 +8,15 @@ PMID_PATTERN = re.compile(r"PMID[_-]?(\d+)", re.IGNORECASE)
 
 
 def infer_pmid_from_path(path: Path) -> str | None:
-    name = path.stem
-    match = PMID_PATTERN.search(name)
-    if match:
-        return match.group(1)
-    if name.upper().startswith("DOI_"):
-        return name
-    digits = re.findall(r"\d{6,}", name)
-    if digits:
-        return digits[0]
+    for name in [path.stem, *(part for part in reversed(path.parts) if part != path.name)]:
+        match = PMID_PATTERN.search(name)
+        if match:
+            return match.group(1)
+        if name.upper().startswith("DOI_"):
+            return name
+        digits = re.findall(r"\d{6,}", name)
+        if digits:
+            return digits[0]
     return None
 
 
