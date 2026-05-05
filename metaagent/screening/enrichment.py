@@ -192,6 +192,85 @@ def _extract_methods_section(html: str, max_chars: int = 3000) -> str:
     return ""
 
 
+
+# ── PMC JATS XML: structured full-text sections ──────────────
+
+async def _fetch_pmc_jats_xml(
+    client: httpx.AsyncClient, pmid: str
+) -> Optional[str]:
+    """Fetch PMC JATS XML for a PMID. Returns full structured XML text."""
+    # First try to get PMCID from PMID
+    conv_url = f"https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/"
+    params = {"ids": pmid, "format": "json", "tool": "metaagent-epi", "email": "dev@example.com"}
+    try:
+        r = await client.get(conv_url, params=params, timeout=10.0)
+        if r.status_code == 200:
+            data = r.json()
+            records = data.get("records", [])
+            if records and records[0].get("pmcid"):
+                pmcid = records[0]["pmcid"]
+                # Fetch JATS XML
+                jats_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/?report=xml"
+                r2 = await client.get(jats_url, timeout=15.0, follow_redirects=True)
+                if r2.status_code == 200 and "<article" in r2.text[:500]:
+                    return r2.text
+    except Exception:
+        pass
+    return None
+
+
+def _extract_sections_from_jats(xml_text: str, max_chars: int = 3000) -> str:
+    """Extract Methods and Results sections from PMC JATS XML."""
+    import re
+    
+    # Remove XML tags to get plain text
+    text = re.sub(r"<[^>]+>", " ", xml_text)
+    text = re.sub(r"\s+", " ", text).strip()
+    
+    # Try to find Methods section
+    methods_pat = r"(?:Methods?|METHODS?|Materials and methods|MATERIALS AND METHODS)\s*[:\.\-]?\s*(.*?)(?=(?:Results?|RESULTS?|Discussion|DISCUSSION)\s*[:\.\-]?\s*|$)"
+    m = re.search(methods_pat, text, re.DOTALL | re.IGNORECASE)
+    if m:
+        methods = m.group(1).strip()[:max_chars]
+        if len(methods) > 200:
+            return f"[Methods section from PMC full-text]\n{methods}"
+    
+    return text[:max_chars]
+
+
+# ── Europe PMC: full-text XML ────────────────────────────────
+
+async def _fetch_europe_pmc_fulltext(
+    client: httpx.AsyncClient, pmid: str
+) -> Optional[str]:
+    """Fetch full-text XML from Europe PMC for a PMID."""
+    url = f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmid}/fullTextXML"
+    try:
+        r = await client.get(url, timeout=15.0)
+        if r.status_code == 200 and "<article" in r.text[:500]:
+            return r.text
+    except Exception:
+        pass
+    return None
+
+
+def _extract_sections_from_europe_pmc(xml_text: str, max_chars: int = 3000) -> str:
+    """Extract Methods/Results from Europe PMC XML."""
+    import re
+    text = re.sub(r"<[^>]+>", " ", xml_text)
+    text = re.sub(r"\s+", " ", text).strip()
+    
+    # Europe PMC XML often has <sec sec-type="methods"> or similar
+    methods_pat = r"(?:Methods?|METHODS?|Materials and methods)\b.*?(?=\b(?:Results?|RESULTS?|Discussion)\b|$)"
+    m = re.search(methods_pat, text, re.DOTALL | re.IGNORECASE)
+    if m:
+        methods = m.group(0).strip()[:max_chars]
+        if len(methods) > 100:
+            return f"[Methods from Europe PMC full-text]\n{methods}"
+    
+    return text[:max_chars]
+
+
 async def _fetch_html_snippet(
     client: httpx.AsyncClient, url: str, max_chars: int = 3000
 ) -> str:
@@ -247,8 +326,28 @@ async def enrich_paper_metadata(
             result.source = "pubmed"
             result.success = True
 
-        # Step 2: PMC OA full-text (optional, less reliable)
+        # Step 2: PMC JATS XML — structured full-text (best quality)
         if try_pmc:
+            jats_xml = await _fetch_pmc_jats_xml(client, pmid)
+            if jats_xml:
+                methods = _extract_sections_from_jats(jats_xml)
+                if methods:
+                    result.pmc_full_text_snippet = methods
+                    result.source = "pmc_jats"
+                    result.success = True
+
+        # Step 3: Europe PMC — full-text XML (broader OA coverage)
+        if try_pmc and not result.pmc_full_text_snippet:
+            epmc_xml = await _fetch_europe_pmc_fulltext(client, pmid)
+            if epmc_xml:
+                methods = _extract_sections_from_europe_pmc(epmc_xml)
+                if methods:
+                    result.pmc_full_text_snippet = methods
+                    result.source = "europe_pmc"
+                    result.success = True
+
+        # Step 4: PMC OA HTML (fallback)
+        if try_pmc and not result.pmc_full_text_snippet:
             pmc_html = await _fetch_pmc_html(client, pmid)
             if pmc_html:
                 methods = _extract_methods_section(pmc_html)
