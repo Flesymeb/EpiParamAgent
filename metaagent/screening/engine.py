@@ -68,10 +68,7 @@ def init_llm_model(model_override: str | None = None) -> Any:
     llm_model = model_override or cfg.model or "openai/gpt-4o-mini"
     api_base = cfg.api_base or "https://api.openai.com/v1"
 
-    print(f"API Base: {api_base}")
-    print(f"Model: {llm_model}\n")
-    print(f"SSL Verify: {cfg.verify_ssl}\n")
-    print(f"Force streaming: {cfg.force_streaming}\n")
+    print(f"Model: {llm_model} @ {api_base}")
 
     return ChatOpenAI(
         model=llm_model,
@@ -145,17 +142,16 @@ async def invoke_with_retry_async(llm, prompt, max_retries=3, delay=1.0):
             error_str = str(e)
 
             if "context_length_exceeded" in error_str:
-                print("      ⚠️ Context length exceeded. Skipping retry.")
+                print("      ⚠ Context length exceeded, skipping retry.")
                 raise e
 
             if attempt < max_retries - 1:
-                print(
-                    f"      ⚠️ API glitch (attempt {attempt+1}/{max_retries}): {error_str[:100]}... Retrying in {delay}s..."
-                )
+                err_short = error_str.split('\n')[0][:80]
+                print(f"      Retry {attempt+1}/{max_retries} ({delay}s): {err_short}")
                 await asyncio.sleep(delay)
                 delay *= 2
             else:
-                print(f"      ❌ API failed after {max_retries} attempts.")
+                print(f"      ❌ Failed after {max_retries} attempts.")
 
     raise last_exception if last_exception else Exception("Unknown error in retry loop")
 
@@ -310,7 +306,7 @@ async def screen_papers_batch_async(
     total_batches = (total - 1) // batch_size + 1
     log_every_batches = max(1, total_batches // 20)
     print(
-        f"\nPreparing to screen {total} papers (batch_size={batch_size} | batch_concurrency={batch_concurrency})...\n"
+        f"\nScreening {total} papers (batch={batch_size}, concurrency={batch_concurrency})...\n"
     )
 
     semaphore = asyncio.Semaphore(max(1, batch_concurrency))
@@ -377,12 +373,9 @@ async def screen_papers_batch_async(
                 if should_log or error_count > 0:
                     elapsed = time.perf_counter() - started_at
                     rate = completed / elapsed if elapsed > 0 else 0.0
-                    eta = (total - completed) / rate if rate > 0 else 0.0
                     unlikely_count = len(batch) - strong_count - possible_count - error_count
                     async with print_lock:
-                        print(f"[{batch_idx:>3}/{total_batches}] "
-                              f"Progress {completed}/{total} | "
-                              f"{rate:.1f} papers/s | ETA {eta/60:.1f}min | "
+                        print(f"  [{completed}/{total}] {rate:.1f}/s "
                               f"S={strong_count} P={possible_count} U={unlikely_count} E={error_count}")
                         for msg in single_errors:
                             print(msg)
@@ -429,7 +422,7 @@ async def screen_papers_batch_async(
     elapsed_total = time.perf_counter() - started_at
     rate_total = total / elapsed_total if elapsed_total > 0 else 0.0
     print(
-        f"Completed {total} papers in {elapsed_total/60:.1f}min, avg {rate_total:.2f} papers/s"
+        f"Done: {total} papers in {elapsed_total/60:.1f}min ({rate_total:.1f}/s)"
     )
     return papers
 
