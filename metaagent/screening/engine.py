@@ -305,120 +305,99 @@ async def screen_papers_batch_async(
         f"\nScreening {total} papers (batch={batch_size}, concurrency={batch_concurrency})...\n"
     )
 
-    semaphore = asyncio.Semaphore(max(1, batch_concurrency))
+    # Limit actual in-flight LLM requests. Previously this semaphore wrapped
+    # whole batches, so real API concurrency was batch_size * batch_concurrency.
+    request_semaphore = asyncio.Semaphore(max(1, batch_concurrency))
     print_lock = asyncio.Lock()
     completed = 0
     started_at = time.perf_counter()
 
+    async def invoke_one(prompt):
+        async with request_semaphore:
+            return await invoke_with_retry_async(structured_llm, prompt)
+
     async def process_batch(batch_idx: int, batch: list[tuple[dict[str, Any], Any]]):
         nonlocal completed
-        async with semaphore:
-            batch_prompts = [prompt for _, prompt in batch]
-            batch_papers = [paper for paper, _ in batch]
+        batch_prompts = [prompt for _, prompt in batch]
+        batch_papers = [paper for paper, _ in batch]
 
-            should_log = (
-                batch_idx == 1
-                or batch_idx == total_batches
-                or batch_idx % log_every_batches == 0
+        should_log = (
+            batch_idx == 1
+            or batch_idx == total_batches
+            or batch_idx % log_every_batches == 0
+        )
+
+        try:
+            tasks = [invoke_one(prompt) for prompt in batch_prompts]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+
+            single_errors: list[str] = []
+            for paper, result in zip(batch_papers, results):
+                completed += 1
+                if isinstance(result, Exception):
+                    single_errors.append(
+                        f"  ⚠️ Paper failed PMID={paper.get('PMID', 'N/A')}: {str(result)[:100]}"
+                    )
+                    _mark_paper_error(paper, result)
+                    continue
+                decision, cost = result
+                _write_cost(paper, cost)
+                parsed = _coerce_structured_result(decision, output_schema)
+                _write_parsed_result(
+                    paper,
+                    parsed,
+                    thresholds=config.get("thresholds"),
+                    stage_mode=stage_mode,
+                    evidence_floor=evidence_floor,
+                )
+
+            strong_count = sum(
+                1 for p in batch_papers if p.get("llm_suggest") == "strong_candidate"
+            )
+            possible_count = sum(
+                1 for p in batch_papers if p.get("llm_suggest") == "possible_candidate"
+            )
+            error_count = sum(
+                1 for p in batch_papers if p.get("llm_suggest") == "error"
             )
 
-            try:
-                tasks = [
-                    invoke_with_retry_async(structured_llm, prompt)
-                    for prompt in batch_prompts
-                ]
-                results = await asyncio.gather(*tasks, return_exceptions=True)
-
-                single_errors: list[str] = []
-                for paper, result in zip(batch_papers, results):
-                    completed += 1
-                    if isinstance(result, Exception):
-                        single_errors.append(
-                            f"  ⚠️ Paper failed PMID={paper.get('PMID', 'N/A')}: {str(result)[:100]}"
-                        )
-                        _mark_paper_error(paper, result)
-                        continue
-                    decision, cost = result
-                    _write_cost(paper, cost)
-                    # Parse JSON response from AIMessage into Pydantic model
-                    if isinstance(decision, BinaryDecision):
-                        parsed = decision
-                    elif isinstance(decision, (ScreeningDecision, PECODecision)):
-                        parsed = decision
-                    else:
-                        content_str = getattr(decision, 'content', '') or ''
-                        if not content_str.strip():
-                            raise ValueError("Empty response from LLM")
-                        parsed = _parse_json_result(content_str, output_schema)
-                    if isinstance(parsed, BinaryDecision):
-                        _write_binary_result(paper, parsed)
-                    elif isinstance(parsed, PECODecision):
-                        _write_peco_result(paper, parsed)
-                    else:
-                        _write_structured_result(
-                            paper,
-                            parsed,
-                            thresholds=config.get("thresholds"),
-                            stage_mode=stage_mode,
-                            evidence_floor=evidence_floor,
-                        )
-
-                strong_count = sum(
-                    1 for p in batch_papers if p.get("llm_suggest") == "strong_candidate"
-                )
-                possible_count = sum(
-                    1 for p in batch_papers if p.get("llm_suggest") == "possible_candidate"
-                )
-                error_count = sum(
-                    1 for p in batch_papers if p.get("llm_suggest") == "error"
-                )
-
-                if should_log or error_count > 0:
-                    elapsed = time.perf_counter() - started_at
-                    rate = completed / elapsed if elapsed > 0 else 0.0
-                    unlikely_count = len(batch) - strong_count - possible_count - error_count
-                    async with print_lock:
-                        print(f"  [{completed}/{total}] {rate:.1f}/s "
-                              f"S={strong_count} P={possible_count} U={unlikely_count} E={error_count}")
-                        for msg in single_errors:
-                            print(msg)
-
-            except Exception as e:
+            if should_log or error_count > 0:
+                elapsed = time.perf_counter() - started_at
+                rate = completed / elapsed if elapsed > 0 else 0.0
+                unlikely_count = len(batch) - strong_count - possible_count - error_count
                 async with print_lock:
-                    print(f"  [Batch {batch_idx}] Batch failed: {str(e)[:200]}")
-                    print(f"  [Batch {batch_idx}] Retrying individual papers...")
-                for paper, prompt in batch:
-                    try:
+                    print(f"  [{completed}/{total}] {rate:.1f}/s "
+                          f"S={strong_count} P={possible_count} U={unlikely_count} E={error_count}")
+                    for msg in single_errors:
+                        print(msg)
+
+        except Exception as e:
+            async with print_lock:
+                print(f"  [Batch {batch_idx}] Batch failed: {str(e)[:200]}")
+                print(f"  [Batch {batch_idx}] Retrying individual papers...")
+            for paper, prompt in batch:
+                try:
+                    async with request_semaphore:
                         raw = await invoke_with_retry_async(structured_llm, prompt)
-                        if isinstance(raw, tuple):
-                            llm_result, cost = raw
-                            _write_cost(paper, cost)
-                        else:
-                            llm_result = raw
-                            cost = {}
-                        # Parse JSON response from AIMessage
-                        content_str = getattr(llm_result, 'content', '') or ''
-                        if not content_str.strip():
-                            raise ValueError("Empty response from LLM")
-                        parsed = _parse_json_result(content_str, output_schema)
-                        if isinstance(parsed, BinaryDecision):
-                            _write_binary_result(paper, result)
-                        elif isinstance(result, PECODecision):
-                            _write_peco_result(paper, result)
-                        else:
-                            _write_structured_result(
-                                paper,
-                                result,
-                                thresholds=config.get("thresholds"),
-                                stage_mode=stage_mode,
-                                evidence_floor=evidence_floor,
-                            )
-                    except Exception as e2:
-                        async with print_lock:
-                            print(
-                                f"    Paper failed PMID={paper.get('PMID', 'N/A')}: {str(e2)[:100]}"
-                            )
-                        _mark_paper_error(paper, e2)
+                    if isinstance(raw, tuple):
+                        llm_result, cost = raw
+                        _write_cost(paper, cost)
+                    else:
+                        llm_result = raw
+                    parsed = _coerce_structured_result(llm_result, output_schema)
+                    _write_parsed_result(
+                        paper,
+                        parsed,
+                        thresholds=config.get("thresholds"),
+                        stage_mode=stage_mode,
+                        evidence_floor=evidence_floor,
+                    )
+                except Exception as e2:
+                    async with print_lock:
+                        print(
+                            f"    Paper failed PMID={paper.get('PMID', 'N/A')}: {str(e2)[:100]}"
+                        )
+                    _mark_paper_error(paper, e2)
 
     batches = [all_prompts[i : i + batch_size] for i in range(0, total, batch_size)]
     await asyncio.gather(
@@ -431,6 +410,39 @@ async def screen_papers_batch_async(
         f"Done: {total} papers in {elapsed_total/60:.1f}min ({rate_total:.1f}/s)"
     )
     return papers
+
+
+def _coerce_structured_result(result: Any, output_schema: type) -> Any:
+    """Normalize LangChain structured output across provider response styles."""
+    if isinstance(result, (BinaryDecision, ScreeningDecision, PECODecision)):
+        return result
+
+    content_str = getattr(result, "content", "") or ""
+    if not content_str.strip():
+        raise ValueError("Empty response from LLM")
+    return _parse_json_result(content_str, output_schema)
+
+
+def _write_parsed_result(
+    paper: dict[str, Any],
+    parsed: Any,
+    *,
+    thresholds: dict[str, Any] | None,
+    stage_mode: str,
+    evidence_floor: int,
+) -> None:
+    if isinstance(parsed, BinaryDecision):
+        _write_binary_result(paper, parsed)
+    elif isinstance(parsed, PECODecision):
+        _write_peco_result(paper, parsed)
+    else:
+        _write_structured_result(
+            paper,
+            parsed,
+            thresholds=thresholds,
+            stage_mode=stage_mode,
+            evidence_floor=evidence_floor,
+        )
 
 
 def _write_structured_result(

@@ -28,6 +28,7 @@ def coding():
 def extract(disease, topic, profile, stage, fetch_mode, out, codebook):
     """Extract coding sheet from papers (PDF fetch + Stage A/B LLM extraction)."""
     proj = resolve_project_root()
+    stage_arg = "both" if stage == "all" else stage
 
     # Resolve codebook from disease + topic
     if codebook:
@@ -55,7 +56,7 @@ def extract(disease, topic, profile, stage, fetch_mode, out, codebook):
     argv = [
         "--input", str(pmids_path),
         "--codebook", str(cb_path),
-        "--stage", stage,
+        "--stage", stage_arg,
         "--fetch-mode", fetch_mode,
     ]
     if out:

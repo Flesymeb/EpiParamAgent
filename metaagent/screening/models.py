@@ -45,19 +45,19 @@ class DimensionAssessment(BaseModel):
 class ScreeningDecision(BaseModel):
     """Structured multi-dimension output returned by the screening model."""
 
-    disease_relevance: DimensionAssessment = Field(
+    disease_relevance: Optional[DimensionAssessment] = Field(default=None, 
         description="疾病相关性: 是否研究目标疾病(COVID-19/SARS-CoV-2)"
     )
-    population_relevance: DimensionAssessment = Field(
+    population_relevance: Optional[DimensionAssessment] = Field(default=None, 
         description="人群相关性: 是否关注人类（非纯动物或体外研究）"
     )
-    location_relevance: DimensionAssessment = Field(
+    location_relevance: Optional[DimensionAssessment] = Field(default=None, 
         description="地理相关性: 是否在真实地理环境中进行"
     )
-    original_evidence: DimensionAssessment = Field(
+    original_evidence: Optional[DimensionAssessment] = Field(default=None, 
         description="原始数据: 是否报告原始经验数据（非综述等）"
     )
-    parameter_relevance: DimensionAssessment = Field(
+    parameter_relevance: Optional[DimensionAssessment] = Field(default=None, 
         description="目标参数相关性: 是否报告研究问题所关注的参数"
     )
 

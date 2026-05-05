@@ -35,7 +35,6 @@ def prepare(project_root, profile, disease, topic, query, date_range, retmax,
             raw_input, output, ground_truth, include_gt, fix_missing, medline_only):
     """Prepare raw screening CSV from PubMed query."""
     argv = [
-        "screening_prepare_raw.py",
         "--project-root", str(resolve_project_root() if not project_root else Path(project_root).resolve()),
         "--profile", profile,
     ]
@@ -81,7 +80,6 @@ def run(project_root, profile, disease, topic, batch_size, batch_concurrency,
         return
 
     argv = [
-        "screening_llm_batch.py",
         "--project-root", str(resolve_project_root() if not project_root else Path(project_root).resolve()),
         "--profile", profile,
         "--batch-size", str(batch_size),
@@ -187,7 +185,8 @@ def _run_cascade(project_root, profile, disease, topic, batch_size, batch_concur
 def evaluate(ctx, subcommand, project_root, profile, disease, topic,
              ground_truth, screened_results, search_results, bucket, axis, values):
     """Evaluate screening results (search-coverage | performance | threshold-sweep | retrieval-metrics)."""
-    argv = [subcommand]
+    script_subcommand = "screening-performance" if subcommand == "performance" else subcommand
+    argv = [script_subcommand]
     proj = str(resolve_project_root() if not project_root else Path(project_root).resolve())
     argv += ["--project-root", proj]
     if profile:          argv += ["--profile", profile]
@@ -213,7 +212,7 @@ def evaluate(ctx, subcommand, project_root, profile, disease, topic,
 @click.option("--update-md/--no-update-md", default=False, help="Update drafts/result.md")
 def report(disease, root, topics, out, with_plots, update_md):
     """Generate academic-style screening report with tables and figures."""
-    argv = ["screening_report_academic.py", "--disease", disease]
+    argv = ["--disease", disease]
     if root:       argv += ["--root", root]
     if topics:     argv += ["--topics", topics]
     if out:        argv += ["--out", out]
@@ -328,17 +327,21 @@ def _run_script(script_name: str, argv: list[str]) -> None:
     import subprocess
 
     script_map = {
-        "screening_prepare_raw":    "screening_prepare_raw",
+        "screening_prepare_raw":    "screening_prepare",
         "screening_llm_batch":      "screening_llm_batch",
         "screening_evaluation":     "screening_evaluation",
-        "screening_report_academic": "screening_report_academic",
+        "screening_report_academic": "screening_report",
         "run_sp_fulltext_all":      "run_sp_fulltext_all",
         "prompt_optimizer":         "prompt_optimizer",
         "prepare_downstream_experiment": "prepare_downstream_experiment",
     }
 
     scripts_dir = DEV_ROOT / "tools" / "scripts"
-    script_path = scripts_dir / f"{script_name}.py"
+    script_path = scripts_dir / f"{script_map.get(script_name, script_name)}.py"
+    if not script_path.exists():
+        legacy_path = DEV_ROOT / "dev" / "literature_search" / "scripts" / "cli" / f"{script_name}.py"
+        if legacy_path.exists():
+            script_path = legacy_path
 
     if not script_path.exists():
         raise click.ClickException(f"Script not found: {script_path}")

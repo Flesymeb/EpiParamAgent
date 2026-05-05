@@ -156,15 +156,7 @@ def resolve_profile_paths(
 
     topic_key = _normalize_topic(topic) if topic else profile.topic_key
     disease_key = _normalize_topic(disease) if disease else profile.disease_key
-    base_dir = (
-        Path(project_root)
-        / "evaluation"
-        / "screening"
-        / disease_key
-        / "GT_1"
-        / "GT_export"
-        / topic_key
-    )
+    base_dir = Path(project_root) / "evaluation" / disease_key / topic_key / "ground_truth"
     project_dir = base_dir / profile.project_dir_name
     stem = profile.project_file_stem
 
