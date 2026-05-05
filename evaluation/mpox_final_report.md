@@ -8,21 +8,22 @@
 
 9 projects across 3 parameters (Case Fatality Rate, Serial Interval/Incubation Period, Reproduction Number). All 9 aligned against source systematic review reference values. All confidence intervals overlap.
 
-| # | Project | Parameter | SR Reference (95% CI) | LLM Extraction (95% CI) | Studies |
-|---|---------|----------|----------------------|------------------------|---------|
-| 1 | MP4 | CFR | **5.8%** (aggregate) | **5.8%** (aggregate, 29/509) | 8 |
-| 2 | MP5 | Incubation Period | **8.26 d** (7.55–8.97) | **8.55 d** (7.02–10.09) | 6 |
-| 3 | MP6 | Serial Interval | **8.70 d** (6.5–11.0) | **9.00 d** (6.74–11.27) | 4 |
-| 4 | MP7 | CFR (pre-2016) | **11.40%** (5.8–21.1) | **11.11%** (9.51–12.71) | 29 |
-| 5 | MP8 | CFR (Clade I) | **9.80%** | **8.33%** (6.39–10.27) | 10 |
-|   |      | CFR (Clade IIa) | **3.50%** | **4.26%** (1.59–6.93) | 4 |
-|   |      | CFR (Clade IIb) | **0.10%** | **0.089%*** | 1† |
-| 6 | MP9 | R0 | **1.80** (1.70–1.90) | **1.78** (1.67–1.90) | 6 |
-| 7 | MP10 | Serial Interval | **12.00 d** (8.01–15.99) | **11.42 d** (8.37–14.48) | 6 |
-| 8 | MP11 | Serial Interval | **8.30 d** (6.74–10.23) | **8.03 d** (7.12–8.93) | 6 |
-| 9 | MP12 | Paediatric CFR | **≤11%** (4–20) | **10.46%** (7.74–13.17) | 12 |
+| # | Project | Parameter | SR (95% CI) | SR N | LLM (95% CI) | LLM N | I² |
+|---|---------|----------|------------|------|-------------|-------|-----|
+| 1 | MP4 | CFR | **5.8%** (aggregate) | 23 | **5.8%** (aggregate, 29/509) | 8 | — |
+| 2 | MP5 | IP | **8.26 d** (7.55–8.97) | 10 | **8.55 d** (7.02–10.09) | 6 | 89.8% |
+| 3 | MP6 | SI | **8.70 d** (6.5–11.0) | —† | **9.00 d** (6.74–11.27) | 4 | 7.5% |
+| 4 | MP7 | CFR (pre-2016) | **11.40%** (5.8–21.1) | 30 | **11.11%** (9.51–12.71) | 29 | 100% |
+| 5 | MP8 | CFR (Clade I) | **9.80%** | —† | **8.33%** (6.39–10.27) | 10 | 100% |
+|   |      | CFR (Clade IIa) | **3.50%** | —† | **4.26%** (1.59–6.93) | 4 | 100% |
+|   |      | CFR (Clade IIb) | **0.10%** | —† | **0.089%*** | 1‡ | — |
+| 6 | MP9 | R0 | **1.80** (1.70–1.90) | 6 | **1.78** (1.67–1.90) | 6 | 93.5% |
+| 7 | MP10 | SI | **12.00 d** (8.01–15.99) | 30 | **11.42 d** (8.37–14.48) | 6 | 91.8% |
+| 8 | MP11 | SI | **8.30 d** (6.74–10.23) | 25 | **8.03 d** (7.12–8.93) | 6 | 22.8% |
+| 9 | MP12 | CFR | **≤11%** (4–20) | 7 | **10.46%** (7.74–13.17) | 12 | 100% |
 
-> \* Ahmed/2023 single-study global value (n = 84,075 confirmed cases). † Clade IIb reported as single representative value rather than pooled.
+> \* Ahmed/2023 single-study global value (n = 84,075 confirmed cases). ‡ Clade IIb reported as single representative value rather than pooled.  
+> † SR values from summary table or qualitative review rather than formal meta-analysis; N may not be directly comparable.
 
 ---
 
@@ -109,7 +110,20 @@
 
 ---
 
-## 6. Technical Notes
+## 6. Heterogeneity Notes
+
+| Parameter type | Typical I² | Interpretation |
+|---------------|-----------|----------------|
+| R0/Rt | 93.5% | Expected: estimates from different methods (EpiEstim vs MCMC) and populations vary naturally |
+| Serial Interval | 7.5%–91.8% | Low for 2022-only studies, high when mixing historical (DRC) and modern data |
+| Incubation Period | 71.8%–89.8% | Moderate-high: differences in case definitions and reporting |
+| Case Fatality Rate | 100% | Extreme heterogeneity: papers span 1970–2024, multiple continents, different clades. Pooled CFR should be interpreted as a coarse average across very different populations. Stratification by clade/region/time period recommended |
+
+High I² in CFR projects reflects the fundamental biological reality that mpox CFR ranges from ~0.1% (Clade IIb, non-endemic 2022) to ~10% (Clade I, endemic, historical). The pooled estimates remain useful as overall benchmarks but should not be over-interpreted as precise population-level risk estimates.
+
+---
+
+## 7. Technical Notes
 
 - **LLM:** GLM-5.1 via OpenRouter, temperature 0.0, max_tokens 8000
 - **PDF Processing:** MinerU v4 API + PMC OA direct download; Sci-Hub fallback for non-OA papers
