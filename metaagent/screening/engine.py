@@ -298,7 +298,7 @@ async def screen_papers_batch_async(
             "content": content,
             "keywords": keywords,
         }
-        if is_peco:
+        if is_peco or strategy == "5d":
             prompt_kwargs["pub_types"] = (paper.get("pub_types") or "").strip() or "(Not available)"
             prompt_kwargs["mesh_terms"] = (paper.get("mesh_terms") or "").strip() or "(Not available)"
         prompt = template.format_messages(**prompt_kwargs)
