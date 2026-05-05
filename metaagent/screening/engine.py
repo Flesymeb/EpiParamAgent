@@ -540,29 +540,93 @@ def _build_json_schema_hint(model_class: type) -> str:
 
 
 def _parse_json_result(content: str, model_class: type) -> Any:
-    """Parse LLM JSON output into a Pydantic model, with fallbacks."""
+    """Parse LLM JSON output into a Pydantic model, with fallbacks and field name mapping."""
     import json as _json
-    # Try direct parse
-    try:
-        return model_class(**_json.loads(content))
-    except Exception:
-        pass
-    # Try to extract JSON from markdown code blocks
     import re
-    m = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', content, re.DOTALL)
-    if m:
+
+    # Extract JSON from content
+    data = None
+    for pattern in [
+        r'```(?:json)?\s*(\{.*?\})\s*```',
+        r'\{.*\}',
+    ]:
+        m = re.search(pattern, content, re.DOTALL)
+        if m:
+            try:
+                data = _json.loads(m.group(1) if m.lastindex else m.group(0))
+                break
+            except Exception:
+                pass
+    if data is None:
         try:
-            return model_class(**_json.loads(m.group(1)))
+            data = _json.loads(content)
         except Exception:
-            pass
-    # Try to find any JSON object in the text
-    m2 = re.search(r'\{.*\}', content, re.DOTALL)
-    if m2:
-        try:
-            return model_class(**_json.loads(m2.group(0)))
-        except Exception:
-            pass
-    raise ValueError(f"Could not parse JSON from response: {content[:200]}")
+            raise ValueError(f"Could not parse JSON from response: {content[:200]}")
+
+    # Map abbreviated/alternative field names to Pydantic model fields
+    field_map = {
+        # PECO mappings
+        "P": "population", "E": "exposure", "C": "comparison", "O": "outcome",
+        "P_present": None, "E_present": None, "C_present": None, "O_present": None,
+        "P_justification": None, "E_justification": None,
+        # 5D mappings
+        "disease": "disease_relevance", "population": "population_relevance",
+        "location": "location_relevance", "evidence": "original_evidence",
+        "parameter": "parameter_relevance",
+        "disease_relevance_score": None, "population_relevance_score": None,
+        # Score fields
+        "score_disease": None, "score_population": None, "score_location": None,
+        "score_evidence": None, "score_parameter": None,
+    }
+
+    # Normalize flattened PECO fields
+    if any(k.startswith(("P_", "E_", "C_", "O_")) for k in data):
+        normalized = {}
+        for prefix, field in [("P", "population"), ("E", "exposure"),
+                               ("C", "comparison"), ("O", "outcome")]:
+            present_key = f"{prefix}_present"
+            just_key = f"{prefix}_justification"
+            if present_key in data:
+                normalized[field] = {
+                    "present": data[present_key],
+                    "justification": data.get(just_key, ""),
+                }
+        if normalized:
+            data.update(normalized)
+
+    # Remap abbreviated field names
+    remapped = {}
+    for k, v in data.items():
+        if k in field_map and field_map[k] is not None:
+            remapped[field_map[k]] = v
+        elif k in field_map:
+            pass  # Skip mapped-to-None fields
+        elif isinstance(v, dict) and "present" in v:
+            remapped[k] = v
+        elif isinstance(v, bool):
+            remapped[k] = v
+        else:
+            remapped[k] = v
+    data = remapped
+
+    # Convert flat booleans (P:true, E:true) to structured objects
+    for elem_name in ["population", "exposure", "comparison", "outcome"]:
+        if elem_name in data and isinstance(data[elem_name], bool):
+            data[elem_name] = {
+                "present": data[elem_name],
+                "justification": "",
+            }
+
+    # Convert flat scores (disease:4) to structured objects for 5D
+    for dim_name in ["disease_relevance", "population_relevance",
+                      "location_relevance", "original_evidence", "parameter_relevance"]:
+        if dim_name in data and isinstance(data[dim_name], (int, float)):
+            data[dim_name] = {
+                "score": int(data[dim_name]),
+                "justification": data.get("overall_justification", ""),
+            }
+
+    return model_class(**data)
 
 
 def _mark_paper_error(paper: dict[str, Any], error: Exception) -> None:
