@@ -1,3 +1,4 @@
+Respond in JSON format only.
 Research question: {research_question}
 
 Title: {title}

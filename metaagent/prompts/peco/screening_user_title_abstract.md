@@ -1,4 +1,5 @@
 Research question: {research_question}
+Respond in JSON format. Output a single JSON object matching the PECO schema.
 
 Title: {title}
 Keywords: {keywords}
