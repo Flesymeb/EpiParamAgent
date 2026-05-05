@@ -15,7 +15,7 @@ STRATEGIES = {
         "rules": {
             "serial_interval": {
                 "disease": [r'COVID', r'SARS.CoV.2', r'coronavirus', r'2019.nCoV'],
-                "parameter": [r'serial.interval', r'incubation.period', r'generation.time', r'transmission.interval'],
+                "parameter": [r'serial.interval', r'incubation.period', r'generation.time', r'transmission.pair', r'symptom.onset.interval', r'serial.interval.estimate'],
             },
             "reproduction_number": {
                 "disease": [r'COVID', r'SARS.CoV.2', r'coronavirus', r'2019.nCoV'],
@@ -62,7 +62,8 @@ def evaluate_keyword(proj, topic):
 
     included = set()
     for row in rows:
-        text = (row.get("Title","") + " " + row.get("Abstract","")).lower()
+        # Title-only keyword matching (simulates rapid title screening)
+        text = (row.get("Title") or "").lower()
         if any(re.search(p, text) for p in rules["disease"]) and any(re.search(p, text) for p in rules["parameter"]):
             included.add(row[pmid_col].strip())
 
