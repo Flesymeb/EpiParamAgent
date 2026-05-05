@@ -74,6 +74,21 @@ class ScreeningDecision(BaseModel):
     )
 
     @model_validator(mode="after")
+    def fill_missing_dimensions(self):
+        """Fill any missing dimension with a neutral default (GLM sometimes skips)."""
+        defaults = {
+            "disease_relevance": DimensionAssessment(score=2, justification="Not assessed by model"),
+            "population_relevance": DimensionAssessment(score=2, justification="Not assessed by model"),
+            "location_relevance": DimensionAssessment(score=2, justification="Not assessed by model"),
+            "original_evidence": DimensionAssessment(score=2, justification="Not assessed by model"),
+            "parameter_relevance": DimensionAssessment(score=2, justification="Not assessed by model"),
+        }
+        for field_name, default in defaults.items():
+            if getattr(self, field_name) is None:
+                setattr(self, field_name, default)
+        return self
+
+    @model_validator(mode="after")
     def calculate_overall_score(self):
         weighted_score = (
             0.30 * self.disease_relevance.score

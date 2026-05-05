@@ -277,12 +277,8 @@ async def screen_papers_batch_async(
     else:
         output_schema = ScreeningDecision
 
-    # Use JSON mode — proxies often don't support function calling
-    json_schema = output_schema.model_json_schema()
-    schema_hint = _build_json_schema_hint(output_schema)
-    schema_hint = schema_hint.replace("{", "{{").replace("}", "}}")
-    system_text += f"\n\nYou MUST respond with a single JSON object matching this schema. Output valid JSON only, no other text.\n{schema_hint}"
-    structured_llm = llm_model.bind(response_format={"type": "json_object"})
+    # Use with_structured_output (function calling) for reliable structured output
+    structured_llm = llm_model.with_structured_output(output_schema)
 
     all_prompts: list[tuple[dict[str, Any], Any]] = []
     for paper in papers:
@@ -345,8 +341,15 @@ async def screen_papers_batch_async(
                     decision, cost = result
                     _write_cost(paper, cost)
                     # Parse JSON response from AIMessage into Pydantic model
-                    content_str = decision.content if hasattr(decision, 'content') else str(decision)
-                    parsed = _parse_json_result(content_str, output_schema)
+                    if isinstance(decision, BinaryDecision):
+                        parsed = decision
+                    elif isinstance(decision, (ScreeningDecision, PECODecision)):
+                        parsed = decision
+                    else:
+                        content_str = getattr(decision, 'content', '') or ''
+                        if not content_str.strip():
+                            raise ValueError("Empty response from LLM")
+                        parsed = _parse_json_result(content_str, output_schema)
                     if isinstance(parsed, BinaryDecision):
                         _write_binary_result(paper, parsed)
                     elif isinstance(parsed, PECODecision):
@@ -392,8 +395,11 @@ async def screen_papers_batch_async(
                             _write_cost(paper, cost)
                         else:
                             llm_result = raw
+                            cost = {}
                         # Parse JSON response from AIMessage
-                        content_str = llm_result.content if hasattr(llm_result, 'content') else str(llm_result)
+                        content_str = getattr(llm_result, 'content', '') or ''
+                        if not content_str.strip():
+                            raise ValueError("Empty response from LLM")
                         parsed = _parse_json_result(content_str, output_schema)
                         if isinstance(parsed, BinaryDecision):
                             _write_binary_result(paper, result)

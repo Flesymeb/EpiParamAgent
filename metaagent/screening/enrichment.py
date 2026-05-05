@@ -364,7 +364,14 @@ async def enrich_paper_metadata(
 
     own_client = client is None
     if own_client:
-        client = httpx.AsyncClient(timeout=httpx.Timeout(30.0))
+        client = httpx.AsyncClient(
+            timeout=httpx.Timeout(30.0),
+            headers={
+                "User-Agent": "MetaAgent-Epi/0.3 (https://github.com/Flesymeb/MetaAgent-Epi; mailto:dev@example.com)",
+                "Accept": "text/html, application/xml, application/json",
+            },
+            follow_redirects=True,
+        )
 
     try:
         # Step 1: PubMed XML (always try, fast and reliable)
