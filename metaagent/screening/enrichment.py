@@ -271,6 +271,57 @@ def _extract_sections_from_europe_pmc(xml_text: str, max_chars: int = 3000) -> s
     return text[:max_chars]
 
 
+
+# ── Publisher HTML: DOI → journal page → Methods section ─────
+
+async def _fetch_publisher_html(
+    client: httpx.AsyncClient, doi: str
+) -> Optional[str]:
+    """Try to extract Methods section from publisher HTML page via DOI.
+
+    Only used as a last resort when PMC/Europe PMC are unavailable.
+    Opens the journal's HTML abstract/full-text page and extracts
+    any visible Methods or study design information.
+    """
+    if not doi:
+        return None
+
+    # Resolve DOI to publisher URL
+    try:
+        resolve_url = f"https://doi.org/{doi}"
+        r = await client.get(resolve_url, timeout=10.0, follow_redirects=True)
+        if r.status_code != 200:
+            return None
+        html = r.text
+        url = str(r.url)
+    except Exception:
+        return None
+
+    # Try to find and extract methods-like content
+    import re
+    text = re.sub(r"<script[^>]*>.*?</script>", "", html, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(r"<style[^>]*>.*?</style>", "", text, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(r"<nav[^>]*>.*?</nav>", "", text, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+
+    # Try to extract methods section
+    for pat in [
+        r"(?:Methods?|METHODS?|Materials and methods|Study design|Experimental procedures?)\b.*?(?=\b(?:Results?|RESULTS?|Discussion|DISCUSSION|Conclusion|References|Acknowledgments?)\b|$)",
+        r"(?:Abstract|ABSTRACT)\b.*?(?=\b(?:Introduction|INTRODUCTION)\b|$)",
+    ]:
+        m = re.search(pat, text, re.DOTALL | re.IGNORECASE)
+        if m:
+            methods = m.group(0).strip()
+            if len(methods) > 200:
+                return f"[Publisher HTML via DOI {doi} — {url}]\n{methods[:3000]}"
+
+    # Fallback: return beginning of article text (often contains study design info)
+    if len(text) > 500:
+        return f"[Publisher HTML via DOI {doi}]\n{text[:2000]}"
+
+    return None
+
 async def _fetch_html_snippet(
     client: httpx.AsyncClient, url: str, max_chars: int = 3000
 ) -> str:
@@ -293,15 +344,17 @@ async def enrich_paper_metadata(
     *,
     client: Optional[httpx.AsyncClient] = None,
     try_pmc: bool = True,
+    doi: str = "",
 ) -> EnrichedMetadata:
     """Fetch enriched metadata for a single paper.
 
-    Priority: PubMed XML (fast, reliable) → PMC HTML (slower, less available)
+    Priority: PubMed EFetch → PMC JATS XML → Europe PMC → PMC HTML → Publisher HTML
 
     Args:
         pmid: PubMed ID of the paper.
         client: Optional shared httpx.AsyncClient.
-        try_pmc: Whether to attempt PMC full-text retrieval.
+        try_pmc: Whether to attempt full-text retrieval.
+        doi: Optional DOI for publisher HTML fallback.
 
     Returns:
         EnrichedMetadata with all gathered information.
@@ -356,7 +409,16 @@ async def enrich_paper_metadata(
                     result.source = "pmc"
                     result.success = True
 
-        # Step 3: Build enriched text for LLM prompt
+        # Step 5: Publisher HTML via DOI (last resort)
+        if try_pmc and not result.pmc_full_text_snippet:
+            if doi:
+                pub_html = await _fetch_publisher_html(client, doi)
+                if pub_html:
+                    result.pmc_full_text_snippet = pub_html
+                    result.source = "publisher_html"
+                    result.success = True
+
+        # Build enriched text for LLM prompt
         parts = []
         if result.publication_types:
             parts.append(f"Publication Types: {', '.join(result.publication_types)}")
@@ -402,7 +464,8 @@ async def batch_enrich(
     async def _enrich_one(paper: dict[str, Any]) -> None:
         async with semaphore:
             pmid = (paper.get("PMID") or "").strip()
-            enriched = await enrich_paper_metadata(pmid, try_pmc=try_pmc)
+            doi = (paper.get("DOI") or "").strip()
+            enriched = await enrich_paper_metadata(pmid, try_pmc=try_pmc, doi=doi)
             results.append((paper, enriched))
 
     await asyncio.gather(*(_enrich_one(p) for p in papers))
