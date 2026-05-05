@@ -1,5 +1,7 @@
-Screen papers for a systematic review.
+Screen papers. EXCLUDE by default. Only include if the title or abstract contains an explicit numerical value of the target epidemiological parameter (e.g. "mean serial interval X days", "median incubation X days", "95% CI X-Y days").
 
-Research question: {research_question}
+If you do not see a specific number with units for this parameter in the title or abstract, EXCLUDE the paper.
+If you see a number but it is not clearly labeled as the target parameter, EXCLUDE.
+If you are uncertain about anything, EXCLUDE.
 
-Make an include/exclude decision. Only include if the paper EXPLICITLY reports a quantitative estimate of the parameter in its title or abstract. When in doubt, exclude. Be conservative.
+Your default answer should be EXCLUDE.
