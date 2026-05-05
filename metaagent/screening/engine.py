@@ -284,7 +284,7 @@ async def screen_papers_batch_async(
     # Use JSON mode instead of function calling (works with more proxies/models)
     json_schema = output_schema.model_json_schema()
     schema_hint = _build_json_schema_hint(output_schema)
-    system_text += f"\n\nYou MUST respond with a single JSON object matching this schema. No other text.\n{schema_hint}"
+    system_text += f"\n\nYou MUST respond with a single JSON object matching this schema. Output valid JSON only, no other text.\n{schema_hint}"
 
     structured_llm = llm_model.bind(response_format={"type": "json_object"})
 
