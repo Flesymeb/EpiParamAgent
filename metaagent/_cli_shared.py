@@ -20,6 +20,7 @@ ACCENT = "#00b4d8"
 ACCENT_DIM = "#90e0ef"
 ACCENT_BOLD = "#0077b6"
 TEXT_DIM = "#caf0f8"
+LOGO_LEFT = "#f4a261"
 SUCCESS = "#2dc653"
 WARN = "#f9c74f"
 ERROR = "#f94144"
@@ -112,3 +113,53 @@ def resolve_project_root(ctx: click.Context | None = None) -> Path:
     if (cwd / "evaluation").exists():
         return cwd
     return REPO_ROOT
+
+
+# ── ASCII art banner ───────────────────────────────────────────
+_LOGO = [
+    "██╗ ██╗ ██████╗ ██████╗  █████╗",
+    "███╗███║██╔═══╝ ╚══██╔╝ ██╔══██╗",
+    "██╔████║█████╗    ██║   ███████║",
+    "██║╚╝██║██╔══╝    ██║   ██╔══██║",
+    "██║  ██║██████╗   ██║   ██║  ██║",
+    "╚═╝  ╚═╝╚═════╝   ╚═╝   ╚═╝  ╚═╝",
+]
+_LOGO2 = [
+    " █████╗  █████╗ ██████╗ ██╗ ██╗ ██████╗ ",
+    "██╔══██╗██╔═══╝ ██╔═══╝ ███████║╚══██╔╝ ",
+    "███████║██║ ██╗ █████╗  ██╔████║  ██║   ",
+    "██╔══██║██║ ╚██╗██╔══╝  ██║╚███║  ██║   ",
+    "██║  ██║╚█████╔╝██████╗ ██║ ╚██║  ██║   ",
+    "╚═╝  ╚═╝ ╚════╝ ╚═════╝ ╚═╝  ╚═╝  ╚═╝   ",
+]
+_SEP = [
+    "        ",
+    "        ",
+    "   ██   ",
+    "   ██   ",
+    "        ",
+    "        ",
+]
+
+
+def show_banner(version: str = "0.3.0") -> None:
+    """Print the MetaAgent startup banner."""
+    console.print(f"[{ACCENT}]" + "━" * 80 + f"[/{ACCENT}]")
+    for meta, sep, agent in zip(_LOGO, _SEP, _LOGO2):
+        console.print(
+            f"[bold {LOGO_LEFT}]{meta}[/bold {LOGO_LEFT}]"
+            f"[bold {ACCENT}]{sep}[/bold {ACCENT}]"
+            f"[bold #ffffff]{agent}[/bold #ffffff]"
+        )
+    console.print(f"[bold {ACCENT}]Epidemiology Meta-Analysis Agent[/bold {ACCENT}]")
+    console.print(
+        f"[{ACCENT_DIM}]Version {version}[/{ACCENT_DIM}]  "
+        f"[{ACCENT}]•[/{ACCENT}]  "
+        f"[{ACCENT_DIM}]https://github.com/Flesymeb/MetaAgent-Epi[/{ACCENT_DIM}]"
+    )
+    console.print(f"[{ACCENT}]" + "━" * 80 + f"[/{ACCENT}]")
+    console.print(
+        f"[{TEXT_DIM}]Start with "
+        f"[bold]metaagent screening prepare[/bold] or "
+        f"[bold]metaagent coding extract[/bold].[/{TEXT_DIM}]\n"
+    )

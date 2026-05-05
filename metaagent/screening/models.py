@@ -11,7 +11,7 @@ DEFAULT_THRESHOLDS: dict[str, dict[str, int]] = {
     "strong": {
         "disease_min": 4,
         "parameter_min": 4,
-        "evidence_min": 3,
+        "evidence_min": 2,
         "population_min": 2,
         "location_min": 2,
     },

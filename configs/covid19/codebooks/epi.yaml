@@ -6,10 +6,10 @@ project:
   effect_type: "dispersion_k"
 
 stage_a:
-  prompt_file: prompts/stage_a.py
+  prompt_file: ../coding_prompts/stage_a.py
 
 stage_b:
-  prompt_file: prompts/stage_b.py
+  prompt_file: ../coding_prompts/stage_b.py
 
 parameters:
   research_question: >

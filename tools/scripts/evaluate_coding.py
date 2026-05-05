@@ -40,8 +40,8 @@ from pathlib import Path
 import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-CODING_ROOT = REPO_ROOT / "evaluation" / "coding"
-TOOLS_SRC = REPO_ROOT / "dev" / "tools"
+CODING_ROOT = REPO_ROOT / "evaluation"  # {disease}/{topic}/coding/{project}/
+TOOLS_SRC = REPO_ROOT / "tools"
 
 for p in (TOOLS_SRC,):
     if str(p) not in sys.path:
@@ -198,8 +198,8 @@ def main() -> None:
         print(f"ERROR: {CODING_ROOT} not found.")
         sys.exit(1)
 
-    # Discover projects — two-level iteration: disease → topic → project
-    _SKIP_DIRS = {"GT_papers", "figures", "_summary"}
+    # Discover projects — three-level: disease → topic → coding/{project}
+    _SKIP_DIRS = {"GT_papers", "figures", "_summary", "screening", "ground_truth"}
     projects_to_run: list[tuple[str, str, str, Path]] = []
     for disease_dir in sorted(CODING_ROOT.iterdir()):
         if not disease_dir.is_dir() or disease_dir.name.startswith("_"):
@@ -211,7 +211,10 @@ def main() -> None:
                 continue
             if args.topic and topic_dir.name != args.topic:
                 continue
-            for project_dir in sorted(topic_dir.iterdir()):
+            coding_dir = topic_dir / "coding"
+            if not coding_dir.is_dir():
+                continue
+            for project_dir in sorted(coding_dir.iterdir()):
                 if not project_dir.is_dir() or project_dir.name.startswith("_"):
                     continue
                 if args.project and project_dir.name != args.project:

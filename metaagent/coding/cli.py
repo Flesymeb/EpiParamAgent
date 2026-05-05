@@ -44,12 +44,12 @@ def extract(disease, topic, profile, stage, fetch_mode, out, codebook):
         cb_rel = cb_map.get((disease, topic))
         if not cb_rel:
             raise click.BadParameter(f"No codebook mapping for disease={disease}, topic={topic}")
-        cb_path = DEV_ROOT / "configs" / "codebooks" / cb_rel.name
+        cb_path = REPO_ROOT / "configs" / disease / "codebooks" / cb_rel.name
 
     # Resolve pmids.txt
     if profile:
         project_id = profile.lower()
-        pmids_path = DEV_ROOT.parent / "evaluation" / "coding" / disease / topic / project_id / "pmids.txt"
+        pmids_path = REPO_ROOT / "evaluation" / disease / topic / "coding" / project_id / "pmids.txt"
         if not pmids_path.exists():
             raise click.BadParameter(f"pmids.txt not found: {pmids_path}")
     else:

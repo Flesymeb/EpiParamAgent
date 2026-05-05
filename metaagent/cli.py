@@ -17,16 +17,8 @@ from metaagent._cli_shared import (
 
 def _show_banner():
     from metaagent import __version__
-    console.print()
-    console.print(
-        r"  [bold #00b4d8]MetaAgent-Epi[/bold #00b4d8]",
-        justify="center",
-    )
-    console.print(
-        f"  [dim]v{__version__} — LLM-powered epidemiological systematic review automation[/dim]",
-        justify="center",
-    )
-    console.print()
+    from metaagent._cli_shared import show_banner
+    show_banner(__version__)
 
 
 @click.group(invoke_without_command=True, cls=StyledGroup)

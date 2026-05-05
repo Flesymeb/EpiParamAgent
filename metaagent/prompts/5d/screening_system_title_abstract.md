@@ -22,8 +22,22 @@ Assess the study on these dimensions:
 - Real-world geographic or field context is preferred.
 
 4. Original empirical evidence
-- The study should report original empirical data or primary analysis.
-- Reviews, editorials, perspectives, and theory-only papers should score low.
+- Does the paper present original empirical data from human subjects?
+- Scoring guide:
+  4 = Publication Type indicates original research (Journal Article, Observational Study,
+      Clinical Trial, etc.) OR the abstract explicitly describes data collection from
+      human subjects (patients, cohort, surveillance data, contact tracing, field data).
+  3 = Abstract suggests original data analysis but lacks explicit description of data
+      source or collection methods. The study appears empirical but evidence is indirect.
+  2 = Cannot determine from abstract alone whether original data is presented.
+      Abstract may describe findings without clarifying the study design.
+      → Mark confidence LOW to trigger enrichment in cascade Tier 2.
+  1 = Clearly a review, editorial, commentary, perspective, modeling-only study,
+      or meta-analysis without original data collection.
+  0 = No empirical content (opinion piece, news, letter without data).
+- Reviews, editorials, perspectives, and theory/modeling-only papers should score 0-1.
+- When uncertain, prefer score 2 with LOW confidence. Cascade Tier 2 will resolve
+  the uncertainty using PubMed metadata (Publication Types, MeSH terms).
 
 5. Target parameter relevance
 - The study should explicitly report {parameter_focus}.

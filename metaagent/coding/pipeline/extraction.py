@@ -395,16 +395,18 @@ def run_pipeline(
     index_dir.mkdir(parents=True, exist_ok=True)
 
     model = init_llm()
-    stage_a_config = load_config(Path(__file__).resolve().parents[2] / "configs" / "stages" / "stage_a.yaml")
+    # Derive disease config dir from codebook path: configs/{disease}/coding_prompts/
+    codebook_resolved = codebook_path.resolve()
+    disease_configs = codebook_resolved.parents[1]  # configs/{disease}/
+    coding_prompts_dir = disease_configs / "coding_prompts"
+    stage_a_config = load_config(coding_prompts_dir / "stage_a.yaml")
     effect_config = load_config(codebook_path)
     applied_b = _apply_stage_prompt_from_codebook(effect_config, "stage_b", effect_config)
     if not applied_b:
-        prompt_dir = Path(__file__).resolve().parents[2] / "configs" / "prompts"
-        _apply_prompt_override(effect_config, prompt_dir / "stage_b.py")
+        _apply_prompt_override(effect_config, coding_prompts_dir / "stage_b.py")
     applied_a = _apply_stage_prompt_from_codebook(effect_config, "stage_a", stage_a_config)
     if not applied_a:
-        prompt_dir = Path(__file__).resolve().parents[2] / "configs" / "prompts"
-        _apply_prompt_override(stage_a_config, prompt_dir / "stage_a.py")
+        _apply_prompt_override(stage_a_config, coding_prompts_dir / "stage_a.py")
     _inject_codebook_context(stage_a_config, effect_config)
     records: list[dict] = []
     index_rows: list[dict] = []
