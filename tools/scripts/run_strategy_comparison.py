@@ -3,7 +3,7 @@
 Run per-project, evaluate recall/precision/F1.
 """
 from __future__ import annotations
-import csv, re, json, subprocess, sys, time
+import csv, re, json, subprocess, sys, time, os
 from pathlib import Path
 
 ROOT = Path("/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi")
@@ -92,36 +92,44 @@ def evaluate_screened_csv(proj, topic, csv_path, strategy_name):
     # Find decision column
     decision_cols = [c for c in rows[0].keys() if 'decision' in c.lower() or 'suggest' in c.lower()]
     if not decision_cols:
-        # Try 5D-style: strong or possible = include
-        score_col = [c for c in rows[0].keys() if 'score' in c.lower() or 'suggest' in c.lower()]
-        if score_col:
-            col = score_col[0]
+        # Try 5D-style columns
+        for col in rows[0].keys():
+            vals = [str(r[col]).strip().lower() for r in rows[:5]]
+            if all(v in ('strong_candidate', 'unlikely_candidate', 'include', 'exclude', 'strong', 'possible', '') for v in vals if v):
+                decision_cols = [col]
+                break
+
+    if not decision_cols:
+        # Try score-based
+        score_cols = [c for c in rows[0].keys() if 'overall_score' in c.lower().replace(' ','_').replace('-','_')]
+        if score_cols:
+            col = score_cols[0]
             included = set()
             for r in rows:
-                v = str(r.get(col, "")).strip().lower()
-                if v in ("include", "strong", "possible", "yes"):
-                    included.add(r[pmid_col].strip())
-            # Also try overall_score for 5D
-            if not included:
-                score_col2 = [c for c in rows[0].keys() if 'overall_score' in c.lower().replace(' ','_')]
-                if score_col2:
-                    col2 = score_col2[0]
-                    for r in rows:
-                        try:
-                            score = float(r.get(col2, 0) or 0)
-                            if score >= 3:
-                                included.add(r[pmid_col].strip())
-                        except:
-                            pass
-        else:
+                try:
+                    if float(r.get(col, 0) or 0) >= 3:
+                        included.add(r[pmid_col].strip())
+                except: pass
+            if included:
+                # Compute metrics
+                gt_file = EVAL_DIR / topic / "ground_truth" / proj / f"project_{proj[1:]}_groundtruth.csv"
+                with open(gt_file) as f: gt_pmids = {r["gt_pmid"].strip() for r in csv.DictReader(f)}
+                tp = len(gt_pmids & included); fn = len(gt_pmids - included); fp = len(included - gt_pmids)
+                recall = tp/(tp+fn) if (tp+fn) else 0; precision = tp/(tp+fp) if (tp+fp) else 0
+                f1 = 2*recall*precision/(recall+precision) if (recall+precision) else 0
+                return {"proj": proj, "strategy": strategy_name, "included": len(included),
+                        "total": len(rows), "tp": tp, "fn": fn, "fp": fp,
+                        "recall": recall, "precision": precision, "f1": f1}
             return None
-    else:
-        col = decision_cols[0]
-        included = set()
-        for r in rows:
-            v = str(r.get(col, "")).strip().lower()
-            if v in ("include", "strong", "possible", "yes", "1", "true"):
-                included.add(r[pmid_col].strip())
+        print(f"    cols={list(rows[0].keys())[:10]}")
+        return None
+
+    col = decision_cols[0]
+    included = set()
+    for r in rows:
+        v = str(r.get(col, "")).strip().lower()
+        if v in ("include", "strong_candidate", "strong", "possible", "yes", "1", "true"):
+            included.add(r[pmid_col].strip())
 
     if not included:
         return None
@@ -143,30 +151,31 @@ def evaluate_screened_csv(proj, topic, csv_path, strategy_name):
 
 
 def find_latest_screened(proj, topic, experiment_name):
-    """Find latest screened CSV for a given experiment."""
-    exp_dir = EVAL_DIR / topic / "ground_truth" / proj / "experiments" / experiment_name
-    if not exp_dir.exists():
-        return None
+    """Find latest screened CSV for a given experiment name (supports wildcards)."""
+    exp_dir = EVAL_DIR / topic / "ground_truth" / proj / "experiments"
 
-    # Check direct
-    csvs = sorted(exp_dir.rglob(f"project_{proj[1:]}_screened*.csv"),
-                  key=lambda p: p.stat().st_mtime, reverse=True)
-    if csvs:
-        return csvs[0]
-
-    # Check screening_runs subdirs
-    runs_dir = exp_dir / "screening_runs"
-    if runs_dir.exists():
-        csvs = sorted(runs_dir.rglob(f"project_{proj[1:]}_screened*.csv"),
-                      key=lambda p: p.stat().st_mtime, reverse=True)
+    # If exact match
+    exact = exp_dir / experiment_name
+    if exact.exists():
+        csvs = sorted(exact.rglob(f"project_{proj[1:]}_screened*.csv"),
+                     key=lambda p: p.stat().st_mtime, reverse=True)
         if csvs:
             return csvs[0]
+
+    # Try glob pattern
+    if '*' in experiment_name or '?' in experiment_name:
+        for d in sorted(exp_dir.glob(experiment_name), reverse=True):
+            if d.is_dir():
+                csvs = sorted(d.rglob(f"project_{proj[1:]}_screened*.csv"),
+                             key=lambda p: p.stat().st_mtime, reverse=True)
+                if csvs:
+                    return csvs[0]
 
     return None
 
 
 def run_llm_screening(proj, topic, profile, strategy, experiment):
-    """Run LLM screening via CLI."""
+    """Spawn LLM screening as background process, return immediately."""
     cmd = [
         sys.executable, str(ROOT / ".venv/bin/metaagent"),
         "screening", "run",
@@ -174,12 +183,27 @@ def run_llm_screening(proj, topic, profile, strategy, experiment):
         "--strategy", strategy,
         "--experiment", experiment,
         "--batch-size", "15",
+        "--model", "qwen/qwen-turbo",
     ]
     env = {**__import__('os').environ, "LANGCHAIN_OPENAI_TCP_KEEPALIVE": "0"}
-    print(f"  Running: {' '.join(cmd)}")
-    result = subprocess.run(cmd, cwd=str(ROOT), env=env,
-                          capture_output=True, text=True, timeout=3600)
-    return result.returncode == 0
+    log_file = ROOT / "evaluation" / f"screening_{proj}_{experiment}.log"
+    print(f"  Spawning: {' '.join(cmd)} > {log_file}")
+    # Check if already running
+    import subprocess as sp
+    pid_file = ROOT / "evaluation" / f"screening_{proj}_{experiment}.pid"
+    if pid_file.exists():
+        try:
+            old_pid = int(pid_file.read_text().strip())
+            os.kill(old_pid, 0)  # Check if alive
+            print(f"  Already running (PID {old_pid})")
+            return True
+        except (OSError, ValueError):
+            pid_file.unlink()
+
+    proc = sp.Popen(cmd, cwd=str(ROOT), env=env, stdout=open(log_file, 'w'), stderr=subprocess.STDOUT)
+    pid_file.write_text(str(proc.pid))
+    print(f"  Spawned PID {proc.pid}")
+    return True
 
 
 def main():
@@ -215,10 +239,17 @@ def main():
         else:
             print(f"  binary_strict: FAILED")
 
-        # 3. 5D - check existing
-        csv_5d = find_latest_screened(proj, topic, "strategy_5d")
-        if not csv_5d:
-            csv_5d = find_latest_screened(proj, topic, "5d_dsv4pro")
+        # 3. 5D - check existing experiments broadly
+        csv_5d = None
+        exp_dir = EVAL_DIR / topic / "ground_truth" / proj / "experiments"
+        for d in sorted(exp_dir.iterdir(), reverse=True):
+            if d.is_dir() and ('5d' in d.name.lower() or 'dsv4pro' in d.name.lower()):
+                csvs = sorted(d.rglob(f"project_{proj[1:]}_screened*.csv"),
+                             key=lambda p: p.stat().st_mtime, reverse=True)
+                if csvs:
+                    csv_5d = csvs[0]
+                    print(f"  5d: using {d.name}/{csvs[0].name}")
+                    break
         if csv_5d:
             d5_result = evaluate_screened_csv(proj, topic, csv_5d, "5d")
             if d5_result:
