@@ -1,6 +1,6 @@
 """Data-driven screening profile registry.
 
-Profiles live in ``configs/screening_profiles/*.yaml`` so new evaluation
+Profiles live in ``configs/{disease}/screening_profiles/*.yaml`` so new evaluation
 projects can be added without editing Python source files.
 """
 
