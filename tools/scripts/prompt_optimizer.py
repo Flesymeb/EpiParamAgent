@@ -101,7 +101,7 @@ def _compute_precision(screened: dict[str, str], gt_pmids: set[str]) -> float:
 
 def _compress_prompt(prompt_text: str, target_pct: int) -> str:
     """Ask the configured LLM to rewrite prompt_text ~target_pct% shorter."""
-    cfg = load_llm_config(module_hint="literature_search")
+    cfg = load_llm_config(module_hint="screening")
     http_client = httpx.Client(verify=cfg.verify_ssl, timeout=cfg.timeout_s)
     http_async_client = httpx.AsyncClient(verify=cfg.verify_ssl)
     llm = ChatOpenAI(

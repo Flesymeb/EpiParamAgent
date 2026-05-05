@@ -82,8 +82,8 @@ def save_screening_outputs(
     with open(log_file, "w", encoding="utf-8") as f:
         f.write("\n".join(report_lines))
 
-    llm_cfg = load_llm_config(module_hint="literature_search")
-    mineru_cfg = load_mineru_config(module_hint="literature_search")
+    llm_cfg = load_llm_config(module_hint="screening")
+    mineru_cfg = load_mineru_config(module_hint="screening")
     manifest_path = write_run_manifest(
         output_dir=log_dir,
         workflow="screening",
@@ -187,7 +187,7 @@ def _build_report_lines(
     report_lines.append(f"Research question: {research_question}")
     report_lines.append(f"输入文件: {input_file}")
     report_lines.append(f"输出文件: {output_file}")
-    llm_cfg = load_llm_config(module_hint="literature_search")
+    llm_cfg = load_llm_config(module_hint="screening")
     report_lines.append(f"模型配置: {llm_cfg.provider}/{llm_cfg.model}")
     report_lines.append(f"批处理大小: {batch_size}")
     report_lines.append(f"批次并发: {batch_concurrency}")

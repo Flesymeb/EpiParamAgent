@@ -52,7 +52,7 @@ if str(TOOLS_DIR) not in sys.path:
 
 from metaagent.config import load_runtime_env
 
-load_runtime_env(module_hint="literature_search")
+load_runtime_env(module_hint="screening")
 
 
 @dataclass

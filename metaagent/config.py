@@ -123,15 +123,19 @@ def load_llm_config(
     )
     model = (
         _strip_inline_comment(
-            (params.get("llm_model") or os.getenv("LLM_MODEL") or "").strip()
+            (params.get("llm_model") or os.getenv("LLM_MODEL") or os.getenv("ANTHROPIC_MODEL") or "").strip()
         )
         or None
     )
+    # Strip [1m] suffix if present — proxy does not support it as a model variant
+    if model and "[1m]" in model:
+        model = model.split("[")[0].strip()
     api_key = (
         params.get("llm_api_key")
         or os.getenv("LLM_API_KEY")
         or os.getenv("OPENAI_API_KEY")
         or os.getenv("ANTHROPIC_API_KEY")
+        or os.getenv("ANTHROPIC_AUTH_TOKEN")
     )
     api_base = _strip_inline_comment(
         (
@@ -139,6 +143,7 @@ def load_llm_config(
             or os.getenv("LLM_API_BASE")
             or os.getenv("OPENAI_API_BASE")
             or os.getenv("ANTHROPIC_API_BASE")
+            or os.getenv("ANTHROPIC_BASE_URL")
             or ""
         ).strip()
     )

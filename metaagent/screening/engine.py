@@ -59,7 +59,7 @@ def init_llm_model(model_override: str | None = None) -> Any:
         model_override: If provided, overrides the model name from env/config.
             Useful for running baseline comparisons across multiple models.
     """
-    cfg = load_llm_config(module_hint="literature_search")
+    cfg = load_llm_config(module_hint="screening")
     if not cfg.api_key:
         raise ValueError(
             "API key not found. Please set LLM_API_KEY/OPENAI_API_KEY in .env file"

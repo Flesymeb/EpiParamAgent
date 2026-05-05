@@ -125,7 +125,7 @@ def _load_markdown_from_pdf(pdf_path: Path, pmid: str) -> str:
     if cache_path.exists():
         return cache_path.read_text(encoding="utf-8", errors="ignore")
 
-    mineru_cfg = load_mineru_config(module_hint="coding_sheet")
+    mineru_cfg = load_mineru_config(module_hint="coding")
     # Allow up to 10× the per-request timeout for the full parse cycle (default 600s)
     max_poll_s = max(600, mineru_cfg.timeout_s * 10)
 
@@ -504,8 +504,8 @@ def run_pipeline(
     from metaagent.config import load_llm_config, load_mineru_config  # type: ignore
     from tools.provenance import write_run_manifest  # type: ignore
 
-    llm_cfg = load_llm_config(module_hint="coding_sheet")
-    mineru_cfg = load_mineru_config(module_hint="coding_sheet")
+    llm_cfg = load_llm_config(module_hint="coding")
+    mineru_cfg = load_mineru_config(module_hint="coding")
     manifest_path = write_run_manifest(
         output_dir=out_dir,
         workflow="coding_sheet_extraction",

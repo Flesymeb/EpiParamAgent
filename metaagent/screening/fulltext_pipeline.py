@@ -143,7 +143,7 @@ def convert_pdfs_to_markdown(
 ) -> dict[str, dict[str, str]]:
     """Convert cached PDFs to Markdown using MinerU."""
     ensure_fulltext_cache_dirs()
-    cfg = load_mineru_config(module_hint="literature_search")
+    cfg = load_mineru_config(module_hint="screening")
     if not cfg.api_key:
         print("⚠️  MinerU API key missing; skipping full-text conversion.")
         return {

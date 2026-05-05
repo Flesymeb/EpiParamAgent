@@ -23,7 +23,7 @@ def init_llm():
 
     from metaagent.config import load_llm_config
 
-    cfg = load_llm_config(module_hint="coding_sheet")
+    cfg = load_llm_config(module_hint="coding")
     if not cfg.api_key:
         raise RuntimeError("Missing LLM_API_KEY/OPENAI_API_KEY")
     model = cfg.model or "openai/gpt-4.1"
