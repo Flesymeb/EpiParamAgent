@@ -41,6 +41,12 @@ fields:
     required: true
     prompt: "Study identifier (author/year)."
 
+  - name: parameter_type
+    label: "Parameter Type"
+    type: str
+    required: true
+    prompt: "Always use 'CFR' for case fatality rate or 'IFR' for infection fatality rate."
+
   - name: region
     label: "Region"
     type: str

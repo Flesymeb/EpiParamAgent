@@ -130,6 +130,9 @@ def evaluate_project(
                 print(f"  [{topic}/{project}] parameter_type '{parameter_type}' not found. "
                       f"Available: {available}. Trying without filter.")
                 parameter_type = None  # type: ignore
+    else:
+        # Column doesn't exist — skip parameter_type filter
+        parameter_type = None
 
     df_enriched = enrich_ci(df)
 
