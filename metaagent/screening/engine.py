@@ -277,13 +277,11 @@ async def screen_papers_batch_async(
     else:
         output_schema = ScreeningDecision
 
-    # Use JSON mode instead of function calling (works with more proxies/models)
+    # Use JSON mode — proxies often don't support function calling
     json_schema = output_schema.model_json_schema()
     schema_hint = _build_json_schema_hint(output_schema)
-    # Escape { } so LangChain ChatPromptTemplate doesn't treat them as template vars
     schema_hint = schema_hint.replace("{", "{{").replace("}", "}}")
     system_text += f"\n\nYou MUST respond with a single JSON object matching this schema. Output valid JSON only, no other text.\n{schema_hint}"
-
     structured_llm = llm_model.bind(response_format={"type": "json_object"})
 
     all_prompts: list[tuple[dict[str, Any], Any]] = []
@@ -642,6 +640,7 @@ def _parse_json_result(content: str, model_class: type) -> Any:
         "evidence_relevance": "original_evidence", "evidence_quality": "original_evidence",
         "original_empirical_evidence": "original_evidence",
         "parameter": "parameter_relevance", "parameter_relevancy": "parameter_relevance",
+        "target_parameter_relevance": "parameter_relevance",
         "overall": "overall_score", "overall_justify": "overall_justification",
     }
     for old_k, new_k in _5d_remap.items():
@@ -656,6 +655,46 @@ def _parse_json_result(content: str, model_class: type) -> Any:
                 "score": int(data[dim_name]),
                 "justification": data.get("overall_justification", ""),
             }
+
+    # Convert flat dimension=integer to nested object (deepseek outputs flat format)
+    _5d_dims = ["disease_relevance", "population_relevance", "location_relevance",
+                "original_evidence", "parameter_relevance"]
+    _word_to_score = {"high": 4, "medium": 3, "low": 1, "none": 0,
+                     "excellent": 4, "good": 3, "fair": 2, "poor": 1,
+                     "yes": 4, "no": 0, "true": 4, "false": 0}
+    for dim in _5d_dims:
+        if dim in data:
+            val = data[dim]
+            if isinstance(val, (int, float)):
+                data[dim] = {"score": int(val), "justification": data.get("overall_justification", "")}
+            elif isinstance(val, str):
+                score = _word_to_score.get(val.lower().strip(), 2)
+                try: score = int(float(val))
+                except (ValueError, TypeError): pass
+                data[dim] = {"score": score, "justification": data.get("overall_justification", "")}
+
+    # Convert flat 5D format to nested objects (LLMs output flat format more reliably)
+    _5d_flat_map = {
+        "disease_score": "disease_relevance", "disease_justification": "disease_relevance",
+        "population_score": "population_relevance", "population_justification": "population_relevance",
+        "location_score": "location_relevance", "location_justification": "location_relevance",
+        "evidence_score": "original_evidence", "evidence_justification": "original_evidence",
+        "parameter_score": "parameter_relevance", "parameter_justification": "parameter_relevance",
+    }
+    flat_dims = {}
+    for k, v in list(data.items()):
+        if k in _5d_flat_map:
+            dim = _5d_flat_map[k]
+            if dim not in flat_dims:
+                flat_dims[dim] = {}
+            if k.endswith("_score"):
+                flat_dims[dim]["score"] = int(float(v)) if isinstance(v, (int, float, str)) else 2
+            else:
+                flat_dims[dim]["justification"] = str(v)
+    for dim, obj in flat_dims.items():
+        if "score" in obj:
+            obj.setdefault("justification", "")
+            data[dim] = obj
 
     # Convert string values to appropriate types (GLM outputs everything as strings)
     for key in list(data.keys()):
