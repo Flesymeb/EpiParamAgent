@@ -120,7 +120,7 @@ Current screening split:
 - FN: {counts['fn']}
 - TN: {counts['tn']}
 
-PDF availability in `dev/paper_pool/pdfs`:
+PDF availability in `paper_pool/pdfs`:
 - GT: {pdf_counts['gt']['available']} available / {pdf_counts['gt']['missing']} missing
 - Predicted relevant: {pdf_counts['predicted_relevant']['available']} available / {pdf_counts['predicted_relevant']['missing']} missing
 - TP: {pdf_counts['tp']['available']} available / {pdf_counts['tp']['missing']} missing
@@ -128,7 +128,7 @@ PDF availability in `dev/paper_pool/pdfs`:
 
 Note:
 - `coding_sheet` accepts PMID `.txt` inputs.
-- When a PMID is missing from `dev/paper_pool/pdfs`, the extraction pipeline will try to fetch the PDF automatically before MinerU/LLM processing.
+- When a PMID is missing from `paper_pool/pdfs`, the extraction pipeline will try to fetch the PDF automatically before MinerU/LLM processing.
 
 Recommended experiment:
 1. Run extraction on `inputs/predicted_relevant_pmids.txt`
@@ -172,7 +172,7 @@ def main() -> None:
     parser.add_argument(
         "--paper-pool-pdf-dir",
         default="",
-        help="Override PDF cache directory (default: repo/dev/paper_pool/pdfs)",
+        help="Override PDF cache directory (default: repo/paper_pool/pdfs)",
     )
     args = parser.parse_args()
 
@@ -181,11 +181,11 @@ def main() -> None:
     out_dir = Path(args.out_dir).resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    repo_root = Path(__file__).resolve().parents[4]
+    repo_root = Path(__file__).resolve().parents[2]
     pdf_dir = (
         Path(args.paper_pool_pdf_dir).resolve()
         if args.paper_pool_pdf_dir
-        else repo_root / "dev" / "paper_pool" / "pdfs"
+        else repo_root / "paper_pool" / "pdfs"
     )
 
     screened_rows = _read_csv(screened_csv)

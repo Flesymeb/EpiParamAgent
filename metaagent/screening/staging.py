@@ -6,7 +6,7 @@ import csv
 from pathlib import Path
 from typing import Any
 
-from metaagent.screening.fulltext_pipeline import MD_CACHE_DIR
+from metaagent.screening.fulltext_pipeline import find_markdown_cache
 
 
 def print_ground_truth_warning(gt_file: Path) -> None:
@@ -76,13 +76,19 @@ def partition_papers(
         fulltext_markdown = (paper.get("fulltext_markdown") or "").strip()
         fulltext_path = (paper.get("fulltext_path") or "").strip()
 
-        if abstract:
+        if effective_fulltext_only:
+            papers_without_abstract.append(paper)
+            paper["screening_stage"] = "pending_fulltext"
+            paper["screening_mode"] = full_text_mode
+            paper["fulltext_status"] = "pending"
+            paper.setdefault("fulltext_path", "")
+            paper["llm_suggest"] = "needs_full_text"
+        elif abstract:
             papers_title_abstract.append(paper)
             paper["screening_stage"] = "title_abstract"
             paper["screening_mode"] = title_abstract_mode
             continue
-
-        if not effective_auto_fulltext and not effective_fulltext_only:
+        elif not effective_auto_fulltext:
             papers_title_only.append(paper)
             paper["screening_stage"] = "title_only"
             paper["screening_mode"] = title_only_mode
@@ -112,8 +118,8 @@ def partition_papers(
                 )
 
         if not fulltext_markdown and pmid:
-            cached_md = MD_CACHE_DIR / f"PMID_{pmid}" / f"PMID_{pmid}.md"
-            if cached_md.exists() and cached_md.stat().st_size > 0:
+            cached_md = find_markdown_cache(pmid)
+            if cached_md:
                 try:
                     fulltext_markdown = cached_md.read_text(encoding="utf-8")
                     paper["fulltext_markdown"] = fulltext_markdown

@@ -1,0 +1,85 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-05-05 21:07:28
+研究问题: What is the case fatality rate (CFR) of mpox?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p4/project_4_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p4/experiments/5d_dsv4pro_v2/project_4_screened.csv
+模型配置: None/deepseek/deepseek-v4-pro
+批处理大小: 5
+批次并发: 5
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │      8   │    2.4%  │
+│ 🤔 Possible candidates   │     18   │    5.4%  │
+│ 😐 Unlikely candidates   │    305   │   92.1%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │    331   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  3.91  │   97.3%  │  3/ 3/ 3/ 4/318                 │
+│ Population      │  3.73  │   92.7%  │  7/ 3/14/24/283                 │
+│ Location        │  3.04  │   69.2%  │ 20/42/40/31/198                 │
+│ Evidence        │  1.70  │   35.3%  │ 108/91/15/25/92                 │
+│ Parameter       │  0.46  │    5.7%  │ 251/43/18/ 4/15                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (8 篇)
+================================================================================
+
+1. PMID: 38035733 [Score: 4/4]
+   Title: Mpox (monkeypox) risk and mortality associated with HIV infection: a national case-control study in Nigeria.
+   Overall: The study directly addresses the research question by reporting original empirical CFR estimates for mpox in a human population in Nigeria. All dimensions are highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+2. PMID: 37723464 [Score: 4/4]
+   Title: Comparison of the risk of hospital admission, need for ventilation, sepsis, pneumonitis and death among the recent monkeypox outbreak and historical outbreaks.
+   Overall: This retrospective study directly addresses mortality in monkeypox patients, providing original empirical data on death outcomes in recent and historical outbreaks. It is highly relevant to estimating the case fatality rate of mpox.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+3. PMID: 37625431 [Score: 4/4]
+   Title: Clinical characteristics and predictors of human mpox outcome during the 2022 outbreak in Nigeria: a cohort study.
+   Overall: This cohort study directly investigates mpox in humans in Nigeria and reports a 6% case fatality rate, making it highly relevant to the research question on mpox CFR.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+4. PMID: 36828001 [Score: 4/4]
+   Title: Mpox in people with advanced HIV infection: a global case series.
+   Overall: The study reports clinical outcomes of mpox in a global cohort of 382 people with advanced HIV, including death data, directly informing the case fatality rate. All dimensions are highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+5. PMID: 32052029 [Score: 4/4]
+   Title: Clinical Course and Outcome of Human Monkeypox in Nigeria.
+   Overall: The study directly investigates human monkeypox cases in Nigeria, reports original empirical data including deaths, and thus provides the necessary information to compute the case fatality rate. It is highly relevant on all dimensions.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+6. PMID: 31285143 [Score: 4/4]
+   Title: Outbreak of human monkeypox in Nigeria in 2017-18: a clinical and epidemiological report.
+   Overall: The study is a primary outbreak report of human monkeypox in Nigeria that directly provides the case fatality rate (6%), making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+7. PMID: 39887004 [Score: 4/4]
+   Title: Evolving Epidemiology of Mpox in Africa in 2024.
+   Overall: This study is highly relevant. It provides original empirical data on the case fatality rate of mpox in human populations across multiple African countries, directly addressing the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+8. PMID: 38058122 [Score: 4/4]
+   Title: Mpox and Chickenpox Coinfection: Case Series From Southern Nigeria.
+   Overall: The study directly addresses mpox in a human population in Nigeria, presents original retrospective cohort data, and explicitly reports the proportion of deaths among confirmed cases (8.9%), which is a case fatality rate. All dimensions are highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4

@@ -21,6 +21,28 @@ def ensure_fulltext_cache_dirs() -> None:
     MD_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 
+def find_markdown_cache(pmid: str) -> Path | None:
+    """Return an existing markdown cache path for a PMID, across legacy names."""
+    pmid = (pmid or "").strip()
+    if not pmid:
+        return None
+    paper_dir = MD_CACHE_DIR / f"PMID_{pmid}"
+    candidates = [
+        paper_dir / "fulltext.md",
+        paper_dir / f"PMID_{pmid}.md",
+        paper_dir / "full.md",
+    ]
+    for path in candidates:
+        if path.exists() and path.stat().st_size > 0:
+            return path
+    if paper_dir.exists():
+        return next(
+            (path for path in sorted(paper_dir.glob("*.md")) if path.stat().st_size > 0),
+            None,
+        )
+    return None
+
+
 def load_pdf_fetcher_module():
     paper_fetch_dir = BASE_DIR / "tools" / "paper_fetch"
     if str(paper_fetch_dir) not in sys.path:
@@ -169,14 +191,15 @@ def convert_pdfs_to_markdown(
             results[pmid] = {"status": "conversion_failed", "md_path": ""}
             continue
 
-        paper_dir = MD_CACHE_DIR / f"PMID_{pmid}"
-        md_path = paper_dir / f"PMID_{pmid}.md"
-        if md_path.exists() and md_path.stat().st_size > 0:
-            results[pmid] = {"status": "converted", "md_path": str(md_path)}
+        cached_md = find_markdown_cache(pmid)
+        if cached_md:
+            results[pmid] = {"status": "converted", "md_path": str(cached_md)}
             converted += 1
             cached += 1
             continue
 
+        paper_dir = MD_CACHE_DIR / f"PMID_{pmid}"
+        md_path = paper_dir / f"PMID_{pmid}.md"
         try:
             paper_dir.mkdir(parents=True, exist_ok=True)
             print(f"  [MinerU] Converting PMID {pmid} ...")

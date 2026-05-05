@@ -1,0 +1,104 @@
+{
+  "timestamp_utc": "2026-05-05T12:46:33.196272+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search",
+  "argv": [
+    "scripts/cli/screening_llm_batch.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP4",
+    "--strategy",
+    "5d",
+    "--model",
+    "deepseek/deepseek-v4-pro",
+    "--batch-size",
+    "5",
+    "--batch-concurrency",
+    "5",
+    "--skip-no-abstract",
+    "--experiment",
+    "5d_dsv4pro"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "ee13132427444545af42bc55a294873b6a31a2ff",
+    "branch": "feat/cascade-screening",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP4",
+    "batch_size": 5,
+    "batch_concurrency": 5,
+    "auto_fulltext": false,
+    "fulltext_only": false,
+    "research_question": "What is the case fatality rate (CFR) of mpox?",
+    "strategy": "5d",
+    "experiment": "5d_dsv4pro"
+  },
+  "inputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p4/project_4_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T12:20:03.529543+00:00",
+      "type": "file",
+      "size_bytes": 572610,
+      "sha256": "dd5157d3f7a174e06b3d0d1e9f9c58a1c92ad8e778755f3fc4f6a0dc60293e5b"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p4/project_4_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T07:46:12.431067+00:00",
+      "type": "file",
+      "size_bytes": 7195,
+      "sha256": "4cecd161f4305772046b15c34a54dbc68e568574fd1051040fcdd458350aaffe"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p4/experiments/5d_dsv4pro/project_4_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T12:46:33.193444+00:00",
+      "type": "file",
+      "size_bytes": 942591,
+      "sha256": "05a10a25dfcbd895d35773c39e0c99a51637d3b6a35cabe039404fa69f2a4511"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p4/experiments/5d_dsv4pro/screening_logs/screening_report_20260505_204633.txt",
+      "exists": true,
+      "mtime_utc": "2026-05-05T12:46:33.196183+00:00",
+      "type": "file",
+      "size_bytes": 6741,
+      "sha256": "6a9b47cb0655143bdd974f53b71e0a09af84af1a2bca902aacec4c606ecc7301"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": null,
+      "model": "deepseek/deepseek-v4-pro",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 180,
+      "verify_ssl": false,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": false
+    }
+  },
+  "extra": {
+    "paper_count": 331,
+    "ground_truth_count": 14,
+    "ground_truth_in_pool": 14,
+    "strong_count": 8,
+    "possible_count": 10,
+    "unlikely_count": 313,
+    "error_count": 0,
+    "fulltext_error_count": 0
+  }
+}

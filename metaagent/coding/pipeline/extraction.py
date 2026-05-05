@@ -27,7 +27,7 @@ def _parse_json_object(text: str) -> dict:
 
 
 def _paper_pool_dirs() -> tuple[Path, Path]:
-    base = Path(__file__).resolve().parents[2] / "paper_pool"
+    base = Path(__file__).resolve().parents[3] / "paper_pool"
     pdf_dir = base / "pdfs"
     md_dir = base / "markdown"
     pdf_dir.mkdir(parents=True, exist_ok=True)
@@ -36,7 +36,7 @@ def _paper_pool_dirs() -> tuple[Path, Path]:
 
 
 def _ensure_tools_on_path() -> None:
-    tools_dir = Path(__file__).resolve().parents[2] / "tools"
+    tools_dir = Path(__file__).resolve().parents[3] / "tools"
     if str(tools_dir) not in sys.path:
         sys.path.insert(0, str(tools_dir))
 
@@ -115,16 +115,35 @@ def _markdown_cache_path(md_dir: Path, pmid: str) -> Path:
     return md_dir / f"PMID_{pmid}" / "fulltext.md"
 
 
+def _existing_markdown_cache_path(md_dir: Path, pmid: str) -> Path | None:
+    paper_dir = md_dir / f"PMID_{pmid}"
+    candidates = [
+        _markdown_cache_path(md_dir, pmid),
+        paper_dir / f"PMID_{pmid}.md",
+        paper_dir / "full.md",
+    ]
+    for path in candidates:
+        if path.exists() and path.stat().st_size > 0:
+            return path
+    if paper_dir.exists():
+        return next(
+            (path for path in sorted(paper_dir.glob("*.md")) if path.stat().st_size > 0),
+            None,
+        )
+    return None
+
+
 def _load_markdown_from_pdf(pdf_path: Path, pmid: str) -> str:
+    _, md_dir = _paper_pool_dirs()
+    existing_cache = _existing_markdown_cache_path(md_dir, pmid)
+    if existing_cache:
+        return existing_cache.read_text(encoding="utf-8", errors="ignore")
+
     _ensure_tools_on_path()
     from tools.mineru.pdf_reader import extract_pdf_markdown_mineru  # type: ignore
     from metaagent.config import load_mineru_config  # type: ignore
 
-    _, md_dir = _paper_pool_dirs()
     cache_path = _markdown_cache_path(md_dir, pmid)
-    if cache_path.exists():
-        return cache_path.read_text(encoding="utf-8", errors="ignore")
-
     mineru_cfg = load_mineru_config(module_hint="coding")
     # Allow up to 10× the per-request timeout for the full parse cycle (default 600s)
     max_poll_s = max(600, mineru_cfg.timeout_s * 10)
@@ -148,16 +167,13 @@ def _iter_inputs(input_path: Path, fetch_strategy: str = "pmc_only"):
         missing = []
         for pmid in pmids:
             pdf_path = pdf_dir / f"PMID_{pmid}.pdf"
+            cached_md = _existing_markdown_cache_path(md_dir, pmid)
             if pdf_path.exists():
                 yield pdf_path
-            elif _markdown_cache_path(md_dir, pmid).exists():
-                yield _markdown_cache_path(md_dir, pmid)
+            elif cached_md:
+                yield cached_md
             else:
-                legacy_md = md_dir / f"PMID_{pmid}" / f"PMID_{pmid}.md"
-                if legacy_md.exists():
-                    yield legacy_md
-                else:
-                    missing.append(pmid)
+                missing.append(pmid)
         if missing:
             print(f"[INFO] {len(missing)} PDF(s) not cached — fetching (strategy: {fetch_strategy})")
             still_missing = _fetch_missing_pmids(missing, pdf_dir, fetch_strategy=fetch_strategy)
@@ -379,8 +395,8 @@ def run_pipeline(
         cached = warmed = 0
         for path in inputs:
             pmid = infer_pmid_from_path(path) or path.stem
-            cache = _markdown_cache_path(md_dir, pmid)
-            if cache.exists():
+            cache = _existing_markdown_cache_path(md_dir, pmid)
+            if cache:
                 cached += 1
                 print(f"  [MD cache] PMID_{pmid} ✓")
             else:

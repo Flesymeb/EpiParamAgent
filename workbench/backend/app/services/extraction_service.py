@@ -39,7 +39,7 @@ def get_run(root: Path, run_id: str) -> dict[str, Any] | None:
             "run": payload,
         },
         "metrics": [
-            {"label": "Input Papers", "value": int(extra.get("input_paper_count", 0))},
+            {"label": "Input Papers", "value": int(extra.get("input_paper_count", extra.get("input_count", 0)))},
             {"label": "Records", "value": int(extra.get("record_count", 0))},
         ],
         "outputs": payload.get("outputs") or [],

@@ -1,2 +1,2 @@
 disease,topic,project,parameter_type,estimate_measure,include_median,impute_se,method,n_studies,n_excluded,n_imputed,pooled_mean,se_pooled,ci_lower,ci_upper,i2,tau2,p_het,run_used
-mpox,serial_interval,p11,serial_interval,mean,False,True,random,1,0,0,9.5,1.25,7.05,11.95,0.0,0.0,nan,run_20260426_223015
+mpox,serial_interval,p6,serial_interval,,False,True,random,4,2,0,9.0018,1.1556,6.7368,11.2668,7.5,0.4349,0.3554,20260505_212441_744
