@@ -134,6 +134,13 @@ def se_from_record(row: dict, fallback_sd: float | None = None) -> float | None:
     n = _extract_n(row.get("sample_size"))
 
     if utype in ("", "nr", "other", "missing", "nan"):
+        # "other" often means range/CI bounds without clear type label
+        lo, hi = _f(low), _f(high)
+        if utype == "other" and lo is not None and hi is not None and hi > lo > 0:
+            z_val = _ci_z(row.get("uncertainty_level")) or 1.96
+            se_val = (hi - lo) / (2 * z_val)
+            if math.isfinite(se_val) and se_val > 0:
+                return se_val
         # Even with NR uncertainty, we can impute if fallback_sd + n available
         if fallback_sd is not None and fallback_sd > 0 and n is not None and n > 0:
             return fallback_sd / math.sqrt(n)
