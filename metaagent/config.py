@@ -149,6 +149,9 @@ def load_llm_config(
     )
     if not api_base:
         api_base = None
+    # Auto-append /v1 for OpenAI-compatible proxies
+    if api_base and not api_base.rstrip("/").endswith("/v1"):
+        api_base = api_base.rstrip("/") + "/v1"
 
     default_max_tokens = LLMConfig().max_tokens
     max_tokens = _safe_int(params.get("llm_max_tokens") or os.getenv("LLM_MAX_TOKENS"))
