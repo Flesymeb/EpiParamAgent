@@ -2,8 +2,7 @@
 
 
 Preferred rules:
-1. Shared defaults live in ``.env`` and shared machine-local secrets in
-   ``.env.local`` at the project root.
+1. All configuration lives in ``.env.local`` at the project root.
 2. Module-specific overrides should live in ``configs/<module>/.env.local``.
 3. Callers should pass ``module_hint`` so one workflow does not accidentally
    load another workflow's env file.
@@ -42,7 +41,7 @@ def _iter_env_candidates(module_hint: Optional[str]) -> Iterable[Path]:
     yield dev_root
     normalized = _normalize_module_hint(module_hint)
     if normalized:
-        yield dev_root / normalized
+        yield dev_root / "metaagent" / normalized
 
 
 def load_runtime_env(module_hint: Optional[str] = None) -> None:

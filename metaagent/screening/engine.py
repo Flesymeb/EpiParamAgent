@@ -62,7 +62,7 @@ def init_llm_model(model_override: str | None = None) -> Any:
     cfg = load_llm_config(module_hint="screening")
     if not cfg.api_key:
         raise ValueError(
-            "API key not found. Please set LLM_API_KEY/OPENAI_API_KEY in .env file"
+            "API key not found. Please set LLM_API_KEY in .env.local file"
         )
 
     llm_model = model_override or cfg.model or "openai/gpt-4o-mini"
@@ -608,6 +608,15 @@ def _parse_json_result(content: str, model_class: type) -> Any:
         else:
             remapped[k] = v
     data = remapped
+
+    # Remap "evidence" -> "justification" in nested objects (GLM output format)
+    for key in list(data.keys()):
+        if isinstance(data[key], dict):
+            for sub_key in list(data[key].keys()):
+                if sub_key == "evidence" and "justification" not in data[key]:
+                    data[key]["justification"] = data[key].pop("evidence")
+                elif sub_key == "reason" and "justification" not in data[key]:
+                    data[key]["justification"] = data[key].pop("reason")
 
     # Convert flat booleans (P:true, E:true) to structured objects
     for elem_name in ["population", "exposure", "comparison", "outcome"]:
