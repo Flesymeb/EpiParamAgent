@@ -128,6 +128,20 @@ def sync_coding_inputs(*, dry_run: bool = False) -> dict[str, int]:
                         continue
                     result = _copy_file(src, dst_project_dir / src.name, dry_run=dry_run)
                     stats[result] = stats.get(result, 0) + 1
+
+        screening_root = REPO_ROOT / "dataset" / disease_dir / "screening"
+        coding_root = REPO_ROOT / "dataset" / disease_dir / "coding"
+        for pmids_path in sorted(coding_root.glob("*/*/pmids.txt")):
+            topic = pmids_path.parent.parent.name
+            project = pmids_path.parent.name
+            src_project_dir = screening_root / topic / project
+            for filename in ("project.json", "ground_truth.csv"):
+                result = _copy_file(
+                    src_project_dir / filename,
+                    pmids_path.parent / filename,
+                    dry_run=dry_run,
+                )
+                stats[f"screening_meta_{result}"] = stats.get(f"screening_meta_{result}", 0) + 1
     return stats
 
 

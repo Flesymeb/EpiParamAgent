@@ -51,9 +51,9 @@ MetaAgent-Epi/
 ├── evaluation/             # Experiment outputs only
 │   ├── screening/
 │   ├── coding/
-│   ├── experiments/
-│   └── figures/
+│   └── experiments/
 ├── docs/                   # Documentation
+│   └── paper/              # Manuscript materials and generated figures
 ├── tests/                  # Integration tests
 └── paper_pool/             # Cached PDFs and markdown (gitignored)
 ```

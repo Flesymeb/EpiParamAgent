@@ -159,6 +159,10 @@ dataset/_legacy_imports/
 dataset/*/screening/*/p*/raw.csv
 dataset/*/screening/*/p*/project_*_raw.csv
 dataset/*/screening/*/p*/screened*.csv
+dataset/**/*.bk_*.csv
+dataset/**/*.bk_*.txt
+dataset/**/*.coding_candidate_*.csv
+dataset/**/*.pre_subset_*.csv
 evaluation/experiments/
 evaluation/**/experiments/
 evaluation/**/screening_logs/

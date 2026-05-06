@@ -14,12 +14,21 @@ dataset/
 │   │   └── raw.csv          # local large search pool, gitignored
 │   └── coding/{parameter}/pN/
 │       ├── pmids.txt
-│       ├── project.json     # when available
-│       └── ground_truth.csv # when available
+│       ├── project.json
+│       └── ground_truth.csv
 └── mpox/
     ├── screening/{parameter}/pN/
     └── coding/{parameter}/pN/
 ```
 
-`raw.csv` files are intentionally ignored because they are large. The small
-metadata and label files can be versioned when needed.
+`pmids.txt` is the canonical coding extraction input. `project.json` and
+`ground_truth.csv` are copied from the matching screening profile to keep each
+coding task self-describing. In profiles with manual coding corrections,
+`pmids.txt` may be a corrected extraction list rather than an exact row-for-row
+copy of `ground_truth.csv`; use `pmids.txt` for coding runs. `raw.csv` files are
+intentionally ignored because they are large.
+
+`dataset/covid19/coding/reproduction_number/p7/` is intentionally a curated
+full-text coding subset of the larger screening GT. Its `pmids.txt` and
+`ground_truth.csv` should remain aligned with each other, but they should not be
+used to overwrite the larger screening GT without a separate source-level audit.

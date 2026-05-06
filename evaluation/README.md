@@ -17,10 +17,9 @@ evaluation/
 │       ├── coding_sheet_*.xlsx
 │       ├── index/
 │       └── run_manifest_*.json
-├── experiments/       # Curated cross-profile summary experiments
-├── figures/           # Paper figures generated from evaluation results
-└── _legacy/           # Old imported layout, kept for traceability
+└── experiments/       # Curated cross-profile summary experiments
 ```
 
 Do not store dataset files such as `raw.csv`, `ground_truth.csv`, `pmids.txt`,
-or `project.json` in `evaluation/`.
+or `project.json` in `evaluation/`. Paper-facing figures and tables belong in
+`docs/paper/`.
