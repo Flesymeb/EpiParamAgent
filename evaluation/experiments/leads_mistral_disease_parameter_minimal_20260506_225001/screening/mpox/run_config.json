@@ -1,0 +1,23 @@
+{
+  "experiment": "leads_mistral_disease_parameter_minimal_20260506_225001",
+  "model": "zifeng-ai/leads-mistral-7b-v1",
+  "base_url": "http://127.0.0.1:8000/v1",
+  "prompt_style": "disease_parameter_minimal",
+  "profiles": [
+    "MP4",
+    "MP5",
+    "MP6",
+    "MP7",
+    "MP8",
+    "MP9",
+    "MP10",
+    "MP11",
+    "MP12"
+  ],
+  "temperature": 0.0,
+  "max_tokens": 64,
+  "concurrency": 20,
+  "limit": 0,
+  "response_format_json": false,
+  "created_at": "2026-05-06T22:52:44"
+}
