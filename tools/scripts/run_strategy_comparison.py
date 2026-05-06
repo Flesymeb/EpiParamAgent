@@ -243,17 +243,20 @@ def main():
         else:
             print(f"  binary_strict: FAILED")
 
-        # 3. 5D - check existing experiments broadly
+        # 3. 5D - prefer gpt-4.1 (deepseek-level), fall back to others
         csv_5d = None
         exp_dir = EVAL_DIR / topic / "ground_truth" / proj / "experiments"
-        for d in sorted(exp_dir.iterdir(), reverse=True):
-            if d.is_dir() and ('5d' in d.name.lower() or 'dsv4pro' in d.name.lower()):
-                csvs = sorted(d.rglob(f"project_{proj[1:]}_screened*.csv"),
-                             key=lambda p: p.stat().st_mtime, reverse=True)
-                if csvs:
-                    csv_5d = csvs[0]
-                    print(f"  5d: using {d.name}/{csvs[0].name}")
-                    break
+        for pattern in ["*gpt*5d*", "*gemini*5d*", "*5d*"]:
+            for d in sorted(exp_dir.glob(pattern), reverse=True):
+                if d.is_dir():
+                    csvs = sorted(d.rglob(f"project_{proj[1:]}_screened*.csv"),
+                                 key=lambda p: p.stat().st_mtime, reverse=True)
+                    if csvs:
+                        csv_5d = csvs[0]
+                        print(f"  5d: using {d.name}/{csvs[0].name}")
+                        break
+            if csv_5d:
+                break
         if csv_5d:
             d5_result = evaluate_screened_csv(proj, topic, csv_5d, "5d")
             if d5_result:
