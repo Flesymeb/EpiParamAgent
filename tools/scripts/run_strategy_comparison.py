@@ -182,7 +182,7 @@ def find_latest_screened(proj, topic, experiment_name):
 def run_llm_screening(proj, topic, profile, strategy, experiment):
     """Spawn LLM screening as background process, return immediately."""
     cmd = [
-        sys.executable, str(ROOT / ".venv/bin/metaagent"),
+        str(ROOT / ".venv/bin/metaagent"),
         "screening", "run",
         "-p", profile,
         "--strategy", strategy,
