@@ -187,7 +187,8 @@ def run_llm_screening(proj, topic, profile, strategy, experiment):
         "-p", profile,
         "--strategy", strategy,
         "--experiment", experiment,
-        "--batch-size", "15",
+        "--batch-size", "20",
+        "--batch-concurrency", "3",
     ]
     env = {**__import__('os').environ, "LANGCHAIN_OPENAI_TCP_KEEPALIVE": "0"}
     log_file = ROOT / "evaluation" / f"screening_{proj}_{experiment}.log"
