@@ -38,9 +38,14 @@ STRATEGIES = {
 }
 
 PROJECTS = [
-    ("p10", "serial_interval", "P10"),
-    ("p13", "serial_interval", "P13"),
+    ("p10", "serial_interval", "P10"), ("p11", "serial_interval", "P11"),
+    ("p12", "serial_interval", "P12"), ("p13", "serial_interval", "P13"),
     ("p14", "serial_interval", "P14"),
+    ("p4", "fatality", "P4"), ("p5", "fatality", "P5"),
+    ("p6", "fatality", "P6"),
+    ("p7", "reproduction_number", "P7"), ("p8", "reproduction_number", "P8"),
+    ("p15", "reproduction_number", "P15"), ("p16", "reproduction_number", "P16"),
+    ("p17", "reproduction_number", "P17"),
 ]
 
 
@@ -183,7 +188,6 @@ def run_llm_screening(proj, topic, profile, strategy, experiment):
         "--strategy", strategy,
         "--experiment", experiment,
         "--batch-size", "15",
-        "--model", "qwen/qwen-turbo",
     ]
     env = {**__import__('os').environ, "LANGCHAIN_OPENAI_TCP_KEEPALIVE": "0"}
     log_file = ROOT / "evaluation" / f"screening_{proj}_{experiment}.log"
