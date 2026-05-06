@@ -1,0 +1,130 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-05-06 00:09:31
+研究问题: What is the CFR of mpox?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p12/project_12_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p12/experiments/5d_dsv4pro_v4/project_12_screened.csv
+模型配置: None/deepseek/deepseek-v4-pro
+批处理大小: 20
+批次并发: 5
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │     17   │    3.5%  │
+│ 🤔 Possible candidates   │    100   │   20.7%  │
+│ 😐 Unlikely candidates   │    236   │   48.8%  │
+│ ⚠️  Errors               │    131   │   27.1%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │    484   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  2.64  │   64.3%  │ 142/16/15/11/300                 │
+│ Population      │  2.77  │   69.2%  │ 137/ 7/ 5/15/320                 │
+│ Location        │  2.03  │   43.4%  │ 158/44/72/46/164                 │
+│ Evidence        │  1.53  │   34.5%  │ 225/73/19/38/129                 │
+│ Parameter       │  0.44  │    6.0%  │ 376/51/28/11/18                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (17 篇)
+================================================================================
+
+1. PMID: 6249508 [Score: 4/4]
+   Title: Human monkeypox, 1970-79.
+   Overall: The study is directly relevant: it provides original empirical data on human monkeypox cases from Central/West Africa and explicitly reports a case-fatality rate of about 17%, matching all dimensions of the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+2. PMID: 38035733 [Score: 4/4]
+   Title: Mpox (monkeypox) risk and mortality associated with HIV infection: a national case-control study in Nigeria.
+   Overall: 该研究以尼日利亚全国病例对照研究为基础，直接报告了 mpox 的总体和 HIV 合并感染者的病死率，提供原始经验数据，完全回答了研究问题的目标参数。
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+3. PMID: 6304185 [Score: 4/4]
+   Title: Human monkeypox.
+   Overall: This study is a primary case series of human monkeypox in Africa that explicitly reports a case-fatality rate of 14%. It provides original empirical data from a real-world geographic setting, with clear disease and population relevance, making it highly relevant to the research question on the CFR of mpox.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+4. PMID: 37079637 [Score: 4/4]
+   Title: Clinical characterization and placental pathology of mpox infection in hospitalized patients in the Democratic Republic of the Congo.
+   Overall: The study is highly relevant. It provides original, empirical data on a confirmed mpox patient cohort in a real-world setting. Crucially, the abstract explicitly reports three deaths among 216 hospitalized patients, directly providing the data needed to calculate a case fatality rate (CFR).
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+5. PMID: 37647121 [Score: 4/4]
+   Title: Mpox in Children and Adolescents during Multicountry Outbreak, 2022-2023.
+   Overall: This study is highly relevant to the research question on mpox CFR. It provides original empirical data on mortality (0 deaths) in a specific human population (children and adolescents) during a global outbreak. Although it does not explicitly calculate a CFR, the reported deaths and case proportion directly inform the parameter. All other dimensions are strongly satisfied.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+6. PMID: 27783372 [Score: 4/4]
+   Title: [Twelve cases of monkeypox virus outbreak in Bangassou District (Central African Republic) in December 2015].
+   Overall: The study directly addresses mpox CFR in a human outbreak in Central African Republic, providing original empirical data with explicit fatality rates. All relevance dimensions are fully met.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+7. PMID: 36328951 [Score: 4/4]
+   Title: National Monkeypox Surveillance, Central African Republic, 2001-2021.
+   Overall: The study directly reports CFR for mpox in a human population from a specific geographic region using original surveillance data, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+8. PMID: 32052029 [Score: 4/4]
+   Title: Clinical Course and Outcome of Human Monkeypox in Nigeria.
+   Overall: The study is highly relevant. It explicitly investigates human monkeypox in a real-world setting (Nigeria), reports original empirical data from a retrospective review, and provides mortality data (5 deaths out of 40 cases), which directly informs the case fatality rate (CFR).
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+9. PMID: 16103616 [Score: 4/4]
+   Title: Extended interhuman transmission of monkeypox in a hospital community in the Republic of the Congo, 2003.
+   Overall: The study is highly relevant to the research question on mpox CFR. It provides original empirical data on a human monkeypox outbreak in a real-world setting, including a death among 11 cases. While the abstract does not explicitly calculate or emphasize CFR, the reported mortality outcome makes it a candidate for inclusion in a CFR analysis. All other dimensions are strongly satisfied.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+10. PMID: 29573840 [Score: 4/4]
+   Title: Investigation of an outbreak of monkeypox in an area occupied by armed groups, Central African Republic.
+   Overall: The study is directly relevant: it investigates a monkeypox outbreak in humans in a real-world setting and reports the case fatality rate as a primary outcome. All dimensions are explicitly met with high confidence.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+11. PMID: 29732376 [Score: 4/4]
+   Title: A Nosocomial Outbreak of Human Monkeypox in the Central African Republic.
+   Overall: The study is highly relevant. It explicitly investigates a monkeypox outbreak in humans in a real-world setting (Central African Republic) and reports original empirical data, including two deaths among ten cases. This directly provides data that can be used to calculate a case fatality rate (CFR), even if the term 'CFR' is not explicitly used in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+12. PMID: 36082686 [Score: 4/4]
+   Title: A large multi-country outbreak of monkeypox across 41 countries in the WHO European Region, 7 March to 23 August 2022.
+   Overall: This study is highly relevant to the research question on mpox CFR. It investigates a large human mpox outbreak in Europe, provides original case and death counts, and thus offers direct evidence for calculating CFR.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+13. PMID: 20875278 [Score: 4/4]
+   Title: Human monkeypox outbreak caused by novel virus belonging to Congo Basin clade, Sudan, 2005.
+   Overall: The study is highly relevant: it investigates a human mpox outbreak in Sudan with original empirical data and reports a mortality outcome (no deaths), providing direct evidence for CFR estimation even though CFR is not the main focus.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+14. PMID: 17402687 [Score: 4/4]
+   Title: [Simian smallpox (or monkey smallpox): study of 8 cases observed at Impfondo Hospital in Republic of Congo].
+   Overall: This is a primary observational study of eight human monkeypox cases in Congo, reporting clinical outcomes including zero deaths. It directly informs the case fatality rate of mpox, with high relevance across all dimensions.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+15. PMID: 6095775 [Score: 4/4]
+   Title: Fatal monkeypox in a child in Kikwit, Zaire.
+   Overall: Title-only screening with strong metadata: all five dimensions are explicitly supported. The study is a case report of a fatal human monkeypox case in a real-world setting, directly relevant to CFR. No abstract is available, but the title and MeSH terms leave no ambiguity.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+16. PMID: 1649373 [Score: 4/4]
+   Title: [First appearance of monkey pox in human beings in Gabon].
+   Overall: This case report describes the first human monkeypox outbreak in Gabon, with four cases and two deaths. It provides original, location-specific, human data with explicit mortality information, making it highly relevant for estimating the CFR of mpox, even though it does not compute a rate itself.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+17. PMID: 9109325 [Score: 3/4]
+   Title: Human monkeypox in Kasai Oriental, Zaire (1996-1997).
+   Overall: Title-only screening with sparse metadata. The title clearly indicates a human monkeypox outbreak in a real-world setting. MeSH terms include 'Survival Rate', suggesting mortality data, and publication type is not a review, implying original evidence. All dimensions score high, but uncertainty remains due to lack of abstract.
+   维度评分: D=4 P=4 L=4 E=3 Param=3

@@ -1,0 +1,105 @@
+{
+  "timestamp_utc": "2026-05-05T16:59:34.510234+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/tools/scripts/screening_llm_batch.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "P11",
+    "--batch-size",
+    "500",
+    "--batch-concurrency",
+    "64",
+    "--strategy",
+    "5d",
+    "--model",
+    "openai/gpt-4.1",
+    "--experiment",
+    "cmp_covid13_openai_gpt-4.1_5d_nofulltext",
+    "--no-fulltext-rescue",
+    "--skip-no-abstract"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "be2567707c9b9a7c51e1b065d1216d6af93a805c",
+    "branch": "feat/cascade-screening",
+    "dirty": true
+  },
+  "params": {
+    "profile": "P11",
+    "batch_size": 500,
+    "batch_concurrency": 64,
+    "auto_fulltext": false,
+    "fulltext_only": false,
+    "research_question": "What are the serial interval and generation time of SARS-CoV-2 estimated from contact tracing or household transmission studies?",
+    "strategy": "5d",
+    "experiment": "cmp_covid13_openai_gpt-4.1_5d_nofulltext"
+  },
+  "inputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/serial_interval/ground_truth/p11/project_11_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T08:48:51.875860+00:00",
+      "type": "file",
+      "size_bytes": 1872140,
+      "sha256": "943cc81867c4a349e1c6967a4c54f3a2aabff3cf629b558e77e47cd0266c0225"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/serial_interval/ground_truth/p11/project_11_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T09:07:34.456753+00:00",
+      "type": "file",
+      "size_bytes": 29499,
+      "sha256": "d2d65af5a58753d2586af5432e8dcd6921692a794fe377619208206d2ed9c194"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/serial_interval/ground_truth/p11/experiments/cmp_covid13_openai_gpt-4.1_5d_nofulltext/project_11_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T16:59:34.503659+00:00",
+      "type": "file",
+      "size_bytes": 2645823,
+      "sha256": "98d0dc04745a5af98a888e926b068dbbf169b76084ba9b269b370de64dd4a59d"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/serial_interval/ground_truth/p11/experiments/cmp_covid13_openai_gpt-4.1_5d_nofulltext/screening_logs/screening_report_20260506_005934.txt",
+      "exists": true,
+      "mtime_utc": "2026-05-05T16:59:34.509660+00:00",
+      "type": "file",
+      "size_bytes": 63129,
+      "sha256": "ca49fbfe563759d5b5d09706f3ed1c73cf03671968c700229752c51ce0a39d9c"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": "openai",
+      "model": "deepseek/deepseek-v4-pro",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 120,
+      "verify_ssl": true,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": true
+    }
+  },
+  "extra": {
+    "paper_count": 841,
+    "ground_truth_count": 76,
+    "ground_truth_in_pool": 76,
+    "strong_count": 134,
+    "possible_count": 123,
+    "unlikely_count": 584,
+    "error_count": 0,
+    "fulltext_error_count": 0
+  }
+}

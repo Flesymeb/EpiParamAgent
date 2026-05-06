@@ -1,0 +1,105 @@
+{
+  "timestamp_utc": "2026-05-05T17:21:51.699382+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/tools/scripts/screening_llm_batch.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "P4",
+    "--batch-size",
+    "500",
+    "--batch-concurrency",
+    "64",
+    "--strategy",
+    "5d",
+    "--model",
+    "qwen/qwen-turbo",
+    "--experiment",
+    "cmp_covid13_qwen_qwen-turbo_5d_nofulltext",
+    "--no-fulltext-rescue",
+    "--skip-no-abstract"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "be2567707c9b9a7c51e1b065d1216d6af93a805c",
+    "branch": "feat/cascade-screening",
+    "dirty": true
+  },
+  "params": {
+    "profile": "P4",
+    "batch_size": 500,
+    "batch_concurrency": 64,
+    "auto_fulltext": false,
+    "fulltext_only": false,
+    "research_question": "What are the fatality and severity outcomes of SARS-CoV-2 infection?",
+    "strategy": "5d",
+    "experiment": "cmp_covid13_qwen_qwen-turbo_5d_nofulltext"
+  },
+  "inputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/fatality/ground_truth/p4/project_4_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T08:45:08.689198+00:00",
+      "type": "file",
+      "size_bytes": 819079,
+      "sha256": "5ed1d08c8b71c90e2e20b9aed166e3deb9e2089e4dc1b90aa5cb197408ca5469"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/fatality/ground_truth/p4/project_4_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T09:07:34.441032+00:00",
+      "type": "file",
+      "size_bytes": 23250,
+      "sha256": "468ead9163a98c1b474711a7f35b07480a18da1b32fbf6126ad3af4ebe84272d"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/fatality/ground_truth/p4/experiments/cmp_covid13_qwen_qwen-turbo_5d_nofulltext/project_4_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T17:21:51.697850+00:00",
+      "type": "file",
+      "size_bytes": 1237280,
+      "sha256": "953ba8bd4c2a883aa11d50b2a6cb0d30a575758e601f719be89a5d6a5b336b5d"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/fatality/ground_truth/p4/experiments/cmp_covid13_qwen_qwen-turbo_5d_nofulltext/screening_logs/screening_report_20260506_012151.txt",
+      "exists": true,
+      "mtime_utc": "2026-05-05T17:21:51.699260+00:00",
+      "type": "file",
+      "size_bytes": 105316,
+      "sha256": "d1778b725783ecd03d7974c2cb78449f34ef35c2993087d5532865a25c7ce4e2"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": "openai",
+      "model": "deepseek/deepseek-v4-pro",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 120,
+      "verify_ssl": true,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": true
+    }
+  },
+  "extra": {
+    "paper_count": 345,
+    "ground_truth_count": 56,
+    "ground_truth_in_pool": 56,
+    "strong_count": 212,
+    "possible_count": 25,
+    "unlikely_count": 107,
+    "error_count": 1,
+    "fulltext_error_count": 0
+  }
+}

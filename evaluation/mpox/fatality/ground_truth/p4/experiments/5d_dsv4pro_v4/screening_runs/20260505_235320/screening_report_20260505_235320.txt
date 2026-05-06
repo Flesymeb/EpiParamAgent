@@ -1,0 +1,85 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-05-05 23:53:20
+研究问题: What is the case fatality rate (CFR) of mpox?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p4/project_4_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p4/experiments/5d_dsv4pro_v4/project_4_screened.csv
+模型配置: None/deepseek/deepseek-v4-pro
+批处理大小: 20
+批次并发: 5
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │      8   │    2.4%  │
+│ 🤔 Possible candidates   │     66   │   19.9%  │
+│ 😐 Unlikely candidates   │    164   │   49.5%  │
+│ ⚠️  Errors               │     93   │   28.1%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │    331   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  2.81  │   69.8%  │ 95/ 3/ 2/ 2/229                 │
+│ Population      │  2.67  │   67.1%  │ 96/ 4/ 9/26/196                 │
+│ Location        │  2.15  │   49.8%  │ 114/27/25/26/139                 │
+│ Evidence        │  1.23  │   24.2%  │ 167/66/18/16/64                 │
+│ Parameter       │  0.30  │    4.2%  │ 278/28/11/ 7/ 7                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (8 篇)
+================================================================================
+
+1. PMID: 38035733 [Score: 4/4]
+   Title: Mpox (monkeypox) risk and mortality associated with HIV infection: a national case-control study in Nigeria.
+   Overall: The study is a national case-control study in Nigeria that directly reports the case fatality rate of mpox in the context of HIV coinfection. It provides original empirical data, making it highly relevant for estimating CFR.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+2. PMID: 37723464 [Score: 4/4]
+   Title: Comparison of the risk of hospital admission, need for ventilation, sepsis, pneumonitis and death among the recent monkeypox outbreak and historical outbreaks.
+   Overall: This retrospective study directly compares death (and other severe outcomes) between recent and historical monkeypox outbreaks using original patient data. It reports zero deaths, providing a direct empirical estimate of case fatality rate. All dimensions are highly relevant.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+3. PMID: 40468189 [Score: 4/4]
+   Title: Time series modelling and forecasting of mpox incidence and mortality in Nigeria.
+   Overall: This study is highly relevant: it investigates mpox in a human population in Nigeria using original empirical data. It forecasts both incidence and mortality, making it directly pertinent to understanding fatality patterns, even though it does not compute a case fatality rate explicitly. The mortality forecasts could inform CFR estimation.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+4. PMID: 37625431 [Score: 4/4]
+   Title: Clinical characteristics and predictors of human mpox outcome during the 2022 outbreak in Nigeria: a cohort study.
+   Overall: This study is highly relevant. It is an original cohort study conducted in Nigeria during the 2022 mpox outbreak. It explicitly reports on clinical outcomes, including death, and identifies predictors of severe disease. The abstract provides the number of deaths (9 out of 160), which directly contributes to calculating a case fatality rate.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+5. PMID: 32052029 [Score: 4/4]
+   Title: Clinical Course and Outcome of Human Monkeypox in Nigeria.
+   Overall: The study is highly relevant. It explicitly investigates human mpox in Nigeria, reports original empirical data from a retrospective study, and provides mortality outcomes (5 deaths among 40 cases), which directly informs the case fatality rate.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+6. PMID: 36403584 [Score: 4/4]
+   Title: Human monkeypox virus infection in women and non-binary individuals during the 2022 outbreaks: a global case series.
+   Overall: This global case series provides original empirical data on mpox in women and non-binary individuals, with explicit mention of zero deaths, making it directly relevant to CFR estimation. It scores highly on disease, population, location, and original evidence, but parameter relevance is slightly lower because CFR is not the central outcome.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+7. PMID: 39887004 [Score: 4/4]
+   Title: Evolving Epidemiology of Mpox in Africa in 2024.
+   Overall: This study is highly relevant. It provides original empirical data on the case fatality rate of mpox in human populations across Africa, directly addressing the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+8. PMID: 38058122 [Score: 4/4]
+   Title: Mpox and Chickenpox Coinfection: Case Series From Southern Nigeria.
+   Overall: This retrospective cohort study provides original empirical data on mpox cases in Nigeria, including a reported mortality of 8.9% (5/56). It is highly relevant across disease, population, location, and evidence dimensions. The target parameter (CFR) is clearly present but secondary to the coinfection analysis, making the study relevant for estimating mpox CFR.
+   维度评分: D=4 P=4 L=4 E=4 Param=3

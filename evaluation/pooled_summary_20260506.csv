@@ -1,0 +1,6 @@
+disease,topic,project,parameter_type,estimate_measure,include_median,impute_se,method,n_studies,n_excluded,n_imputed,pooled_mean,se_pooled,ci_lower,ci_upper,i2,tau2,p_het,run_used
+mpox,reproduction_number,p9,all,mean,False,True,random,6,0,0,1.7817,0.0595,1.6652,1.8982,93.5,0.0141,0.0,20260505_184054_099
+mpox,serial_interval,p10,serial_interval,mean,False,True,random,4,1,0,8.843,0.9119,7.0557,10.6304,74.5,1.9751,0.0082,20260505_192104_444
+mpox,serial_interval,p11,serial_interval,mean,False,True,random,6,0,0,8.0266,0.4632,7.1188,8.9345,22.8,0.2878,0.2623,20260505_204630_616
+mpox,serial_interval,p5,serial_interval,mean,False,True,random,2,1,0,8.4758,1.1476,6.2265,10.7251,89.8,2.3758,0.0017,20260505_202716_175
+mpox,serial_interval,p6,serial_interval,mean,False,True,random,3,2,0,8.9024,1.4436,6.073,11.7318,38.3,2.4096,0.1976,20260505_212441_744

@@ -1,0 +1,53 @@
+{
+  "timestamp_utc": "2026-05-05T15:39:25.476054+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_prepare_raw.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP6",
+    "--query",
+    "(mpox OR monkeypox OR \"monkeypox virus\") AND (\"incubation period\" OR \"serial interval\" OR \"generation time\" OR \"generation interval\" OR \"latent period\" OR \"infectious period\")",
+    "--date-range",
+    "1970/1/1-2024/12/31",
+    "--include-gt",
+    "--fix-missing"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "d17b85cc6063d9ea9078476327cd4acc2794526f",
+    "branch": "feat/cascade-screening",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP6",
+    "topic": "",
+    "query": "(mpox OR monkeypox OR \"monkeypox virus\") AND (\"incubation period\" OR \"serial interval\" OR \"generation time\" OR \"generation interval\" OR \"latent period\" OR \"infectious period\")",
+    "date_range": "1970/1/1-2024/12/31",
+    "retmax": "all",
+    "include_gt": true,
+    "fix_missing": true,
+    "medline_only": false
+  },
+  "inputs": [],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/serial_interval/ground_truth/p6/project_6_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T15:39:25.474247+00:00",
+      "type": "file",
+      "size_bytes": 167457,
+      "sha256": "f222e84f0324c3213bdcec0ce3a3a084d0926c778140fe477bab2d012a4c958c"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 72,
+    "ground_truth_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/serial_interval/ground_truth/p6/project_6_groundtruth.csv"
+  }
+}

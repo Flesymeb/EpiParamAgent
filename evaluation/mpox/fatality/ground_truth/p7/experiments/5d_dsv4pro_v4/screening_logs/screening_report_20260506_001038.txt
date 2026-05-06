@@ -1,0 +1,520 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-05-06 00:10:38
+研究问题: What is the mortality/fatality of mpox?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p7/project_7_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p7/experiments/5d_dsv4pro_v4/project_7_screened.csv
+模型配置: None/deepseek/deepseek-v4-pro
+批处理大小: 20
+批次并发: 5
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │     95   │    7.2%  │
+│ 🤔 Possible candidates   │    175   │   13.2%  │
+│ 😐 Unlikely candidates   │    820   │   61.9%  │
+│ ⚠️  Errors               │    234   │   17.7%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │   1324   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  2.79  │   66.5%  │ 292/87/65/41/839                 │
+│ Population      │  2.76  │   68.1%  │ 317/52/54/104/797                 │
+│ Location        │  2.07  │   46.7%  │ 432/126/148/158/460                 │
+│ Evidence        │  1.61  │   36.2%  │ 596/213/36/67/412                 │
+│ Parameter       │  0.89  │   16.4%  │ 848/124/135/84/133                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (95 篇)
+================================================================================
+
+1. PMID: 35866746 [Score: 4/4]
+   Title: Monkeypox Virus Infection in Humans across 16 Countries - April-June 2022.
+   Overall: This case series provides direct, original empirical evidence on human mpox infections across multiple countries and explicitly reports mortality (no deaths). It is highly relevant to the research question on mpox mortality/fatality.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+2. PMID: 39887004 [Score: 4/4]
+   Title: Evolving Epidemiology of Mpox in Africa in 2024.
+   Overall: 该研究直接报告了非洲mpox的病死率，数据来源于非洲CDC的原始病例统计，完全符合死亡率/病死率研究问题的所有维度，高度相关。
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+3. PMID: 39892912 [Score: 4/4]
+   Title: Suspected and confirmed mpox cases in DR Congo: a retrospective analysis of national epidemiological and laboratory surveillance data, 2010-23.
+   Overall: The study is highly relevant: it provides original empirical data on mpox mortality (case-fatality ratios) in a human population in DR Congo, with all dimensions scoring 4.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+4. PMID: 40239067 [Score: 4/4]
+   Title: Tecovirimat for Clade I MPXV Infection in the Democratic Republic of Congo.
+   Overall: The study is highly relevant. It is an original randomized controlled trial investigating mpox (clade I) in humans in the DRC. Crucially, the abstract explicitly reports overall mortality (1.7%) and compares it to a case fatality rate, directly providing data on the target parameter.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+5. PMID: 40222380 [Score: 4/4]
+   Title: Clinical presentation and epidemiological assessment of confirmed human mpox cases in DR Congo: a surveillance-based observational study.
+   Overall: The study is highly relevant. It is an original observational study of human mpox cases in DR Congo that explicitly reports case-fatality rates, directly addressing the research question on mortality/fatality of mpox.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+6. PMID: 39892407 [Score: 4/4]
+   Title: Epidemiological and clinical features of mpox during the clade Ib outbreak in South Kivu, Democratic Republic of the Congo: a prospective cohort study.
+   Overall: The study is highly relevant: it investigates mpox in a human outbreak setting, provides original empirical data from a prospective cohort, and explicitly reports mortality outcomes (two deaths among hospitalized patients). All dimensions score 4.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+7. PMID: 38001044 [Score: 4/4]
+   Title: Associations Between HIV and Severe Mpox in an Atlanta Cohort.
+   Overall: This cohort study directly reports the number and proportion of deaths among mpox patients, making it relevant to the mortality/fatality research question. Although mortality is not the central outcome, the paper provides original empirical data from a defined geographic setting.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+8. PMID: 39321225 [Score: 4/4]
+   Title: Clinical and Epidemiological Characteristics of Mpox Cases Identified Through Case-based Surveillance in India, July 2022-January 2023.
+   Overall: The study is highly relevant. It provides original empirical data on mpox cases in India, including a direct measure of case fatality rate (4.2%), which directly answers the research question on mortality/fatality of mpox. All dimensions are clearly satisfied.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+9. PMID: 40263113 [Score: 4/4]
+   Title: Clade Ia Monkeypox Virus Linked to Sexual Transmission, Democratic Republic of the Congo, August 2024.
+   Overall: This case report directly describes a fatal human mpox case in the DRC, providing original empirical evidence on mortality. All relevance dimensions are explicitly met.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+10. PMID: 36884032 [Score: 4/4]
+   Title: An Mpox-Related Death in the United States.
+   Overall: Title-only screening is sufficient here because the title and metadata provide unambiguous signals: a human mpox-related death case report from the United States. All five dimensions are explicitly addressed, leaving no uncertainty. The study is highly relevant to the research question on mpox mortality/fatality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+11. PMID: 39933565 [Score: 4/4]
+   Title: Epidemiological and genomic evolution of the ongoing outbreak of clade Ib mpox virus in the eastern Democratic Republic of the Congo.
+   Overall: This original study investigates an mpox outbreak in humans in DRC, providing direct empirical data including deaths, which is relevant to mortality/fatality even if not the central aim.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+12. PMID: 37079637 [Score: 4/4]
+   Title: Clinical characterization and placental pathology of mpox infection in hospitalized patients in the Democratic Republic of the Congo.
+   Overall: This prospective observational study of hospitalized mpox patients in the DRC provides original empirical data on clinical outcomes, including three deaths among 216 patients, directly addressing mortality. All relevance dimensions are clearly met.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+13. PMID: 39066285 [Score: 4/4]
+   Title: High Rates of Miscarriage and Stillbirth among Pregnant Women with Clade I Mpox (Monkeypox) Are Confirmed during 2023-2024 DR Congo Outbreak in South Kivu Province.
+   Overall: The study is highly relevant: it investigates mpox in a human population during a real-world outbreak, and it reports fetal mortality rates, which are a direct measure of fatality. Although the abstract suggests a review component, it includes original case data. All dimensions score high, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+14. PMID: 31285143 [Score: 4/4]
+   Title: Outbreak of human monkeypox in Nigeria in 2017-18: a clinical and epidemiological report.
+   Overall: This study is highly relevant. It provides original empirical data on a human mpox outbreak in Nigeria, explicitly reporting a case fatality rate of 6%. All dimensions are clearly satisfied with strong textual evidence.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+15. PMID: 39024895 [Score: 4/4]
+   Title: Epidemiological and clinical characteristics of monkeypox among people with and without HIV in Peru: a national observational study.
+   Overall: The study is highly relevant: it investigates mpox in humans in Peru, provides original empirical data, and explicitly reports mortality. All dimensions are clearly evidenced.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+16. PMID: 38042367 [Score: 4/4]
+   Title: A case of fatal monkeypox infection: necropsy and molecular findings, with some considerations related to clinical management.
+   Overall: This is a case report of a fatal mpox infection in an HIV-positive patient. It provides original empirical data directly addressing mortality/fatality of mpox in humans. All relevance dimensions are strong except location, which is not explicitly stated but implied by the clinical context. The study is highly relevant to the research question.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+17. PMID: 32052029 [Score: 4/4]
+   Title: Clinical Course and Outcome of Human Monkeypox in Nigeria.
+   Overall: This retrospective study of 40 human monkeypox cases in Nigeria directly reports five deaths, providing original empirical mortality data in a defined human population and geographic setting. It is highly relevant to the research question on mpox mortality/fatality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+18. PMID: 36630413 [Score: 4/4]
+   Title: Clinical and Demographic Features of 49 Patients With Human Monkeypox Virus-Confirmed Infection in a Tertiary Care Center in Valencia, Spain: A Descriptive Study.
+   Overall: This descriptive case series of 49 mpox patients in Spain provides original empirical data on clinical features, including the explicit finding that no deaths occurred. It is directly relevant to the research question on mpox mortality/fatality, with high scores across all dimensions. The mortality parameter is reported but not the sole focus, hence a score of 3 for parameter relevance.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+19. PMID: 40529678 [Score: 4/4]
+   Title: Epidemiological and clinical characteristics of patients with human monkeypox infection in Zhejiang Province, China, 2023.
+   Overall: This study is highly relevant to the research question on mpox mortality/fatality. It provides original empirical data on 182 human mpox cases in a defined geographic area and explicitly reports that no deaths occurred, directly contributing mortality information.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+20. PMID: 38042298 [Score: 4/4]
+   Title: Efficacy and viral dynamics of tecovirimat in patients with MPOX: A multicenter open-label, double-arm trial in Japan.
+   Overall: This clinical trial directly reports mortality outcomes in mpox patients, making it highly relevant to the research question on mpox mortality/fatality. All dimensions score 4.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+21. PMID: 40451826 [Score: 4/4]
+   Title: Mpox in an Immunocompromised Patient: Fatal Case Report, Colombia.
+   Overall: This is a case report of a fatal mpox infection in an immunocompromised patient in Colombia. It provides direct, original evidence on mortality, making it highly relevant to the research question on mpox mortality/fatality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+22. PMID: 37291857 [Score: 4/4]
+   Title: Monkeypox Presenting as a Hand Consult in the Emergency Department: Two Case Reports.
+   Overall: The study is highly relevant. It explicitly investigates mpox in a human population within a real-world clinical setting, reports original empirical data from two case reports, and directly mentions a patient death, providing explicit evidence for the target parameter of mortality/fatality.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+23. PMID: 39708276 [Score: 4/4]
+   Title: Clinical characteristics of suspected cases of human mpox (monkeypox) in Katako-Kombe, Democratic Republic of the Congo 2023: challenges and key responses.
+   Overall: 该研究直接针对mpox病死率，提供了具体CFR数据，人群、地点、数据来源和参数均高度匹配研究问题，属于高相关性原始研究。
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+24. PMID: 20875278 [Score: 4/4]
+   Title: Human monkeypox outbreak caused by novel virus belonging to Congo Basin clade, Sudan, 2005.
+   Overall: The study is highly relevant. It directly investigates a human monkeypox outbreak, provides original empirical data from a specific geographic location, and explicitly reports that 'no deaths occurred', which is a direct statement on mortality. This makes it a strong candidate for inclusion in a systematic review on mpox mortality/fatality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+25. PMID: 29573840 [Score: 4/4]
+   Title: Investigation of an outbreak of monkeypox in an area occupied by armed groups, Central African Republic.
+   Overall: This is an outbreak investigation that directly reports case fatality for human monkeypox cases in a specific geographic setting, providing original empirical evidence on mortality, which exactly matches the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+26. PMID: 41414936 [Score: 4/4]
+   Title: Community transmission of mpox clade Ib not driven through sexual exposures, Uvira, eastern Democratic Republic of the Congo, June to October 2024.
+   Overall: The study is a primary outbreak investigation providing original empirical data on mpox mortality, with explicit case-fatality ratios reported. It is highly relevant to the research question on mortality/fatality of mpox.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+27. PMID: 36037315 [Score: 4/4]
+   Title: Severe disseminated clinical presentation of monkeypox virus infection in an immunosuppressed patient: first death report in Brazil.
+   Overall: This case report is highly relevant. It explicitly investigates monkeypox in a human population in Brazil, reports original empirical data, and directly describes a death, which is a mortality outcome. All dimensions score highly.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+28. PMID: 39749987 [Score: 4/4]
+   Title: Clinical Characterization and Outcomes of Human Clade IIb Mpox Virus Disease: A European Multicenter Mpox Observational Cohort Study (MOSAIC).
+   Overall: The study is a primary observational cohort of human mpox cases in Europe, and it explicitly reports no deaths, making it highly relevant to the mortality/fatality question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+29. PMID: 36082686 [Score: 4/4]
+   Title: A large multi-country outbreak of monkeypox across 41 countries in the WHO European Region, 7 March to 23 August 2022.
+   Overall: This study reports original mortality data (two deaths) from a large multi-country mpox outbreak in humans, making it highly relevant to the research question on mpox mortality/fatality.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+30. PMID: 41534478 [Score: 4/4]
+   Title: Clinical characteristics of six fatal cases with advanced HIV and monkeypox virus co-infection in Beijing: A retrospective analysis.
+   Overall: The study is directly relevant: it provides original empirical data on fatal mpox cases in humans from a specific geographic setting, with mortality as the central outcome.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+31. PMID: 39821125 [Score: 4/4]
+   Title: A new STI in the city: MPOX in Barcelona. First outbreak (5/2022-5/2023) and subsequent resurgence.
+   Overall: This study is highly relevant. It provides original empirical data on a real-world mpox outbreak in Barcelona, explicitly reporting mortality (zero deaths) among human cases. All dimensions score 4.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+32. PMID: 40044363 [Score: 4/4]
+   Title: Mpox in a Patient With a Signal Transducer and Activator of Transcription 1 Gain-of-Function Mutation.
+   Overall: This case report directly describes a fatal mpox case in a human patient, providing original empirical evidence on mortality. It is highly relevant to the research question on mpox mortality/fatality.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+33. PMID: 36403584 [Score: 4/4]
+   Title: Human monkeypox virus infection in women and non-binary individuals during the 2022 outbreaks: a global case series.
+   Overall: This global case series provides original empirical data on mpox in women and non-binary individuals, explicitly noting zero deaths. While mortality is reported, it is a secondary finding within a broader clinical description, making the study moderately relevant to the mortality/fatality research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+34. PMID: 39894476 [Score: 4/4]
+   Title: Monkeypox Outbreak 2023 in Chengdu, China: an Observational Study.
+   Overall: This observational study investigates a monkeypox outbreak in humans in Chengdu, China, providing original empirical data. It explicitly reports that no deaths occurred among the 28 cases, directly contributing evidence on mpox mortality. The study is highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+35. PMID: 38035733 [Score: 4/4]
+   Title: Mpox (monkeypox) risk and mortality associated with HIV infection: a national case-control study in Nigeria.
+   Overall: This is a national case-control study in Nigeria that directly investigates mpox mortality and its association with HIV. It reports case fatality rates, making it highly relevant to the research question on mortality/fatality of mpox.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+36. PMID: 38249378 [Score: 4/4]
+   Title: Cases of Monkeypox show highly-overlapping co-infection with HIV and syphilis.
+   Overall: This original study of human mpox cases in China reports on mortality (no deaths), making it partially relevant to the fatality question, though the main focus is co-infections and transmission.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+37. PMID: 12149352 [Score: 4/4]
+   Title: Outbreaks of disease suspected of being due to human monkeypox virus infection in the Democratic Republic of Congo in 2001.
+   Overall: This study directly investigates human monkeypox outbreaks in a real-world setting, providing original data on cases and deaths. It is highly relevant to the research question on mpox mortality/fatality.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+38. PMID: 39900050 [Score: 4/4]
+   Title: Clinical and epidemiological characteristics of the 2022-2023 Mpox outbreak in Buenos Aires, Argentina.
+   Overall: The study is highly relevant: it provides original empirical data on mpox in a human population in Argentina, and explicitly reports a mortality rate of 0.4%, directly addressing the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+39. PMID: 40468189 [Score: 4/4]
+   Title: Time series modelling and forecasting of mpox incidence and mortality in Nigeria.
+   Overall: The study is highly relevant. It explicitly models and forecasts mpox mortality in Nigeria using original empirical data. The title, abstract, and MeSH terms all confirm a direct focus on the target disease, population, and parameter.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+40. PMID: 39658116 [Score: 4/4]
+   Title: Rising epidemiological trends in prevalence and mortality of mpox: Global insights and analysis.
+   Overall: The study is highly relevant: it directly investigates mpox mortality trends globally using original cross-sectional data from human populations in real-world locations. Mortality is a key outcome, though specific fatality metrics are not detailed in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+41. PMID: 3036967 [Score: 4/4]
+   Title: Human monkeypox: clinical features of 282 patients.
+   Overall: The study is highly relevant. It explicitly investigates human monkeypox in a defined geographic location (Zaire) and reports original empirical data on clinical features and prognosis. Crucially, the abstract directly reports a case-fatality rate, making it a strong candidate for inclusion in a review on mpox mortality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+42. PMID: 37211342 [Score: 4/4]
+   Title: Clinical and epidemiological characteristics of mpox: A descriptive cases series in Colombia.
+   Overall: This study is highly relevant. It is an original observational study of human mpox cases in Colombia. Crucially, the abstract explicitly reports 'two deaths reported' among the 521 cases, directly providing mortality data. The study meets all criteria for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+43. PMID: 37053126 [Score: 4/4]
+   Title: Epidemiologic and Clinical Features of Mpox-Associated Deaths - United States, May 10, 2022-March 7, 2023.
+   Overall: This study is directly relevant to the research question. It provides original empirical data on mpox mortality in the United States, including an explicit case fatality rate. All dimensions score 4.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+44. PMID: 6249508 [Score: 4/4]
+   Title: Human monkeypox, 1970-79.
+   Overall: 该研究完全针对猴痘疾病，报告了病死率，基于原始病例数据，且人群和地理背景明确，高度符合研究问题。
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+45. PMID: 37071153 [Score: 4/4]
+   Title: Clinical Presentation of Mpox in People With and Without HIV in the United Kingdom During the 2022 Global Outbreak.
+   Overall: 该研究为基于英国医院病例系列的观察性分析，比较了 HIV 阳性与阴性 mpox 患者的临床特征，并直接报告了零死亡，为死亡率问题提供了直接但非核心的证据。属于高度相关的原始实证研究。
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+46. PMID: 40966819 [Score: 4/4]
+   Title: Global Mpox outbreaks: A comprehensive epidemiological assessment (2022-2024).
+   Overall: The study directly addresses global Mpox outbreaks in humans, computes case fatality rate alongside other parameters, and is based on original analysis of real-world surveillance data. All dimensions are highly relevant, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+47. PMID: 37723464 [Score: 4/4]
+   Title: Comparison of the risk of hospital admission, need for ventilation, sepsis, pneumonitis and death among the recent monkeypox outbreak and historical outbreaks.
+   Overall: The study is highly relevant: it directly compares death risk in recent vs. historical monkeypox outbreaks using original retrospective data on human patients. Although no deaths occurred, it provides empirical evidence on mortality, aligning perfectly with the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+48. PMID: 2841783 [Score: 4/4]
+   Title: Human monkeypox: disease pattern, incidence and attack rates in a rural area of northern Zaire.
+   Overall: This study is highly relevant: it provides original empirical data on human monkeypox cases in Zaire, including a directly reported case-fatality rate of 9%, which answers the research question on mortality/fatality of mpox.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+49. PMID: 37632124 [Score: 4/4]
+   Title: Implementation and early outcomes of a telehealth visit model to deliver tecovirimat for mpox infection in New York City.
+   Overall: The study is highly relevant to the research question on mpox mortality. It explicitly investigates mpox in a human population in a real-world setting (New York City) and reports original empirical data. Crucially, the abstract explicitly states there were 'no... deaths related to mpox' among the treated cohort, directly addressing the mortality/fatality parameter. This makes it a primary source of evidence for the outcome of interest.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+50. PMID: 37812389 [Score: 4/4]
+   Title: Mpox severity and associated hospitalizations among people with HIV and related immunosuppression in Brazil.
+   Overall: This prospective cohort study provides original empirical data on mpox outcomes in a Brazilian cohort, including mortality (2 deaths). All relevance dimensions are strong, with mortality reported as a secondary finding. The study is highly relevant to the research question on mpox mortality/fatality.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+51. PMID: 11384521 [Score: 4/4]
+   Title: Outbreak of human monkeypox, Democratic Republic of Congo, 1996 to 1997.
+   Overall: 该研究为1996-1997年刚果民主共和国人类猴痘暴发的原始调查，明确报告了病死率，所有维度高度相关。
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+52. PMID: 36813281 [Score: 4/4]
+   Title: Mpox: Clinicians identify severe form with high mortality in advanced HIV patients.
+   Overall: The title provides strong signals for disease, population, and parameter relevance, with moderate support for original evidence and limited location information. Title-only screening yields high confidence for inclusion.
+   维度评分: D=4 P=4 L=2 E=3 Param=4
+
+53. PMID: 36718662 [Score: 4/4]
+   Title: Severe Mpox Infections in People With Uncontrolled Human Immunodeficiency Virus.
+   Overall: This case series directly investigates severe mpox in HIV patients and reports death as an outcome, making it highly relevant for mortality/fatality of mpox. All dimensions except location (which is unspecified) score high.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+54. PMID: 37678309 [Score: 4/4]
+   Title: Mpox in people with past infection or a complete vaccination course: a global case series.
+   Overall: This global case series provides original empirical data on mpox in previously immune individuals, directly addressing the disease and population of interest. It reports mortality (no deaths) as part of clinical outcomes, making it relevant to the research question on mpox mortality/fatality, though the primary aim is not to estimate fatality rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+55. PMID: 9132583 [Score: 4/4]
+   Title: Human monkeypox--Kasai Oriental, Zaire, 1996-1997.
+   Overall: The study is highly relevant. It directly investigates a human monkeypox outbreak in a defined geographic area, reports original empirical data, and explicitly provides mortality information (six deaths among 71 cases). All dimensions are clearly evidenced in the title and abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+56. PMID: 36566771 [Score: 4/4]
+   Title: Clinical features and management of individuals admitted to hospital with monkeypox and associated complications across the UK: a retrospective cohort study.
+   Overall: The study is highly relevant. It directly investigates mpox in a human population within a real-world UK hospital setting, using original empirical data from a retrospective cohort study. Crucially, the abstract explicitly reports on mortality as a key outcome, stating 'No deaths occurred during the study period', which directly addresses the target parameter of mortality/fatality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+57. PMID: 36542047 [Score: 4/4]
+   Title: Epidemiological and clinical characteristics of monkeypox cases in Brazil in 2022: a cross-sectional study.
+   Overall: 该研究为巴西猴痘病例的横断面描述，提供了人口学和临床特征，且报告了死亡例数，因此可为猴痘致死率提供基础数据，但本身不深入分析病死率。整体相关性较高。
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+58. PMID: 37294338 [Score: 4/4]
+   Title: Risk factors for mortality and clinical presentation of monkeypox.
+   Overall: The study is highly relevant: it is an original prospective cohort study of human mpox patients in Mexico, explicitly reporting mortality rates and risk factors. All dimensions are clearly satisfied with strong textual evidence.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+59. PMID: 36828001 [Score: 4/4]
+   Title: Mpox in people with advanced HIV infection: a global case series.
+   Overall: This case series directly investigates mpox mortality in people with advanced HIV, providing original empirical data on deaths. It is highly relevant to the research question on mortality/fatality of mpox.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+60. PMID: 38465911 [Score: 4/4]
+   Title: Clinical features and outcomes of mpox in people with and without HIV: a national comparative study.
+   Overall: The study directly investigates mpox mortality in a human population using original observational data from Mexico. All dimensions of the research question are fully addressed.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+61. PMID: 39393385 [Score: 4/4]
+   Title: Modelling vaccination approaches for mpox containment and mitigation in the Democratic Republic of the Congo.
+   Overall: This modelling study directly addresses mpox mortality in a real-world human population (DRC). It explicitly quantifies deaths under different vaccination scenarios, making it highly relevant for the target parameter, although it is a simulation rather than primary empirical data.
+   维度评分: D=4 P=4 L=4 E=2 Param=4
+
+62. PMID: 36327164 [Score: 4/4]
+   Title: Severe Monkeypox in Hospitalized Patients - United States, August 10-October 10, 2022.
+   Overall: This study is highly relevant to the research question on mpox mortality/fatality. It provides original empirical data on deaths among hospitalized mpox patients in the United States, with explicit reporting of mortality numbers and rates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+63. PMID: 40602378 [Score: 4/4]
+   Title: Mpox, HIV, and a Compounding Sepsis Crisis in Africa.
+   Overall: This case report directly describes a death from mpox-associated sepsis in a human patient in Uganda, providing explicit evidence of mpox mortality. All dimensions are highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+64. PMID: 36216018 [Score: 4/4]
+   Title: Epidemiological and clinical characteristics of patients with monkeypox in the GeoSentinel Network: a cross-sectional study.
+   Overall: The study is highly relevant: it provides original empirical data on mpox in humans across multiple countries and directly reports mortality (no deaths). Although mortality is not the primary outcome, it is explicitly stated, making the study useful for a systematic review on mpox mortality/fatality.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+65. PMID: 41356465 [Score: 4/4]
+   Title: Clinical and radiological characteristics of Mpox pneumonia in immunosuppressed HIV-infected patients: a multicenter study from China.
+   Overall: This study is highly relevant to the research question. It provides original empirical data on case fatality rates among HIV-infected patients with Mpox pneumonia in China, directly measuring mortality. All dimensions score 4, indicating strong alignment with the review's scope.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+66. PMID: 40783724 [Score: 4/4]
+   Title: Neonatal mpox in Nigeria: a case of transplacental or postnatal transmission.
+   Overall: The study is highly relevant. It is an original case report on a confirmed neonatal mpox infection in Nigeria. The abstract explicitly mentions that neonatal mpox 'could lead to prolonged morbidity and mortality,' directly addressing the target parameter of mortality/fatality, even though it is not the sole focus of the paper.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+67. PMID: 36950196 [Score: 4/4]
+   Title: Investigation of a mpox outbreak in Central African Republic, 2021-2022.
+   Overall: This study is highly relevant. It is an original outbreak investigation in humans from Central African Republic that explicitly reports a case fatality ratio for mpox, directly addressing the research question on mortality/fatality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+68. PMID: 41386319 [Score: 4/4]
+   Title: Mpox-related deaths in Brazil: National surveillance findings with implications for HIV-integrated care.
+   Overall: The title and keywords are unusually explicit for title-only screening: they directly mention mpox deaths, mortality, a specific country, and surveillance findings. All dimensions score highly. The only minor uncertainty is whether the 'Letter' format contains original empirical data, but the language of 'findings' strongly supports it. No abstract is available, but the available metadata leaves little ambiguity.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+69. PMID: 41322099 [Score: 4/4]
+   Title: Fatal Mpox Coinfection in Advanced AIDS: A Case Report.
+   Overall: This case report is highly relevant. It explicitly investigates mpox in a human patient, reports a fatal outcome (mortality), and provides original empirical evidence from a specific geographic location (China). The study directly addresses the mortality/fatality of mpox, albeit in a single case with a specific comorbidity.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+70. PMID: 41245145 [Score: 4/4]
+   Title: Fatal case of community-acquired pneumonia coinfected with monkeypox virus: clinical and autopsy findings.
+   Overall: This case report directly documents a fatal outcome of mpox coinfection, providing explicit evidence on mortality. All dimensions are highly relevant, with location relevance slightly less explicit but still clearly a real-world clinical setting.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+71. PMID: 39980571 [Score: 4/4]
+   Title: Summary of the mpox outbreak in Canada, April 28-December 31, 2022.
+   Overall: The study is highly relevant: it provides original empirical data on mpox cases in Canada, including explicit reporting of zero deaths, which directly informs the mortality/fatality of mpox.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+72. PMID: 39338547 [Score: 4/4]
+   Title: Update of the Genetic Variability of Monkeypox Virus Clade IIb Lineage B.1.
+   Overall: The study is highly relevant to mpox and reports original genomic analyses. It mentions 203 deaths among 97,745 cases, which directly provides mortality data, making it relevant to the research question on mortality/fatality.
+   维度评分: D=4 P=4 L=3 E=3 Param=4
+
+73. PMID: 38344579 [Score: 4/4]
+   Title: Prolonged, Atypical, and Fulminant Mpox in a HIV/HBV-Coinfected Patient: A Case Report.
+   Overall: This case report is highly relevant. It explicitly investigates mpox in a human patient and reports a fatal outcome, directly addressing mortality. As a case report, it provides original empirical evidence. The only weakness is the lack of an explicit geographic location.
+   维度评分: D=4 P=4 L=2 E=4 Param=4
+
+74. PMID: 41845378 [Score: 4/4]
+   Title: Dynamics of Mpox epidemics by the interplay of COVID-19 pandemic in Africa.
+   Overall: The study directly investigates Mpox mortality/fatality in human populations across Africa using original retrospective cohort data. It reports case fatality rates and mortality risk, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+75. PMID: 41293069 [Score: 4/4]
+   Title: Mpox in people living with HIV in Brazil: spatial distribution, clinical features, and outcomes from a nationwide surveillance study.
+   Overall: The study is highly relevant: it investigates mpox in a human population in Brazil using original empirical data from a national surveillance study, and it explicitly reports mortality outcomes, including the proportion of deaths among people living with HIV. All dimensions score 4.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+76. PMID: 41948362 [Score: 4/4]
+   Title: Leveraging Google search data for predictive surveillance of Mpox: Toward active outbreak prevention.
+   Overall: The study is highly relevant. It explicitly investigates Mpox (disease relevance), uses real-world human population data from 96 countries (population and location relevance), reports original empirical analysis (original evidence), and directly analyzes mortality/deaths as a key outcome, even if the predictive performance for deaths was found to be weak (target parameter relevance).
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+77. PMID: 36412741 [Score: 4/4]
+   Title: Clinical and Epidemiological Features of Hospitalized and Ambulatory Patients with Human Monkeypox Infection: A Retrospective Observational Study in Portugal.
+   Overall: The study is highly relevant: it provides original empirical data on human mpox cases in Portugal and explicitly reports mortality (no deaths). While mortality is not the primary outcome, the direct mention makes it a valid source for mortality/fatality evidence synthesis.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+78. PMID: 36415264 [Score: 4/4]
+   Title: Human Monkeypox: Old virus with new Epidemiological and Transmission Trends.
+   Overall: The study is highly relevant to the research question. It focuses on human monkeypox (disease relevance), reports on human cases globally (population and location relevance), presents original aggregated data (original evidence), and explicitly states the number of deaths caused by the disease (target parameter relevance). The mention of '27 deaths' directly addresses mortality/fatality, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=3 E=3 Param=4
+
+79. PMID: 36828492 [Score: 4/4]
+   Title: Mpox, Caused by the MPXV of the Clade IIb Lineage, Goes Global.
+   Overall: The study is highly relevant to mpox in humans with global real-world data and original empirical evidence. It includes mortality counts (72 deaths), making it partially relevant to the mortality/fatality question, though the primary focus is broader epidemiological and phylogenetic analysis. It would contribute to understanding mpox fatality but is not exclusively a mortality study.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+80. PMID: 41625562 [Score: 4/4]
+   Title: Epidemiology, clinical features, and outcomes of Mpox in children and adolescents in Uganda, August 2024-January 2025.
+   Overall: The study is highly relevant. It explicitly investigates mpox in a human population in Uganda, reports original empirical data, and provides a case fatality rate of 1.9%, directly addressing the mortality/fatality research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+81. PMID: 41209599 [Score: 4/4]
+   Title: Epidemiology, clinical presentation and outcome of human mpox in Rivers State, Nigeria during the 2022-23 outbreak: an observational retrospective study.
+   Overall: The study is directly relevant: it provides original empirical data on mortality/fatality of mpox in a human population in Nigeria. All dimensions are explicitly met.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+82. PMID: 41304217 [Score: 4/4]
+   Title: Role of Genomic, Economic, and Demographic Disparities in Mpox Epidemic in Africa: A Retrospective Cross-Country Analysis.
+   Overall: The study directly addresses mpox mortality using original human surveillance data from Africa, making it highly relevant to the research question on mpox mortality/fatality.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+83. PMID: 41194813 [Score: 4/4]
+   Title: Combination of Mpox With Ocular Involvement, Human Immunodeficiency Virus, and Pulmonary Tuberculosis Resulting in High Mortality: A Report of Two Cases.
+   Overall: 该病例报告直接关注猴痘患者的死亡率，提供了两名合并感染患者的死亡结局，符合研究问题的所有维度，证据充分且为原始数据。
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+84. PMID: 37799502 [Score: 4/4]
+   Title: A hybrid forecasting technique for infection and death from the mpox virus.
+   Overall: This study is highly relevant to mpox in humans at a global scale and provides original empirical modeling. It directly addresses death counts, which aligns with the mortality/fatality outcome, though it does not estimate rates. It is a strong candidate for inclusion if death counts are considered an acceptable measure of mortality.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+85. PMID: 40266089 [Score: 4/4]
+   Title: Epidemiology and Clinical Features of Mpox in Jakarta, Indonesia, August 2022-December 2023.
+   Overall: The study is highly relevant. It explicitly investigates mpox in a human population in Jakarta, uses an original retrospective study design, and explicitly includes mortality as one of its described outcomes. The abstract confirms the presence of original empirical data on the target parameter.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+86. PMID: 38868307 [Score: 4/4]
+   Title: Severe Mpox Among People With Advanced Human Immunodeficiency Virus Receiving Prolonged Tecovirimat in New York City.
+   Overall: The study is a primary investigation of severe mpox in a specific human population in New York City, reporting original clinical outcomes including high mortality. All dimensions are explicitly and centrally addressed.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+87. PMID: 38756609 [Score: 4/4]
+   Title: Hospitalization determinants in patients with Mpox disease: The CEME-22 Project.
+   Overall: 该研究针对西班牙人群的Mpox住院患者，提供了原始死亡数据，尽管死亡不是主要结局，但仍直接报告了致死事件，高度相关。
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+88. PMID: 37172461 [Score: 3/4]
+   Title: A European perspective of phylogenomics, sublineages, geographical distribution, epidemiology, and mutational landscape of mpox virus: Emergence pattern may help to fight the next public health emergency in Europe.
+   Overall: The study is highly relevant to the research question on mpox mortality/fatality. It explicitly investigates mpox in a human population in Europe and reports original empirical data. The abstract mentions examining 'total cases, and deaths' and provides case counts, directly addressing the target parameter of mortality. The only minor limitation is that the abstract does not provide specific fatality rates or detailed mortality analysis, but the explicit mention of deaths makes it clearly relevant.
+   维度评分: D=4 P=4 L=4 E=3 Param=3
+
+89. PMID: 39427467 [Score: 3/4]
+   Title: Emergence of mpox in the Eastern Mediterranean Region: Data assessment and implications for a public health response.
+   Overall: The study is highly relevant as it investigates mpox in humans across the Eastern Mediterranean, using original case data and explicitly reporting zero deaths, thus providing direct evidence on mpox mortality. The evidence dimension is slightly reduced due to ambiguous study type labeling.
+   维度评分: D=4 P=4 L=4 E=3 Param=3
+
+90. PMID: 41133508 [Score: 3/4]
+   Title: A Compartmental Mathematical Model to Assess the Impact of Vaccination, Isolation, and Key Epidemiological Parameters on Mpox Control.
+   Overall: This mathematical modeling study of mpox transmission incorporates case fatality rate as a sensitivity parameter, making it partially relevant to mortality/fatality. It uses real-world data for validation but does not report original mortality estimates. The study is not a review and includes human population context, but its primary contribution is theoretical modeling of control strategies rather than empirical mortality measurement.
+   维度评分: D=4 P=4 L=3 E=2 Param=3
+
+91. PMID: 35970550 [Score: 3/4]
+   Title: Making sense of monkeypox death rates.
+   Overall: The title is clearly relevant to monkeypox mortality, but evidence is limited to title and keywords. The nature of the article (original research vs commentary) is uncertain, and geographic context is missing. Overall relevance is high for the research question.
+   维度评分: D=4 P=4 L=2 E=2 Param=4
+
+92. PMID: 40950929 [Score: 3/4]
+   Title: Potential Risk of Local Transmission of Mpox in Nepal: An Emerging Public Health Concern.
+   Overall: The study is highly relevant to the research question on mpox mortality/fatality. It explicitly investigates mpox in a human population within a specific geographic location (Nepal) using original data analysis. The abstract mentions global mortality figures ('more than 100,000 Mpox cases and 200 deaths') and discusses case data, directly addressing the target parameter of mortality/fatality. The study appears to be an original research article, not a review.
+   维度评分: D=4 P=4 L=4 E=3 Param=3
+
+93. PMID: 36573222 [Score: 3/4]
+   Title: Study and prediction of the 2022 global monkeypox epidemic.
+   Overall: The study is directly about the 2022 monkeypox outbreak and provides original model-based estimates of deaths, thus relevant to mortality. It is not a review and uses real-world global data. The primary emphasis is epidemic prediction including transmission parameters, but deaths are explicitly reported and predicted, supporting moderate parameter relevance.
+   维度评分: D=4 P=4 L=4 E=3 Param=3
+
+94. PMID: 9109325 [Score: 3/4]
+   Title: Human monkeypox in Kasai Oriental, Zaire (1996-1997).
+   Overall: Title-only screening: The study is clearly about human monkeypox in a real outbreak setting, and the presence of 'Survival Rate' in MeSH terms strongly suggests mortality-related outcomes. Without an abstract, we cannot confirm if mortality/fatality is a primary endpoint, but the metadata signals are highly favorable. The study is very likely to be relevant.
+   维度评分: D=4 P=4 L=4 E=3 Param=3
+
+95. PMID: 39418278 [Score: 3/4]
+   Title: Mpox: Neglect has led to a more dangerous virus now spreading across borders, harming and killing people. Leaders must take action to stop mpox now.
+   Overall: Title-only screening with sparse metadata. The title is highly relevant for disease and mentions killing people, which strongly suggests mortality. However, the title's tone is that of a call to action or commentary, and the lack of MeSH terms or abstract makes it impossible to confirm if this is an original empirical study or an editorial. The evidence and parameter scores are therefore moderated to reflect this uncertainty.
+   维度评分: D=4 P=3 L=3 E=2 Param=4

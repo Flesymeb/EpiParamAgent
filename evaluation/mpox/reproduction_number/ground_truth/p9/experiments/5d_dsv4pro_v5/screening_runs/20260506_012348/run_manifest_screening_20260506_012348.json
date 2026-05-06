@@ -1,0 +1,104 @@
+{
+  "timestamp_utc": "2026-05-05T17:23:48.380022+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search",
+  "argv": [
+    "scripts/cli/screening_llm_batch.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP9",
+    "--strategy",
+    "5d",
+    "--model",
+    "deepseek/deepseek-v4-pro",
+    "--batch-size",
+    "20",
+    "--batch-concurrency",
+    "3",
+    "--skip-no-abstract",
+    "--experiment",
+    "5d_dsv4pro_v5"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "be2567707c9b9a7c51e1b065d1216d6af93a805c",
+    "branch": "feat/cascade-screening",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP9",
+    "batch_size": 20,
+    "batch_concurrency": 3,
+    "auto_fulltext": false,
+    "fulltext_only": false,
+    "research_question": "What is the basic reproduction number (R0) of mpox?",
+    "strategy": "5d",
+    "experiment": "5d_dsv4pro_v5"
+  },
+  "inputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/reproduction_number/ground_truth/p9/project_9_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T15:44:55.957229+00:00",
+      "type": "file",
+      "size_bytes": 1940737,
+      "sha256": "39e2bd13c77ed12337e25bf7502d8662da12bff99bd353d66af949f1ba77d67c"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/reproduction_number/ground_truth/p9/project_9_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T07:46:12.445093+00:00",
+      "type": "file",
+      "size_bytes": 1491,
+      "sha256": "62c84dae2179a7beb6f6813831c1b64085eac6ed3f690e30ef21fd8bf92f3b38"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/reproduction_number/ground_truth/p9/experiments/5d_dsv4pro_v5/project_9_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T17:23:48.377088+00:00",
+      "type": "file",
+      "size_bytes": 3250427,
+      "sha256": "a6b58e33438db73fdc621c6f8e315d704e4f1c5c930ac3b94d6c4d8a9ac41a77"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/reproduction_number/ground_truth/p9/experiments/5d_dsv4pro_v5/screening_logs/screening_report_20260506_012348.txt",
+      "exists": true,
+      "mtime_utc": "2026-05-05T17:23:48.379948+00:00",
+      "type": "file",
+      "size_bytes": 16642,
+      "sha256": "57ad2baf65e0bdd739a93efdded57586707b322d7596c0f3f8a533b1553cdebd"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": null,
+      "model": "deepseek/deepseek-v4-pro",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 180,
+      "verify_ssl": false,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": false
+    }
+  },
+  "extra": {
+    "paper_count": 1029,
+    "ground_truth_count": 3,
+    "ground_truth_in_pool": 3,
+    "strong_count": 27,
+    "possible_count": 348,
+    "unlikely_count": 654,
+    "error_count": 0,
+    "fulltext_error_count": 0
+  }
+}

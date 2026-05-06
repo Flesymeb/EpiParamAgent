@@ -1,0 +1,515 @@
+================================================================================
+LLM Screening Detailed Report
+================================================================================
+
+Generated: 2026-05-06 03:54:45
+Research question: What is the serial interval of COVID-19?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/serial_interval/ground_truth/p14/project_14_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/serial_interval/ground_truth/p14/experiments/strategy_binary_strict/project_14_screened.csv
+模型配置: openai/deepseek/deepseek-v4-pro
+批处理大小: 10
+批次并发: 1
+Full-text: need_fulltext=2 | screened=2
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │     94   │  100.0%  │
+│ 🤔 Possible candidates   │      0   │    0.0%  │
+│ 😐 Unlikely candidates   │      0   │    0.0%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │     94   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  4.00  │  100.0%  │  0/ 0/ 0/ 0/ 2                 │
+│ Population      │  4.00  │  100.0%  │  0/ 0/ 0/ 0/ 2                 │
+│ Location        │  4.00  │  100.0%  │  0/ 0/ 0/ 0/ 2                 │
+│ Evidence        │  4.00  │  100.0%  │  0/ 0/ 0/ 0/ 2                 │
+│ Parameter       │  4.00  │  100.0%  │  0/ 0/ 0/ 0/ 2                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (94 篇)
+================================================================================
+
+1. PMID: 31995857 [Score: 4/4]
+   Title: Early Transmission Dynamics in Wuhan, China, of Novel Coronavirus-Infected Pneumonia.
+   Overall: This paper is highly relevant to epidemiology and public health as it provides critical early insights into the transmission dynamics of the novel coronavirus (SARS-CoV-2) in Wuhan, China. It includes key epidemiological metrics such as the basic reproductive number, incubation period, and serial interval, which are essential for understanding disease spread and informing public health interventions. The study is foundational for the global understanding of the COVID-19 pandemic.
+   维度评分: D= P= L= E= Param=
+
+2. PMID: 32145466 [Score: 4/4]
+   Title: Serial interval of novel coronavirus (COVID-19) infections.
+   Overall: The paper is relevant to epidemiology and public health as it estimates the serial interval of COVID-19, which is a key parameter for understanding transmission dynamics and informing public health interventions. The study uses a statistical approach and addresses important methodological considerations such as right truncation, making it valuable for the field.
+   维度评分: D= P= L= E= Param=
+
+3. PMID: 32191173 [Score: 4/4]
+   Title: Serial Interval of COVID-19 among Publicly Reported Confirmed Cases.
+   Overall: The paper focuses on the serial interval of COVID-19, which is a key epidemiological parameter for understanding transmission dynamics. It provides estimates of the mean and standard deviation of the serial interval, along with a percentage of presymptomatic transmission, all of which are relevant to public health and epidemiology. The study is based on confirmed cases in China, contributing to the broader understanding of SARS-CoV-2 transmission.
+   维度评分: D= P= L= E= Param=
+
+4. PMID: 32869006 [Score: 4/4]
+   Title: Estimates of serial interval for COVID-19: A systematic review and meta-analysis.
+   Overall: The paper is a systematic review and meta-analysis focused on the serial interval of COVID-19, which is directly relevant to epidemiology and public health. It addresses a key measure in understanding disease transmission dynamics, which is essential for public health policy and intervention strategies.
+   维度评分: D= P= L= E= Param=
+
+5. PMID: 32511454 [Score: 4/4]
+   Title: The serial interval of COVID-19 from publicly reported confirmed cases.
+   Overall: The paper focuses on the serial interval of COVID-19, which is a key epidemiological parameter used to understand transmission dynamics. The study uses publicly reported confirmed cases and provides statistical estimates, making it relevant to the field of epidemiology and public health.
+   维度评分: D= P= L= E= Param=
+
+6. PMID: 34594686 [Score: 4/4]
+   Title: Serial Interval and Reproductive Number of COVID-19 Among 116 Infector-infectee Pairs - Jingzhou City, Hubei Province, China, 2020.
+   Overall: This paper provides important epidemiological data on the serial interval and reproductive numbers of COVID-19, which are critical parameters for understanding disease transmission and informing public health interventions. The study uses a well-defined sample of 116 infector-infectee pairs, addressing limitations of previous research. The findings contribute to the broader understanding of COVID-19 dynamics and have direct implications for public health practices, making it relevant for epidemiological and public health literature.
+   维度评分: D= P= L= E= Param=
+
+7. PMID: 32863615 [Score: 4/4]
+   Title: Logistic equation and COVID-19.
+   Overall: The paper applies a generalized logistic model to analyze COVID-19 epidemic data, which is relevant to epidemiological modeling and public health. It discusses the use of mathematical models to understand disease spread, coefficient variability, and the potential for stochastic approaches, all of which are important in the field of epidemiology and public health.
+   维度评分: D= P= L= E= Param=
+
+8. PMID: 32767657 [Score: 4/4]
+   Title: Evidence for pre-symptomatic transmission of coronavirus disease 2019 (COVID-19) in China.
+   Overall: The paper addresses pre-symptomatic transmission of COVID-19, which is directly relevant to epidemiology and public health. It provides key insights into transmission dynamics, serial interval, and the role of pre-symptomatic individuals in spreading the virus. These findings are critical for understanding and controlling the spread of infectious diseases, making the paper highly relevant for inclusion.
+   维度评分: D= P= L= E= Param=
+
+9. PMID: 32372755 [Score: 4/4]
+   Title: Estimating the generation interval for coronavirus disease (COVID-19) based on symptom onset data, March 2020.
+   Overall: This paper is relevant to public health and epidemiology as it estimates key parameters related to the transmission dynamics of COVID-19, including the generation interval, serial interval, and proportion of pre-symptomatic transmission. These parameters are critical for understanding disease spread and informing public health interventions. The study uses real-world outbreak data and provides insights into the limitations of using serial interval estimates for reproduction numbers, which is important for modeling and policy-making.
+   维度评分: D= P= L= E= Param=
+
+10. PMID: 32566233 [Score: 4/4]
+   Title: Serial interval and time-varying reproduction number estimation for COVID-19 in western Iran.
+   Overall: The paper is relevant to public health and epidemiology as it estimates the serial interval and time-varying reproduction number (R) for COVID-19 in a specific region of Iran. These are key epidemiological parameters used to understand disease transmission dynamics and evaluate the effectiveness of public health interventions. The study contributes to the broader understanding of how COVID-19 spread in different settings, which is valuable for global public health efforts.
+   维度评分: D= P= L= E= Param=
+
+11. PMID: 32835316 [Score: 4/4]
+   Title: QT interval and arrhythmic safety of hydroxychloroquine monotherapy in coronavirus disease 2019.
+   Overall: This paper is relevant to public health and epidemiology as it evaluates the arrhythmic safety of hydroxychloroquine (HCQ) monotherapy in patients with COVID-19, a critical issue during the pandemic. The study addresses potential cardiovascular risks associated with a drug that was widely used for treatment and prophylaxis. The findings contribute to understanding the safety profile of HCQ, which is important for clinical decision-making and public health guidelines. The study includes a systematic monitoring protocol, making it methodologically robust and informative for epidemiological and pharmacovigilance purposes.
+   维度评分: D= P= L= E= Param=
+
+12. PMID: 32473049 [Score: 4/4]
+   Title: Estimation of the serial interval and basic reproduction number of COVID-19 in Qom, Iran, and three other countries: A data-driven analysis in the early phase of the outbreak.
+   Overall: The paper is relevant to epidemiology and public health as it estimates the basic reproduction number (R0) and serial interval of COVID-19 in Qom, Iran, and compares it with other countries. It uses data-driven methods and contributes to understanding the transmission dynamics of the virus, which is critical for outbreak control and public health interventions.
+   维度评分: D= P= L= E= Param=
+
+13. PMID: 32266828 [Score: 4/4]
+   Title: Electrolyte imbalances in patients with severe coronavirus disease 2019 (COVID-19).
+   Overall: The paper is relevant to public health and epidemiology as it examines electrolyte imbalances in patients with severe COVID-19, which is a significant aspect of the disease's clinical presentation and management. The study provides a pooled analysis of electrolyte levels, contributing to the understanding of how severe COVID-19 affects physiological parameters. This information is valuable for clinical decision-making and public health strategies related to patient care and resource allocation.
+   维度评分: D= P= L= E= Param=
+
+14. PMID: 32594928 [Score: 4/4]
+   Title: Estimation of incubation period and serial interval of COVID-19: analysis of 178 cases and 131 transmission chains in Hubei province, China.
+   Overall: This paper is relevant to epidemiology and public health as it provides important estimates of the incubation period and serial interval of COVID-19, which are critical for understanding transmission dynamics and informing public health interventions such as quarantine measures. The study uses contact tracing data and statistical modeling, which aligns with standard epidemiological methods.
+   维度评分: D= P= L= E= Param=
+
+15. PMID: 33490015 [Score: 4/4]
+   Title: Serial Interval and Generation Interval for Imported and Local Infectors, Respectively, Estimated Using Reported Contact-Tracing Data of COVID-19 in China.
+   Overall: The paper is relevant to epidemiology and public health as it analyzes the serial and generation intervals of COVID-19 transmission in China using contact-tracing data. It provides important insights into the transmission dynamics of the virus, which is critical for understanding outbreak patterns and informing public health interventions.
+   维度评分: D= P= L= E= Param=
+
+16. PMID: 32452648 [Score: 4/4]
+   Title: Estimating the serial interval of the novel coronavirus disease (COVID-19) based on the public surveillance data in Shenzhen, China, from 19 January to 22 February 2020.
+   Overall: This paper is relevant to epidemiology and public health as it estimates the serial interval (SI) of COVID-19 using real-world surveillance data from Shenzhen, China. It employs statistical models (Weibull, lognormal, gamma) and discusses the implications of the SI for disease transmission and control. The study also estimates the basic reproduction number, which is a key parameter in understanding and managing outbreaks. These aspects make it relevant for public health research and practice.
+   维度评分: D= P= L= E= Param=
+
+17. PMID: 32771633 [Score: 4/4]
+   Title: Transmission onset distribution of COVID-19.
+   Overall: The paper is relevant to public health and epidemiology, focusing on the transmission dynamics of SARS-CoV-2, specifically the timing of transmission relative to symptom onset. It addresses key concepts such as pre-symptomatic transmission, incubation period, and serial interval, which are critical for understanding and controlling infectious disease spread. The study uses Bayesian methods to estimate these parameters, contributing valuable insights for infection control strategies.
+   维度评分: D= P= L= E= Param=
+
+18. PMID: 32664866 [Score: 4/4]
+   Title: Early epidemiological assessment of the transmission potential and virulence of coronavirus disease 2019 (COVID-19) in Wuhan City, China, January-February, 2020.
+   Overall: This paper is relevant to epidemiology and public health as it provides an early assessment of the transmission potential and virulence of COVID-19 in Wuhan, China, during the initial phase of the outbreak. It uses statistical methods and multiple data sources to estimate key epidemiological parameters such as the basic reproduction number (R), infection fatality ratio (IFR), and the impact of public health interventions. These findings are critical for understanding the dynamics of the pandemic and informing public health responses.
+   维度评分: D= P= L= E= Param=
+
+19. PMID: 36753110 [Score: 4/4]
+   Title: [Estimation of serial interval and basic reproductive number for imported cases of COVID-19].
+   Overall: The paper is relevant to public health and epidemiology as it estimates the serial interval and basic reproductive number (R0) for imported cases of COVID-19 in a specific population (Pereira, Colombia). These are key epidemiological parameters used to understand disease transmission dynamics and inform public health interventions. The study uses field epidemiological data and contributes to the understanding of presymptomatic transmission, which is an important aspect of COVID-19 epidemiology.
+   维度评分: D= P= L= E= Param=
+
+20. PMID: 32771634 [Score: 4/4]
+   Title: Diagnostic serial interval as a novel indicator for contact tracing effectiveness exemplified with the SARS-CoV-2/COVID-19 outbreak in South Korea.
+   Overall: The paper introduces a novel indicator, the diagnostic serial interval, for assessing contact tracing effectiveness during the SARS-CoV-2/COVID-19 outbreak in South Korea. It provides epidemiological insights relevant to public health surveillance and contact tracing strategies, which are key components of infectious disease control. The study is methodologically sound and contributes to the understanding of transmission dynamics and public health interventions.
+   维度评分: D= P= L= E= Param=
+
+21. PMID: 32033064 [Score: 4/4]
+   Title: The Rate of Underascertainment of Novel Coronavirus (2019-nCoV) Infection: Estimation Using Japanese Passengers Data on Evacuation Flights.
+   Overall: This paper is relevant to public health and epidemiology, as it addresses the estimation of underascertainment of a novel coronavirus infection using data from evacuation flights. It involves key epidemiological concepts such as ascertainment rate, serial interval, and infection fatality risk, which are important in understanding the spread and impact of infectious diseases. The study contributes to the broader understanding of disease surveillance and estimation during an outbreak.
+   维度评分: D= P= L= E= Param=
+
+22. PMID: 32244365 [Score: 4/4]
+   Title: A Systematic Review of COVID-19 Epidemiology Based on Current Evidence.
+   Overall: The paper is a systematic review of COVID-19 epidemiology, covering key topics such as the basic reproduction number, incubation period, serial interval, and severity. These align with the general epidemiological and public health relevance of the task. The abstract provides a comprehensive summary of current evidence, making it relevant for understanding the epidemiological characteristics of SARS-CoV-2.
+   维度评分: D= P= L= E= Param=
+
+23. PMID: 32353991 [Score: 4/4]
+   Title: Early Transmission Dynamics of Novel Coronavirus (COVID-19) in Nigeria.
+   Overall: The paper is relevant to public health and epidemiology, focusing on the early transmission dynamics of COVID-19 in Nigeria. It includes key elements such as reproduction number, importation, and time-varying analysis, which are important in understanding disease spread. The study provides valuable insights into the epidemiological characteristics of the outbreak in a low-resource setting, making it relevant for public health research and practice.
+   维度评分: D= P= L= E= Param=
+
+24. PMID: 32097725 [Score: 4/4]
+   Title: Estimation of the reproductive number of novel coronavirus (COVID-19) and the probable outbreak size on the Diamond Princess cruise ship: A data-driven analysis.
+   Overall: This paper is relevant to epidemiology and public health as it estimates the reproductive number (R0) of COVID-19 in a real-world outbreak setting (the Diamond Princess cruise ship) and uses mathematical modeling to predict future case numbers. The study contributes to understanding the transmission dynamics of the virus and the potential impact of intervention measures, which are key aspects of epidemiological research.
+   维度评分: D= P= L= E= Param=
+
+25. PMID: 32366488 [Score: 4/4]
+   Title: Nosocomial outbreak of COVID-19 pneumonia in Wuhan, China.
+   Overall: This paper is relevant to public health and epidemiology as it describes a nosocomial (hospital-acquired) outbreak of COVID-19 in Wuhan, China, focusing on transmission dynamics, clinical features, and genomic analysis of SARS-CoV-2. It provides important insights into the spread of the virus among healthcare workers and their families, which is critical for understanding infection control measures and public health responses during the early stages of the pandemic.
+   维度评分: D= P= L= E= Param=
+
+26. PMID: 32437930 [Score: 4/4]
+   Title: COVID-19 outbreak reproduction number estimations and forecasting in Marche, Italy.
+   Overall: The paper is relevant to public health and epidemiology as it focuses on estimating the reproduction number (Rt) of COVID-19 in a specific region (Marche, Italy) and provides projections of disease spread. These are key topics in epidemiological research and public health response to infectious disease outbreaks.
+   维度评分: D= P= L= E= Param=
+
+27. PMID: 32817769 [Score: 4/4]
+   Title: COVID-19 severity scoring systems in radiological imaging - a review.
+   Overall: The paper is a review discussing severity scoring systems for COVID-19 using radiological imaging (CT and CXR), which is directly relevant to epidemiology and public health. It addresses diagnostic tools and disease progression, which are important for understanding and managing the pandemic.
+   维度评分: D= P= L= E= Param=
+
+28. PMID: 32537527 [Score: 4/4]
+   Title: A novel IDEA: The impact of serial interval on a modified-Incidence Decay and Exponential Adjustment (m-IDEA) model for projections of daily COVID-19 cases.
+   Overall: The paper is relevant to epidemiology and public health as it discusses a modified model (m-IDEA) for forecasting daily COVID-19 cases, incorporating the impact of the serial interval. It addresses key aspects of disease transmission modeling, uncertainty, and public health interventions, which are central to epidemiological research and pandemic response.
+   维度评分: D= P= L= E= Param=
+
+29. PMID: 32512664 [Score: 4/4]
+   Title: Epidemiological characteristics of and containment measures for COVID-19 in Busan, Korea.
+   Overall: This paper is relevant to epidemiology and public health as it describes the epidemiological characteristics of a specific outbreak of COVID-19 in Busan, Korea, and evaluates the containment measures implemented. It provides valuable insights into the effectiveness of public health interventions, including contact tracing, quarantine, and the estimation of key epidemiological parameters such as the reproduction number. These are central topics in the field of epidemiology and public health.
+   维度评分: D= P= L= E= Param=
+
+30. PMID: 32568070 [Score: 4/4]
+   Title: Evidence for transmission of COVID-19 prior to symptom onset.
+   Overall: This paper is relevant to epidemiology and public health, as it provides evidence on pre-symptomatic transmission of SARS-CoV-2, which is a critical factor in understanding the spread of COVID-19. The study uses contact tracing data and estimates key epidemiological parameters such as incubation periods and serial intervals, which are essential for informing public health interventions.
+   维度评分: D= P= L= E= Param=
+
+31. PMID: 33554183 [Score: 4/4]
+   Title: Epidemiological and Clinical Characteristics of COVID-19 in Adolescents and Young Adults.
+   Overall: The paper focuses on the epidemiological and clinical characteristics of COVID-19 in adolescents and young adults, which aligns with the general scope of epidemiology and public health. It provides data on transmission, symptoms, and outcomes in this age group, making it relevant for understanding the disease's impact in younger populations.
+   维度评分: D= P= L= E= Param=
+
+32. PMID: 32216717 [Score: 4/4]
+   Title: Frequency and Distribution of Chest Radiographic Findings in Patients Positive for COVID-19.
+   Overall: This paper is relevant to public health and epidemiology as it provides important insights into the radiographic findings of COVID-19, which is critical for diagnosis, monitoring disease progression, and understanding the clinical manifestations of the disease. The study's focus on chest radiography, a common and accessible diagnostic tool, has implications for clinical practice and public health strategies during pandemics.
+   维度评分: D= P= L= E= Param=
+
+33. PMID: 32255761 [Score: 4/4]
+   Title: High Contagiousness and Rapid Spread of Severe Acute Respiratory Syndrome Coronavirus 2.
+   Overall: This paper is highly relevant to public health and epidemiology as it provides critical insights into the transmission dynamics of SARS-CoV-2, including key parameters such as the basic reproductive number (R0), doubling time, and the effectiveness of public health interventions. The study is directly related to the ongoing COVID-19 pandemic and contributes valuable information for understanding and controlling the spread of the virus.
+   维度评分: D= P= L= E= Param=
+
+34. PMID: 32163140 [Score: 4/4]
+   Title: Serial interval in determining the estimation of reproduction number of the novel coronavirus disease (COVID-19) during the early outbreak.
+   Overall: The study is directly relevant to the research question on the serial interval of COVID-19. It explicitly investigates the serial interval, provides a simulation model, and discusses its impact on the reproduction number. The full text contains clear and central evidence supporting the relevance of the study to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+35. PMID: 32101510 [Score: 4/4]
+   Title: Correlation of Chest CT and RT-PCR Testing for Coronavirus Disease 2019 (COVID-19) in China: A Report of 1014 Cases.
+   Overall: This paper is relevant to public health and epidemiology as it evaluates the diagnostic performance of chest CT and RT-PCR for COVID-19, which are critical tools in the management and surveillance of the pandemic. The study provides insights into the sensitivity and consistency of these diagnostic methods, which are essential for understanding the epidemiology of the disease and informing public health strategies.
+   维度评分: D= P= L= E= Param=
+
+36. PMID: 33163739 [Score: 4/4]
+   Title: Estimating effective reproduction number using generation time versus serial interval, with application to covid-19 in the Greater Toronto Area, Canada.
+   Overall: This paper is relevant to public health and epidemiology as it addresses the estimation of the effective reproduction number (R_e(t)), a key metric in understanding the transmission dynamics of infectious diseases like COVID-19. The study compares different methods for calculating R_e(t) using generation time versus serial interval, which is important for accurate epidemic monitoring and control. The focus on the Greater Toronto Area adds a real-world application context. The paper contributes to the methodological understanding of how to properly estimate R_e(t) and highlights the implications of using different distributions, which is directly relevant to public health practice and research.
+   维度评分: D= P= L= E= Param=
+
+37. PMID: 32511616 [Score: 4/4]
+   Title: COVID-19 serial interval estimates based on confirmed cases in public reports from 86 Chinese cities.
+   Overall: The paper provides serial interval estimates for COVID-19 based on confirmed cases from multiple cities in China, which is directly relevant to understanding transmission dynamics. This information is important for epidemiological modeling and public health response strategies.
+   维度评分: D= P= L= E= Param=
+
+38. PMID: 32604404 [Score: 4/4]
+   Title: Suppression of a SARS-CoV-2 outbreak in the Italian municipality of Vo'.
+   Overall: This paper is relevant to public health and epidemiology as it provides important insights into the prevalence of asymptomatic SARS-CoV-2 infections, transmission dynamics, and the effectiveness of lockdown measures in controlling an outbreak. The study is conducted in a real-world setting and contributes to understanding the epidemiology of COVID-19, which is highly relevant to public health practice and policy.
+   维度评分: D= P= L= E= Param=
+
+39. PMID: 32694200 [Score: 4/4]
+   Title: Serial interval of SARS-CoV-2 was shortened over time by nonpharmaceutical interventions.
+   Overall: The paper is relevant to epidemiology and public health as it examines the serial interval of SARS-CoV-2 and its changes over time in response to nonpharmaceutical interventions. It addresses key concepts such as transmission dynamics, reproduction numbers, and the impact of control measures, which are central to public health and infectious disease research.
+   维度评分: D= P= L= E= Param=
+
+40. PMID: 32517845 [Score: 4/4]
+   Title: The basic reproduction number and prediction of the epidemic size of the novel coronavirus (COVID-19) in Shahroud, Iran.
+   Overall: This paper is relevant to epidemiology and public health as it estimates the basic reproduction number (R0) of COVID-19 and predicts epidemic size in a specific region. It uses statistical methods to model the spread of the virus, which is central to understanding and managing infectious disease outbreaks. The findings have implications for public health policy and intervention strategies.
+   维度评分: D= P= L= E= Param=
+
+41. PMID: 32192580 [Score: 4/4]
+   Title: Investigation of three clusters of COVID-19 in Singapore: implications for surveillance and response measures.
+   Overall: This paper is relevant to public health and epidemiology as it investigates clusters of COVID-19 in Singapore, focusing on transmission dynamics, contact tracing, and surveillance measures. It provides insights into the spread of SARS-CoV-2 in community settings and the importance of early intervention strategies, which are critical for pandemic response and control.
+   维度评分: D= P= L= E= Param=
+
+42. PMID: 32353347 [Score: 4/4]
+   Title: Epidemiology and transmission of COVID-19 in 391 cases and 1286 of their close contacts in Shenzhen, China: a retrospective cohort study.
+   Overall: This paper is a retrospective cohort study examining the epidemiology and transmission of SARS-CoV-2 in Shenzhen, China, with a focus on 391 cases and 1286 close contacts. It provides key insights into disease transmission, the effectiveness of isolation and contact tracing, and the role of different population groups, including children. The study is relevant to public health and epidemiology, particularly in understanding the spread of COVID-19 and the impact of control measures.
+   维度评分: D= P= L= E= Param=
+
+43. PMID: 32776726 [Score: 4/4]
+   Title: Epidemiological Characteristics of COVID-19 Outbreak at Fitness Centers in Cheonan, Korea.
+   Overall: This paper is relevant to epidemiology and public health as it analyzes the epidemiological characteristics of a specific outbreak of COVID-19 in a particular setting (fitness centers). It provides insights into transmission dynamics, attack rates, and the effectiveness of public health interventions. The study contributes to understanding how outbreaks can be controlled through contact tracing and isolation, which are key aspects of epidemiological practice.
+   维度评分: D= P= L= E= Param=
+
+44. PMID: 32753141 [Score: 4/4]
+   Title: Acute QT Interval Modifications During Hydroxychloroquine-Azithromycin Treatment in the Context of COVID-19 Infection.
+   Overall: This paper is relevant to public health and epidemiology as it examines the cardiac effects of a drug combination (hydroxychloroquine and azithromycin) used in the treatment of COVID-19, a global pandemic. The study focuses on QT interval modifications, which are important for understanding drug safety and potential adverse effects, particularly in hospitalized patients. The findings contribute to the broader understanding of treatment-related risks during public health crises.
+   维度评分: D= P= L= E= Param=
+
+45. PMID: 32725765 [Score: 4/4]
+   Title: COVID-19 outbreak following a single patient exposure at an entertainment site: An epidemiological study.
+   Overall: The paper is a relevant epidemiological study on the transmission dynamics of COVID-19, focusing on an outbreak linked to a specific setting (an entertainment venue). It includes key epidemiological metrics such as secondary attack rate, incubation time, and serial interval, and discusses factors influencing transmission. These elements are central to public health and epidemiology, making the paper relevant for general knowledge in the field.
+   维度评分: D= P= L= E= Param=
+
+46. PMID: 32987541 [Score: 4/4]
+   Title: Estimating the time interval between transmission generations when negative values occur in the serial interval data: using COVID-19 as an example.
+   Overall: The paper is relevant to public health and epidemiology, focusing on the estimation of transmission intervals for COVID-19, which is a key aspect of understanding disease spread. It addresses the serial interval and pre-symptomatic transmission, which are important for modeling and control strategies. The study contributes to the broader understanding of epidemic dynamics and is therefore relevant for inclusion.
+   维度评分: D= P= L= E= Param=
+
+47. PMID: 32007643 [Score: 4/4]
+   Title: Preliminary estimation of the basic reproduction number of novel coronavirus (2019-nCoV) in China, from 2019 to 2020: A data-driven analysis in the early phase of the outbreak.
+   Overall: This paper is relevant to epidemiology and public health as it provides an early estimation of the basic reproduction number (R0) of the novel coronavirus (2019-nCoV) during the initial phase of the outbreak. The study uses a data-driven approach to model the epidemic curve and assesses the impact of reporting rates on R0 estimates, which is critical for understanding the transmission potential of the virus. The findings are important for public health planning and outbreak response.
+   维度评分: D= P= L= E= Param=
+
+48. PMID: 33537350 [Score: 4/4]
+   Title: Biventricular Longitudinal Strain Predict Mortality in COVID-19 Patients.
+   Overall: The paper is relevant to public health and epidemiology as it investigates the prognostic value of biventricular longitudinal strain in predicting mortality among COVID-19 patients. It uses a well-established imaging technique (speckle tracking echocardiography) and provides important insights into cardiac function and outcomes in a major global health crisis. The findings have implications for risk stratification and clinical management of COVID-19 patients, making it a valuable contribution to the field.
+   维度评分: D= P= L= E= Param=
+
+49. PMID: 32247326 [Score: 4/4]
+   Title: Evolving epidemiology and transmission dynamics of coronavirus disease 2019 outside Hubei province, China: a descriptive and modelling study.
+   Overall: This paper is a descriptive and modelling study on the epidemiology and transmission dynamics of COVID-19 outside Hubei province, China, during the early phase of the pandemic. It provides valuable insights into demographic trends, time-to-event intervals, and the net reproduction number (Rt) at the provincial level. The study is relevant to public health and epidemiology, particularly in understanding how the epidemic evolved and how interventions may have impacted transmission. The findings are timely and contribute to the broader understanding of SARS-CoV-2 dynamics, making it a relevant inclusion.
+   维度评分: D= P= L= E= Param=
+
+50. PMID: 32537955 [Score: 4/4]
+   Title: Social Distancing and Transmission-reducing Practices during the 2019 Coronavirus Disease and 2015 Middle East Respiratory Syndrome Coronavirus Outbreaks in Korea.
+   Overall: The paper is relevant to public health and epidemiology as it examines non-pharmaceutical interventions (NPIs) such as social distancing, face mask use, and handwashing during two coronavirus outbreaks in Korea—MERS-CoV and COVID-19. These behaviors are critical in mitigating the spread of infectious diseases, and the study provides comparative insights into public adherence to such measures during different outbreaks. The findings contribute to understanding how public health messaging and risk perception influence preventive behaviors, which is essential for future outbreak preparedness and response.
+   维度评分: D= P= L= E= Param=
+
+51. PMID: 32936811 [Score: 4/4]
+   Title: Impact of COVID-19 epidemic curtailment strategies in selected Indian states: An analysis by reproduction number and doubling time with incidence modelling.
+   Overall: The paper is relevant to public health and epidemiology as it analyzes the impact of epidemic control measures (e.g., lockdowns, quarantine) on the transmission dynamics of COVID-19 in Indian states. It uses key epidemiological metrics such as the reproduction number (R0), doubling time, and growth rate, which are central to understanding disease spread and intervention effectiveness. The study contributes to the broader understanding of how public health policies influence pandemic outcomes, making it relevant for public health research and policy-making.
+   维度评分: D= P= L= E= Param=
+
+52. PMID: 32637423 [Score: 4/4]
+   Title: Strongly Heterogeneous Transmission of COVID-19 in Mainland China: Local and Regional Variation.
+   Overall: This paper is relevant to epidemiology and public health as it examines the transmission dynamics of COVID-19 in mainland China, including key concepts such as the reproduction number, serial interval, and regional variation in outbreak spread. The findings contribute to understanding how infectious diseases can vary in transmission intensity across different geographic areas, which is critical for public health response and intervention strategies.
+   维度评分: D= P= L= E= Param=
+
+53. PMID: 32702717 [Score: 4/4]
+   Title: Evolution of effective serial interval of SARS-CoV-2 by non-pharmaceutical interventions.
+   Overall: The paper is relevant to public health and epidemiology, focusing on the serial interval of SARS-CoV-2 and how non-pharmaceutical interventions affect transmission dynamics. It addresses key epidemiological parameters and their implications for disease control, which are central to the field of public health.
+   维度评分: D= P= L= E= Param=
+
+54. PMID: 32283156 [Score: 4/4]
+   Title: Rapid asymptomatic transmission of COVID-19 during the incubation period demonstrating strong infectivity in a cluster of youngsters aged 16-23 years outside Wuhan and characteristics of young patients with COVID-19: A prospective contact-tracing study.
+   Overall: This paper is relevant to public health and epidemiology as it provides important insights into the transmission dynamics of SARS-CoV-2, particularly among young individuals. It highlights the potential for rapid asymptomatic transmission during the incubation period, which has significant implications for public health measures and contact tracing. The study's focus on a cluster of young people outside Wuhan adds to the understanding of how the virus spreads in different populations and settings.
+   维度评分: D= P= L= E= Param=
+
+55. PMID: 32627172 [Score: 4/4]
+   Title: Estimation of incubation period and generation time based on observed length-biased epidemic cohort with censoring for COVID-19 outbreak in China.
+   Overall: The paper is relevant to epidemiology and public health as it addresses key concepts in infectious disease transmission: incubation period, generation time, and serial interval. It introduces statistical methods (e.g., deconvolution, interval censoring, mixture distribution) to improve the estimation of these parameters during the COVID-19 outbreak. These methods are important for understanding disease dynamics and informing public health interventions. The application to a real-world outbreak further strengthens its relevance.
+   维度评分: D= P= L= E= Param=
+
+56. PMID: 32014114 [Score: 4/4]
+   Title: Nowcasting and forecasting the potential domestic and international spread of the 2019-nCoV outbreak originating in Wuhan, China: a modelling study.
+   Overall: This paper is highly relevant to epidemiology and public health. It presents a modeling study on the 2019-nCoV outbreak, focusing on the domestic and international spread, which is directly related to the field of epidemiological forecasting and outbreak analysis. The study uses sophisticated methods such as Markov Chain Monte Carlo, metapopulation models, and incorporates real-world data on human mobility and travel. The findings have significant implications for public health preparedness and intervention strategies. The paper is clearly within the scope of epidemiology and public health research.
+   维度评分: D= P= L= E= Param=
+
+57. PMID: 32460229 [Score: 4/4]
+   Title: Estimation of the time-varying reproduction number of COVID-19 outbreak in China.
+   Overall: This paper is relevant to public health and epidemiology as it estimates the time-varying reproduction number of the COVID-19 outbreak in China using multiple statistical methods. It provides important insights into the effectiveness of containment measures and the dynamics of the epidemic, which are critical for understanding and managing infectious disease outbreaks.
+   维度评分: D= P= L= E= Param=
+
+58. PMID: 32952144 [Score: 4/4]
+   Title: Prevalence of SARS-CoV-2 infection in India: Findings from the national serosurvey, May-June 2020.
+   Overall: This paper is relevant to public health and epidemiology as it presents findings from a national serosurvey on SARS-CoV-2 infection in India. It provides important data on seroprevalence, infection rates, and factors associated with seropositivity, which are critical for understanding the spread of the virus and informing public health strategies. The study is methodologically sound and contributes valuable insights into the early phase of the COVID-19 pandemic in India.
+   维度评分: D= P= L= E= Param=
+
+59. PMID: 32246136 [Score: 4/4]
+   Title: Coronavirus Occurrence and Transmission Over 8 Years in the HIVE Cohort of Households in Michigan.
+   Overall: This paper is relevant to epidemiology and public health as it examines the occurrence, seasonality, and transmission of human coronaviruses in a household cohort over an 8-year period. It provides valuable insights into the epidemiological patterns of coronaviruses, including age-specific infection rates, seasonal trends, and household transmission dynamics. These findings contribute to the broader understanding of respiratory virus transmission and public health preparedness.
+   维度评分: D= P= L= E= Param=
+
+60. PMID: 32105637 [Score: 4/4]
+   Title: Radiological findings from 81 patients with COVID-19 pneumonia in Wuhan, China: a descriptive study.
+   Overall: This paper is relevant to public health and epidemiology as it provides important radiological findings related to COVID-19 pneumonia, which is a critical aspect of understanding and managing the pandemic. The study describes the evolution of CT findings in patients with COVID-19, which is valuable for early diagnosis and clinical management. The research was conducted in Wuhan, China, where the outbreak originated, making it a key reference in the early stages of the pandemic.
+   维度评分: D= P= L= E= Param=
+
+61. PMID: 32577693 [Score: 4/4]
+   Title: Meta-analysis of several epidemic characteristics of COVID-19.
+   Overall: The paper is a meta-analysis focusing on key epidemic characteristics of COVID-19, including the basic reproduction number, incubation period, serial interval, and epidemic doubling time. These are all relevant to epidemiology and public health, and the study contributes to understanding the transmissibility of the virus, which is critical for public health response. Therefore, the paper should be included.
+   维度评分: D= P= L= E= Param=
+
+62. PMID: 32024089 [Score: 4/4]
+   Title: Estimating the Unreported Number of Novel Coronavirus (2019-nCoV) Cases in China in the First Half of January 2020: A Data-Driven Modelling Analysis of the Early Outbreak.
+   Overall: This paper is relevant to epidemiology and public health as it addresses the estimation of underreported cases during the early stages of the 2019-nCoV outbreak, which is critical for understanding disease transmission dynamics. The study uses modeling techniques, including exponential growth and maximum likelihood estimation, to assess underreporting and estimate the basic reproduction number (R0). These methods are standard in epidemiological research, and the findings contribute to the broader understanding of outbreak response and data interpretation during public health emergencies.
+   维度评分: D= P= L= E= Param=
+
+63. PMID: 32822290 [Score: 4/4]
+   Title: Epidemiology of COVID-19 Outbreak on Cruise Ship Quarantined at Yokohama, Japan, February 2020.
+   Overall: This paper is relevant to epidemiology and public health as it provides important insights into the transmission dynamics of SARS-CoV-2 in a closed setting (a cruise ship), including attack rates, asymptomatic infections, and the role of close contact in transmission. These findings are critical for understanding how the virus spreads in confined environments and inform public health measures such as quarantine and contact tracing.
+   维度评分: D= P= L= E= Param=
+
+64. PMID: 32832735 [Score: 4/4]
+   Title: Prolongation of QT interval due to hydroxychloroquine overdose used in COVID-19 treatment.
+   Overall: This paper is relevant to public health and epidemiology as it discusses a case of QT interval prolongation due to hydroxychloroquine overdose in the context of COVID-19 treatment. It highlights potential cardiac side effects of a drug used in the pandemic, which is important for understanding drug safety and informing clinical practice. The case report contributes to the body of knowledge on adverse effects of medications used in the management of infectious diseases, making it relevant for public health considerations.
+   维度评分: D= P= L= E= Param=
+
+65. PMID: 32511424 [Score: 4/4]
+   Title: Evolving epidemiology of novel coronavirus diseases 2019 and possible interruption of local transmission outside Hubei Province in China: a descriptive and modeling study.
+   Overall: The paper is relevant to epidemiology and public health, focusing on the transmission dynamics of COVID-19, reproduction numbers, and the impact of containment measures. It provides valuable insights into the evolving epidemiology of the disease and the effectiveness of interventions, which are key topics in the field.
+   维度评分: D= P= L= E= Param=
+
+66. PMID: 32445710 [Score: 4/4]
+   Title: Individual quarantine versus active monitoring of contacts for the mitigation of COVID-19: a modelling study.
+   Overall: This paper is relevant to public health and epidemiology as it evaluates the effectiveness of individual quarantine versus active monitoring of contacts in mitigating the spread of SARS-CoV-2. It uses a stochastic branching model and considers different feasibility settings, which are important factors in real-world implementation of public health interventions. The study contributes to the understanding of how to best allocate resources and manage outbreaks, making it a valuable contribution to the field.
+   维度评分: D= P= L= E= Param=
+
+67. PMID: 32347743 [Score: 4/4]
+   Title: Effect of Chloroquine, Hydroxychloroquine, and Azithromycin on the Corrected QT Interval in Patients With SARS-CoV-2 Infection.
+   Overall: This paper is relevant to public health and epidemiology as it addresses the safety profile of medications used in the treatment of SARS-CoV-2 infection, specifically focusing on QT interval prolongation, which is a critical concern in the context of the COVID-19 pandemic. The study provides important clinical data on the use of chloroquine, hydroxychloroquine, and azithromycin, which were widely used during the pandemic. Understanding the cardiac risks associated with these treatments is essential for public health decision-making and clinical guidelines.
+   维度评分: D= P= L= E= Param=
+
+68. PMID: 32606285 [Score: 4/4]
+   Title: Acute Myopericarditis with Pericardial Effusion and Cardiac Tamponade in a Patient with COVID-19.
+   Overall: This paper is relevant to public health and epidemiology as it describes a rare cardiac complication (acute myopericarditis with pericardial effusion and cardiac tamponade) associated with COVID-19. It highlights the importance of recognizing non-respiratory manifestations of the disease, which is critical for early diagnosis and management. The case report contributes to the understanding of the broader clinical spectrum of SARS-CoV-2 infection, which is important for public health surveillance and clinical practice.
+   维度评分: D= P= L= E= Param=
+
+69. PMID: 32611913 [Score: 4/4]
+   Title: National sero-surveillance to monitor the trend of SARS-CoV-2 infection transmission in India: Protocol for community-based surveillance.
+   Overall: This paper is relevant to public health and epidemiology as it describes a protocol for national sero-surveillance to monitor the trend of SARS-CoV-2 infection transmission in India. It addresses key public health concerns such as seroprevalence, geographical spread, and the use of serological data to inform containment strategies. The study involves a large-scale, community-based approach with specific methodologies, making it valuable for understanding and managing the COVID-19 pandemic.
+   维度评分: D= P= L= E= Param=
+
+70. PMID: 32729278 [Score: 4/4]
+   Title: Characteristics of COVID-19 Patients Who Progress to Pneumonia on Follow-Up Chest Radiograph: 236 Patients from a Single Isolated Cohort in Daegu, South Korea.
+   Overall: This paper is relevant to public health and epidemiology as it examines the progression of COVID-19 to pneumonia, identifies risk factors for disease progression, and provides insights into clinical and laboratory predictors. The study contributes to understanding the natural history of the disease and can inform clinical decision-making and public health strategies for monitoring and managing COVID-19 patients.
+   维度评分: D= P= L= E= Param=
+
+71. PMID: 32422201 [Score: 4/4]
+   Title: Investigation of a COVID-19 outbreak in Germany resulting from a single travel-associated primary case: a case series.
+   Overall: This paper is relevant to public health and epidemiology as it investigates a specific outbreak of COVID-19 in Germany, analyzing transmission dynamics, incubation periods, secondary attack rates, and the role of presymptomatic transmission. The study provides important insights into the epidemiology of SARS-CoV-2, which is directly relevant to understanding and managing infectious disease outbreaks.
+   维度评分: D= P= L= E= Param=
+
+72. PMID: 31624039 [Score: 4/4]
+   Title: Improved inference of time-varying reproduction numbers during infectious disease outbreaks.
+   Overall: This paper is relevant to public health and epidemiology as it addresses the estimation of the time-varying reproduction number, a key metric for understanding and controlling infectious disease outbreaks. The study discusses methods for improving parameter inference, includes real-world applications, and provides tools for real-time analysis, which are valuable for public health decision-making.
+   维度评分: D= P= L= E= Param=
+
+73. PMID: 32587980 [Score: 4/4]
+   Title: Asymptomatic and presymptomatic transmission of SARS-CoV-2: A systematic review.
+   Overall: This paper is a systematic review on asymptomatic and presymptomatic transmission of SARS-CoV-2, which is directly relevant to epidemiology and public health. It addresses key topics such as viral kinetics, serial interval, and the role of asymptomatic individuals in transmission, all of which are critical in understanding the spread of the virus. The review critically evaluates existing studies and highlights limitations, making it a valuable resource for public health policy and epidemiological research.
+   维度评分: D= P= L= E= Param=
+
+74. PMID: 32617309 [Score: 4/4]
+   Title: Real-time estimation of the reproduction number of the novel coronavirus disease (COVID-19) in China in 2020 based on incidence data.
+   Overall: This paper is relevant to public health and epidemiology as it focuses on estimating the reproduction number (R0) of COVID-19 in China, Hubei province, and Wuhan using incidence data. It addresses key public health concerns related to disease transmissibility and the effectiveness of control measures. The study uses a well-established method (renewal equation with serial interval) and provides real-time estimates, which are critical for understanding and managing outbreaks.
+   维度评分: D= P= L= E= Param=
+
+75. PMID: 33194456 [Score: 4/4]
+   Title: Transmissibility of coronavirus disease 2019 in Chinese cities with different dynamics of imported cases.
+   Overall: This paper is relevant to public health and epidemiology as it examines the transmissibility of COVID-19 in different urban settings, specifically focusing on the impact of imported cases and the effectiveness of intervention measures such as lockdowns. The study provides insights into the reproduction number (Rt) and how it varies with local and imported transmission dynamics, which is critical for understanding and managing infectious disease outbreaks.
+   维度评分: D= P= L= E= Param=
+
+76. PMID: 32622836 [Score: 4/4]
+   Title: Hospital affiliated long term care facility COVID-19 containment strategy by using prevalence testing and infection control best practices.
+   Overall: The paper addresses a long-term care facility's strategy for containing a potential COVID-19 outbreak, focusing on prevalence testing and infection control measures. These topics are directly relevant to epidemiology and public health, particularly in the context of infectious disease control in high-risk settings.
+   维度评分: D= P= L= E= Param=
+
+77. PMID: 32171192 [Score: 4/4]
+   Title: [Epidemiological characteristics of COVID-19 family clustering in Zhejiang Province].
+   Overall: The paper is relevant to public health and epidemiology as it examines the epidemiological characteristics of COVID-19 family clustering, including secondary attack rates and serial intervals, which are key metrics in understanding disease transmission dynamics. The study provides valuable insights into how the virus spreads within families, which is critical for public health surveillance and intervention strategies.
+   维度评分: D= P= L= E= Param=
+
+78. PMID: 32720639 [Score: 4/4]
+   Title: Authors' response: Estimating the generation interval for COVID-19 based on symptom onset data.
+   Overall: The study is directly relevant to the research question on the serial interval of COVID-19. It is based on original empirical data from Singapore, and the full text explicitly discusses the serial interval in the context of the generation interval. The study provides estimates of the serial interval and its uncertainty, making it highly relevant for the systematic review.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+79. PMID: 32417744 [Score: 4/4]
+   Title: Monitoring disease transmissibility of 2019 novel coronavirus disease in Zhejiang, China.
+   Overall: The paper is relevant to public health and epidemiology as it discusses the transmissibility of the 2019 novel coronavirus (COVID-19) in Zhejiang, China, including key epidemiological metrics such as the reproduction number and the impact of interventions. It addresses important public health topics like disease monitoring, transmission dynamics, and the effectiveness of travel restrictions, which are central to the field of epidemiology.
+   维度评分: D= P= L= E= Param=
+
+80. PMID: 32617273 [Score: 4/4]
+   Title: Estimation of the net reproductive number of COVID-19 in Iran.
+   Overall: The paper is relevant to public health and epidemiology as it estimates the net reproductive number of COVID-19 in Iran, which is a key epidemiological metric for understanding disease transmission dynamics. The study provides insights into regional variations in transmission rates, which is valuable for public health planning and intervention strategies.
+   维度评分: D= P= L= E= Param=
+
+81. PMID: 32347198 [Score: 4/4]
+   Title: Epidemiological characteristics of the first 53 laboratory-confirmed cases of COVID-19 epidemic in Hong Kong, 13 February 2020.
+   Overall: This paper is relevant to epidemiology and public health as it provides key epidemiological parameters of the early phase of the COVID-19 epidemic in Hong Kong, including containment delay, serial interval, and secondary attack rate. These are critical metrics for understanding transmission dynamics and informing public health interventions such as contact tracing and social distancing. The study uses appropriate statistical methods and contributes to the broader understanding of how the virus spreads, making it valuable for public health research and practice.
+   维度评分: D= P= L= E= Param=
+
+82. PMID: 33315980 [Score: 4/4]
+   Title: Estimation of the basic reproduction number (𝑅0) of the COVID-19 epidemic in Iran.
+   Overall: This paper is relevant to public health and epidemiology as it estimates the basic reproduction number (R0) of COVID-19 in Iran, which is a key metric for understanding disease transmissibility and informing public health interventions. The study uses multiple methods to estimate R0 and discusses the implications of their findings, making it valuable for researchers and policymakers interested in the epidemiology of the COVID-19 pandemic.
+   维度评分: D= P= L= E= Param=
+
+83. PMID: 32689956 [Score: 4/4]
+   Title: Basic epidemiological parameter values from data of real-world in mega-cities: the characteristics of COVID-19 in Beijing, China.
+   Overall: The paper is relevant to epidemiology and public health, focusing on real-world data from a mega-city (Beijing) during the early phase of the COVID-19 pandemic. It provides key epidemiological parameters such as the basic reproduction number, secondary attack rate, incubation period, and serial interval, which are essential for understanding disease transmission dynamics. These parameters are critical for public health planning and intervention strategies.
+   维度评分: D= P= L= E= Param=
+
+84. PMID: 33553677 [Score: 4/4]
+   Title: Household transmission of seasonal coronavirus infections: Results from the Flu Watch cohort study.
+   Overall: This paper is relevant to epidemiology and public health as it investigates household transmission of seasonal coronaviruses, which is directly related to understanding the spread of respiratory viruses. The study provides valuable insights into transmission dynamics, risk factors, and comparisons with SARS-CoV-2, which is highly relevant in the context of the broader coronavirus landscape. The findings contribute to the understanding of how coronaviruses spread within communities and can inform public health strategies for both seasonal and pandemic scenarios.
+   维度评分: D= P= L= E= Param=
+
+85. PMID: 32685697 [Score: 4/4]
+   Title: The contribution of pre-symptomatic infection to the transmission dynamics of COVID-2019.
+   Overall: This paper is relevant to public health and epidemiology as it addresses pre-symptomatic transmission of COVID-19, a critical factor in understanding the spread of the virus and the effectiveness of containment strategies. The study uses serial interval data and incubation period information to estimate the contribution of pre-symptomatic cases to transmission, which is directly related to the dynamics of infectious disease spread. The findings have implications for public health interventions such as case isolation and contact tracing.
+   维度评分: D= P= L= E= Param=
+
+86. PMID: 32842292 [Score: 4/4]
+   Title: [Analysis on the cluster epidemic of coronavirus disease 2019 in Guangdong Province].
+   Overall: This paper is relevant to epidemiology and public health as it analyzes the clustering characteristics of the COVID-19 outbreak in Guangdong Province, including key metrics such as secondary attack rate, serial interval, and cluster size. These are important epidemiological parameters for understanding disease transmission dynamics and outbreak control.
+   维度评分: D= P= L= E= Param=
+
+87. PMID: 32322691 [Score: 4/4]
+   Title: The transmissibility of novel Coronavirus in the early stages of the 2019-20 outbreak in Wuhan: Exploring initial point-source exposure sizes and durations using scenario analysis.
+   Overall: This paper is relevant to public health and epidemiology as it addresses the transmissibility of a novel coronavirus during the early stages of the outbreak in Wuhan. It uses a stochastic branching process model to explore scenarios related to the initial point-source exposure, which is critical for understanding the dynamics of the outbreak. The study contributes to the broader understanding of disease transmission and the estimation of key epidemiological parameters such as the reproduction number (R0).
+   维度评分: D= P= L= E= Param=
+
+88. PMID: 32511615 [Score: 4/4]
+   Title: Household transmissions of SARS-CoV-2 in the time of unprecedented travel lockdown in China.
+   Overall: This paper is relevant to epidemiology and public health as it provides detailed analysis of SARS-CoV-2 transmission patterns, including household and non-household settings, super-spreading events, serial intervals, and age- and gender-stratified risks. The study contributes valuable insights into understanding transmission dynamics during a critical phase of the pandemic, which is essential for public health planning and intervention strategies.
+   维度评分: D= P= L= E= Param=
+
+89. PMID: 32611465 [Score: 4/4]
+   Title: The descriptive epidemiology of coronavirus disease 2019 during the epidemic period in Lu'an, China: achieving limited community transmission using proactive response strategies.
+   Overall: This paper is relevant to public health and epidemiology as it describes the epidemiological characteristics of a COVID-19 outbreak in Lu'an, China, including the role of asymptomatic carriers and cluster transmission. It provides insights into the effectiveness of proactive response strategies in limiting community transmission, which is highly pertinent to the broader understanding of pandemic control measures.
+   维度评分: D= P= L= E= Param=
+
+90. PMID: 32838256 [Score: 4/4]
+   Title: The Clinical Utility of Continuous QT Interval Monitoring in Patients Admitted With COVID-19 Compared With Standard of Care: A Prospective Cohort Study.
+   Overall: This paper is relevant to public health and epidemiology as it evaluates the clinical utility of continuous QT interval monitoring in patients with COVID-19, a topic of significant interest during the pandemic. The study addresses the use of medical technology in improving patient outcomes, the impact of QT-prolonging medications, and the potential for adverse cardiac events. These are important considerations in the broader context of managing patients with infectious diseases and their associated complications.
+   维度评分: D= P= L= E= Param=
+
+91. PMID: 32247050 [Score: 4/4]
+   Title: Insight into 2019 novel coronavirus - An updated interim review and lessons from SARS-CoV and MERS-CoV.
+   Overall: This paper provides a comprehensive review of the 2019 novel coronavirus (2019-nCoV) in the context of SARS-CoV and MERS-CoV, covering virology, epidemiology, clinical features, and treatment options. It is relevant to public health and epidemiology as it offers insights into the characteristics of a novel coronavirus and lessons for pandemic preparedness. The content is timely and informative for understanding the early stages of the COVID-19 pandemic.
+   维度评分: D= P= L= E= Param=
+
+92. PMID: 33088292 [Score: 4/4]
+   Title: Meta-analysis of several epidemic characteristics of COVID-19.
+   Overall: The paper is a meta-analysis focusing on key epidemiological characteristics of COVID-19, including the basic reproduction number, incubation period, serial interval, and epidemic doubling time. These are all relevant to public health and epidemiology, and the study contributes to understanding the transmissibility of the virus. Given the broad relevance to public health and the nature of the analysis, the paper should be included.
+   维度评分: D= P= L= E= Param=
+
+93. PMID: 32511440 [Score: 4/4]
+   Title: Comparative Impact of Individual Quarantine vs. Active Monitoring of Contacts for the Mitigation of COVID-19: a modelling study.
+   Overall: This paper is relevant to public health and epidemiology as it evaluates the effectiveness of individual quarantine versus active monitoring for controlling the spread of COVID-19. It uses a stochastic branching model to compare these interventions under different feasibility scenarios, which is directly related to nonpharmaceutical interventions and outbreak management. The findings have implications for policy decisions and resource allocation during infectious disease outbreaks.
+   维度评分: D= P= L= E= Param=
+
+94. PMID: 32035431 [Score: 4/4]
+   Title: Epidemiologic characteristics of early cases with 2019 novel coronavirus (2019-nCoV) disease in Korea.
+   Overall: The paper provides epidemiological data on early cases of 2019-nCoV in Korea, including demographic characteristics, transmission patterns, incubation period, and reproduction number. These are key epidemiological metrics relevant to understanding the spread and control of the disease. The study contributes to the global understanding of the outbreak and aligns with public health research on infectious disease dynamics.
+   维度评分: D= P= L= E= Param=

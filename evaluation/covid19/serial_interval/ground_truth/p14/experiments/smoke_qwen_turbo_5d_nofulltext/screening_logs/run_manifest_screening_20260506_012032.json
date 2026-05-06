@@ -1,0 +1,105 @@
+{
+  "timestamp_utc": "2026-05-05T17:20:32.043642+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/tools/scripts/screening_llm_batch.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "P14",
+    "--batch-size",
+    "500",
+    "--batch-concurrency",
+    "64",
+    "--strategy",
+    "5d",
+    "--model",
+    "qwen/qwen-turbo",
+    "--experiment",
+    "smoke_qwen_turbo_5d_nofulltext",
+    "--no-fulltext-rescue",
+    "--skip-no-abstract"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "be2567707c9b9a7c51e1b065d1216d6af93a805c",
+    "branch": "feat/cascade-screening",
+    "dirty": true
+  },
+  "params": {
+    "profile": "P14",
+    "batch_size": 500,
+    "batch_concurrency": 64,
+    "auto_fulltext": false,
+    "fulltext_only": false,
+    "research_question": "What is the serial interval of COVID-19?",
+    "strategy": "5d",
+    "experiment": "smoke_qwen_turbo_5d_nofulltext"
+  },
+  "inputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/serial_interval/ground_truth/p14/project_14_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T08:49:02.902527+00:00",
+      "type": "file",
+      "size_bytes": 226829,
+      "sha256": "b1f386f37b624a444cd86cd11abebef65887af54d967d13fedf71d8a272bb596"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/serial_interval/ground_truth/p14/project_14_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T09:07:34.462330+00:00",
+      "type": "file",
+      "size_bytes": 3686,
+      "sha256": "c003322b078d61bf7ab65683fa2e6ec0907e997ab8069c6540cdf12fd95c96d3"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/serial_interval/ground_truth/p14/experiments/smoke_qwen_turbo_5d_nofulltext/project_14_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T17:20:32.041692+00:00",
+      "type": "file",
+      "size_bytes": 339523,
+      "sha256": "430771de078550ce87dfc47020948a6d22bcfe0aade8f91bce61d85327f89bc5"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/serial_interval/ground_truth/p14/experiments/smoke_qwen_turbo_5d_nofulltext/screening_logs/screening_report_20260506_012032.txt",
+      "exists": true,
+      "mtime_utc": "2026-05-05T17:20:32.043528+00:00",
+      "type": "file",
+      "size_bytes": 31433,
+      "sha256": "06b32463e769f5e745b35dd0b8f87e238dafa86f183648832ff9464a82f8d167"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": "openai",
+      "model": "deepseek/deepseek-v4-pro",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 120,
+      "verify_ssl": true,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": true
+    }
+  },
+  "extra": {
+    "paper_count": 94,
+    "ground_truth_count": 9,
+    "ground_truth_in_pool": 9,
+    "strong_count": 56,
+    "possible_count": 14,
+    "unlikely_count": 24,
+    "error_count": 0,
+    "fulltext_error_count": 0
+  }
+}

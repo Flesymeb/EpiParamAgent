@@ -1,0 +1,62 @@
+{
+  "timestamp_utc": "2026-05-05T15:22:39.862042+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_prepare_raw.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP8",
+    "--query",
+    "(mpox OR monkeypox OR \"monkeypox virus\" OR MPXV) AND (mortality OR death OR \"case fatality\" OR CFR OR \"clinical features\" OR \"clinical characteristics\" OR outcome OR hospitalization OR epidemiology)",
+    "--date-range",
+    "2022/1/1-2024/12/31",
+    "--include-gt",
+    "--fix-missing"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "1733542bc886b5fbbff2edfecddc7643c7820ca6",
+    "branch": "feat/cascade-screening",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP8",
+    "topic": "",
+    "query": "(mpox OR monkeypox OR \"monkeypox virus\" OR MPXV) AND (mortality OR death OR \"case fatality\" OR CFR OR \"clinical features\" OR \"clinical characteristics\" OR outcome OR hospitalization OR epidemiology)",
+    "date_range": "2022/1/1-2024/12/31",
+    "retmax": "all",
+    "include_gt": true,
+    "fix_missing": true,
+    "medline_only": false
+  },
+  "inputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p8/project_8_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T15:22:39.858585+00:00",
+      "type": "file",
+      "size_bytes": 6923059,
+      "sha256": "9dfd15c255f0f6090bf817cd8e6bc3519b546c65b8adbf26e9eae82085ca7629"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p8/project_8_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T15:22:39.858585+00:00",
+      "type": "file",
+      "size_bytes": 6923059,
+      "sha256": "9dfd15c255f0f6090bf817cd8e6bc3519b546c65b8adbf26e9eae82085ca7629"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 3726,
+    "ground_truth_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p8/project_8_groundtruth.csv"
+  }
+}

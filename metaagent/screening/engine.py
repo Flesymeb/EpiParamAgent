@@ -409,9 +409,12 @@ async def screen_papers_batch_async(
                     _mark_paper_error(paper, e2)
 
     batches = [all_prompts[i : i + batch_size] for i in range(0, total, batch_size)]
-    await asyncio.gather(
-        *(process_batch(idx + 1, batch) for idx, batch in enumerate(batches))
-    )
+    for idx, batch in enumerate(batches):
+        # Keep the number of scheduled coroutines bounded. Running every batch
+        # at once can queue hundreds/thousands of pending structured-output
+        # calls against a shared client; some OpenRouter providers then surface
+        # this as connection storms even when request_semaphore is low.
+        await process_batch(idx + 1, batch)
 
     elapsed_total = time.perf_counter() - started_at
     rate_total = total / elapsed_total if elapsed_total > 0 else 0.0

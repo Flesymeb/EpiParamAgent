@@ -1,0 +1,104 @@
+{
+  "timestamp_utc": "2026-05-05T16:03:11.703667+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search",
+  "argv": [
+    "scripts/cli/screening_llm_batch.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP6",
+    "--strategy",
+    "5d",
+    "--model",
+    "deepseek/deepseek-v4-pro",
+    "--batch-size",
+    "20",
+    "--batch-concurrency",
+    "5",
+    "--skip-no-abstract",
+    "--experiment",
+    "5d_dsv4pro_v4"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "e261ee69a0e26bf0370ec4a93c4e151ea95f3c4b",
+    "branch": "feat/cascade-screening",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP6",
+    "batch_size": 20,
+    "batch_concurrency": 5,
+    "auto_fulltext": false,
+    "fulltext_only": false,
+    "research_question": "What are the serial intervals and incubation period of mpox?",
+    "strategy": "5d",
+    "experiment": "5d_dsv4pro_v4"
+  },
+  "inputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/serial_interval/ground_truth/p6/project_6_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T15:39:25.474247+00:00",
+      "type": "file",
+      "size_bytes": 167457,
+      "sha256": "f222e84f0324c3213bdcec0ce3a3a084d0926c778140fe477bab2d012a4c958c"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/serial_interval/ground_truth/p6/project_6_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T07:46:12.466747+00:00",
+      "type": "file",
+      "size_bytes": 2520,
+      "sha256": "031e2b64d21f204ba2c9e1c0928c610c43a32074dfcaf42d46e5bf7ccd368c70"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/serial_interval/ground_truth/p6/experiments/5d_dsv4pro_v4/project_6_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T16:03:11.701503+00:00",
+      "type": "file",
+      "size_bytes": 226336,
+      "sha256": "cae9df89e0c30b082cd0603c374e8dd5434c709b5bc67b0b3f62878045830131"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/serial_interval/ground_truth/p6/experiments/5d_dsv4pro_v4/screening_logs/screening_report_20260506_000311.txt",
+      "exists": true,
+      "mtime_utc": "2026-05-05T16:03:11.703549+00:00",
+      "type": "file",
+      "size_bytes": 9136,
+      "sha256": "27e42ddbd44497462d2d2f0f1c3410ed50db485526e322c6f88d2703ccbc1ed6"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": null,
+      "model": "deepseek/deepseek-v4-pro",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 180,
+      "verify_ssl": false,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": false
+    }
+  },
+  "extra": {
+    "paper_count": 72,
+    "ground_truth_count": 5,
+    "ground_truth_in_pool": 5,
+    "strong_count": 13,
+    "possible_count": 3,
+    "unlikely_count": 31,
+    "error_count": 25,
+    "fulltext_error_count": 0
+  }
+}

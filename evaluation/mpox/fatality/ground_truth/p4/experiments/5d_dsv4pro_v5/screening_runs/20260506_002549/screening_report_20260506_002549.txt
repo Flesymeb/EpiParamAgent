@@ -1,0 +1,90 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-05-06 00:25:49
+研究问题: What is the case fatality rate (CFR) of mpox?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p4/project_4_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p4/experiments/5d_dsv4pro_v5/project_4_screened.csv
+模型配置: None/deepseek/deepseek-v4-pro
+批处理大小: 20
+批次并发: 3
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │      9   │    2.7%  │
+│ 🤔 Possible candidates   │     97   │   29.3%  │
+│ 😐 Unlikely candidates   │    225   │   68.0%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │    331   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  3.91  │   97.3%  │  3/ 4/ 2/ 2/320                 │
+│ Population      │  3.72  │   92.1%  │  5/ 7/14/24/281                 │
+│ Location        │  3.04  │   70.1%  │ 28/29/42/35/197                 │
+│ Evidence        │  1.73  │   35.3%  │ 102/95/17/26/91                 │
+│ Parameter       │  0.47  │    5.4%  │ 244/47/22/ 6/12                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (9 篇)
+================================================================================
+
+1. PMID: 38035733 [Score: 4/4]
+   Title: Mpox (monkeypox) risk and mortality associated with HIV infection: a national case-control study in Nigeria.
+   Overall: The study is a primary case-control investigation of mpox in Nigeria that directly reports the case fatality rate, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+2. PMID: 37723464 [Score: 4/4]
+   Title: Comparison of the risk of hospital admission, need for ventilation, sepsis, pneumonitis and death among the recent monkeypox outbreak and historical outbreaks.
+   Overall: This retrospective study directly compares death (and other severe outcomes) between recent and historical monkeypox outbreaks in humans, using original empirical data. Although no deaths occurred in the recent cohort, the study is highly relevant for estimating case fatality rates.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+3. PMID: 37631992 [Score: 4/4]
+   Title: Mpox (Monkeypox) in Pregnancy: Viral Clade Differences and Their Associations with Varying Obstetrical and Fetal Outcomes.
+   Overall: The study is highly relevant to mpox and discusses case fatality rates (CFR) in pregnant women, including specific percentages. However, it appears to be a summary of existing reports rather than an original empirical study, which limits its value as a source of primary CFR data. The location context is strong, and the disease and parameter relevance are explicit.
+   维度评分: D=4 P=4 L=4 E=2 Param=4
+
+4. PMID: 37625431 [Score: 4/4]
+   Title: Clinical characteristics and predictors of human mpox outcome during the 2022 outbreak in Nigeria: a cohort study.
+   Overall: This cohort study directly reports deaths among laboratory-confirmed mpox cases in Nigeria, yielding a CFR of 6%. It is highly relevant to the research question on mpox CFR, providing original, human, location-specific empirical data.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+5. PMID: 39078789 [Score: 4/4]
+   Title: Monkeypox and chickenpox co-infection in a person living with Human Immunodeficiency Virus.
+   Overall: This case report is highly relevant. It directly investigates mpox in a human population in a real-world setting (Nigeria), provides original empirical data, and explicitly reports a fatal outcome, which directly informs the case fatality rate. The only minor limitation is that it is a single case, but it still provides a data point for CFR.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+6. PMID: 32052029 [Score: 4/4]
+   Title: Clinical Course and Outcome of Human Monkeypox in Nigeria.
+   Overall: This retrospective study of 40 human monkeypox cases in Nigeria reports deaths and clinical outcomes, making it highly relevant for estimating CFR. All dimensions score highly, though the abstract does not use the exact phrase 'case fatality rate', it provides the necessary numerator and denominator.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+7. PMID: 31285143 [Score: 4/4]
+   Title: Outbreak of human monkeypox in Nigeria in 2017-18: a clinical and epidemiological report.
+   Overall: The study is a primary outbreak report providing original data on case fatality rate of human mpox in Nigeria, directly addressing the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+8. PMID: 39887004 [Score: 4/4]
+   Title: Evolving Epidemiology of Mpox in Africa in 2024.
+   Overall: The study directly addresses the research question by reporting CFR for mpox in Africa using original empirical surveillance data. All dimensions are highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+9. PMID: 38058122 [Score: 4/4]
+   Title: Mpox and Chickenpox Coinfection: Case Series From Southern Nigeria.
+   Overall: This retrospective cohort study from Nigeria reports deaths among confirmed mpox cases, providing direct data on case fatality. It is original human research in a real-world setting. While CFR is not the primary outcome, the reported mortality proportion makes it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=3

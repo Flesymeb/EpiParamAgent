@@ -5,13 +5,15 @@ from pathlib import Path
 import pytest
 
 from tools.scripts import prepare_downstream_experiment
+from tools.scripts import compare_screening_models
 from metaagent.coding import cli as coding_cli
 from metaagent.coding.pipeline import extraction as coding_extraction
+from metaagent.coding.shared.io import infer_pmid_from_path
 from metaagent.screening import cli as screening_cli
 from metaagent.screening import engine
 from metaagent.screening import fulltext_pipeline
-from metaagent.screening.models import BinaryDecision
-from metaagent.screening.profile_registry import resolve_profile_paths
+from metaagent.screening.models import BinaryDecision, ScreeningDecision
+from metaagent.screening.profile_registry import get_profile, resolve_profile_paths
 from metaagent.screening.staging import partition_papers
 from workbench.backend.app.services import extraction_service
 
@@ -91,6 +93,20 @@ def test_screening_individual_retry_writes_structured_result(monkeypatch):
     assert [p["llm_suggest"] for p in papers] == ["strong_candidate", "strong_candidate"]
 
 
+def test_screening_decision_accepts_verbal_confidence_labels():
+    decision = ScreeningDecision(
+        disease_relevance={"score": 4, "justification": "COVID-19"},
+        population_relevance={"score": 4, "justification": "human"},
+        location_relevance={"score": 3, "justification": "real setting"},
+        original_evidence={"score": 4, "justification": "primary data"},
+        parameter_relevance={"score": 4, "justification": "target parameter"},
+        overall_justification="Relevant paper",
+        confidence="high",
+    )
+
+    assert decision.confidence == 0.85
+
+
 def test_profile_paths_resolve_to_current_evaluation_layout(tmp_path):
     _, paths = resolve_profile_paths(project_root=tmp_path, profile_name="P7")
 
@@ -104,6 +120,45 @@ def test_profile_paths_resolve_to_current_evaluation_layout(tmp_path):
     )
     assert paths.raw_file.name == "project_7_raw.csv"
     assert paths.ground_truth_file.name == "project_7_groundtruth.csv"
+
+
+def test_compare_screening_models_defaults_to_covid13_profiles():
+    assert compare_screening_models.COVID13_PROFILES == [
+        "P4",
+        "P5",
+        "P6",
+        "P7",
+        "P8",
+        "P10",
+        "P11",
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+    ]
+    assert "P9" not in compare_screening_models.COVID13_PROFILES
+    assert {
+        get_profile(profile_name).disease_key
+        for profile_name in compare_screening_models.COVID13_PROFILES
+    } == {"covid19"}
+
+
+def test_compare_screening_models_experiment_template_supports_existing_runs():
+    slug = compare_screening_models._slugify_model("gpt41mini")
+
+    assert slug == "gpt41mini"
+    assert (
+        compare_screening_models._build_experiment_name(
+            prefix="cmp_covid13",
+            model="gpt41mini",
+            model_slug=slug,
+            strategy="5d",
+            template="{strategy}_{model_slug}",
+        )
+        == "5d_gpt41mini"
+    )
 
 
 def test_fulltext_only_routes_all_papers_to_fulltext_bucket():
@@ -243,6 +298,12 @@ def test_coding_tools_path_points_to_repo_tools(monkeypatch):
     coding_extraction._ensure_tools_on_path()
 
     assert sys.path[0] == repo_tools
+
+
+def test_coding_infers_pmid_from_markdown_cache_parent():
+    path = Path("paper_pool/markdown/PMID_35038257/abstract.md")
+
+    assert infer_pmid_from_path(path) == "35038257"
 
 
 def test_downstream_experiment_defaults_to_root_paper_pool(tmp_path, monkeypatch):

@@ -1,0 +1,62 @@
+{
+  "timestamp_utc": "2026-05-05T15:23:32.817619+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_prepare_raw.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP12",
+    "--query",
+    "(mpox OR monkeypox OR \"monkeypox virus\" OR MPXV) AND (paediatric OR pediatric OR maternal OR congenital OR pregnancy OR pregnant OR child OR children OR infant OR neonatal OR \"mother to child\" OR breastfeeding OR fetus OR fetal)",
+    "--date-range",
+    "1970/1/1-2023/12/31",
+    "--include-gt",
+    "--fix-missing"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "d17b85cc6063d9ea9078476327cd4acc2794526f",
+    "branch": "feat/cascade-screening",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP12",
+    "topic": "",
+    "query": "(mpox OR monkeypox OR \"monkeypox virus\" OR MPXV) AND (paediatric OR pediatric OR maternal OR congenital OR pregnancy OR pregnant OR child OR children OR infant OR neonatal OR \"mother to child\" OR breastfeeding OR fetus OR fetal)",
+    "date_range": "1970/1/1-2023/12/31",
+    "retmax": "all",
+    "include_gt": true,
+    "fix_missing": true,
+    "medline_only": false
+  },
+  "inputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p12/project_12_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T15:23:32.811909+00:00",
+      "type": "file",
+      "size_bytes": 10685489,
+      "sha256": "9fc6fa83b39f42914c5ba0b679579d0504d813bcf49e2d4bdbd540439f57e7c5"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p12/project_12_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T15:23:32.811909+00:00",
+      "type": "file",
+      "size_bytes": 10685489,
+      "sha256": "9fc6fa83b39f42914c5ba0b679579d0504d813bcf49e2d4bdbd540439f57e7c5"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 6218,
+    "ground_truth_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p12/project_12_groundtruth.csv"
+  }
+}

@@ -103,14 +103,23 @@ def evaluate(disease, topic, project, parameter_type, estimate_measure,
 # ── Helper ─────────────────────────────────────────────────────────────
 def _run_script(script_path: Path, argv: list[str]) -> None:
     """Run an existing argparse CLI script as a subprocess."""
+    import os
     import subprocess
 
     if not script_path.exists():
         raise click.ClickException(f"Script not found: {script_path}")
 
+    env = os.environ.copy()
+    env["PYTHONPATH"] = (
+        str(DEV_ROOT)
+        if not env.get("PYTHONPATH")
+        else f"{DEV_ROOT}{os.pathsep}{env['PYTHONPATH']}"
+    )
+
     result = subprocess.run(
         [sys.executable, str(script_path)] + argv,
         cwd=str(DEV_ROOT),
+        env=env,
     )
     if result.returncode != 0:
         raise click.ClickException(f"Script exited with code {result.returncode}")

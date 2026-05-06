@@ -66,12 +66,14 @@ def prepare(project_root, profile, disease, topic, query, date_range, retmax,
 @click.option("--cascade", is_flag=True, help="Enable cascade screening (Tier1->Tier2->Tier3) with deep research retrieval")
 @click.option("--auto-fulltext", is_flag=True, help="Auto-download full-text for no-abstract papers")
 @click.option("--fulltext-only", is_flag=True, help="Skip title/abstract, only run full-text")
+@click.option("--no-fulltext-rescue", is_flag=True, help="Disable profile full-text rescue policy")
 @click.option("--skip-no-abstract", is_flag=True, help="Route no-abstract papers to title-only")
 @click.option("--resume-fulltext", is_flag=True, help="Resume from milestone, screen fulltext_eligible papers")
 @click.option("--resume-possible-fulltext", is_flag=True, help="Stage 2: PMC-only full-text rescue for possible candidates")
 @click.option("--resume-sp-fulltext", is_flag=True, help="Stage 2: PMC-only full-text for strong+possible")
 def run(project_root, profile, disease, topic, batch_size, batch_concurrency,
-        model, strategy, experiment, cascade, auto_fulltext, fulltext_only, skip_no_abstract,
+        model, strategy, experiment, cascade, auto_fulltext, fulltext_only,
+        no_fulltext_rescue, skip_no_abstract,
         resume_fulltext, resume_possible_fulltext, resume_sp_fulltext):
     """Run LLM-based batch screening with optional cascade retrieval."""
     if cascade:
@@ -91,6 +93,7 @@ def run(project_root, profile, disease, topic, batch_size, batch_concurrency,
     if experiment:         argv += ["--experiment", experiment]
     if auto_fulltext:      argv += ["--auto-fulltext"]
     if fulltext_only:      argv += ["--fulltext-only"]
+    if no_fulltext_rescue: argv += ["--no-fulltext-rescue"]
     if skip_no_abstract:   argv += ["--skip-no-abstract"]
     if resume_fulltext:    argv += ["--resume-fulltext"]
     if resume_possible_fulltext: argv += ["--resume-possible-fulltext"]
@@ -324,6 +327,7 @@ def downstream(screened_csv, gt_csv, out_dir, project_name, paper_pool_pdf_dir):
 # ── Helper: run an existing CLI script via subprocess ────────────────────
 def _run_script(script_name: str, argv: list[str]) -> None:
     """Run an existing argparse CLI script as a subprocess."""
+    import os
     import subprocess
 
     script_map = {
@@ -346,9 +350,17 @@ def _run_script(script_name: str, argv: list[str]) -> None:
     if not script_path.exists():
         raise click.ClickException(f"Script not found: {script_path}")
 
+    env = os.environ.copy()
+    env["PYTHONPATH"] = (
+        str(DEV_ROOT)
+        if not env.get("PYTHONPATH")
+        else f"{DEV_ROOT}{os.pathsep}{env['PYTHONPATH']}"
+    )
+
     result = subprocess.run(
         [sys.executable, str(script_path)] + argv,
         cwd=str(DEV_ROOT),
+        env=env,
     )
     if result.returncode != 0:
         raise click.ClickException(f"Script exited with code {result.returncode}")

@@ -5,7 +5,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any, Optional
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 DEFAULT_THRESHOLDS: dict[str, dict[str, int]] = {
     "strong": {
@@ -31,6 +31,31 @@ DIMENSION_KEY_MAP = {
     "population_min": "population_relevance",
     "location_min": "location_relevance",
 }
+
+
+def _coerce_confidence(value: Any) -> Any:
+    """Accept common verbal confidence labels from non-OpenAI models."""
+    if value is None or isinstance(value, (int, float)):
+        return value
+    text = str(value).strip().lower()
+    if not text:
+        return None
+    verbal = {
+        "very high": 0.95,
+        "high": 0.85,
+        "medium": 0.6,
+        "moderate": 0.6,
+        "low": 0.3,
+        "very low": 0.15,
+    }
+    if text in verbal:
+        return verbal[text]
+    if text.endswith("%"):
+        try:
+            return float(text[:-1].strip()) / 100.0
+        except ValueError:
+            return value
+    return value
 
 
 class DimensionAssessment(BaseModel):
@@ -72,6 +97,11 @@ class ScreeningDecision(BaseModel):
         le=1.0,
         description="置信度 0-1。反映各维度评分的信息充分程度。1.0=摘要直接覆盖所有维度，0.0=完全无法判断",
     )
+
+    @field_validator("confidence", mode="before")
+    @classmethod
+    def normalize_confidence(cls, value: Any) -> Any:
+        return _coerce_confidence(value)
 
     @model_validator(mode="after")
     def fill_missing_dimensions(self):
@@ -115,6 +145,11 @@ class BinaryDecision(BaseModel):
         description="Confidence in the decision. 1.0=highly confident, 0.0=complete guess.",
     )
 
+    @field_validator("confidence", mode="before")
+    @classmethod
+    def normalize_confidence(cls, value: Any) -> Any:
+        return _coerce_confidence(value)
+
 
 class PECOElement(BaseModel):
     """Assessment for a single PECO element."""
@@ -142,6 +177,11 @@ class PECODecision(BaseModel):
         description="Confidence in the overall decision. 0.0-0.3=very uncertain, 0.7+=high confidence.",
     )
     justification: str = Field(description="Overall justification, 2-3 sentences summarizing key evidence")
+
+    @field_validator("confidence", mode="before")
+    @classmethod
+    def normalize_confidence(cls, value: Any) -> Any:
+        return _coerce_confidence(value)
 
 
 def classify_binary_decision(decision: BinaryDecision) -> str:

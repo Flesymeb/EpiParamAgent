@@ -1,0 +1,53 @@
+{
+  "timestamp_utc": "2026-05-05T15:42:54.716229+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_prepare_raw.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP8",
+    "--query",
+    "(mpox OR monkeypox) AND (mortality OR death OR CFR OR \"case fatality\" OR \"outcome\" OR hospitalization)",
+    "--date-range",
+    "2022/1/1-2024/12/31",
+    "--include-gt",
+    "--fix-missing"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "d17b85cc6063d9ea9078476327cd4acc2794526f",
+    "branch": "feat/cascade-screening",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP8",
+    "topic": "",
+    "query": "(mpox OR monkeypox) AND (mortality OR death OR CFR OR \"case fatality\" OR \"outcome\" OR hospitalization)",
+    "date_range": "2022/1/1-2024/12/31",
+    "retmax": "all",
+    "include_gt": true,
+    "fix_missing": true,
+    "medline_only": false
+  },
+  "inputs": [],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p8/project_8_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T15:42:54.713376+00:00",
+      "type": "file",
+      "size_bytes": 3366510,
+      "sha256": "0a7756b30e00eccc7329ab7c91a3ae8eeaafb15b756c60e25b74a56106be38fe"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 1947,
+    "ground_truth_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p8/project_8_groundtruth.csv"
+  }
+}

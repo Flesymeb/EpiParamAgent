@@ -1,0 +1,116 @@
+{
+  "timestamp_utc": "2026-05-05T14:50:57.749771+00:00",
+  "workflow": "screening_evaluation",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+  "argv": [
+    "tools/scripts/screening_evaluation.py",
+    "screening-performance",
+    "--ground-truth",
+    "evaluation/mpox/fatality/ground_truth/p7/project_7_groundtruth.csv",
+    "--screened-results",
+    "evaluation/mpox/fatality/ground_truth/p7/experiments/5d_dsv4pro_v3/project_7_screened.csv"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "2cf195576c565d1b846775148f21af48b3997130",
+    "branch": "feat/cascade-screening",
+    "dirty": true
+  },
+  "params": {
+    "command": "screening-performance",
+    "profile": "",
+    "topic": "",
+    "threshold_overrides": {}
+  },
+  "inputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p7/project_7_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T13:57:34.331879+00:00",
+      "type": "file",
+      "size_bytes": 18812,
+      "sha256": "4dae0e78f936f15208525f9903cb01215c6167b53ccb1b80c28ae162830821a4"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p7/experiments/5d_dsv4pro_v3/project_7_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T14:50:18.588032+00:00",
+      "type": "file",
+      "size_bytes": 4481465,
+      "sha256": "54aef0a856ad64ea343f7a1a38bfcdd912d6c56145e40057e98c37e8b74518b1"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p7/experiments/5d_dsv4pro_v3",
+      "exists": true,
+      "mtime_utc": "2026-05-05T14:50:57.748400+00:00",
+      "type": "dir",
+      "file_count": 7,
+      "dir_digest": "37cbba217b161c67da2fd8abd8fd3922a06ab9edf8a0ee3c643c4b16c6b70da4",
+      "dir_digest_truncated": false
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p7/experiments/5d_dsv4pro_v3/paper_summary.tsv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T14:50:57.749689+00:00",
+      "type": "file",
+      "size_bytes": 303,
+      "sha256": "6da5eda88cc781d06bb6cafca23733acb67f9d67bc70b436d8f9853aa41e01c6"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "summary": {
+      "topic": "unknown",
+      "project_label": "custom",
+      "ground_truth_count": 33,
+      "screened_count": 1324,
+      "tp": 30,
+      "fp": 295,
+      "fn": 3,
+      "tn": 983,
+      "strong_count": 23,
+      "possible_count": 7,
+      "unlikely_count": 3,
+      "not_found_count": 0,
+      "sensitivity": 0.909091,
+      "specificity": 0.769171,
+      "precision": 0.092308,
+      "npv": 0.996957,
+      "f1": 0.167598,
+      "accuracy": 0.772693,
+      "workload_reduction": 0.744713,
+      "nns": 10.833333,
+      "mcc": 0.246059,
+      "wss95": 0.694713,
+      "recall_ci_low": 0.764274,
+      "recall_ci_high": 0.968596,
+      "precision_ci_low": 0.065424,
+      "precision_ci_high": 0.128716,
+      "workload_reduction_ci_low": 0.728452,
+      "workload_reduction_ci_high": 0.774981,
+      "nns_ci_low": 7.975,
+      "nns_ci_high": 16.190476,
+      "recall_ci_display": "90.9% [76.4%, 96.9%]",
+      "precision_display": "9.2%",
+      "workload_reduction_display": "74.5%",
+      "nns_display": "10.83",
+      "precision_ci_display": "9.2% [6.5%, 12.9%]",
+      "workload_reduction_ci_display": "74.5% [72.8%, 77.5%]",
+      "nns_ci_display": "10.83 [7.97, 16.19]",
+      "specificity_display": "76.9%",
+      "npv_display": "99.7%",
+      "f1_display": "16.8%",
+      "accuracy_display": "77.3%",
+      "mcc_display": "0.246",
+      "wss95_display": "69.5%",
+      "threshold_mode": "original_labels",
+      "threshold_overrides": ""
+    },
+    "paper_summary_tsv": "evaluation/mpox/fatality/ground_truth/p7/experiments/5d_dsv4pro_v3/paper_summary.tsv"
+  }
+}

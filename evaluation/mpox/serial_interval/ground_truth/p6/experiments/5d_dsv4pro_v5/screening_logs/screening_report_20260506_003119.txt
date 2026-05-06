@@ -1,0 +1,150 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-05-06 00:31:19
+研究问题: What are the serial intervals and incubation period of mpox?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/serial_interval/ground_truth/p6/project_6_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/serial_interval/ground_truth/p6/experiments/5d_dsv4pro_v5/project_6_screened.csv
+模型配置: None/deepseek/deepseek-v4-pro
+批处理大小: 20
+批次并发: 3
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │     21   │   29.2%  │
+│ 🤔 Possible candidates   │      9   │   12.5%  │
+│ 😐 Unlikely candidates   │     42   │   58.3%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │     72   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  3.82  │   94.4%  │  2/ 1/ 1/ 0/68                 │
+│ Population      │  3.79  │   94.4%  │  2/ 2/ 0/ 1/67                 │
+│ Location        │  3.21  │   81.9%  │  4/ 3/ 6/20/39                 │
+│ Evidence        │  2.60  │   61.1%  │ 13/15/ 0/ 4/40                 │
+│ Parameter       │  2.74  │   65.3%  │  5/14/ 6/17/30                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (21 篇)
+================================================================================
+
+1. PMID: 35713026 [Score: 4/4]
+   Title: Estimated incubation period for monkeypox cases confirmed in the Netherlands, May 2022.
+   Overall: This study is highly relevant. It directly estimates the incubation period for monkeypox using original empirical data from human cases in the Netherlands. The title, abstract, and MeSH terms all align perfectly with the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+2. PMID: 36271480 [Score: 4/4]
+   Title: Estimation of the serial interval of monkeypox during the early outbreak in 2022.
+   Overall: The study is highly relevant. It explicitly investigates the serial interval of monkeypox using original empirical data from human cases during the 2022 outbreak. It directly addresses the target parameter and provides a real-world global context.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+3. PMID: 38063085 [Score: 4/4]
+   Title: Estimation of Incubation Period of Mpox during 2022 Outbreak in Pereira, Colombia.
+   Overall: The study directly estimates the incubation period of mpox using primary case data from a 2022 outbreak in Colombia. All relevance dimensions are explicitly and centrally addressed, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+4. PMID: 37014716 [Score: 4/4]
+   Title: Time Scales of Human Mpox Transmission in The Netherlands.
+   Overall: The study directly investigates mpox transmission in humans in the Netherlands, using original contact tracing data to estimate the serial interval. It is highly relevant to the research question on serial intervals and incubation periods.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+5. PMID: 38249378 [Score: 4/4]
+   Title: Cases of Monkeypox show highly-overlapping co-infection with HIV and syphilis.
+   Overall: The study is highly relevant. It explicitly investigates mpox in a human population in China, reports original empirical data, and provides a direct estimate of the incubation period (median 8 days, IQR 6-16). While the primary focus is on co-infections and viral loads, the incubation period is a reported finding, making it directly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+6. PMID: 36573222 [Score: 4/4]
+   Title: Study and prediction of the 2022 global monkeypox epidemic.
+   Overall: The study is highly relevant. It focuses on the mpox epidemic, uses global human case data, presents original epidemiological analysis, and explicitly reports the mean incubation period, a target parameter of the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+7. PMID: 37260588 [Score: 4/4]
+   Title: Features of Mpox infection: The analysis of the data submitted to the ID-IRI network.
+   Overall: The study provides original empirical data on the incubation period of mpox in a large, multicountry human cohort. Although serial interval is not reported, the explicit reporting of incubation period makes it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+8. PMID: 40078742 [Score: 4/4]
+   Title: Epidemiology and characteristics of identified early mpox cases in Guangdong Province, China: Implications for prevention and control.
+   Overall: This study is highly relevant. It explicitly investigates mpox in a human population in a real-world setting, reports original empirical data, and provides a direct estimate of the incubation period, which is a target parameter of the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+9. PMID: 36863012 [Score: 4/4]
+   Title: Serial Interval and Incubation Period Estimates of Monkeypox Virus Infection in 12 Jurisdictions, United States, May-August 2022.
+   Overall: The study directly estimates serial interval and incubation period for mpox in humans using original data from US jurisdictions. All relevance dimensions are explicitly and centrally addressed.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+10. PMID: 37708908 [Score: 4/4]
+   Title: Transmission dynamics and effect of control measures on the 2022 outbreak of mpox among gay, bisexual, and other men who have sex with men in England: a mathematical modelling study.
+   Overall: The study directly estimates both the serial interval and incubation period of mpox using original empirical data from a human outbreak in England. All relevance dimensions are explicitly and centrally addressed in the title and abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+11. PMID: 36323407 [Score: 4/4]
+   Title: Transmission dynamics of monkeypox in the United Kingdom: contact tracing study.
+   Overall: The study directly addresses the research question by providing original empirical estimates of both incubation period and serial interval for mpox in a human population in the UK. All relevance dimensions are fully satisfied with explicit evidence in the title and abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+12. PMID: 38218669 [Score: 4/4]
+   Title: JYNNEOS™ effectiveness as post-exposure prophylaxis against mpox: Challenges using real-world outbreak data.
+   Overall: The study is highly relevant. It directly investigates mpox in a human population during a real-world outbreak in New York City. It is an original observational study that explicitly reports the incubation period (median 7 days, range 1-16) among unvaccinated cases, which is a target parameter of the research question. The primary focus is vaccine effectiveness, but the incubation period is a key reported finding.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+13. PMID: 39255234 [Score: 4/4]
+   Title: Epidemiologic Quantities for Monkeypox Virus Clade I from Historical Data with Implications for Current Outbreaks, Democratic Republic of the Congo.
+   Overall: 该研究直接针对猴痘的序列间隔和潜伏期，利用刚果民主共和国的历史爆发数据进行了参数估计，摘要提供了具体的潜伏期和世代时间估计，与系统评价问题高度相关。
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+14. PMID: 38666400 [Score: 4/4]
+   Title: Scenarios of future mpox outbreaks among men who have sex with men: a modelling study based on cross-sectional seroprevalence data from the Netherlands, 2022.
+   Overall: The study is highly relevant to the research question. It explicitly investigates mpox in a human population within a defined geographic setting using original empirical data. Crucially, the abstract states that the model was informed by 'published data on serial interval', making the target parameter a direct input to the study's analysis.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+15. PMID: 37195290 [Score: 4/4]
+   Title: An Atypical Presentation of Mpox Transmitted Between Transgender Men Through Oral Sex.
+   Overall: The study is a case report on mpox transmission between two transgender men. It explicitly mentions a 'short incubation period' in the abstract, making it highly relevant to the research question on incubation periods. It provides original empirical data from a real-world outbreak setting.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+16. PMID: 27191380 [Score: 4/4]
+   Title: Extended Human-to-Human Transmission during a Monkeypox Outbreak in the Democratic Republic of the Congo.
+   Overall: The study is a primary outbreak investigation of monkeypox in humans in the DRC, explicitly reporting the incubation period. It is highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+17. PMID: 37861345 [Score: 4/4]
+   Title: Comparison of clinical course of Mpox among HIV-negative and HIV-positive patients: A 2022 cohort of hospitalized patients in Central Europe.
+   Overall: The study is highly relevant. It directly investigates mpox in a human population, reports original empirical data from a real-world hospital setting, and explicitly provides the median incubation period (7 days) as a key finding. The only minor limitation is that it does not report the serial interval, but the strong evidence for incubation period makes it a valuable candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+18. PMID: 38781950 [Score: 4/4]
+   Title: Incubation Period and Serial Interval of Mpox in 2022 Global Outbreak Compared with Historical Estimates.
+   Overall: This study is highly relevant. It explicitly investigates the incubation period and serial interval of mpox in a human population during a global outbreak, using original empirical data analysis. The title, abstract, keywords, and MeSH terms all align perfectly with the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+19. PMID: 35994726 [Score: 4/4]
+   Title: Early Estimates of Monkeypox Incubation Period, Generation Time, and Reproduction Number, Italy, May-June 2022.
+   Overall: The study directly estimates incubation period and generation time for mpox using original case data from Italy, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+20. PMID: 37410383 [Score: 4/4]
+   Title: Estimated incubation period distributions of mpox using cases from two international European festivals and outbreaks in a club in Berlin, May to June 2022.
+   Overall: The study directly estimates the incubation period of mpox using primary data from European outbreaks, making it highly relevant to the research question on serial intervals and incubation period.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+21. PMID: 36787016 [Score: 4/4]
+   Title: Mpox outbreak 2022: an overview of all cases reported to the Cologne Health Department.
+   Overall: This observational study directly provides original empirical data on the incubation period of mpox in a human outbreak setting in Cologne. It meets all relevance dimensions with high scores, making it highly pertinent to the research question, despite not addressing serial intervals.
+   维度评分: D=4 P=4 L=4 E=4 Param=4

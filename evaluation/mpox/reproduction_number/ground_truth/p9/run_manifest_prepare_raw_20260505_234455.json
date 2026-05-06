@@ -1,0 +1,53 @@
+{
+  "timestamp_utc": "2026-05-05T15:44:55.958824+00:00",
+  "workflow": "prepare_raw",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/dev/literature_search/scripts/cli/screening_prepare_raw.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "MP9",
+    "--query",
+    "(mpox OR monkeypox OR \"monkeypox virus\") AND (\"reproduction number\" OR R0 OR Rt OR transmissibility OR \"attack rate\" OR \"secondary attack\" OR \"transmission rate\")",
+    "--date-range",
+    "1970/1/1-2023/12/31",
+    "--include-gt",
+    "--fix-missing"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "d17b85cc6063d9ea9078476327cd4acc2794526f",
+    "branch": "feat/cascade-screening",
+    "dirty": true
+  },
+  "params": {
+    "profile": "MP9",
+    "topic": "",
+    "query": "(mpox OR monkeypox OR \"monkeypox virus\") AND (\"reproduction number\" OR R0 OR Rt OR transmissibility OR \"attack rate\" OR \"secondary attack\" OR \"transmission rate\")",
+    "date_range": "1970/1/1-2023/12/31",
+    "retmax": "all",
+    "include_gt": true,
+    "fix_missing": true,
+    "medline_only": false
+  },
+  "inputs": [],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/reproduction_number/ground_truth/p9/project_9_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T15:44:55.957229+00:00",
+      "type": "file",
+      "size_bytes": 1940737,
+      "sha256": "39e2bd13c77ed12337e25bf7502d8662da12bff99bd353d66af949f1ba77d67c"
+    }
+  ],
+  "runtime": {},
+  "extra": {
+    "row_count": 1029,
+    "ground_truth_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/reproduction_number/ground_truth/p9/project_9_groundtruth.csv"
+  }
+}

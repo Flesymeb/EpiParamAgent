@@ -1,0 +1,105 @@
+{
+  "timestamp_utc": "2026-05-05T16:56:41.757389+00:00",
+  "workflow": "screening",
+  "module": "literature_search",
+  "cwd": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+  "argv": [
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/tools/scripts/screening_llm_batch.py",
+    "--project-root",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "--profile",
+    "P7",
+    "--batch-size",
+    "500",
+    "--batch-concurrency",
+    "64",
+    "--strategy",
+    "5d",
+    "--model",
+    "openai/gpt-4.1",
+    "--experiment",
+    "cmp_covid13_openai_gpt-4.1_5d_nofulltext",
+    "--no-fulltext-rescue",
+    "--skip-no-abstract"
+  ],
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-6.14.0-36-generic-x86_64-with-glibc2.39",
+  "git": {
+    "repo_root": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi",
+    "commit": "be2567707c9b9a7c51e1b065d1216d6af93a805c",
+    "branch": "feat/cascade-screening",
+    "dirty": true
+  },
+  "params": {
+    "profile": "P7",
+    "batch_size": 500,
+    "batch_concurrency": 64,
+    "auto_fulltext": false,
+    "fulltext_only": false,
+    "research_question": "What is the basic reproduction number (R0) of COVID-19?",
+    "strategy": "5d",
+    "experiment": "cmp_covid13_openai_gpt-4.1_5d_nofulltext"
+  },
+  "inputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/reproduction_number/ground_truth/p7/project_7_raw.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T08:42:51.705327+00:00",
+      "type": "file",
+      "size_bytes": 1499090,
+      "sha256": "a3e7c5a8f3bd75fc63d064a8cc48deff8cf3e85410943f5f17d701d404e128a0"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/reproduction_number/ground_truth/p7/project_7_groundtruth.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T09:07:34.451707+00:00",
+      "type": "file",
+      "size_bytes": 37048,
+      "sha256": "dfd365836ddc7cc1bec1d01524e5ef77e57dd55e3c23244723e5751f5516beb1"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/reproduction_number/ground_truth/p7/experiments/cmp_covid13_openai_gpt-4.1_5d_nofulltext/project_7_screened.csv",
+      "exists": true,
+      "mtime_utc": "2026-05-05T16:56:41.755451+00:00",
+      "type": "file",
+      "size_bytes": 2039796,
+      "sha256": "24808a8e0761d32db97eadbb61c49927f31e2d788500bbc3de3d4b7006a7bd4c"
+    },
+    {
+      "path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/covid19/reproduction_number/ground_truth/p7/experiments/cmp_covid13_openai_gpt-4.1_5d_nofulltext/screening_logs/screening_report_20260506_005641.txt",
+      "exists": true,
+      "mtime_utc": "2026-05-05T16:56:41.757286+00:00",
+      "type": "file",
+      "size_bytes": 54494,
+      "sha256": "e02d5bd3c667bb6ddf057afbb33ca09cf49ab7aa96c07975f16b474eb9404cbd"
+    }
+  ],
+  "runtime": {
+    "llm": {
+      "provider": "openai",
+      "model": "deepseek/deepseek-v4-pro",
+      "api_base": "https://openrouter.ai/api/v1",
+      "timeout_s": 120,
+      "verify_ssl": true,
+      "has_api_key": true
+    },
+    "mineru": {
+      "base_url": "https://mineru.net",
+      "endpoint": "/api/v4/extract/task",
+      "timeout_s": 180,
+      "has_api_key": true
+    }
+  },
+  "extra": {
+    "paper_count": 574,
+    "ground_truth_count": 122,
+    "ground_truth_in_pool": 122,
+    "strong_count": 110,
+    "possible_count": 22,
+    "unlikely_count": 442,
+    "error_count": 0,
+    "fulltext_error_count": 0
+  }
+}

@@ -1,0 +1,210 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-05-06 02:37:13
+研究问题: What is the case fatality rate of mpox?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p8/project_8_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/fatality/ground_truth/p8/experiments/5d_dsv4pro_v5/project_8_screened.csv
+模型配置: None/deepseek/deepseek-v4-pro
+批处理大小: 20
+批次并发: 3
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │     33   │    1.7%  │
+│ 🤔 Possible candidates   │    970   │   49.8%  │
+│ 😐 Unlikely candidates   │    944   │   48.5%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │   1947   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  3.78  │   93.7%  │ 43/41/39/46/1778                 │
+│ Population      │  3.67  │   91.2%  │ 49/43/79/150/1626                 │
+│ Location        │  2.64  │   57.1%  │ 201/251/383/332/780                 │
+│ Evidence        │  2.14  │   48.0%  │ 509/370/133/200/735                 │
+│ Parameter       │  0.43  │    4.0%  │ 1458/262/149/35/43                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (33 篇)
+================================================================================
+
+1. PMID: 37294338 [Score: 4/4]
+   Title: Risk factors for mortality and clinical presentation of monkeypox.
+   Overall: This prospective cohort study directly reports mortality among mpox patients, providing a case fatality rate. All relevance dimensions are explicitly met with high confidence.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+2. PMID: 36857117 [Score: 4/4]
+   Title: Mpox Virus in Pregnancy, the Placenta, and Newborn.
+   Overall: The study directly addresses mpox and reports a specific case fatality rate (perinatal CFR of 75%), making it highly relevant to the research question on mpox case fatality rate. It includes original human data from real-world settings. Although the CFR is for a subgroup, it still provides a fatality rate estimate.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+3. PMID: 37053126 [Score: 4/4]
+   Title: Epidemiologic and Clinical Features of Mpox-Associated Deaths - United States, May 10, 2022-March 7, 2023.
+   Overall: 该研究直接针对mpox相关死亡，基于美国人群的原始流行病学数据，明确计算并报告了病例死亡率（CFR），在所有维度上高度相关，完全符合研究问题的需求。
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+4. PMID: 39024895 [Score: 4/4]
+   Title: Epidemiological and clinical characteristics of monkeypox among people with and without HIV in Peru: a national observational study.
+   Overall: The study is highly relevant: it investigates mpox in a human population in Peru using original observational data, and it explicitly reports a case fatality rate (0.56%). All dimensions score high, though the target parameter is not the sole focus of the paper.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+5. PMID: 36566771 [Score: 4/4]
+   Title: Clinical features and management of individuals admitted to hospital with monkeypox and associated complications across the UK: a retrospective cohort study.
+   Overall: The study is highly relevant to the research question. It is an original retrospective cohort study of hospitalized mpox patients in the UK. It explicitly reports on mortality as an outcome, stating 'No deaths occurred during the study period', which directly provides data for calculating a case fatality rate. All dimensions score highly.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+6. PMID: 37079637 [Score: 4/4]
+   Title: Clinical characterization and placental pathology of mpox infection in hospitalized patients in the Democratic Republic of the Congo.
+   Overall: This observational study directly investigates mpox in a human population in the DRC and reports the number of deaths among confirmed cases, providing data to calculate the case fatality rate. It is highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+7. PMID: 37861345 [Score: 4/4]
+   Title: Comparison of clinical course of Mpox among HIV-negative and HIV-positive patients: A 2022 cohort of hospitalized patients in Central Europe.
+   Overall: The study is highly relevant. It is an original observational study on mpox in humans, set in a real-world location. Crucially, the abstract explicitly reports that there were 'no severe cases or deaths', which directly addresses the case fatality rate (CFR) by providing a numerator of zero deaths in the cohort. This makes the target parameter explicitly evidenced.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+8. PMID: 39708276 [Score: 4/4]
+   Title: Clinical characteristics of suspected cases of human mpox (monkeypox) in Katako-Kombe, Democratic Republic of the Congo 2023: challenges and key responses.
+   Overall: The study is highly relevant. It explicitly investigates mpox in a human population in a real-world setting, reports original empirical data, and directly provides the case fatality rate (CFR) as a key finding.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+9. PMID: 38035733 [Score: 4/4]
+   Title: Mpox (monkeypox) risk and mortality associated with HIV infection: a national case-control study in Nigeria.
+   Overall: The study is a primary case-control study from Nigeria that directly reports mpox case fatality rates in humans, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+10. PMID: 37625431 [Score: 4/4]
+   Title: Clinical characteristics and predictors of human mpox outcome during the 2022 outbreak in Nigeria: a cohort study.
+   Overall: This study is highly relevant. It directly investigates mpox in a human population in Nigeria, reports original empirical data from a cohort study, and provides explicit mortality outcomes (9 deaths out of 160 patients) which can be used to calculate a case fatality rate. The abstract details the primary outcome of disease severity and death.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+11. PMID: 38236779 [Score: 4/4]
+   Title: Mpox Outbreak - Los Angeles County, California, May 4-August 17, 2023.
+   Overall: This outbreak report provides original, human, location-specific data on mpox cases and explicitly notes zero deaths, making it directly relevant to estimating case fatality rate, even though the term itself is not used.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+12. PMID: 39321225 [Score: 4/4]
+   Title: Clinical and Epidemiological Characteristics of Mpox Cases Identified Through Case-based Surveillance in India, July 2022-January 2023.
+   Overall: The study is highly relevant. It explicitly investigates mpox in a human population in India, reports original empirical data from 24 cases, and directly provides the case fatality rate (4.2%) in the abstract.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+13. PMID: 38058122 [Score: 4/4]
+   Title: Mpox and Chickenpox Coinfection: Case Series From Southern Nigeria.
+   Overall: The study directly addresses mpox in a human population in Nigeria, reports original empirical data, and explicitly provides a case fatality rate (8.9%). All dimensions are highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+14. PMID: 38042298 [Score: 4/4]
+   Title: Efficacy and viral dynamics of tecovirimat in patients with MPOX: A multicenter open-label, double-arm trial in Japan.
+   Overall: This clinical trial directly investigates mpox in humans in Japan and reports mortality outcomes (0% CFR at day 14 and 30). It is original empirical research with high relevance across all dimensions, though CFR is a secondary outcome rather than the primary focus.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+15. PMID: 36828001 [Score: 4/4]
+   Title: Mpox in people with advanced HIV infection: a global case series.
+   Overall: This global case series provides original empirical data on mpox in humans, with detailed mortality outcomes that allow calculation of case fatality rate. It is highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+16. PMID: 36328951 [Score: 4/4]
+   Title: National Monkeypox Surveillance, Central African Republic, 2001-2021.
+   Overall: The study directly addresses mpox case fatality rate using original human surveillance data from a defined geographic area, making it highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+17. PMID: 36327164 [Score: 4/4]
+   Title: Severe Monkeypox in Hospitalized Patients - United States, August 10-October 10, 2022.
+   Overall: The study is highly relevant. It explicitly investigates monkeypox in a human population in the United States, reports original empirical data on hospitalized patients, and provides mortality data (12 deaths out of 57 patients), which directly informs the case fatality rate. The abstract notes that monkeypox was a cause or contributing factor in some deaths, making it a strong candidate for inclusion.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+18. PMID: 36059149 [Score: 4/4]
+   Title: Clinical characteristics of monkeypox virus infections among men with and without HIV: A large outbreak cohort in Germany.
+   Overall: The study is highly relevant to the research question. It investigates a large cohort of human mpox cases in Germany using original empirical data. The abstract explicitly reports that 'no fatal course was observed', which directly provides information on case fatality (zero deaths in this cohort). This makes it a direct source of evidence for calculating or informing the case fatality rate.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+19. PMID: 36542047 [Score: 4/4]
+   Title: Epidemiological and clinical characteristics of monkeypox cases in Brazil in 2022: a cross-sectional study.
+   Overall: The study is highly relevant. It explicitly investigates monkeypox in a human population in Brazil, reports original empirical data from a cross-sectional study, and mentions three deaths among the cases, which directly relates to the concept of case fatality. While the term 'case fatality rate' is not explicitly stated, the reporting of deaths in a defined case series provides the necessary data to calculate it, making the parameter strongly implied.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+20. PMID: 35866746 [Score: 4/4]
+   Title: Monkeypox Virus Infection in Humans across 16 Countries - April-June 2022.
+   Overall: This study is highly relevant. It is an original case series investigating mpox in humans across multiple countries. While the abstract does not explicitly calculate a case fatality rate, it directly reports the outcome 'No deaths were reported' among 528 cases, which is a critical component for estimating CFR. The study provides primary empirical data on clinical outcomes.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+21. PMID: 38465911 [Score: 4/4]
+   Title: Clinical features and outcomes of mpox in people with and without HIV: a national comparative study.
+   Overall: The study is highly relevant. It explicitly investigates mpox in a human population in Mexico, reports original empirical data from an observational study, and provides direct evidence on deaths and fatality outcomes, including a comparison of death risk by HIV status.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+22. PMID: 36331124 [Score: 4/4]
+   Title: Epidemiologic and Clinical Features of Children and Adolescents Aged <18 Years with Monkeypox - United States, May 17-September 24, 2022.
+   Overall: This study is highly relevant: it investigates mpox in a human population in the US using original empirical data. It reports zero deaths, which directly contributes to estimating the case fatality rate, though it does not explicitly calculate a CFR. It would be a candidate for inclusion in a systematic review on mpox CFR.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+23. PMID: 36216018 [Score: 4/4]
+   Title: Epidemiological and clinical characteristics of patients with monkeypox in the GeoSentinel Network: a cross-sectional study.
+   Overall: The study is highly relevant. It directly investigates mpox in a human population across multiple countries using original empirical data from a cross-sectional study. It explicitly reports that no deaths occurred, which directly informs the case fatality rate (CFR) parameter, even though it does not calculate a rate. The abstract provides strong evidence for all dimensions.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+24. PMID: 38344579 [Score: 4/4]
+   Title: Prolonged, Atypical, and Fulminant Mpox in a HIV/HBV-Coinfected Patient: A Case Report.
+   Overall: The study is highly relevant. It is an original case report of a human patient with confirmed mpox who died, directly providing data on a fatal outcome. While the term 'case fatality rate' is not explicitly used, the report describes a death from mpox, which is the core component of the target parameter. The study's focus on a fatal case in a specific high-risk population (HIV/HBV coinfection) provides direct evidence for the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=3
+
+25. PMID: 36950196 [Score: 4/4]
+   Title: Investigation of a mpox outbreak in Central African Republic, 2021-2022.
+   Overall: The study is highly relevant. It explicitly investigates a human mpox outbreak in a real-world setting (Central African Republic), reports original empirical data, and directly provides the case fatality rate (4.0%).
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+26. PMID: 38868307 [Score: 4/4]
+   Title: Severe Mpox Among People With Advanced Human Immunodeficiency Virus Receiving Prolonged Tecovirimat in New York City.
+   Overall: The study is highly relevant. It explicitly investigates mpox in a human population in a specific location (New York City), reports original clinical data, and mentions high mortality, which is directly related to the case fatality rate. The abstract does not explicitly state 'case fatality rate' or 'CFR', but 'high mortality' in a defined cohort strongly implies the parameter is reported.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+27. PMID: 36412741 [Score: 4/4]
+   Title: Clinical and Epidemiological Features of Hospitalized and Ambulatory Patients with Human Monkeypox Infection: A Retrospective Observational Study in Portugal.
+   Overall: The study directly examines monkeypox in humans with original data from a Portuguese hospital. It reports zero deaths, providing evidence relevant to case fatality, though it does not explicitly calculate or name the rate. All other dimensions are fully satisfied.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+28. PMID: 36573222 [Score: 4/4]
+   Title: Study and prediction of the 2022 global monkeypox epidemic.
+   Overall: The study is highly relevant. It explicitly investigates the global monkeypox epidemic in humans, reports original empirical analysis of real-world data, and provides specific numbers for total cases and deaths, which are directly related to calculating a case fatality rate, even if the term 'case fatality rate' is not explicitly used.
+   维度评分: D=4 P=4 L=4 E=4 Param=3
+
+29. PMID: 36828492 [Score: 4/4]
+   Title: Mpox, Caused by the MPXV of the Clade IIb Lineage, Goes Global.
+   Overall: The study is highly relevant. It explicitly investigates mpox (disease relevance), concerns human populations globally (population relevance), provides a real-world geographic analysis (location relevance), reports original empirical data and primary analysis (original evidence), and explicitly reports the number of deaths among confirmed cases, allowing for the calculation of a case fatality rate (target parameter relevance).
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+30. PMID: 35912445 [Score: 3/4]
+   Title: Monkeypox in Germany.
+   Overall: This letter reports original data on 301 monkeypox cases in Germany, including death outcomes (none died), which is directly relevant to estimating case fatality rate. However, the publication type is a letter, and the term 'case fatality rate' is not explicitly used. The study provides useful empirical evidence for the research question.
+   维度评分: D=4 P=4 L=4 E=3 Param=3
+
+31. PMID: 39672537 [Score: 3/4]
+   Title: A new method for the estimation of stochastic epidemic descriptors reinforced by Kalman-based dynamic parameter estimation. Application to mpox data.
+   Overall: The study is highly relevant to the research question. It explicitly investigates mpox (monkeypox) in a human population (Czech Republic) and reports original empirical results that include the estimation of deaths. The abstract mentions estimating 'total number of infections, deaths, and the duration of epidemic outbreaks', which directly relates to the components needed for a case fatality rate, even if 'case fatality rate' is not explicitly named. The study is a primary research article presenting a novel method and its application to real mpox data.
+   维度评分: D=4 P=4 L=4 E=3 Param=3
+
+32. PMID: 35970550 [Score: 3/4]
+   Title: Making sense of monkeypox death rates.
+   Overall: Title-only screening with sparse metadata. The study is clearly about monkeypox death rates in humans, but it is uncertain whether it provides original empirical data on case fatality rate or is a commentary. Location and study design are ambiguous. Scores reflect this uncertainty.
+   维度评分: D=4 P=4 L=2 E=2 Param=3
+
+33. PMID: 36149253 [Score: 3/4]
+   Title: What should we do about monkeypox?
+   Overall: The study is highly relevant. It explicitly focuses on monkeypox (score 4), concerns human cases globally (score 4), and reports original empirical data on cases and deaths (score 3). The abstract provides the necessary components (cases and deaths) to calculate a case fatality rate, even though the term 'case fatality rate' is not explicitly stated. The target parameter is directly derivable from the reported data.
+   维度评分: D=4 P=4 L=4 E=3 Param=3

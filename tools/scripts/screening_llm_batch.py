@@ -257,6 +257,11 @@ def main() -> None:
     )
 
     screening_config, research_question = _resolve_profile_config(args.profile)
+    if args.no_fulltext_rescue:
+        policies = screening_config.setdefault("policies", {})
+        rescue_policy = dict(policies.get("fulltext_rescue", {}) or {})
+        rescue_policy["enabled"] = False
+        policies["fulltext_rescue"] = rescue_policy
     if args.research_question:
         research_question = args.research_question
     input_file, output_file, gt_file = _resolve_io_paths(args)
@@ -485,6 +490,7 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--experiment", default="", help="Experiment output subdirectory")
     parser.add_argument("--fulltext-only", action="store_true", help="Only run full-text screening")
     parser.add_argument("--auto-fulltext", action="store_true", help="Fetch full text for routed papers")
+    parser.add_argument("--no-fulltext-rescue", action="store_true", help="Disable profile full-text rescue policy")
     parser.add_argument("--skip-no-abstract", action="store_true", help="Title-only now, full-text later")
     parser.add_argument("--resume-fulltext", action="store_true", help="Deprecated alias; use --resume-sp-fulltext")
     parser.add_argument("--resume-possible-fulltext", action="store_true")

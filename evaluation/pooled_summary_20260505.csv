@@ -1,2 +1,10 @@
 disease,topic,project,parameter_type,estimate_measure,include_median,impute_se,method,n_studies,n_excluded,n_imputed,pooled_mean,se_pooled,ci_lower,ci_upper,i2,tau2,p_het,run_used
+mpox,fatality,p12,all,,False,True,random,12,3,3,10.4557,1.3834,7.7442,13.1672,100.0,22.9583,0.0,20260505_192104_520
+mpox,fatality,p4,CFR,,False,True,random,8,4,4,4.2572,0.8653,2.5612,5.9531,100.0,5.9782,0.0,20260505_232328_689
+mpox,fatality,p7,CFR,,False,True,random,29,6,5,11.1086,0.8151,9.511,12.7062,100.0,18.8266,0.0,20260505_215747_842
+mpox,fatality,p8,all,,False,True,random,27,10,10,5.0481,0.5596,3.9513,6.1448,100.0,8.2376,0.0,20260505_192104_406
+mpox,reproduction_number,p9,all,,False,True,random,6,0,0,1.7817,0.0595,1.6652,1.8982,93.5,0.0141,0.0,20260505_184054_099
+mpox,serial_interval,p10,serial_interval,,False,True,random,6,1,0,11.4247,1.5571,8.3728,14.4765,91.8,11.2984,0.0,20260505_192104_444
+mpox,serial_interval,p11,serial_interval,,False,True,random,6,0,0,8.0266,0.4632,7.1188,8.9345,22.8,0.2878,0.2623,20260505_204630_616
+mpox,serial_interval,p5,serial_interval,,False,True,random,2,1,0,8.4758,1.1476,6.2265,10.7251,89.8,2.3758,0.0017,20260505_202716_175
 mpox,serial_interval,p6,serial_interval,,False,True,random,4,2,0,9.0018,1.1556,6.7368,11.2668,7.5,0.4349,0.3554,20260505_212441_744

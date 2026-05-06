@@ -1,0 +1,180 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-05-06 01:23:48
+研究问题: What is the basic reproduction number (R0) of mpox?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/reproduction_number/ground_truth/p9/project_9_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/reproduction_number/ground_truth/p9/experiments/5d_dsv4pro_v5/project_9_screened.csv
+模型配置: None/deepseek/deepseek-v4-pro
+批处理大小: 20
+批次并发: 3
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │     27   │    2.6%  │
+│ 🤔 Possible candidates   │    348   │   33.8%  │
+│ 😐 Unlikely candidates   │    654   │   63.6%  │
+│ ⚠️  Errors               │      0   │    0.0%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │   1029   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  3.74  │   92.2%  │ 17/35/28/37/912                 │
+│ Population      │  3.60  │   88.7%  │ 32/37/47/81/832                 │
+│ Location        │  2.77  │   64.7%  │ 95/123/145/226/440                 │
+│ Evidence        │  1.96  │   44.2%  │ 338/178/58/93/362                 │
+│ Parameter       │  0.29  │    3.9%  │ 883/72/34/ 3/37                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (27 篇)
+================================================================================
+
+1. PMID: 37325911 [Score: 4/4]
+   Title: Estimates of mpox effective reproduction number in Spain, April-August 2022.
+   Overall: The study is directly relevant: it provides original empirical estimates of the effective reproduction number of mpox in human populations in Spain, fully aligning with the research question on R0 of mpox.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+2. PMID: 36929727 [Score: 4/4]
+   Title: Anticipating the transmissibility of the 2022 mpox outbreak.
+   Overall: The study is highly relevant. It explicitly investigates the basic reproduction number (R0) of mpox using original empirical data from human populations in three European countries. The title, abstract, keywords, and MeSH terms all align perfectly with the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+3. PMID: 36319946 [Score: 4/4]
+   Title: Monkeypox: Early estimation of basic reproduction number R0 in Europe.
+   Overall: The study directly addresses the research question by estimating R0 for mpox in European human populations using original empirical data. All dimensions are explicitly and centrally evidenced.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+4. PMID: 37592305 [Score: 4/4]
+   Title: Mapping global zoonotic niche and interregional transmission risk of monkeypox: a retrospective observational study.
+   Overall: The study is highly relevant across all dimensions: it investigates monkeypox in human populations using global observational data and directly estimates effective reproduction numbers (Rt), a key transmission parameter closely related to R0. All scores are 4.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+5. PMID: 37097947 [Score: 4/4]
+   Title: Dynamical analysis of monkeypox transmission incorporating optimal vaccination and treatment with cost-effectiveness.
+   Overall: The study is highly relevant. It explicitly investigates monkeypox (disease relevance), concerns both human and animal populations (population relevance), is set in a real-world outbreak context (location relevance), presents original mathematical modeling (original evidence), and directly calculates the basic reproduction number (R0) for humans and animals as a central outcome (target parameter relevance).
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+6. PMID: 36271480 [Score: 4/4]
+   Title: Estimation of the serial interval of monkeypox during the early outbreak in 2022.
+   Overall: The study is highly relevant. It explicitly investigates monkeypox in a human population using original global contact tracing data. Crucially, the abstract states it 'calculated the reproduction number of 1.33', directly addressing the target parameter. The MeSH terms and keywords further confirm the focus on reproduction number and serial interval.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+7. PMID: 36829116 [Score: 4/4]
+   Title: Possibility of mpox viral transmission and control from high-risk to the general population: a modeling study.
+   Overall: The study is highly relevant. It explicitly investigates mpox transmission in human populations using a modeling approach. Crucially, it reports an original estimate of the effective reproduction number (Reff), which is a direct match for the target parameter (R0/Rt). The only minor limitation is that it reports Reff rather than the basic reproduction number R0, but this is a closely related and acceptable parameter for the research question.
+   维度评分: D=4 P=4 L=3 E=4 Param=4
+
+8. PMID: 37348377 [Score: 4/4]
+   Title: A pair formation model with recovery: Application to mpox.
+   Overall: The study is highly relevant: it directly estimates the basic reproduction number of mpox using original empirical data from human populations in real-world settings (global and Canadian). All dimensions score 4.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+9. PMID: 36137054 [Score: 4/4]
+   Title: Heavy-tailed sexual contact networks and monkeypox epidemiology in the global outbreak, 2022.
+   Overall: All dimensions are highly relevant: the paper directly addresses mpox, focuses on human populations, uses real-world outbreak data, reports original model-based estimates, and explicitly discusses R0. No exclusion reasons detected.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+10. PMID: 37057838 [Score: 4/4]
+   Title: Monkeypox in Latin America and the Caribbean: assessment of the first 100 days of the 2022 outbreak.
+   Overall: The study is highly relevant to the research question. It investigates the 2022 mpox outbreak in Latin America and the Caribbean, focusing on human populations in real-world settings. It provides original empirical estimates of the effective reproductive number (Rt), directly addressing the target parameter. All dimensions score 3 or 4, indicating strong inclusion suitability.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+11. PMID: 36875378 [Score: 4/4]
+   Title: Mathematical epidemiological modeling and analysis of monkeypox dynamism with non-pharmaceutical intervention using real data from United Kingdom.
+   Overall: The study directly addresses the research question by estimating the basic reproduction number (R0) of mpox using human case data from the United Kingdom. It is original empirical research with explicit reporting of the target parameter.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+12. PMID: 23658504 [Score: 4/4]
+   Title: Inference of R(0) and transmission heterogeneity from the size distribution of stuttering chains.
+   Overall: This study develops and applies a method to estimate the basic reproduction number (R0) and transmission heterogeneity from stuttering chain data, using human monkeypox cases from the Democratic Republic of Congo. It directly addresses the research question by providing original empirical estimates of R0 for mpox in a real-world setting. All relevance dimensions are strongly satisfied, making the paper highly pertinent.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+13. PMID: 36637825 [Score: 4/4]
+   Title: Estimated Testing, Tracing, and Vaccination Targets for Containment of the US Mpox Outbreak.
+   Overall: The study is highly relevant: it focuses on mpox in a human population (US MSM), uses a decision analytic model to estimate the effective reproduction number, and provides original empirical estimates. It directly addresses the research question on R0 of mpox.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+14. PMID: 35994726 [Score: 4/4]
+   Title: Early Estimates of Monkeypox Incubation Period, Generation Time, and Reproduction Number, Italy, May-June 2022.
+   Overall: The study is highly relevant. It directly investigates monkeypox in a human population in Italy, reports original empirical data, and explicitly provides an estimate of the reproduction number (2.43). This directly addresses the research question on the basic reproduction number (R0) of mpox.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+15. PMID: 37703247 [Score: 4/4]
+   Title: Data-driven estimation of the instantaneous reproduction number and growth rates for the 2022 monkeypox outbreak in Europe.
+   Overall: The study is highly relevant. It directly addresses the research question by estimating the basic reproduction number (R0) for the 2022 mpox outbreak in Europe. The abstract explicitly states that the early-phase Rt estimate can be used as a proxy for R0 and provides numerical estimates for multiple countries. It is an original empirical study on human populations in a real-world geographic context.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+16. PMID: 37708908 [Score: 4/4]
+   Title: Transmission dynamics and effect of control measures on the 2022 outbreak of mpox among gay, bisexual, and other men who have sex with men in England: a mathematical modelling study.
+   Overall: The study directly addresses the research question by estimating R0 for mpox using original data from a human outbreak in England. All relevance dimensions are explicitly and centrally evidenced.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+17. PMID: 38008354 [Score: 4/4]
+   Title: Assessing the transmission potential of mpox in East Asia during 2022-2023: A focus on Taiwan, China, Japan, and South Korea.
+   Overall: The study directly addresses the research question by estimating the effective reproduction number (Rt) of mpox in human populations across four East Asian countries using original empirical data and modeling. All relevance dimensions are fully satisfied.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+18. PMID: 36772860 [Score: 4/4]
+   Title: Adaptive changes in sexual behavior in the high-risk population in response to human monkeypox transmission in Canada can help control the outbreak: Insights from a two-group, two-route epidemic model.
+   Overall: The study directly addresses the research question by estimating the basic reproduction number of mpox in a human population in Canada using an original mathematical model. All relevance dimensions are strongly satisfied, making it highly pertinent for inclusion.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+19. PMID: 35817231 [Score: 4/4]
+   Title: Estimation of local transmissibility in the early phase of monkeypox epidemic in 2022.
+   Overall: The study directly estimates the basic reproduction number (R0) of monkeypox using original empirical data from human populations in three countries. All dimensions are explicitly and centrally addressed, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+20. PMID: 36342036 [Score: 4/4]
+   Title: Early estimates of the incidence trend and the reproductive number of the monkeypox epidemic in Brazil.
+   Overall: The study directly addresses monkeypox in a human population in Brazil, uses original empirical data, and estimates the effective reproductive number (Rt), making it highly relevant to the research question on mpox reproduction numbers.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+21. PMID: 36761122 [Score: 4/4]
+   Title: Monkeypox outbreaks in the context of the COVID-19 pandemic: Network and clustering analyses of global risks and modified SEIR prediction of epidemic trends.
+   Overall: The study is highly relevant: it directly investigates monkeypox in human populations with global geographic scope, presents original empirical modeling, and explicitly reports basic reproduction number (R0) estimates.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+22. PMID: 36845803 [Score: 4/4]
+   Title: The study of human monkeypox disease in 2022 using the epidemic models: herd immunity and the basic reproduction number case.
+   Overall: The study directly estimates the basic reproduction number (R0) of human mpox during the 2022 outbreak using an SIR model and provides original empirical results. It is highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+23. PMID: 36560564 [Score: 4/4]
+   Title: Transmission Dynamics of Monkeypox Virus in Nigeria during the Current COVID-19 Pandemic and Estimation of Effective Reproduction Number.
+   Overall: This study is highly relevant. It explicitly focuses on monkeypox, uses human case data from Nigeria, and directly estimates the effective reproduction number (Rt), which is a key target parameter for the research question on R0. The study appears to be original empirical research.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+24. PMID: 38140170 [Score: 4/4]
+   Title: Comparative Epidemiological Assessment of Monkeypox Infections on a Global and Continental Scale Using Logistic and Gompertz Mathematical Models.
+   Overall: The study directly addresses the research question by estimating R0 for mpox using original empirical data from human populations in real-world geographic settings. All dimensions are highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+25. PMID: 36248765 [Score: 4/4]
+   Title: Monkeypox: EpiMPX Surveillance System and Open Data with a Special Focus on European and Italian Epidemic.
+   Overall: The study is highly relevant: it investigates monkeypox in human populations across real-world European locations and directly estimates the reproduction number Rt. While the primary contribution is a surveillance system, the inclusion of original Rt estimates makes it likely to contain useful data for the review. The lack of a specific primary-research publication type slightly tempers the evidence score, but the study remains a strong candidate.
+   维度评分: D=4 P=4 L=4 E=3 Param=4
+
+26. PMID: 36573222 [Score: 4/4]
+   Title: Study and prediction of the 2022 global monkeypox epidemic.
+   Overall: The study directly estimates the basic reproduction number (R0) of mpox using a global SEIR model fitted to real-world outbreak data, making it highly relevant to the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+27. PMID: 37229503 [Score: 4/4]
+   Title: Mathematical Modeling and backward bifurcation in monkeypox disease under real observed data.
+   Overall: The study directly addresses the research question by estimating the basic reproduction number (R0) of monkeypox using real human outbreak data from the USA. It is a primary modeling study with explicit R0 computation, making it highly relevant.
+   维度评分: D=4 P=4 L=4 E=4 Param=4

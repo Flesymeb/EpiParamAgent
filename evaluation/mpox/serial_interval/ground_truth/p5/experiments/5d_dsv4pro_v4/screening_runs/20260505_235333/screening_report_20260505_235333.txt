@@ -1,0 +1,80 @@
+================================================================================
+LLM文献筛选详细报告
+================================================================================
+
+生成时间: 2026-05-05 23:53:33
+研究问题: What are the serial intervals and generation time of mpox?
+输入文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/serial_interval/ground_truth/p5/project_5_raw.csv
+输出文件: /home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/evaluation/mpox/serial_interval/ground_truth/p5/experiments/5d_dsv4pro_v4/project_5_screened.csv
+模型配置: None/deepseek/deepseek-v4-pro
+批处理大小: 20
+批次并发: 5
+Full-text: need_fulltext=0 | screened=0
+
+================================================================================
+📊 筛选结果统计
+================================================================================
+
+┌─────────────────────────┬──────────┬──────────┐
+│ 类别                     │   数量    │   占比    │
+├─────────────────────────┼──────────┼──────────┤
+│ 💪 Strong candidates     │      7   │    8.2%  │
+│ 🤔 Possible candidates   │      6   │    7.1%  │
+│ 😐 Unlikely candidates   │     39   │   45.9%  │
+│ ⚠️  Errors               │     33   │   38.8%  │
+├─────────────────────────┼──────────┼──────────┤
+│ 📝 总记录数              │     85   │ 100.0%   │
+└─────────────────────────┴──────────┴──────────┘
+
+================================================================================
+📊 各维度相关性评分统计 (0-4分制)
+================================================================================
+
+┌─────────────────┬─────────┬──────────┬────────────────────────────────┐
+│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │
+├─────────────────┼─────────┼──────────┼────────────────────────────────┤
+│ Disease (Variant) │  2.25  │   55.3%  │ 36/ 1/ 1/ 0/47                 │
+│ Population      │  2.14  │   52.9%  │ 38/ 1/ 1/ 1/44                 │
+│ Location        │  1.76  │   41.2%  │ 40/ 4/ 6/ 6/29                 │
+│ Evidence        │  1.45  │   35.3%  │ 48/ 7/ 0/ 4/26                 │
+│ Parameter       │  0.93  │   12.9%  │ 47/18/ 9/ 1/10                 │
+└─────────────────┴─────────┴──────────┴────────────────────────────────┘
+
+================================================================================
+💪 Strong Candidates (7 篇)
+================================================================================
+
+1. PMID: 36323407 [Score: 4/4]
+   Title: Transmission dynamics of monkeypox in the United Kingdom: contact tracing study.
+   Overall: 该研究基于英国接触者追踪数据，直接估计猴痘的序列间隔和潜伏期，完全符合研究问题的所有关键维度（疾病、人群、地理、原始证据、目标参数）。
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+2. PMID: 40328893 [Score: 4/4]
+   Title: Exploring the epidemiological characteristics of Mpox in the Arab Gulf countries.
+   Overall: The study is highly relevant. It explicitly investigates mpox in a human population in a real-world setting (Arab Gulf Countries) using original empirical data. Crucially, the abstract directly states it estimates the mean serial interval, which is a target parameter of the research question.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+3. PMID: 38781950 [Score: 4/4]
+   Title: Incubation Period and Serial Interval of Mpox in 2022 Global Outbreak Compared with Historical Estimates.
+   Overall: The study is highly relevant. It explicitly investigates mpox in a global human outbreak context, reports original empirical estimates, and directly provides values for both the incubation period and the serial interval, which are the target parameters.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+4. PMID: 38063085 [Score: 4/4]
+   Title: Estimation of Incubation Period of Mpox during 2022 Outbreak in Pereira, Colombia.
+   Overall: This study directly estimates the incubation period of mpox using primary case data from a 2022 outbreak in Colombia. While the research question focuses on serial intervals and generation time, incubation period is a closely related transmission parameter and is explicitly included in the target parameter dimension. The study provides original empirical evidence in a relevant human population and geographic setting, making it highly relevant for understanding mpox transmission dynamics.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+5. PMID: 36863012 [Score: 4/4]
+   Title: Serial Interval and Incubation Period Estimates of Monkeypox Virus Infection in 12 Jurisdictions, United States, May-August 2022.
+   Overall: The study directly estimates serial interval and incubation period for monkeypox in a human population in the United States using original case-pair data. All dimensions are fully satisfied.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+6. PMID: 35994726 [Score: 4/4]
+   Title: Early Estimates of Monkeypox Incubation Period, Generation Time, and Reproduction Number, Italy, May-June 2022.
+   Overall: This study directly addresses monkeypox in humans, provides original empirical data from Italy, and estimates the generation time, making it highly relevant to the research question on generation time and serial intervals.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
+
+7. PMID: 39255234 [Score: 4/4]
+   Title: Epidemiologic Quantities for Monkeypox Virus Clade I from Historical Data with Implications for Current Outbreaks, Democratic Republic of the Congo.
+   Overall: The study is directly and centrally relevant to the research question. It provides original estimates of generation time and serial interval for mpox clade I in a human population in the Democratic Republic of the Congo, using primary analysis of historical outbreak data. All dimensions score 4.
+   维度评分: D=4 P=4 L=4 E=4 Param=4
