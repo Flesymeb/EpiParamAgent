@@ -1,0 +1,26 @@
+{
+  "experiment": "leads_mistral_strict_simple_20260506_185524",
+  "model": "zifeng-ai/leads-mistral-7b-v1",
+  "base_url": "http://127.0.0.1:8000/v1",
+  "profiles": [
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P10",
+    "P11",
+    "P12",
+    "P13",
+    "P14",
+    "P15",
+    "P16",
+    "P17"
+  ],
+  "temperature": 0.0,
+  "max_tokens": 64,
+  "concurrency": 20,
+  "limit": 0,
+  "response_format_json": false,
+  "created_at": "2026-05-06T18:58:56"
+}
