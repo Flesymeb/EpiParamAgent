@@ -161,5 +161,9 @@ evaluation/*/*/coding/p*/*.csv
 evaluation/*/*/screening/*.csv
 evaluation/*/*/screening/*.xlsx
 evaluation/*/*/ground_truth/*.csv
+evaluation/*/*/ground_truth/p*/experiments/
+evaluation/experiments/leads_p4_full/
+evaluation/experiments/leads_smoke/
+evaluation/experiments/*/screening/*/summary_with_ci.csv
 evaluation/_legacy/
 evaluation/*.zip
