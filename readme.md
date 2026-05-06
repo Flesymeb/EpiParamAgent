@@ -29,12 +29,14 @@ MetaAgent-Epi/
 │   ├── prompts/            # LLM prompt templates (5d, binary, peco, etc.)
 │   └── epidemiology/       # Epidemiological utilities
 ├── tools/                  # Standalone scripts and utilities
-│   ├── screening_prepare.py    # Build screening-ready datasets
-│   ├── screening_evaluation.py # Evaluate screening against ground truth
-│   ├── screening_report.py     # Generate academic reports
-│   ├── pubmed_manager.py       # PubMed batch operations
-│   ├── evaluate_coding.py      # Coding evaluation and pooling
-│   └── extract_coding.py       # Coding sheet extraction CLI
+│   └── scripts/
+│       ├── screening_prepare.py    # Build screening-ready datasets
+│       ├── screening_llm_batch.py  # Run screening for profiles or explicit CSVs
+│       ├── screening_evaluation.py # Evaluate screening against ground truth
+│       ├── screening_report.py     # Generate academic reports
+│       ├── pubmed_manager.py       # PubMed batch operations
+│       ├── evaluate_coding.py      # Coding evaluation and pooling
+│       └── extract_coding.py       # Coding sheet extraction CLI
 ├── configs/                # YAML configuration files
 │   ├── screening_profiles/     # Experiment profiles (per disease/parameter)
 │   ├── codebooks/              # Coding codebook definitions
@@ -59,8 +61,8 @@ Purpose:
 
 CLI commands:
 ```bash
-metaagent screening run --input papers.csv --output screened.csv --strategy peco
-metaagent screening run --input papers.csv --output screened.csv --strategy 5d --cascade
+python -m metaagent.cli screening run --input papers.csv --output screened.csv --research-question "..." --strategy peco
+python -m metaagent.cli screening run -p P4 --strategy 5d --provider lab --model deepseek-3.2
 ```
 
 ### `metaagent/coding/`
@@ -83,6 +85,12 @@ Runtime env is loaded from:
 2. `.env.local` -- machine-local secrets
 3. `configs/` -- YAML profiles and codebooks
 
+Module-specific LLM settings live in the root env file:
+`SCREENING_LLM_PROVIDER`, `SCREENING_LLM_MODEL`, `CODING_LLM_PROVIDER`, and
+`CODING_LLM_MODEL`. Provider profiles use variables such as
+`LAB_BASE_URL`, `LAB_API_KEY`, `LAB_MODEL`, `OPENROUTER_BASE_URL`, and
+`OPENROUTER_API_KEY`.
+
 ## Shared Infrastructure
 
 - `tools/common/`: runtime config and provenance helpers
@@ -92,9 +100,9 @@ Runtime env is loaded from:
 ## Canonical Workflow
 
 For screening experiments:
-1. Prepare raw dataset: `python tools/screening_prepare.py`
-2. Run screening: `metaagent screening run --input ... --output ...`
-3. Evaluate: `python tools/screening_evaluation.py`
+1. Prepare raw dataset: `python tools/scripts/screening_prepare.py`
+2. Run screening: `python -m metaagent.cli screening run --input ... --output ... --research-question "..."`
+3. Evaluate: `python tools/scripts/screening_evaluation.py`
 4. Analyze: open `workbench/`
 
 ## Legacy

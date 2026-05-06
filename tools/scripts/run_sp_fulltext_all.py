@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-"""
-Batch runner: --resume-sp-fulltext for all evaluation profiles (P4–P17, skip P9).
+"""Batch runner: --resume-sp-fulltext for all evaluation profiles.
 
 Runs each profile sequentially, captures stdout, parses the Second-stage summary
 block, and writes a consolidated metrics TSV to:
   evaluation/screening/GT_1/sp_fulltext_results.tsv
 
 Usage:
-  python dev/literature_search/scripts/cli/run_sp_fulltext_all.py [--project-root .]
-  python dev/literature_search/scripts/cli/run_sp_fulltext_all.py --dry-run
+  python tools/scripts/run_sp_fulltext_all.py [--project-root .]
+  python tools/scripts/run_sp_fulltext_all.py --dry-run
 """
 from __future__ import annotations
 
@@ -152,26 +151,28 @@ def main() -> None:
     args = parser.parse_args()
 
     project_root = Path(args.project_root).resolve()
-    python_exe = project_root / "dev" / "literature_search" / ".venv" / "Scripts" / "python.exe"
-    screening_script = project_root / "dev" / "literature_search" / "scripts" / "cli" / "screening_llm_batch.py"
+    python_exe = Path(sys.executable)
+    screening_script = project_root / "tools" / "scripts" / "screening_llm_batch.py"
     results_dir = project_root / "evaluation" / "screening" / args.disease / "GT_1"
     results_file = results_dir / RESULTS_FILENAME
     log_dir = results_dir / "sp_fulltext_logs"
 
     if not args.dry_run:
+        results_dir.mkdir(parents=True, exist_ok=True)
         log_dir.mkdir(parents=True, exist_ok=True)
 
     progress_file = results_dir / "sp_fulltext_progress.txt"
 
     def _log(msg: str) -> None:
         print(msg, flush=True)
-        with open(progress_file, "a", encoding="utf-8") as pf:
-            pf.write(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}\n")
+        if not args.dry_run:
+            with open(progress_file, "a", encoding="utf-8") as pf:
+                pf.write(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}\n")
 
     _log(f"=== Batch start: {datetime.now().isoformat()} ===")
     _log(f"Profiles to run: {args.profiles}")
-    _log(f"Results → {results_file}")
-    _log(f"Logs    → {log_dir}\n")
+    _log(f"Results -> {results_file}")
+    _log(f"Logs    -> {log_dir}\n")
 
     rows: list[dict[str, str]] = []
 
@@ -184,7 +185,7 @@ def main() -> None:
             "--profile", profile,
             "--resume-sp-fulltext",
         ]
-        _log(f"[{i}/{len(args.profiles)}] {'[DRY] ' if args.dry_run else ''}▶  {profile}  ({ts})")
+        _log(f"[{i}/{len(args.profiles)}] {'[DRY] ' if args.dry_run else ''}{profile}  ({ts})")
 
         if args.dry_run:
             print(f"      {' '.join(cmd)}\n", flush=True)
@@ -208,9 +209,9 @@ def main() -> None:
 
             if result.returncode != 0:
                 row["status"] = f"error_rc{result.returncode}"
-                _log(f"  ✗ exit code {result.returncode} — see {log_file.name}")
+                _log(f"  x exit code {result.returncode} - see {log_file.name}")
             else:
-                _log(f"  ✓ done — {log_file.name}")
+                _log(f"  done - {log_file.name}")
 
             metrics = parse_summary(result.stdout)
             row.update(metrics)
@@ -223,12 +224,12 @@ def main() -> None:
             dfp  = metrics.get("d_fp", "?")
             chg  = metrics.get("label_changes", "?")
             gtc  = metrics.get("gt_label_changes", "?")
-            _log(f"  Recall {s1r}% → {fnr}%   Precision {s1p}% → {fnp}%")
+            _log(f"  Recall {s1r}% -> {fnr}%   Precision {s1p}% -> {fnp}%")
             _log(f"  ΔTP={dtp}  ΔFP={dfp}   label_changes={chg}  gt_affected={gtc}\n")
 
         except Exception as exc:
             row["status"] = f"exception: {exc}"
-            _log(f"  ✗ exception: {exc}\n")
+            _log(f"  x exception: {exc}\n")
 
         rows.append(row)
 

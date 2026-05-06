@@ -31,7 +31,7 @@ def init_llm():
     # If the API endpoint is in NO_PROXY (e.g. internal 10.x.x.x), bypass the
     # system SOCKS proxy entirely; otherwise let httpx pick up env proxy settings.
     no_proxy = os.environ.get("NO_PROXY") or os.environ.get("no_proxy") or ""
-    trust_env = not _matches_no_proxy(cfg.api_base or "", no_proxy)
+    trust_env = cfg.provider not in {"lab", "lab2"} and not _matches_no_proxy(cfg.api_base or "", no_proxy)
 
     http_client = httpx.Client(
         verify=cfg.verify_ssl,

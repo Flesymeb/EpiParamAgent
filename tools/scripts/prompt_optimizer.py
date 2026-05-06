@@ -4,7 +4,7 @@ Iteratively compresses the 5D system prompt (title+abstract stage) while keeping
 recall above a minimum threshold, validated on a small sample of GT + random negatives.
 
 Usage:
-    python scripts/cli/prompt_optimizer.py \\
+    python tools/scripts/prompt_optimizer.py \\
         --project-root /path/to/MetaAgent-Epi \\
         --profile P12 \\
         --experiment 5d_gpt54 \\

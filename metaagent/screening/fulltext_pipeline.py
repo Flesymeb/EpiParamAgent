@@ -155,7 +155,7 @@ def convert_pdfs_to_markdown(
 
     total_pdfs = sum(1 for info in pmid_to_pdf.values() if info.get("pdf_path"))
     if total_pdfs:
-        print(f"Starting full-text conversion (MinerU): {total_pdfs}  papers | 输出目录: {MD_CACHE_DIR}")
+        print(f"Starting full-text conversion (MinerU): {total_pdfs} papers | output dir: {MD_CACHE_DIR}")
 
     results: dict[str, dict[str, str]] = {}
     converted = 0
@@ -220,7 +220,7 @@ def prepare_fulltext_candidates(
 ) -> tuple[list[dict[str, Any]], dict[str, dict[str, str]], dict[str, dict[str, str]]]:
     """Prepare markdown-backed papers for full-text screening."""
     total_fulltext = len({id(p) for p in papers_without_abstract + fulltext_cached})
-    print(f"\nStarting full-text screening pipeline ({total_fulltext} 篇)...")
+    print(f"\nStarting full-text screening pipeline ({total_fulltext} papers)...")
     ensure_fulltext_cache_dirs()
 
     cached_pmids = {
@@ -262,7 +262,7 @@ def prepare_fulltext_candidates(
     if pmids:
         pdf_need = [pmid for pmid in pmids if not (PDF_CACHE_DIR / f"PMID_{pmid}.pdf").exists()]
         if pdf_need:
-            print(f"Starting full-text download (PDF) | 输出目录: {PDF_CACHE_DIR}")
+            print(f"Starting full-text download (PDF) | output dir: {PDF_CACHE_DIR}")
         else:
             print("PDF cache hit, no download needed.")
         pdf_results = download_pdfs_batch(

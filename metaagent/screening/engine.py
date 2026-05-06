@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import csv
+import os
 import time
 from pathlib import Path
 from typing import Any, Optional
@@ -26,6 +27,14 @@ from metaagent.screening.models import (
     resolve_stage_mode,
 )
 from metaagent.screening.prompt_loader import PROMPT_FILES, load_prompt_templates
+
+
+def _matches_no_proxy(url: str, no_proxy: str) -> bool:
+    """Return True when the URL host matches a NO_PROXY entry."""
+    if not url or not no_proxy:
+        return False
+    host = url.split("//")[-1].split("/")[0].split(":")[0]
+    return any(host.endswith(entry.strip()) for entry in no_proxy.split(",") if entry.strip())
 
 
 def load_ground_truth_pmids(gt_file: Path) -> set[str]:
@@ -52,34 +61,68 @@ def load_ground_truth_pmids(gt_file: Path) -> set[str]:
     return gt_pmids
 
 
-def init_llm_model(model_override: str | None = None) -> Any:
+def init_llm_model(
+    model_override: str | None = None,
+    provider_override: str | None = None,
+) -> Any:
     """Initialize screening model from shared runtime config.
 
     Args:
         model_override: If provided, overrides the model name from env/config.
             Useful for running baseline comparisons across multiple models.
+        provider_override: Optional provider profile override, e.g. openrouter,
+            lab, or lab2.
     """
-    cfg = load_llm_config(module_hint="screening")
+    params: dict[str, Any] = {}
+    if model_override:
+        params["llm_model"] = model_override
+    if provider_override:
+        params["llm_provider"] = provider_override
+    cfg = load_llm_config(params, module_hint="screening")
     if not cfg.api_key:
         raise ValueError(
-            "API key not found. Please set LLM_API_KEY in .env.local file"
+            "API key not found. Please set LLM_API_KEY or the selected "
+            "provider key in .env.local"
         )
 
-    llm_model = model_override or cfg.model or "openai/gpt-4o-mini"
+    llm_model = cfg.model or "openai/gpt-4o-mini"
     api_base = cfg.api_base or "https://api.openai.com/v1"
 
+    print(f"Provider: {cfg.provider or 'default'}")
     print(f"Model: {llm_model} @ {api_base}")
 
-    return ChatOpenAI(
-        model=llm_model,
-        temperature=cfg.temperature,
-        api_key=cfg.api_key,
-        base_url=api_base,
-        max_retries=3,
-        request_timeout=cfg.timeout_s,
-        streaming=cfg.force_streaming,
-        max_tokens=cfg.max_tokens,
+    no_proxy = os.environ.get("NO_PROXY") or os.environ.get("no_proxy") or ""
+    trust_env = cfg.provider not in {"lab", "lab2"} and not _matches_no_proxy(api_base, no_proxy)
+    http_client = httpx.Client(
+        verify=cfg.verify_ssl,
+        timeout=cfg.timeout_s,
+        trust_env=trust_env,
     )
+    http_async_client = httpx.AsyncClient(
+        verify=cfg.verify_ssl,
+        timeout=cfg.timeout_s,
+        trust_env=trust_env,
+    )
+
+    kwargs: dict[str, Any] = {
+        "model": llm_model,
+        "temperature": cfg.temperature,
+        "api_key": cfg.api_key,
+        "base_url": api_base,
+        "max_retries": 3,
+        "request_timeout": cfg.timeout_s,
+        "streaming": cfg.force_streaming,
+        "max_tokens": cfg.max_tokens,
+        "http_client": http_client,
+        "http_async_client": http_async_client,
+        "http_socket_options": (),
+    }
+    if "openrouter.ai" in api_base and "minimax/" not in llm_model.lower():
+        # Some OpenRouter reasoning models otherwise return reasoning-only
+        # payloads through the OpenAI-compatible API.
+        kwargs["reasoning"] = {"exclude": True}
+
+    return ChatOpenAI(**kwargs)
 
 
 
@@ -267,9 +310,6 @@ async def screen_papers_batch_async(
         }
 
     system_text = system_text.format(**fmt_kwargs)
-    template = ChatPromptTemplate.from_messages(
-        [("system", system_text), ("human", user_text)]
-    )
     if is_peco:
         output_schema = PECODecision
     elif is_binary:
@@ -280,8 +320,16 @@ async def screen_papers_batch_async(
     # Use JSON mode instead of function calling (works with more proxies/models)
     json_schema = output_schema.model_json_schema()
     schema_hint = _build_json_schema_hint(output_schema)
-    system_text += f"\n\nYou MUST respond with a single JSON object matching this schema. Output valid JSON only, no other text.\n{schema_hint}"
+    escaped_schema_hint = schema_hint.replace("{", "{{").replace("}", "}}")
+    system_text += (
+        "\n\nYou MUST respond with a single JSON object matching this schema. "
+        "Output valid JSON only, no other text.\n"
+        f"{escaped_schema_hint}"
+    )
 
+    template = ChatPromptTemplate.from_messages(
+        [("system", system_text), ("human", user_text)]
+    )
     structured_llm = llm_model.bind(response_format={"type": "json_object"})
 
     all_prompts: list[tuple[dict[str, Any], Any]] = []
@@ -344,21 +392,14 @@ async def screen_papers_batch_async(
                         continue
                     decision, cost = result
                     _write_cost(paper, cost)
-                    # Parse JSON response from AIMessage into Pydantic model
-                    content_str = decision.content if hasattr(decision, 'content') else str(decision)
-                    parsed = _parse_json_result(content_str, output_schema)
-                    if isinstance(parsed, BinaryDecision):
-                        _write_binary_result(paper, parsed)
-                    elif isinstance(parsed, PECODecision):
-                        _write_peco_result(paper, parsed)
-                    else:
-                        _write_structured_result(
-                            paper,
-                            parsed,
-                            thresholds=config.get("thresholds"),
-                            stage_mode=stage_mode,
-                            evidence_floor=evidence_floor,
-                        )
+                    parsed = _coerce_structured_result(decision, output_schema)
+                    _write_parsed_result(
+                        paper,
+                        parsed,
+                        thresholds=config.get("thresholds"),
+                        stage_mode=stage_mode,
+                        evidence_floor=evidence_floor,
+                    )
 
                 strong_count = sum(
                     1 for p in batch_papers if p.get("llm_suggest") == "strong_candidate"
@@ -392,21 +433,14 @@ async def screen_papers_batch_async(
                             _write_cost(paper, cost)
                         else:
                             llm_result = raw
-                        # Parse JSON response from AIMessage
-                        content_str = llm_result.content if hasattr(llm_result, 'content') else str(llm_result)
-                        parsed = _parse_json_result(content_str, output_schema)
-                        if isinstance(parsed, BinaryDecision):
-                            _write_binary_result(paper, result)
-                        elif isinstance(result, PECODecision):
-                            _write_peco_result(paper, result)
-                        else:
-                            _write_structured_result(
-                                paper,
-                                result,
-                                thresholds=config.get("thresholds"),
-                                stage_mode=stage_mode,
-                                evidence_floor=evidence_floor,
-                            )
+                        parsed = _coerce_structured_result(llm_result, output_schema)
+                        _write_parsed_result(
+                            paper,
+                            parsed,
+                            thresholds=config.get("thresholds"),
+                            stage_mode=stage_mode,
+                            evidence_floor=evidence_floor,
+                        )
                     except Exception as e2:
                         async with print_lock:
                             print(
@@ -425,6 +459,36 @@ async def screen_papers_batch_async(
         f"Done: {total} papers in {elapsed_total/60:.1f}min ({rate_total:.1f}/s)"
     )
     return papers
+
+
+def _coerce_structured_result(result: Any, output_schema: type) -> Any:
+    """Normalize provider responses before writing screening fields."""
+    if isinstance(result, (BinaryDecision, ScreeningDecision, PECODecision)):
+        return result
+    content_str = getattr(result, "content", "") or str(result)
+    return _parse_json_result(content_str, output_schema)
+
+
+def _write_parsed_result(
+    paper: dict[str, Any],
+    parsed: Any,
+    *,
+    thresholds: dict[str, Any] | None,
+    stage_mode: str,
+    evidence_floor: int,
+) -> None:
+    if isinstance(parsed, BinaryDecision):
+        _write_binary_result(paper, parsed)
+    elif isinstance(parsed, PECODecision):
+        _write_peco_result(paper, parsed)
+    else:
+        _write_structured_result(
+            paper,
+            parsed,
+            thresholds=thresholds,
+            stage_mode=stage_mode,
+            evidence_floor=evidence_floor,
+        )
 
 
 def _write_structured_result(
@@ -602,6 +666,15 @@ def _parse_json_result(content: str, model_class: type) -> Any:
             remapped[k] = v
     data = remapped
 
+    normalized = {}
+    for k, v in list(data.items()):
+        nk = k.strip().lower().replace(" ", "_").replace("-", "_")
+        if nk in normalized and isinstance(v, dict) and isinstance(normalized[nk], dict):
+            normalized[nk].update(v)
+        else:
+            normalized[nk] = v
+    data = normalized
+
     # Remap "evidence" -> "justification" in nested objects (GLM output format)
     for key in list(data.keys()):
         if isinstance(data[key], dict):
@@ -622,13 +695,137 @@ def _parse_json_result(content: str, model_class: type) -> Any:
     # Convert flat scores (disease:4) to structured objects for 5D
     for dim_name in ["disease_relevance", "population_relevance",
                       "location_relevance", "original_evidence", "parameter_relevance"]:
-        if dim_name in data and isinstance(data[dim_name], (int, float)):
+        if dim_name in data and isinstance(data[dim_name], (int, float, str)):
+            try:
+                score = int(float(data[dim_name]))
+            except (TypeError, ValueError):
+                score = _score_from_word(str(data[dim_name]))
             data[dim_name] = {
-                "score": int(data[dim_name]),
+                "score": score,
                 "justification": data.get("overall_justification", ""),
             }
 
+    _remap_5d_aliases(data)
+    _convert_flat_5d_scores(data)
+    if model_class is ScreeningDecision:
+        _fill_missing_5d_dimensions(data)
+
     return model_class(**data)
+
+
+def _remap_5d_aliases(data: dict[str, Any]) -> None:
+    aliases = {
+        "disease": "disease_relevance",
+        "disease_relevancy": "disease_relevance",
+        "population": "population_relevance",
+        "population_relevancy": "population_relevance",
+        "location": "location_relevance",
+        "location_relevancy": "location_relevance",
+        "evidence": "original_evidence",
+        "evidence_relevance": "original_evidence",
+        "evidence_quality": "original_evidence",
+        "original_empirical_evidence": "original_evidence",
+        "original_evidence_score": "original_evidence",
+        "parameter": "parameter_relevance",
+        "parameter_relevancy": "parameter_relevance",
+        "target_parameter_relevance": "parameter_relevance",
+        "overall": "overall_score",
+        "overall_justify": "overall_justification",
+    }
+    for old_key, new_key in aliases.items():
+        if old_key in data and new_key not in data:
+            data[new_key] = data.pop(old_key)
+
+
+def _convert_flat_5d_scores(data: dict[str, Any]) -> None:
+    flat_map = {
+        "disease_score": "disease_relevance",
+        "disease_justification": "disease_relevance",
+        "population_score": "population_relevance",
+        "population_justification": "population_relevance",
+        "location_score": "location_relevance",
+        "location_justification": "location_relevance",
+        "evidence_score": "original_evidence",
+        "evidence_justification": "original_evidence",
+        "parameter_score": "parameter_relevance",
+        "parameter_justification": "parameter_relevance",
+    }
+    grouped: dict[str, dict[str, Any]] = {}
+    for key, value in list(data.items()):
+        dim = flat_map.get(key)
+        if not dim:
+            continue
+        grouped.setdefault(dim, {})
+        if key.endswith("_score"):
+            grouped[dim]["score"] = _coerce_score(value)
+        else:
+            grouped[dim]["justification"] = str(value)
+    for dim, value in grouped.items():
+        if "score" in value:
+            value.setdefault("justification", data.get("overall_justification", ""))
+            data[dim] = value
+
+    for dim in [
+        "disease_relevance",
+        "population_relevance",
+        "location_relevance",
+        "original_evidence",
+        "parameter_relevance",
+    ]:
+        if dim in data and isinstance(data[dim], dict):
+            obj = data[dim]
+            if "score" in obj:
+                obj["score"] = _coerce_score(obj["score"])
+            if "justification" not in obj:
+                obj["justification"] = str(
+                    obj.get("reason")
+                    or obj.get("evidence")
+                    or data.get("overall_justification", "")
+                )
+
+
+def _fill_missing_5d_dimensions(data: dict[str, Any]) -> None:
+    for dim in [
+        "disease_relevance",
+        "population_relevance",
+        "location_relevance",
+        "original_evidence",
+        "parameter_relevance",
+    ]:
+        if dim not in data:
+            data[dim] = {
+                "score": 2,
+                "justification": "The model did not explicitly assess this dimension.",
+            }
+    data.setdefault("overall_justification", "No overall justification provided.")
+    data.setdefault("confidence", 0.5)
+
+
+def _coerce_score(value: Any) -> int:
+    if isinstance(value, bool):
+        return 4 if value else 0
+    try:
+        return max(0, min(4, int(float(value))))
+    except (TypeError, ValueError):
+        return _score_from_word(str(value))
+
+
+def _score_from_word(value: str) -> int:
+    mapping = {
+        "high": 4,
+        "yes": 4,
+        "true": 4,
+        "medium": 3,
+        "moderate": 3,
+        "uncertain": 2,
+        "maybe": 2,
+        "low": 1,
+        "poor": 1,
+        "none": 0,
+        "no": 0,
+        "false": 0,
+    }
+    return mapping.get(value.strip().lower(), 2)
 
 
 def _mark_paper_error(paper: dict[str, Any], error: Exception) -> None:

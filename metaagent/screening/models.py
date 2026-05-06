@@ -37,40 +37,40 @@ class DimensionAssessment(BaseModel):
     """Assessment for a single screening dimension."""
 
     score: int = Field(
-        description="相关性评分 0-4 (0=不相关, 1=基本不相关, 2=不确定/可能相关, 3=比较相关, 4=高度相关)"
+        description="Relevance score from 0 to 4 (0=not relevant, 1=mostly not relevant, 2=uncertain/possibly relevant, 3=relevant, 4=highly relevant)"
     )
-    justification: str = Field(description="简要理由，1-2句话")
+    justification: str = Field(description="Brief justification in 1-2 sentences")
 
 
 class ScreeningDecision(BaseModel):
     """Structured multi-dimension output returned by the screening model."""
 
     disease_relevance: DimensionAssessment = Field(
-        description="疾病相关性: 是否研究目标疾病(COVID-19/SARS-CoV-2)"
+        description="Disease relevance: whether the paper studies the target disease/pathogen"
     )
     population_relevance: DimensionAssessment = Field(
-        description="人群相关性: 是否关注人类（非纯动物或体外研究）"
+        description="Population relevance: whether the paper concerns humans or human-derived data"
     )
     location_relevance: DimensionAssessment = Field(
-        description="地理相关性: 是否在真实地理环境中进行"
+        description="Location relevance: whether the study is situated in a real-world geographic setting"
     )
     original_evidence: DimensionAssessment = Field(
-        description="原始数据: 是否报告原始经验数据（非综述等）"
+        description="Original evidence: whether the paper reports original empirical data rather than only review/background content"
     )
     parameter_relevance: DimensionAssessment = Field(
-        description="目标参数相关性: 是否报告研究问题所关注的参数"
+        description="Target-parameter relevance: whether the paper reports the epidemiological parameter required by the research question"
     )
 
     overall_score: Optional[int] = Field(
         default=None,
-        description="整体相关性评分 0-4，由系统自动计算加权平均（Disease 30% + Parameter 30% + Evidence 25% + Population 10% + Location 5%）",
+        description="Overall relevance score from 0 to 4, computed from weighted dimension scores",
     )
-    overall_justification: str = Field(description="整体评估理由，2-3句话")
+    overall_justification: str = Field(description="Overall assessment in 2-3 sentences")
     confidence: Optional[float] = Field(
         default=None,
         ge=0.0,
         le=1.0,
-        description="置信度 0-1。反映各维度评分的信息充分程度。1.0=摘要直接覆盖所有维度，0.0=完全无法判断",
+        description="Confidence from 0 to 1. 1.0 means the text directly covers all dimensions; 0.0 means there is not enough information to judge.",
     )
 
     @model_validator(mode="after")

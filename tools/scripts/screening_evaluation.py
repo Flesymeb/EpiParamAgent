@@ -1,14 +1,13 @@
-"""
-筛选结果评估工具。
+"""Screening result evaluation tools.
 
-支持两种模式：
-1. profile 模式：--project-root + --profile
-2. 显式文件模式：直接传入 raw / screened / ground-truth 文件
+Supported modes:
+1. Profile mode: --project-root + --profile
+2. Explicit file mode: pass raw, screened, and ground-truth files directly.
 
-使用示例：
-    python scripts/cli/screening_evaluation.py search-coverage --project-root D:/repo/MetaAgent-Epi --profile P13
-    python scripts/cli/screening_evaluation.py screening-performance --project-root D:/repo/MetaAgent-Epi --profile P13
-    python scripts/cli/screening_evaluation.py retrieval-metrics --ground-truth outputs/raw.csv --retrieved-results outputs/retrieved.jsonl
+Examples:
+    python tools/scripts/screening_evaluation.py search-coverage --project-root /path/to/MetaAgent-Epi --profile P13
+    python tools/scripts/screening_evaluation.py screening-performance --project-root /path/to/MetaAgent-Epi --profile P13
+    python tools/scripts/screening_evaluation.py retrieval-metrics --ground-truth outputs/raw.csv --retrieved-results outputs/retrieved.jsonl
 """
 
 import argparse
@@ -20,8 +19,9 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Set, List, Tuple
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2].parent / "tools"))
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from tools.provenance import write_run_manifest
 from metaagent.screening.profile_registry import resolve_profile_paths
@@ -48,8 +48,7 @@ except (AttributeError, ValueError, OverflowError):
 
 
 def load_ground_truth_pmids(csv_file: Path) -> Dict[str, Dict]:
-    """
-    从ground truth CSV加载PMIDs
+    """Load PMIDs from a ground-truth CSV file.
 
     Returns:
         Dict[pmid -> {id, title, first_author, year, variant_focus}]
@@ -58,7 +57,7 @@ def load_ground_truth_pmids(csv_file: Path) -> Dict[str, Dict]:
     with open(csv_file, "r", encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            # 处理可能的BOM
+            # Handle a possible BOM in the PMID column name.
             pmid = None
             for key in row.keys():
                 if key is None:
@@ -83,7 +82,7 @@ def load_ground_truth_pmids(csv_file: Path) -> Dict[str, Dict]:
 
 
 def load_search_results(csv_file: Path) -> Set[str]:
-    """加载搜索结果的PMID集合"""
+    """Load the PMID set from search results."""
     pmids = set()
     with open(csv_file, "r", encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
@@ -95,8 +94,7 @@ def load_search_results(csv_file: Path) -> Set[str]:
 
 
 def load_screened_results(csv_file: Path) -> Dict[str, Dict]:
-    """
-    加载筛选结果
+    """Load screened results.
 
     Returns:
         Dict[pmid -> {llm_suggest, overall_score, dimension scores, ...}]
@@ -119,7 +117,7 @@ def load_screened_results(csv_file: Path) -> Dict[str, Dict]:
                     "title": row.get("Title", ""),
                     "screening_stage": row.get("screening_stage", "").strip(),
                     "screening_mode": row.get("screening_mode", "").strip(),
-                    # 5个核心维度评分
+                    # Five core dimension scores.
                     "disease_score": int(row.get("disease_score", "0") or "0"),
                     "population_score": int(row.get("population_score", "0") or "0"),
                     "location_score": int(row.get("location_score", "0") or "0"),
@@ -440,7 +438,7 @@ def write_threshold_sweep_tsv(
 
 
 def load_retrieved_jsonl(jsonl_file: Path) -> Set[str]:
-    """从JSONL文件加载检索到的PMIDs"""
+    """Load retrieved PMIDs from a JSONL file."""
     pmids = set()
     with open(jsonl_file, "r", encoding="utf-8") as f:
         for line in f:
@@ -699,7 +697,7 @@ def write_paper_summary_tsv(output_dir: Path, summary: Dict[str, float | int | s
 def evaluate_search_coverage(
     ground_truth: Dict[str, Dict], search_results: Set[str]
 ) -> Dict[str, float | int]:
-    """评估搜索策略对ground truth的覆盖率"""
+    """Evaluate search coverage against the ground truth."""
     print("\n" + "=" * 100)
     print("Search coverage analysis")
     print("=" * 100)
@@ -710,8 +708,8 @@ def evaluate_search_coverage(
 
     coverage = len(found) / total_gt * 100 if total_gt > 0 else 0
 
-    print(f"\nGround Truth总数: {total_gt} 篇")
-    print(f"搜索结果总数: {len(search_results)} 篇")
+    print(f"\nGround-truth count: {total_gt} papers")
+    print(f"Search-result count: {len(search_results)} papers")
     print(f"\nFound in search results: {len(found)} ({coverage:.1f}%)")
     print(
         f"Missing from search results: {len(not_found)} ({len(not_found)/total_gt*100:.1f}%)"
@@ -723,8 +721,8 @@ def evaluate_search_coverage(
         for i, pmid in enumerate(sorted(not_found), 1):
             gt = ground_truth[pmid]
             print(f"[{i}] PMID: {pmid} | {gt['first_author']} ({gt['year']})")
-            print(f"    变异株: {gt['variant_focus']}")
-            print(f"    标题: {gt['title']}")
+            print(f"    Variant focus: {gt['variant_focus']}")
+            print(f"    Title: {gt['title']}")
             print()
 
     return {
@@ -737,15 +735,14 @@ def evaluate_search_coverage(
 
 
 def meets_core_criteria(paper: Dict, threshold: int = 3) -> bool:
-    """
-    判断论文是否满足所有核心纳入标准
+    """Return whether a paper meets all core inclusion dimensions.
 
     Args:
-        paper: 论文数据（包含5个维度评分）
-        threshold: 每个维度的最低分数要求（默认3分=比较相关）
+        paper: Paper data with five dimension scores.
+        threshold: Minimum score required for each dimension.
 
     Returns:
-        True if 所有5个维度都 >= threshold
+        True if all five dimension scores are at or above the threshold.
     """
     dimensions = [
         "disease_score",
@@ -765,14 +762,14 @@ def evaluate_screening_performance(
     project_label: str = "",
     threshold_overrides: Dict[str, Dict[str, int]] | None = None,
 ) -> Dict[str, float | int | str]:
-    """评估LLM筛选效果（含混淆矩阵）"""
+    """Evaluate LLM screening performance, including confusion matrices."""
     applied_thresholds = None
     if threshold_overrides:
         screened, applied_thresholds = reclassify_screened_results(
             screened, threshold_overrides
         )
 
-    # 分类ground truth
+    # Classify ground-truth papers.
     strong = []
     possible = []
     unlikely = []
@@ -795,7 +792,7 @@ def evaluate_screening_performance(
 
     screened_count = len(screened)
 
-    # 非ground truth的分类
+    # Classify non-ground-truth papers.
     non_gt_pmids = set(screened.keys()) - set(ground_truth.keys())
     FP_strong = sum(
         1
@@ -813,11 +810,11 @@ def evaluate_screening_performance(
         if screened[pmid]["llm_suggest"] == "unlikely_candidate"
     )
 
-    TP = combined_relevant  # Ground truth被正确识别为相关
-    FN = len(unlikely) + len(not_found)  # Ground truth被错误标记为不相关
-    FP = FP_strong + FP_possible  # 非GT被错误标记为相关
+    TP = combined_relevant
+    FN = len(unlikely) + len(not_found)
+    FP = FP_strong + FP_possible
 
-    # 性能指标
+    # Performance metrics.
     sensitivity = TP / (TP + FN) if (TP + FN) > 0 else 0
     specificity = TN / (TN + FP) if (TN + FP) > 0 else 0
     precision = TP / (TP + FP) if (TP + FP) > 0 else 0
@@ -920,7 +917,7 @@ def evaluate_screening_performance(
         f"\nGround-truth breakdown (GT={total_gt} | Pool={screened_count})\n"
     )
     print(f"┌─────────────────────────────┬─────────┬─────────┐")
-    print(f"│ 类别                        │  数量   │  占比   │")
+    print(f"│ Category                    │  Count  │  Share  │")
     print(f"├─────────────────────────────┼─────────┼─────────┤")
     if total_gt == 0:
         print("│ Strong candidates           │  0     │   0.0%  │")
@@ -954,9 +951,8 @@ def evaluate_screening_performance(
     print(f"└─────────────────────────────┴─────────┴─────────┘")
 
     print(f"\n\nThree-class confusion matrix\n")
-    print("混淆矩阵:")
     print(f"┌─────────────────────────┬──────────────────┬──────────────────┐")
-    print(f"│                         │   实际相关(GT)   │   实际不相关     │")
+    print(f"│                         │ Actual GT relevant│ Actual non-GT    │")
     print(f"├─────────────────────────┼──────────────────┼──────────────────┤")
     print(
         f"│ Strong                 │      {len(strong):2d}          │      {FP_strong:2d}          │"
@@ -973,20 +969,20 @@ def evaluate_screening_performance(
 
     print(f"\n\nBinary confusion matrix (Strong+Possible = relevant)\n")
     print(f"┌─────────────────────────┬──────────────────┬──────────────────┐")
-    print(f"│                         │   实际相关(GT)   │   实际不相关     │")
+    print(f"│                         │ Actual GT relevant│ Actual non-GT    │")
     print(f"├─────────────────────────┼──────────────────┼──────────────────┤")
     print(
-        f"│ 预测相关(S+P)           │   TP = {TP:2d}        │   FP = {FP:2d}        │"
+        f"│ Predicted relevant      │   TP = {TP:2d}        │   FP = {FP:2d}        │"
     )
     print(f"├─────────────────────────┼──────────────────┼──────────────────┤")
     print(
-        f"│ 预测不相关(Unlikely)    │   FN = {FN:2d}        │   TN = {TN:2d}        │"
+        f"│ Predicted irrelevant    │   FN = {FN:2d}        │   TN = {TN:2d}        │"
     )
     print(f"└─────────────────────────┴──────────────────┴──────────────────┘")
 
     print(f"\nMetrics:")
     print(f"┌─────────────────────────────┬─────────┬─────────────────────────┐")
-    print(f"│ 指标                        │  数值   │  计算公式               │")
+    print(f"│ Metric                      │  Value  │  Formula                │")
     print(f"├─────────────────────────────┼─────────┼─────────────────────────┤")
     print(
         f"│ Recall                      │ {sensitivity:6.1%}  │ TP/(TP+FN) = {TP}/{TP+FN:2d}      │"
@@ -1039,9 +1035,9 @@ def evaluate_screening_performance(
 def evaluate_retrieval_metrics(
     ground_truth_pmids: Set[str], retrieved_pmids: Set[str]
 ) -> Dict[str, float | int]:
-    """评估检索结果的召回率和精确率"""
+    """Evaluate recall and precision for retrieval results."""
     print("\n" + "=" * 100)
-    print("📊 检索指标分析")
+    print("Retrieval metrics")
     print("=" * 100)
 
     tp = len(ground_truth_pmids & retrieved_pmids)
@@ -1056,14 +1052,14 @@ def evaluate_retrieval_metrics(
         else 0
     )
 
-    print(f"\nGround Truth: {len(ground_truth_pmids)} 篇")
-    print(f"检索结果: {len(retrieved_pmids)} 篇")
-    print(f"\nTP (命中): {tp}")
-    print(f"FP (误检): {fp}")
-    print(f"FN (漏检): {fn}")
-    print(f"\n📈 Recall (召回率): {recall:.1%}")
-    print(f"💎 Precision (精确率): {precision:.1%}")
-    print(f"🏆 F1-score: {f1:.1%}")
+    print(f"\nGround truth: {len(ground_truth_pmids)} papers")
+    print(f"Retrieved results: {len(retrieved_pmids)} papers")
+    print(f"\nTP: {tp}")
+    print(f"FP: {fp}")
+    print(f"FN: {fn}")
+    print(f"\nRecall: {recall:.1%}")
+    print(f"Precision: {precision:.1%}")
+    print(f"F1-score: {f1:.1%}")
 
     return {
         "ground_truth_count": len(ground_truth_pmids),
@@ -1079,65 +1075,68 @@ def evaluate_retrieval_metrics(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="筛选结果评估工具",
+        description="Screening result evaluation tools",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
 
-    subparsers = parser.add_subparsers(dest="command", help="子命令")
+    subparsers = parser.add_subparsers(dest="command", help="Subcommand")
 
     # search-coverage
-    search_parser = subparsers.add_parser("search-coverage", help="评估搜索覆盖率")
-    search_parser.add_argument("--project-root", default="", help="仓库根目录；与 --profile 配合使用时自动解析 evaluation 路径")
-    search_parser.add_argument("--profile", default="", help="实验 profile 名称，例如 P13")
-    search_parser.add_argument("--topic", default="", help="可选 topic 覆盖；默认使用 profile 自带 topic")
+    search_parser = subparsers.add_parser("search-coverage", help="Evaluate search coverage")
+    search_parser.add_argument("--project-root", default="", help="Repository root; used with --profile to resolve evaluation paths")
+    search_parser.add_argument("--profile", default="", help="Screening profile name, e.g. P13")
+    search_parser.add_argument("--disease", default="", help="Optional disease override, e.g. covid19 or mpox")
+    search_parser.add_argument("--topic", default="", help="Optional topic override; defaults to the profile topic")
     search_parser.add_argument(
-        "--ground-truth", default="", help="Ground truth CSV文件"
+        "--ground-truth", default="", help="Ground-truth CSV file"
     )
     search_parser.add_argument(
-        "--search-results", default="", help="搜索结果CSV文件"
+        "--search-results", default="", help="Search-results CSV file"
     )
 
     # screening-performance
-    screen_parser = subparsers.add_parser("screening-performance", help="评估筛选效果")
-    screen_parser.add_argument("--project-root", default="", help="仓库根目录；与 --profile 配合使用时自动解析 evaluation 路径")
-    screen_parser.add_argument("--profile", default="", help="实验 profile 名称，例如 P13")
-    screen_parser.add_argument("--topic", default="", help="可选 topic 覆盖；默认使用 profile 自带 topic")
+    screen_parser = subparsers.add_parser("screening-performance", help="Evaluate screening performance")
+    screen_parser.add_argument("--project-root", default="", help="Repository root; used with --profile to resolve evaluation paths")
+    screen_parser.add_argument("--profile", default="", help="Screening profile name, e.g. P13")
+    screen_parser.add_argument("--disease", default="", help="Optional disease override, e.g. covid19 or mpox")
+    screen_parser.add_argument("--topic", default="", help="Optional topic override; defaults to the profile topic")
     screen_parser.add_argument(
-        "--ground-truth", default="", help="Ground truth CSV文件"
+        "--ground-truth", default="", help="Ground-truth CSV file"
     )
     screen_parser.add_argument(
-        "--screened-results", default="", help="筛选结果CSV文件"
+        "--screened-results", default="", help="Screened-results CSV file"
     )
-    screen_parser.add_argument("--strong-disease-min", type=int, default=None, help="evaluation时 strong 的 disease 最低分")
-    screen_parser.add_argument("--strong-parameter-min", type=int, default=None, help="evaluation时 strong 的 parameter 最低分")
-    screen_parser.add_argument("--strong-evidence-min", type=int, default=None, help="evaluation时 strong 的 evidence 最低分")
-    screen_parser.add_argument("--strong-population-min", type=int, default=None, help="evaluation时 strong 的 population 最低分")
-    screen_parser.add_argument("--strong-location-min", type=int, default=None, help="evaluation时 strong 的 location 最低分")
-    screen_parser.add_argument("--possible-disease-min", type=int, default=None, help="evaluation时 possible 的 disease 最低分")
-    screen_parser.add_argument("--possible-parameter-min", type=int, default=None, help="evaluation时 possible 的 parameter 最低分")
-    screen_parser.add_argument("--possible-evidence-min", type=int, default=None, help="evaluation时 possible 的 evidence 最低分")
-    screen_parser.add_argument("--possible-population-min", type=int, default=None, help="evaluation时 possible 的 population 最低分")
-    screen_parser.add_argument("--possible-location-min", type=int, default=None, help="evaluation时 possible 的 location 最低分")
+    screen_parser.add_argument("--strong-disease-min", type=int, default=None, help="Minimum disease score for strong reclassification")
+    screen_parser.add_argument("--strong-parameter-min", type=int, default=None, help="Minimum parameter score for strong reclassification")
+    screen_parser.add_argument("--strong-evidence-min", type=int, default=None, help="Minimum evidence score for strong reclassification")
+    screen_parser.add_argument("--strong-population-min", type=int, default=None, help="Minimum population score for strong reclassification")
+    screen_parser.add_argument("--strong-location-min", type=int, default=None, help="Minimum location score for strong reclassification")
+    screen_parser.add_argument("--possible-disease-min", type=int, default=None, help="Minimum disease score for possible reclassification")
+    screen_parser.add_argument("--possible-parameter-min", type=int, default=None, help="Minimum parameter score for possible reclassification")
+    screen_parser.add_argument("--possible-evidence-min", type=int, default=None, help="Minimum evidence score for possible reclassification")
+    screen_parser.add_argument("--possible-population-min", type=int, default=None, help="Minimum population score for possible reclassification")
+    screen_parser.add_argument("--possible-location-min", type=int, default=None, help="Minimum location score for possible reclassification")
 
     # threshold-sweep
-    sweep_parser = subparsers.add_parser("threshold-sweep", help="按单个阈值轴做 evaluation 敏感性分析")
-    sweep_parser.add_argument("--project-root", default="", help="仓库根目录；与 --profile 配合使用时自动解析 evaluation 路径")
-    sweep_parser.add_argument("--profile", default="", help="实验 profile 名称，例如 P7")
-    sweep_parser.add_argument("--topic", default="", help="可选 topic 覆盖；默认使用 profile 自带 topic")
-    sweep_parser.add_argument("--ground-truth", default="", help="Ground truth CSV文件")
-    sweep_parser.add_argument("--screened-results", default="", help="筛选结果CSV文件")
-    sweep_parser.add_argument("--bucket", choices=["strong", "possible"], default="possible", help="扫描 strong 还是 possible 阈值")
-    sweep_parser.add_argument("--axis", choices=["disease", "parameter", "evidence", "population", "location"], required=True, help="扫描哪个维度阈值")
-    sweep_parser.add_argument("--values", default="1,2,3,4", help="阈值列表，逗号分隔，例如 2,3,4")
+    sweep_parser = subparsers.add_parser("threshold-sweep", help="Run one-axis threshold sensitivity analysis")
+    sweep_parser.add_argument("--project-root", default="", help="Repository root; used with --profile to resolve evaluation paths")
+    sweep_parser.add_argument("--profile", default="", help="Screening profile name, e.g. P7")
+    sweep_parser.add_argument("--disease", default="", help="Optional disease override, e.g. covid19 or mpox")
+    sweep_parser.add_argument("--topic", default="", help="Optional topic override; defaults to the profile topic")
+    sweep_parser.add_argument("--ground-truth", default="", help="Ground-truth CSV file")
+    sweep_parser.add_argument("--screened-results", default="", help="Screened-results CSV file")
+    sweep_parser.add_argument("--bucket", choices=["strong", "possible"], default="possible", help="Threshold bucket to sweep")
+    sweep_parser.add_argument("--axis", choices=["disease", "parameter", "evidence", "population", "location"], required=True, help="Dimension threshold to sweep")
+    sweep_parser.add_argument("--values", default="1,2,3,4", help="Comma-separated threshold values, e.g. 2,3,4")
 
     # retrieval-metrics
-    retrieval_parser = subparsers.add_parser("retrieval-metrics", help="评估检索指标")
+    retrieval_parser = subparsers.add_parser("retrieval-metrics", help="Evaluate retrieval metrics")
     retrieval_parser.add_argument(
-        "--ground-truth", required=True, help="Ground truth CSV文件"
+        "--ground-truth", required=True, help="Ground-truth CSV file"
     )
     retrieval_parser.add_argument(
-        "--retrieved-results", required=True, help="检索结果JSONL文件"
+        "--retrieved-results", required=True, help="Retrieved-results JSONL file"
     )
 
     args = parser.parse_args()
@@ -1152,6 +1151,7 @@ def main():
                 project_root=args.project_root,
                 profile_name=args.profile,
                 topic=args.topic or None,
+                disease=args.disease or None,
             )
             gt_file = paths.ground_truth_file
             search_file = paths.raw_file
@@ -1174,6 +1174,7 @@ def main():
             params={
                 "command": args.command,
                 "profile": getattr(args, "profile", ""),
+                "disease": getattr(args, "disease", ""),
                 "topic": getattr(args, "topic", ""),
             },
             inputs=[gt_file, search_file],
@@ -1188,6 +1189,7 @@ def main():
                 project_root=args.project_root,
                 profile_name=args.profile,
                 topic=args.topic or None,
+                disease=args.disease or None,
             )
             gt_file = paths.ground_truth_file
             screened_file = paths.screened_file
@@ -1219,6 +1221,7 @@ def main():
             params={
                 "command": args.command,
                 "profile": getattr(args, "profile", ""),
+                "disease": getattr(args, "disease", ""),
                 "topic": getattr(args, "topic", ""),
                 "threshold_overrides": threshold_overrides or {},
             },
@@ -1235,6 +1238,7 @@ def main():
                 project_root=args.project_root,
                 profile_name=args.profile,
                 topic=args.topic or None,
+                disease=args.disease or None,
             )
             gt_file = paths.ground_truth_file
             screened_file = paths.screened_file
@@ -1275,6 +1279,7 @@ def main():
             params={
                 "command": args.command,
                 "profile": getattr(args, "profile", ""),
+                "disease": getattr(args, "disease", ""),
                 "topic": getattr(args, "topic", ""),
                 "bucket": args.bucket,
                 "axis": args.axis,

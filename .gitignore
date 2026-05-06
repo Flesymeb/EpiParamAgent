@@ -154,8 +154,23 @@ metaagent/coding/.env.local
 .env.local
 .env
 
-# Evaluation — track structure only, ignore run data
+# Evaluation — track curated summaries and ground truth, ignore run data
+evaluation/experiments/
+evaluation/**/experiments/
+evaluation/**/screening_logs/
+evaluation/**/screening_runs/
+evaluation/**/sp_fulltext_logs/
+evaluation/**/*.log
+evaluation/**/*.docx
+evaluation/**/*_predictions.jsonl
+evaluation/**/predictions.jsonl
+evaluation/**/*_screened.csv
+evaluation/**/screened_*.csv
+evaluation/**/*_backup_*.csv
+evaluation/**/run_manifest_*.json
+evaluation/**/paper_summary.tsv
 evaluation/*/*/coding/p*/coding_runs/
+evaluation/*/*/*/coding/p*/coding_runs/
 evaluation/*/*/coding/p*/*.json
 evaluation/*/*/coding/p*/*.csv
 evaluation/*/*/screening/*.csv

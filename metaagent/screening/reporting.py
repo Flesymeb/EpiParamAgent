@@ -32,6 +32,8 @@ def save_screening_outputs(
     fulltext_errors: list[dict[str, str]],
     strategy: str = "5d",
     experiment: str | None = None,
+    llm_provider: str | None = None,
+    llm_model: str | None = None,
 ) -> tuple[Path, Path, Path, Path]:
     """Persist screened CSV, detailed report, and run manifest."""
     output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -61,6 +63,14 @@ def save_screening_outputs(
     unlikely = [p for p in papers if p.get("llm_suggest") == "unlikely_candidate"]
     errors = [p for p in papers if p.get("llm_suggest") == "error"]
 
+    llm_cfg = load_llm_config(
+        {
+            "llm_provider": llm_provider,
+            "llm_model": llm_model,
+        },
+        module_hint="screening",
+    )
+
     log_dir = output_file.parent / "screening_logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_file = log_dir / f"screening_report_{timestamp}.txt"
@@ -78,11 +88,11 @@ def save_screening_outputs(
         possible=possible,
         unlikely=unlikely,
         errors=errors,
+        llm_cfg=llm_cfg,
     )
     with open(log_file, "w", encoding="utf-8") as f:
         f.write("\n".join(report_lines))
 
-    llm_cfg = load_llm_config(module_hint="screening")
     mineru_cfg = load_mineru_config(module_hint="screening")
     manifest_path = write_run_manifest(
         output_dir=log_dir,
@@ -178,6 +188,7 @@ def _build_report_lines(
     possible: list[dict[str, Any]],
     unlikely: list[dict[str, Any]],
     errors: list[dict[str, Any]],
+    llm_cfg: Any,
 ) -> list[str]:
     report_lines: list[str] = []
     report_lines.append("=" * 80)
@@ -185,12 +196,11 @@ def _build_report_lines(
     report_lines.append("=" * 80)
     report_lines.append(f"\nGenerated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     report_lines.append(f"Research question: {research_question}")
-    report_lines.append(f"输入文件: {input_file}")
-    report_lines.append(f"输出文件: {output_file}")
-    llm_cfg = load_llm_config(module_hint="screening")
-    report_lines.append(f"模型配置: {llm_cfg.provider}/{llm_cfg.model}")
-    report_lines.append(f"批处理大小: {batch_size}")
-    report_lines.append(f"批次并发: {batch_concurrency}")
+    report_lines.append(f"Input file: {input_file}")
+    report_lines.append(f"Output file: {output_file}")
+    report_lines.append(f"Model config: {llm_cfg.provider}/{llm_cfg.model}")
+    report_lines.append(f"Batch size: {batch_size}")
+    report_lines.append(f"Batch concurrency: {batch_concurrency}")
     report_lines.append(
         "Full-text: "
         f"need_fulltext={fulltext_needed_count} | "
@@ -198,10 +208,10 @@ def _build_report_lines(
     )
 
     report_lines.append("\n" + "=" * 80)
-    report_lines.append("📊 筛选结果统计")
+    report_lines.append("Screening Result Summary")
     report_lines.append("=" * 80)
     report_lines.append("\n┌─────────────────────────┬──────────┬──────────┐")
-    report_lines.append("│ 类别                     │   数量    │   占比    │")
+    report_lines.append("│ Category                │ Count    │ Share    │")
     report_lines.append("├─────────────────────────┼──────────┼──────────┤")
     report_lines.append(
         f"│ 💪 Strong candidates     │   {len(strong):4d}   │  {len(strong)/len(papers)*100:5.1f}%  │"
@@ -216,7 +226,7 @@ def _build_report_lines(
         f"│ ⚠️  Errors               │   {len(errors):4d}   │  {len(errors)/len(papers)*100:5.1f}%  │"
     )
     report_lines.append("├─────────────────────────┼──────────┼──────────┤")
-    report_lines.append(f"│ 📝 总记录数              │   {len(papers):4d}   │ 100.0%   │")
+    report_lines.append(f"│ Total records           │   {len(papers):4d}   │ 100.0%   │")
     report_lines.append("└─────────────────────────┴──────────┴──────────┘")
 
     if fulltext_errors:
@@ -232,7 +242,7 @@ def _build_report_lines(
                 report_lines.append(f"     detail: {detail}")
 
     report_lines.append("\n" + "=" * 80)
-    report_lines.append("📊 各维度相关性评分统计 (0-4分制)")
+    report_lines.append("Dimension Score Summary (0-4)")
     report_lines.append("=" * 80)
     dimensions = [
         ("disease", "Disease (Variant)"),
@@ -245,7 +255,7 @@ def _build_report_lines(
         "\n┌─────────────────┬─────────┬──────────┬────────────────────────────────┐"
     )
     report_lines.append(
-        "│ 维度             │ 平均分  │ 高相关率  │ 评分分布 (0/1/2/3/4)            │"
+        "│ Dimension        │ Average │ High-rate │ Score distribution (0/1/2/3/4)  │"
     )
     report_lines.append(
         "├─────────────────┼─────────┼──────────┼────────────────────────────────┤"
@@ -275,7 +285,7 @@ def _build_report_lines(
 
     if strong:
         report_lines.append("\n" + "=" * 80)
-        report_lines.append(f"💪 Strong Candidates ({len(strong)} 篇)")
+        report_lines.append(f"Strong Candidates ({len(strong)} papers)")
         report_lines.append("=" * 80)
         high_relevance = sorted(
             strong, key=lambda x: int(x.get("overall_score", 0)), reverse=True
@@ -289,6 +299,6 @@ def _build_report_lines(
                 f"   Overall: {paper.get('overall_justification', 'N/A')}"
             )
             report_lines.append(
-                f"   维度评分: D={paper.get('disease_score')} P={paper.get('population_score')} L={paper.get('location_score')} E={paper.get('evidence_score')} Param={paper.get('parameter_score')}"
+                f"   Dimension scores: D={paper.get('disease_score')} P={paper.get('population_score')} L={paper.get('location_score')} E={paper.get('evidence_score')} Param={paper.get('parameter_score')}"
             )
     return report_lines

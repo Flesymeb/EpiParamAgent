@@ -198,17 +198,7 @@ class KeywordGeneratorAgent:
         self.api_key = api_key
         self.raw_openai_client = None
 
-        # Get API base URL (check multiple env vars for compatibility)
-        # Support both LLM_BASE_URL and LLM_API_BASE for flexibility
-        api_base = (
-            api_base
-            or os.getenv("LLM_BASE_URL")
-            or os.getenv("LLM_API_BASE")
-            or os.getenv("OPENAI_BASE_URL")
-            or os.getenv("OPENAI_API_BASE")
-            or os.getenv("SILICONFLOW_BASE_URL")
-            or os.getenv("SILICONFLOW_API_BASE")
-        )
+        api_base = api_base or self._get_api_base(provider)
         logger.info(f"API base URL: {api_base or 'Not set'}")
         # Persist key runtime values for adapters/fallbacks
         self.api_base = api_base
@@ -229,12 +219,18 @@ class KeywordGeneratorAgent:
 
     def _get_api_key(self, provider: str) -> Optional[str]:
         """Get API key from environment variables."""
-        provider_lower = provider.lower()
+        provider_lower = self._canonical_provider(provider)
 
         if provider_lower == "claude":
             return os.getenv("ANTHROPIC_API_KEY") or os.getenv("LLM_API_KEY")
         elif provider_lower == "openai":
             return os.getenv("OPENAI_API_KEY") or os.getenv("LLM_API_KEY")
+        elif provider_lower == "openrouter":
+            return os.getenv("OPENROUTER_API_KEY") or os.getenv("LLM_API_KEY")
+        elif provider_lower == "lab":
+            return os.getenv("LAB_API_KEY") or os.getenv("LLM_API_KEY")
+        elif provider_lower == "lab2":
+            return os.getenv("LAB_API_KEY_2") or os.getenv("LLM_API_KEY")
         elif provider_lower in ["siliconflow", "qwen"]:
             # SiliconFlow specific env vars
             return (
@@ -248,8 +244,52 @@ class KeywordGeneratorAgent:
             return (
                 os.getenv("LLM_API_KEY")
                 or os.getenv("OPENAI_API_KEY")
+                or os.getenv("OPENROUTER_API_KEY")
+                or os.getenv("LAB_API_KEY")
+                or os.getenv("LAB_API_KEY_2")
                 or os.getenv(f"{provider.upper()}_API_KEY")
             )
+
+    def _get_api_base(self, provider: str) -> Optional[str]:
+        """Get OpenAI-compatible API base URL from provider-specific env vars."""
+        provider_lower = self._canonical_provider(provider)
+
+        if provider_lower == "openrouter":
+            return (
+                os.getenv("OPENROUTER_BASE_URL")
+                or os.getenv("OPENROUTER_API_BASE")
+                or "https://openrouter.ai/api/v1"
+            )
+        if provider_lower == "lab":
+            return os.getenv("LAB_BASE_URL") or os.getenv("LAB_API_BASE")
+        if provider_lower == "lab2":
+            return os.getenv("LAB_BASE_URL_2") or os.getenv("LAB_API_BASE_2")
+
+        return (
+            os.getenv("LLM_BASE_URL")
+            or os.getenv("LLM_API_BASE")
+            or os.getenv("OPENAI_BASE_URL")
+            or os.getenv("OPENAI_API_BASE")
+            or os.getenv("SILICONFLOW_BASE_URL")
+            or os.getenv("SILICONFLOW_API_BASE")
+        )
+
+    def _canonical_provider(self, provider: str) -> str:
+        normalized = provider.lower().replace("_", "-")
+        aliases = {
+            "lab1": "lab",
+            "lab-1": "lab",
+            "lab-api": "lab",
+            "lab2": "lab2",
+            "lab-2": "lab2",
+            "lab-api-2": "lab2",
+            "lab-dsv3": "lab2",
+            "dsv3": "lab2",
+            "deepseek-v3": "lab2",
+            "deepseekv3": "lab2",
+            "open-router": "openrouter",
+        }
+        return aliases.get(normalized, normalized)
 
     def _create_llm(
         self,
@@ -275,24 +315,21 @@ class KeywordGeneratorAgent:
                 api_key = (
                     os.getenv("OPENAI_API_KEY")
                     or os.getenv("LLM_API_KEY")
+                    or os.getenv("OPENROUTER_API_KEY")
+                    or os.getenv("LAB_API_KEY")
+                    or os.getenv("LAB_API_KEY_2")
                     or os.getenv("SILICONFLOW_API_KEY")
                 )
                 if not api_key:
                     raise ValueError(
                         "API key is required. Please set one of: "
-                        "OPENAI_API_KEY, LLM_API_KEY, or SILICONFLOW_API_KEY"
+                        "OPENAI_API_KEY, LLM_API_KEY, OPENROUTER_API_KEY, "
+                        "LAB_API_KEY, LAB_API_KEY_2, or SILICONFLOW_API_KEY"
                     )
 
             # Get API base URL
             if not api_base:
-                api_base = (
-                    os.getenv("LLM_BASE_URL")
-                    or os.getenv("LLM_API_BASE")
-                    or os.getenv("OPENAI_BASE_URL")
-                    or os.getenv("OPENAI_API_BASE")
-                    or os.getenv("SILICONFLOW_BASE_URL")
-                    or os.getenv("SILICONFLOW_API_BASE")
-                )
+                api_base = self._get_api_base(provider)
 
             # Default SiliconFlow API base if not specified
             if not api_base and provider.lower() in ["siliconflow", "qwen"]:
@@ -302,7 +339,8 @@ class KeywordGeneratorAgent:
             if not api_base:
                 raise ValueError(
                     "API base URL is required for custom providers. "
-                    "Please set LLM_BASE_URL, LLM_API_BASE, OPENAI_BASE_URL, or OPENAI_API_BASE environment variable. "
+                    "Please set LLM_BASE_URL, LLM_API_BASE, OPENAI_BASE_URL, "
+                    "OPENAI_API_BASE, LAB_BASE_URL, or LAB_BASE_URL_2 environment variable. "
                     "For SiliconFlow, use: https://api.siliconflow.cn/v1"
                 )
 
@@ -431,9 +469,7 @@ class KeywordGeneratorAgent:
                 logger.warning(
                     f"Unknown provider '{provider}', trying OpenAI-compatible API"
                 )
-                fallback_base = (
-                    api_base or os.getenv("LLM_BASE_URL") or os.getenv("LLM_API_BASE")
-                )
+                fallback_base = api_base or self._get_api_base(provider)
                 try:
                     return ChatOpenAI(
                         model=model,
@@ -451,7 +487,7 @@ class KeywordGeneratorAgent:
             raise ValueError(
                 f"Unsupported provider: {provider}. "
                 "Supported providers: 'claude', 'openai', or any OpenAI-compatible API "
-                "(set LLM_API_BASE for custom providers)"
+                "(set LLM_API_BASE or provider-specific base URL for custom providers)"
             )
 
     def _load_config(self, config_path: Path) -> Dict[str, Any]:
@@ -638,17 +674,16 @@ class KeywordGeneratorAgent:
 
         # 4) Final fallback: try calling the provider HTTP API directly (OpenAI-compatible)
         try:
-            base = (
-                getattr(self, "api_base", None)
-                or os.getenv("LLM_BASE_URL")
-                or os.getenv("LLM_API_BASE")
-                or os.getenv("OPENAI_API_BASE")
-                or os.getenv("SILICONFLOW_BASE_URL")
+            base = getattr(self, "api_base", None) or self._get_api_base(
+                getattr(self, "provider", "")
             )
             key = (
                 getattr(self, "api_key", None)
                 or os.getenv("SILICONFLOW_API_KEY")
                 or os.getenv("QWEN_API_KEY")
+                or os.getenv("OPENROUTER_API_KEY")
+                or os.getenv("LAB_API_KEY")
+                or os.getenv("LAB_API_KEY_2")
                 or os.getenv("OPENAI_API_KEY")
                 or os.getenv("LLM_API_KEY")
             )

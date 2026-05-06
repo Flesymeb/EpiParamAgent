@@ -18,10 +18,10 @@ Outputs (under --out):
   drafts/result.md (optional, updated by default)
 
 Example:
-  python scripts/cli/screening_report_academic.py \
+  python tools/scripts/screening_report.py \
     --root evaluation/screening/GT_1/GT_export \
     --topics serial_interval,reproduction_number,fatality \
-    --out dev/literature_search/drafts \
+    --out evaluation/reports \
     --with-plots \
     --update-md
 """
@@ -339,7 +339,7 @@ def main() -> None:
     parser.add_argument(
         "--out",
         type=Path,
-        default=Path("dev/literature_search/drafts"),
+        default=Path("evaluation/reports/screening"),
         help="Output directory for tables/figs/result.md",
     )
     parser.add_argument("--with-plots", action="store_true", help="Generate PNG figures")

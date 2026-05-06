@@ -8,8 +8,8 @@ Workflow:
 3) Fix missing Abstract/Keywords (optional)
 
 Usage:
-  python scripts/cli/screening_prepare_raw.py --query "..." --date-range "2020/1/1-2021/9/10" --output raw.csv --ground-truth gt.csv --fix-missing
-  python scripts/cli/screening_prepare_raw.py --project-root D:/repo/MetaAgent-Epi --profile P13
+  python tools/scripts/screening_prepare.py --query "..." --date-range "2020/1/1-2021/9/10" --output raw.csv --ground-truth gt.csv --fix-missing
+  python tools/scripts/screening_prepare.py --project-root /path/to/MetaAgent-Epi --profile P13
 """
 
 from __future__ import annotations
@@ -23,9 +23,9 @@ import sys
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 BASE_DIR = SCRIPT_DIR.parents[1]
-# Removed: path now resolved via metaagent package
-# Removed: path now resolved via metaagent package
-# Removed: path now resolved via metaagent package
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from tools.pubmed.client import PubMedClient
 from tools.provenance import write_run_manifest
@@ -91,9 +91,10 @@ def _chunk(items: List[str], size: int) -> Iterable[List[str]]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Prepare raw screening CSV from PubMed")
-    parser.add_argument("--project-root", default="", help="仓库根目录；与 --profile 配合使用时自动解析 evaluation 路径")
-    parser.add_argument("--profile", default="", help="实验 profile 名称，例如 P13")
-    parser.add_argument("--topic", default="", help="可选 topic 覆盖；默认使用 profile 自带 topic")
+    parser.add_argument("--project-root", default="", help="Repository root; used with --profile to resolve evaluation paths")
+    parser.add_argument("--profile", default="", help="Screening profile name, e.g. P13")
+    parser.add_argument("--disease", default="", help="Optional disease override, e.g. covid19 or mpox")
+    parser.add_argument("--topic", default="", help="Optional topic override; defaults to the profile topic")
     parser.add_argument("--query", help="PubMed search term/query")
     parser.add_argument(
         "--date-range",
@@ -130,6 +131,7 @@ def main() -> None:
             project_root=args.project_root,
             profile_name=args.profile,
             topic=args.topic or None,
+            disease=args.disease or None,
         )
         output_path = paths.raw_file
         gt_path = paths.ground_truth_file

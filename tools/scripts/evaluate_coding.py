@@ -6,19 +6,19 @@ applies enrich_ci + summarize, and writes a consolidated summary CSV.
 Usage
 -----
 # All projects (auto-discover):
-uv run --directory dev python dev/literature_search/scripts/cli/evaluate_coding.py
+python tools/scripts/evaluate_coding.py
 
 # Specific disease:
-uv run --directory dev python dev/literature_search/scripts/cli/evaluate_coding.py --disease covid19
+python tools/scripts/evaluate_coding.py --disease covid19
 
 # Specific disease + topic:
-uv run --directory dev python dev/literature_search/scripts/cli/evaluate_coding.py --disease covid19 --topic serial_interval
+python tools/scripts/evaluate_coding.py --disease covid19 --topic serial_interval
 
 # Specific project:
-uv run --directory dev python dev/literature_search/scripts/cli/evaluate_coding.py --disease mpox --topic fatality --project p4
+python tools/scripts/evaluate_coding.py --disease mpox --topic fatality --project p4
 
 # Override method / parameter filter:
-uv run --directory dev python dev/literature_search/scripts/cli/evaluate_coding.py \
+python tools/scripts/evaluate_coding.py \
     --disease covid19 --parameter-type serial_interval --estimate-measure mean --include-median --impute-se
 
 Output
