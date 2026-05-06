@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run a deliberately rough LEADS-Mistral screening evaluation.
+"""Run a simple LEADS-Mistral screening evaluation.
 
 This script is intentionally independent from the main screening engine: it uses
 one short binary prompt and the OpenAI-compatible /chat/completions API exposed
@@ -54,6 +54,22 @@ DEFAULT_PROFILES_BY_DISEASE = {
     ],
 }
 
+PROMPT_STYLES = ("strict_simple", "disease_parameter_minimal")
+
+SIMPLE_DISEASE_LABELS = {
+    "covid19": "COVID-19",
+    "covid_19": "COVID-19",
+    "sars_cov_2": "COVID-19",
+    "mpox": "mpox",
+    "monkeypox": "mpox",
+}
+
+SIMPLE_PARAMETER_LABELS = {
+    "fatality": "fatality",
+    "reproduction_number": "reproduction number",
+    "serial_interval": "serial interval",
+}
+
 RESULT_FIELDS = [
     "llm_suggest",
     "overall_score",
@@ -63,6 +79,7 @@ RESULT_FIELDS = [
     "screening_stage",
     "screening_mode",
     "screening_strategy",
+    "prompt_style",
     "screening_profile",
     "screening_topic",
     "screening_disease",
@@ -260,6 +277,16 @@ def truncate_text(text: str, max_chars: int) -> str:
     return text[:max_chars].rstrip() + " ... [truncated]"
 
 
+def simple_disease_label(profile: ScreeningProfile) -> str:
+    key = normalize_key(profile.disease)
+    return SIMPLE_DISEASE_LABELS.get(key, str(profile.disease).replace("_", " "))
+
+
+def simple_parameter_label(profile: ScreeningProfile) -> str:
+    key = normalize_key(profile.topic)
+    return SIMPLE_PARAMETER_LABELS.get(key, str(profile.topic).replace("_", " "))
+
+
 def load_ground_truth_pmids(path: Path) -> set[str]:
     pmids: set[str] = set()
     if not path.exists():
@@ -279,15 +306,20 @@ def normalize_base_url(base_url: str) -> str:
     return value
 
 
-def build_messages(profile: ScreeningProfile, row: dict[str, Any], *, abstract_max_chars: int) -> list[dict[str, str]]:
+def build_messages(
+    profile: ScreeningProfile,
+    row: dict[str, Any],
+    *,
+    abstract_max_chars: int,
+    prompt_style: str,
+) -> list[dict[str, str]]:
     title = truncate_text(get_field(row, "Title", "title"), 1200)
     abstract = truncate_text(get_field(row, "Abstract", "abstract"), abstract_max_chars)
     if not abstract:
         abstract = "(No abstract.)"
 
-    # Keep this deliberately rough: the goal is a simple LEADS-Mistral baseline,
-    # not the stronger hand-engineered prompts used by the main screening engine.
-    user = f"""
+    if prompt_style == "strict_simple":
+        user = f"""
 Task: quick screen for a {profile.disease} review.
 Question: {profile.research_question}
 Title: {title}
@@ -297,6 +329,20 @@ Be strict. Include only if the title/abstract clearly looks directly useful for 
 If it is vague, off-topic, review/editorial/protocol, or only mentions the topic, exclude it.
 JSON only: {{"include": true/false, "reason": "short"}}
 """.strip()
+    elif prompt_style == "disease_parameter_minimal":
+        disease = simple_disease_label(profile)
+        parameter = simple_parameter_label(profile)
+        user = f"""
+I am screening papers for a systematic review about {disease} and {parameter}.
+Based on the title and abstract, decide include or exclude.
+
+Title: {title}
+Abstract: {abstract}
+
+Return JSON only: {{"include": true/false, "reason": "short"}}
+""".strip()
+    else:
+        raise ValueError(f"Unknown prompt style: {prompt_style!r}")
     return [{"role": "user", "content": user}]
 
 
@@ -528,6 +574,7 @@ def apply_prediction(
     *,
     profile: ScreeningProfile,
     model: str,
+    prompt_style: str,
     save_raw_response: bool,
 ) -> dict[str, Any]:
     updated = dict(row)
@@ -550,7 +597,8 @@ def apply_prediction(
             "confidence": confidence,
             "screening_stage": "title_abstract",
             "screening_mode": "simple_prompt",
-            "screening_strategy": "leads_mistral_simple",
+            "screening_strategy": f"leads_mistral_{prompt_style}",
+            "prompt_style": prompt_style,
             "screening_profile": profile.id,
             "screening_topic": profile.topic,
             "screening_disease": profile.disease,
@@ -676,7 +724,12 @@ async def screen_one(
     args: argparse.Namespace,
 ) -> dict[str, Any]:
     pmid = get_pmid(row, fallback="")
-    messages = build_messages(profile, row, abstract_max_chars=args.abstract_max_chars)
+    messages = build_messages(
+        profile,
+        row,
+        abstract_max_chars=args.abstract_max_chars,
+        prompt_style=args.prompt_style,
+    )
     try:
         content, usage = await call_chat_completion(
             client,
@@ -696,6 +749,8 @@ async def screen_one(
         prediction.update(
             {
                 "pmid": pmid,
+                "model": args.model,
+                "prompt_style": args.prompt_style,
                 "prompt_tokens": int(usage.get("prompt_tokens") or 0),
                 "completion_tokens": int(usage.get("completion_tokens") or 0),
                 "total_tokens": int(usage.get("total_tokens") or 0),
@@ -708,6 +763,8 @@ async def screen_one(
     except Exception as exc:
         prediction = error_prediction(str(exc))
         prediction["pmid"] = pmid
+        prediction["model"] = args.model
+        prediction["prompt_style"] = args.prompt_style
         return prediction
 
 
@@ -724,6 +781,7 @@ async def run_profile(
             "topic": profile.topic,
             "project": profile.project_number,
             "status": "missing_raw",
+            "prompt_style": args.prompt_style,
             "raw_file": str(paths["raw_file"]),
             "screened_file": str(paths["screened_file"]),
         }
@@ -750,7 +808,9 @@ async def run_profile(
         pmid = get_pmid(row, fallback=f"ROW{idx}")
         existing = predictions.get(pmid)
         if existing and existing.get("llm_suggest") != "error":
-            continue
+            existing_style = str(existing.get("prompt_style") or "strict_simple")
+            if existing_style == args.prompt_style:
+                continue
         pending.append(row)
 
     print(
@@ -794,6 +854,7 @@ async def run_profile(
                 prediction,
                 profile=profile,
                 model=args.model,
+                prompt_style=args.prompt_style,
                 save_raw_response=args.save_raw_response,
             )
         )
@@ -810,6 +871,7 @@ async def run_profile(
                 "topic": profile.topic,
                 "project": profile.project_number,
                 "model": args.model,
+                "prompt_style": args.prompt_style,
                 "experiment": args.experiment,
                 "raw_file": str(paths["raw_file"]),
                 "ground_truth_file": str(paths["ground_truth_file"]),
@@ -825,6 +887,7 @@ async def run_profile(
             "topic": profile.topic,
             "project": profile.project_number,
             "status": "missing_ground_truth",
+            "prompt_style": args.prompt_style,
             "raw_file": str(paths["raw_file"]),
             "ground_truth_file": str(paths["ground_truth_file"]),
             "screened_file": str(paths["screened_file"]),
@@ -853,7 +916,7 @@ def print_profile_summary(summary: dict[str, Any]) -> None:
 
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Evaluate LEADS-Mistral-7B-v1 with a deliberately rough screening prompt."
+        description="Evaluate LEADS-Mistral-7B-v1 with simple screening prompts."
     )
     parser.add_argument("--project-root", default=".", help="Repository root")
     parser.add_argument("--disease", default="covid19", help="Disease profile namespace")
@@ -866,7 +929,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--experiment",
         default="",
-        help="Experiment name. Defaults to leads_mistral_simple_<timestamp>.",
+        help="Experiment name. Defaults to leads_mistral_<prompt_style>_<timestamp>.",
     )
     parser.add_argument(
         "--base-url",
@@ -888,6 +951,15 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--model",
         default=os.getenv("LLM_MODEL") or "zifeng-ai/leads-mistral-7b-v1",
         help="Served model name configured in vLLM.",
+    )
+    parser.add_argument(
+        "--prompt-style",
+        choices=PROMPT_STYLES,
+        default="strict_simple",
+        help=(
+            "Prompt template to use. strict_simple keeps the previous strict question prompt; "
+            "disease_parameter_minimal only gives simple disease/parameter labels plus title/abstract."
+        ),
     )
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--max-tokens", type=int, default=64)
@@ -912,7 +984,7 @@ async def async_main(args: argparse.Namespace) -> int:
     project_root = Path(args.project_root).resolve()
     args.base_url = normalize_base_url(args.base_url)
     if not args.experiment:
-        args.experiment = "leads_mistral_simple_" + datetime.now().strftime("%Y%m%d_%H%M%S")
+        args.experiment = f"leads_mistral_{args.prompt_style}_" + datetime.now().strftime("%Y%m%d_%H%M%S")
 
     profiles = load_profiles(project_root, args.disease)
     disease_key = normalize_key(args.disease)
@@ -932,6 +1004,7 @@ async def async_main(args: argparse.Namespace) -> int:
         "experiment": args.experiment,
         "model": args.model,
         "base_url": args.base_url,
+        "prompt_style": args.prompt_style,
         "profiles": [p.id for p in selected],
         "temperature": args.temperature,
         "max_tokens": args.max_tokens,
@@ -956,6 +1029,7 @@ async def async_main(args: argparse.Namespace) -> int:
                     "topic": profile.topic,
                     "project": profile.project_number,
                     "status": "dry_run",
+                    "prompt_style": args.prompt_style,
                     "raw_file": str(paths["raw_file"]),
                     "ground_truth_file": str(paths["ground_truth_file"]),
                     "screened_file": str(paths["screened_file"]),
