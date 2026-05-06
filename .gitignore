@@ -154,13 +154,15 @@ metaagent/coding/.env.local
 .env.local
 .env
 
-# Evaluation — track structure only, ignore run data
+# Evaluation — track raw + groundtruth CSVs, ignore experiment results and run outputs
 evaluation/*/*/coding/p*/coding_runs/
 evaluation/*/*/coding/p*/*.json
 evaluation/*/*/coding/p*/*.csv
 evaluation/*/*/screening/*.csv
 evaluation/*/*/screening/*.xlsx
-evaluation/*/*/ground_truth/*.csv
+evaluation/**/experiments/
+evaluation/**/screening_logs/
+evaluation/**/screening_runs/
 evaluation/_legacy/
 evaluation/*.zip
 metaagent/paper_pool_legacy_synced_*

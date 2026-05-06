@@ -244,17 +244,17 @@ def main():
         else:
             print(f"  binary_strict: FAILED")
 
-        # 3. 5D - prefer gpt-4.1 (deepseek-level), fall back to others
+        # 3. 5D - prefer deepseek, then gpt, then any
         csv_5d = None
         exp_dir = EVAL_DIR / topic / "ground_truth" / proj / "experiments"
-        for pattern in ["*gpt*5d*", "*gemini*5d*", "*5d*"]:
+        for pattern in ["*deepseek*5d*", "*dsv4pro*5d*", "*gpt*5d*", "*5d*"]:
             for d in sorted(exp_dir.glob(pattern), reverse=True):
                 if d.is_dir():
                     csvs = sorted(d.rglob(f"project_{proj[1:]}_screened*.csv"),
                                  key=lambda p: p.stat().st_mtime, reverse=True)
                     if csvs:
                         csv_5d = csvs[0]
-                        print(f"  5d: using {d.name}/{csvs[0].name}")
+                        print(f"  5d: {d.name}")
                         break
             if csv_5d:
                 break

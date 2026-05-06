@@ -70,16 +70,23 @@ def init_llm_model(model_override: str | None = None) -> Any:
 
     print(f"Model: {llm_model} @ {api_base}")
 
-    return ChatOpenAI(
-        model=llm_model,
-        temperature=cfg.temperature,
-        api_key=cfg.api_key,
-        base_url=api_base,
-        max_retries=3,
-        request_timeout=cfg.timeout_s,
-        streaming=cfg.force_streaming,
-        max_tokens=cfg.max_tokens,
-    )
+    kwargs: dict[str, Any] = {
+        "model": llm_model,
+        "temperature": cfg.temperature,
+        "api_key": cfg.api_key,
+        "base_url": api_base,
+        "max_retries": 3,
+        "request_timeout": cfg.timeout_s,
+        "streaming": cfg.force_streaming,
+        "max_tokens": cfg.max_tokens,
+    }
+    if "openrouter.ai" in api_base and "minimax/" not in llm_model.lower():
+        # Keep reasoning models from returning reasoning-only messages with
+        # empty content/tool payloads through the OpenAI-compatible API.
+        # MiniMax endpoints reject even exclude-only reasoning controls.
+        kwargs["reasoning"] = {"exclude": True}
+
+    return ChatOpenAI(**kwargs)
 
 
 
@@ -269,6 +276,8 @@ async def screen_papers_batch_async(
         }
 
     system_text = system_text.format(**fmt_kwargs)
+    if "json" not in f"{system_text}\n{user_text}".lower():
+        system_text += "\n\nRespond in JSON format only."
     template = ChatPromptTemplate.from_messages(
         [("system", system_text), ("human", user_text)]
     )

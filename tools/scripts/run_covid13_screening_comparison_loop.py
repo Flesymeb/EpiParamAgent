@@ -51,52 +51,44 @@ class ModelSpec:
 
 MODEL_SPECS: list[ModelSpec] = [
     ModelSpec(
-        label="openai/gpt-4.1",
-        model_id="openai/gpt-4.1",
-        experiment="cmp_covid13_openai_gpt-4.1_5d_nofulltext",
-        batch_size=500,
-        batch_concurrency=64,
-        timeout_s=7200,
+        label="qwen/qwen3.6-flash",
+        model_id="qwen/qwen3.6-flash",
+        experiment="cmp_covid13_qwen_qwen3.6-flash_5d_nofulltext_c16",
+        batch_size=40,
+        batch_concurrency=16,
+        timeout_s=21600,
     ),
     ModelSpec(
-        label="openai/gpt-4.1-mini",
-        model_id="openai/gpt-4.1-mini",
-        experiment="cmp_covid13_openai_gpt-4.1-mini_5d_nofulltext",
-        batch_size=20,
-        batch_concurrency=8,
-        timeout_s=7200,
-    ),
-    ModelSpec(
-        label="qwen/qwen-turbo",
-        model_id="qwen/qwen-turbo",
-        experiment="cmp_covid13_qwen_qwen-turbo_5d_nofulltext_c16",
-        batch_size=20,
-        batch_concurrency=4,
-        timeout_s=10800,
-    ),
-    ModelSpec(
-        label="mistralai/mistral-small-3.2-24b-instruct",
-        model_id="mistralai/mistral-small-3.2-24b-instruct",
-        experiment="cmp_covid13_mistral_small_3.2_24b_5d_nofulltext_c8",
-        batch_size=20,
-        batch_concurrency=8,
-        timeout_s=18000,
-    ),
-    ModelSpec(
-        label="minimax/minimax-m2.5",
-        model_id="minimax/minimax-m2.5",
-        experiment="cmp_covid13_minimax_minimax-m2.5_5d_nofulltext_c8",
-        batch_size=20,
-        batch_concurrency=8,
-        timeout_s=18000,
+        label="qwen/qwen3.6-35b-a3b",
+        model_id="qwen/qwen3.6-35b-a3b",
+        experiment="cmp_covid13_qwen_qwen3.6-35b-a3b_5d_nofulltext_c16",
+        batch_size=40,
+        batch_concurrency=16,
+        timeout_s=21600,
     ),
     ModelSpec(
         label="deepseek/deepseek-v4-flash",
         model_id="deepseek/deepseek-v4-flash",
-        experiment="cmp_covid13_deepseek_deepseek-v4-flash_5d_nofulltext_c8",
-        batch_size=20,
-        batch_concurrency=4,
-        timeout_s=18000,
+        experiment="cmp_covid13_deepseek_deepseek-v4-flash_5d_nofulltext_c16",
+        batch_size=40,
+        batch_concurrency=16,
+        timeout_s=21600,
+    ),
+    ModelSpec(
+        label="minimax/minimax-m2.7",
+        model_id="minimax/minimax-m2.7",
+        experiment="cmp_covid13_minimax_minimax-m2.7_5d_nofulltext_c8",
+        batch_size=40,
+        batch_concurrency=8,
+        timeout_s=21600,
+    ),
+    ModelSpec(
+        label="moonshotai/kimi-k2.6",
+        model_id="moonshotai/kimi-k2.6",
+        experiment="cmp_covid13_moonshotai_kimi-k2.6_5d_nofulltext_c8",
+        batch_size=40,
+        batch_concurrency=8,
+        timeout_s=21600,
     ),
 ]
 
@@ -170,6 +162,7 @@ def _run_profile(
     ]
     env = os.environ.copy()
     env["PYTHONUNBUFFERED"] = "1"
+    env.setdefault("PYTHONWARNINGS", "ignore")
     env["PYTHONPATH"] = (
         str(project_root)
         if not env.get("PYTHONPATH")

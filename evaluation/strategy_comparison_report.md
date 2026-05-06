@@ -6,11 +6,11 @@
 
 ## 1. Strategies
 
-| Strategy | Description | LLM? | Input |
-|----------|-------------|------|-------|
-| **Keyword** | Title-only keyword matching (disease + parameter terms) | No | Title only |
-| **Binary LLM** | Simple include/exclude with strict prompt ("exclude when uncertain") | Yes (Qwen-Turbo) | Title + Abstract |
-| **5D** | Five-dimensional evidence scoring (disease, population, location, evidence, parameter) | Yes (Qwen-Turbo) | Title + Abstract* |
+| Strategy       | Description                                                                            | LLM?             | Input             |
+| -------------- | -------------------------------------------------------------------------------------- | ---------------- | ----------------- |
+| **Keyword**    | Title-only keyword matching (disease + parameter terms)                                | No               | Title only        |
+| **Binary LLM** | Simple include/exclude with strict prompt ("exclude when uncertain")                   | Yes (Qwen-Turbo) | Title + Abstract  |
+| **5D**         | Five-dimensional evidence scoring (disease, population, location, evidence, parameter) | Yes (Qwen-Turbo) | Title + Abstract* |
 
 > \* 5D results use `nofulltext` mode (title + abstract only). Full-text 5D with deepseek-v4-pro achieves higher recall.
 
@@ -20,37 +20,37 @@
 
 ### P10 — Serial Interval (28 GT papers, 599 total)
 
-| Strategy | Recall | Precision | F1 | Included | TP | FN | FP |
-|----------|--------|-----------|-----|----------|-----|-----|-----|
-| Keyword | **3.6%** | 100% | 0.07 | 1/599 | 1 | 27 | 0 |
-| Binary LLM | 78.6% | 23.7% | 0.36 | 93/599 | 22 | 6 | 71 |
-| **5D** | 67.9% | **47.5%** | **0.56** | 40/599 | 19 | 9 | 21 |
+| Strategy   | Recall   | Precision | F1       | Included | TP  | FN  | FP  |
+| ---------- | -------- | --------- | -------- | -------- | --- | --- | --- |
+| Keyword    | **3.6%** | 100%      | 0.07     | 1/599    | 1   | 27  | 0   |
+| Binary LLM | 78.6%    | 23.7%     | 0.36     | 93/599   | 22  | 6   | 71  |
+| **5D**     | 67.9%    | **47.5%** | **0.56** | 40/599   | 19  | 9   | 21  |
 
 ### P13 — Serial Interval (51 GT papers, 111 total)
 
-| Strategy | Recall | Precision | F1 | Included | TP | FN | FP |
-|----------|--------|-----------|-----|----------|-----|-----|-----|
-| Keyword | **5.9%** | 75.0% | 0.11 | 4/111 | 3 | 48 | 1 |
-| Binary LLM | **96.1%** | 59.0% | **0.73** | 83/111 | 49 | 2 | 34 |
-| **5D** | 82.4% | 52.5% | 0.64 | 80/111 | 42 | 9 | 38 |
+| Strategy   | Recall    | Precision | F1       | Included | TP  | FN  | FP  |
+| ---------- | --------- | --------- | -------- | -------- | --- | --- | --- |
+| Keyword    | **5.9%**  | 75.0%     | 0.11     | 4/111    | 3   | 48  | 1   |
+| Binary LLM | **96.1%** | 59.0%     | **0.73** | 83/111   | 49  | 2   | 34  |
+| **5D**     | 82.4%     | 52.5%     | 0.64     | 80/111   | 42  | 9   | 38  |
 
 ### P14 — Serial Interval (9 GT papers, 94 total)
 
-| Strategy | Recall | Precision | F1 | Included | TP | FN | FP |
-|----------|--------|-----------|-----|----------|-----|-----|-----|
-| Keyword | **11.1%** | 33.3% | 0.17 | 3/94 | 1 | 8 | 2 |
-| Binary LLM | **100%** | 9.6% | 0.17 | 94/94 | 9 | 0 | 85 |
-| **5D** | 88.9% | 14.3% | **0.25** | 56/94 | 8 | 1 | 48 |
+| Strategy   | Recall    | Precision | F1       | Included | TP  | FN  | FP  |
+| ---------- | --------- | --------- | -------- | -------- | --- | --- | --- |
+| Keyword    | **11.1%** | 33.3%     | 0.17     | 3/94     | 1   | 8   | 2   |
+| Binary LLM | **100%**  | 9.6%      | 0.17     | 94/94    | 9   | 0   | 85  |
+| **5D**     | 88.9%     | 14.3%     | **0.25** | 56/94    | 8   | 1   | 48  |
 
 ---
 
 ## 3. Aggregate Comparison
 
-| Strategy | Mean Recall | Mean Precision | Mean F1 | Avg. Included | Workload Reduction |
-|----------|------------|----------------|---------|--------------|-------------------|
-| Keyword | **6.9%** | 69.4% | 0.12 | 3/268 | 99.0% (too aggressive) |
-| Binary LLM | **91.6%** | 30.8% | 0.42 | 90/268 | 66.4% (limited filtering) |
-| **5D** | **79.6%** | **38.3%** | **0.48** | 59/268 | **78.0%** (best balance) |
+| Strategy   | Mean Recall | Mean Precision | Mean F1  | Avg. Included | Workload Reduction        |
+| ---------- | ----------- | -------------- | -------- | ------------- | ------------------------- |
+| Keyword    | **6.9%**    | 69.4%          | 0.12     | 3/268         | 99.0% (too aggressive)    |
+| Binary LLM | **91.6%**   | 30.8%          | 0.42     | 90/268        | 66.4% (limited filtering) |
+| **5D**     | **79.6%**   | **38.3%**      | **0.48** | 59/268        | **78.0%** (best balance)  |
 
 ---
 

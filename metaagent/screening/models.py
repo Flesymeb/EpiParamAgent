@@ -90,7 +90,7 @@ class ScreeningDecision(BaseModel):
         default=None,
         description="整体相关性评分 0-4，由系统自动计算加权平均（Disease 30% + Parameter 30% + Evidence 25% + Population 10% + Location 5%）",
     )
-    overall_justification: str = Field(description="整体评估理由，2-3句话")
+    overall_justification: str = Field(default="", description="整体评估理由，2-3句话")
     confidence: Optional[float] = Field(
         default=None,
         ge=0.0,
