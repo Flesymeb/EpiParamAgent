@@ -15,6 +15,12 @@ sys.path.insert(0, str(SCREENING_SRC))
 from metaagent.coding.pipeline.extraction import FETCH_STRATEGIES, run_pipeline
 
 
+DISEASE_DIRS = {
+    "covid19": "covid19",
+    "mpox": "mpox",
+}
+
+
 def _resolve_output_from_profile(profile_name: str) -> Path:
     """Look up profile in the screening registry to derive the evaluation output path.
 
@@ -27,7 +33,7 @@ def _resolve_output_from_profile(profile_name: str) -> Path:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:19]
             return (
                 REPO_ROOT / "evaluation" / "coding"
-                / p.disease_key / p.topic_key
+                / DISEASE_DIRS.get(p.disease_key, p.disease_key) / p.topic_key
                 / p.project_dir_name
                 / "coding_runs" / timestamp
             )
@@ -46,7 +52,7 @@ def main():
         default=None,
         help=(
             "Screening profile ID (e.g. P13). Looks up topic/project from the profile "
-            "registry and writes to evaluation/coding/{topic}/{project}/coding_runs/{timestamp}/."
+            "registry and writes to evaluation/coding/{disease}/{topic}/{project}/coding_runs/{timestamp}/."
         ),
     )
     parser.add_argument(

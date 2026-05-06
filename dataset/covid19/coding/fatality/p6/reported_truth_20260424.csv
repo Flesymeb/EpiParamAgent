@@ -1,0 +1,6 @@
+project,reported_group,label,fatality_type,denominator_type,population_filter,point_estimate,unit,uncertainty_type,uncertainty_level,uncertainty_low,uncertainty_high,p_value,i2,source
+p6,overall_pooled_cfr,Overall pooled CFR of COVID-19,CFR,mixed,all included studies,10.0,%,CI,95%,8.0,11.0,<0.001,99.7,Alimohamadi 2021 abstract Results; PMID 34604571; PMCID PMC8451339
+p6,general_population_cfr,Pooled CFR in general population,CFR,confirmed_cases,general population,1.0,%,CI,95%,1.0,3.0,<0.001,94.3,Alimohamadi 2021 abstract Results; PMID 34604571; PMCID PMC8451339
+p6,hospitalized_cfr,Pooled CFR in hospitalized patients,HFR,hospitalizations,hospitalized patients,13.0,%,CI,95%,9.0,17.0,<0.001,95.6,Alimohamadi 2021 abstract Results; PMID 34604571; PMCID PMC8451339
+p6,icu_cfr,Pooled CFR in ICU patients,ICU_fatality_rate,ICU_admissions,patients admitted in ICU,37.0,%,CI,95%,24.0,51.0,<0.001,97.8,Alimohamadi 2021 abstract Results; PMID 34604571; PMCID PMC8451339
+p6,age_gt_50_cfr,Pooled CFR in patients older than 50 years,age_subgroup_CFR,mixed,patients older than 50 years,19.0,%,CI,95%,13.0,24.0,<0.001,99.8,Alimohamadi 2021 abstract Results; PMID 34604571; PMCID PMC8451339

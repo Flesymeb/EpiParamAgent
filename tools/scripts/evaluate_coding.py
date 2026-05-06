@@ -42,6 +42,12 @@ import pandas as pd
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CODING_ROOT = REPO_ROOT / "evaluation" / "coding"
 TOOLS_SRC = REPO_ROOT / "dev" / "tools"
+DISEASE_DIR_ALIASES = {
+    "covid19": "covid19",
+    "covid-19": "covid19",
+    "COVID-19": "covid19",
+    "mpox": "mpox",
+}
 
 for p in (TOOLS_SRC,):
     if str(p) not in sys.path:
@@ -201,10 +207,11 @@ def main() -> None:
     # Discover projects — two-level iteration: disease → topic → project
     _SKIP_DIRS = {"GT_papers", "figures", "_summary"}
     projects_to_run: list[tuple[str, str, str, Path]] = []
+    disease_filter = DISEASE_DIR_ALIASES.get(args.disease, args.disease) if args.disease else None
     for disease_dir in sorted(CODING_ROOT.iterdir()):
         if not disease_dir.is_dir() or disease_dir.name.startswith("_"):
             continue
-        if args.disease and disease_dir.name != args.disease:
+        if disease_filter and disease_dir.name != disease_filter:
             continue
         for topic_dir in sorted(disease_dir.iterdir()):
             if not topic_dir.is_dir() or topic_dir.name in _SKIP_DIRS:

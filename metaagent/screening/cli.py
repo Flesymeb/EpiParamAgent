@@ -200,6 +200,7 @@ def _run_cascade(project_root, profile, disease, topic, batch_size, batch_concur
 @click.option("--profile", "-p", default=None, help="Screening profile")
 @click.option("--disease", default=None, help="Disease filter")
 @click.option("--topic", default="", help="Topic override")
+@click.option("--experiment", default="", help="Experiment output subdirectory")
 @click.option("--ground-truth", default="", help="Ground truth CSV path")
 @click.option("--screened-results", default="", help="Screened results CSV")
 @click.option("--search-results", default="", help="Search results CSV")
@@ -208,7 +209,7 @@ def _run_cascade(project_root, profile, disease, topic, batch_size, batch_concur
 @click.option("--values", default="1,2,3,4", help="Comma-separated threshold values for sweep")
 @click.pass_context
 def evaluate(ctx, subcommand, project_root, profile, disease, topic,
-             ground_truth, screened_results, search_results, bucket, axis, values):
+             experiment, ground_truth, screened_results, search_results, bucket, axis, values):
     """Evaluate screening results (search-coverage | performance | threshold-sweep | retrieval-metrics)."""
     script_subcommand = "screening-performance" if subcommand == "performance" else subcommand
     argv = [script_subcommand]
@@ -217,6 +218,8 @@ def evaluate(ctx, subcommand, project_root, profile, disease, topic,
     if profile:          argv += ["--profile", profile]
     if disease:          argv += ["--disease", disease]
     if topic:            argv += ["--topic", topic]
+    if experiment and script_subcommand in {"screening-performance", "threshold-sweep"}:
+        argv += ["--experiment", experiment]
     if ground_truth:     argv += ["--ground-truth", ground_truth]
     if screened_results: argv += ["--screened-results", screened_results]
     if search_results:   argv += ["--search-results", search_results]

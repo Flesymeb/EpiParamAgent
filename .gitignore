@@ -155,6 +155,10 @@ metaagent/coding/.env.local
 .env
 
 # Evaluation — track curated summaries and ground truth, ignore run data
+dataset/_legacy_imports/
+dataset/*/screening/*/p*/raw.csv
+dataset/*/screening/*/p*/project_*_raw.csv
+dataset/*/screening/*/p*/screened*.csv
 evaluation/experiments/
 evaluation/**/experiments/
 evaluation/**/screening_logs/
@@ -169,6 +173,13 @@ evaluation/**/screened_*.csv
 evaluation/**/*_backup_*.csv
 evaluation/**/run_manifest_*.json
 evaluation/**/paper_summary.tsv
+evaluation/screening/*/*/p*/experiments/
+evaluation/coding/*/*/p*/coding_runs/
+evaluation/*/*/ground_truth/p*/project.json
+evaluation/*/*/ground_truth/p*/raw.csv
+evaluation/*/*/ground_truth/p*/ground_truth.csv
+evaluation/*/*/ground_truth/p*/project_*_raw.csv
+evaluation/*/*/ground_truth/p*/project_*_groundtruth.csv
 evaluation/*/*/coding/p*/coding_runs/
 evaluation/*/*/*/coding/p*/coding_runs/
 evaluation/*/*/coding/p*/*.json

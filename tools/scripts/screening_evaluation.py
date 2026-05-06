@@ -1101,6 +1101,7 @@ def main():
     screen_parser.add_argument("--profile", default="", help="Screening profile name, e.g. P13")
     screen_parser.add_argument("--disease", default="", help="Optional disease override, e.g. covid19 or mpox")
     screen_parser.add_argument("--topic", default="", help="Optional topic override; defaults to the profile topic")
+    screen_parser.add_argument("--experiment", default="", help="Experiment output subdirectory")
     screen_parser.add_argument(
         "--ground-truth", default="", help="Ground-truth CSV file"
     )
@@ -1124,6 +1125,7 @@ def main():
     sweep_parser.add_argument("--profile", default="", help="Screening profile name, e.g. P7")
     sweep_parser.add_argument("--disease", default="", help="Optional disease override, e.g. covid19 or mpox")
     sweep_parser.add_argument("--topic", default="", help="Optional topic override; defaults to the profile topic")
+    sweep_parser.add_argument("--experiment", default="", help="Experiment output subdirectory")
     sweep_parser.add_argument("--ground-truth", default="", help="Ground-truth CSV file")
     sweep_parser.add_argument("--screened-results", default="", help="Screened-results CSV file")
     sweep_parser.add_argument("--bucket", choices=["strong", "possible"], default="possible", help="Threshold bucket to sweep")
@@ -1155,6 +1157,7 @@ def main():
             )
             gt_file = paths.ground_truth_file
             search_file = paths.raw_file
+            output_dir = paths.screened_file.parent
         else:
             if not args.ground_truth or not args.search_results:
                 raise ValueError(
@@ -1162,13 +1165,14 @@ def main():
                 )
             gt_file = Path(args.ground_truth)
             search_file = Path(args.search_results)
+            output_dir = search_file.parent
 
         ground_truth = load_ground_truth_pmids(gt_file)
         search_results = load_search_results(search_file)
 
         summary = evaluate_search_coverage(ground_truth, search_results)
         manifest_path = write_run_manifest(
-            output_dir=search_file.parent,
+            output_dir=output_dir,
             workflow="search_coverage_evaluation",
             module="literature_search",
             params={
@@ -1178,7 +1182,7 @@ def main():
                 "topic": getattr(args, "topic", ""),
             },
             inputs=[gt_file, search_file],
-            outputs=[search_file.parent],
+            outputs=[output_dir],
             extra={"summary": summary},
         )
         print(f"\nManifest: {manifest_path}")
@@ -1190,6 +1194,7 @@ def main():
                 profile_name=args.profile,
                 topic=args.topic or None,
                 disease=args.disease or None,
+                experiment=args.experiment or None,
             )
             gt_file = paths.ground_truth_file
             screened_file = paths.screened_file
@@ -1223,6 +1228,7 @@ def main():
                 "profile": getattr(args, "profile", ""),
                 "disease": getattr(args, "disease", ""),
                 "topic": getattr(args, "topic", ""),
+                "experiment": getattr(args, "experiment", ""),
                 "threshold_overrides": threshold_overrides or {},
             },
             inputs=[gt_file, screened_file],
@@ -1239,6 +1245,7 @@ def main():
                 profile_name=args.profile,
                 topic=args.topic or None,
                 disease=args.disease or None,
+                experiment=args.experiment or None,
             )
             gt_file = paths.ground_truth_file
             screened_file = paths.screened_file

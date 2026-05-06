@@ -11,6 +11,12 @@ import click
 from metaagent._cli_shared import (DEV_ROOT, REPO_ROOT, DISEASE_NAMES, TOPIC_NAMES, resolve_project_root, show_step, show_success, show_error, show_warning, show_command_header, StyledGroup, console, ACCENT, ACCENT_BOLD, ACCENT_DIM)
 
 
+DATASET_DISEASE_DIRS = {
+    "covid19": "covid19",
+    "mpox": "mpox",
+}
+
+
 @click.group(cls=StyledGroup)
 def coding():
     """Coding sheet extraction and evaluation."""
@@ -33,23 +39,15 @@ def extract(disease, topic, profile, stage, fetch_mode, out, codebook):
     if codebook:
         cb_path = Path(codebook)
     else:
-        cb_map = {
-            ("covid19", "fatality"):            "configs/codebook_fatality.yaml",
-            ("covid19", "serial_interval"):     "configs/codebook_serial_interval.yaml",
-            ("covid19", "reproduction_number"): "configs/codebook_reproduction_number.yaml",
-            ("mpox", "fatality"):               "configs/codebook_mpox_fatality.yaml",
-            ("mpox", "serial_interval"):        "configs/codebook_mpox_serial_interval.yaml",
-            ("mpox", "reproduction_number"):    "configs/codebook_mpox_reproduction_number.yaml",
-        }
-        cb_rel = cb_map.get((disease, topic))
-        if not cb_rel:
-            raise click.BadParameter(f"No codebook mapping for disease={disease}, topic={topic}")
-        cb_path = DEV_ROOT / "configs" / "codebooks" / cb_rel.name
+        cb_path = proj / "configs" / disease / "codebooks" / f"{topic}.yaml"
+        if not cb_path.exists():
+            raise click.BadParameter(f"Codebook not found: {cb_path}")
 
     # Resolve pmids.txt
     if profile:
         project_id = profile.lower()
-        pmids_path = DEV_ROOT.parent / "evaluation" / "coding" / disease / topic / project_id / "pmids.txt"
+        disease_dir = DATASET_DISEASE_DIRS.get(disease, disease)
+        pmids_path = proj / "dataset" / disease_dir / "coding" / topic / project_id / "pmids.txt"
         if not pmids_path.exists():
             raise click.BadParameter(f"pmids.txt not found: {pmids_path}")
     else:

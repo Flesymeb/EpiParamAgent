@@ -1,7 +1,8 @@
 """Data-driven screening profile registry.
 
-Profiles live in ``configs/{disease}/screening_profiles/*.yaml`` so new evaluation
-projects can be added without editing Python source files.
+Profiles live in ``configs/{disease}/screening_profiles/*.yaml``. Fixed task
+inputs live in ``dataset/{disease}/screening/{topic}/pN/`` and run outputs live
+under ``evaluation/screening/``.
 """
 
 from __future__ import annotations
@@ -14,11 +15,22 @@ from typing import Any
 import yaml
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-PROFILE_DIR = BASE_DIR / "configs" / "screening_profiles"
+CONFIG_DIR = BASE_DIR / "configs"
+DATASET_DIR = BASE_DIR / "dataset"
+DATASET_DISEASE_DIRS = {
+    "covid19": "covid19",
+    "covid_19": "covid19",
+    "covid-19": "covid19",
+    "mpox": "mpox",
+}
 
 
 def _normalize_topic(topic: str) -> str:
     return str(topic).strip().lower().replace("-", "_").replace(" ", "_")
+
+
+def _dataset_disease_dir_name(disease_key: str) -> str:
+    return DATASET_DISEASE_DIRS.get(_normalize_topic(disease_key), disease_key)
 
 
 @dataclass(frozen=True)
@@ -116,10 +128,18 @@ def _merge_profile(defaults: dict[str, Any], profile_id: str, topic: str, diseas
 @lru_cache(maxsize=1)
 def load_profile_registry() -> dict[str, ScreeningProfile]:
     registry: dict[str, ScreeningProfile] = {}
-    if not PROFILE_DIR.exists():
-        raise FileNotFoundError(f"Missing screening profile directory: {PROFILE_DIR}")
+    if not CONFIG_DIR.exists():
+        raise FileNotFoundError(f"Missing config directory: {CONFIG_DIR}")
 
-    for yaml_file in sorted(PROFILE_DIR.glob("*.yaml")):
+    yaml_files = [
+        path
+        for path in sorted(CONFIG_DIR.glob("*/screening_profiles/*.yaml"))
+        if not path.name.startswith("_")
+    ]
+    if not yaml_files:
+        raise FileNotFoundError(f"No screening profiles found under: {CONFIG_DIR}")
+
+    for yaml_file in yaml_files:
         with open(yaml_file, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f) or {}
         topic = _normalize_topic(data.get("topic") or yaml_file.stem)
@@ -156,32 +176,66 @@ def resolve_profile_paths(
 
     topic_key = _normalize_topic(topic) if topic else profile.topic_key
     disease_key = _normalize_topic(disease) if disease else profile.disease_key
-    base_dir = (
+    dataset_topic_dir = (
+        Path(project_root)
+        / "dataset"
+        / _dataset_disease_dir_name(disease_key)
+        / "screening"
+        / topic_key
+    )
+    dataset_project_dir = dataset_topic_dir / profile.project_dir_name
+    output_topic_dir = (
         Path(project_root)
         / "evaluation"
+        / "screening"
+        / _dataset_disease_dir_name(disease_key)
+        / topic_key
+    )
+    output_project_dir = output_topic_dir / profile.project_dir_name
+    legacy_project_dir = (
+        Path(project_root)
+        / "dataset"
+        / "_legacy_imports"
+        / "evaluation_legacy"
         / "screening"
         / disease_key
         / "GT_1"
         / "GT_export"
         / topic_key
+        / profile.project_dir_name
     )
-    project_dir = base_dir / profile.project_dir_name
     stem = profile.project_file_stem
 
-    # Raw and ground-truth are always in the project root (shared across experiments).
-    # Screened output goes into an experiment subdirectory when one is specified,
-    # so that multiple runs coexist without overwriting each other.
+    raw_candidates = [
+        dataset_project_dir / "raw.csv",
+        dataset_project_dir / f"{stem}_raw.csv",
+        legacy_project_dir / f"{stem}_raw.csv",
+    ]
+    raw_file = next((path for path in raw_candidates if path.exists()), raw_candidates[0])
+
+    ground_truth_candidates = [
+        dataset_project_dir / "ground_truth.csv",
+        dataset_project_dir / f"{stem}_groundtruth.csv",
+        legacy_project_dir / f"{stem}_groundtruth.csv",
+    ]
+    ground_truth_file = next(
+        (path for path in ground_truth_candidates if path.exists()),
+        ground_truth_candidates[0],
+    )
+
+    # Fixed task inputs live under dataset/. New run outputs live under
+    # evaluation/ so experiments do not mix with input data.
     if experiment:
-        screened_dir = project_dir / "experiments" / experiment
+        screened_dir = output_project_dir / "experiments" / experiment
     else:
-        screened_dir = project_dir
+        screened_dir = output_project_dir
 
     paths = ScreeningProjectPaths(
         topic=topic_key,
-        topic_dir=base_dir,
-        project_dir=project_dir,
-        raw_file=project_dir / f"{stem}_raw.csv",
-        ground_truth_file=project_dir / f"{stem}_groundtruth.csv",
+        topic_dir=dataset_topic_dir,
+        project_dir=dataset_project_dir,
+        raw_file=raw_file,
+        ground_truth_file=ground_truth_file,
         screened_file=screened_dir / f"{stem}_screened.csv",
     )
     return profile, paths

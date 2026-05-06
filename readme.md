@@ -38,12 +38,21 @@ MetaAgent-Epi/
 │       ├── evaluate_coding.py      # Coding evaluation and pooling
 │       └── extract_coding.py       # Coding sheet extraction CLI
 ├── configs/                # YAML configuration files
-│   ├── screening_profiles/     # Experiment profiles (per disease/parameter)
-│   ├── codebooks/              # Coding codebook definitions
-│   └── coding_prompts/         # Stage A/B coding prompts
+│   ├── covid19/                # COVID-19 profiles, codebooks, prompts
+│   └── mpox/                   # mpox profiles, codebooks, prompts
 ├── workbench/              # Web UI dashboard (FastAPI + React)
-├── evaluation/             # Ground truth + experiment results
-├── dataset/                # Raw datasets
+├── dataset/                # Fixed task inputs by disease
+│   ├── covid19/
+│   │   ├── screening/
+│   │   └── coding/
+│   └── mpox/
+│       ├── screening/
+│       └── coding/
+├── evaluation/             # Experiment outputs only
+│   ├── screening/
+│   ├── coding/
+│   ├── experiments/
+│   └── figures/
 ├── docs/                   # Documentation
 ├── tests/                  # Integration tests
 └── paper_pool/             # Cached PDFs and markdown (gitignored)
@@ -100,9 +109,9 @@ Module-specific LLM settings live in the root env file:
 ## Canonical Workflow
 
 For screening experiments:
-1. Prepare raw dataset: `python tools/scripts/screening_prepare.py`
-2. Run screening: `python -m metaagent.cli screening run --input ... --output ... --research-question "..."`
-3. Evaluate: `python tools/scripts/screening_evaluation.py`
+1. Fixed inputs live in `dataset/{disease}/screening/{topic}/pN/`.
+2. Run screening: `python -m metaagent.cli screening run -p P4 --strategy 5d --provider lab --model deepseek-3.2 --experiment my_run`.
+3. Evaluate: `python -m metaagent.cli screening evaluate performance -p P4 --screened-results ...`.
 4. Analyze: open `workbench/`
 
 ## Legacy
