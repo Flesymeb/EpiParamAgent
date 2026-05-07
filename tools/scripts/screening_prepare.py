@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 from pathlib import Path
 from typing import List, Dict, Iterable
 
@@ -84,6 +85,67 @@ def _dedupe_rows(rows: List[Dict[str, str]]) -> List[Dict[str, str]]:
     return deduped
 
 
+def _normalize_date(value: str) -> str:
+    return str(value or "").strip().replace("-", "/")
+
+
+def _date_tuple(value: str) -> tuple[int, int, int] | None:
+    value = _normalize_date(value)
+    if not value:
+        return None
+    try:
+        parts = [int(part) for part in value.split("/")[:3]]
+    except ValueError:
+        return None
+    if len(parts) == 1:
+        return parts[0], 1, 1
+    if len(parts) == 2:
+        return parts[0], parts[1], 1
+    return parts[0], parts[1], parts[2]
+
+
+def _load_project_date_range(project_dir: Path) -> str:
+    project_file = project_dir / "project.json"
+    if not project_file.exists():
+        return ""
+    with open(project_file, "r", encoding="utf-8") as f:
+        project = json.load(f)
+    start = _normalize_date(project.get("query_date_from", ""))
+    end = _normalize_date(project.get("query_date_to", ""))
+    if start and end:
+        return f"{start}-{end}"
+    return start or end
+
+
+def _filter_rows_by_date_range(rows: List[Dict[str, str]], date_range: str) -> List[Dict[str, str]]:
+    if not date_range:
+        return rows
+
+    start_raw, end_raw = "", ""
+    if "-" in date_range:
+        start_raw, end_raw = [part.strip() for part in date_range.split("-", 1)]
+    else:
+        start_raw = end_raw = date_range.strip()
+
+    start = _date_tuple(start_raw)
+    end = _date_tuple(end_raw)
+    if start is None and end is None:
+        return rows
+
+    filtered = []
+    for row in rows:
+        row_date = _date_tuple(row.get("Create Date", ""))
+        if row_date is None:
+            filtered.append(row)
+            continue
+        if start is not None and row_date < start:
+            continue
+        if end is not None and row_date > end:
+            continue
+        filtered.append(row)
+    return filtered
+
+
 def _chunk(items: List[str], size: int) -> Iterable[List[str]]:
     for i in range(0, len(items), size):
         yield items[i : i + size]
@@ -135,6 +197,8 @@ def main() -> None:
         )
         output_path = paths.raw_file
         gt_path = paths.ground_truth_file
+        if not args.date_range:
+            args.date_range = _load_project_date_range(paths.project_dir)
         if not args.raw_input and paths.raw_file.exists():
             args.raw_input = str(paths.raw_file)
     else:
@@ -160,6 +224,10 @@ def main() -> None:
             reader = csv.DictReader(f)
             rows = list(reader)
         print(f"[INFO] Loaded raw rows: {len(rows)}")
+        filtered_rows = _filter_rows_by_date_range(rows, args.date_range)
+        if len(filtered_rows) != len(rows):
+            print(f"[INFO] Date-filtered raw rows: {len(filtered_rows)} (removed {len(rows) - len(filtered_rows)})")
+            rows = filtered_rows
     else:
         if not args.query:
             raise ValueError("Either --query or --raw-input must be provided.")

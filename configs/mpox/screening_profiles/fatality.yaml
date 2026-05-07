@@ -12,7 +12,7 @@ defaults:
     possible:
       disease_min: 3
       parameter_min: 2
-      evidence_min: 2
+      evidence_min: 3
       population_min: 2
       location_min: 2
   policies:
@@ -21,16 +21,29 @@ defaults:
     full_text_mode: standard
     stage2_evidence_floor: 1
     parameter_scoring_note: |
-      - Score 3–4 if the paper directly reports case fatality rate, infection fatality
-        rate, or mortality rate from its own original patient/surveillance data (e.g.
-        a cohort study, surveillance report, or meta-analysis that calculates CFR).
-      - Score 2 if the paper reports a clinical case series or case report that records
-        patient outcomes (survived/died), even without explicitly calculating CFR, OR
-        if it is an epidemiological report documenting deaths during an mpox outbreak.
-        Individual case reports of imported mpox with outcome data should score 2.
-      - Score 1 if the paper only mentions mortality in the background/introduction
-        without contributing new outcome data.
-      - Score 0 if death/fatality is not discussed at all.
+      CFR screening guidance:
+      - Judge whether the paper could contribute extractable CFR/fatality/mortality
+        information from original human mpox patient, outbreak, clinical, cohort,
+        case-series, or surveillance data.
+      - Strong support: the title/abstract directly reports CFR/IFR, fatality,
+        mortality, deaths, no deaths, no fatal outcomes, or deaths with a patient
+        denominator.
+      - Moderate support: the paper reports original human mpox cases with clinical
+        course, outcomes, severity, admissions, or surveillance summaries where
+        fatality data may plausibly appear in full text or tables.
+      - For imported-case reports, traveler case reports, household/family clusters,
+        hospital outbreak reports, and environmental investigations tied to named
+        human cases, do not require the abstract to explicitly say "death" or
+        "outcome". If the article is original human case evidence and the clinical
+        course/outcome could plausibly be extractable in full text, use P rather
+        than U.
+      - A recovered case, no fatal outcomes, or a case series with zero deaths can
+        contribute a 0% fatality estimate when a denominator is clear.
+      - Weak support: the paper has little connection to patient outcomes or lacks
+        original human case data. Weigh this against any other evidence rather than
+        applying a keyword-only exclusion.
+      - Assign S/P/U after weighing supporting and opposing reasons; do not decide
+        solely from title keywords.
     fulltext_rescue:
       enabled: true
       when_no_abstract: true
@@ -50,15 +63,15 @@ profiles:
     disease_focus: mpox or monkeypox or MPXV
     disease_exclude: none
     parameter_focus: mortality OR fatality OR case fatality rate OR death rate
-    parameter_exclude: none
+    parameter_exclude: studies with little plausible connection to extractable mpox CFR, mortality, fatality, or patient outcome data
 
   MP8:
     project_number: 8
-    research_question: What is the case fatality rate of mpox?
+    research_question: What is the case fatality rate of mpox, restricted to records created on or before 2023-03-20?
     disease_focus: mpox or monkeypox or MPXV
     disease_exclude: none
-    parameter_focus: case fatality rate OR CFR OR fatality rate
-    parameter_exclude: studies that do not report case fatality rate
+    parameter_focus: case fatality rate, CFR, fatality rate, mortality, deaths, death rate, fatal outcomes, no deaths, survival/death status, or mortality among mpox cases
+    parameter_exclude: studies created after 2023-03-20 or studies with little plausible connection to extractable mpox CFR, mortality, fatality, or patient outcome data
 
   MP12:
     project_number: 12

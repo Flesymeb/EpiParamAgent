@@ -47,11 +47,13 @@ sys.path.insert(0, str(DEV_ROOT))
 
 from metaagent.screening.cli import screening
 from metaagent.coding.cli import coding
+from metaagent.evaluation.cli import evaluation
 from tools.pubmed.cli import pubmed
 from tools.paper_fetch.cli import pdf
 
 main.add_command(screening)
 main.add_command(coding)
+main.add_command(evaluation)
 main.add_command(pubmed)
 main.add_command(pdf)
 

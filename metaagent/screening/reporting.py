@@ -24,6 +24,7 @@ def save_screening_outputs(
     gt_count: int | None,
     batch_size: int,
     batch_concurrency: int,
+    batch_mode: str = "single",
     profile_name: str | None,
     auto_fulltext: bool,
     fulltext_only: bool,
@@ -49,9 +50,9 @@ def save_screening_outputs(
         backup_path = log_dir_early / f"{output_file.stem}_backup_{timestamp}.csv"
         shutil.copy2(output_file, backup_path)
 
-    fieldnames = _collect_fieldnames(papers)
     for paper in papers:
         paper.pop("fulltext_markdown", None)
+    fieldnames = _collect_fieldnames(papers)
 
     with open(output_file, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -81,6 +82,7 @@ def save_screening_outputs(
         output_file=output_file,
         batch_size=batch_size,
         batch_concurrency=batch_concurrency,
+        batch_mode=batch_mode,
         fulltext_needed_count=fulltext_needed_count,
         fulltext_ready_count=fulltext_ready_count,
         fulltext_errors=fulltext_errors,
@@ -102,6 +104,7 @@ def save_screening_outputs(
             "profile": profile_name,
             "batch_size": batch_size,
             "batch_concurrency": batch_concurrency,
+            "batch_mode": batch_mode,
             "auto_fulltext": bool(auto_fulltext),
             "fulltext_only": bool(fulltext_only),
             "research_question": research_question,
@@ -150,7 +153,14 @@ def _collect_fieldnames(papers: list[dict[str, Any]]) -> list[str]:
     if not papers:
         return []
 
-    fieldnames = list(papers[0].keys())
+    fieldnames: list[str] = []
+    seen: set[str] = set()
+    for paper in papers:
+        for key in paper.keys():
+            if key in seen:
+                continue
+            seen.add(key)
+            fieldnames.append(key)
     if "is_ground_truth" in fieldnames:
         fieldnames.remove("is_ground_truth")
         if "PMID" in fieldnames:
@@ -181,6 +191,7 @@ def _build_report_lines(
     output_file: Path,
     batch_size: int,
     batch_concurrency: int,
+    batch_mode: str,
     fulltext_needed_count: int,
     fulltext_ready_count: int,
     fulltext_errors: list[dict[str, str]],
@@ -201,6 +212,7 @@ def _build_report_lines(
     report_lines.append(f"Model config: {llm_cfg.provider}/{llm_cfg.model}")
     report_lines.append(f"Batch size: {batch_size}")
     report_lines.append(f"Batch concurrency: {batch_concurrency}")
+    report_lines.append(f"Batch mode: {batch_mode}")
     report_lines.append(
         "Full-text: "
         f"need_fulltext={fulltext_needed_count} | "

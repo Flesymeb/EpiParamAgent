@@ -21,12 +21,34 @@ defaults:
     full_text_mode: standard
     stage2_evidence_floor: 1
     parameter_scoring_note: |
-      - Score 3–4 if the paper estimates or reports the reproduction number by applying
-        a transmission model or exponential growth method to its own real epidemic data.
-      - Score 2 if the paper only cites or borrows another study's R0 estimate as a
-        model input assumption, without producing its own estimate.
-      - Score 0–1 if the paper only mentions R0 in the introduction without reporting
-        a new estimate.
+      R0/Rt/Re screening guidance:
+      - Judge whether the paper could contribute extractable reproduction-number
+        estimates from human mpox outbreak, incidence, case, or transmission data.
+      - Strong support: the title/abstract directly reports or clearly estimates
+        R0, Rt, Re, effective reproduction number, instantaneous reproduction
+        number, or a closely equivalent reproduction-number quantity.
+      - Moderate support: the paper performs original quantitative mpox epidemic
+        modeling, incidence time-series analysis, or transmissibility estimation
+        where R0/Rt/Re or an equivalent epidemic threshold is likely to appear in
+        full text or tables.
+      - Do not mark a paper as P solely because it mentions transmission dynamics,
+        viral dynamics, genomics, travel spread, contact tracing, incubation period,
+        or outbreak description. Without an explicit reproduction-number concept or
+        quantitative epidemic model, usually mark U.
+      - P should require a concrete reproduction-number signal: R0/Rt/Re wording,
+        effective reproduction number, epidemic threshold, secondary infections per
+        case, transmission capacity, or a model output that is clearly equivalent.
+        If relevance would require the reviewer to re-analyze incidence data rather
+        than extract a reported estimate, mark U.
+      - Generic mathematical models, outbreak forecasts, risk-factor studies,
+        genomic/phylodynamic introductions, clinical cohorts, and policy responses
+        should be U unless the title/abstract indicates a reproduction-number-like
+        quantity is estimated or reported.
+      - Weak support: the paper has little connection to estimating transmissibility
+        from mpox outbreak data. Weigh this against any other evidence rather than
+        applying a keyword-only exclusion.
+      - Assign S/P/U after weighing supporting and opposing reasons; do not decide
+        solely from title keywords.
     fulltext_rescue:
       enabled: true
       when_no_abstract: true
@@ -34,8 +56,8 @@ defaults:
 profiles:
   MP9:
     project_number: 9
-    research_question: What is the basic reproduction number (R0) of mpox?
+    research_question: What are the R0/Rt/Re estimates for human mpox outbreaks, restricted to records created on or before 2023-02-09?
     disease_focus: mpox or monkeypox or MPXV
     disease_exclude: none
-    parameter_focus: basic reproduction number OR R0 OR effective reproduction number OR Rt
-    parameter_exclude: studies that do not report or estimate reproduction number
+    parameter_focus: numeric R0, Rt, Re, effective reproduction number, instantaneous reproduction number, or reproductive number estimate for human mpox
+    parameter_exclude: studies created after 2023-02-09 or studies with little plausible connection to extractable reproduction-number estimates from human mpox outbreak data

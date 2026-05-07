@@ -51,6 +51,9 @@ def download_pdfs_batch(
             print(f"[PDF] PMID_{pmid} cache hit: {target_pdf}")
             results[pmid] = {"status": "downloaded", "pdf_path": str(target_pdf)}
             continue
+        if source_strategy == "cache_only":
+            results[pmid] = {"status": "cache_missing", "pdf_path": ""}
+            continue
         todo_pmids.append(pmid)
 
     if not todo_pmids:

@@ -63,9 +63,11 @@ def prepare(project_root, profile, disease, topic, query, date_range, retmax,
 @click.option("--ground-truth", default="", help="Explicit ground-truth CSV")
 @click.option("--research-question", default="", help="Research question for explicit file mode")
 @click.option("--batch-size", default=20, type=int, help="Papers per batch")
-@click.option("--batch-concurrency", default=1, type=int, help="Concurrent batches")
+@click.option("--batch-concurrency", default=1, type=int, help="Concurrent batch groups")
+@click.option("--batch-mode", default="single", type=click.Choice(["single", "multi"]), help="single=one API call per paper; multi=one API call per batch")
 @click.option("--model", default=None, help="Override model name")
-@click.option("--provider", default=None, help="Override provider profile (openrouter, openai, lab, lab2)")
+@click.option("--provider", default=None, help="Override provider profile (for example openrouter, openai, lab, lab2, boyue, or any env-backed custom provider)")
+@click.option("--temperature", default=None, type=float, help="Override LLM temperature")
 @click.option("--strategy", default="5d", type=click.Choice(["5d", "binary", "binary_noguidance", "binary_baseline", "peco"]))
 @click.option("--experiment", default=None, help="Experiment subdirectory")
 @click.option("--cascade", is_flag=True, help="Enable cascade screening (Tier1->Tier2->Tier3) with deep research retrieval")
@@ -76,20 +78,28 @@ def prepare(project_root, profile, disease, topic, query, date_range, retmax,
 @click.option("--resume-fulltext", is_flag=True, help="Resume from milestone, screen fulltext_eligible papers")
 @click.option("--resume-possible-fulltext", is_flag=True, help="Stage 2: PMC-only full-text rescue for possible candidates")
 @click.option("--resume-sp-fulltext", is_flag=True, help="Stage 2: PMC-only full-text for strong+possible")
+@click.option("--fulltext-cache-only", is_flag=True, help="Stage 2: use cached PDFs/markdown only")
+@click.option(
+    "--prefer-llm-tier/--no-prefer-llm-tier",
+    default=True,
+    help="Use LLM's own tier classification instead of code-side thresholds.",
+)
 def run(project_root, profile, disease, topic, input_file, output_file,
-        ground_truth, research_question, batch_size, batch_concurrency,
-        model, provider, strategy, experiment, cascade, auto_fulltext, fulltext_only,
+        ground_truth, research_question, batch_size, batch_concurrency, batch_mode,
+        model, provider, temperature, strategy, experiment, cascade, auto_fulltext, fulltext_only,
         no_fulltext_rescue, skip_no_abstract,
-        resume_fulltext, resume_possible_fulltext, resume_sp_fulltext):
+        resume_fulltext, resume_possible_fulltext, resume_sp_fulltext, fulltext_cache_only,
+        prefer_llm_tier):
     """Run LLM-based batch screening with optional cascade retrieval."""
     if cascade:
-        _run_cascade(project_root, profile, disease, topic, batch_size, batch_concurrency,
-                     model, provider, strategy, experiment)
+        _run_cascade(project_root, profile, disease, topic, batch_size, batch_concurrency, batch_mode,
+                     model, provider, temperature, strategy, experiment, prefer_llm_tier)
         return
 
     argv = [
         "--batch-size", str(batch_size),
         "--batch-concurrency", str(batch_concurrency),
+        "--batch-mode", batch_mode,
         "--strategy", strategy,
     ]
     if project_root or profile:
@@ -103,6 +113,7 @@ def run(project_root, profile, disease, topic, input_file, output_file,
     if research_question:  argv += ["--research-question", research_question]
     if model:              argv += ["--model", model]
     if provider:           argv += ["--provider", provider]
+    if temperature is not None: argv += ["--temperature", str(temperature)]
     if experiment:         argv += ["--experiment", experiment]
     if auto_fulltext:      argv += ["--auto-fulltext"]
     if fulltext_only:      argv += ["--fulltext-only"]
@@ -111,12 +122,15 @@ def run(project_root, profile, disease, topic, input_file, output_file,
     if resume_fulltext:    argv += ["--resume-fulltext"]
     if resume_possible_fulltext: argv += ["--resume-possible-fulltext"]
     if resume_sp_fulltext: argv += ["--resume-sp-fulltext"]
+    if fulltext_cache_only: argv += ["--fulltext-cache-only"]
+    if prefer_llm_tier:     argv += ["--prefer-llm-tier"]
+    else:                   argv += ["--no-prefer-llm-tier"]
 
     _run_script("screening_llm_batch", argv)
 
 
-def _run_cascade(project_root, profile, disease, topic, batch_size, batch_concurrency,
-                 model, provider, strategy, experiment):
+def _run_cascade(project_root, profile, disease, topic, batch_size, batch_concurrency, batch_mode,
+                 model, provider, temperature, strategy, experiment, prefer_llm_tier=True):
     """Run cascade screening with Tier-2 PubMed/PMC enrichment."""
     import asyncio, csv
     from metaagent.config import load_llm_config
@@ -138,6 +152,7 @@ def _run_cascade(project_root, profile, disease, topic, batch_size, batch_concur
     llm = init_llm_model(
         model_override=model or None,
         provider_override=provider or None,
+        temperature_override=temperature,
     )
     print(f"Model: {cfg.provider or 'default'}/{cfg.model}")
 
@@ -163,11 +178,13 @@ def _run_cascade(project_root, profile, disease, topic, batch_size, batch_concur
                 "llm_model": llm,
                 "batch_size": int(batch_size),
                 "batch_concurrency": int(batch_concurrency),
+                "batch_mode": batch_mode,
                 "screening_stage": "title_abstract",
                 "content_label": "Abstract",
                 "content_key": "Abstract",
-                "content_fallback": "(Abstract unavailable)",
+                "content_fallback": "(NO ABSTRACT AVAILABLE — cannot assess evidence or parameter from title alone. Score conservatively.)",
                 "strategy": strategy,
+                "prefer_llm_tier": prefer_llm_tier,
             },
             try_pmc=True,
         )
@@ -261,12 +278,14 @@ def report(disease, root, topics, out, with_plots, update_md):
 @click.option("--fix-missing/--no-fix-missing", default=False)
 @click.option("--batch-size", default=10, type=int)
 @click.option("--batch-concurrency", default=1, type=int)
+@click.option("--batch-mode", default="single", type=click.Choice(["single", "multi"]))
 @click.option("--model", default=None, help="Override model name")
 @click.option("--provider", default=None, help="Override provider profile")
+@click.option("--temperature", default=None, type=float, help="Override LLM temperature")
 @click.option("--auto-fulltext", is_flag=True)
 @click.option("--fulltext-only", is_flag=True)
 def pipeline(project_root, profile, disease, topic, include_gt, fix_missing,
-             batch_size, batch_concurrency, model, provider, auto_fulltext, fulltext_only):
+             batch_size, batch_concurrency, batch_mode, model, provider, temperature, auto_fulltext, fulltext_only):
     """Full screening pipeline: prepare → run → evaluate."""
     proj = str(resolve_project_root() if not project_root else Path(project_root).resolve())
 
@@ -285,12 +304,14 @@ def pipeline(project_root, profile, disease, topic, include_gt, fix_missing,
         "--project-root", proj, "--profile", profile,
         "--batch-size", str(batch_size),
         "--batch-concurrency", str(batch_concurrency),
+        "--batch-mode", batch_mode,
         "--strategy", "5d",
     ]
     if disease:        eval_argv += ["--disease", disease]
     if topic:          eval_argv += ["--topic", topic]
     if model:          eval_argv += ["--model", model]
     if provider:       eval_argv += ["--provider", provider]
+    if temperature is not None: eval_argv += ["--temperature", str(temperature)]
     if auto_fulltext:  eval_argv += ["--auto-fulltext"]
     if fulltext_only:  eval_argv += ["--fulltext-only"]
     _run_script("screening_llm_batch", eval_argv)

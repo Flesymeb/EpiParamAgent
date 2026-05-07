@@ -5,7 +5,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any, Optional
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 DEFAULT_THRESHOLDS: dict[str, dict[str, int]] = {
     "strong": {
@@ -63,7 +63,7 @@ class ScreeningDecision(BaseModel):
 
     overall_score: Optional[int] = Field(
         default=None,
-        description="Overall relevance score from 0 to 4, computed from weighted dimension scores",
+        description="Optional overall integer score from 0 to 4. If omitted, code will derive it from the five dimension scores.",
     )
     overall_justification: str = Field(description="Overall assessment in 2-3 sentences")
     confidence: Optional[float] = Field(
@@ -72,6 +72,31 @@ class ScreeningDecision(BaseModel):
         le=1.0,
         description="Confidence from 0 to 1. 1.0 means the text directly covers all dimensions; 0.0 means there is not enough information to judge.",
     )
+    tier: Optional[str] = Field(
+        default=None,
+        description="Your own tier classification after holistic judgment: "
+                    "'S' (Strong candidate — clearly mentions the target topic with high confidence, should proceed to next stage), "
+                    "'P' (Possible candidate — mentions the relevant topic but some dimensions are unclear from available evidence, needs full-text verification), "
+                    "or 'U' (Unlikely candidate — clearly not relevant, does not meet core requirements, should be excluded). "
+                    "Consider the overall evidence strength across all dimensions, not mechanical threshold counting.",
+    )
+
+    @field_validator("tier", mode="before")
+    @classmethod
+    def normalize_tier(cls, value):
+        if value is None:
+            return None
+        text = str(value).strip()
+        if not text:
+            return None
+        label = llm_tier_to_label(text)
+        if label == "strong_candidate":
+            return "S"
+        if label == "possible_candidate":
+            return "P"
+        if label == "unlikely_candidate":
+            return "U"
+        return None
 
     @model_validator(mode="after")
     def calculate_overall_score(self):
@@ -199,14 +224,76 @@ def resolve_stage2_evidence_floor(policies: dict[str, Any] | None) -> int:
     return int((policies or {}).get("stage2_evidence_floor", 1))
 
 
+def llm_tier_to_label(tier: str | None) -> str | None:
+    """Map LLM self-classified tier to canonical label.
+
+    Accepts S/P/U directly, plus legacy include/maybe/exclude for backward compat.
+    """
+    if tier is None:
+        return None
+    tier = tier.strip().upper()
+    # Canonical S/P/U
+    if tier in ("S", "STRONG", "STRONG_CANDIDATE"):
+        return "strong_candidate"
+    if tier in ("P", "POSSIBLE", "POSSIBLE_CANDIDATE"):
+        return "possible_candidate"
+    if tier in ("U", "UNLIKELY", "UNLIKELY_CANDIDATE"):
+        return "unlikely_candidate"
+    # Legacy include/maybe/exclude
+    tier_lower = tier.lower()
+    if tier_lower in ("include", "yes", "clearly relevant"):
+        return "strong_candidate"
+    if tier_lower in ("maybe", "possible", "uncertain", "potentially relevant"):
+        return "possible_candidate"
+    if tier_lower in ("exclude", "no", "clearly not relevant"):
+        return "unlikely_candidate"
+    return None
+
+
 def classify_screening_decision(
     decision: ScreeningDecision,
     *,
     thresholds: dict[str, Any] | None = None,
     stage_mode: str = "strict",
     evidence_floor: int = 1,
+    prefer_llm_tier: bool = True,
 ) -> str:
-    """Map five-dimension scores to strong/possible/unlikely in code."""
+    """Map five-dimension scores to strong/possible/unlikely.
+
+    When prefer_llm_tier=True and the LLM provided a tier, use the LLM's own
+    holistic judgment instead of code-side threshold rules. Falls back to
+    threshold-based classification when the LLM did not provide a tier.
+
+    Core exclusion and full-text hard gates always run regardless of prefer_llm_tier,
+    because the LLM's tier is a holistic judgment, not a veto of objective dimension facts.
+    """
+    # Hard gates always run first — LLM tier cannot override them.
+    if _violates_core_exclusion(decision):
+        return "unlikely_candidate"
+
+    normalized = normalize_thresholds(thresholds)
+
+    if prefer_llm_tier and decision.tier is not None:
+        label = llm_tier_to_label(decision.tier)
+        if label is not None:
+            if stage_mode == "confirm_parameter":
+                # Always run 5D gate for strong-candidate confirmation, regardless of tier.
+                # Strong candidates entering this stage deserve a gate check even when the
+                # full-text LLM says tier=U, because a borderline paper (par=2, ev=4) should
+                # be downgraded to possible rather than excluded outright.
+                possible_block = _apply_stage_mode(normalized["possible"], stage_mode=stage_mode)
+                gate = _classify_confirm_parameter(decision, possible_block, evidence_floor=evidence_floor)
+                if gate == "unlikely_candidate":
+                    return "unlikely_candidate"
+                # Gate passed: if LLM said U, downgrade to possible (not exclude).
+                return "possible_candidate" if label == "unlikely_candidate" else label
+            if stage_mode == "filter_possible" and label != "unlikely_candidate":
+                possible_block = _apply_stage_mode(normalized["possible"], stage_mode=stage_mode)
+                gate = _classify_possible_fulltext(decision, possible_block, evidence_floor=evidence_floor)
+                if gate == "unlikely_candidate":
+                    return "unlikely_candidate"
+            return label
+
     normalized = normalize_thresholds(thresholds)
 
     if _meets_threshold_block(decision, normalized["strong"]):
@@ -224,25 +311,40 @@ def classify_screening_decision(
     return "unlikely_candidate"
 
 
+def _violates_core_exclusion(decision: ScreeningDecision) -> bool:
+    """Hard exclusion gates that cannot be overridden by an LLM tier label.
+
+    The LLM may occasionally emit an internally inconsistent result, such as
+    tier=P while assigning low dimension scores. Keep this guard limited to
+    clearly wrong disease or non-original evidence; parameter relevance is often
+    the most nuanced dimension at title/abstract screening, and the tier is the
+    model's intended final judgment for borderline parameter cases.
+    """
+    if decision.disease_relevance.score <= 1:
+        return True
+    if decision.original_evidence.score <= 1:
+        return True
+    return False
+
+
 def _classify_confirm_parameter(
     decision: ScreeningDecision,
     threshold_block: dict[str, int],
     *,
     evidence_floor: int = 1,
 ) -> str:
-    """Stage-2 rule for STRONG candidates: conservative confirmation pass.
+    """Stage-2 rule for STRONG candidates: 5D confirmation pass.
 
-    Demote only when the full text provides clear evidence that:
-    - the target parameter is entirely absent or cited-only (score <= 1), OR
-    - evidence quality is below the profile-specific floor:
-        SI profiles: floor=2 → demote model-fitted (evidence=2) papers
-        R0 profiles: floor=1 → only demote purely theoretical papers (evidence≤1)
+    Lenient on parameter (min=2): a strong candidate may report the parameter
+    as a secondary result and still be worthy of inclusion. Evidence must exceed
+    the profile floor. All other dimensions checked against threshold_block.
     """
-    if decision.parameter_relevance.score <= 1:
+    effective = dict(threshold_block)
+    # Confirmation pass: parameter must be at least present (≥2), not necessarily primary.
+    effective["parameter_min"] = max(2, effective.get("parameter_min", 2))
+    effective["evidence_min"] = max(effective.get("evidence_min", 1), evidence_floor + 1)
+    if not _meets_threshold_block(decision, effective):
         return "unlikely_candidate"
-    if decision.original_evidence.score <= evidence_floor:
-        return "unlikely_candidate"
-
     return "possible_candidate"
 
 
@@ -252,20 +354,19 @@ def _classify_possible_fulltext(
     *,
     evidence_floor: int = 1,
 ) -> str:
-    """Stage-2 rule for POSSIBLE candidates: active FP reduction pass.
+    """Stage-2 rule for POSSIBLE candidates: 5D active FP reduction pass.
 
-    Demotion rules (any one is sufficient):
-    - parameter_relevance <= 2  (weakly/not supported; or cited-only estimate)
-    - original_evidence   <= evidence_floor  (below profile-specific threshold)
-    - disease_relevance   <= 1  (clearly off-topic disease)
+    All five dimensions are checked. With full text, parameter must be clearly
+    reported (≥3) and evidence must exceed the profile floor. Any failing
+    dimension causes demotion to unlikely.
     """
-    if decision.parameter_relevance.score <= 2:
+    effective = dict(threshold_block)
+    # Full text: raise parameter floor to 3 — parameter as secondary/intermediate
+    # result (score 2) is not sufficient for inclusion.
+    effective["parameter_min"] = max(3, effective.get("parameter_min", 3))
+    effective["evidence_min"] = max(effective.get("evidence_min", 1), evidence_floor + 1)
+    if not _meets_threshold_block(decision, effective):
         return "unlikely_candidate"
-    if decision.original_evidence.score <= evidence_floor:
-        return "unlikely_candidate"
-    if decision.disease_relevance.score <= 1:
-        return "unlikely_candidate"
-
     return "possible_candidate"
 
 

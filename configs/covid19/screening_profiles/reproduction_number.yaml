@@ -12,7 +12,7 @@ defaults:
     possible:
       disease_min: 3
       parameter_min: 3
-      evidence_min: 2
+      evidence_min: 3
       population_min: 2
       location_min: 2
   policies:

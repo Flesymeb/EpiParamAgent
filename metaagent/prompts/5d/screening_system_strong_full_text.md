@@ -38,19 +38,29 @@ Only score 3 or higher if the study used its own individual-level case data to d
 - If the full text only discusses the topic broadly, uses the parameter as background context, or does not actually report or estimate the target parameter, score this dimension low.
 - Studies that do not actually report the parameter or {parameter_exclude} should score low.
 
+**Critical distinction for scoring 3 vs 4:**
+- Score 4: the target parameter is the **primary estimated output** of this study — the Methods section is designed around estimating it, the Results section leads with it, and it is a main finding.
+- Score 3: the target parameter is explicitly estimated somewhere in the paper but is **one of several co-equal parameters** (e.g., a paper that jointly estimates SI, R0, and incubation period where none is the sole focus).
+- Score 2: the target parameter is reported numerically but as a **secondary or intermediate result** — e.g., SI is estimated to plug into an R0 calculation, or is mentioned in passing with a single value in a table without distributional fit.
+- Score 1: the target parameter appears only as a cited value from another paper, or the paper only discusses it conceptually without reporting an estimate.
+- Score 0: absent.
+
+**Watch for these FP patterns in full text:**
+- Paper estimates generation time or incubation period and uses SI only as an intermediate input → param score 1-2, not 4.
+- Paper reports a comprehensive epidemiological characterization with SI as one row in a summary table among 5+ other parameters → param score 2-3.
+- Paper reports "effective serial interval" or time-varying SI rather than a single distributional estimate → score 3 if the review question asks for a fixed distribution, lower if the parameter definition doesn't match.
+
 Scoring note for this dimension:
 {parameter_scoring_note}
 
 Strain scope note:
 - If the research question explicitly covers both original strains and variants, original wild-type strain studies are equally in scope. Do NOT score original-strain papers lower on disease relevance than variant-specific papers.
 
-Second-stage policy (confirmation pass, not a fresh re-screen):
-- This paper already passed stage 1 as a STRONG candidate. Treat that as a strong prior.
-- Only score disease, population, or location low if the full text CLEARLY contradicts stage-1 relevance on those dimensions.
-- Do not sharply penalize any dimension simply because the full text is narrower or less explicit than the title/abstract implied.
-- Focus primarily on whether the target parameter is genuinely reported or estimated somewhere in the full text.
-- A score of 2 ("weakly or indirectly supported") should be used when the parameter is present but not prominently stated; reserve 0–1 only for cases where the full text provides clear evidence the parameter is absent or the paper is entirely off-topic.
-- If the paper clearly reports the target parameter with original empirical evidence, preserve a moderate relevance assessment even if some scope details are imperfect.
+Second-stage policy:
+- You now have the full text. Score each dimension based on what the full text actually shows — not on what the abstract implied.
+- For disease, population, and location: carry over the stage-1 judgment unless the full text clearly contradicts it.
+- For **original_evidence**: the full text is the definitive source. Score precisely using the guide above. If the paper uses SI or other parameters as calibration inputs or only cites others' estimates, that is score 1. If it fits aggregate curves without individual contact data, that is score 2. Do not inflate this score because the paper is "empirical" in a general sense.
+- For **parameter_relevance**: score 3-4 only if the target parameter is explicitly reported or estimated somewhere in the body, tables, appendix, or figure captions. If the full text uses the parameter as a background context value, inputs it as a fixed assumption, or only cites it from other work, score 1-2. Score 0-1 if the parameter is absent or clearly not the focus.
 
 Scoring rubric for each dimension:
 - 4: explicit and central in the full text

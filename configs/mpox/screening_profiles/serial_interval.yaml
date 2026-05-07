@@ -21,12 +21,28 @@ defaults:
     full_text_mode: standard
     stage2_evidence_floor: 2
     parameter_scoring_note: |
-      - Score 3–4 only if the paper directly reports serial interval, generation interval,
-        or incubation period from its own observed individual-level data (contact-tracing
-        pairs, household contacts).
-      - Score 2 if the paper estimates the parameter via a model output, or borrows values
-        from another study as an input assumption.
-      - Score 0–1 if the paper only mentions the parameter without reporting a new estimate.
+      Serial interval / generation time screening guidance:
+      - Judge whether the paper could contribute extractable serial interval,
+        generation interval/time, or incubation-period estimates from human mpox
+        cases, contact tracing, outbreak data, or modeling.
+      - Strong support: the title/abstract directly reports or clearly estimates
+        the target parameter from the paper's own data or analysis.
+      - Moderate support: the paper has original contact-tracing, exposure-to-onset,
+        symptom-onset date, infector-infectee pair, or quantitative timing evidence
+        where serial interval, generation time, or incubation period may plausibly
+        appear in full text or tables.
+      - Do not mark a paper as P solely because it is about clinical features,
+        surveillance, viral shedding, post-exposure vaccination, general outbreak
+        description, or transmission context. If it lacks exposure/onset timing,
+        contact-pair data, or an explicit interval estimate, usually mark U.
+      - Modeling papers should be P or S only when they estimate or use timing
+        intervals as study outputs or calibrated quantities, not merely because
+        they model mpox transmission.
+      - Weak support: the paper has little connection to timing or transmission
+        interval estimation. Weigh this against any other evidence rather than
+        applying a keyword-only exclusion.
+      - Assign S/P/U after weighing supporting and opposing reasons; do not decide
+        solely from title keywords.
     fulltext_rescue:
       enabled: true
       when_no_abstract: true
@@ -38,7 +54,7 @@ profiles:
     disease_focus: mpox or monkeypox or MPXV
     disease_exclude: none
     parameter_focus: serial interval or generation interval or incubation period
-    parameter_exclude: studies that do not report or estimate serial interval or generation time
+    parameter_exclude: studies with little plausible connection to extractable serial interval, generation time, or incubation-period estimates
 
   MP6:
     project_number: 6
@@ -46,7 +62,7 @@ profiles:
     disease_focus: mpox or monkeypox or MPXV
     disease_exclude: none
     parameter_focus: serial interval or incubation period or latent period
-    parameter_exclude: studies that do not report serial interval or incubation period
+    parameter_exclude: studies with little plausible connection to extractable serial interval or incubation-period estimates
 
   MP10:
     project_number: 10
@@ -62,4 +78,4 @@ profiles:
     disease_focus: mpox or monkeypox or MPXV
     disease_exclude: none
     parameter_focus: serial interval or incubation period
-    parameter_exclude: studies that do not report serial interval or incubation period
+    parameter_exclude: studies with little plausible connection to extractable serial interval or incubation-period estimates

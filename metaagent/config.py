@@ -221,10 +221,12 @@ def load_llm_config(
         timeout_s = LLMConfig().timeout_s
 
     temperature = _safe_float(
-        params.get("llm_temperature")
-        or _module_env_value(normalized_module, "LLM_TEMPERATURE")
-        or os.getenv("LLM_TEMPERATURE")
-        or 0.1
+        _first_defined_value(
+            params.get("llm_temperature"),
+            _module_env_value(normalized_module, "LLM_TEMPERATURE"),
+            os.getenv("LLM_TEMPERATURE"),
+            0.1,
+        )
     )
     verify_ssl = _safe_bool(
         params.get("llm_verify_ssl")
@@ -405,4 +407,17 @@ def _first_config_value(*values: Any) -> Optional[str]:
         text = _strip_inline_comment(str(value).strip())
         if text:
             return text
+    return None
+
+
+def _first_defined_value(*values: Any) -> Any:
+    for value in values:
+        if value is None:
+            continue
+        if isinstance(value, str):
+            text = _strip_inline_comment(value.strip())
+            if text:
+                return text
+            continue
+        return value
     return None

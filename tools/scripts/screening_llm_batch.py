@@ -71,12 +71,14 @@ async def _screen(
     llm_model: Any,
     batch_size: int,
     batch_concurrency: int,
+    batch_mode: str,
     screening_config: dict[str, Any],
     screening_stage: str,
     content_label: str,
     content_key: str,
     content_fallback: str,
     strategy: str,
+    prefer_llm_tier: bool = True,
 ) -> None:
     from metaagent.screening.engine import screen_papers_batch_async
 
@@ -86,12 +88,14 @@ async def _screen(
         llm_model,
         batch_size=batch_size,
         batch_concurrency=batch_concurrency,
+        batch_mode=batch_mode,
         screening_config=screening_config,
         screening_stage=screening_stage,
         content_label=content_label,
         content_key=content_key,
         content_fallback=content_fallback,
         strategy=strategy,
+        prefer_llm_tier=prefer_llm_tier,
     )
 
 
@@ -121,6 +125,7 @@ def _save(
         gt_count=gt_count,
         batch_size=args.batch_size,
         batch_concurrency=args.batch_concurrency,
+        batch_mode=args.batch_mode,
         profile_name=args.profile,
         auto_fulltext=bool(args.auto_fulltext or args.fulltext_only),
         fulltext_only=bool(args.fulltext_only),
@@ -149,6 +154,7 @@ def _run_second_stage(
     strong_stage: str,
     possible_stage: str,
     suffix: str,
+    source_strategy: str,
 ) -> None:
     from metaagent.screening.fulltext_pipeline import prepare_fulltext_candidates
 
@@ -170,7 +176,7 @@ def _run_second_stage(
         papers_without_abstract=candidates,
         fulltext_cached=[],
         fulltext_errors=fulltext_errors,
-        source_strategy="pmc_only",
+        source_strategy=source_strategy,
     )
 
     strong_rows = [p for p in fulltext_ready if p.get("llm_suggest") == "strong_candidate"]
@@ -184,12 +190,14 @@ def _run_second_stage(
                 llm_model=llm_model,
                 batch_size=args.batch_size,
                 batch_concurrency=args.batch_concurrency,
+                batch_mode=args.batch_mode,
                 screening_config=screening_config,
                 screening_stage=strong_stage,
                 content_label="Full-text content (Markdown)",
                 content_key="fulltext_markdown",
                 content_fallback="(Full-text content unavailable.)",
                 strategy=args.strategy,
+                prefer_llm_tier=args.prefer_llm_tier,
             )
         )
     if possible_rows:
@@ -200,12 +208,14 @@ def _run_second_stage(
                 llm_model=llm_model,
                 batch_size=args.batch_size,
                 batch_concurrency=args.batch_concurrency,
+                batch_mode=args.batch_mode,
                 screening_config=screening_config,
                 screening_stage=possible_stage,
                 content_label="Full-text content (Markdown)",
                 content_key="fulltext_markdown",
                 content_fallback="(Full-text content unavailable.)",
                 strategy=args.strategy,
+                prefer_llm_tier=args.prefer_llm_tier,
             )
         )
 
@@ -281,6 +291,7 @@ def main() -> None:
     llm_model = init_llm_model(
         model_override=args.model or None,
         provider_override=args.provider or None,
+        temperature_override=args.temperature,
     )
 
     if args.resume_possible_fulltext or args.resume_sp_fulltext:
@@ -308,6 +319,7 @@ def main() -> None:
             strong_stage=strong_stage,
             possible_stage=possible_stage,
             suffix=suffix,
+            source_strategy="cache_only" if args.fulltext_cache_only else "pmc_only",
         )
         return
 
@@ -336,12 +348,14 @@ def main() -> None:
                     llm_model=llm_model,
                     batch_size=args.batch_size,
                     batch_concurrency=args.batch_concurrency,
+                    batch_mode=args.batch_mode,
                     screening_config=screening_config,
                     screening_stage="full_text",
                     content_label="Full-text content (Markdown)",
                     content_key="fulltext_markdown",
                     content_fallback="(Full-text content unavailable.)",
                     strategy=args.strategy,
+                    prefer_llm_tier=args.prefer_llm_tier,
                 )
             )
             for paper in fulltext_ready:
@@ -400,12 +414,14 @@ def main() -> None:
                 llm_model=llm_model,
                 batch_size=args.batch_size,
                 batch_concurrency=args.batch_concurrency,
+                batch_mode=args.batch_mode,
                 screening_config=screening_config,
                 screening_stage="title_abstract",
                 content_label="Abstract",
                 content_key="Abstract",
                 content_fallback="(Abstract unavailable.)",
                 strategy=args.strategy,
+                prefer_llm_tier=args.prefer_llm_tier,
             )
         )
 
@@ -417,12 +433,14 @@ def main() -> None:
                 llm_model=llm_model,
                 batch_size=args.batch_size,
                 batch_concurrency=args.batch_concurrency,
+                batch_mode=args.batch_mode,
                 screening_config=screening_config,
                 screening_stage="title_only",
                 content_label="Available metadata",
                 content_key="Abstract",
                 content_fallback="(No abstract available. Assess based on title and keywords only.)",
                 strategy=args.strategy,
+                prefer_llm_tier=args.prefer_llm_tier,
             )
         )
 
@@ -444,12 +462,14 @@ def main() -> None:
                     llm_model=llm_model,
                     batch_size=args.batch_size,
                     batch_concurrency=args.batch_concurrency,
+                    batch_mode=args.batch_mode,
                     screening_config=screening_config,
                     screening_stage="full_text",
                     content_label="Full-text content (Markdown)",
                     content_key="fulltext_markdown",
                     content_fallback="(Full-text content unavailable.)",
                     strategy=args.strategy,
+                    prefer_llm_tier=args.prefer_llm_tier,
                 )
             )
             for paper in fulltext_ready:
@@ -486,10 +506,12 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output", default="", help="Explicit output CSV")
     parser.add_argument("--ground-truth", default="", help="Explicit ground-truth CSV")
     parser.add_argument("--research-question", default="", help="Research question for explicit file mode")
-    parser.add_argument("--batch-size", type=int, default=20, help="Progress/logging batch size")
-    parser.add_argument("--batch-concurrency", type=int, default=1, help="Max in-flight LLM requests")
+    parser.add_argument("--batch-size", type=int, default=20, help="Papers per API request in multi mode; progress group size in single mode")
+    parser.add_argument("--batch-concurrency", type=int, default=1, help="Concurrent batch groups")
+    parser.add_argument("--batch-mode", choices=["single", "multi"], default="single", help="single=one API call per paper; multi=one API call per batch of papers")
     parser.add_argument("--model", default="", help="Override model name")
-    parser.add_argument("--provider", default="", help="Override provider profile (openrouter, openai, lab, lab2)")
+    parser.add_argument("--provider", default="", help="Override provider profile (for example openrouter, openai, lab, lab2, boyue, or any env-backed custom provider)")
+    parser.add_argument("--temperature", type=float, default=None, help="Override LLM temperature")
     parser.add_argument(
         "--strategy",
         choices=["5d", "binary", "binary_noguidance", "binary_baseline", "peco"],
@@ -503,6 +525,20 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--resume-fulltext", action="store_true", help="Deprecated alias; use --resume-sp-fulltext")
     parser.add_argument("--resume-possible-fulltext", action="store_true")
     parser.add_argument("--resume-sp-fulltext", action="store_true")
+    parser.add_argument("--fulltext-cache-only", action="store_true", help="Use cached PDFs/markdown only during second-stage full-text screening")
+    parser.add_argument(
+        "--prefer-llm-tier",
+        dest="prefer_llm_tier",
+        action="store_true",
+        default=True,
+        help="Use LLM's own S/P/U tier classification instead of code-side thresholds (default).",
+    )
+    parser.add_argument(
+        "--no-prefer-llm-tier",
+        dest="prefer_llm_tier",
+        action="store_false",
+        help="Use code-side score thresholds instead of the LLM's S/P/U tier.",
+    )
     return parser
 
 

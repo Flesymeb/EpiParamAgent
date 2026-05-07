@@ -29,7 +29,16 @@ def _mineru_should_bypass_proxy(url: str, cfg: Optional[MineruConfig]) -> bool:
     if not cfg or not cfg.no_proxy:
         return False
     host = (url or '').lower()
-    return any(domain in host for domain in ('mineru.net', 'openxlab.org.cn', 'cdn-mineru'))
+    return any(
+        domain in host
+        for domain in (
+            'mineru.net',
+            'openxlab.org.cn',
+            'cdn-mineru',
+            'mineru.oss-cn-shanghai.aliyuncs.com',
+            'aliyuncs.com',
+        )
+    )
 
 
 @contextmanager
@@ -42,7 +51,10 @@ def _temporary_no_proxy(url: str, cfg: Optional[MineruConfig]):
     original = {key: os.environ.get(key) for key in proxy_keys}
     no_proxy_keys = ['NO_PROXY', 'no_proxy']
     original_no_proxy = {key: os.environ.get(key) for key in no_proxy_keys}
-    mineru_hosts = 'mineru.net,openxlab.org.cn,cdn-mineru.openxlab.org.cn'
+    mineru_hosts = (
+        'mineru.net,openxlab.org.cn,cdn-mineru.openxlab.org.cn,'
+        'mineru.oss-cn-shanghai.aliyuncs.com,aliyuncs.com'
+    )
 
     try:
         for key in proxy_keys:

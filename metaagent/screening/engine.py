@@ -64,6 +64,7 @@ def load_ground_truth_pmids(gt_file: Path) -> set[str]:
 def init_llm_model(
     model_override: str | None = None,
     provider_override: str | None = None,
+    temperature_override: float | None = None,
 ) -> Any:
     """Initialize screening model from shared runtime config.
 
@@ -78,6 +79,8 @@ def init_llm_model(
         params["llm_model"] = model_override
     if provider_override:
         params["llm_provider"] = provider_override
+    if temperature_override is not None:
+        params["llm_temperature"] = temperature_override
     cfg = load_llm_config(params, module_hint="screening")
     if not cfg.api_key:
         raise ValueError(
@@ -199,25 +202,94 @@ async def invoke_with_retry_async(llm, prompt, max_retries=3, delay=1.0):
     raise last_exception if last_exception else Exception("Unknown error in retry loop")
 
 
+async def _screen_individual_prompts(
+    *,
+    structured_llm: Any,
+    batch_papers: list[dict[str, Any]],
+    batch_prompts: list[Any],
+    output_schema: type,
+    thresholds: dict[str, Any] | None,
+    stage_mode: str,
+    evidence_floor: int,
+    prefer_llm_tier: bool,
+) -> list[str]:
+    """Screen a batch by issuing one model request per paper."""
+    tasks = [invoke_with_retry_async(structured_llm, prompt) for prompt in batch_prompts]
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+
+    single_errors: list[str] = []
+    for paper, prompt, result in zip(batch_papers, batch_prompts, results):
+        if isinstance(result, Exception):
+            single_errors.append(
+                f"  ⚠️ Paper failed PMID={paper.get('PMID', 'N/A')}: {str(result)[:100]}"
+            )
+            _mark_paper_error(paper, result)
+            continue
+        try:
+            decision, cost = result
+            _write_cost(paper, cost)
+            parsed = _coerce_structured_result(decision, output_schema)
+            _write_parsed_result(
+                paper,
+                parsed,
+                thresholds=thresholds,
+                stage_mode=stage_mode,
+                evidence_floor=evidence_floor,
+                prefer_llm_tier=prefer_llm_tier,
+            )
+        except Exception as parse_error:
+            try:
+                retry_result, retry_cost = await invoke_with_retry_async(
+                    structured_llm,
+                    prompt,
+                    max_retries=2,
+                )
+                _write_cost(paper, retry_cost)
+                parsed = _coerce_structured_result(retry_result, output_schema)
+                _write_parsed_result(
+                    paper,
+                    parsed,
+                    thresholds=thresholds,
+                    stage_mode=stage_mode,
+                    evidence_floor=evidence_floor,
+                    prefer_llm_tier=prefer_llm_tier,
+                )
+            except Exception as retry_error:
+                single_errors.append(
+                    f"  ⚠️ Paper failed PMID={paper.get('PMID', 'N/A')}: {str(retry_error or parse_error)[:100]}"
+                )
+                _mark_paper_error(paper, retry_error)
+    return single_errors
+
+
 async def screen_papers_batch_async(
     papers: list[dict[str, Any]],
     research_question: str,
     llm_model: Any,
     batch_size: int = 20,
     batch_concurrency: int = 1,
+    batch_mode: str = "single",
     screening_config: Optional[dict[str, Any]] = None,
     screening_stage: str = "title_abstract",
     content_label: str = "Abstract",
     content_key: str = "Abstract",
-    content_fallback: str = "(No abstract available. Please assess based on title only.)",
+    content_fallback: str = "(NO ABSTRACT AVAILABLE — cannot assess evidence quality or parameter details. Score conservatively: evidence ≤ 2, parameter ≤ 2 unless title explicitly states the target parameter, tier at most P.)",
     strategy: str = "5d",
+    prefer_llm_tier: bool = True,
 ) -> list[dict[str, Any]]:
     """Screen papers in async batches and write scores back onto each paper dict.
 
     Args:
         strategy: Screening strategy. "5d" uses the five-dimension scoring model;
             "binary" uses a simpler include/exclude decision model.
+        prefer_llm_tier: If True (default), use the LLM's own tier classification
+            (S/P/U) instead of code-side threshold rules. Falls back to thresholds
+            when the LLM did not provide a tier.
     """
+    batch_mode = (batch_mode or "single").strip().lower()
+    if batch_mode not in {"single", "multi"}:
+        raise ValueError(f"batch_mode must be 'single' or 'multi', got {batch_mode!r}")
+
     default_config = {
         "research_question": research_question,
         "disease_focus": "(SARS-CoV-2 OR COVID-19 OR 2019-nCoV OR coronavirus) AND its (variant OR mutation OR lineage OR amino acid substitution)",
@@ -321,18 +393,36 @@ async def screen_papers_batch_async(
     json_schema = output_schema.model_json_schema()
     schema_hint = _build_json_schema_hint(output_schema)
     escaped_schema_hint = schema_hint.replace("{", "{{").replace("}", "}}")
-    system_text += (
-        "\n\nYou MUST respond with a single JSON object matching this schema. "
-        "Output valid JSON only, no other text.\n"
-        f"{escaped_schema_hint}"
-    )
+    if batch_mode == "multi":
+        system_text += (
+            "\n\nYou MUST respond with a single JSON object with exactly this top-level shape:\n"
+            '{{"papers":[{{"paper_id":"the exact Paper ID from the input","decision":{{...}}}}]}}\n'
+            "Return one entry for every input paper, in the same order if possible. "
+            "Output valid JSON only, no markdown or extra text.\n"
+            "Each decision object must match this schema. For each five-dimension field, "
+            'return an object with exactly two keys: "score" (integer 0-4 only, never decimals) '
+            'and "justification" (short text). Do not return bare strings for dimension fields. '
+            'The optional "overall_score" field, if included, must also be an integer 0-4; '
+            "do not output weighted decimals such as 3.6.\n"
+            f"{escaped_schema_hint}"
+        )
+    else:
+        system_text += (
+            "\n\nYou MUST respond with a single JSON object matching this schema. "
+            "Output valid JSON only, no other text.\n"
+            "For each five-dimension field, return an object with exactly two keys: "
+            '"score" (integer 0-4 only, never decimals) and "justification" (short text). '
+            'Do not return bare strings for dimension fields. '
+            'The optional "overall_score" field, if you include it, must also be an integer 0-4; do not output weighted decimals such as 3.6.\n'
+            f"{escaped_schema_hint}"
+        )
 
     template = ChatPromptTemplate.from_messages(
         [("system", system_text), ("human", user_text)]
     )
     structured_llm = llm_model.bind(response_format={"type": "json_object"})
 
-    all_prompts: list[tuple[dict[str, Any], Any]] = []
+    all_prompts: list[tuple[dict[str, Any], Any, dict[str, str]]] = []
     for paper in papers:
         title = paper.get("Title", "").strip()
         content = (paper.get(content_key) or "").strip() or content_fallback
@@ -340,21 +430,22 @@ async def screen_papers_batch_async(
         prompt_kwargs: dict[str, str] = {
             "research_question": research_question,
             "title": title,
+            "publication_year": str(paper.get("Publication Year") or "").strip() or "(Not available)",
+            "create_date": str(paper.get("Create Date") or "").strip() or "(Not available)",
             "content_label": content_label,
             "content": content,
             "keywords": keywords,
+            "pub_types": (paper.get("pub_types") or "").strip() or "(Not available)",
+            "mesh_terms": (paper.get("mesh_terms") or "").strip() or "(Not available)",
         }
-        if is_peco:
-            prompt_kwargs["pub_types"] = (paper.get("pub_types") or "").strip() or "(Not available)"
-            prompt_kwargs["mesh_terms"] = (paper.get("mesh_terms") or "").strip() or "(Not available)"
         prompt = template.format_messages(**prompt_kwargs)
-        all_prompts.append((paper, prompt))
+        all_prompts.append((paper, prompt, prompt_kwargs))
 
     total = len(all_prompts)
     total_batches = (total - 1) // batch_size + 1
     log_every_batches = max(1, total_batches // 20)
     print(
-        f"\nScreening {total} papers (batch={batch_size}, concurrency={batch_concurrency})...\n"
+        f"\nScreening {total} papers (batch={batch_size}, concurrency={batch_concurrency}, mode={batch_mode})...\n"
     )
 
     semaphore = asyncio.Semaphore(max(1, batch_concurrency))
@@ -362,11 +453,11 @@ async def screen_papers_batch_async(
     completed = 0
     started_at = time.perf_counter()
 
-    async def process_batch(batch_idx: int, batch: list[tuple[dict[str, Any], Any]]):
+    async def process_batch(batch_idx: int, batch: list[tuple[dict[str, Any], Any, dict[str, str]]]):
         nonlocal completed
         async with semaphore:
-            batch_prompts = [prompt for _, prompt in batch]
-            batch_papers = [paper for paper, _ in batch]
+            batch_prompts = [prompt for _, prompt, _ in batch]
+            batch_papers = [paper for paper, _, _ in batch]
 
             should_log = (
                 batch_idx == 1
@@ -375,31 +466,51 @@ async def screen_papers_batch_async(
             )
 
             try:
-                tasks = [
-                    invoke_with_retry_async(structured_llm, prompt)
-                    for prompt in batch_prompts
-                ]
-                results = await asyncio.gather(*tasks, return_exceptions=True)
-
-                single_errors: list[str] = []
-                for paper, result in zip(batch_papers, results):
-                    completed += 1
-                    if isinstance(result, Exception):
-                        single_errors.append(
-                            f"  ⚠️ Paper failed PMID={paper.get('PMID', 'N/A')}: {str(result)[:100]}"
+                if batch_mode == "multi":
+                    batch_content, paper_ids = _build_multi_paper_user_content(
+                        [(paper, kwargs) for paper, _, kwargs in batch]
+                    )
+                    batch_template = ChatPromptTemplate.from_messages(
+                        [("system", system_text), ("human", "{batch_content}")]
+                    )
+                    batch_prompt = batch_template.format_messages(batch_content=batch_content)
+                    raw = await invoke_with_retry_async(structured_llm, batch_prompt)
+                    decision, cost = raw
+                    parsed_by_id = _parse_multi_paper_result(decision, output_schema)
+                    missing_ids: list[str] = []
+                    for paper, paper_id in zip(batch_papers, paper_ids):
+                        parsed = parsed_by_id.get(paper_id)
+                        if parsed is None:
+                            missing_ids.append(paper_id)
+                            _mark_paper_error(paper, ValueError(f"Missing batch result for paper_id={paper_id}"))
+                            continue
+                        _write_cost_share(paper, cost, len(batch_papers))
+                        _write_parsed_result(
+                            paper,
+                            parsed,
+                            thresholds=config.get("thresholds"),
+                            stage_mode=stage_mode,
+                            evidence_floor=evidence_floor,
+                            prefer_llm_tier=prefer_llm_tier,
                         )
-                        _mark_paper_error(paper, result)
-                        continue
-                    decision, cost = result
-                    _write_cost(paper, cost)
-                    parsed = _coerce_structured_result(decision, output_schema)
-                    _write_parsed_result(
-                        paper,
-                        parsed,
+                    single_errors = [
+                        f"  ⚠️ Paper failed PMID={paper.get('PMID', 'N/A')}: missing batch result"
+                        for paper, paper_id in zip(batch_papers, paper_ids)
+                        if paper_id in missing_ids
+                    ]
+                    completed += len(batch_papers)
+                else:
+                    single_errors = await _screen_individual_prompts(
+                        structured_llm=structured_llm,
+                        batch_papers=batch_papers,
+                        batch_prompts=batch_prompts,
+                        output_schema=output_schema,
                         thresholds=config.get("thresholds"),
                         stage_mode=stage_mode,
                         evidence_floor=evidence_floor,
+                        prefer_llm_tier=prefer_llm_tier,
                     )
+                    completed += len(batch_papers)
 
                 strong_count = sum(
                     1 for p in batch_papers if p.get("llm_suggest") == "strong_candidate"
@@ -425,7 +536,7 @@ async def screen_papers_batch_async(
                 async with print_lock:
                     print(f"  [Batch {batch_idx}] Batch failed: {str(e)[:200]}")
                     print(f"  [Batch {batch_idx}] Retrying individual papers...")
-                for paper, prompt in batch:
+                for paper, prompt, _ in batch:
                     try:
                         raw = await invoke_with_retry_async(structured_llm, prompt)
                         if isinstance(raw, tuple):
@@ -440,6 +551,7 @@ async def screen_papers_batch_async(
                             thresholds=config.get("thresholds"),
                             stage_mode=stage_mode,
                             evidence_floor=evidence_floor,
+                            prefer_llm_tier=prefer_llm_tier,
                         )
                     except Exception as e2:
                         async with print_lock:
@@ -447,6 +559,8 @@ async def screen_papers_batch_async(
                                 f"    Paper failed PMID={paper.get('PMID', 'N/A')}: {str(e2)[:100]}"
                             )
                         _mark_paper_error(paper, e2)
+                    finally:
+                        completed += 1
 
     batches = [all_prompts[i : i + batch_size] for i in range(0, total, batch_size)]
     await asyncio.gather(
@@ -465,8 +579,89 @@ def _coerce_structured_result(result: Any, output_schema: type) -> Any:
     """Normalize provider responses before writing screening fields."""
     if isinstance(result, (BinaryDecision, ScreeningDecision, PECODecision)):
         return result
-    content_str = getattr(result, "content", "") or str(result)
+    content_str = _result_content_to_string(result)
     return _parse_json_result(content_str, output_schema)
+
+
+def _result_content_to_string(result: Any) -> str:
+    content = getattr(result, "content", "")
+    if isinstance(content, list):
+        content_str = ""
+        for block in content:
+            if isinstance(block, dict) and block.get("type") == "text":
+                content_str += block.get("text", "")
+        if not content_str:
+            content_str = str(content)
+    else:
+        content_str = content or str(result)
+    return content_str
+
+
+def _build_multi_paper_user_content(
+    papers: list[tuple[dict[str, Any], dict[str, str]]],
+) -> tuple[str, list[str]]:
+    """Build the user prompt for one API request that screens multiple papers."""
+    research_question = papers[0][1].get("research_question", "") if papers else ""
+    lines = [
+        "Screen each paper independently using the same rubric.",
+        f"Research question: {research_question}",
+        "Important: Treat each paper as a new, independent case. Do not use evidence, topic signals, or decisions from one paper when judging another paper.",
+        "Use the Paper ID exactly as provided.",
+        "Return JSON only in this shape:",
+        '{"papers":[{"paper_id":"...","decision":{...}}]}',
+        "",
+        "Papers:",
+    ]
+    ids: list[str] = []
+    seen: set[str] = set()
+    for idx, (paper, kwargs) in enumerate(papers, start=1):
+        raw_id = (paper.get("PMID") or "").strip() or f"row_{idx}"
+        paper_id = raw_id if raw_id not in seen else f"{raw_id}#{idx}"
+        seen.add(paper_id)
+        ids.append(paper_id)
+        lines.extend(
+            [
+                "",
+                f"--- BEGIN PAPER {paper_id} ---",
+                f"Paper ID: {paper_id}",
+                "Independent case: judge only this paper against the research question above.",
+                f"Title: {kwargs.get('title', '')}",
+                f"Keywords: {kwargs.get('keywords', '')}",
+                f"{kwargs.get('content_label', 'Abstract')}: {kwargs.get('content', '')}",
+                f"Publication Types: {kwargs.get('pub_types', '(Not available)')}",
+                f"MeSH Terms: {kwargs.get('mesh_terms', '(Not available)')}",
+                f"--- END PAPER {paper_id} ---",
+            ]
+        )
+    return "\n".join(lines), ids
+
+
+def _parse_multi_paper_result(result: Any, output_schema: type) -> dict[str, Any]:
+    """Parse a multi-paper JSON response into decisions keyed by paper_id."""
+    if isinstance(result, dict):
+        data = result
+    else:
+        data = _load_json_data(_result_content_to_string(result))
+    papers = data.get("papers") or data.get("results") or data.get("decisions")
+    if not isinstance(papers, list):
+        raise ValueError("Batch response must contain a 'papers' array")
+
+    parsed: dict[str, Any] = {}
+    import json as _json
+
+    for item in papers:
+        if not isinstance(item, dict):
+            raise ValueError("Each batch response item must be an object")
+        paper_id = item.get("paper_id") or item.get("id") or item.get("PMID") or item.get("pmid")
+        if not paper_id:
+            raise ValueError("Each batch response item must include paper_id")
+        decision_data = item.get("decision") or {
+            key: value
+            for key, value in item.items()
+            if key not in {"paper_id", "id", "PMID", "pmid"}
+        }
+        parsed[str(paper_id)] = _parse_json_result(_json.dumps(decision_data), output_schema)
+    return parsed
 
 
 def _write_parsed_result(
@@ -476,6 +671,7 @@ def _write_parsed_result(
     thresholds: dict[str, Any] | None,
     stage_mode: str,
     evidence_floor: int,
+    prefer_llm_tier: bool = True,
 ) -> None:
     if isinstance(parsed, BinaryDecision):
         _write_binary_result(paper, parsed)
@@ -488,6 +684,7 @@ def _write_parsed_result(
             thresholds=thresholds,
             stage_mode=stage_mode,
             evidence_floor=evidence_floor,
+            prefer_llm_tier=prefer_llm_tier,
         )
 
 
@@ -498,13 +695,16 @@ def _write_structured_result(
     thresholds: dict[str, Any] | None,
     stage_mode: str,
     evidence_floor: int = 1,
+    prefer_llm_tier: bool = True,
 ) -> None:
     paper["llm_suggest"] = classify_screening_decision(
         result,
         thresholds=thresholds,
         stage_mode=stage_mode,
         evidence_floor=evidence_floor,
+        prefer_llm_tier=prefer_llm_tier,
     )
+    paper["llm_tier"] = result.tier or ""
     paper["overall_score"] = result.overall_score
     paper["overall_justification"] = result.overall_justification
     paper["disease_score"] = result.disease_relevance.score
@@ -567,22 +767,35 @@ def _write_cost(paper: dict[str, Any], cost: dict[str, Any]) -> None:
     paper["wall_time_ms"] = cost.get("wall_time_ms", 0)
 
 
+def _write_cost_share(paper: dict[str, Any], cost: dict[str, Any], n_papers: int) -> None:
+    """Write approximate per-paper token share for one multi-paper request."""
+    n = max(1, n_papers)
+    paper["prompt_tokens"] = round(float(cost.get("prompt_tokens", 0)) / n, 2)
+    paper["completion_tokens"] = round(float(cost.get("completion_tokens", 0)) / n, 2)
+    paper["total_tokens"] = round(float(cost.get("total_tokens", 0)) / n, 2)
+    paper["wall_time_ms"] = cost.get("wall_time_ms", 0)
+
+
 def _build_json_schema_hint(model_class: type) -> str:
     """Build a compact JSON schema description for the LLM prompt."""
     schema = model_class.model_json_schema()
     props = schema.get("properties", {})
     required = schema.get("required", [])
+    defs = schema.get("$defs", {})
     lines = ["{"]
     for name, prop in props.items():
-        ptype = prop.get("type", "any")
+        resolved = _resolve_schema_prop(prop, defs)
+        ptype = _schema_type_name(resolved)
         desc = (prop.get("description", "") or "")[:80]
         req = "required" if name in required else "optional"
         if ptype == "object":
-            subprops = prop.get("properties", {})
-            sub = ", ".join(f'"{k}"' for k in subprops)
+            subprops = resolved.get("properties", {})
+            sub = ", ".join(
+                _format_schema_leaf(sub_key, _resolve_schema_prop(sub_prop, defs))
+                for sub_key, sub_prop in subprops.items()
+            )
             lines.append(f'  "{name}": {{ {sub} }},  // {req}, {desc}')
         elif ptype == "array":
-            items = prop.get("items", {})
             lines.append(f'  "{name}": [...],  // {req}, {desc}')
         elif ptype == "boolean":
             lines.append(f'  "{name}": true|false,  // {req}, {desc}')
@@ -598,27 +811,7 @@ def _build_json_schema_hint(model_class: type) -> str:
 
 def _parse_json_result(content: str, model_class: type) -> Any:
     """Parse LLM JSON output into a Pydantic model, with fallbacks and field name mapping."""
-    import json as _json
-    import re
-
-    # Extract JSON from content
-    data = None
-    for pattern in [
-        r'```(?:json)?\s*(\{.*?\})\s*```',
-        r'\{.*\}',
-    ]:
-        m = re.search(pattern, content, re.DOTALL)
-        if m:
-            try:
-                data = _json.loads(m.group(1) if m.lastindex else m.group(0))
-                break
-            except Exception:
-                pass
-    if data is None:
-        try:
-            data = _json.loads(content)
-        except Exception:
-            raise ValueError(f"Could not parse JSON from response: {content[:200]}")
+    data = _load_json_data(content)
 
     # Map abbreviated/alternative field names to Pydantic model fields
     field_map = {
@@ -708,9 +901,105 @@ def _parse_json_result(content: str, model_class: type) -> Any:
     _remap_5d_aliases(data)
     _convert_flat_5d_scores(data)
     if model_class is ScreeningDecision:
+        data.pop("overall_score", None)
         _fill_missing_5d_dimensions(data)
 
     return model_class(**data)
+
+
+def _load_json_data(content: str) -> dict[str, Any]:
+    import re
+    import json as _json
+
+    data = None
+    candidates: list[str] = []
+    for text in [_strip_reasoning_blocks(content), content]:
+        candidates.extend(
+            match.group(1)
+            for match in re.finditer(r'```(?:json)?\s*(\{.*?\})\s*```', text, re.DOTALL)
+        )
+        candidates.extend(_iter_balanced_json_objects(text))
+
+    # Prefer the last valid object. Models that emit reasoning often mention
+    # JSON examples before the final answer.
+    for candidate in reversed(candidates):
+        try:
+            data = _json.loads(candidate)
+            break
+        except Exception:
+            continue
+    if data is None:
+        try:
+            data = _json.loads(content)
+        except Exception:
+            raise ValueError(f"Could not parse JSON from response: {content[:200]}")
+    if not isinstance(data, dict):
+        raise ValueError("JSON response must be an object")
+    return data
+
+
+def _strip_reasoning_blocks(content: str) -> str:
+    import re
+
+    return re.sub(r"<think>.*?</think>", "", content, flags=re.DOTALL | re.IGNORECASE)
+
+
+def _resolve_schema_prop(prop: dict[str, Any], defs: dict[str, Any]) -> dict[str, Any]:
+    if "$ref" in prop:
+        ref = str(prop["$ref"])
+        if ref.startswith("#/$defs/"):
+            key = ref.split("/")[-1]
+            return defs.get(key, prop)
+        return prop
+    if "anyOf" in prop:
+        variants = [item for item in prop.get("anyOf", []) if item.get("type") != "null"]
+        if len(variants) == 1:
+            return _resolve_schema_prop(variants[0], defs)
+    return prop
+
+
+def _schema_type_name(prop: dict[str, Any]) -> str:
+    return str(prop.get("type", "object" if "properties" in prop else "any"))
+
+
+def _format_schema_leaf(name: str, prop: dict[str, Any]) -> str:
+    ptype = _schema_type_name(prop)
+    if ptype == "integer":
+        return f'"{name}": 0'
+    if ptype == "number":
+        return f'"{name}": 0.0'
+    if ptype == "boolean":
+        return f'"{name}": true|false'
+    return f'"{name}": "..."'
+
+
+def _iter_balanced_json_objects(content: str) -> list[str]:
+    objects: list[str] = []
+    start: int | None = None
+    depth = 0
+    in_string = False
+    escape = False
+    for idx, ch in enumerate(content):
+        if in_string:
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == '"':
+                in_string = False
+            continue
+        if ch == '"':
+            in_string = True
+        elif ch == "{":
+            if depth == 0:
+                start = idx
+            depth += 1
+        elif ch == "}" and depth:
+            depth -= 1
+            if depth == 0 and start is not None:
+                objects.append(content[start : idx + 1])
+                start = None
+    return objects
 
 
 def _remap_5d_aliases(data: dict[str, Any]) -> None:
