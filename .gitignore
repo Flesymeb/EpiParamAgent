@@ -165,6 +165,7 @@ dataset/**/*.coding_candidate_*.csv
 dataset/**/*.pre_subset_*.csv
 evaluation/experiments/
 evaluation/**/experiments/
+dataset/**/experiments/
 evaluation/**/screening_logs/
 evaluation/**/screening_runs/
 evaluation/**/sp_fulltext_logs/
