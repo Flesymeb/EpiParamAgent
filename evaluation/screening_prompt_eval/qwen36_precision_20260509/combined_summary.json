@@ -1,0 +1,250 @@
+{
+  "note": "Combined from per-project enriched smoke-test CSVs currently present in this directory; precision/F1 are not full-pool estimates.",
+  "projects": [
+    {
+      "file": "evaluation/screening_prompt_eval/qwen36_precision_20260509/covid19_reproduction_number_p16_screened.csv",
+      "baseline": {
+        "n": 54,
+        "gt": 36,
+        "included": 46,
+        "tp": 34,
+        "fp": 12,
+        "fn": 2,
+        "recall": 0.9444444444444444,
+        "precision": 0.7391304347826086,
+        "f1": 0.8292682926829269,
+        "nns": 1.3529411764705883
+      },
+      "tuned": {
+        "n": 54,
+        "gt": 36,
+        "included": 39,
+        "tp": 35,
+        "fp": 4,
+        "fn": 1,
+        "recall": 0.9722222222222222,
+        "precision": 0.8974358974358975,
+        "f1": 0.9333333333333333,
+        "nns": 1.1142857142857143
+      },
+      "previous_fp_sampled": 12,
+      "previous_fp_demoted": 8,
+      "baseline_fn_sampled": 2,
+      "baseline_fn_rescued": 1
+    },
+    {
+      "file": "evaluation/screening_prompt_eval/qwen36_precision_20260509/mpox_fatality_p12_screened.csv",
+      "baseline": {
+        "n": 34,
+        "gt": 16,
+        "included": 26,
+        "tp": 14,
+        "fp": 12,
+        "fn": 2,
+        "recall": 0.875,
+        "precision": 0.5384615384615384,
+        "f1": 0.6666666666666667,
+        "nns": 1.8571428571428572
+      },
+      "tuned": {
+        "n": 34,
+        "gt": 16,
+        "included": 17,
+        "tp": 14,
+        "fp": 3,
+        "fn": 2,
+        "recall": 0.875,
+        "precision": 0.8235294117647058,
+        "f1": 0.8484848484848485,
+        "nns": 1.2142857142857144
+      },
+      "previous_fp_sampled": 12,
+      "previous_fp_demoted": 9,
+      "baseline_fn_sampled": 2,
+      "baseline_fn_rescued": 2
+    },
+    {
+      "file": "evaluation/screening_prompt_eval/qwen36_precision_20260509/mpox_fatality_p4_screened.csv",
+      "baseline": {
+        "n": 32,
+        "gt": 14,
+        "included": 17,
+        "tp": 5,
+        "fp": 12,
+        "fn": 9,
+        "recall": 0.35714285714285715,
+        "precision": 0.29411764705882354,
+        "f1": 0.3225806451612903,
+        "nns": 3.4
+      },
+      "tuned": {
+        "n": 32,
+        "gt": 14,
+        "included": 24,
+        "tp": 13,
+        "fp": 11,
+        "fn": 1,
+        "recall": 0.9285714285714286,
+        "precision": 0.5416666666666666,
+        "f1": 0.6842105263157894,
+        "nns": 1.8461538461538463
+      },
+      "previous_fp_sampled": 12,
+      "previous_fp_demoted": 2,
+      "baseline_fn_sampled": 9,
+      "baseline_fn_rescued": 8
+    },
+    {
+      "file": "evaluation/screening_prompt_eval/qwen36_precision_20260509/mpox_fatality_p8_screened.csv",
+      "baseline": {
+        "n": 32,
+        "gt": 14,
+        "included": 24,
+        "tp": 12,
+        "fp": 12,
+        "fn": 2,
+        "recall": 0.8571428571428571,
+        "precision": 0.5,
+        "f1": 0.631578947368421,
+        "nns": 2.0
+      },
+      "tuned": {
+        "n": 32,
+        "gt": 14,
+        "included": 20,
+        "tp": 13,
+        "fp": 7,
+        "fn": 1,
+        "recall": 0.9285714285714286,
+        "precision": 0.65,
+        "f1": 0.7647058823529412,
+        "nns": 1.5384615384615383
+      },
+      "previous_fp_sampled": 12,
+      "previous_fp_demoted": 5,
+      "baseline_fn_sampled": 2,
+      "baseline_fn_rescued": 1
+    },
+    {
+      "file": "evaluation/screening_prompt_eval/qwen36_precision_20260509/mpox_reproduction_number_p9_screened.csv",
+      "baseline": {
+        "n": 21,
+        "gt": 3,
+        "included": 15,
+        "tp": 3,
+        "fp": 12,
+        "fn": 0,
+        "recall": 1.0,
+        "precision": 0.2,
+        "f1": 0.33333333333333337,
+        "nns": 5.0
+      },
+      "tuned": {
+        "n": 21,
+        "gt": 3,
+        "included": 4,
+        "tp": 3,
+        "fp": 1,
+        "fn": 0,
+        "recall": 1.0,
+        "precision": 0.75,
+        "f1": 0.8571428571428571,
+        "nns": 1.3333333333333333
+      },
+      "previous_fp_sampled": 12,
+      "previous_fp_demoted": 11,
+      "baseline_fn_sampled": 0,
+      "baseline_fn_rescued": 0
+    },
+    {
+      "file": "evaluation/screening_prompt_eval/qwen36_precision_20260509/mpox_serial_interval_p10_screened.csv",
+      "baseline": {
+        "n": 33,
+        "gt": 15,
+        "included": 26,
+        "tp": 14,
+        "fp": 12,
+        "fn": 1,
+        "recall": 0.9333333333333333,
+        "precision": 0.5384615384615384,
+        "f1": 0.6829268292682926,
+        "nns": 1.8571428571428572
+      },
+      "tuned": {
+        "n": 33,
+        "gt": 15,
+        "included": 25,
+        "tp": 15,
+        "fp": 10,
+        "fn": 0,
+        "recall": 1.0,
+        "precision": 0.6,
+        "f1": 0.7499999999999999,
+        "nns": 1.6666666666666667
+      },
+      "previous_fp_sampled": 12,
+      "previous_fp_demoted": 3,
+      "baseline_fn_sampled": 1,
+      "baseline_fn_rescued": 1
+    },
+    {
+      "file": "evaluation/screening_prompt_eval/qwen36_precision_20260509/mpox_serial_interval_p6_screened.csv",
+      "baseline": {
+        "n": 23,
+        "gt": 5,
+        "included": 17,
+        "tp": 5,
+        "fp": 12,
+        "fn": 0,
+        "recall": 1.0,
+        "precision": 0.29411764705882354,
+        "f1": 0.45454545454545453,
+        "nns": 3.4
+      },
+      "tuned": {
+        "n": 23,
+        "gt": 5,
+        "included": 9,
+        "tp": 5,
+        "fp": 4,
+        "fn": 0,
+        "recall": 1.0,
+        "precision": 0.5555555555555556,
+        "f1": 0.7142857142857143,
+        "nns": 1.7999999999999998
+      },
+      "previous_fp_sampled": 12,
+      "previous_fp_demoted": 8,
+      "baseline_fn_sampled": 0,
+      "baseline_fn_rescued": 0
+    }
+  ],
+  "pooled": {
+    "baseline": {
+      "gt": 103,
+      "included": 171,
+      "tp": 87,
+      "fp": 84,
+      "fn": 16,
+      "recall": 0.8446601941747572,
+      "precision": 0.5087719298245614,
+      "f1": 0.635036496350365,
+      "nns": 1.9655172413793103
+    },
+    "tuned": {
+      "gt": 103,
+      "included": 138,
+      "tp": 98,
+      "fp": 40,
+      "fn": 5,
+      "recall": 0.9514563106796117,
+      "precision": 0.7101449275362319,
+      "f1": 0.8132780082987553,
+      "nns": 1.4081632653061225
+    },
+    "previous_fp_sampled": 84,
+    "previous_fp_demoted": 46,
+    "baseline_fn_sampled": 16,
+    "baseline_fn_rescued": 13
+  }
+}

@@ -26,8 +26,16 @@ def _parse_json_object(text: str) -> dict:
     return {}
 
 
+def _repo_root() -> Path:
+    current = Path(__file__).resolve()
+    for parent in current.parents:
+        if (parent / "pyproject.toml").exists() and (parent / "metaagent").is_dir():
+            return parent
+    return current.parents[3]
+
+
 def _paper_pool_dirs() -> tuple[Path, Path]:
-    base = Path(__file__).resolve().parents[2] / "paper_pool"
+    base = _repo_root() / "paper_pool"
     pdf_dir = base / "pdfs"
     md_dir = base / "markdown"
     pdf_dir.mkdir(parents=True, exist_ok=True)
@@ -36,7 +44,7 @@ def _paper_pool_dirs() -> tuple[Path, Path]:
 
 
 def _ensure_tools_on_path() -> None:
-    tools_dir = Path(__file__).resolve().parents[2] / "tools"
+    tools_dir = _repo_root() / "tools"
     if str(tools_dir) not in sys.path:
         sys.path.insert(0, str(tools_dir))
 

@@ -38,6 +38,20 @@ VERSION = OUT.name
 EXPORT_FORMATS = ("svg", "pdf", "png")
 
 MODEL_SOURCES = {
+    "calibrated_qwen3_6_plus_v1": {
+        "display": "Calibrated Qwen3.6 Plus v1",
+        "provider": "boyue",
+        "model": "qwen3.6-plus",
+        "exp": "model_5d_screening_calibrated_boyue_qwen3-6-plus_v1_20260509",
+        "profile_metrics": "evaluation/results/model_5d_screening_calibrated_boyue_qwen3-6-plus_v1_20260509_profile_metrics.csv",
+    },
+    "calibrated_qwen3_6_plus_v1_recall": {
+        "display": "Calibrated Qwen3.6 Plus v1-R",
+        "provider": "boyue",
+        "model": "qwen3.6-plus",
+        "exp": "model_5d_screening_calibrated_boyue_qwen3-6-plus_v1_recall_20260509",
+        "profile_metrics": "evaluation/results/model_5d_screening_calibrated_boyue_qwen3-6-plus_v1_recall_20260509_profile_metrics.csv",
+    },
     "gemini_2_5_flash": {
         "display": "Gemini 2.5 Flash",
         "provider": "openrouter",
@@ -75,7 +89,7 @@ MODEL_SOURCES = {
         "exp": "model_5d_screening_multi_adaptive_highc_llmtier_20260507_boyue_qwen3-6-plus",
     },
 }
-DEFAULT_MODEL_SOURCE = "boyue_qwen3_6_plus"
+DEFAULT_MODEL_SOURCE = "calibrated_qwen3_6_plus_v1_recall"
 MODEL_CACHE_JSON = REPO / "evaluation/results/recall_nns_model_sources.json"
 MODEL_CACHE_CSV = REPO / "evaluation/results/recall_nns_model_sources.csv"
 
@@ -97,28 +111,31 @@ NNS_BASE_X = 1.0
 NNS_LOG_THRESHOLD = 90.0
 NNS_REFERENCE_FILL = "#D3D3D3"
 NNS_REFERENCE_TEXT = "#6F6F6F"
-NNS_SUBPLOT_HSPACE = 0.56
+NNS_SUBPLOT_HSPACE = 0.82
 CI_Z = 1.96
 CI_LEGEND_LABEL = "95% CI"
 
 # Shared typography scale. Keep these synchronized across all panels.
-TOPIC_FS = 12.5
-NNS_TOPIC_FS = 10.6
-TOPIC_LEGEND_FS = 12.8
-AXIS_LABEL_FS = 12.5
-RECALL_AXIS_LABEL_FS = 15.0
-TICK_FS = 9.6
-RECALL_TICK_FS = 11.0
-AUTHOR_TICK_FS = 8.6
-VALUE_FS = 10.4
-SUBTOTAL_VALUE_FS = 10.4
-REFERENCE_FS = 11.0
-REFERENCE_TITLE_FS = 10.8
+TOPIC_FS = 13.6
+NNS_TOPIC_FS = 13.1
+TOPIC_LEGEND_FS = 14.4
+AXIS_LABEL_FS = 13.8
+RECALL_AXIS_LABEL_FS = 17.0
+TICK_FS = 11.0
+RECALL_TICK_FS = 12.4
+AUTHOR_TICK_FS = 11.8
+VALUE_FS = 11.8
+SUBTOTAL_VALUE_FS = 11.8
+RECALL_VALUE_FS = 10.2
+RECALL_SUBTOTAL_VALUE_FS = 10.4
+REFERENCE_FS = 12.2
+REFERENCE_TITLE_FS = 12.4
 RATIO_FS = 8.5
-PANEL_LABEL_FS = 12.5
+PANEL_LABEL_FS = 13.5
 DISEASE_TITLE_FS = 13.5
-PANEL_TITLE_FS = 12.5
+PANEL_TITLE_FS = 17.0
 TEXT_WEIGHT = "semibold"
+NNS_TITLE_PAD = 5
 
 RECALL_PANEL_TITLE = "Recall of review-included papers"
 NNS_PANEL_TITLE = "NNS after LLM screening"
@@ -136,6 +153,7 @@ NNS_TOPIC_LABELS = {
 NNS_GROUP_LABEL_X = -0.325
 RECALL_SINGLETON_GROUP_EXTRA = 1.45
 SHOW_NNS_GROUP_LABELS = False
+SHOW_NNS_TOPIC_LABELS = False
 
 COVID_AUTHOR_MAP = {
     4: "Lim et al., 2021",
@@ -394,65 +412,83 @@ def load_disease_data(disease_key, model_source_key):
     cfg = DISEASES[disease_key]
     model = MODEL_SOURCES[model_source_key]
     rows = []
+    profile_metrics = {}
+
+    if model.get("profile_metrics"):
+        profile_path = REPO / model["profile_metrics"]
+        for row in read_csv_rows(profile_path):
+            if row.get("experiment") != model["exp"] or row.get("disease") != disease_key:
+                continue
+            profile_metrics[(summary_topic_name(row.get("topic")), int(row["project"]))] = row
 
     for topic_name, project_nums in cfg["topic_groups"]:
         td = topic_dir(topic_name)
         projects = []
 
         for pn in project_nums:
-            screened = (
-                cfg["eval"]
-                / td
-                / f"p{pn}"
-                / "experiments"
-                / model["exp"]
-                / f"project_{pn}_screened.csv"
-            )
-            if not screened.exists():
-                print(f"  warning: missing {screened}")
-                continue
-
             project_dir = cfg["dataset"] / td / f"p{pn}"
-            papers = read_csv_rows(screened)
-            if (td, pn) in cfg.get("date_filter_projects", set()):
-                papers = filter_rows_by_project_date(papers, project_dir)
-            valid = [row for row in papers if is_valid(row)]
-            included = [row for row in valid if is_included(row)]
+            metric_row = profile_metrics.get((topic_name, pn))
 
-            if cfg["gt_source"] == "screened_marker":
-                gt_n = sum(1 for row in papers if has_gt_marker(row))
-                tp = sum(1 for row in included if has_gt_marker(row))
+            if metric_row is not None:
+                gt_n = int(metric_row["gt"])
+                tp = int(metric_row["tp"])
+                fp = int(metric_row["fp"])
+                pool_n = int(metric_row["total"])
             else:
-                gt_pmids = load_gt_pmids(cfg["dataset"] / td / f"p{pn}" / "ground_truth.csv")
-                gt_n = len(gt_pmids)
-                tp = sum(1 for row in included if (row.get("PMID") or "").strip() in gt_pmids)
+                screened = (
+                    cfg["eval"]
+                    / td
+                    / f"p{pn}"
+                    / "experiments"
+                    / model["exp"]
+                    / f"project_{pn}_screened.csv"
+                )
+                if not screened.exists():
+                    print(f"  warning: missing {screened}")
+                    continue
 
-            override = cfg.get("gt_count_overrides", {}).get((td, pn))
-            if override is not None:
-                gt_n = override
-                tp = min(tp, gt_n)
+                papers = read_csv_rows(screened)
+                if (td, pn) in cfg.get("date_filter_projects", set()):
+                    papers = filter_rows_by_project_date(papers, project_dir)
+                valid = [row for row in papers if is_valid(row)]
+                included = [row for row in valid if is_included(row)]
 
-            fp = len(included) - tp
-            recall = tp / gt_n if gt_n else 0
-            rlo, rhi = wilson_ci(recall, gt_n, z=CI_Z)
-            nns = len(included) / tp if tp else float("inf")
-            nns_lo, nns_hi = nns_ci_from_precision(tp, len(included), z=CI_Z)
+                if cfg["gt_source"] == "screened_marker":
+                    gt_n = sum(1 for row in papers if has_gt_marker(row))
+                    tp = sum(1 for row in included if has_gt_marker(row))
+                else:
+                    gt_pmids = load_gt_pmids(cfg["dataset"] / td / f"p{pn}" / "ground_truth.csv")
+                    gt_n = len(gt_pmids)
+                    tp = sum(1 for row in included if (row.get("PMID") or "").strip() in gt_pmids)
 
-            if cfg["pool_source"] == "screened_csv":
-                pool_n = len(papers)
-            elif cfg["pool_source"] == "search_count":
-                project = load_project_metadata(project_dir)
-                pool_n = int_or_none(project.get("search_count"))
-                if pool_n is None:
+                override = cfg.get("gt_count_overrides", {}).get((td, pn))
+                if override is not None:
+                    gt_n = override
+                    tp = min(tp, gt_n)
+
+                fp = len(included) - tp
+
+                if cfg["pool_source"] == "screened_csv":
+                    pool_n = len(papers)
+                elif cfg["pool_source"] == "search_count":
+                    project = load_project_metadata(project_dir)
+                    pool_n = int_or_none(project.get("search_count"))
+                    if pool_n is None:
+                        pool_n = load_raw_pool_count(
+                            project_dir,
+                            date_filter=(td, pn) in cfg.get("date_filter_projects", set()),
+                        )
+                else:
                     pool_n = load_raw_pool_count(
                         project_dir,
                         date_filter=(td, pn) in cfg.get("date_filter_projects", set()),
                     )
-            else:
-                pool_n = load_raw_pool_count(
-                    project_dir,
-                    date_filter=(td, pn) in cfg.get("date_filter_projects", set()),
-                )
+
+            recall = tp / gt_n if gt_n else 0
+            rlo, rhi = wilson_ci(recall, gt_n, z=CI_Z)
+            included_n = tp + fp
+            nns = included_n / tp if tp else float("inf")
+            nns_lo, nns_hi = nns_ci_from_precision(tp, included_n, z=CI_Z)
 
             projects.append({
                 "label": cfg["author_map"].get(pn, f"P{pn}"),
@@ -499,6 +535,7 @@ def load_disease_data(disease_key, model_source_key):
             "nns_lo": nns_lo,
             "nns_hi": nns_hi,
             "raw": pool_total,
+            "project_count": len(projects),
             "is_sub": True,
         })
 
@@ -568,6 +605,7 @@ def export_model_cache():
                     "nns": jsonable_value(row["nns"]),
                     "nns_lo": jsonable_value(row["nns_lo"]),
                     "nns_hi": jsonable_value(row["nns_hi"]),
+                    "project_count": row.get("project_count", ""),
                     "source_experiment": row.get("source_experiment", ""),
                 })
 
@@ -594,6 +632,7 @@ def export_model_cache():
             "nns",
             "nns_lo",
             "nns_hi",
+            "project_count",
             "source_experiment",
         ]
         writer = csv.DictWriter(fh, fieldnames=fieldnames)
@@ -754,14 +793,31 @@ def linear_inside_label_x(value, xlim_right):
     return max(value - xlim_right * 0.012, xlim_right * 0.012)
 
 
+def reference_label_x(original_nns, llm_label_x, xlim_right, use_log):
+    """Place the original-NNS label just to the right of the grey bar."""
+    if use_log:
+        x = original_nns * 1.035
+        if x < llm_label_x * 1.45:
+            x = llm_label_x * 1.45
+    else:
+        x = original_nns + xlim_right * 0.012
+        if x < llm_label_x + xlim_right * 0.075:
+            x = llm_label_x + xlim_right * 0.075
+    return x
+
+
+def format_count(value):
+    return f"{int(value):,}"
+
+
 # Plotting
-def set_panel_title(ax, title):
+def set_panel_title(ax, title, pad=11):
     ax.set_title(
         title,
         fontsize=PANEL_TITLE_FS,
         fontweight=TEXT_WEIGHT,
         color=DARK,
-        pad=11,
+        pad=pad,
     )
 
 
@@ -851,10 +907,23 @@ def nice_linear_nns_upper(value):
 
 def choose_nns_axis(items):
     original_vals = nns_original_values(items)
-    xmax = max(original_vals) if original_vals else NNS_BASE_X
+    measured_vals = [
+        row["nns"]
+        for row in items
+        if row.get("nns") is not None and not math.isinf(row["nns"])
+    ]
+    ci_vals = [
+        row["nns_hi"]
+        for row in items
+        if row.get("nns_hi") is not None and not math.isinf(row["nns_hi"])
+    ]
+    xmax = max(original_vals) if original_vals else max(measured_vals + ci_vals + [NNS_BASE_X])
     use_log = xmax > NNS_LOG_THRESHOLD
     x_start = NNS_BASE_X if use_log else 0.0
-    xlim_right = max(1, int(math.ceil(xmax)))
+    if use_log:
+        xlim_right = max(1, int(math.ceil(xmax)))
+    else:
+        xlim_right = nice_linear_nns_upper(xmax)
     return use_log, x_start, xlim_right
 
 
@@ -864,8 +933,6 @@ def set_nns_xaxis(ax, use_log, xlim_right, show_xlabel):
         ax.set_xlim(NNS_BASE_X, xlim_right)
         max_power = int(math.floor(math.log2(xlim_right)))
         ticks = [2 ** i for i in range(0, max_power + 1)]
-        if abs(ticks[-1] - xlim_right) > 1e-6:
-            ticks.append(xlim_right)
         ax.xaxis.set_minor_locator(mpl.ticker.NullLocator())
         xlabel = "Number of papers needed to screen (NNS, log2 scale)"
     else:
@@ -890,8 +957,8 @@ def set_nns_xaxis(ax, use_log, xlim_right, show_xlabel):
         ax.set_xlabel("")
 
 
-def draw_nns_group(ax, topic_name, items, show_xlabel):
-    use_log, x_start, xlim_right = choose_nns_axis(items)
+def draw_nns_group(ax, topic_name, items, show_xlabel, axis_config=None):
+    use_log, x_start, xlim_right = axis_config or choose_nns_axis(items)
     y_pos = np.arange(len(items), dtype=float)
     y_labels = ["Average" if row["is_sub"] else row["label"] for row in items]
     bar_h = 0.52
@@ -900,18 +967,19 @@ def draw_nns_group(ax, topic_name, items, show_xlabel):
     ax.set_ylim(-0.55, len(items) - 0.45)
     ax.invert_yaxis()
     set_nns_xaxis(ax, use_log, xlim_right, show_xlabel=show_xlabel)
-    ax.text(
-        0.0,
-        1.025,
-        topic_name,
-        transform=ax.transAxes,
-        ha="left",
-        va="bottom",
-        fontsize=NNS_TOPIC_FS,
-        fontweight=TEXT_WEIGHT,
-        color=TOPIC_SPECS[topic_name]["edge"],
-        clip_on=False,
-    )
+    if SHOW_NNS_TOPIC_LABELS:
+        ax.text(
+            0.0,
+            1.025,
+            topic_name,
+            transform=ax.transAxes,
+            ha="left",
+            va="bottom",
+            fontsize=NNS_TOPIC_FS,
+            fontweight=TEXT_WEIGHT,
+            color=TOPIC_SPECS[topic_name]["edge"],
+            clip_on=False,
+        )
 
     for yi, row in zip(y_pos, items):
         spec = TOPIC_SPECS[row["topic"]]
@@ -952,7 +1020,8 @@ def draw_nns_group(ax, topic_name, items, show_xlabel):
         hi = row.get("nns_hi")
         if lo is not None and hi is not None and not math.isinf(value):
             display_lo = max(lo, x_start if use_log else 0.0)
-            display_hi = min(hi, xlim_right)
+            ci_cap = original_nns if original_nns else xlim_right
+            display_hi = min(hi, ci_cap, xlim_right)
             err_lo = max(0, value - display_lo)
             err_hi = max(0, display_hi - value)
             if err_lo + err_hi > 0:
@@ -964,7 +1033,7 @@ def draw_nns_group(ax, topic_name, items, show_xlabel):
                     ecolor=DARK,
                     elinewidth=0.7,
                     capsize=2.5,
-                    uplims=hi > xlim_right,
+                    uplims=False,
                     lolims=lo < (x_start if use_log else 0.0),
                     zorder=4,
                 )
@@ -974,10 +1043,10 @@ def draw_nns_group(ax, topic_name, items, show_xlabel):
             if use_log
             else linear_label_x(value, xlim_right)
         )
-        label = f"{value:.1f}  (N={row['raw']})" if row["is_sub"] else f"{value:.1f}"
+        label = f"{value:.1f}"
         ax.text(
             label_x,
-            yi + height * 0.50,
+            yi + height * 0.60,
             label,
             va="center",
             fontsize=SUBTOTAL_VALUE_FS if row["is_sub"] else VALUE_FS,
@@ -987,17 +1056,16 @@ def draw_nns_group(ax, topic_name, items, show_xlabel):
         )
 
         if original_nns:
-            reference_x = (
-                log_inside_label_x(original_nns)
-                if use_log
-                else linear_inside_label_x(original_nns, xlim_right)
-            )
+            reference_x = reference_label_x(original_nns, label_x, xlim_right, use_log)
+            reference_label = f"{original_nns:.0f}"
+            if row["is_sub"]:
+                reference_label = f"{reference_label}  (N={format_count(row['raw'])})"
             ax.text(
                 reference_x,
-                yi - height * 0.41,
-                f"{original_nns:.0f}",
+                yi,
+                reference_label,
                 va="center",
-                ha="right",
+                ha="left",
                 fontsize=REFERENCE_FS - 0.5 if row["is_sub"] else REFERENCE_FS - 1.3,
                 fontweight=TEXT_WEIGHT,
                 color=NNS_REFERENCE_TEXT,
@@ -1071,7 +1139,7 @@ def plot_recall(bundle, fname="fig_recall", ax=None, save=True, show_legend=True
                 zorder=3,
             )
             label = f"{value:.2f}"
-            fs = SUBTOTAL_VALUE_FS
+            fs = RECALL_SUBTOTAL_VALUE_FS
         else:
             add_vertical_bar(
                 ax,
@@ -1085,7 +1153,7 @@ def plot_recall(bundle, fname="fig_recall", ax=None, save=True, show_legend=True
                 zorder=3,
             )
             label = f"{value:.2f}"
-            fs = VALUE_FS
+            fs = RECALL_VALUE_FS
 
         label_y = recall_label_y(value, hi, ymax)
         ax.text(
@@ -1174,7 +1242,7 @@ def plot_nns(bundle, fname="fig_nns", ax=None, save=True, show_legend=True):
     groups = [(topic_name, items) for topic_name, items in groups if items]
     n_bars = sum(len(items) for _, items in groups)
     fig_w = max(7.5, 0.55 * n_bars + 6.0)
-    fig_h = max(5.8, n_bars * 0.37 + 2.95)
+    fig_h = max(7.2, n_bars * 0.56 + 3.95)
 
     if ax is None:
         fig, ax = plt.subplots(figsize=(fig_w, fig_h))
@@ -1187,16 +1255,20 @@ def plot_nns(bundle, fname="fig_nns", ax=None, save=True, show_legend=True):
     for spine in ax.spines.values():
         spine.set_visible(False)
 
-    spacer = 0.42
     subgs = ax.get_subplotspec().subgridspec(
-        len(groups) + 1,
+        len(groups),
         1,
-        height_ratios=[spacer] + [max(1.0, len(items)) for _, items in groups],
+        height_ratios=[max(1.0, len(items)) for _, items in groups],
         hspace=NNS_SUBPLOT_HSPACE,
     )
     for idx, (topic_name, items) in enumerate(groups):
-        gax = fig.add_subplot(subgs[idx + 1, 0])
-        draw_nns_group(gax, topic_name, items, show_xlabel=(idx == len(groups) - 1))
+        gax = fig.add_subplot(subgs[idx, 0])
+        draw_nns_group(
+            gax,
+            topic_name,
+            items,
+            show_xlabel=(idx == len(groups) - 1),
+        )
 
     if show_legend:
         ax.legend(
@@ -1212,22 +1284,22 @@ def plot_nns(bundle, fname="fig_nns", ax=None, save=True, show_legend=True):
         )
 
     if save:
-        set_panel_title(ax, f"{bundle['title']}: {NNS_PANEL_TITLE}")
+        set_panel_title(ax, f"{bundle['title']}: {NNS_PANEL_TITLE}", pad=NNS_TITLE_PAD)
         fig.subplots_adjust(left=0.19, right=0.985, top=0.92, bottom=0.13)
         export_figure(fig, fname)
         plt.close(fig)
 
 
 def plot_disease_combined(bundle, fname):
-    fig = plt.figure(figsize=(11.6, 10.15))
-    gs = fig.add_gridspec(2, 1, height_ratios=[1.0, 1.58], hspace=1.02)
+    fig = plt.figure(figsize=(11.6, 12.35))
+    gs = fig.add_gridspec(2, 1, height_ratios=[1.0, 2.12], hspace=1.14)
     ax_recall = fig.add_subplot(gs[0])
     ax_nns = fig.add_subplot(gs[1])
 
     plot_recall(bundle, ax=ax_recall, save=False, show_legend=False)
     plot_nns(bundle, ax=ax_nns, save=False, show_legend=False)
     set_panel_title(ax_recall, f"{bundle['title']}: {RECALL_PANEL_TITLE}")
-    set_panel_title(ax_nns, f"{bundle['title']}: {NNS_PANEL_TITLE}")
+    set_panel_title(ax_nns, f"{bundle['title']}: {NNS_PANEL_TITLE}", pad=NNS_TITLE_PAD)
 
     ax_recall.text(
         -0.052,
@@ -1268,8 +1340,8 @@ def plot_disease_combined(bundle, fname):
 
 
 def plot_overall_combined(covid, mpox, fname="fig7_screening_overall_combined"):
-    fig = plt.figure(figsize=(19.0, 10.45))
-    gs = fig.add_gridspec(2, 2, height_ratios=[1.0, 1.58], hspace=0.70, wspace=0.34)
+    fig = plt.figure(figsize=(14.2, 10.4))
+    gs = fig.add_gridspec(2, 2, height_ratios=[1.0, 2.14], hspace=0.96, wspace=0.26)
 
     ax_c_recall = fig.add_subplot(gs[0, 0])
     ax_m_recall = fig.add_subplot(gs[0, 1])
@@ -1282,8 +1354,8 @@ def plot_overall_combined(covid, mpox, fname="fig7_screening_overall_combined"):
     plot_nns(mpox, ax=ax_m_nns, save=False, show_legend=False)
     set_panel_title(ax_c_recall, f"{covid['title']}: {RECALL_PANEL_TITLE}")
     set_panel_title(ax_m_recall, f"{mpox['title']}: {RECALL_PANEL_TITLE}")
-    set_panel_title(ax_c_nns, f"{covid['title']}: {NNS_PANEL_TITLE}")
-    set_panel_title(ax_m_nns, f"{mpox['title']}: {NNS_PANEL_TITLE}")
+    set_panel_title(ax_c_nns, f"{covid['title']}: {NNS_PANEL_TITLE}", pad=NNS_TITLE_PAD)
+    set_panel_title(ax_m_nns, f"{mpox['title']}: {NNS_PANEL_TITLE}", pad=NNS_TITLE_PAD)
 
     for ax, label in [
         (ax_c_recall, "A"),
@@ -1306,7 +1378,7 @@ def plot_overall_combined(covid, mpox, fname="fig7_screening_overall_combined"):
     fig.legend(
         handles=screening_legend_handles(),
         loc="upper center",
-        bbox_to_anchor=(0.5, 0.57),
+        bbox_to_anchor=(0.5, 0.555),
         ncol=5,
         prop={"size": TOPIC_LEGEND_FS, "weight": TEXT_WEIGHT},
         handlelength=1.45,
@@ -1314,7 +1386,7 @@ def plot_overall_combined(covid, mpox, fname="fig7_screening_overall_combined"):
         columnspacing=1.25,
         borderaxespad=0.0,
     )
-    fig.subplots_adjust(left=0.11, right=0.985, top=0.925, bottom=0.08)
+    fig.subplots_adjust(left=0.075, right=0.992, top=0.932, bottom=0.070)
     export_figure(fig, fname)
     plt.close(fig)
 

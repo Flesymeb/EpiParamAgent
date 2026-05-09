@@ -1,0 +1,71 @@
+{
+  "model": "qwen3.6-plus",
+  "provider": "boyue",
+  "baseline_experiment": "model_5d_screening_multi_adaptive_highc_llmtier_20260507_boyue_qwen3-6-plus",
+  "candidate_scope": "strong_only",
+  "projects": [
+    {
+      "label": "covid19/serial_interval/p12",
+      "baseline": {
+        "n": 146,
+        "gt": 19,
+        "included": 46,
+        "tp": 18,
+        "fp": 28,
+        "fn": 1,
+        "recall": 0.9473684210526315,
+        "precision": 0.391304347826087,
+        "f1": 0.5538461538461538,
+        "nns": 2.5555555555555554
+      },
+      "tuned": {
+        "n": 146,
+        "gt": 19,
+        "included": 44,
+        "tp": 17,
+        "fp": 27,
+        "fn": 2,
+        "recall": 0.8947368421052632,
+        "precision": 0.38636363636363635,
+        "f1": 0.5396825396825397,
+        "nns": 2.588235294117647
+      },
+      "candidate_scope": "strong_only",
+      "candidate_count": 28,
+      "cached_ready": 27,
+      "retrieved_ready": 1,
+      "demoted_candidates": 2,
+      "rescued_fn": 0,
+      "output": "evaluation/screening_prompt_eval/retrieval_enriched_20260509/covid19_serial_interval_p12_retrieval_screened.csv"
+    }
+  ],
+  "pooled": {
+    "baseline": {
+      "gt": 19,
+      "included": 46,
+      "tp": 18,
+      "fp": 28,
+      "fn": 1,
+      "recall": 0.9473684210526315,
+      "precision": 0.391304347826087,
+      "f1": 0.5538461538461538,
+      "nns": 2.5555555555555554
+    },
+    "tuned": {
+      "gt": 19,
+      "included": 44,
+      "tp": 17,
+      "fp": 27,
+      "fn": 2,
+      "recall": 0.8947368421052632,
+      "precision": 0.38636363636363635,
+      "f1": 0.5396825396825397,
+      "nns": 2.588235294117647
+    },
+    "candidate_count": 28,
+    "cached_ready": 27,
+    "retrieved_ready": 1,
+    "demoted_candidates": 2,
+    "rescued_fn": 0
+  }
+}

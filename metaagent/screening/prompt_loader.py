@@ -27,6 +27,30 @@ PROMPT_FILES = {
         PROMPT_DIR / "5d" / "screening_system_strong_full_text.md",
         PROMPT_DIR / "5d" / "screening_user_strong_full_text.md",
     ),
+    "possible_full_text_llm": (
+        PROMPT_DIR / "5d" / "screening_system_possible_full_text_llm.md",
+        PROMPT_DIR / "5d" / "screening_user_possible_full_text_llm.md",
+    ),
+    "strong_full_text_llm": (
+        PROMPT_DIR / "5d" / "screening_system_strong_full_text_llm.md",
+        PROMPT_DIR / "5d" / "screening_user_strong_full_text_llm.md",
+    ),
+    "strong_source_scope_full_text_llm": (
+        PROMPT_DIR / "5d" / "screening_system_strong_source_scope_full_text_llm.md",
+        PROMPT_DIR / "5d" / "screening_user_strong_source_scope_full_text_llm.md",
+    ),
+    "strong_hard_exclusion_full_text_llm": (
+        PROMPT_DIR / "5d" / "screening_system_strong_hard_exclusion_full_text_llm.md",
+        PROMPT_DIR / "5d" / "screening_user_strong_hard_exclusion_full_text_llm.md",
+    ),
+    "rescue_full_text_llm": (
+        PROMPT_DIR / "5d" / "screening_system_rescue_full_text_llm.md",
+        PROMPT_DIR / "5d" / "screening_user_rescue_full_text_llm.md",
+    ),
+    "rescue_full_text_conservative_llm": (
+        PROMPT_DIR / "5d" / "screening_system_rescue_full_text_conservative_llm.md",
+        PROMPT_DIR / "5d" / "screening_user_rescue_full_text_conservative_llm.md",
+    ),
     "binary_title_abstract": (
         PROMPT_DIR / "binary" / "screening_system_title_abstract.md",
         PROMPT_DIR / "binary" / "screening_user_title_abstract.md",

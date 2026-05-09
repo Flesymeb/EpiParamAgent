@@ -1,7 +1,7 @@
 # Screening Dataset Freeze 2026-05-08
 
 This file defines the fixed screening dataset for the paper-facing 5D,
-keyword-rule, and LEADS-2 comparisons.
+keyword-rule, and LEADS comparisons.
 
 Use this dataset version for all reruns that should be merged with the current
 5D model comparison:
@@ -64,5 +64,7 @@ the following:
 5. Record the prompt, model/provider, batch mode, and decision rule in the run
    config.
 
-The previous LEADS-2 snapshot should be treated as historical/directional until
-rerun on this frozen dataset.
+The previous historical LEADS snapshot has been replaced by the frozen-dataset
+LEADS rerun. Use `evaluation/leads_mistral_freeze_leads_minimal_summary.csv`
+and `evaluation/leads_mistral_freeze_leads_minimal_predictions.csv` for formal
+LEADS results.

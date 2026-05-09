@@ -7,7 +7,7 @@ The frozen source data are under `dataset/{disease}/screening/{topic}/p{project}
 
 ## Selected LEADS result
 
-Use `disease_parameter_minimal` as the replacement for the earlier historical `LEADS-2` result. In the paper/report, this can be named simply `LEADS` or `LEADS-Minimal`.
+Use `disease_parameter_minimal` as the formal frozen-dataset LEADS result. In the paper/report, name it `LEADS` or `LEADS-Minimal`; do not use the earlier LEADS-2 historical snapshot in main tables.
 
 Prompt:
 
@@ -50,5 +50,5 @@ Rationale: this prompt only gives disease and parameter context, uses title/abst
 
 Notes:
 
-- The earlier `LEADS-2` result should be treated as a historical snapshot because it was generated before the dataset freeze.
+- The previous LEADS-2 historical snapshot was replaced by the frozen-dataset LEADS-Minimal rerun.
 - Strict prompts such as `disease_parameter_numerical_value` and `disease_parameter_primary_study` lower recall but raise precision/F1, so they are better interpreted as strict high-specificity sensitivity analyses rather than the main weak LEADS baseline.
