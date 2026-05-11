@@ -37,6 +37,20 @@ defaults:
         "outcome". If the article is original human case evidence and the clinical
         course/outcome could plausibly be extractable in full text, use P rather
         than U.
+      - For source-review recall, sparse older human monkeypox reports and
+        case-focused papers can be P when they plausibly contain patient outcome
+        or denominator information in the full text, even if the title/abstract
+        emphasizes importation, diagnosis, transmission, sample testing, or
+        environmental investigation.
+      - For mpox fatality source-review recall, do not exclude human case reports,
+        clinical sample studies, viral shedding studies, saliva/semen PCR or virus
+        isolation studies, imported-case investigations, domestic/environmental
+        contamination investigations tied to named human cases, or unusual death
+        reports solely because the title/abstract does not mention CFR or death.
+        These records may still contain patient outcome and denominator details
+        in case descriptions or tables; classify as P unless they are clearly
+        animal-only, laboratory-only without human cases, policy/commentary, or
+        unrelated to confirmed/suspected human mpox cases.
       - A recovered case, no fatal outcomes, or a case series with zero deaths can
         contribute a 0% fatality estimate when a denominator is clear.
       - Weak support: the paper has little connection to patient outcomes or lacks

@@ -29,14 +29,14 @@ LEADS-Official uses the LEADS official-style trial-result extraction prompt. LEA
 | P16 | covid19 | R0 | 4.08 (3.09-5.39) R | 3.97 (2.96-4.98) R | 2.63 (2.29-2.97) R | 40 | -0.11 | -1.45 | 5D |  |
 | P17 | covid19 | R0 | 3.32 (2.81-3.82) R | 2.87 (2.30-3.59) R | 2.77 (2.13-3.41) R | 13 | -0.45 | -0.55 | 5D |  |
 | P4 | covid19 | CFR (IMV) | 45.00 (39.00-52.00) % | 44.70 (31.90-57.40) % | 24.11 (17.30-30.93) % | 55 | -0.30 | -20.89 | 5D |  |
-| P5 | covid19 | IFR median | 0.27 % | 0.28 % | 1.97 (0.93-3.02) % | 48 | 0.01 | 1.70 | 5D | SR/5D median no CI |
+| P5 | covid19 | IFR median | 0.27 % | 0.28 % | 1.97 % | 48 | 0.01 | 1.70 | 5D | SR/MetaAgent median no CI; LEADS CI suppressed for consistent point-only reporting |
 | P6 | covid19 | CFR (HFR) | 13.00 (9.00-17.00) % | 12.70 (10.50-14.90) % | 20.04 (11.28-28.79) % | 32 | -0.30 | 7.04 | 5D | P6 ICU row not shown; LEADS cannot separate HFR/ICU |
 | MP9 | mpox | R0 | 1.80 (1.70-1.90) R | 1.78 (1.67-1.90) R | 1.07 (0.15-2.00) R | 3 | -0.02 | -0.73 | 5D |  |
 | MP6 | mpox | Serial interval | 8.70 (6.50-11.00) days | 9.00 (6.74-11.27) days | 6.04 (3.29-8.80) days | 5 | 0.30 | -2.66 | 5D |  |
 | MP10 | mpox | Serial interval | 12.00 (8.01-15.99) days | 11.42 (8.37-14.48) days | 9.19 (6.55-11.84) days | 14 | -0.58 | -2.81 | 5D |  |
 | MP11 | mpox | Serial interval | 8.30 (6.74-10.23) days | 8.03 (7.12-8.93) days | 7.37 (6.35-8.39) days | 6 | -0.27 | -0.93 | 5D |  |
 | MP5 | mpox | Incubation period | 8.26 (7.55-8.97) days | 8.55 (7.02-10.09) days | 8.34 (6.18-10.50) days | 8 | 0.29 | 0.08 | LEADS-Official | Dataset topic folder is serial_interval |
-| MP4 | mpox | CFR aggregate | 5.80 % | 5.80 % | 3.00 (0.65-5.36) % | 14 | 0.00 | -2.80 | 5D |  |
+| MP4 | mpox | CFR aggregate | 5.80 (3.39-9.59) % | 5.80 (4.00-8.06) % | 3.00 (0.65-5.36) % | 14 | 0.00 | -2.80 | 5D | SR Wilson CI from 13/226; MetaAgent Wilson CI from 29/509 |
 | MP7 | mpox | CFR pre-2016 | 11.40 (5.80-21.10) % | 11.11 (9.51-12.71) % | 6.01 (1.46-10.55) % | 20 | -0.29 | -5.39 | 5D |  |
-| MP8 | mpox | CFR Clade I | 9.80 % | 8.33 (6.39-10.27) % | 7.81 (-3.60-19.22) % | 17 | -1.47 | -1.99 | 5D |  |
+| MP8 | mpox | CFR Clade I | 9.80 (8.19-11.73) % | 8.33 (6.39-10.27) % | 7.81 (-3.60-19.22) % | 17 | -1.47 | -1.99 | 5D | SR CI derived from Sharif Table 3 9.8% and 1090 cases; original paper did not report CI |
 | MP12 | mpox | Pediatric CFR | 11.00 (4.00-20.00) % | 10.46 (7.74-13.17) % | 3.34 (0.62-6.07) % | 13 | -0.54 | -7.66 | 5D | SR point treated as 11 |

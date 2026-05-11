@@ -18,7 +18,8 @@ Assess the study on these dimensions:
 - Purely animal or in vitro studies should score low.
 
 3. Location relevance
-- Real-world geographic or field context is preferred.
+- The study should be conducted in or report data from a geographic area where the target disease is known to be present or circulating.
+- Studies based purely on imported cases from non-endemic regions, or theoretical/modelled settings without reference to real affected populations, should score low.
 
 4. Original empirical evidence
 - The study should report original empirical data or primary analysis.
@@ -44,27 +45,35 @@ Assess the study on these dimensions:
 - Related parameters are only weak signals. Do not over-include broad disease,
   transmission, clinical, diagnostic, vaccine, serology, forecasting, or policy
   papers unless there is a concrete textual cue that the target parameter itself
-  is estimated, measured, or reported. If the paper does not explicitly report
-  or estimate the target parameter, or clearly analyze data that naturally yield
-  that parameter, default to parameter 0-1 rather than 2-4.
+  is estimated, measured, or reported, or unless the profile-specific guidance
+  below explicitly identifies that kind of record as a full-text verification
+  candidate. If the paper does not explicitly report or estimate the target
+  parameter, or clearly analyze data that naturally yield that parameter, default
+  to parameter 0-1 rather than 2-4.
 - Score parameter 3-4 only when the title/abstract/metadata directly indicates
   the target parameter or a close synonym as a study result. Score 2 when the
   parameter is plausible but indirect or hidden. Score 0-1 when the paper is only
   generally about the disease/topic and gives no specific target-parameter cue.
 - For fatality, mortality, severity, hospitalization, ICU, or clinical-outcome
-  reviews, keep a paper as plausible "P" only when the title/abstract/metadata
+  reviews, keep a paper as plausible "P" when the title/abstract/metadata
   contains an explicit outcome cue such as death, fatal, mortality, severe
   disease, hospitalization, ICU, maternal/fetal outcome, survival, or clinical
-  outcome. Mere diagnosis, imported-case response, contact tracing, transmission,
-  or outbreak description without an outcome cue should usually be "U", not "P",
-  even if the paper reports original human cases.
+  outcome. For sparse mpox source-review recall tasks, also follow the
+  profile-specific guidance: original human case reports, traveler/imported-case
+  reports, household or hospital clusters, outbreak investigations, surveillance
+  summaries, and environmental investigations tied to named human cases may be
+  "P" even when the abstract does not explicitly state death or CFR, because
+  patient outcomes may be recoverable from the full text.
 - For serial interval, generation time, incubation period, or latent period
-  reviews, keep a paper as plausible "P" only when the title/abstract explicitly
+  reviews, keep a paper as plausible "P" when the title/abstract explicitly
   mentions interval-type terms, symptom-onset timing, linked infector-infectee
   timing, contact-tracing intervals, or that such values are estimated from
-  observed data. If a paper only reports Rt/R0, outbreak decline, intervention
-  effects, family clusters, or uses published interval values as model inputs,
-  score parameter 0-1 and usually use "U".
+  observed data. For sparse mpox source-review recall tasks, also follow the
+  profile-specific guidance: human transmission-chain, household/family cluster,
+  contact-tracing, outbreak-investigation, incubation-period, and
+  disease-specific Rt/R0/growth-modeling papers may be "P" when timing values
+  could plausibly appear in methods, assumptions, tables, or full text. Do not
+  mark them as "S" unless the target parameter is explicit.
 
 Profile-specific parameter scoring:
 {parameter_scoring_note}
@@ -112,7 +121,9 @@ Guidance for tier decisions:
 - If evidence is 0-1 because the paper is a review, commentary, editorial,
   letter, news, or other non-original/secondary source, use "U" unless the
   abstract itself clearly describes a mislabeled original cohort, case series,
-  outbreak dataset, or another primary analysis.
+  outbreak dataset, or another primary analysis, or the profile-specific guidance
+  explicitly treats older source-review references as possible full-text
+  verification candidates. In that latter case use at most "P", not "S".
 - Use "U" when the available evidence gives strong reasons to think the paper is
   out of scope, lacks original evidence, studies the wrong disease/population, or
   is unlikely to contain the target parameter.
@@ -131,8 +142,9 @@ Guidance for tier decisions:
   reproduction/growth modeling, prefer "P". These are full-text verification
   candidates, not strong inclusions.
 - With sparse metadata or no abstract, use "P" only when the title or indexed
-  terms contain the exact target parameter, a close synonym, or an explicit
-  clinical outcome cue. Otherwise use "U".
+  terms contain the exact target parameter, a close synonym, an explicit clinical
+  outcome cue, or a profile-specific mpox sparse-record cue that makes full-text
+  verification genuinely plausible. Otherwise use "U".
 - If the research question states a record/create-date cutoff, treat Create Date
   as an important scope signal and include your reasoning in the justification.
 
