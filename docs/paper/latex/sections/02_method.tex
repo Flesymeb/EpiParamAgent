@@ -1,0 +1,84 @@
+\section{Method}
+
+We developed a framework named \metagent{} for automated literature screening of systematic reviews in infectious disease modeling (Figure~\ref{fig:pipeline}). The proposed \metagent{} consists of three core components: benchmark construction, LLM screening, and evaluation, which jointly support the literature screening workflow for relevant systematic reviews.
+
+\begin{figure}[!t]
+  \centering
+  \includegraphics[width=\textwidth]{pipeline/pipeline.pdf}
+  \caption{Overview of the \metagent{} pipeline. a) Benchmark construction from published systematic reviews. b) LLM screening of title and abstract. c) Full-text PDF parsing and codebook-guided parameter extraction.}
+  \label{fig:pipeline}
+\end{figure}
+
+\subsection{Benchmark Dataset}
+
+This study adopts three core epidemiological parameters to evaluate the proposed screening framework: basic reproduction number ($R_0$), serial interval, and fatality, characterizing the transmission potential, transmission speed, and disease severity of an epidemic. We constructed a screening benchmark from published systematic reviews on COVID-19/SARS-CoV-2 and mpox. The benchmark was frozen on May 8, 2026. The benchmark comprises 22 screening profiles, each corresponding to one systematic review task, with a total of 12,758 candidate records. The source reviews used to define the benchmark are listed in Table~\ref{tab:source-reviews}. For each task, we designed a Boolean search query based on the target parameter definitions, adhering as closely as possible to the original search strategies reported in the source reviews. PubMed served as the primary data source for retrieving records, which collectively formed the raw pool of candidate articles for screening.
+
+Upon constructing the raw pool, we defined the final inclusion list of each systematic review as the corresponding ground truth (GT) for that task. In this framework, the raw pool delineates the search space of candidate records, whereas the GT identifies the subset of articles that should ultimately be included. Across the benchmark, the aggregated GT consists of 668 articles. It is important to emphasize that the GT in this study does not constitute a rigorous gold standard in the strictest sense. The original search strategies often relied on multiple bibliographic databases and could not be fully reconstructed from the published manuscripts alone, meaning that some GT articles may not appear in our constructed raw pool. The original reviews may themselves contain retrieval omissions or include eligibility constraints that are not fully encoded in the current tasks.
+
+\subsection{LLM Screening}
+
+\textbf{Task definition.}
+We formulate the task as high-recall first-pass screening, rather than a definitive inclusion/exclusion decision. The objective of the system is to maximally retain GT-positive articles while substantially reducing the number of records requiring manual review, thereby focusing human effort on studies with a higher likelihood of relevance. Final inclusion judgments remain the responsibility of domain experts operating at the full-text level.
+
+\textbf{Screening strategy.}
+We adopt a stage-aware screening strategy that tailors the input modality to the level of metadata available for each candidate record. This design acknowledges that the completeness of bibliographic metadata varies across records retrieved from PubMed, and that treating all records uniformly risks either discarding potentially relevant studies prematurely or introducing noise into the downstream decision process.
+
+\begin{itemize}
+  \item \textbf{Title+Abstract screening.} For records that contain a usable abstract, the LLM receives both the title and the abstract as input. This richer representation allows the model to assess the five scoring dimensions with greater contextual fidelity, yielding more reliable dimension-level scores and a more informed relevance categorization (Strong, Possible, or Unlikely).
+  \item \textbf{Title-only screening.} For records that lack an available or informative abstract, such as certain preprint entries, letters, or older publications with missing metadata, the LLM is constrained to a title-only input. Recognizing the inherent uncertainty introduced by this reduced information signal, the title-only pathway applies the same five-dimension scoring rubric but is explicitly designed to err on the side of retention. Records classified as Possible or Strong via title-only screening proceed to the next stage, whereas those deemed Unlikely are excluded.
+\end{itemize}
+
+By conditioning the screening depth on metadata availability, the stage-aware strategy balances efficiency with the overarching high-recall objective of the first-pass screening task: to preserve as many GT-positive articles as possible while substantially reducing the volume of records requiring downstream human review.
+
+\textbf{LLM screening.}
+The input to the large language model consists of two components: (1) paper metadata for each candidate article in the raw pool, including title, abstract, and keywords; and (2) a screening prompt that operationalizes five independent scoring dimensions:
+
+\begin{itemize}
+  \item Disease relevance: the study must explicitly target the infectious disease of interest.
+  \item Population relevance: the study should concern human subjects or populations. Purely animal or in vitro studies are considered less relevant.
+  \item Location relevance: the study should ideally be situated in a real-world geographic or field context.
+  \item Original empirical evidence: the study should report original empirical data or primary analysis. Reviews, editorials, commentaries, and purely theoretical papers are deemed less relevant.
+  \item Parameter relevance: the study should report or estimate the target epidemiological parameter.
+\end{itemize}
+
+Each dimension is scored independently, and the resulting scores are subsequently combined through a threshold-based mapping to assign each record to one of three relevance categories: Strong, Possible, or Unlikely.
+
+\textbf{Score-to-label mapping.}
+Based on the scores assigned across the five dimensions, each article is mapped into one of three relevance categories: Strong, Possible, or Unlikely. The Strong label designates records that receive high scores on critical dimensions, such as disease, parameter, and evidence type. The Possible label is reserved for records that are likely relevant but for which the metadata alone does not support a high-confidence determination. The Unlikely label is assigned to records that fail to meet the specified thresholds.
+
+\begin{itemize}
+  \item \textbf{Strong}: disease relevance $\geq 4$, parameter relevance $\geq 4$, original empirical evidence $\geq 3$, population relevance $\geq 3$, and location relevance $\geq 3$.
+  \item \textbf{Possible}: disease relevance $\geq 3$, parameter relevance $\geq 3$, original empirical evidence $\geq 2$, population relevance $\geq 3$, and location relevance $\geq 3$.
+  \item \textbf{Unlikely}: any record that does not meet the criteria for either Strong or Possible.
+\end{itemize}
+
+
+
+
+\subsection{Coding and Extraction}
+
+\textbf{Task definition.}
+We evaluated full-text coding as a controlled evidence-reconstruction task (Figure~\ref{fig:pipeline}c). For this component, the input was fixed to the papers included by each source review. The objective was not to make a new eligibility decision, but to recover the parameter evidence required to reproduce the review-level epidemiological estimate. This design isolates the coding step from title-and-abstract screening, so that discrepancies in the reconstructed estimates primarily reflect full-text availability, document parsing, evidence localization, value extraction, or alignment with the source review's synthesis rule.
+
+\textbf{Full-text processing.}
+For each source-review included article, cached full texts were used when available; otherwise, open-access full text was retrieved with PubMed Central prioritized where possible. PDFs were parsed into a structured text representation that retained section order, paragraphs, figure captions, and table-like content where recoverable. The parsed representation was cached before LLM coding, ensuring that repeated experiments used the same document input.
+
+\textbf{Evidence localization and extraction.}
+The coding workflow followed the two-stage structure shown in the method overview. Stage A localized candidate evidence windows, including paragraphs, tables, and figure captions that mentioned the target parameter, sample size, denominator, population, study period, geography, uncertainty interval, or estimation method. Stage B applied a parameter-specific codebook to these localized windows and produced schema-constrained records. Each record captured the parameter type, point estimate, uncertainty interval, sample size or numerator-denominator pair when available, study setting, subgroup definition, and source location in the full text.
+
+Separate codebooks were used for the three parameter domains. Reproduction-number coding distinguished $R_0$, effective reproduction number, and other transmissibility estimates. Transmission-interval coding distinguished serial interval, generation interval or generation time, and incubation period. Fatality coding distinguished CFR, IFR, hospitalized fatality, ICU fatality, and denominator-specific or clade-specific estimates. These distinctions were necessary because the same article can report multiple quantities that are not interchangeable for meta-analysis.
+
+\textbf{Estimate reconstruction.}
+The structured coding outputs were aggregated at the source-review level and compared with the estimates reported by the original reviews. For continuous parameters, reported uncertainty intervals were converted to standard errors when possible and combined using inverse-variance random-effects synthesis. For fatality proportions, reconstructed estimates were interpreted only when the denominator, population stratum, and source-review aggregation rule could be aligned. Rows based on medians, narrative ranges, aggregate counts, or clade-specific summaries were therefore evaluated against the corresponding source-review estimand rather than forced into a single pooling rule.
+
+
+\subsection{Evaluation}
+
+\subsubsection{Screening}
+
+The screening performance of the model was evaluated by comparing its outputs against the manually annotated GT. For evaluation purposes, both Strong and Possible relevance judgments were consolidated into a single relevant category, while Unlikely was treated as not relevant. Based on this binary classification, the following four outcomes were defined: true positives (TP), articles classified as relevant that were included in the ground truth; false positives (FP), articles classified as relevant but not included in the ground truth; false negatives (FN), articles classified as not relevant but included in the ground truth; and true negatives (TN), articles classified as not relevant and not included in the ground truth.
+
+From these four categories, we computed recall, precision, workload reduction (WR), and number needed to screen (\nns{}). Recall measures the proportion of GT-relevant articles within the raw pool that were correctly identified by the system. Precision describes the proportion of articles advanced to manual review that are genuinely relevant, thereby quantifying the false-positive burden imposed by a high-recall strategy. WR denotes the proportion of articles classified as not relevant by the system and consequently exempted from manual review. \nns{} represents the average number of articles that must be manually reviewed per eligible study identified; a lower \nns{} indicates greater screening efficiency. Given that the proposed framework is designed as a high-recall screening tool for the title-and-abstract phase, recall and WR were regarded as the two most decision-informative metrics in the present experiments.
+
+\subsubsection{Coding}
+Coding performance was evaluated as agreement between reconstructed estimates and source-review reference estimates. We reported absolute differences in point estimates and whether the reconstructed estimate was closer to the source-review estimate than the LEADS estimate. Summary agreement was evaluated overall, by disease, and by parameter domain. This validation should be interpreted as component-level coding validity under a fixed source-review inclusion set, not as end-to-end performance from search retrieval to final meta-analysis.

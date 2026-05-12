@@ -1,0 +1,71 @@
+\clearpage
+\appendix
+\section*{Appendix}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{table}{0}
+\renewcommand{\thetable}{S\arabic{table}}
+
+\subsection*{Appendix A. Metric Definitions}
+
+For each model evaluated on the screening benchmark, the following metrics are reported.
+TP = true positives (included papers correctly retrieved);
+FP = false positives (excluded papers incorrectly retrieved);
+FN = false negatives (included papers missed);
+TN = true negatives (excluded papers correctly excluded).
+\[
+\text{Recall} = \frac{\text{TP}}{\text{TP}+\text{FN}},
+\quad
+\text{Precision} = \frac{\text{TP}}{\text{TP}+\text{FP}},
+\quad
+F_1 = \frac{2 \times \text{Precision} \times \text{Recall}}{\text{Precision}+\text{Recall}}.
+\]
+\[
+\text{NNS} = \frac{\text{TP}+\text{FP}}{\text{TP}},
+\quad
+\text{WR} = 1 - \frac{\text{TP}+\text{FP}}{\text{TP}+\text{FP}+\text{FN}+\text{TN}}.
+\]
+
+\subsection*{Appendix B. Screening Model Comparison}
+
+Supplementary Figure~\ref{fig:model-compare} visualizes recall and papers needed to screen across candidate models and baselines. Table~\ref{tab:model-summary} reports the corresponding aggregate counts and metrics on the unified benchmark.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{pdf/model_recall_nns_benchmark.pdf}
+  \caption{Model-assisted screening performance across epidemiological parameters. a) Recall across three parameter domains, shown as dot plots to emphasize small differences among high-recall models. b) Papers needed to screen per included paper (\nns{}), where lower values indicate fewer papers screened per included paper; numbers above each panel indicate the original unassisted NNS.}
+  \label{fig:model-compare}
+\end{figure}
+
+\papertable{model_summary.tex}
+
+\subsection*{Appendix C. Full-Text Tier-2 Ablation}
+
+Tables~\ref{tab:fulltext-tier2-p13} and \ref{tab:p13-remaining-fp-audit} summarize the full-text rescreening ablation and the remaining false-positive categories for the COVID-19 serial-interval review by Ali et al. 2022.
+
+\papertable{fulltext_tier2_p13_ablation.tex}
+
+\papertable{fulltext_tier2_p13_remaining_fp_audit.tex}
+
+\subsection*{Appendix D. Coding Results Comparison}
+
+Supplementary Figure~\ref{fig:supp-coding-leads} and Tables~\ref{tab:coding-leads-summary}--\ref{tab:coding-compare-leads-detail} provide the full per-source-review coding comparison between Ours and LEADS.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{pdf/coding_compare_leads_official_final.pdf}
+  \caption{Supplementary coding comparison of source-review (SR), Ours, and LEADS estimates across serial interval, reproduction number, and fatality.}
+  \label{fig:supp-coding-leads}
+\end{figure}
+
+\papertable{coding_compare_leads_summary.tex}
+
+\papertable{coding_compare_leads_detail.tex}
+
+\clearpage
+
+\subsection*{Appendix E. Benchmark Source-Review Inventory}
+
+Table~\ref{tab:source-reviews} lists the source reviews used to construct the frozen screening and coding benchmark.
+
+\papertable{source_reviews.tex}

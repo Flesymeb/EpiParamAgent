@@ -1,0 +1,35 @@
+\section{Results}
+
+\subsection{LLM-Assisted Screening Performance}
+
+\metagent{} was evaluated on a benchmark comprising 22 published COVID-19 and mpox systematic review profiles, covering 12,758 candidate records and 668 ground-truth included studies. The benchmark spans three key epidemiological parameters: reproduction number, serial interval, and fatality; which correspond to transmission potential, transmission speed, and disease severity, respectively. Candidate records were retrieved from PubMed, and the final inclusion lists reported in the original systematic reviews were used as task-specific ground truth. \metagent{} performs stage-aware screening using available title and abstract information, and assigns each article to one of three relevance categories: Strong, Possible, or Unlikely. For evaluation, Strong and Possible records were treated as relevant and advanced to manual review.
+
+Across all tasks, \metagent{} achieved an overall recall of 0.960 (95\% CI: 0.942--0.972) while reducing the manual screening workload by 73.6\% (95\% CI: 0.728--0.744). Parameter-specific analyses showed consistently high recall, reaching 0.984 (95\% CI: 0.959--0.994) for reproduction number, 0.935 (95\% CI: 0.894--0.961) for serial interval, and 0.957 (95\% CI: 0.919--0.977) for fatality. These results demonstrate that \metagent{} can substantially reduce the number of articles requiring human screening while preserving high sensitivity in systematic review workflows. Model-level comparisons and per-baseline screening metrics are reported in Figure~\ref{fig:model-compare} and Table~\ref{tab:model-summary}.
+
+We evaluated \metagent{}'s performance on literature screening tasks based on the benchmark dataset. The system achieved a high overall recall of 0.960, with the highest recall of 0.984 (95\% CI: 95.9\%, 99.4\%) observed in the reproduction number group. The fatality group ranked second in terms of recall performance, reaching 0.957 (0.919, 0.977). By contrast, the serial interval group yielded the lowest recall at 0.935 (0.894, 0.961). This indicates that approximately 96\% of truly relevant articles in the raw pool could be retained for subsequent manual review.
+
+The number of FNs was small across all groups. Taking the serial interval group as an example, the 14 FNs primarily originated from records where the target parameter only appeared in the full-text tables or appendices but not in the abstracts. This pattern reflects the inherent information limitation of relying solely on abstracts for the first-stage screening, rather than systematic misjudgment by the model. Thus, it represents an expected and acceptable source of error in the methodological design. A focused full-text tier-2 ablation for the Ali et al. serial-interval review is provided in Table~\ref{tab:fulltext-tier2-p13}, with remaining false-positive categories summarized in Table~\ref{tab:p13-remaining-fp-audit}.
+
+The system achieved an overall WR rate of 73.6\%, meaning that approximately three-quarters of candidate articles could be automatically excluded without proceeding to manual review. The serial interval group had the highest WR rate of 83\% and an \nns{} of only 2.55, indicating that reviewers needed to screen an average of approximately 3 articles to confirm 1 positive article. In contrast, due to the extremely low density of the candidate pool in the fatality group, even though the WR rate reached 76\%, the \nns{} remained as high as 7.47. This suggests that the screening efficiency is ultimately constrained by parameter specificity rather than the discriminative ability of the model itself.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{pdf/screening_recall_nns_overall.pdf}
+  \caption{LLM-assisted screening recall and \nns{} (papers needed to screen per included paper) across COVID-19 and mpox benchmarks. a) and c) per-review recall grouped by parameter domain (colour-coded); filled circles are per-review recall; horizontal bars are Wilson 95\% CIs. b) and d) corresponding \nns{}; coloured bars = LLM-assisted, grey bars = original unassisted; whiskers are 95\% CIs.}
+  \label{fig:screening-recall-nns}
+\end{figure}
+
+\subsection{LLM-Coded Estimate Reconstruction}
+
+We next evaluated the full-text coding component under a controlled setting in which the eligible articles were fixed to the inclusion lists of the source reviews. The analysis therefore tested whether the Stage A localization and Stage B extraction workflow could recover the evidence needed to reconstruct review-level parameter estimates, independent of upstream screening errors.
+
+Across 22 source reviews, the reconstructed estimates closely matched the source-review references (Figure~\ref{fig:coding-overall}). Agreement was strongest when the review estimand and pooling rule were explicit, such as serial-interval and reproduction-number analyses. For COVID-19, reconstructed serial-interval estimates differed from the source-review estimates by 0.02--0.09 days in four of five reviews, and reproduction-number estimates preserved the same review-level ordering as the original analyses. Fatality estimates were also recovered when the denominator was aligned to the source review, including invasive-mechanical-ventilation fatality, hospitalized fatality, and mpox clade- or population-specific CFR.
+
+The comparison with LEADS supported the same conclusion. Overall, our coded estimates had lower mean absolute error than LEADS (0.255 versus 2.677) and were closer to the source-review estimate in 21 of 22 source reviews (Table~\ref{tab:coding-leads-summary}). This advantage was observed in both diseases, with closer estimates in 13 of 13 COVID-19 reviews and 8 of 9 mpox reviews. The only mpox exception was a transmission-interval row where both methods remained close to the source-review estimate. These results indicate that codebook-guided full-text coding can reproduce review-level epidemiological estimates when the target parameter definition and synthesis rule are made explicit. Full per-review comparisons are shown in Figure~\ref{fig:supp-coding-leads} and Table~\ref{tab:coding-compare-leads-detail}.
+
+\begin{figure}[!t]
+  \centering
+  \includegraphics[width=0.985\textwidth]{pdf/coding_estimates_overall_by_disease.pdf}
+  \caption{Agreement between LLM-coded estimates and source-review estimates. Panels a and b show source-review and LLM-coded estimates for serial interval, reproduction number, and fatality in COVID-19 and mpox reviews. Points denote point estimates and horizontal bars denote 95\% confidence intervals. Grey squares indicate estimates reported in the source reviews; coloured circles indicate estimates reconstructed from LLM-coded full-text evidence. Axes are scaled separately by disease and parameter.}
+  \label{fig:coding-overall}
+\end{figure}

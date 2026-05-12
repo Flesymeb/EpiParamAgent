@@ -1,0 +1,21 @@
+\begin{table}[H]
+\centering
+\caption{Stage-2 full-text rescreening ablation for the COVID-19 serial-interval review by Ali et al. 2022. S, P, and U denote papers predicted at Stage 1 as strong, possible, and excluded, respectively; full texts were obtained from PMC OA where available.}
+\label{tab:fulltext-tier2-p13}
+\small
+\setlength{\tabcolsep}{4.5pt}
+\noindent\makebox[\textwidth][c]{%
+\begin{tabular}{ccrrrrrrrr}
+\toprule
+Stage & Strategy & TP & FP & FN & TN & Recall & Precision & F1 & \nns{} \\
+\midrule
+\makecell[c]{Stage I\\(Title+Abstract)} & - & 45 & 40 & 6 & 20 & 0.882 & 0.529 & 0.662 & 1.89 \\
+\midrule
+\multirow[c]{5}{*}{\makecell[c]{Stage II\\(Full-text)}} & S-only & 45 & 39 & 6 & 21 & 0.882 & 0.536 & 0.667 & 1.87 \\
+ & P-only & 45 & 25 & 6 & 35 & 0.882 & 0.643 & 0.744 & 1.56 \\
+ & U-only & 48 & 40 & 3 & 20 & 0.941 & 0.545 & 0.691 & 1.83 \\
+ & S+P & 45 & 24 & 6 & 36 & 0.882 & 0.652 & 0.750 & 1.53 \\
+ & \textbf{S+P+U} & \textbf{48} & \textbf{24} & \textbf{3} & \textbf{36} & \textbf{0.941} & \textbf{0.667} & \textbf{0.780} & \textbf{1.50} \\
+\bottomrule
+\end{tabular}}
+\end{table}
