@@ -53,9 +53,11 @@ export async function getRun(runId: string): Promise<RunDetail> {
 export async function startStep(
   runId: string,
   stepNo: number,
+  params?: Record<string, unknown>,
 ): Promise<StartStepResult> {
   const response = await startStepRunsRunIdStepsStepNoStartPost({
     path: { run_id: runId, step_no: stepNo },
+    body: { params: params ?? {} },
     throwOnError: true,
   })
 

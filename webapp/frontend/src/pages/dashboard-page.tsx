@@ -8,6 +8,8 @@ import { toast } from "sonner"
 import { createRun, listRuns } from "@/api/pipeline"
 import type { Run } from "@/api/pipeline"
 import Aurora from "@/components/Aurora"
+import { BlurText } from "@/components/react-bits/blur-text"
+import { SpotlightCard } from "@/components/react-bits/spotlight-card"
 import { StatusBadge } from "@/components/status-badge"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -183,7 +185,7 @@ export function DashboardPage() {
           <div>
             <Badge variant="secondary">Pipeline runs</Badge>
             <h1 className="mt-3 text-2xl font-semibold tracking-normal">
-              Runs
+              <BlurText text="Runs" />
             </h1>
             <p
               className="max-w-xl truncate text-sm text-muted-foreground"
@@ -211,6 +213,7 @@ export function DashboardPage() {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]">
+        <SpotlightCard className="rounded-xl">
         <Card>
           <CardHeader>
             <CardTitle>Runs list</CardTitle>
@@ -313,7 +316,9 @@ export function DashboardPage() {
             </Table>
           </CardContent>
         </Card>
+        </SpotlightCard>
 
+        <SpotlightCard className="rounded-xl self-start">
         <Card className="h-fit bg-card/95">
           <CardHeader>
             <CardTitle>New run</CardTitle>
@@ -421,6 +426,7 @@ export function DashboardPage() {
             </form>
           </CardContent>
         </Card>
+        </SpotlightCard>
       </div>
     </div>
   )

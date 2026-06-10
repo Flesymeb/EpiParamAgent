@@ -43,7 +43,14 @@ export const getRunRunsRunIdGet = <ThrowOnError extends boolean = false>(options
 /**
  * Start Step
  */
-export const startStepRunsRunIdStepsStepNoStartPost = <ThrowOnError extends boolean = false>(options: Options<StartStepRunsRunIdStepsStepNoStartPostData, ThrowOnError>): RequestResult<StartStepRunsRunIdStepsStepNoStartPostResponses, StartStepRunsRunIdStepsStepNoStartPostErrors, ThrowOnError> => (options.client ?? client).post<StartStepRunsRunIdStepsStepNoStartPostResponses, StartStepRunsRunIdStepsStepNoStartPostErrors, ThrowOnError>({ url: '/runs/{run_id}/steps/{step_no}/start', ...options });
+export const startStepRunsRunIdStepsStepNoStartPost = <ThrowOnError extends boolean = false>(options: Options<StartStepRunsRunIdStepsStepNoStartPostData, ThrowOnError>): RequestResult<StartStepRunsRunIdStepsStepNoStartPostResponses, StartStepRunsRunIdStepsStepNoStartPostErrors, ThrowOnError> => (options.client ?? client).post<StartStepRunsRunIdStepsStepNoStartPostResponses, StartStepRunsRunIdStepsStepNoStartPostErrors, ThrowOnError>({
+    url: '/runs/{run_id}/steps/{step_no}/start',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Download Step Artifact

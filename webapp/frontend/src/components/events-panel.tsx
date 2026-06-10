@@ -45,7 +45,8 @@ export function EventsPanel({ events, isConnected }: EventsPanelProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[360px] pr-3">
+        <div className="relative">
+          <ScrollArea className="h-[360px] pr-3">
           {events.length === 0 ? (
             <div className="flex h-[320px] items-center justify-center rounded-lg border border-dashed bg-muted/25 p-6 text-center">
               <div className="flex max-w-56 flex-col items-center gap-2 text-sm text-muted-foreground">
@@ -109,7 +110,20 @@ export function EventsPanel({ events, isConnected }: EventsPanelProps) {
               <div ref={bottomRef} />
             </div>
           )}
-        </ScrollArea>
+          </ScrollArea>
+          {events.length > 0 ? (
+            <>
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 z-10 h-6 bg-gradient-to-b from-card to-transparent"
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-6 bg-gradient-to-t from-card to-transparent"
+              />
+            </>
+          ) : null}
+        </div>
       </CardContent>
     </Card>
   )

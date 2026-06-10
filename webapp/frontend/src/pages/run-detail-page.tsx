@@ -30,6 +30,7 @@ import { EventsPanel } from "@/components/events-panel"
 import { PipelineStepper } from "@/components/pipeline-stepper"
 import { PoolingResult } from "@/components/pooling-result"
 import { StatusBadge } from "@/components/status-badge"
+import { StepConfigForm } from "@/components/step-config-form"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -118,6 +119,7 @@ export function RunDetailPage() {
     (import.meta.env.DEV && searchParams.has("nosse"))
   const { detail, error, isLoading, refresh } = useRun(runId)
   const [startingStepNo, setStartingStepNo] = useState<number | null>(null)
+  const [stepParams, setStepParams] = useState<Record<string, unknown>>({})
   const [streamVersion, setStreamVersion] = useState(0)
   const [streamErrorKey, setStreamErrorKey] = useState<string | null>(null)
   const [eventState, setEventState] = useState<EventState>({
@@ -240,7 +242,7 @@ export function RunDetailPage() {
     setStreamVersion((current) => current + 1)
 
     try {
-      await startStep(runId, currentStep.number)
+      await startStep(runId, currentStep.number, stepParams)
       await refresh()
     } catch (startError) {
       toast.error(
@@ -354,6 +356,13 @@ export function RunDetailPage() {
             </CardAction>
           </CardHeader>
           <CardContent className="space-y-4">
+            <StepConfigForm
+              disabled={isSelectedStepRunning}
+              initialValues={detail?.run.params ?? {}}
+              key={currentStep.number}
+              onChange={setStepParams}
+              stepNumber={currentStep.number}
+            />
             <div
               className={cn(
                 "relative flex flex-col gap-3 overflow-hidden rounded-lg border bg-muted/20 p-3 transition-[background-color,border-color,box-shadow] duration-300 sm:flex-row sm:items-center sm:justify-between",

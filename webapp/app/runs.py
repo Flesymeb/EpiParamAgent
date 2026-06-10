@@ -36,6 +36,12 @@ class CreateRunRequest(BaseModel):
     params: dict[str, Any] = PydanticField(default_factory=dict)
 
 
+class StartStepRequest(BaseModel):
+    # Per-step parameter overrides. Merged into the run's params (override wins)
+    # so the configured fields persist and downstream steps inherit them.
+    params: dict[str, Any] = PydanticField(default_factory=dict)
+
+
 def _now() -> datetime:
     return datetime.now(UTC)
 
@@ -101,6 +107,7 @@ def start_step(
     run_id: str,
     step_no: int,
     background_tasks: BackgroundTasks,
+    body: StartStepRequest | None = None,
     session: Session = Depends(get_session),
 ) -> StartStepResponse:
     run = session.get(PipelineRun, run_id)
@@ -121,6 +128,17 @@ def start_step(
             step_no=step_no,
             name=get_step_name(step_no),
         )
+
+    # Merge per-step overrides into the run params (override wins) and persist,
+    # so configured fields stick and downstream steps inherit them. Empty-string
+    # values are dropped so a blank field falls back to the existing/default.
+    overrides = {
+        key: value
+        for key, value in (body.params if body else {}).items()
+        if not (isinstance(value, str) and value.strip() == "")
+    }
+    if overrides:
+        run.params = {**(run.params or {}), **overrides}
 
     now = _now()
     run.status = "running"

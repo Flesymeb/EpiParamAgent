@@ -84,6 +84,18 @@ export type SaveEditedStepRequest = {
 };
 
 /**
+ * StartStepRequest
+ */
+export type StartStepRequest = {
+    /**
+     * Params
+     */
+    params?: {
+        [key: string]: unknown;
+    };
+};
+
+/**
  * StartStepResponse
  */
 export type StartStepResponse = {
@@ -271,7 +283,10 @@ export type GetRunRunsRunIdGetResponses = {
 export type GetRunRunsRunIdGetResponse = GetRunRunsRunIdGetResponses[keyof GetRunRunsRunIdGetResponses];
 
 export type StartStepRunsRunIdStepsStepNoStartPostData = {
-    body?: never;
+    /**
+     * Body
+     */
+    body?: StartStepRequest | null;
     path: {
         /**
          * Run Id

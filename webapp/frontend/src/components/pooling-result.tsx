@@ -12,6 +12,7 @@ import {
 } from "recharts"
 
 import type { StepTableRows } from "@/api/client/types.gen"
+import { CountUp } from "@/components/react-bits/count-up"
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
@@ -73,7 +74,7 @@ export function PoolingResult({
             <CardHeader>
               <CardDescription>{stat.label}</CardDescription>
               <CardTitle className="font-mono text-lg">
-                {formatSummaryValue(stat.key, pooled)}
+                <SummaryValue pooled={pooled} statKey={stat.key} />
               </CardTitle>
             </CardHeader>
           </Card>
@@ -282,6 +283,39 @@ function formatSummaryValue(
 
   const value = getPooledStatValue(key, pooled)
   return value !== null ? formatNumber(value) : "-"
+}
+
+function countUpDecimals(value: number): number {
+  return Number.isInteger(value) ? 0 : 3
+}
+
+// Animates numeric pooled stats on first view (React Bits CountUp); the CI
+// range and any "-" placeholders fall back to the plain formatted string.
+function SummaryValue({
+  statKey,
+  pooled,
+}: {
+  statKey: (typeof summaryStats)[number]["key"]
+  pooled: PooledSummary
+}) {
+  if (statKey === "ci") {
+    return <>{formatSummaryValue(statKey, pooled)}</>
+  }
+
+  if (statKey === "i2") {
+    return pooled.i2 !== null ? (
+      <CountUp decimals={countUpDecimals(pooled.i2)} suffix="%" to={pooled.i2} />
+    ) : (
+      <>-</>
+    )
+  }
+
+  const value = getPooledStatValue(statKey, pooled)
+  return value !== null ? (
+    <CountUp decimals={countUpDecimals(value)} to={value} />
+  ) : (
+    <>-</>
+  )
 }
 
 function getPooledStatValue(
