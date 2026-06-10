@@ -195,3 +195,9 @@ evaluation/*/*/screening/*.xlsx
 evaluation/*/*/ground_truth/*.csv
 evaluation/_legacy/
 evaluation/*.zip
+
+# Demo system runtime DB + per-run outputs
+/data/
+
+# CodeGraph index
+.codegraph/
