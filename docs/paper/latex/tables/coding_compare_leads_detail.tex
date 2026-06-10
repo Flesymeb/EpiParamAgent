@@ -1,6 +1,7 @@
+% !TEX root = ../main.tex
 \begin{table}[p]
 \centering
-\caption{Per-source-review coding comparison of Ours and LEADS against source-review reference estimates.}
+\caption{Per-source-review coding comparison of MetaAgent and LEADS against source-review reference estimates. Source-review (SR) reference estimates were manually selected from the reported primary or most comparable review-level estimate; when no single overall estimate was reported, the selected target followed the source review's stated synthesis focus.}
 \label{tab:coding-compare-leads-detail}
 \scriptsize
 \setlength{\tabcolsep}{3.0pt}
@@ -10,9 +11,9 @@
 \resizebox{0.94\textwidth}{!}{%
 \begin{tabular}{>{\centering\arraybackslash}m{0.052\textwidth} >{\centering\arraybackslash}m{0.108\textwidth} >{\centering\arraybackslash}m{0.152\textwidth} >{\centering\arraybackslash}m{0.104\textwidth} >{\centering\arraybackslash}m{0.104\textwidth} >{\centering\arraybackslash}m{0.104\textwidth} >{\centering\arraybackslash}m{0.070\textwidth} >{\centering\arraybackslash}m{0.054\textwidth} >{\centering\arraybackslash}m{0.072\textwidth}}
 \toprule
-\multirow[c]{2}{*}{\makecell[c]{Disease}} & \multirow[c]{2}{*}{\makecell[c]{Parameter}} & \multirow[c]{2}{*}{\makecell[c]{Source\\review}} & \multicolumn{3}{c}{Estimate (95\% CI)} & \multicolumn{2}{c}{$|\Delta|$} & \multirow[c]{2}{*}{\makecell[c]{Ours\\better?}} \\
+\multirow[c]{2}{*}{\makecell[c]{Disease}} & \multirow[c]{2}{*}{\makecell[c]{Parameter}} & \multirow[c]{2}{*}{\makecell[c]{Source\\review}} & \multicolumn{3}{c}{Estimate (95\% CI)} & \multicolumn{2}{c}{$|\Delta|$} & \multirow[c]{2}{*}{\makecell[c]{MetaAgent\\better?}} \\
 \cmidrule(lr){4-6}\cmidrule(lr){7-8}
- &  &  & SR & Ours & LEADS & Ours & LEADS &  \\
+ &  &  & SR & \makecell[c]{Meta\\Agent} & LEADS & \makecell[c]{Meta\\Agent} & LEADS &  \\
 \midrule
 \multirow[c]{13}{0.052\textwidth}{\centering \verticalcell{COVID-19}} & \multirow[c]{5}{0.108\textwidth}{\centering Serial Interval} & Madewell et al., 2023 & \shortstack[c]{3.55 d\\(3.28--3.82)} & \shortstack[c]{3.64 d\\(3.45--3.84)} & \shortstack[c]{3.39 d\\(3.07--3.72)} & 0.09 & 0.16 & $\checkmark$ \\
  &  & Xu et al., 2023 & \shortstack[c]{3.50 d\\(3.00--4.00)} & \shortstack[c]{3.48 d\\(3.32--3.64)} & \shortstack[c]{4.15 d\\(3.83--4.47)} & 0.02 & 0.65 & $\checkmark$ \\
