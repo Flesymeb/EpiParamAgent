@@ -117,4 +117,5 @@ def _resolve_project_root() -> Path:
     cwd = Path.cwd()
     if (cwd / "evaluation").exists():
         return cwd
-    return Path(__file__).resolve().parents[2]
+    # webapp/app/steps/coding.py -> repo root is parents[3]
+    return Path(__file__).resolve().parents[3]
