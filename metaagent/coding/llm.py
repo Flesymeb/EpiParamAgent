@@ -16,14 +16,14 @@ def _matches_no_proxy(url: str, no_proxy: str) -> bool:
     return any(host.endswith(e.strip()) for e in no_proxy.split(",") if e.strip())
 
 
-def init_llm():
+def init_llm(config_overrides: dict[str, object] | None = None):
     tools_dir = Path(__file__).resolve().parents[2] / "tools"
     if str(tools_dir) not in sys.path:
         sys.path.insert(0, str(tools_dir))
 
     from metaagent.config import load_llm_config
 
-    cfg = load_llm_config(module_hint="coding")
+    cfg = load_llm_config(config_overrides, module_hint="coding")
     if not cfg.api_key:
         raise RuntimeError("Missing LLM_API_KEY/OPENAI_API_KEY")
     model = cfg.model or "openai/gpt-4.1"

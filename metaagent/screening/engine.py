@@ -65,6 +65,7 @@ def init_llm_model(
     model_override: str | None = None,
     provider_override: str | None = None,
     temperature_override: float | None = None,
+    config_overrides: dict[str, Any] | None = None,
 ) -> Any:
     """Initialize screening model from shared runtime config.
 
@@ -74,7 +75,7 @@ def init_llm_model(
         provider_override: Optional provider profile override, e.g. openrouter,
             lab, or lab2.
     """
-    params: dict[str, Any] = {}
+    params: dict[str, Any] = dict(config_overrides or {})
     if model_override:
         params["llm_model"] = model_override
     if provider_override:

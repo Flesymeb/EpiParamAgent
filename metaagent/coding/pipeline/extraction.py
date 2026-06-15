@@ -375,6 +375,7 @@ def run_pipeline(
     stage: str,
     codebook_path: Path,
     fetch_strategy: str = "pmc_only",
+    llm_overrides: dict[str, object] | None = None,
 ) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -402,17 +403,27 @@ def run_pipeline(
     index_dir = out_dir / "index"
     index_dir.mkdir(parents=True, exist_ok=True)
 
-    model = init_llm()
-    stage_a_config = load_config(Path(__file__).resolve().parents[2] / "configs" / "stages" / "stage_a.yaml")
+    model = init_llm(llm_overrides)
+    # Stage-A schema and prompt fallbacks live in the disease's coding_prompts/
+    # dir, derived from the codebook path (configs/{disease}/codebooks/*.yaml ->
+    # configs/{disease}/coding_prompts/). Avoids hardcoding a path that breaks
+    # whenever this module is relocated.
+    prompts_dir = codebook_path.resolve().parents[1] / "coding_prompts"
+    stage_a_schema = prompts_dir / "stage_a.yaml"
+    if not stage_a_schema.exists():
+        raise FileNotFoundError(
+            f"Stage-A schema not found at {stage_a_schema}. Expected the codebook "
+            f"at configs/<disease>/codebooks/<param>.yaml so its sibling "
+            f"coding_prompts/ dir can be derived; got codebook_path={codebook_path}."
+        )
+    stage_a_config = load_config(stage_a_schema)
     effect_config = load_config(codebook_path)
     applied_b = _apply_stage_prompt_from_codebook(effect_config, "stage_b", effect_config)
     if not applied_b:
-        prompt_dir = Path(__file__).resolve().parents[2] / "configs" / "prompts"
-        _apply_prompt_override(effect_config, prompt_dir / "stage_b.py")
+        _apply_prompt_override(effect_config, prompts_dir / "stage_b.py")
     applied_a = _apply_stage_prompt_from_codebook(effect_config, "stage_a", stage_a_config)
     if not applied_a:
-        prompt_dir = Path(__file__).resolve().parents[2] / "configs" / "prompts"
-        _apply_prompt_override(stage_a_config, prompt_dir / "stage_a.py")
+        _apply_prompt_override(stage_a_config, prompts_dir / "stage_a.py")
     _inject_codebook_context(stage_a_config, effect_config)
     records: list[dict] = []
     index_rows: list[dict] = []
@@ -512,7 +523,7 @@ def run_pipeline(
     from metaagent.config import load_llm_config, load_mineru_config  # type: ignore
     from tools.provenance import write_run_manifest  # type: ignore
 
-    llm_cfg = load_llm_config(module_hint="coding")
+    llm_cfg = load_llm_config(llm_overrides, module_hint="coding")
     mineru_cfg = load_mineru_config(module_hint="coding")
     manifest_path = write_run_manifest(
         output_dir=out_dir,

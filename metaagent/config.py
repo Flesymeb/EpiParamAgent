@@ -156,12 +156,14 @@ def load_llm_config(
     provider = _normalize_provider(
         _first_config_value(
             params.get("llm_provider"),
+            params.get("provider"),
             _module_env_value(normalized_module, "LLM_PROVIDER"),
             os.getenv("LLM_PROVIDER"),
         )
     )
     model = _first_config_value(
         params.get("llm_model"),
+        params.get("model"),
         _module_env_value(normalized_module, "LLM_MODEL"),
         _provider_env_value(provider, "model_vars"),
         os.getenv("LLM_MODEL"),
@@ -206,6 +208,7 @@ def load_llm_config(
     default_max_tokens = LLMConfig().max_tokens
     max_tokens = _safe_int(
         params.get("llm_max_tokens")
+        or params.get("max_tokens")
         or _module_env_value(normalized_module, "LLM_MAX_TOKENS")
         or os.getenv("LLM_MAX_TOKENS")
     )
@@ -214,6 +217,7 @@ def load_llm_config(
 
     timeout_s = _safe_int(
         params.get("llm_timeout_s")
+        or params.get("timeout_s")
         or _module_env_value(normalized_module, "LLM_TIMEOUT_S")
         or os.getenv("LLM_TIMEOUT_S")
     )
@@ -223,21 +227,28 @@ def load_llm_config(
     temperature = _safe_float(
         _first_defined_value(
             params.get("llm_temperature"),
+            params.get("temperature"),
             _module_env_value(normalized_module, "LLM_TEMPERATURE"),
             os.getenv("LLM_TEMPERATURE"),
             0.1,
         )
     )
     verify_ssl = _safe_bool(
-        params.get("llm_verify_ssl")
-        or _module_env_value(normalized_module, "LLM_VERIFY_SSL")
-        or os.getenv("LLM_VERIFY_SSL")
+        _first_defined_value(
+            params.get("llm_verify_ssl"),
+            params.get("verify_ssl"),
+            _module_env_value(normalized_module, "LLM_VERIFY_SSL"),
+            os.getenv("LLM_VERIFY_SSL"),
+        )
     )
     force_streaming = _safe_bool(
-        params.get("llm_force_streaming")
-        or _module_env_value(normalized_module, "LLM_FORCE_STREAMING")
-        or os.getenv("LLM_FORCE_STREAMING")
-        or False
+        _first_defined_value(
+            params.get("llm_force_streaming"),
+            params.get("force_streaming"),
+            _module_env_value(normalized_module, "LLM_FORCE_STREAMING"),
+            os.getenv("LLM_FORCE_STREAMING"),
+            False,
+        )
     )
 
     return LLMConfig(

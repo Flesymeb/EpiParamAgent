@@ -8,10 +8,10 @@ project:
   effect_type: "fatality_rate"
 
 stage_a:
-  prompt_file: prompts/stage_a_fatality.py
+  prompt_file: ../coding_prompts/stage_a_fatality.py
 
 stage_b:
-  prompt_file: prompts/stage_b_fatality.py
+  prompt_file: ../coding_prompts/stage_b_fatality.py
 
 parameters:
   research_question: >
