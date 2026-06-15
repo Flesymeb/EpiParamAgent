@@ -8,7 +8,7 @@ from typing import Any
 
 from sqlmodel import Session, select
 
-from app.db import engine
+from app.db import engine, run_step_dir
 from app.events import StreamToEvents
 from app.models import PipelineStep
 
@@ -17,7 +17,7 @@ BASE_COLUMNS = ["PMID", "Title", "Abstract", "Keywords"]
 
 def run_screening_step(run_id: str, params: dict[str, Any]) -> str:
     input_path = _resolve_input_path(run_id, params)
-    out_dir = Path("data") / "runs" / run_id / "step-3"
+    out_dir = run_step_dir(run_id, 3)
     out_dir.mkdir(parents=True, exist_ok=True)
     screened_path = out_dir / "screened.csv"
 
@@ -34,11 +34,24 @@ def run_screening_step(run_id: str, params: dict[str, Any]) -> str:
                 model_override=params.get("model"),
                 provider_override=params.get("provider"),
                 temperature_override=params.get("temperature"),
+                config_overrides=params,
             )
+            # Human-in-the-loop supplement: appended to the eligibility text so
+            # it flows into the screening prompt as extra reviewer guidance.
+            research_question = str(params.get("research_question") or "")
+            supplement = str(
+                params.get("screen_prompt_supplement")
+                or params.get("prompt_supplement")
+                or ""
+            ).strip()
+            if supplement:
+                research_question = (
+                    f"{research_question}\n\nAdditional reviewer guidance:\n{supplement}"
+                ).strip()
             asyncio.run(
                 screen_papers_batch_async(
                     papers=papers,
-                    research_question=params.get("research_question", ""),
+                    research_question=research_question,
                     llm_model=llm,
                     batch_size=int(params.get("batch_size", 20)),
                     batch_concurrency=1,

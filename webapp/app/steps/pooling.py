@@ -7,7 +7,7 @@ from typing import Any
 import pandas as pd
 from sqlmodel import Session, select
 
-from app.db import engine
+from app.db import engine, run_step_dir
 from app.events import StreamToEvents
 from app.models import PipelineStep
 
@@ -22,7 +22,7 @@ TOPIC_PARAM = {
 
 def run_pooling_step(run_id: str, params: dict[str, Any]) -> str:
     input_path = _resolve_input_path(run_id, params)
-    out_dir = Path("data") / "runs" / run_id / "step-5"
+    out_dir = run_step_dir(run_id, 5)
     out_dir.mkdir(parents=True, exist_ok=True)
     pooled_path = out_dir / "pooled.csv"
     forest_path = out_dir / "forest.csv"

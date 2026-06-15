@@ -1,18 +1,19 @@
 from __future__ import annotations
 
 import json
+import re
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from typing import Any
 
 from sqlmodel import Session
 
-from app.db import engine
+from app.db import engine, run_step_dir
 from app.events import StreamToEvents
 
 
 def run_query_gen_step(run_id: str, params: dict[str, Any]) -> str:
-    out_dir = Path("data") / "runs" / run_id / "step-1"
+    out_dir = run_step_dir(run_id, 1)
     out_dir.mkdir(parents=True, exist_ok=True)
     query_path = out_dir / "query.json"
 
@@ -36,6 +37,7 @@ def run_query_gen_step(run_id: str, params: dict[str, Any]) -> str:
                 model_override=params.get("model"),
                 provider_override=params.get("provider"),
                 temperature_override=params.get("temperature"),
+                config_overrides=params,
             )
 
             messages = _build_messages(
@@ -43,6 +45,11 @@ def run_query_gen_step(run_id: str, params: dict[str, Any]) -> str:
                 research_question=research_question,
                 disease=disease,
                 parameter=parameter,
+                supplement=str(
+                    params.get("query_prompt_supplement")
+                    or params.get("prompt_supplement")
+                    or ""
+                ).strip(),
             )
             print("query_gen step: requesting PubMed boolean query")
             resp = llm.invoke(messages)
@@ -82,20 +89,47 @@ def _build_messages(
     research_question: str,
     disease: str,
     parameter: str,
+    supplement: str = "",
 ) -> list[dict[str, str]]:
-    system_text = (
+    from app.prompt_templates import load_query_template
+
+    sections = load_query_template()
+    system_text = sections.get("system") or (
         "You are an expert medical information specialist designing PubMed "
         "searches for epidemiological systematic reviews. Generate precise, "
         "PubMed-ready boolean queries with synonym expansion and field tags."
     )
-    user_text = f"""
+    user_template = sections.get("user") or _DEFAULT_USER_TEMPLATE
+    substitutions = {
+        "keywords": keywords or "not provided",
+        "research_question": research_question or "not provided",
+        "disease": disease or "not provided",
+        "parameter": parameter or "not provided",
+    }
+    user_text = re.sub(
+        r"\{(keywords|research_question|disease|parameter)\}",
+        lambda match: substitutions[match.group(1)],
+        user_template,
+    ).strip()
+    if supplement:
+        user_text += (
+            "\n\nAdditional reviewer guidance (incorporate into the query):\n"
+            + supplement
+        )
+    return [
+        {"role": "system", "content": system_text},
+        {"role": "user", "content": user_text},
+    ]
+
+
+_DEFAULT_USER_TEMPLATE = """
 Create a PubMed-ready boolean search query for the study topic below.
 
 Inputs:
-- keywords: {keywords or "not provided"}
-- research_question: {research_question or "not provided"}
-- disease: {disease or "not provided"}
-- epidemiological_parameter: {parameter or "not provided"}
+- keywords: {keywords}
+- research_question: {research_question}
+- disease: {disease}
+- epidemiological_parameter: {parameter}
 
 Requirements:
 - Use valid PubMed boolean syntax with parentheses.
@@ -110,10 +144,6 @@ Requirements:
   "rationale": short string,
   "warnings": list of strings.
 """.strip()
-    return [
-        {"role": "system", "content": system_text},
-        {"role": "user", "content": user_text},
-    ]
 
 
 def _response_text(content: Any) -> str:

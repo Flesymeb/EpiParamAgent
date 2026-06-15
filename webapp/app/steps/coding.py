@@ -1,15 +1,17 @@
 from __future__ import annotations
 
 import json
+import re
 import shutil
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
+import yaml
 from sqlmodel import Session
 
-from app.db import engine
+from app.db import engine, run_step_dir
 from app.events import StreamToEvents
 
 DATASET_DISEASE_DIRS = {
@@ -24,6 +26,11 @@ def run_coding_step(run_id: str, params: dict[str, Any]) -> str:
     profile = str(params.get("profile") or params.get("topic") or "").strip()
     stage = str(params.get("stage") or "extract").strip()
     fetch_strategy = str(params.get("fetch_strategy") or "pmc_only").strip()
+    supplement = str(
+        params.get("code_prompt_supplement")
+        or params.get("prompt_supplement")
+        or ""
+    ).strip()
 
     if not parameter:
         raise ValueError("params['parameter'] is required")
@@ -40,7 +47,7 @@ def run_coding_step(run_id: str, params: dict[str, Any]) -> str:
         params.get("codebook_path")
         or project_root / "configs" / disease / "codebooks" / f"{parameter}.yaml"
     )
-    out_dir = Path("data") / "runs" / run_id / "step-4"
+    out_dir = run_step_dir(run_id, 4)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     if not project_path.exists():
@@ -60,15 +67,28 @@ def run_coding_step(run_id: str, params: dict[str, Any]) -> str:
             print(f"coding step: codebook={codebook_path}")
             print(f"coding step: out_dir={out_dir}")
 
+            temp_codebook: Path | None = None
+            if supplement:
+                temp_codebook = _materialize_codebook_supplement(
+                    codebook_path, supplement, run_id
+                )
+                codebook_path = temp_codebook
+                print(f"coding step: applied reviewer supplement → {codebook_path}")
+
             from metaagent.coding.pipeline.extraction import run_pipeline
 
-            run_pipeline(
-                input_path=pmids_path,
-                out_dir=out_dir,
-                stage=stage,
-                codebook_path=codebook_path,
-                fetch_strategy=fetch_strategy,
-            )
+            try:
+                run_pipeline(
+                    input_path=pmids_path,
+                    out_dir=out_dir,
+                    stage=stage,
+                    codebook_path=codebook_path,
+                    fetch_strategy=fetch_strategy,
+                    llm_overrides=params,
+                )
+            finally:
+                if temp_codebook is not None:
+                    temp_codebook.unlink(missing_ok=True)
 
             coding_csv = _write_coding_sheet_csv(out_dir)
             if coding_csv is not None:
@@ -119,3 +139,24 @@ def _resolve_project_root() -> Path:
         return cwd
     # webapp/app/steps/coding.py -> repo root is parents[3]
     return Path(__file__).resolve().parents[3]
+
+
+def _materialize_codebook_supplement(
+    codebook_path: Path, supplement: str, run_id: str
+) -> Path:
+    """Write a per-run codebook copy NEXT TO the original (same directory) with
+    the reviewer supplement appended to `notes`. Keeping it in the original dir
+    means run_pipeline's relative `../coding_prompts/` + sibling derivation still
+    resolve. The caller deletes it after the run."""
+    data = yaml.safe_load(codebook_path.read_text(encoding="utf-8")) or {}
+    notes = str(data.get("notes") or "").rstrip()
+    block = "[Reviewer supplement]\n" + supplement
+    data["notes"] = f"{notes}\n\n{block}" if notes else block
+
+    safe_run = re.sub(r"[^A-Za-z0-9_-]", "", run_id)[:24] or "run"
+    target = codebook_path.parent / f".run_{safe_run}.codebook.yaml"
+    target.write_text(
+        yaml.safe_dump(data, allow_unicode=True, sort_keys=False),
+        encoding="utf-8",
+    )
+    return target

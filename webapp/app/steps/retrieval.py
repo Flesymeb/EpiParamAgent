@@ -9,7 +9,7 @@ from typing import Any
 
 from sqlmodel import Session, select
 
-from app.db import engine
+from app.db import engine, run_step_dir
 from app.events import StreamToEvents
 from app.models import PipelineStep
 
@@ -21,7 +21,7 @@ def run_retrieval_step(run_id: str, params: dict[str, Any]) -> str:
 
     retmax = _parse_retmax(params.get("retmax", "200"))
     date_range = str(params.get("date_range") or "").strip()
-    out_dir = Path("data") / "runs" / run_id / "step-2"
+    out_dir = run_step_dir(run_id, 2)
     out_dir.mkdir(parents=True, exist_ok=True)
     candidates_path = out_dir / "candidates.csv"
 
@@ -93,7 +93,7 @@ def _resolve_step1_query_path(run_id: str) -> Path:
             if artifact:
                 candidates.append(Path(artifact))
 
-    candidates.append(Path("data") / "runs" / run_id / "step-1" / "query.json")
+    candidates.append(run_step_dir(run_id, 1) / "query.json")
 
     seen: set[Path] = set()
     checked: list[str] = []

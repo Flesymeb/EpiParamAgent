@@ -3,17 +3,19 @@ from __future__ import annotations
 import asyncio
 import csv
 import json
+import re
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+import yaml
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field as PydanticField
 from sqlmodel import Session, select
 from sse_starlette.sse import EventSourceResponse
 
-from app.db import engine, get_session
+from app.db import engine, get_session, run_step_dir
 from app.events import event_hub, log_event, serialize_event
 from app.models import PipelineRun, PipelineStep, RunEvent
 from app.schemas import (
@@ -131,12 +133,16 @@ def start_step(
 
     # Merge per-step overrides into the run params (override wins) and persist,
     # so configured fields stick and downstream steps inherit them. Empty-string
-    # values are dropped so a blank field falls back to the existing/default.
-    overrides = {
-        key: value
-        for key, value in (body.params if body else {}).items()
-        if not (isinstance(value, str) and value.strip() == "")
-    }
+    # values are dropped so a blank field falls back to the existing/default —
+    # EXCEPT prompt-supplement keys, where an empty value must clear a prior
+    # supplement rather than keep applying it.
+    raw_overrides = (body.params if body else {}) or {}
+    overrides: dict[str, Any] = {}
+    for key, value in raw_overrides.items():
+        is_blank = isinstance(value, str) and value.strip() == ""
+        if is_blank and not key.endswith("prompt_supplement"):
+            continue
+        overrides[key] = value
     if overrides:
         run.params = {**(run.params or {}), **overrides}
 
@@ -218,7 +224,7 @@ def save_edited_step(
     if step is None:
         raise HTTPException(status_code=404, detail="Step not found")
 
-    out_dir = Path("data") / "runs" / run_id / f"step-{step_no}"
+    out_dir = run_step_dir(run_id, step_no)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     if body.rows is not None:
@@ -471,3 +477,158 @@ async def stream_events(
                 }
 
     return EventSourceResponse(generate_events(), ping=15)
+
+
+# ── Codebook introspection (read-only) ───────────────────────────────────────
+_NAME_RE = re.compile(r"^[A-Za-z0-9_-]+$")
+
+
+class CodebookField(BaseModel):
+    name: str | None = None
+    label: str | None = None
+    type: str | None = None
+    required: bool = False
+    prompt: str | None = None
+
+
+class CodebookRead(BaseModel):
+    disease: str
+    parameter: str
+    name: str | None = None
+    description: str | None = None
+    effect_type: str | None = None
+    notes: str | None = None
+    fields: list[CodebookField] = PydanticField(default_factory=list)
+
+
+def _repo_root() -> Path:
+    cwd = Path.cwd()
+    if (cwd / "configs").is_dir() and (cwd / "evaluation").is_dir():
+        return cwd
+    # webapp/app/runs.py -> repo root is parents[2]
+    return Path(__file__).resolve().parents[2]
+
+
+@router.get("/codebooks/{disease}/{parameter}", response_model=CodebookRead)
+def get_codebook(disease: str, parameter: str) -> CodebookRead:
+    # Guard against path traversal — only flat config names are valid.
+    if not _NAME_RE.match(disease) or not _NAME_RE.match(parameter):
+        raise HTTPException(status_code=400, detail="Invalid disease/parameter")
+
+    path = _repo_root() / "configs" / disease / "codebooks" / f"{parameter}.yaml"
+    if not path.exists():
+        raise HTTPException(
+            status_code=404,
+            detail=f"Codebook not found: {disease}/{parameter}",
+        )
+
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    project = data.get("project") if isinstance(data.get("project"), dict) else {}
+
+    fields: list[CodebookField] = []
+    for raw in data.get("fields") or []:
+        if not isinstance(raw, dict):
+            continue
+        fields.append(
+            CodebookField(
+                name=raw.get("name"),
+                label=raw.get("label") or raw.get("name"),
+                type=raw.get("type"),
+                required=bool(raw.get("required", False)),
+                prompt=raw.get("prompt"),
+            )
+        )
+
+    notes = data.get("notes")
+    return CodebookRead(
+        disease=disease,
+        parameter=parameter,
+        name=project.get("name"),
+        description=project.get("description"),
+        effect_type=project.get("effect_type"),
+        notes=notes if isinstance(notes, str) else None,
+        fields=fields,
+    )
+
+
+def _stringify_cell(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, (int, float, bool)):
+        return str(value)
+    return json.dumps(value, ensure_ascii=False)
+
+
+@router.get("/runs/{run_id}/steps/{step_no}/index", response_model=StepTableRows)
+def get_step_index(run_id: str, step_no: int) -> StepTableRows:
+    """Aggregate the per-paper structured index JSONs a coding run produces
+    (data/runs/{id}/step-{n}/index/*.index.json) into a single review table."""
+    # Guard against path traversal — run ids are flat tokens (uuid-like).
+    if not _NAME_RE.match(run_id):
+        raise HTTPException(status_code=400, detail="Invalid run id")
+
+    index_dir = run_step_dir(run_id, step_no) / "index"
+    if not index_dir.is_dir():
+        raise HTTPException(status_code=404, detail="No index results for this stage")
+
+    columns: list[str] = ["pmid"]
+    rows: list[dict[str, str]] = []
+    for path in sorted(index_dir.glob("*.index.json")):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        envelope = data if isinstance(data, dict) else {}
+        index_obj = envelope.get("index")
+        if not isinstance(index_obj, dict):
+            index_obj = envelope
+        pmid = envelope.get("pmid") or path.stem.replace(".index", "").replace(
+            "PMID_", ""
+        )
+        row: dict[str, str] = {"pmid": _stringify_cell(pmid)}
+        for key, value in index_obj.items():
+            col = str(key)
+            if col == "pmid":
+                continue
+            if col not in columns:
+                columns.append(col)
+            row[col] = _stringify_cell(value)
+        rows.append(row)
+
+    if not rows:
+        raise HTTPException(status_code=404, detail="No index records found")
+
+    normalized = [{col: row.get(col, "") for col in columns} for row in rows]
+    return StepTableRows(kind="table", columns=columns, rows=normalized)
+
+
+class StagePromptRead(BaseModel):
+    stage: str
+    has_prompt: bool
+    source: str | None = None
+    system: str | None = None
+    user: str | None = None
+    output: str | None = None
+
+
+@router.get("/prompts/{stage}", response_model=StagePromptRead)
+def get_stage_prompt(
+    stage: str,
+    disease: str | None = None,
+    parameter: str | None = None,
+    strategy: str | None = None,
+) -> StagePromptRead:
+    """Resolve the prompt template a stage uses (read-only), for display +
+    human-in-the-loop supplementation."""
+    for value in (stage, disease, parameter, strategy):
+        if value is not None and not _NAME_RE.match(value):
+            raise HTTPException(status_code=400, detail="Invalid prompt selector")
+
+    from app.prompt_templates import resolve_stage_prompt
+
+    data = resolve_stage_prompt(
+        stage, disease=disease, parameter=parameter, strategy=strategy
+    )
+    return StagePromptRead(**data)

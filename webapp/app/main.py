@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.db import init_db
 from app.runs import router as runs_router
+from app.settings import router as settings_router
 
 
 @asynccontextmanager
@@ -38,9 +39,9 @@ app.add_middleware(
 )
 
 app.include_router(runs_router)
+app.include_router(settings_router)
 
 
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
-
