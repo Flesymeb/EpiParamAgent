@@ -4,10 +4,14 @@ import { useEffect, useState } from "react"
 import type { LucideIcon } from "lucide-react"
 import {
   ActivityIcon,
-  FlaskConicalIcon,
   ListChecksIcon,
+  MoonIcon,
+  SettingsIcon,
+  SunIcon,
 } from "lucide-react"
+import { useTheme } from "next-themes"
 
+import { SettingsDialog } from "@/components/settings-dialog"
 import { Badge } from "@/components/ui/badge"
 import {
   Sidebar,
@@ -21,8 +25,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { API_BASE_URL } from "@/lib/config"
+import { getApiBaseUrl } from "@/lib/config"
 import { cn } from "@/lib/utils"
 
 type SidebarNavItem = {
@@ -87,8 +92,11 @@ function SidebarNavGroup({
 export function AppSidebar({
   ...props
 }: ComponentProps<typeof Sidebar>) {
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const [backendStatus, setBackendStatus] =
     useState<BackendStatus>("checking")
+  const { resolvedTheme, setTheme } = useTheme()
+  const isDark = resolvedTheme === "dark"
 
   useEffect(() => {
     const controller = new AbortController()
@@ -122,70 +130,99 @@ export function AppSidebar({
       : isReachable
         ? "API online"
         : "API offline"
+  const apiBaseUrl = getApiBaseUrl()
 
   return (
-    <Sidebar collapsible="icon" variant="inset" {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild size="lg" tooltip="MetaAgent-Epi">
-              <Link to="/">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <FlaskConicalIcon className="size-4" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">MetaAgent-Epi</span>
-                  <span className="truncate text-xs">Pipeline UI</span>
-                </div>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarNavGroup label="Workspace" items={workspaceItems} />
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton tooltip={`${label}: ${API_BASE_URL}`}>
-              <ActivityIcon
-                className={cn(
-                  isReachable
-                    ? "text-emerald-600 dark:text-emerald-300"
-                    : "text-muted-foreground"
-                )}
-              />
-              <span>{label}</span>
-              <Badge
-                className={cn(
-                  "ml-auto border",
-                  isReachable
-                    ? "border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
-                    : "border-border bg-muted text-muted-foreground"
-                )}
-                variant="outline"
+    <>
+      <Sidebar collapsible="icon" variant="inset" {...props}>
+        <SidebarHeader>
+          <div className="flex items-center gap-1 group-data-[collapsible=icon]:flex-col">
+            <SidebarMenu className="min-w-0 flex-1 group-data-[collapsible=icon]:flex-none">
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild size="lg" tooltip="MetaAgent">
+                  <Link to="/">
+                    <img
+                      alt="MetaAgent logo"
+                      className="size-8 shrink-0 object-contain"
+                      src="/logo.png"
+                    />
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-medium">MetaAgent</span>
+                      <span className="truncate text-xs text-muted-foreground">
+                        v0.3.0
+                      </span>
+                    </div>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+            <SidebarTrigger className="size-8 shrink-0" />
+          </div>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarNavGroup label="Workspace" items={workspaceItems} />
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                onClick={() => setTheme(isDark ? "light" : "dark")}
+                tooltip="Toggle theme"
               >
-                <span
-                  aria-hidden="true"
+                {isDark ? <SunIcon /> : <MoonIcon />}
+                <span>{isDark ? "Light mode" : "Dark mode"}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                onClick={() => setSettingsOpen(true)}
+                tooltip="Settings"
+              >
+                <SettingsIcon />
+                <span>Settings</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton tooltip={`${label}: ${apiBaseUrl}`}>
+                <ActivityIcon
                   className={cn(
-                    "size-1.5 rounded-full",
                     isReachable
-                      ? "bg-emerald-500 motion-safe:animate-pulse"
-                      : "bg-muted-foreground/45"
+                      ? "text-emerald-600 dark:text-emerald-300"
+                      : "text-muted-foreground"
                   )}
                 />
-                API
-              </Badge>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-      <SidebarRail />
-    </Sidebar>
+                <span>{label}</span>
+                <Badge
+                  className={cn(
+                    "ml-auto border",
+                    isReachable
+                      ? "border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                      : "border-border bg-muted text-muted-foreground"
+                  )}
+                  variant="outline"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "size-1.5 rounded-full",
+                      isReachable
+                        ? "bg-emerald-500 motion-safe:animate-pulse"
+                        : "bg-muted-foreground/45"
+                    )}
+                  />
+                  API
+                </Badge>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+        <SidebarRail />
+      </Sidebar>
+      <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
+    </>
   )
 }
 
 function apiPath(path: string) {
-  return `${API_BASE_URL.replace(/\/$/, "")}${path}`
+  return `${getApiBaseUrl().replace(/\/$/, "")}${path}`
 }

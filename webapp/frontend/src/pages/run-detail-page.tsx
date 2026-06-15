@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react"
 import { Link, useParams, useSearchParams } from "react-router-dom"
 import {
   AlertCircleIcon,
@@ -8,6 +8,7 @@ import {
   PlayIcon,
   RefreshCwIcon,
   SaveIcon,
+  ScrollTextIcon,
   TableIcon,
 } from "lucide-react"
 import { toast } from "sonner"
@@ -15,6 +16,7 @@ import { toast } from "sonner"
 import {
   artifactUrl,
   getStepFile,
+  getStepIndex,
   getStepRows,
   saveEditedStep,
   startStep,
@@ -27,21 +29,27 @@ import type {
 } from "@/api/pipeline"
 import { EditableTable } from "@/components/editable-table"
 import { EventsPanel } from "@/components/events-panel"
+import { CodingSubsteps } from "@/components/coding-substeps"
 import { PipelineStepper } from "@/components/pipeline-stepper"
-import { PoolingResult } from "@/components/pooling-result"
+import { RunningProgressBar, SectionCard } from "@/components/section-card"
 import { StatusBadge } from "@/components/status-badge"
 import { StepConfigForm } from "@/components/step-config-form"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 import {
   Table,
   TableBody,
@@ -53,8 +61,10 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { useRun } from "@/hooks/use-run"
 import { getErrorMessage } from "@/lib/errors"
+import { useSetRunHeader } from "@/lib/page-header"
 import {
   getPipelineStep,
+  PIPELINE_STEPS,
   resolvePipelineStepId,
 } from "@/lib/pipeline"
 import type { PipelineStepId } from "@/lib/pipeline"
@@ -108,11 +118,22 @@ type RowsLoadState =
       error: string
     }
 
+const MISSING_ARTIFACT_MESSAGE = "Artifact file is not available yet."
+
+// Lazy-loaded so recharts (heavy) only loads when a pooling chart is shown,
+// not on every run-detail page mount.
+const PoolingResult = lazy(() =>
+  import("@/components/pooling-result").then((module) => ({
+    default: module.PoolingResult,
+  }))
+)
+
 export function RunDetailPage() {
   const { runId = "" } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
   const currentStepId = resolvePipelineStepId(searchParams.get("step"))
   const currentStep = getPipelineStep(currentStepId)
+  const StepIcon = currentStep.icon
   // Capture/test aid: ?nosse=1 skips long-lived SSE so headless tools can settle.
   const shouldSkipEventSource =
     searchParams.get("nosse") === "1" ||
@@ -154,7 +175,7 @@ export function RunDetailPage() {
     return stepNos
   }, [detail])
 
-  const selectedStep = stepsByNumber.get(currentStep.number)
+  const selectedStep = stepsByNumber.get(currentStep.backendStep)
   const selectedStatus = normalizeStatus(selectedStep?.status)
   const selectedHasEditedArtifact = Boolean(selectedStep?.edited_artifact_path)
   const selectedArtifactPath =
@@ -166,7 +187,7 @@ export function RunDetailPage() {
     detail?.steps.some((step) => normalizeStatus(step.status) === "running") ??
     false
   const isSelectedStepRunning =
-    selectedStatus === "running" || startingStepNo === currentStep.number
+    selectedStatus === "running" || startingStepNo === currentStep.backendStep
 
   useEffect(() => {
     if (error) {
@@ -225,6 +246,19 @@ export function RunDetailPage() {
     }
   }, [refresh, runId, shouldSkipEventSource, streamKey])
 
+  useSetRunHeader(
+    runId
+      ? {
+          runId,
+          status: detail?.run.status,
+          stepRunning: anyStepRunning,
+          paramsSummary: detail
+            ? summarizeRunParams(detail.run.params)
+            : "Loading run…",
+        }
+      : null
+  )
+
   function handleStepChange(nextStepId: PipelineStepId) {
     setSearchParams((current) => {
       const next = new URLSearchParams(current)
@@ -238,15 +272,28 @@ export function RunDetailPage() {
       return
     }
 
-    setStartingStepNo(currentStep.number)
+    setStartingStepNo(currentStep.backendStep)
     setStreamVersion((current) => current + 1)
 
+    // Code & Extraction both drive backend step 4; force a stage that produces
+    // both the structured index and the coding sheet so either stage's panel
+    // populates from one coding run (avoids reusing a prior index-only stage).
+    const params = currentStep.codingStage
+      ? {
+          ...stepParams,
+          stage:
+            typeof stepParams.stage === "string" && stepParams.stage
+              ? stepParams.stage
+              : "both",
+        }
+      : stepParams
+
     try {
-      await startStep(runId, currentStep.number, stepParams)
+      await startStep(runId, currentStep.backendStep, params)
       await refresh()
     } catch (startError) {
       toast.error(
-        `Failed to start step ${currentStep.number}: ${getErrorMessage(
+        `Failed to start ${currentStep.label}: ${getErrorMessage(
           startError
         )}`
       )
@@ -274,7 +321,7 @@ export function RunDetailPage() {
   }
 
   if (isLoading) {
-    return <RunDetailSkeleton runId={runId} />
+    return <RunDetailSkeleton />
   }
 
   if (error && !detail) {
@@ -291,161 +338,172 @@ export function RunDetailPage() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-4">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge title={runId} variant="secondary">
-              Run {shortRunId(runId)}
+    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-5">
+      <Card className="relative gap-0 overflow-hidden py-0">
+        {anyStepRunning ? <RunningProgressBar /> : null}
+        <div className="flex items-center justify-between gap-2 border-b bg-muted/20 px-4 py-2.5">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">Pipeline</span>
+            <Badge className="font-normal" variant="outline">
+              Step {currentStep.number} of {PIPELINE_STEPS.length}
             </Badge>
-            {detail ? (
-              <StatusBadge status={detail.run.status} />
-            ) : null}
-            {anyStepRunning ? (
-              <StatusBadge label="step running" status="running" />
-            ) : null}
           </div>
-          <h1 className="mt-3 text-2xl font-semibold tracking-normal">
-            Pipeline
-          </h1>
-          <p
-            className="max-w-4xl truncate text-sm text-muted-foreground"
-            title={detail ? summarizeRunParams(detail.run.params) : undefined}
+          <Button
+            className="h-8"
+            onClick={() => {
+              void refresh().catch((refreshError) => {
+                toast.error(
+                  `Failed to refresh run: ${getErrorMessage(refreshError)}`
+                )
+              })
+            }}
+            size="sm"
+            variant="ghost"
           >
-            {detail ? summarizeRunParams(detail.run.params) : "Loading run..."}
-          </p>
+            <RefreshCwIcon />
+            Refresh
+          </Button>
         </div>
-        <Button
-          onClick={() => {
-            void refresh().catch((refreshError) => {
-              toast.error(`Failed to refresh run: ${getErrorMessage(refreshError)}`)
-            })
-          }}
-          variant="outline"
-        >
-          <RefreshCwIcon />
-          Refresh
-        </Button>
-      </div>
+        <div className="px-2 py-3">
+          <PipelineStepper
+            currentStepId={currentStepId}
+            editedStepNos={editedStepNos}
+            onStepChange={handleStepChange}
+            stepStatuses={stepStatuses}
+          />
+        </div>
+      </Card>
 
-      <PipelineStepper
-        currentStepId={currentStepId}
-        editedStepNos={editedStepNos}
-        onStepChange={handleStepChange}
-        stepStatuses={stepStatuses}
-      />
-
-      <div className="grid flex-1 gap-4 xl:grid-cols-[minmax(0,1fr)_24rem]">
-        <Card
-          className={cn(
-            "relative min-h-[520px] transition-[box-shadow] duration-300",
-            isSelectedStepRunning && "shadow-sm shadow-sky-500/10"
-          )}
-        >
-          {isSelectedStepRunning ? <RunningProgressBar /> : null}
-          <CardHeader>
-            <CardTitle>
-              {currentStep.number}. {currentStep.label}
-            </CardTitle>
-            <CardDescription>{currentStep.description}</CardDescription>
-            <CardAction className="flex flex-wrap justify-end gap-2">
+      <Tabs className="flex-1" defaultValue="output">
+        <TabsList>
+          <TabsTrigger value="output">
+            <FileTextIcon className="size-4" />
+            Output
+          </TabsTrigger>
+          <TabsTrigger value="logs">
+            <ScrollTextIcon className="size-4" />
+            Logs
+            {events.length > 0 ? (
+              <span className="ml-1 rounded-full bg-muted px-1.5 text-[0.65rem] leading-4 text-muted-foreground">
+                {events.length}
+              </span>
+            ) : null}
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent className="space-y-4" value="output">
+          <div className="flex items-start gap-3">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border bg-card text-primary shadow-sm">
+              <StepIcon className="size-5" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <h2 className="text-lg font-semibold leading-tight tracking-tight">
+                {currentStep.number}. {currentStep.label}
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {currentStep.description}
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
               {selectedHasEditedArtifact ? (
                 <Badge variant="secondary">edited</Badge>
               ) : null}
               <StatusBadge status={selectedStep?.status} />
-            </CardAction>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <StepConfigForm
-              disabled={isSelectedStepRunning}
-              initialValues={detail?.run.params ?? {}}
-              key={currentStep.number}
-              onChange={setStepParams}
-              stepNumber={currentStep.number}
-            />
-            <div
-              className={cn(
-                "relative flex flex-col gap-3 overflow-hidden rounded-lg border bg-muted/20 p-3 transition-[background-color,border-color,box-shadow] duration-300 sm:flex-row sm:items-center sm:justify-between",
-                isSelectedStepRunning &&
-                  "border-sky-500/25 bg-sky-500/5 shadow-sm shadow-sky-500/10"
-              )}
-            >
-              <div className="min-w-0">
-                <div className="truncate font-medium" title={currentStep.title}>
-                  {currentStep.title}
-                </div>
+            </div>
+          </div>
+
+          <StepConfigForm
+            disabled={isSelectedStepRunning}
+            initialValues={detail?.run.params ?? {}}
+            key={currentStep.number}
+            onChange={setStepParams}
+            stepNumber={currentStep.number}
+          />
+
+          <SectionCard icon={PlayIcon} running={isSelectedStepRunning} title="Run">
+            <div className="space-y-3">
+              {currentStep.backendStep === 4 ? (
+                <CodingSubsteps
+                  events={events}
+                  stage={String(
+                    stepParams.stage ?? detail?.run.params.stage ?? "extract"
+                  )}
+                  status={selectedStatus}
+                />
+              ) : null}
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div
-                  className="truncate text-xs text-muted-foreground"
+                  className="min-w-0 text-xs text-muted-foreground"
                   title={formatStepTiming(selectedStep)}
                 >
                   {formatStepTiming(selectedStep)}
                 </div>
+                <Button
+                  aria-busy={isSelectedStepRunning}
+                  disabled={isLoading || isSelectedStepRunning}
+                  onClick={() => {
+                    void handleStartStep()
+                  }}
+                >
+                  {isSelectedStepRunning ? (
+                    <LoaderCircleIcon className="motion-safe:animate-spin motion-reduce:animate-none" />
+                  ) : (
+                    <PlayIcon />
+                  )}
+                  {isSelectedStepRunning ? "Running…" : `Run ${currentStep.label}`}
+                </Button>
               </div>
-              <Button
-                aria-busy={isSelectedStepRunning}
-                disabled={isLoading || isSelectedStepRunning}
-                onClick={() => {
-                  void handleStartStep()
-                }}
-              >
-                {isSelectedStepRunning ? (
-                  <LoaderCircleIcon className="motion-safe:animate-spin motion-reduce:animate-none" />
-                ) : (
-                  <PlayIcon />
-                )}
-                {isSelectedStepRunning
-                  ? "Running…"
-                  : `Run step ${currentStep.number}`}
-              </Button>
             </div>
+          </SectionCard>
 
+          <SectionCard icon={FileTextIcon} title="Result">
             <ArtifactPreview
               artifactPath={selectedArtifactPath}
               hasEditedArtifact={selectedHasEditedArtifact}
               onSaved={refresh}
               runId={runId}
-              stepNo={currentStep.number}
+              stageId={currentStep.id}
+              stepNo={currentStep.backendStep}
               stepStatus={selectedStep?.status}
             />
-          </CardContent>
-        </Card>
-
-        <EventsPanel events={events} isConnected={isStreamConnected} />
-      </div>
+          </SectionCard>
+        </TabsContent>
+        <TabsContent value="logs">
+          <EventsPanel events={events} isConnected={isStreamConnected} />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
 
-function RunningProgressBar() {
+function RunDetailSkeleton() {
   return (
-    <div
-      aria-hidden="true"
-      className="absolute inset-x-0 top-0 h-0.5 overflow-hidden bg-sky-500/10"
-    >
-      <span className="block h-full w-1/3 bg-gradient-to-r from-transparent via-sky-500/70 to-transparent animate-shimmer" />
-    </div>
-  )
-}
-
-function RunDetailSkeleton({ runId }: { runId: string }) {
-  return (
-    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div className="min-w-0 flex-1 space-y-3">
-          <Badge title={runId} variant="secondary">
-            Run {shortRunId(runId)}
-          </Badge>
-          <Skeleton className="h-8 w-44" />
-          <Skeleton className="h-4 max-w-2xl" />
+    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-5">
+      <Card className="gap-0 overflow-hidden py-0">
+        <div className="flex items-center justify-between gap-2 border-b bg-muted/20 px-4 py-2.5">
+          <Skeleton className="h-5 w-28" />
+          <Skeleton className="h-8 w-20" />
         </div>
-        <Skeleton className="h-8 w-24" />
-      </div>
-      <div className="grid min-w-0 grid-cols-1 gap-3 lg:grid-cols-5">
-        {PIPELINE_SKELETON_KEYS.map((key) => (
-          <Skeleton className="h-24" key={key} />
-        ))}
-      </div>
-      <div className="grid flex-1 gap-4 xl:grid-cols-[minmax(0,1fr)_24rem]">
+        <div className="px-2 py-3">
+          <div className="w-full overflow-hidden">
+            <div className="mx-auto flex w-max items-start py-1">
+              {PIPELINE_SKELETON_KEYS.map((key, index) => (
+                <div
+                  className="relative flex w-24 flex-none flex-col items-center gap-1.5"
+                  key={key}
+                >
+                  {index > 0 ? (
+                    <Skeleton className="absolute left-[-28px] top-5 h-px w-[56px]" />
+                  ) : null}
+                  <Skeleton className="size-10 rounded-full" />
+                  <Skeleton className="h-3 w-14" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Card>
+      <div className="flex flex-1 flex-col gap-2">
+        <Skeleton className="h-9 w-44" />
         <Card className="min-h-[520px]">
           <CardHeader>
             <Skeleton className="h-5 w-40" />
@@ -454,17 +512,6 @@ function RunDetailSkeleton({ runId }: { runId: string }) {
           <CardContent className="space-y-4">
             <Skeleton className="h-16 w-full" />
             <Skeleton className="h-[280px] w-full" />
-          </CardContent>
-        </Card>
-        <Card className="min-h-[320px]">
-          <CardHeader>
-            <Skeleton className="h-5 w-24" />
-            <Skeleton className="h-4 w-36" />
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Skeleton className="h-14 w-full" />
-            <Skeleton className="h-14 w-full" />
-            <Skeleton className="h-14 w-full" />
           </CardContent>
         </Card>
       </div>
@@ -503,13 +550,21 @@ function RunDetailError({
   )
 }
 
-const PIPELINE_SKELETON_KEYS = ["query", "retrieve", "screen", "code", "pool"]
+const PIPELINE_SKELETON_KEYS = [
+  "query",
+  "retrieve",
+  "screen",
+  "code",
+  "extract",
+  "analyze",
+]
 
 function ArtifactPreview({
   artifactPath,
   hasEditedArtifact,
   onSaved,
   runId,
+  stageId,
   stepNo,
   stepStatus,
 }: {
@@ -517,6 +572,7 @@ function ArtifactPreview({
   hasEditedArtifact: boolean
   onSaved: () => Promise<unknown>
   runId: string
+  stageId: PipelineStepId
   stepNo: number
   stepStatus: string | null | undefined
 }) {
@@ -526,16 +582,22 @@ function ArtifactPreview({
     return (
       <EmptyArtifactState
         icon={<FileTextIcon className="size-5" />}
-        message="Artifact preview appears after this step finishes."
+        message="Result appears after this stage finishes."
       />
     )
+  }
+
+  // Code stage surfaces the per-paper structured index (read-only); the coding
+  // run that produces it lives on the same backend step as Extraction.
+  if (stageId === "code") {
+    return <CodeIndexPreview runId={runId} stepNo={stepNo} />
   }
 
   if (!artifactPath) {
     return (
       <EmptyArtifactState
         icon={<FileTextIcon className="size-5" />}
-        message="Step is done, but no artifact path was reported."
+        message="Stage is done, but no artifact path was reported."
       />
     )
   }
@@ -559,6 +621,113 @@ function ArtifactPreview({
       runId={runId}
       stepNo={stepNo}
     />
+  )
+}
+
+function CodeIndexPreview({
+  runId,
+  stepNo,
+}: {
+  runId: string
+  stepNo: number
+}) {
+  const [state, setState] = useState<RowsLoadState>({
+    key: "",
+    status: "idle",
+    data: null,
+    error: null,
+  })
+  const key = `${runId}:${stepNo}:index`
+  const visibleState =
+    state.key === key
+      ? state
+      : ({
+          key,
+          status: "loading",
+          data: null,
+          error: null,
+        } satisfies RowsLoadState)
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    getStepIndex(runId, stepNo, controller.signal)
+      .then((data) => {
+        setState({ key, status: "ready", data, error: null })
+      })
+      .catch((error) => {
+        if (controller.signal.aborted) {
+          return
+        }
+        setState({
+          key,
+          status: "error",
+          data: null,
+          error: getErrorMessage(error),
+        })
+      })
+
+    return () => {
+      controller.abort()
+    }
+  }, [key, runId, stepNo])
+
+  if (visibleState.status === "loading" || visibleState.status === "idle") {
+    return <ArtifactLoadingState message="Loading structured index" />
+  }
+
+  if (visibleState.status === "error") {
+    return (
+      <EmptyArtifactState
+        icon={<TableIcon className="size-5" />}
+        message="No structured index yet — run the Code stage to produce it."
+      />
+    )
+  }
+
+  if (visibleState.status !== "ready") {
+    return null
+  }
+
+  const data = visibleState.data
+  if (data.kind !== "table") {
+    return <PlainTextPreview text={JSON.stringify(data, null, 2)} />
+  }
+
+  const bodyRows = data.rows.slice(0, 200)
+
+  return (
+    <div className="space-y-2">
+      <div className="text-xs text-muted-foreground">
+        Per-paper structured index for {data.rows.length} papers (read-only).
+      </div>
+      <div className="overflow-x-auto rounded-lg border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {data.columns.map((column) => (
+                <TableHead key={column}>{formatStatLabel(column)}</TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {bodyRows.map((row, rowIndex) => (
+              <TableRow key={rowIndex}>
+                {data.columns.map((column) => (
+                  <TableCell
+                    className="max-w-[18rem] truncate align-top"
+                    key={column}
+                    title={row[column] ?? ""}
+                  >
+                    {row[column] ?? ""}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   )
 }
 
@@ -599,7 +768,11 @@ function TextArtifactPreview({
           signal: controller.signal,
         })
         if (!response.ok) {
-          throw new Error(`Artifact request failed with ${response.status}`)
+          throw new Error(
+            response.status === 404
+              ? MISSING_ARTIFACT_MESSAGE
+              : `Artifact request failed with ${response.status}`
+          )
         }
         const text = await response.text()
         setState({
@@ -619,7 +792,9 @@ function TextArtifactPreview({
           text: null,
           error: message,
         })
-        toast.error(`Failed to load artifact: ${message}`)
+        if (!isMissingArtifactMessage(message)) {
+          toast.error(`Failed to load artifact: ${message}`)
+        }
       }
     }
 
@@ -715,9 +890,13 @@ function StructuredArtifactPreview({
           key: artifactKey,
           status: "error",
           data: null,
-          error: message,
+          error: isMissingArtifactMessage(message)
+            ? MISSING_ARTIFACT_MESSAGE
+            : message,
         })
-        toast.error(`Failed to load artifact rows: ${message}`)
+        if (!isMissingArtifactMessage(message)) {
+          toast.error(`Failed to load artifact rows: ${message}`)
+        }
       }
     }
 
@@ -759,6 +938,17 @@ function StructuredArtifactPreview({
         stepNo={stepNo}
       />
     </div>
+  )
+}
+
+function isMissingArtifactMessage(message: string) {
+  const normalized = message.toLowerCase().replace(/\s+/g, "")
+
+  return (
+    normalized.includes("artifactfileisnotavailableyet") ||
+    normalized.includes("stepartifactisabsent") ||
+    normalized.includes("stepartifactfilenotfound") ||
+    normalized.includes("artifactrequestfailedwith404")
   )
 }
 
@@ -934,11 +1124,13 @@ function PoolingArtifactBody({
         : "missing"
 
   return (
-    <PoolingResult
-      forestRows={forestRows}
-      forestStatus={forestStatus}
-      pooledRows={pooledRows}
-    />
+    <Suspense fallback={<ArtifactLoadingState message="Loading chart" />}>
+      <PoolingResult
+        forestRows={forestRows}
+        forestStatus={forestStatus}
+        pooledRows={pooledRows}
+      />
+    </Suspense>
   )
 }
 
@@ -1393,10 +1585,6 @@ function normalizeTableRows(
 
 function readCellValue(value: unknown) {
   return typeof value === "string" ? value : String(value ?? "")
-}
-
-function shortRunId(runId: string) {
-  return runId.length > 12 ? `${runId.slice(0, 8)}...` : runId
 }
 
 function summarizeRunParams(params: Record<string, unknown>) {

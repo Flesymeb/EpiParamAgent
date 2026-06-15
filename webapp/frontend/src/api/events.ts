@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/lib/config"
+import { getApiBaseUrl } from "@/lib/config"
 
 export type RunEvent = {
   id: number
@@ -20,7 +20,7 @@ export function subscribeToRunEvents(
   { onEvent, onError, signal }: SubscribeToRunEventsOptions,
 ): () => void {
   const source = new EventSource(
-    `${API_BASE_URL}/runs/${encodeURIComponent(runId)}/events`,
+    `${getApiBaseUrl()}/runs/${encodeURIComponent(runId)}/events`,
   )
 
   const close = () => {

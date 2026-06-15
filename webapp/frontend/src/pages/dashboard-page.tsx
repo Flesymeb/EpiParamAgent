@@ -1,13 +1,19 @@
-import type { FormEvent, KeyboardEvent } from "react"
-import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { LoaderCircleIcon, PlayIcon, RefreshCwIcon } from "lucide-react"
+import type { KeyboardEvent } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import {
+  ArrowUpRightIcon,
+  ClockIcon,
+  InboxIcon,
+  RefreshCwIcon,
+  SearchXIcon,
+} from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
 import { toast } from "sonner"
 
-import { createRun, listRuns } from "@/api/pipeline"
+import { listRuns } from "@/api/pipeline"
 import type { Run } from "@/api/pipeline"
-import Aurora from "@/components/Aurora"
+import { QuickStartBox } from "@/components/quick-start-box"
 import { BlurText } from "@/components/react-bits/blur-text"
 import { SpotlightCard } from "@/components/react-bits/spotlight-card"
 import { StatusBadge } from "@/components/status-badge"
@@ -17,39 +23,23 @@ import {
   Card,
   CardAction,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { Textarea } from "@/components/ui/textarea"
-import { API_BASE_URL } from "@/lib/config"
 import { getErrorMessage } from "@/lib/errors"
+import { normalizeStatus } from "@/lib/status"
 import { cn } from "@/lib/utils"
 
-const diseaseOptions = ["mpox", "covid19"] as const
-const parameterOptions = [
-  "serial_interval",
-  "reproduction_number",
-  "fatality",
+const STATUS_FILTERS = [
+  { value: "all", label: "All" },
+  { value: "running", label: "Running" },
+  { value: "done", label: "Done" },
+  { value: "error", label: "Error" },
+  { value: "pending", label: "Pending" },
 ] as const
 
-type RunFormState = {
-  keywords: string
-  research_question: string
-  disease: (typeof diseaseOptions)[number]
-  parameter: (typeof parameterOptions)[number]
-}
+type StatusFilter = (typeof STATUS_FILTERS)[number]["value"]
 
 type RunsState = {
   runs: Run[]
@@ -58,30 +48,15 @@ type RunsState = {
   hasLoaded: boolean
 }
 
-const initialForm: RunFormState = {
-  keywords: "",
-  research_question: "",
-  disease: "mpox",
-  parameter: "serial_interval",
-}
-
-const selectClassName =
-  "h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30"
-
-const headerAuroraStops = ["#38bdf8", "#64748b", "#f59e0b"]
-
 export function DashboardPage() {
   const navigate = useNavigate()
   const shouldReduceMotion = useReducedMotion()
-  const [form, setForm] = useState<RunFormState>(initialForm)
-  const [isCreating, setIsCreating] = useState(false)
   const [runsState, setRunsState] = useState<RunsState>({
     runs: [],
     error: null,
     isRefreshing: false,
     hasLoaded: false,
   })
-  const canCreate = form.keywords.trim().length > 0 && !isCreating
 
   useEffect(() => {
     let active = true
@@ -141,325 +116,262 @@ export function DashboardPage() {
     }
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    if (!form.keywords.trim()) {
-      return
-    }
-    setIsCreating(true)
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all")
 
-    try {
-      const run = await createRun({
-        keywords: form.keywords.trim(),
-        research_question: form.research_question.trim(),
-        disease: form.disease,
-        parameter: form.parameter,
-      })
-      navigate(`/runs/${run.id}`)
-    } catch (error) {
-      toast.error(`Failed to create run: ${getErrorMessage(error)}`)
-    } finally {
-      setIsCreating(false)
+  const statusCounts = useMemo(() => {
+    const counts: Record<string, number> = {}
+    for (const run of runsState.runs) {
+      const status = normalizeStatus(run.status)
+      counts[status] = (counts[status] ?? 0) + 1
     }
-  }
+    return counts
+  }, [runsState.runs])
+
+  const visibleRuns = useMemo(
+    () =>
+      statusFilter === "all"
+        ? runsState.runs
+        : runsState.runs.filter(
+            (run) => normalizeStatus(run.status) === statusFilter
+          ),
+    [runsState.runs, statusFilter]
+  )
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-4">
-      <div className="relative overflow-hidden rounded-xl border bg-card/80 p-4">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-20 [mask-image:linear-gradient(to_bottom,black,transparent_82%)] dark:opacity-15"
-        >
-          <Aurora
-            amplitude={0.42}
-            blend={0.62}
-            colorStops={headerAuroraStops}
-            speed={0.38}
-          />
-        </div>
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-card via-card/90 to-card/70"
-        />
-        <div className="relative flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <Badge variant="secondary">Pipeline runs</Badge>
-            <h1 className="mt-3 text-2xl font-semibold tracking-normal">
+      <QuickStartBox />
+
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-2xl font-semibold tracking-normal">
               <BlurText text="Runs" />
             </h1>
-            <p
-              className="max-w-xl truncate text-sm text-muted-foreground"
-              title={API_BASE_URL}
-            >
-              Backend base URL: {API_BASE_URL}
-            </p>
+            <Badge variant="outline">
+              {runsState.hasLoaded ? `${runsState.runs.length} runs` : "..."}
+            </Badge>
           </div>
-          <Button
-            disabled={runsState.isRefreshing}
-            onClick={() => {
-              void refreshRuns()
-            }}
-            variant="outline"
-          >
-            <RefreshCwIcon
-              className={cn(
-                runsState.isRefreshing &&
-                  "motion-safe:animate-spin motion-reduce:animate-none"
-              )}
-            />
-            Refresh
-          </Button>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Pick up a previous review or start a new one above.
+          </p>
         </div>
+        <Button
+          disabled={runsState.isRefreshing}
+          onClick={() => {
+            void refreshRuns()
+          }}
+          variant="outline"
+        >
+          <RefreshCwIcon
+            className={cn(
+              runsState.isRefreshing &&
+                "motion-safe:animate-spin motion-reduce:animate-none"
+            )}
+          />
+          Refresh
+        </Button>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]">
-        <SpotlightCard className="rounded-xl">
-        <Card>
-          <CardHeader>
-            <CardTitle>Runs list</CardTitle>
-            <CardDescription>Existing backend runs</CardDescription>
-            <CardAction>
-              <Badge variant="outline">
-                {runsState.hasLoaded ? runsState.runs.length : "..."}
-              </Badge>
-            </CardAction>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Run</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Created</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {!runsState.hasLoaded ? (
-                  <RunListSkeletonRows />
-                ) : runsState.runs.length === 0 ? (
-                  <TableRow>
-                    <TableCell
-                      className="py-8 text-center text-muted-foreground"
-                      colSpan={4}
-                    >
-                      {runsState.error ?? "No runs yet."}
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  runsState.runs.map((run, index) => {
-                    const paramsSummary = summarizeRunParams(run)
-                    const runHref = `/runs/${run.id}`
+      {runsState.hasLoaded && runsState.runs.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-1.5">
+          {STATUS_FILTERS.map((filter) => {
+            const count =
+              filter.value === "all"
+                ? runsState.runs.length
+                : statusCounts[filter.value] ?? 0
+            const active = statusFilter === filter.value
+            return (
+              <Button
+                className="h-7 gap-1.5 px-2.5 text-xs"
+                key={filter.value}
+                onClick={() => setStatusFilter(filter.value)}
+                size="sm"
+                variant={active ? "secondary" : "ghost"}
+              >
+                {filter.label}
+                <span
+                  className={cn(
+                    "tabular-nums text-muted-foreground",
+                    active && "text-foreground/70"
+                  )}
+                >
+                  {count}
+                </span>
+              </Button>
+            )
+          })}
+        </div>
+      ) : null}
 
-                    return (
-                      <motion.tr
-                        animate={{ opacity: 1, y: 0 }}
-                        className="group cursor-pointer border-b transition-[background-color,box-shadow,transform] duration-200 hover:-translate-y-px hover:bg-muted/45 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-                        data-slot="table-row"
-                        initial={
-                          shouldReduceMotion ? false : { opacity: 0, y: 8 }
-                        }
-                        key={run.id}
-                        onClick={() => navigate(runHref)}
-                        onKeyDown={(event) =>
-                          handleRunRowKeyDown(event, () => navigate(runHref))
-                        }
-                        role="link"
-                        tabIndex={0}
-                        transition={{
-                          delay: shouldReduceMotion
-                            ? 0
-                            : Math.min(index * 0.025, 0.16),
-                          duration: shouldReduceMotion ? 0 : 0.22,
-                          ease: "easeOut",
-                        }}
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {!runsState.hasLoaded ? (
+          RUN_CARD_SKELETON_KEYS.map((key) => <RunCardSkeleton key={key} />)
+        ) : runsState.runs.length === 0 ? (
+          <Card className="sm:col-span-2 xl:col-span-3 border-dashed bg-muted/20">
+            <CardContent className="flex flex-col items-center gap-3 py-12 text-center">
+              <div className="flex size-12 items-center justify-center rounded-full border bg-background text-muted-foreground">
+                <InboxIcon className="size-5" />
+              </div>
+              <div className="space-y-1">
+                <p className="font-medium">
+                  {runsState.error ? "Couldn't load runs" : "No runs yet"}
+                </p>
+                <p className="mx-auto max-w-sm text-sm text-muted-foreground">
+                  {runsState.error ??
+                    "Describe a systematic-review task in the box above to start your first run."}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        ) : visibleRuns.length === 0 ? (
+          <Card className="sm:col-span-2 xl:col-span-3 border-dashed bg-muted/20">
+            <CardContent className="flex flex-col items-center gap-3 py-12 text-center">
+              <div className="flex size-12 items-center justify-center rounded-full border bg-background text-muted-foreground">
+                <SearchXIcon className="size-5" />
+              </div>
+              <div className="space-y-1">
+                <p className="font-medium">No {statusFilter} runs</p>
+                <p className="mx-auto max-w-sm text-sm text-muted-foreground">
+                  No runs match this status filter.{" "}
+                  <button
+                    className="text-foreground underline-offset-4 hover:underline"
+                    onClick={() => setStatusFilter("all")}
+                    type="button"
+                  >
+                    Show all
+                  </button>
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          visibleRuns.map((run, index) => {
+            const facets = runFacets(run)
+            const runHref = `/runs/${run.id}`
+            const title = runTitle(facets)
+            const description =
+              facets.researchQuestion && facets.researchQuestion !== title
+                ? facets.researchQuestion
+                : null
+
+            return (
+              <motion.div
+                animate={{ opacity: 1, y: 0 }}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
+                key={run.id}
+                transition={{
+                  delay: shouldReduceMotion
+                    ? 0
+                    : Math.min(index * 0.025, 0.16),
+                  duration: shouldReduceMotion ? 0 : 0.22,
+                  ease: "easeOut",
+                }}
+              >
+                <SpotlightCard className="flex h-full min-h-44 flex-col rounded-xl border border-border/50 bg-card shadow-sm transition-[transform,box-shadow,border-color] duration-200 will-change-transform hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-xl motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+                  <Card
+                    className="group flex h-full flex-1 cursor-pointer flex-col gap-0 border-0 bg-transparent shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                    onClick={() => navigate(runHref)}
+                    onKeyDown={(event) =>
+                      handleRunCardKeyDown(event, () => navigate(runHref))
+                    }
+                    role="link"
+                    tabIndex={0}
+                  >
+                    <CardHeader className="gap-0 pb-3">
+                      <CardTitle
+                        className="flex items-start gap-1.5 text-sm font-semibold leading-snug"
+                        title={title}
                       >
-                        <TableCell>
-                          <div className="min-w-0">
-                            <span
-                              className="block max-w-[16rem] truncate font-medium text-foreground group-hover:underline"
-                              title={run.id}
-                            >
-                              {shortRunId(run.id)}
-                            </span>
-                            <div
-                              className="mt-0.5 max-w-[34rem] truncate text-xs text-muted-foreground"
-                              title={paramsSummary}
-                            >
-                              {paramsSummary}
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <StatusBadge status={run.status} />
-                        </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          <span title={formatDateTime(run.created_at)}>
-                            {formatRelativeTime(run.created_at)}
-                          </span>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button
-                            asChild
-                            onClick={(event) => event.stopPropagation()}
-                            size="sm"
+                        <span className="line-clamp-1">{title}</span>
+                        <ArrowUpRightIcon className="mt-0.5 size-3.5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+                      </CardTitle>
+                      <CardAction>
+                        <StatusBadge status={run.status} />
+                      </CardAction>
+                    </CardHeader>
+                    <CardContent className="flex flex-1 flex-col gap-3">
+                      <div className="flex flex-wrap gap-1.5">
+                        {facets.disease ? (
+                          <Badge
+                            className="border-sky-500/25 bg-sky-500/10 text-sky-700 dark:text-sky-300"
                             variant="outline"
                           >
-                            <Link to={runHref}>Open</Link>
-                          </Button>
-                        </TableCell>
-                      </motion.tr>
-                    )
-                  })
-                )}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-        </SpotlightCard>
-
-        <SpotlightCard className="rounded-xl self-start">
-        <Card className="h-fit bg-card/95">
-          <CardHeader>
-            <CardTitle>New run</CardTitle>
-            <CardDescription>Start a five-step evidence pipeline</CardDescription>
-            <CardAction>
-              <Badge variant="secondary">5 steps</Badge>
-            </CardAction>
-          </CardHeader>
-          <CardContent>
-            <form className="space-y-3" onSubmit={handleSubmit}>
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium" htmlFor="keywords">
-                  Keywords
-                </label>
-                <Input
-                  id="keywords"
-                  onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      keywords: event.target.value,
-                    }))
-                  }
-                  placeholder="mpox serial interval infectiousness"
-                  required
-                  value={form.keywords}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label
-                  className="text-xs font-medium"
-                  htmlFor="research_question"
-                >
-                  Research question
-                </label>
-                <Textarea
-                  className="min-h-28 resize-none"
-                  id="research_question"
-                  onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      research_question: event.target.value,
-                    }))
-                  }
-                  placeholder="Among eligible mpox studies, what serial interval estimates and uncertainty should be pooled?"
-                  required
-                  value={form.research_question}
-                />
-              </div>
-              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-medium" htmlFor="disease">
-                    Disease
-                  </label>
-                  <select
-                    className={selectClassName}
-                    id="disease"
-                    onChange={(event) =>
-                      setForm((current) => ({
-                        ...current,
-                        disease: event.target.value as RunFormState["disease"],
-                      }))
-                    }
-                    value={form.disease}
-                  >
-                    {diseaseOptions.map((disease) => (
-                      <option key={disease} value={disease}>
-                        {disease}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-medium" htmlFor="parameter">
-                    Parameter
-                  </label>
-                  <select
-                    className={selectClassName}
-                    id="parameter"
-                    onChange={(event) =>
-                      setForm((current) => ({
-                        ...current,
-                        parameter: event.target
-                          .value as RunFormState["parameter"],
-                      }))
-                    }
-                    value={form.parameter}
-                  >
-                    {parameterOptions.map((parameter) => (
-                      <option key={parameter} value={parameter}>
-                        {parameter}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <Separator />
-              <Button className="w-full" disabled={!canCreate} type="submit">
-                {isCreating ? (
-                  <LoaderCircleIcon className="motion-safe:animate-spin motion-reduce:animate-none" />
-                ) : (
-                  <PlayIcon />
-                )}
-                {isCreating ? "Creating…" : "Create run"}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-        </SpotlightCard>
+                            {facets.disease}
+                          </Badge>
+                        ) : null}
+                        {facets.parameter ? (
+                          <Badge
+                            className="border-amber-500/25 bg-amber-500/10 text-amber-700 dark:text-amber-300"
+                            variant="outline"
+                          >
+                            {formatParameter(facets.parameter)}
+                          </Badge>
+                        ) : null}
+                        {!facets.disease && !facets.parameter ? (
+                          <Badge variant="outline">No params</Badge>
+                        ) : null}
+                      </div>
+                      {description ? (
+                        <p
+                          className="line-clamp-2 text-xs text-muted-foreground"
+                          title={description}
+                        >
+                          {description}
+                        </p>
+                      ) : null}
+                      <div className="mt-auto flex items-center justify-between gap-2 border-t pt-2.5 text-xs text-muted-foreground">
+                        <span
+                          className="flex items-center gap-1.5"
+                          title={formatDateTime(run.created_at)}
+                        >
+                          <ClockIcon className="size-3.5" />
+                          {formatRelativeTime(run.created_at)}
+                        </span>
+                        <span
+                          className="font-mono text-[0.7rem] text-muted-foreground/70"
+                          title={run.id}
+                        >
+                          {shortRunId(run.id)}
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </SpotlightCard>
+              </motion.div>
+            )
+          })
+        )}
       </div>
     </div>
   )
 }
 
-function RunListSkeletonRows() {
+function RunCardSkeleton() {
   return (
-    <>
-      {RUN_LIST_SKELETON_KEYS.map((key) => (
-        <TableRow key={key}>
-          <TableCell>
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-28" />
-              <Skeleton className="h-3 w-64 max-w-full" />
-            </div>
-          </TableCell>
-          <TableCell>
-            <Skeleton className="h-5 w-20 rounded-4xl" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="h-4 w-24" />
-          </TableCell>
-          <TableCell className="text-right">
-            <Skeleton className="ml-auto h-7 w-16" />
-          </TableCell>
-        </TableRow>
-      ))}
-    </>
+    <Card className="min-h-44 gap-0 shadow-sm">
+      <CardHeader className="gap-0 pb-3">
+        <Skeleton className="h-5 w-40" />
+        <CardAction>
+          <Skeleton className="h-5 w-20 rounded-4xl" />
+        </CardAction>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-3">
+        <div className="flex gap-1.5">
+          <Skeleton className="h-5 w-16 rounded-4xl" />
+          <Skeleton className="h-5 w-24 rounded-4xl" />
+        </div>
+        <Skeleton className="h-4 w-full" />
+        <div className="flex items-center justify-between border-t pt-2.5">
+          <Skeleton className="h-3 w-20" />
+          <Skeleton className="h-3 w-16" />
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
-function handleRunRowKeyDown(
-  event: KeyboardEvent<HTMLTableRowElement>,
+function handleRunCardKeyDown(
+  event: KeyboardEvent<HTMLDivElement>,
   openRun: () => void
 ) {
   if (event.key !== "Enter" && event.key !== " ") {
@@ -520,18 +432,45 @@ function formatRelativeTime(value: string) {
   return isFuture ? `in ${days}d` : `${days}d ago`
 }
 
-function summarizeRunParams(run: Run) {
-  const values = [
-    stringifyParam(run.params.disease),
-    stringifyParam(run.params.parameter),
-    stringifyParam(run.params.keywords),
-  ].filter(Boolean)
+function runFacets(run: Run) {
+  return {
+    disease: stringifyParam(run.params.disease),
+    parameter: stringifyParam(run.params.parameter),
+    keywords: stringifyParam(run.params.keywords),
+    researchQuestion: stringifyParam(run.params.research_question),
+  }
+}
 
-  return values.length > 0 ? values.join(" / ") : "No params"
+// A readable card title derived from run params, falling back gracefully so the
+// card never shows a raw run id as its name.
+function runTitle(facets: ReturnType<typeof runFacets>): string {
+  if (facets.keywords) {
+    return facets.keywords
+  }
+  if (facets.disease || facets.parameter) {
+    return [
+      facets.disease,
+      facets.parameter ? formatParameter(facets.parameter) : null,
+    ]
+      .filter(Boolean)
+      .join(" · ")
+  }
+  return "Untitled run"
+}
+
+function formatParameter(value: string) {
+  return value.replaceAll("_", " ")
 }
 
 function stringifyParam(value: unknown) {
   return typeof value === "string" && value.trim() ? value.trim() : null
 }
 
-const RUN_LIST_SKELETON_KEYS = ["run-1", "run-2", "run-3", "run-4", "run-5"]
+const RUN_CARD_SKELETON_KEYS = [
+  "run-1",
+  "run-2",
+  "run-3",
+  "run-4",
+  "run-5",
+  "run-6",
+]

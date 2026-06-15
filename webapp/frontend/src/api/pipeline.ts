@@ -16,7 +16,7 @@ import type {
   StepRead,
 } from "./client/types.gen"
 import { subscribeToRunEvents } from "./events"
-import { API_BASE_URL } from "@/lib/config"
+import { getApiBaseUrl } from "@/lib/config"
 
 export type CreateRunParams = NonNullable<CreateRunRequest["params"]>
 export type Run = RunRead
@@ -90,6 +90,23 @@ export async function getStepFile(
   return response.data
 }
 
+/** Aggregated per-paper structured index produced by a coding run (Code stage). */
+export async function getStepIndex(
+  runId: string,
+  stepNo: number,
+  signal?: AbortSignal,
+): Promise<StepRows> {
+  const base = getApiBaseUrl().replace(/\/$/, "")
+  const response = await fetch(
+    `${base}/runs/${encodeURIComponent(runId)}/steps/${stepNo}/index`,
+    { signal },
+  )
+  if (!response.ok) {
+    throw new Error(`Index request failed (${response.status})`)
+  }
+  return (await response.json()) as StepRows
+}
+
 export async function saveEditedStep(
   runId: string,
   stepNo: number,
@@ -105,7 +122,7 @@ export async function saveEditedStep(
 }
 
 export function artifactUrl(runId: string, stepNo: number): string {
-  return `${API_BASE_URL}/runs/${encodeURIComponent(
+  return `${getApiBaseUrl()}/runs/${encodeURIComponent(
     runId,
   )}/steps/${stepNo}/artifact`
 }
