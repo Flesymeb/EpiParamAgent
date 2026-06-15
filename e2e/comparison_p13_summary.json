@@ -1,0 +1,50 @@
+{
+  "n_modular_pmids": 31,
+  "n_e2e_pmids": 34,
+  "n_matched_pmids": 31,
+  "n_only_modular": 0,
+  "n_only_e2e": 3,
+  "n_matched_both_pt": 31,
+  "n_exact_match_pt": 31,
+  "mean_abs_delta_days": 0.0,
+  "pct_within_5pct": 100.0,
+  "pct_within_10pct": 100.0,
+  "pooled_modular": {
+    "pooled_mean": 5.2427,
+    "se_pooled": 0.1495,
+    "ci_lower": 4.9497,
+    "ci_upper": 5.5356,
+    "i2": 81.3845,
+    "tau2": 0.9654,
+    "p_het": 0.0,
+    "n_studies": 70.0,
+    "n_excluded": 8.0,
+    "n_imputed": 8.0
+  },
+  "pooled_e2e": {
+    "pooled_mean": 5.2769,
+    "se_pooled": 0.1511,
+    "ci_lower": 4.9808,
+    "ci_upper": 5.5731,
+    "i2": 83.3937,
+    "tau2": 1.0815,
+    "p_het": 0.0,
+    "n_studies": 73.0,
+    "n_excluded": 8.0,
+    "n_imputed": 7.0
+  },
+  "pooled_official_leads": {
+    "pooled_mean": 4.8,
+    "ci_lower": 4.45,
+    "ci_upper": 5.15,
+    "n_studies": 52
+  },
+  "pooled_delta_e2e_vs_modular": {
+    "pooled_mean": 0.0342,
+    "ci_lower": 0.031,
+    "ci_upper": 0.0374
+  },
+  "pooled_delta_e2e_vs_official": {
+    "pooled_mean": 0.4769
+  }
+}
