@@ -201,3 +201,14 @@ evaluation/*.zip
 
 # CodeGraph index
 .codegraph/
+
+# Playwright / UI debug captures
+.playwright-cli/
+output/playwright/
+
+# e2e reproducibility run outputs (harness + report tracked; run data ignored)
+e2e/runs/
+e2e/smoke/
+e2e/logs/
+e2e/**/*.xlsx
+e2e/**/*.index.json
