@@ -120,6 +120,8 @@ Profile-based `prepare`, `run`, and `pipeline` commands are also available.
 Existing YAML files under `configs/*/screening_profiles/` show the expected
 profile structure. New disease profiles should define their own review
 question, PubMed query, eligibility criteria, date range, and local data paths.
+The included `AI1` profile represents the avian-influenza human positivity-rate
+review and resolves to `dataset/avian_influenza/screening/positivity_rate/p1/`.
 
 ## Coding and Extraction
 

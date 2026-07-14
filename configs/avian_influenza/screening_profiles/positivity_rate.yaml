@@ -1,0 +1,60 @@
+topic: positivity_rate
+disease: avian_influenza
+
+defaults:
+  thresholds:
+    strong:
+      disease_min: 4
+      parameter_min: 4
+      evidence_min: 3
+      population_min: 2
+      location_min: 1
+    possible:
+      disease_min: 3
+      parameter_min: 2
+      evidence_min: 2
+      population_min: 2
+      location_min: 1
+  policies:
+    title_abstract_mode: standard
+    title_only_mode: lenient
+    full_text_mode: standard
+    stage2_evidence_floor: 1
+    parameter_scoring_note: |
+      Positivity-rate screening guidance:
+      - Assess whether the paper reports original testing of humans for avian
+        influenza virus infection or prior infection, using molecular,
+        virological, antigen, or serological methods.
+      - Strong support includes a reported positivity, seropositivity, or
+        seroprevalence estimate, or extractable numbers tested and positive.
+      - Possible support includes original human surveillance, occupational or
+        exposure-group testing, outbreak investigation, or serosurvey data for
+        which the numerator and denominator may only appear in the full text.
+      - The review has no geographic restriction; study location alone should
+        not lower eligibility.
+      - A report restricted to preselected confirmed cases does not estimate a
+        positivity rate unless it also provides a screened or tested denominator.
+      - Animal-only, environmental-only, laboratory-only, review, commentary,
+        and modelling records without original human testing data are generally
+        outside scope. Weigh the full evidence rather than applying a keyword-only
+        exclusion.
+    fulltext_rescue:
+      enabled: true
+      when_no_abstract: true
+
+profiles:
+  AI1:
+    project_number: 1
+    research_question: What is the positivity rate of avian influenza infection in humans?
+    disease_focus: >-
+      avian influenza or bird flu or fowl plague or human infection with an
+      avian influenza A virus, including H5N1, H5N6, H5N8, H7N9, or H9N2
+    disease_exclude: >-
+      records with no human participants or human-derived specimens
+    parameter_focus: >-
+      positivity rate, positive rate, proportion positive, percent positive,
+      detection rate, seropositivity, or seroprevalence based on an original
+      tested human denominator
+    parameter_exclude: >-
+      records without an original human testing denominator and positive count
+      or an equivalent extractable positivity estimate
