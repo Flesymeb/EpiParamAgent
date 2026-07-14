@@ -61,7 +61,11 @@ class StyledGroup(click.Group):
     """Click Group with Rich-styled help output."""
 
     def format_help(self, ctx: click.Context, formatter: click.HelpFormatter) -> None:
-        group_name = ctx.command.name or "metaagent"
+        command_parts = ctx.command_path.split()
+        if command_parts and command_parts[0] == "main":
+            command_parts[0] = "metaagent"
+        command_path = " ".join(command_parts) or "metaagent"
+        group_name = "metaagent" if ctx.parent is None else (ctx.info_name or ctx.command.name)
         help_text = (self.help or "").split("\n")[0]
         console.rule(
             f"[bold {ACCENT_BOLD}]{group_name}[/bold {ACCENT_BOLD}]  "
@@ -79,8 +83,29 @@ class StyledGroup(click.Group):
                 table.add_row(name, desc)
             console.print(table)
             console.print()
+
+        options = []
+        for param in self.get_params(ctx):
+            if isinstance(param, click.Option) and not param.hidden:
+                flags = ", ".join([*param.opts, *param.secondary_opts])
+                options.append((flags, param.help or ""))
+        if options:
+            table = Table(
+                show_header=True,
+                header_style=f"bold {ACCENT_BOLD}",
+                border_style=ACCENT_DIM,
+                title="Options",
+                title_style=f"bold {ACCENT}",
+            )
+            table.add_column("Flag", style=f"bold {ACCENT}", min_width=14)
+            table.add_column("Description", style="white")
+            for flags, description in options:
+                table.add_row(flags, description)
+            console.print(table)
+            console.print()
+
         console.print(
-            f"[{ACCENT_DIM}]Run [bold]metaagent {group_name} <subcommand> --help[/bold] "
+            f"[{ACCENT_DIM}]Run [bold]{command_path} <subcommand> --help[/bold] "
             f"for details.[/{ACCENT_DIM}]"
         )
 
