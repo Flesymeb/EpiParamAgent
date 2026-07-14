@@ -1,0 +1,62 @@
+topic: reproduction_number
+disease: avian_influenza
+
+defaults:
+  thresholds:
+    strong:
+      disease_min: 4
+      parameter_min: 4
+      evidence_min: 3
+      population_min: 2
+      location_min: 1
+    possible:
+      disease_min: 3
+      parameter_min: 2
+      evidence_min: 2
+      population_min: 2
+      location_min: 1
+  policies:
+    title_abstract_mode: standard
+    title_only_mode: lenient
+    full_text_mode: standard
+    stage2_evidence_floor: 1
+    parameter_scoring_note: |
+      Reproduction-number screening guidance:
+      - Assess whether the paper reports an original R0, Re, Rt, or equivalent
+        reproduction-number estimate for avian influenza transmission involving
+        humans or a human outbreak context.
+      - Strong support includes a direct estimate fitted to human case, cluster,
+        contact-tracing, incidence, or outbreak data.
+      - Possible support includes original modelling of human transmission,
+        intervention effects, or pandemic potential where an extractable human
+        reproduction-number estimate may appear only in the full text.
+      - A reproduction number cited from another paper or used only as a fixed
+        model assumption is weaker than an estimate produced from the study's own
+        analysis.
+      - Reproduction numbers restricted to poultry, wild birds, farms, or other
+        animal populations are outside scope unless a separate human-transmission
+        estimate is also reported.
+      - The review has no geographic restriction; study location alone should
+        not lower eligibility. Weigh all evidence rather than applying a
+        keyword-only exclusion.
+    fulltext_rescue:
+      enabled: true
+      when_no_abstract: true
+
+profiles:
+  AIR1:
+    project_number: 1
+    research_question: What are the reproduction number estimates for avian influenza transmission in humans?
+    disease_focus: >-
+      avian influenza or bird flu or human infection with an avian influenza A
+      virus, including H5N1, H5N6, H5N8, H7N7, H7N9, H9N2, H10N3, or H3N8
+    disease_exclude: >-
+      records concerned exclusively with transmission in birds or other animals
+      and reporting no human-transmission analysis
+    parameter_focus: >-
+      basic reproduction number, effective reproduction number, time-varying
+      reproduction number, R0, Re, Rt, reproductive number, or reproduction ratio
+      estimated for transmission involving humans
+    parameter_exclude: >-
+      animal-only reproduction-number estimates or values only cited or assumed
+      without an original human-transmission estimate

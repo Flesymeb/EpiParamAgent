@@ -24,6 +24,7 @@ from metaagent._cli_shared import (
 from tools.pubmed.query_generator import (
     PubMedQueryGenerator,
     PubMedQueryRequest,
+    create_manual_query_artifact,
     default_output_dir,
     save_query_artifact,
     search_pubmed_to_csv,
@@ -56,7 +57,7 @@ ISO_DATE = ISODateType()
 
 
 def _parse_retmax(value: str | None) -> int | None:
-    text = str(value or "1000").strip().lower()
+    text = str(value or "all").strip().lower()
     if text == "all":
         return None
     try:
@@ -117,16 +118,27 @@ def _show_query_summary(artifact, output_dir: Path) -> None:
 @click.option("--start-date", type=ISO_DATE, help="Publication start date (YYYY-MM-DD)")
 @click.option("--end-date", type=ISO_DATE, help="Publication end date (YYYY-MM-DD)")
 @click.option("--project-id", default=None, help="Review task identifier (default: p1)")
+@click.option("--query", "custom_query", help="Use a user-authored final PubMed query")
+@click.option(
+    "--query-file",
+    type=click.Path(path_type=Path, dir_okay=False, readable=True),
+    help="Read the user-authored final PubMed query from a text file",
+)
+@click.option(
+    "--manual-query",
+    is_flag=True,
+    help="Prompt for a final query instead of generating one with the LLM",
+)
 @click.option(
     "--output-dir",
     type=click.Path(path_type=Path, file_okay=False),
     help="Directory for query.json, query.txt, and optional raw.csv",
 )
-@click.option("--provider", default=None, help="Override the screening LLM provider")
-@click.option("--model", default=None, help="Override the screening LLM model")
+@click.option("--provider", default=None, help="Override the query LLM provider")
+@click.option("--model", default=None, help="Override the query LLM model")
 @click.option("--interactive/--no-interactive", default=None, help="Enable or disable the input wizard")
 @click.option("--search/--no-search", "run_search", default=None, help="Run PubMed after saving the query")
-@click.option("--retmax", default=None, help="Maximum PubMed records or 'all' (default: 1000)")
+@click.option("--retmax", default=None, help="Maximum PubMed records or 'all' (default: all)")
 @click.option("--medline-only", is_flag=True, help="Restrict retrieval to MEDLINE-indexed records")
 @click.option("--force", is_flag=True, help="Replace existing query/raw files")
 @click.option("--json", "json_output", is_flag=True, help="Emit a machine-readable result")
@@ -137,6 +149,9 @@ def query_command(
     start_date,
     end_date,
     project_id,
+    custom_query,
+    query_file,
+    manual_query,
     output_dir,
     provider,
     model,
@@ -151,7 +166,12 @@ def query_command(
 
     Run without options for the guided wizard. For automation, provide all
     review fields with --no-interactive and choose --search or --no-search.
+    Use --manual-query, --query, or --query-file to save a query you edited
+    yourself while keeping the same project metadata and retrieval workflow.
     """
+    if custom_query and query_file:
+        raise click.UsageError("Use only one of --query and --query-file")
+    manual_mode = bool(manual_query or custom_query or query_file)
     if interactive is None:
         interactive = sys.stdin.isatty()
 
@@ -186,8 +206,14 @@ def query_command(
         start_date = start_date or _prompt("Start date", value_type=ISO_DATE)
         end_date = end_date or _prompt("End date", value_type=ISO_DATE)
         project_id = project_id or _prompt("Project ID", default="p1")
+        if manual_mode and not custom_query and not query_file:
+            custom_query = _prompt("Final PubMed query")
     else:
         project_id = project_id or "p1"
+        if manual_mode and not custom_query and not query_file:
+            raise click.UsageError(
+                "Manual mode requires --query or --query-file in non-interactive mode"
+            )
 
     try:
         request = PubMedQueryRequest(
@@ -217,15 +243,20 @@ def query_command(
         else:
             raise click.ClickException("Query files already exist; use --force to replace them")
 
-    generator = PubMedQueryGenerator(provider=provider, model=model)
     try:
-        if interactive and not json_output:
-            with console.status("[bold cyan]Generating PubMed vocabulary...[/bold cyan]"):
-                artifact = generator.generate(request)
+        if manual_mode:
+            if query_file:
+                custom_query = query_file.read_text(encoding="utf-8")
+            artifact = create_manual_query_artifact(request, custom_query or "")
         else:
-            artifact = generator.generate(request)
+            generator = PubMedQueryGenerator(provider=provider, model=model)
+            if interactive and not json_output:
+                with console.status("[bold cyan]Generating PubMed vocabulary...[/bold cyan]"):
+                    artifact = generator.generate(request)
+            else:
+                artifact = generator.generate(request)
         json_path, text_path = save_query_artifact(artifact, output_dir, force=force)
-    except (RuntimeError, ValueError, FileExistsError) as exc:
+    except (OSError, RuntimeError, ValueError, FileExistsError) as exc:
         raise click.ClickException(str(exc)) from exc
 
     if not json_output:
@@ -244,7 +275,7 @@ def query_command(
             else:
                 raise click.ClickException("raw.csv already exists; use --force to replace it")
         if retmax is None and interactive:
-            retmax = _prompt("Maximum records (integer or all)", default="1000")
+            retmax = _prompt("Maximum records (integer or all)", default="all")
         limit = _parse_retmax(retmax)
         if not json_output:
             label = "all matching records" if limit is None else f"up to {limit} records"

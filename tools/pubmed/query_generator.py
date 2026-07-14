@@ -103,6 +103,26 @@ class PubMedQueryArtifact(BaseModel):
     query: str
 
 
+def create_manual_query_artifact(
+    request: PubMedQueryRequest,
+    query: str,
+) -> PubMedQueryArtifact:
+    """Create an artifact from a user-authored PubMed query without LLM expansion."""
+    normalized_query = re.sub(r"\s+", " ", str(query or "")).strip()
+    if not normalized_query:
+        raise ValueError("A manual PubMed query cannot be empty")
+    return PubMedQueryArtifact(
+        created_at=datetime.now(UTC),
+        provider="manual",
+        model="manual",
+        request=request,
+        terms=PubMedQueryTerms(
+            rationale="The final PubMed query was supplied by the user; no LLM expansion was applied."
+        ),
+        query=normalized_query,
+    )
+
+
 def _safe_term(value: str) -> str:
     text = re.sub(r"\[[^\]]+\]", "", str(value or ""))
     text = text.replace('"', " ").replace("(", " ").replace(")", " ")
@@ -414,6 +434,7 @@ __all__ = [
     "PubMedQueryGenerator",
     "PubMedQueryTerms",
     "build_pubmed_query",
+    "create_manual_query_artifact",
     "default_output_dir",
     "save_query_artifact",
     "search_pubmed_to_csv",

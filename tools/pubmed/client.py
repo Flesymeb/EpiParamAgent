@@ -2,17 +2,18 @@
 
 from __future__ import annotations
 
+import html
 import logging
-from dataclasses import dataclass
-from datetime import datetime
-from typing import List, Optional, Dict, Any, Iterable
 import os
 import time
-import html
 import xml.etree.ElementTree as ET
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any, Dict, Iterable, List, Optional
 
 import requests
 from tenacity import retry, stop_after_attempt, wait_exponential
+from urllib3.exceptions import InsecureRequestWarning
 
 # Paper dataclass from shared models
 try:
@@ -86,6 +87,8 @@ class PubMedClient:
         self._last_request_ts: Optional[float] = None
         # Allow disabling SSL verification via env (NCBI_VERIFY_SSL=false) for environments with custom certs.
         self.verify_ssl = os.getenv("NCBI_VERIFY_SSL", "true").lower() != "false"
+        if not self.verify_ssl:
+            requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
         self.last_total: Optional[int] = None
 
     def _base_params(self) -> Dict[str, str]:

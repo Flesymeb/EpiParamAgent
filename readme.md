@@ -87,6 +87,27 @@ metaagent pubmed query \
   --no-search
 ```
 
+To save a query that you edited yourself, keep the same metadata prompts but
+skip LLM generation:
+
+```bash
+metaagent pubmed query \
+  --manual-query \
+  --query-file /path/to/my_query.txt \
+  --question "What is the positivity rate of avian influenza infection in humans?" \
+  --disease "Avian influenza" \
+  --parameter "Positivity rate" \
+  --start-date 2000-01-01 \
+  --end-date 2026-07-14 \
+  --project-id p1 \
+  --search \
+  --retmax all
+```
+
+Use `--query "..."` instead of `--query-file` for a short query. With
+`--retmax all`, PubMed IDs are paginated and fetched in batches until all
+available matches are processed.
+
 The candidate CSV must contain `PMID`, `Title`, and `Abstract` columns. A small
 evaluation set is optional and needs only a `PMID` column.
 
