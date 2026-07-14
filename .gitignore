@@ -85,7 +85,12 @@ transformers_cache/
 torch_cache/
 .codegraph/
 
-# Local research assets: retained on disk, not published in the code repository
+# Local research and experiment workspaces: retained on disk, not published
+/baselines/
+/e2e/
+/evaluation/
+/scripts/
+/tests/
 /docs/
 /archive/
 /dataset/
@@ -99,40 +104,21 @@ torch_cache/
 /misc/
 /workbench/
 
-# Experiment outputs. Keep Python/YAML experiment implementations tracked.
-evaluation/experiments/
-evaluation/**/experiments/
-evaluation/results/
-evaluation/screening_prompt_eval/
-evaluation/_legacy/
-evaluation/leads_*
-evaluation/**/*.csv
-evaluation/**/*.tsv
-evaluation/**/*.json
-evaluation/**/*.jsonl
-evaluation/**/*.xlsx
-evaluation/**/*.docx
-evaluation/**/*.pdf
-evaluation/**/*.png
-evaluation/**/coding_runs/
-evaluation/**/screening_runs/
-evaluation/**/screening_logs/
-evaluation/**/sp_fulltext_logs/
-
-baselines/**/cache/
-baselines/**/results/
-baselines/**/reviewcopilot_*/
-
-e2e/runs/
-e2e/smoke/
-e2e/logs/
-e2e/REPORT.md
-e2e/**/*.csv
-e2e/**/*.tsv
-e2e/**/*.json
-e2e/**/*.jsonl
-e2e/**/*.xlsx
-e2e/**/*.index.json
+# Keep only reusable CLI entrypoints under tools/scripts. One-off paper,
+# baseline, and appendix scripts remain local.
+/tools/scripts/*
+!/tools/scripts/__init__.py
+!/tools/scripts/evaluate_coding.py
+!/tools/scripts/extract_coding.py
+!/tools/scripts/pubmed_fix_missing.py
+!/tools/scripts/pubmed_manager.py
+!/tools/scripts/pubmed_search_titles.py
+!/tools/scripts/screening_evaluation.py
+!/tools/scripts/screening_llm_batch.py
+!/tools/scripts/screening_prepare.py
+!/tools/scripts/screening_report.py
+/tools/paper_fetch/pmid.txt
+/webapp/seed_example_run.py
 
 # Browser and UI debugging captures
 .playwright-cli/

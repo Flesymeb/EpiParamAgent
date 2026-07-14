@@ -5,7 +5,7 @@
 # as the working directory so that:
 #   - `metaagent` (not pip-installed) resolves from the repo root
 #   - relative artifact paths like Path("data")/runs resolve under <repo>/data
-#   - coding.py's codebook/evaluation lookup finds <repo>/evaluation
+#   - coding and screening steps find the tracked configs under <repo>/configs
 # `--app-dir webapp` puts the `app` package on sys.path without changing cwd.
 set -euo pipefail
 

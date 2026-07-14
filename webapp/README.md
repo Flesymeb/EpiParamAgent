@@ -2,7 +2,8 @@
 
 End-to-end, reviewable systematic-review pipeline that wraps existing
 `metaagent` modules as black-box job steps. Frontend and backend live here
-together; they reuse the repo's `metaagent/`, `tools/`, and `evaluation/`.
+together; they reuse the repo's `metaagent/` and `tools/` packages. Runtime
+artifacts are written only to ignored local directories.
 
 ```
 webapp/

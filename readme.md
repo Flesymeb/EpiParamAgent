@@ -4,9 +4,10 @@ MetaAgent-Epi is a CLI-first research codebase for LLM-assisted screening,
 full-text coding, extraction, and pooling in infectious-disease systematic
 reviews.
 
-This repository contains source code, configuration examples, and tests only.
-Manuscripts, datasets, cached papers, credentials, and generated experiment
-outputs are kept locally and are not versioned.
+This repository contains core runtime source code and configuration examples
+only. Manuscripts, datasets, cached papers, credentials, test workspaces,
+baseline experiments, and generated outputs are kept locally and are not
+versioned.
 
 ## Requirements
 
@@ -25,7 +26,7 @@ cd MetaAgent-Epi
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install -e ".[dev]"
+python -m pip install -e .
 
 cp .env.example .env.local
 metaagent --help
@@ -102,32 +103,20 @@ prompts before its coding results are used in an experiment.
 - `metaagent/`: reusable screening, coding, extraction, and analysis package.
 - `configs/`: tracked screening profiles, codebooks, and prompt templates.
 - `tools/`: PubMed, PDF, MinerU, pooling, and evaluation utilities.
-- `tests/`: automated tests and small code-level fixtures.
-- `baselines/`: reproducible baseline implementations, without run outputs.
-- `e2e/`: end-to-end experiment runners, without generated results.
-- `evaluation/`: evaluation and summarization code only.
 - `webapp/`: optional human-review interface; not required for CLI experiments.
 
 The following local paths are intentionally ignored by Git:
 
 - `dataset/` and `data/`
 - `paper_pool/` and `external/`
-- `evaluation/**/experiments/` and generated result files
+- `baselines/`, `e2e/`, and `evaluation/`
+- `tests/` and `scripts/`
 - `output/`
 - `docs/`
 - `archive/`
 
 Do not force-add files from these paths. Share approved datasets and experiment
 artifacts through the project storage agreed by the research team.
-
-## Tests
-
-```bash
-PYTHONPATH=. pytest -q tests
-```
-
-Network-dependent PubMed and full-text checks are separate from the normal test
-suite and may require API credentials.
 
 ## Optional Web Interface
 
