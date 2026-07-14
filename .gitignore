@@ -1,214 +1,159 @@
-# Python
+# Python caches and build artifacts
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
 build/
-develop-eggs/
 dist/
+*.egg-info/
+.eggs/
+develop-eggs/
 downloads/
 eggs/
-.eggs/
-lib64/
 parts/
 sdist/
 var/
 wheels/
 pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
 .installed.cfg
-*.egg
 MANIFEST
 
-# Virtual Environment
+# Virtual environments
+.venv/
 venv/
 env/
 ENV/
 env.bak/
 venv.bak/
-.venv/
 
-# IDE
+# Local credentials and provider configuration
+.env*
+!.env.example
+
+# Test, lint, type-check, and notebook caches
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+.ipynb_checkpoints/
+*.ipynb
+
+# Editors and operating systems
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
+Thumbs.db
+.Spotlight-V100
+.Trashes
 
-# Jupyter Notebook
-.ipynb_checkpoints
-*.ipynb
+# Frontend dependencies and generated bundles
+node_modules/
+webapp/frontend/dist/
+*.tsbuildinfo
+vite-*.log
 
-# Environment variables
-.env.*.local
+# Logs and temporary files
+logs/
+refine-logs/
+tmp/
+temp/
+*.log
+*.tmp
+*.patch
 
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
-.nox/
-coverage.xml
-*.cover
-.hypothesis/
-
-# MyPy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Ruff
-.ruff_cache/
-
-# Data files
-data/papers/*.pdf
-data/embeddings/
-data/metadata/
+# Local databases, indexes, and model caches
 *.db
 *.sqlite
 *.sqlite3
-
-# Vector databases
+*.index
 qdrant_storage/
 chromadb/
-*.index
-
-# Model caches
 models/
 .cache/
 transformers_cache/
 torch_cache/
+.codegraph/
 
-# Logs
-logs/
-*.log
-vite-*.log
+# Local research assets: retained on disk, not published in the code repository
+/docs/
+/archive/
+/dataset/
+/data/
+/external/
+/output/
+/paper_pool/
+/paper_pool_*.tar.*
+/dev/
+/old/
+/misc/
+/workbench/
 
-# Large files
+# Experiment outputs. Keep Python/YAML experiment implementations tracked.
+evaluation/experiments/
+evaluation/results/
+evaluation/screening_prompt_eval/
+evaluation/_legacy/
+evaluation/leads_*
+evaluation/**/*.csv
+evaluation/**/*.tsv
+evaluation/**/*.json
+evaluation/**/*.jsonl
+evaluation/**/*.xlsx
+evaluation/**/*.docx
+evaluation/**/*.pdf
+evaluation/**/*.png
+evaluation/**/coding_runs/
+evaluation/**/screening_runs/
+evaluation/**/screening_logs/
+evaluation/**/sp_fulltext_logs/
+
+baselines/**/cache/
+baselines/**/results/
+baselines/**/reviewcopilot_*/
+
+e2e/runs/
+e2e/smoke/
+e2e/logs/
+e2e/REPORT.md
+e2e/**/*.csv
+e2e/**/*.tsv
+e2e/**/*.json
+e2e/**/*.jsonl
+e2e/**/*.xlsx
+e2e/**/*.index.json
+
+# Browser and UI debugging captures
+.playwright-cli/
+output/playwright/
+.shared/
+
+# Large generated artifacts
 *.pkl
 *.pickle
 *.h5
 *.hdf5
 *.tar.gz
 *.zip
+*.docx
+*.pptx
+*.mp4
+*.avi
 
-# OS
-Thumbs.db
-.Spotlight-V100
-.Trashes
-
-# ROCm/CUDA
+# Compiler-specific artifacts
 *.rocm
 *.cu.o
 *.fatbin
 
-# Claude Code
+# Local agent settings
 .claude/
-
-# Temporary files
-tmp/
-temp/
-*.tmp
-*.tsbuildinfo
-*.patch
-
-# Node / frontend
-node_modules/
-workbench/frontend/dist/
-workbench/frontend/tailwind.config.js
-workbench/frontend/tailwind.config.d.ts
-workbench/frontend/vite.config.js
-workbench/frontend/vite.config.d.ts
-
-# Local workflow outputs
-
-# video files
-*.mp4
-*.avi
-
-
-# UI/UX files
-.github
-.shared
-
-
-
-# misc
-docs/
-misc/
-*.pptx
-
-paper_pool/
-paper_pool_*.tar.*
-
-# old versions
-old/
-dev/
-
-# Evaluation — ignore run outputs and large data; pmids.txt tracked via git add -f
-paper_pool/
-metaagent/screening/.env.local
-metaagent/coding/.env.local
-.env.local
-.env
-
-# Evaluation — track curated summaries and ground truth, ignore run data
-dataset/_legacy_imports/
-dataset/*/screening/*/p*/raw.csv
-dataset/*/screening/*/p*/project_*_raw.csv
-dataset/*/screening/*/p*/screened*.csv
-dataset/**/*.bk_*.csv
-dataset/**/*.bk_*.txt
-dataset/**/*.coding_candidate_*.csv
-dataset/**/*.pre_subset_*.csv
-evaluation/experiments/
-evaluation/**/experiments/
-dataset/**/experiments/
-evaluation/**/screening_logs/
-evaluation/**/screening_runs/
-evaluation/**/sp_fulltext_logs/
-evaluation/**/*.log
-evaluation/**/*.docx
-evaluation/**/*_predictions.jsonl
-evaluation/**/predictions.jsonl
-evaluation/**/*_screened.csv
-evaluation/**/screened_*.csv
-evaluation/**/*_backup_*.csv
-evaluation/**/run_manifest_*.json
-evaluation/**/paper_summary.tsv
-evaluation/screening/*/*/p*/experiments/
-evaluation/coding/*/*/p*/coding_runs/
-evaluation/*/*/ground_truth/p*/project.json
-evaluation/*/*/ground_truth/p*/raw.csv
-evaluation/*/*/ground_truth/p*/ground_truth.csv
-evaluation/*/*/ground_truth/p*/project_*_raw.csv
-evaluation/*/*/ground_truth/p*/project_*_groundtruth.csv
-evaluation/*/*/coding/p*/coding_runs/
-evaluation/*/*/*/coding/p*/coding_runs/
-evaluation/*/*/coding/p*/*.json
-evaluation/*/*/coding/p*/*.csv
-evaluation/*/*/screening/*.csv
-evaluation/*/*/screening/*.xlsx
-evaluation/*/*/ground_truth/*.csv
-evaluation/_legacy/
-evaluation/*.zip
-
-# Demo system runtime DB + per-run outputs
-/data/
-
-# CodeGraph index
-.codegraph/
-
-# Playwright / UI debug captures
-.playwright-cli/
-output/playwright/
-
-# e2e reproducibility run outputs (harness + report tracked; run data ignored)
-e2e/runs/
-e2e/smoke/
-e2e/logs/
-e2e/**/*.xlsx
-e2e/**/*.index.json
