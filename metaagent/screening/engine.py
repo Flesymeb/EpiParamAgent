@@ -65,6 +65,7 @@ def init_llm_model(
     model_override: str | None = None,
     provider_override: str | None = None,
     temperature_override: float | None = None,
+    config_overrides: dict[str, Any] | None = None,
 ) -> Any:
     """Initialize screening model from shared runtime config.
 
@@ -74,7 +75,7 @@ def init_llm_model(
         provider_override: Optional provider profile override, e.g. openrouter,
             lab, or lab2.
     """
-    params: dict[str, Any] = {}
+    params: dict[str, Any] = dict(config_overrides or {})
     if model_override:
         params["llm_model"] = model_override
     if provider_override:
@@ -118,8 +119,9 @@ def init_llm_model(
         "max_tokens": cfg.max_tokens,
         "http_client": http_client,
         "http_async_client": http_async_client,
-        "http_socket_options": (),
     }
+    if cfg.reasoning_effort:
+        kwargs["reasoning_effort"] = cfg.reasoning_effort
     if "openrouter.ai" in api_base and "minimax/" not in llm_model.lower():
         # Some OpenRouter reasoning models otherwise return reasoning-only
         # payloads through the OpenAI-compatible API.
@@ -432,6 +434,9 @@ async def screen_papers_batch_async(
             "title": title,
             "publication_year": str(paper.get("Publication Year") or "").strip() or "(Not available)",
             "create_date": str(paper.get("Create Date") or "").strip() or "(Not available)",
+            "authors": str(paper.get("Authors") or "").strip() or "(Not available)",
+            "citation": str(paper.get("Citation") or "").strip() or "(Not available)",
+            "journal": str(paper.get("Journal/Book") or "").strip() or "(Not available)",
             "content_label": content_label,
             "content": content,
             "keywords": keywords,

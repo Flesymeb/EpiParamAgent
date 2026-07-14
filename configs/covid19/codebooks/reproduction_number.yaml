@@ -8,10 +8,10 @@ project:
   effect_type: "reproduction_number"
 
 stage_a:
-  prompt_file: prompts/stage_a_reproduction_number.py
+  prompt_file: ../coding_prompts/stage_a_reproduction_number.py
 
 stage_b:
-  prompt_file: prompts/stage_b_reproduction_number.py
+  prompt_file: ../coding_prompts/stage_b_reproduction_number.py
 
 parameters:
   research_question: >

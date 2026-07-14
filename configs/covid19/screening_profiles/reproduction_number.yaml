@@ -23,6 +23,17 @@ defaults:
     parameter_scoring_note: |
       - Score 3–4 if the paper estimates or reports the reproduction number by applying a transmission model, exponential growth rate method, or Bayesian inference to its own real epidemic incidence or case data.
       - Score 2 if the paper only cites or borrows another study's R0/Rt estimate as an input assumption, without producing its own estimate.
+      - For COVID-19 reproduction-number reviews, preserve recall for papers that
+        may report R0/Rt in full text: original analyses of epidemic growth,
+        doubling time, lockdown/intervention impact, mobility/importation risk,
+        agent-based transmission, or other disease-specific models fitted to
+        observed COVID-19 case, incidence, mobility, travel, genomic, or
+        surveillance data can be "P" when the title/abstract shows a concrete
+        transmission-modeling path even if the abstract does not spell out R0.
+      - A meta-analysis, systematic review, or sensitivity analysis that directly
+        estimates or synthesizes the basic reproduction number should not be
+        excluded at title/abstract stage solely for being secondary evidence;
+        score evidence around 2 and use "P" when the R0/Rt target is explicit.
       - Score 0–1 if the paper only mentions the reproduction number in the introduction or background without reporting a new estimate.
     fulltext_rescue:
       enabled: true

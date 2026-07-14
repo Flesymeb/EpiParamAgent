@@ -316,13 +316,12 @@ def _violates_core_exclusion(decision: ScreeningDecision) -> bool:
 
     The LLM may occasionally emit an internally inconsistent result, such as
     tier=P while assigning low dimension scores. Keep this guard limited to
-    clearly wrong disease or non-original evidence; parameter relevance is often
-    the most nuanced dimension at title/abstract screening, and the tier is the
-    model's intended final judgment for borderline parameter cases.
+    clearly wrong disease. At title/abstract screening, non-original or sparse
+    records may still be source-review full-text verification candidates, and
+    parameter relevance is often the most nuanced dimension. The tier is the
+    model's intended final judgment for borderline parameter/evidence cases.
     """
     if decision.disease_relevance.score <= 1:
-        return True
-    if decision.original_evidence.score <= 1:
         return True
     return False
 

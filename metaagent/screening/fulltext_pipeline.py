@@ -327,7 +327,11 @@ def prepare_fulltext_candidates(
 
 
 def _normalize_pmcid(pmcid: str) -> str:
-    return re.sub(r"^.*?(PMC\d+).*$", r"\1", pmcid or "", flags=re.IGNORECASE)
+    value = str(pmcid or "").strip()
+    if not value or value.lower() in {"nan", "none", "null"}:
+        return ""
+    match = re.search(r"PMC\d+", value, flags=re.IGNORECASE)
+    return match.group(0).upper() if match else ""
 
 
 def _first_downloaded_pdf(url_results: list[dict[str, Any]]) -> Path | None:

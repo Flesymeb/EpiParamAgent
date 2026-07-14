@@ -325,65 +325,6 @@ def pipeline(project_root, profile, disease, topic, include_gt, fix_missing,
     show_success("Pipeline complete")
 
 
-# ── fulltext (batch) ───────────────────────────────────────────────────
-@screening.command("fulltext")
-@click.option("--project-root", default="", help="Repository root")
-@click.option("--disease", default="covid19", type=click.Choice(DISEASE_NAMES))
-@click.option("--dry-run", is_flag=True, help="Print commands without executing")
-@click.option("--profiles", default=None, help="Override profile list (space-separated)")
-def fulltext(project_root, disease, dry_run, profiles):
-    """Batch second-stage fulltext screening for all profiles."""
-    argv = ["--project-root", str(resolve_project_root() if not project_root else Path(project_root).resolve()),
-            "--disease", disease]
-    if dry_run:   argv += ["--dry-run"]
-    if profiles:  argv += ["--profiles"] + profiles.split()
-
-    _run_script("run_sp_fulltext_all", argv)
-
-
-# ── optimize ───────────────────────────────────────────────────────────
-@screening.command("optimize")
-@click.option("--project-root", default="", help="Repository root")
-@click.option("--profile", "-p", required=True)
-@click.option("--topic", default="")
-@click.option("--experiment", default=None)
-@click.option("--min-recall", default=0.80, type=float)
-@click.option("--max-iterations", default=5, type=int)
-@click.option("--target-reduction", default=25, type=int, help="Target word-count reduction %")
-@click.option("--seed", default=42, type=int)
-def optimize(project_root, profile, topic, experiment, min_recall,
-             max_iterations, target_reduction, seed):
-    """Iteratively compress screening prompt while preserving recall."""
-    argv = [
-        "--project-root", str(resolve_project_root() if not project_root else Path(project_root).resolve()),
-        "--profile", profile,
-        "--min-recall", str(min_recall),
-        "--max-iterations", str(max_iterations),
-        "--target-reduction", str(target_reduction),
-        "--seed", str(seed),
-    ]
-    if topic:      argv += ["--topic", topic]
-    if experiment: argv += ["--experiment", experiment]
-
-    _run_script("prompt_optimizer", argv)
-
-
-# ── downstream ─────────────────────────────────────────────────────────
-@screening.command("downstream")
-@click.option("--screened-csv", required=True, help="Path to project_*_screened.csv")
-@click.option("--gt-csv", required=True, help="Path to project_*_groundtruth.csv")
-@click.option("--out-dir", required=True, help="Output directory")
-@click.option("--project-name", default=None, help="Project label")
-@click.option("--paper-pool-pdf-dir", default=None, help="Override PDF cache directory")
-def downstream(screened_csv, gt_csv, out_dir, project_name, paper_pool_pdf_dir):
-    """Prepare downstream robustness experiment assets."""
-    argv = ["--screened-csv", screened_csv, "--gt-csv", gt_csv, "--out-dir", out_dir]
-    if project_name:       argv += ["--project-name", project_name]
-    if paper_pool_pdf_dir: argv += ["--paper-pool-pdf-dir", paper_pool_pdf_dir]
-
-    _run_script("prepare_downstream_experiment", argv)
-
-
 # ── Helper: run an existing CLI script via subprocess ────────────────────
 def _run_script(script_name: str, argv: list[str]) -> None:
     """Run an existing argparse CLI script as a subprocess."""
@@ -395,9 +336,6 @@ def _run_script(script_name: str, argv: list[str]) -> None:
         "screening_llm_batch":      "screening_llm_batch",
         "screening_evaluation":     "screening_evaluation",
         "screening_report_academic": "screening_report",
-        "run_sp_fulltext_all":      "run_sp_fulltext_all",
-        "prompt_optimizer":         "prompt_optimizer",
-        "prepare_downstream_experiment": "prepare_downstream_experiment",
     }
 
     scripts_dir = DEV_ROOT / "tools" / "scripts"

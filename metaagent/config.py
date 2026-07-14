@@ -12,7 +12,7 @@ Preferred rules:
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Iterable, Optional
 
@@ -124,13 +124,14 @@ def apply_langsmith_env(module_hint: Optional[str] = None) -> None:
 class LLMConfig:
     provider: Optional[str] = None
     model: Optional[str] = None
-    api_key: Optional[str] = None
+    api_key: Optional[str] = field(default=None, repr=False)
     api_base: Optional[str] = None
     timeout_s: int = 120
     max_tokens: int = 32000
     temperature: float = 0.1
     verify_ssl: bool = True
     force_streaming: bool = False
+    reasoning_effort: Optional[str] = None
 
 
 @dataclass
@@ -156,12 +157,14 @@ def load_llm_config(
     provider = _normalize_provider(
         _first_config_value(
             params.get("llm_provider"),
+            params.get("provider"),
             _module_env_value(normalized_module, "LLM_PROVIDER"),
             os.getenv("LLM_PROVIDER"),
         )
     )
     model = _first_config_value(
         params.get("llm_model"),
+        params.get("model"),
         _module_env_value(normalized_module, "LLM_MODEL"),
         _provider_env_value(provider, "model_vars"),
         os.getenv("LLM_MODEL"),
@@ -206,6 +209,7 @@ def load_llm_config(
     default_max_tokens = LLMConfig().max_tokens
     max_tokens = _safe_int(
         params.get("llm_max_tokens")
+        or params.get("max_tokens")
         or _module_env_value(normalized_module, "LLM_MAX_TOKENS")
         or os.getenv("LLM_MAX_TOKENS")
     )
@@ -214,6 +218,7 @@ def load_llm_config(
 
     timeout_s = _safe_int(
         params.get("llm_timeout_s")
+        or params.get("timeout_s")
         or _module_env_value(normalized_module, "LLM_TIMEOUT_S")
         or os.getenv("LLM_TIMEOUT_S")
     )
@@ -223,21 +228,36 @@ def load_llm_config(
     temperature = _safe_float(
         _first_defined_value(
             params.get("llm_temperature"),
+            params.get("temperature"),
             _module_env_value(normalized_module, "LLM_TEMPERATURE"),
             os.getenv("LLM_TEMPERATURE"),
             0.1,
         )
     )
     verify_ssl = _safe_bool(
-        params.get("llm_verify_ssl")
-        or _module_env_value(normalized_module, "LLM_VERIFY_SSL")
-        or os.getenv("LLM_VERIFY_SSL")
+        _first_defined_value(
+            params.get("llm_verify_ssl"),
+            params.get("verify_ssl"),
+            _module_env_value(normalized_module, "LLM_VERIFY_SSL"),
+            os.getenv("LLM_VERIFY_SSL"),
+        )
     )
     force_streaming = _safe_bool(
-        params.get("llm_force_streaming")
-        or _module_env_value(normalized_module, "LLM_FORCE_STREAMING")
-        or os.getenv("LLM_FORCE_STREAMING")
-        or False
+        _first_defined_value(
+            params.get("llm_force_streaming"),
+            params.get("force_streaming"),
+            _module_env_value(normalized_module, "LLM_FORCE_STREAMING"),
+            _provider_env_value(provider, "streaming_vars"),
+            os.getenv("LLM_FORCE_STREAMING"),
+            False,
+        )
+    )
+    reasoning_effort = _first_config_value(
+        params.get("llm_reasoning_effort"),
+        params.get("reasoning_effort"),
+        _module_env_value(normalized_module, "LLM_REASONING_EFFORT"),
+        _provider_env_value(provider, "reasoning_vars"),
+        os.getenv("LLM_REASONING_EFFORT"),
     )
 
     return LLMConfig(
@@ -250,6 +270,7 @@ def load_llm_config(
         temperature=temperature,
         verify_ssl=verify_ssl,
         force_streaming=force_streaming,
+        reasoning_effort=reasoning_effort,
     )
 
 
@@ -379,6 +400,10 @@ def _dynamic_provider_env_names(provider: str, key: str) -> tuple[str, ...]:
         return (f"{prefix}_API_KEY", f"{prefix}_KEY")
     if key == "model_vars":
         return (f"{prefix}_MODEL",)
+    if key == "streaming_vars":
+        return (f"{prefix}_FORCE_STREAMING", f"{prefix}_STREAMING")
+    if key == "reasoning_vars":
+        return (f"{prefix}_REASONING_EFFORT",)
     return ()
 
 

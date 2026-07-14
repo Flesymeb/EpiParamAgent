@@ -6,7 +6,7 @@ project:
   effect_type: "index"
 
 prompt:
-  prompt_file: ../prompts/stage_a.py
+  prompt_file: stage_a.py
 
 parameters:
   research_question: ""

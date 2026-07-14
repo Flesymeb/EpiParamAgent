@@ -38,6 +38,22 @@ defaults:
       - Modeling papers should be P or S only when they estimate or use timing
         intervals as study outputs or calibrated quantities, not merely because
         they model mpox transmission.
+      - For source-review recall, older human monkeypox reviews or broad
+        outbreak reports can be P when they plausibly summarize incubation
+        period, exposure-to-onset timing, or transmission timing evidence used by
+        the source review. Treat these as full-text verification candidates, not
+        strong title/abstract inclusions.
+      - Do not require the title/abstract to explicitly say "serial interval" or
+        "incubation period" for original outbreak investigations that include
+        exposure interviews, active contact surveillance, occupational exposure,
+        household/family transmission, or named linked cases. These records may
+        contain exposure-to-onset or contact-timing data in full text; classify
+        them as P unless they are clearly unrelated to human transmission timing.
+      - For older mpox source-review references, a narrative review focused on
+        human monkeypox clinical disease, epidemiology, and research can be P
+        because it may summarize incubation-period evidence used by the source
+        review. Score evidence low, but do not make it an automatic U when the
+        disease and epidemiology scope match the source-review question.
       - Weak support: the paper has little connection to timing or transmission
         interval estimation. Weigh this against any other evidence rather than
         applying a keyword-only exclusion.

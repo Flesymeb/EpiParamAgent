@@ -87,14 +87,23 @@ class StyledGroup(click.Group):
 
 # ── Project root resolution ────────────────────────────────────
 
+def _is_project_root(path: Path) -> bool:
+    """Return whether *path* contains the tracked runtime repository layout."""
+    return (
+        (path / "pyproject.toml").is_file()
+        and (path / "metaagent").is_dir()
+        and (path / "tools").is_dir()
+    )
+
+
 def _find_project_root() -> Path:
     cwd = Path.cwd()
     for p in [cwd] + list(cwd.parents):
-        if (p / "evaluation").exists() and (p / "metaagent").exists():
+        if _is_project_root(p):
             return p
     src_dir = Path(__file__).resolve()
     for p in src_dir.parents:
-        if (p / "evaluation").exists() and (p / "metaagent").exists():
+        if _is_project_root(p):
             return p
     raise click.ClickException(
         "Cannot find MetaAgent-Epi project root. Run from project directory."
@@ -109,6 +118,6 @@ def resolve_project_root(ctx: click.Context | None = None) -> Path:
     if ctx and ctx.params.get("project_root"):
         return Path(ctx.params["project_root"]).resolve()
     cwd = Path.cwd()
-    if (cwd / "evaluation").exists():
+    if _is_project_root(cwd):
         return cwd
     return REPO_ROOT

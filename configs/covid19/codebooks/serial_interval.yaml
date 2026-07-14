@@ -6,10 +6,10 @@ project:
   effect_type: "serial_interval"
 
 stage_a:
-  prompt_file: prompts/stage_a_serial_interval.py
+  prompt_file: ../coding_prompts/stage_a_serial_interval.py
 
 stage_b:
-  prompt_file: prompts/stage_b_serial_interval.py
+  prompt_file: ../coding_prompts/stage_b_serial_interval.py
 
 parameters:
   research_question: >
