@@ -6,7 +6,7 @@ import csv
 import json
 import re
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 
@@ -96,6 +96,25 @@ def _column_map(fieldnames: list[str] | None) -> dict[str, str]:
     return {name.strip().casefold(): name for name in (fieldnames or []) if name}
 
 
+def _normalize_tier(value: str | None) -> str:
+    aliases = {
+        "s": "S",
+        "strong": "S",
+        "strong_candidate": "S",
+        "p": "P",
+        "possible": "P",
+        "possible_candidate": "P",
+        "u": "U",
+        "unlikely": "U",
+        "unlikely_candidate": "U",
+        "error": "ERROR",
+    }
+    text = str(value or "").strip().casefold()
+    if not text:
+        return ""
+    return aliases.get(text, "OTHER")
+
+
 def load_pdf_records(
     input_path: Path,
     *,
@@ -129,35 +148,35 @@ def load_pdf_records(
                 + ", ".join(reader.fieldnames or [])
             )
 
-        selected_tier_key = None
-        if normalized_tiers:
-            candidates = [
-                tier_column,
-                "llm_tier",
-                "tier",
-                "screening_tier",
-                "final_tier",
-            ]
-            selected_tier_key = next(
-                (
-                    columns.get(candidate.casefold())
-                    for candidate in candidates
-                    if candidate and columns.get(candidate.casefold())
-                ),
-                None,
+        candidates = (
+            [tier_column]
+            if tier_column
+            else ["llm_suggest", "final_tier", "screening_tier", "llm_tier", "tier"]
+        )
+        selected_tier_keys = [
+            columns[candidate.casefold()]
+            for candidate in candidates
+            if candidate and candidate.casefold() in columns
+        ]
+        if normalized_tiers and not selected_tier_keys:
+            raise ValueError(
+                "Tier filtering requested, but no tier column was found. "
+                "Use --tiers all for an unfiltered CSV."
             )
-            if not selected_tier_key:
-                raise ValueError(
-                    "Tier filtering requested, but no tier column was found. "
-                    "Use --tiers all for an unfiltered CSV."
-                )
 
         doi_key = columns.get("doi")
         pmcid_key = columns.get("pmcid")
         records: list[PdfFetchRecord] = []
         seen: set[str] = set()
         for row in reader:
-            tier = str(row.get(selected_tier_key, "") or "").strip().upper()
+            tier = next(
+                (
+                    normalized
+                    for key in selected_tier_keys
+                    if (normalized := _normalize_tier(row.get(key)))
+                ),
+                "",
+            )
             if normalized_tiers and tier not in normalized_tiers:
                 continue
             pmid = str(row.get(pmid_key, "") or "").strip().removeprefix("PMID_")
@@ -194,7 +213,7 @@ def save_fetch_plan(
         encoding="utf-8",
     )
     payload = {
-        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_at": datetime.now(UTC).isoformat(),
         "input": str(Path(input_path).resolve()),
         "source": source,
         "tiers": list(tiers or []),

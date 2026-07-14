@@ -6,7 +6,7 @@ from datetime import datetime
 from pathlib import Path
 
 MODULE_ROOT = Path(__file__).resolve().parents[1]
-REPO_ROOT = MODULE_ROOT.parents[1]  # MetaAgent-Epi/
+REPO_ROOT = MODULE_ROOT.parent  # MetaAgent-Epi/
 SCREENING_SRC = REPO_ROOT
 
 sys.path.insert(0, str(MODULE_ROOT))
@@ -88,7 +88,16 @@ def main():
         parser.error("Either --out or --profile must be provided.")
 
     print(f"Output: {out_dir}")
-    run_pipeline(Path(args.input), out_dir, args.stage, Path(args.codebook), fetch_strategy=args.fetch_mode)
+    try:
+        run_pipeline(
+            Path(args.input),
+            out_dir,
+            args.stage,
+            Path(args.codebook),
+            fetch_strategy=args.fetch_mode,
+        )
+    except (FileNotFoundError, RuntimeError, ValueError) as exc:
+        parser.exit(1, f"ERROR: {exc}\n")
 
 
 if __name__ == "__main__":

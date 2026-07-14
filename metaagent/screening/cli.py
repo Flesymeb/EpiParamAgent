@@ -6,15 +6,26 @@ import csv
 import json
 import shutil
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import click
 from rich.panel import Panel
 from rich.table import Table
 
-
-from metaagent._cli_shared import (DEV_ROOT, REPO_ROOT, DISEASE_NAMES, TOPIC_NAMES, resolve_project_root, show_step, show_success, show_error, show_warning, show_command_header, StyledGroup, console, ACCENT, ACCENT_BOLD, ACCENT_DIM)
+from metaagent._cli_shared import (
+    ACCENT,
+    ACCENT_BOLD,
+    ACCENT_DIM,
+    DEV_ROOT,
+    DISEASE_NAMES,
+    StyledGroup,
+    console,
+    resolve_project_root,
+    show_step,
+    show_success,
+    show_warning,
+)
 from tools.pubmed.metadata import inspect_csv_metadata
 
 
@@ -162,6 +173,108 @@ def run(project_root, profile, disease, topic, input_file, output_file,
     _run_script("screening_llm_batch", argv)
 
 
+@screening.command("summary")
+@click.option("--input", "input_file", type=click.Path(path_type=Path, dir_okay=False))
+@click.option("--profile", "-p", default=None, help="Screening profile (AI1, AIR1, P10, etc.)")
+@click.option("--disease", default=None, help="Optional disease-key override for profile mode")
+@click.option("--parameter", "--topic", "topic", default=None, help="Optional parameter-key override")
+@click.option("--project-root", default="", help="Repository root")
+@click.option("--json", "json_output", is_flag=True, help="Emit a machine-readable result")
+def summary(input_file, profile, disease, topic, project_root, json_output):
+    """Show Strong, Possible, and Unlikely counts for a screening result."""
+    if input_file is not None:
+        screened_path = input_file.expanduser().resolve()
+    elif profile:
+        from metaagent.screening.profile_registry import resolve_profile_paths
+
+        root = resolve_project_root() if not project_root else Path(project_root).resolve()
+        try:
+            _, paths = resolve_profile_paths(
+                project_root=root,
+                profile_name=profile,
+                disease=disease,
+                topic=topic,
+            )
+        except KeyError as exc:
+            raise click.ClickException(str(exc)) from exc
+        screened_path = paths.screened_file
+    else:
+        raise click.UsageError("Provide --input or --profile")
+
+    if not screened_path.exists():
+        raise click.ClickException(f"Screening result not found: {screened_path}")
+
+    try:
+        with screened_path.open("r", encoding="utf-8-sig", newline="") as handle:
+            rows = list(csv.DictReader(handle))
+    except (OSError, csv.Error) as exc:
+        raise click.ClickException(f"Cannot read {screened_path}: {exc}") from exc
+
+    counts = {"S": 0, "P": 0, "U": 0, "error": 0, "other": 0}
+    for row in rows:
+        counts[_screening_row_tier(row)] += 1
+
+    total = len(rows)
+    retained = counts["S"] + counts["P"]
+    payload = {
+        "input": str(screened_path),
+        "total": total,
+        "strong": counts["S"],
+        "possible": counts["P"],
+        "unlikely": counts["U"],
+        "retained": retained,
+        "errors": counts["error"],
+        "other": counts["other"],
+        "retained_share": retained / total if total else 0.0,
+    }
+    if json_output:
+        click.echo(json.dumps(payload, ensure_ascii=False))
+        return
+
+    table = Table(title="Screening summary", header_style=f"bold {ACCENT_BOLD}")
+    table.add_column("Tier", style=f"bold {ACCENT}")
+    table.add_column("Meaning")
+    table.add_column("Count", justify="right")
+    table.add_column("Share", justify="right")
+    for tier, meaning, count in (
+        ("S", "Strong", counts["S"]),
+        ("P", "Possible", counts["P"]),
+        ("U", "Unlikely", counts["U"]),
+        ("-", "Error/other", counts["error"] + counts["other"]),
+    ):
+        share = count / total if total else 0.0
+        table.add_row(tier, meaning, str(count), f"{share:.1%}")
+    console.print(table)
+    console.print(
+        f"[bold {ACCENT_BOLD}]Retained (S+P):[/bold {ACCENT_BOLD}] "
+        f"{retained}/{total} ({payload['retained_share']:.1%})"
+    )
+    console.print(f"[{ACCENT_DIM}]Input: {screened_path}[/{ACCENT_DIM}]")
+
+
+def _screening_row_tier(row: dict[str, str]) -> str:
+    """Normalize current and legacy screening labels to S/P/U/error/other."""
+    columns = {str(key).strip().casefold(): key for key in row}
+    aliases = {
+        "s": "S",
+        "strong": "S",
+        "strong_candidate": "S",
+        "p": "P",
+        "possible": "P",
+        "possible_candidate": "P",
+        "u": "U",
+        "unlikely": "U",
+        "unlikely_candidate": "U",
+        "error": "error",
+    }
+    for name in ("llm_suggest", "final_tier", "screening_tier", "llm_tier", "tier"):
+        key = columns.get(name)
+        value = str(row.get(key, "") or "").strip().casefold() if key else ""
+        if value:
+            return aliases.get(value, "other")
+    return "other"
+
+
 def _resolve_run_input(
     *,
     project_root: str,
@@ -266,7 +379,7 @@ def _preflight_input_metadata(
     marker_path.write_text(
         json.dumps(
             {
-                "completed_at": datetime.now(timezone.utc).isoformat(),
+                "completed_at": datetime.now(UTC).isoformat(),
                 "input_csv": str(input_path),
                 "before": before.__dict__,
                 "after": after.__dict__,
@@ -287,11 +400,11 @@ def _preflight_input_metadata(
 def _run_cascade(project_root, profile, disease, topic, batch_size, batch_concurrency, batch_mode,
                  model, provider, temperature, strategy, experiment, prefer_llm_tier=True):
     """Run cascade screening with Tier-2 PubMed/PMC enrichment."""
-    import asyncio, csv
+    import asyncio
+
     from metaagent.config import load_llm_config
-    from metaagent.screening.engine import init_llm_model, screen_papers_batch_async
-    from metaagent.screening.staging import partition_papers, annotate_ground_truth
     from metaagent.screening.cascade import run_simple_cascade
+    from metaagent.screening.engine import init_llm_model, screen_papers_batch_async
 
     root = resolve_project_root()
     print(f"Starting cascade screening with strategy={strategy}")

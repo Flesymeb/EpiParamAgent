@@ -518,10 +518,19 @@ def run_pipeline(
     # No LLM calls; useful as a pre-flight before a full extraction run.
     if stage == "fetch":
         inputs = list(_iter_inputs(input_path, fetch_strategy=fetch_strategy))
+        if not inputs:
+            raise RuntimeError(
+                f"No full-text inputs could be resolved from {input_path}. "
+                "Check the PMID list and paper_pool fetch status."
+            )
         pdf_dir, md_dir = _paper_pool_dirs()
         cached = warmed = 0
         for path in inputs:
             pmid = infer_pmid_from_path(path) or path.stem
+            if path.suffix.lower() in {".md", ".txt"}:
+                cached += 1
+                print(f"  [MD cache] PMID_{pmid} ✓")
+                continue
             cache = _markdown_cache_path(md_dir, pmid)
             if cache.exists():
                 cached += 1
@@ -572,8 +581,10 @@ def run_pipeline(
 
     inputs = list(_iter_inputs(input_path, fetch_strategy=fetch_strategy))
     if not inputs:
-        print(f"[WARN] No input files found for: {input_path}")
-        return
+        raise RuntimeError(
+            f"No full-text inputs could be resolved from {input_path}. "
+            "Run 'metaagent pdf fetch' and inspect fetch_results.csv."
+        )
 
     for path in inputs:
         pmid = infer_pmid_from_path(path) or path.stem
@@ -712,3 +723,8 @@ def run_pipeline(
         },
     )
     print(f"[OK] Manifest written: {manifest_path}")
+    if stage in {"extract", "both"} and not records:
+        raise RuntimeError(
+            f"No coding records were produced from {len(inputs)} full-text input(s). "
+            f"Inspect {out_dir / 'errors'} and the run manifest."
+        )

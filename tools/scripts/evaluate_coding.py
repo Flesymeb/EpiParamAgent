@@ -63,79 +63,85 @@ TOPIC_PARAM = {
 }
 
 
-def _latest_xlsx(project_dir: Path) -> Path | None:
-    """Return the xlsx with the most data rows from timestamp-style coding_runs dirs.
+def _coding_xlsx(run_dir: Path) -> Path | None:
+    """Return the newest coding sheet inside one run directory."""
+    candidates = list(run_dir.glob("coding_sheet*.xlsx"))
+    if not candidates:
+        return None
+    return max(candidates, key=lambda path: (path.stat().st_mtime_ns, path.name))
 
-    Prefers timestamp directories (YYYYMMDD_*) over ad-hoc names.
-    Among those, picks the xlsx with the highest row count (most complete run),
-    breaking ties by most recent timestamp.
-    """
-    import re
+
+def _latest_xlsx(project_dir: Path, run_name: str | None = None) -> Path | None:
+    """Return a coding sheet from an explicit run or the latest completed run."""
     runs_dir = project_dir / "coding_runs"
     if not runs_dir.exists():
         return None
 
-    ts_pattern = re.compile(r"^\d{8}_")
-    all_dirs = [d for d in runs_dir.iterdir() if d.is_dir()]
-    ts_dirs = sorted([d for d in all_dirs if ts_pattern.match(d.name)], reverse=True)
-    other_dirs = sorted([d for d in all_dirs if not ts_pattern.match(d.name)], reverse=True)
+    if run_name:
+        if Path(run_name).name != run_name:
+            raise ValueError("--run must be a directory name, not a path")
+        run_dir = runs_dir / run_name
+        if not run_dir.is_dir():
+            raise FileNotFoundError(f"Coding run not found: {run_dir}")
+        xlsx = _coding_xlsx(run_dir)
+        if xlsx is None:
+            raise FileNotFoundError(f"No coding_sheet*.xlsx found in run: {run_dir}")
+        return xlsx
 
-    candidates: list[tuple[int, str, Path]] = []
-    for run_dir in ts_dirs + other_dirs:
-        for xlsx in run_dir.glob("*.xlsx"):
-            try:
-                import pandas as pd
-                n_rows = len(pd.read_excel(xlsx, usecols=[0]))  # fast: only first col
-            except Exception:
-                n_rows = 0
-            # Sort key: (-n_rows, -timestamp_str) → most rows first, then most recent
-            candidates.append((n_rows, run_dir.name, xlsx))
-
+    candidates = [
+        xlsx
+        for run_dir in runs_dir.iterdir()
+        if run_dir.is_dir()
+        if (xlsx := _coding_xlsx(run_dir)) is not None
+    ]
     if not candidates:
         return None
-    # Pick highest row count; break ties by latest timestamp (lexicographic desc)
-    candidates.sort(key=lambda x: (x[0], x[1]), reverse=True)
-    return candidates[0][2]
+    return max(candidates, key=lambda path: (path.stat().st_mtime_ns, path.parent.name))
 
 
 def evaluate_project(
     topic: str,
     project: str,
     project_dir: Path,
-    parameter_type: str,
+    parameter_type: str | None,
     estimate_measure: str,
     include_median: bool,
     impute_se: bool,
     method: str,
-) -> dict | None:
-    xlsx = _latest_xlsx(project_dir)
+    run_name: str | None = None,
+) -> dict:
+    xlsx = _latest_xlsx(project_dir, run_name=run_name)
     if xlsx is None:
-        print(f"  [{topic}/{project}] No coding_runs found, skipping.")
-        return None
+        raise FileNotFoundError(f"No completed coding run found under {project_dir}")
 
     print(f"  [{topic}/{project}] Using {xlsx.parent.name}/{xlsx.name}")
 
     try:
         df = pd.read_excel(xlsx)
     except Exception as exc:
-        print(f"  [{topic}/{project}] Failed to read xlsx: {exc}")
-        return None
+        raise RuntimeError(f"Failed to read {xlsx}: {exc}") from exc
 
-    # Check parameter_type column
-    if "parameter_type" in df.columns:
-        available = df["parameter_type"].dropna().unique().tolist()
+    if parameter_type is not None:
+        if "parameter_type" not in df.columns:
+            raise ValueError(
+                f"parameter_type '{parameter_type}' was requested, but {xlsx.name} "
+                "has no parameter_type column. Use --all-parameter-types only after "
+                "confirming that all rows represent a commensurate estimand."
+            )
+        available = [str(value).strip() for value in df["parameter_type"].dropna().unique()]
         if parameter_type not in available:
-            # Try case-insensitive match
             match = next(
-                (p for p in available if p.lower().strip() == parameter_type.lower()),
+                (value for value in available if value.casefold() == parameter_type.casefold()),
                 None,
             )
             if match:
                 parameter_type = match
             else:
-                print(f"  [{topic}/{project}] parameter_type '{parameter_type}' not found. "
-                      f"Available: {available}. Trying without filter.")
-                parameter_type = None  # type: ignore
+                raise ValueError(
+                    f"parameter_type '{parameter_type}' not found in {xlsx.name}. "
+                    f"Available: {available}. Pass the intended --parameter-type, "
+                    "or use --all-parameter-types explicitly."
+                )
 
     df_enriched = enrich_ci(df)
 
@@ -153,8 +159,9 @@ def evaluate_project(
             print(f"    [warn] {w.message}")
 
     if summary.empty:
-        print(f"  [{topic}/{project}] summarize returned empty.")
-        return None
+        raise ValueError(
+            f"Pooling returned no rows for {topic}/{project} from run {xlsx.parent.name}"
+        )
 
     r = summary.iloc[0]
     return {
@@ -188,6 +195,11 @@ def main() -> None:
     parser.add_argument("--project", default=None, help="Filter by project (e.g. p13).")
     parser.add_argument("--parameter-type", default=None,
                         help="Override parameter_type filter (default: inferred from topic).")
+    parser.add_argument(
+        "--all-parameter-types",
+        action="store_true",
+        help="Intentionally pool all parameter types without a parameter_type filter.",
+    )
     parser.add_argument("--estimate-measure", default="mean",
                         help="Estimate measure to pool (default: mean).")
     parser.add_argument("--include-median", action="store_true",
@@ -196,9 +208,16 @@ def main() -> None:
                         help="Impute missing SE from pooled within-study SD (default: True).")
     parser.add_argument("--no-impute-se", dest="impute_se", action="store_false")
     parser.add_argument("--method", default="random", choices=["random", "fixed"])
+    parser.add_argument(
+        "--run",
+        default=None,
+        help="Exact coding_runs directory name. Default: latest run containing a coding sheet.",
+    )
     parser.add_argument("--output", default=None,
                         help="Output CSV path. Default: evaluation/coding/pooled_summary_YYYYMMDD.csv")
     args = parser.parse_args()
+    if args.parameter_type and args.all_parameter_types:
+        parser.error("Use only one of --parameter-type and --all-parameter-types")
 
     if not CODING_ROOT.exists():
         print(f"ERROR: {CODING_ROOT} not found.")
@@ -226,35 +245,50 @@ def main() -> None:
                 projects_to_run.append((disease_dir.name, topic_dir.name, project_dir.name, project_dir))
 
     if not projects_to_run:
-        print("No projects found matching filters.")
-        sys.exit(0)
+        print("ERROR: No projects found matching filters.", file=sys.stderr)
+        sys.exit(1)
 
     print(f"Found {len(projects_to_run)} project(s) to evaluate.\n")
 
     rows = []
+    errors = []
     for disease, topic, project, project_dir in projects_to_run:
-        param_type = args.parameter_type or TOPIC_PARAM.get(topic, "serial_interval")
+        param_type = (
+            None
+            if args.all_parameter_types
+            else args.parameter_type or TOPIC_PARAM.get(topic, topic)
+        )
         if topic == "fatality":
             print(f"  [{disease}/{topic}/{project}] NOTE: CFR/IFR is a proportion — "
                   "pooled_mean here is arithmetic average (may be biased). "
                   "For publication-quality meta-analysis use logit transform.")
-        result = evaluate_project(
-            topic=topic,
-            project=project,
-            project_dir=project_dir,
-            parameter_type=param_type,
-            estimate_measure=args.estimate_measure,
-            include_median=args.include_median,
-            impute_se=args.impute_se,
-            method=args.method,
-        )
-        if result:
-            result["disease"] = disease
-            rows.append(result)
+        try:
+            result = evaluate_project(
+                topic=topic,
+                project=project,
+                project_dir=project_dir,
+                parameter_type=param_type,
+                estimate_measure=args.estimate_measure,
+                include_median=args.include_median,
+                impute_se=args.impute_se,
+                method=args.method,
+                run_name=args.run,
+            )
+        except (FileNotFoundError, RuntimeError, ValueError) as exc:
+            errors.append(f"{disease}/{topic}/{project}: {exc}")
+            continue
+        result["disease"] = disease
+        rows.append(result)
+
+    if errors:
+        print("\nERROR: Coding evaluation failed:", file=sys.stderr)
+        for error in errors:
+            print(f"  - {error}", file=sys.stderr)
+        sys.exit(1)
 
     if not rows:
-        print("\nNo results produced.")
-        return
+        print("ERROR: No pooling results were produced.", file=sys.stderr)
+        sys.exit(1)
 
     out_path = Path(args.output) if args.output else (
         CODING_ROOT / f"pooled_summary_{datetime.now().strftime('%Y%m%d')}.csv"
@@ -273,7 +307,7 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(rows)
 
-    print(f"\n=== Summary ===")
+    print("\n=== Summary ===")
     df_out = pd.DataFrame(rows)
     print(df_out[["disease","topic","project","n_studies","n_excluded","n_imputed",
                    "pooled_mean","ci_lower","ci_upper","i2"]].to_string(index=False))
