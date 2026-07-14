@@ -42,7 +42,7 @@ export const PIPELINE_STEPS: readonly PipelineStep[] = [
     backendStep: 1,
     label: "Query",
     title: "Query Builder",
-    description: "Protocol question and search seed setup.",
+    description: "Keyword generation and Boolean query setup.",
     icon: SearchIcon,
   },
   {
@@ -94,9 +94,29 @@ export const PIPELINE_STEPS: readonly PipelineStep[] = [
   },
 ]
 
+const PIPELINE_STEP_ALIASES: Readonly<Record<string, PipelineStepId>> = {
+  analysis: "analyze",
+  coding: "code",
+  extraction: "extract",
+  meta: "analyze",
+  metaanalysis: "analyze",
+  pooling: "analyze",
+  pool: "analyze",
+  retrieval: "retrieve",
+  screening: "screen",
+}
+
 export function resolvePipelineStepId(value: string | null): PipelineStepId {
+  const normalizedValue = value?.trim().toLowerCase().replace(/[^a-z0-9]/g, "")
+
+  if (!normalizedValue) {
+    return PIPELINE_STEPS[0].id
+  }
+
   return (
-    PIPELINE_STEPS.find((step) => step.id === value)?.id ?? PIPELINE_STEPS[0].id
+    PIPELINE_STEPS.find((step) => step.id === normalizedValue)?.id ??
+    PIPELINE_STEP_ALIASES[normalizedValue] ??
+    PIPELINE_STEPS[0].id
   )
 }
 

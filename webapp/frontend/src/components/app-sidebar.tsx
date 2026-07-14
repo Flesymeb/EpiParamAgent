@@ -26,6 +26,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import { getApiBaseUrl } from "@/lib/config"
 import { cn } from "@/lib/utils"
@@ -48,9 +49,11 @@ type BackendStatus = "checking" | "offline" | "reachable"
 
 function SidebarNavGroup({
   label,
+  onNavigate,
   items,
 }: {
   label: string
+  onNavigate: () => void
   items: SidebarNavItem[]
 }) {
   const { pathname, search } = useLocation()
@@ -75,7 +78,7 @@ function SidebarNavGroup({
                   isActive={isActive}
                   tooltip={item.title}
                 >
-                  <Link to={item.url}>
+                  <Link onClick={onNavigate} to={item.url}>
                     <Icon />
                     <span>{item.title}</span>
                   </Link>
@@ -96,6 +99,8 @@ export function AppSidebar({
   const [backendStatus, setBackendStatus] =
     useState<BackendStatus>("checking")
   const { resolvedTheme, setTheme } = useTheme()
+  const { openMobile, setOpenMobile } = useSidebar()
+  const { pathname } = useLocation()
   const isDark = resolvedTheme === "dark"
 
   useEffect(() => {
@@ -131,6 +136,9 @@ export function AppSidebar({
         ? "API online"
         : "API offline"
   const apiBaseUrl = getApiBaseUrl()
+  const showFloatingMobileTrigger =
+    !pathname.startsWith("/runs/") && !settingsOpen && !openMobile
+  const closeMobileSidebar = () => setOpenMobile(false)
 
   return (
     <>
@@ -140,7 +148,7 @@ export function AppSidebar({
             <SidebarMenu className="min-w-0 flex-1 group-data-[collapsible=icon]:flex-none">
               <SidebarMenuItem>
                 <SidebarMenuButton asChild size="lg" tooltip="MetaAgent">
-                  <Link to="/">
+                  <Link onClick={closeMobileSidebar} to="/">
                     <img
                       alt="MetaAgent logo"
                       className="size-8 shrink-0 object-contain"
@@ -160,7 +168,11 @@ export function AppSidebar({
           </div>
         </SidebarHeader>
         <SidebarContent>
-          <SidebarNavGroup label="Workspace" items={workspaceItems} />
+          <SidebarNavGroup
+            label="Workspace"
+            onNavigate={closeMobileSidebar}
+            items={workspaceItems}
+          />
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
@@ -175,7 +187,10 @@ export function AppSidebar({
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
-                onClick={() => setSettingsOpen(true)}
+                onClick={() => {
+                  setOpenMobile(false)
+                  setSettingsOpen(true)
+                }}
                 tooltip="Settings"
               >
                 <SettingsIcon />
@@ -218,6 +233,12 @@ export function AppSidebar({
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>
+      {showFloatingMobileTrigger ? (
+        <SidebarTrigger
+          aria-label="Open navigation"
+          className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-40 size-10 rounded-full border border-border/70 bg-background/95 shadow-lg backdrop-blur lg:hidden"
+        />
+      ) : null}
       <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
     </>
   )

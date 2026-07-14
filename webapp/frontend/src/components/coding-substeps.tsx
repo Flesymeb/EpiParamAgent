@@ -117,7 +117,7 @@ export function CodingSubsteps({
             <SubStageDot icon={sub.icon} state={subState} />
             <span
               className={cn(
-                "text-xs",
+                "inline-flex items-center gap-1 text-xs",
                 subState === "skip"
                   ? "text-muted-foreground/50"
                   : subState === "process"
@@ -129,7 +129,12 @@ export function CodingSubsteps({
                         : "text-muted-foreground"
               )}
             >
-              {sub.label}
+              <span>{sub.label}</span>
+              {subState === "skip" ? (
+                <span className="rounded-full border border-border/60 px-1 text-[0.6rem] leading-3">
+                  skipped
+                </span>
+              ) : null}
             </span>
           </div>
         )

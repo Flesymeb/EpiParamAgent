@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreateRunRunsPostData, CreateRunRunsPostErrors, CreateRunRunsPostResponses, DownloadStepArtifactRunsRunIdStepsStepNoArtifactGetData, DownloadStepArtifactRunsRunIdStepsStepNoArtifactGetErrors, DownloadStepArtifactRunsRunIdStepsStepNoArtifactGetResponses, GetRunRunsRunIdGetData, GetRunRunsRunIdGetErrors, GetRunRunsRunIdGetResponses, GetStepRowsRunsRunIdStepsStepNoRowsGetData, GetStepRowsRunsRunIdStepsStepNoRowsGetErrors, GetStepRowsRunsRunIdStepsStepNoRowsGetResponses, HealthHealthGetData, HealthHealthGetResponses, ListRunsRunsGetData, ListRunsRunsGetResponses, SaveEditedStepRunsRunIdStepsStepNoEditedPutData, SaveEditedStepRunsRunIdStepsStepNoEditedPutErrors, SaveEditedStepRunsRunIdStepsStepNoEditedPutResponses, StartStepRunsRunIdStepsStepNoStartPostData, StartStepRunsRunIdStepsStepNoStartPostErrors, StartStepRunsRunIdStepsStepNoStartPostResponses, StreamEventsRunsRunIdEventsGetData, StreamEventsRunsRunIdEventsGetErrors, StreamEventsRunsRunIdEventsGetResponses } from './types.gen';
+import type { CreateRunRunsPostData, CreateRunRunsPostErrors, CreateRunRunsPostResponses, DownloadStepArtifactRunsRunIdStepsStepNoArtifactGetData, DownloadStepArtifactRunsRunIdStepsStepNoArtifactGetErrors, DownloadStepArtifactRunsRunIdStepsStepNoArtifactGetResponses, GetCodebookCodebooksDiseaseParameterGetData, GetCodebookCodebooksDiseaseParameterGetErrors, GetCodebookCodebooksDiseaseParameterGetResponses, GetRunRunsRunIdGetData, GetRunRunsRunIdGetErrors, GetRunRunsRunIdGetResponses, GetStagePromptPromptsStageGetData, GetStagePromptPromptsStageGetErrors, GetStagePromptPromptsStageGetResponses, GetStepIndexRunsRunIdStepsStepNoIndexGetData, GetStepIndexRunsRunIdStepsStepNoIndexGetErrors, GetStepIndexRunsRunIdStepsStepNoIndexGetResponses, GetStepRowsRunsRunIdStepsStepNoRowsGetData, GetStepRowsRunsRunIdStepsStepNoRowsGetErrors, GetStepRowsRunsRunIdStepsStepNoRowsGetResponses, HealthHealthGetData, HealthHealthGetResponses, ListRunEventsRunsRunIdEventsHistoryGetData, ListRunEventsRunsRunIdEventsHistoryGetErrors, ListRunEventsRunsRunIdEventsHistoryGetResponses, ListRunsRunsGetData, ListRunsRunsGetErrors, ListRunsRunsGetResponses, ReadLlmSettingsSettingsLlmGetData, ReadLlmSettingsSettingsLlmGetResponses, SaveEditedStepRunsRunIdStepsStepNoEditedPutData, SaveEditedStepRunsRunIdStepsStepNoEditedPutErrors, SaveEditedStepRunsRunIdStepsStepNoEditedPutResponses, StartStepRunsRunIdStepsStepNoStartPostData, StartStepRunsRunIdStepsStepNoStartPostErrors, StartStepRunsRunIdStepsStepNoStartPostResponses, StreamEventsRunsRunIdEventsGetData, StreamEventsRunsRunIdEventsGetErrors, StreamEventsRunsRunIdEventsGetResponses, UpdateLlmSettingsSettingsLlmPutData, UpdateLlmSettingsSettingsLlmPutErrors, UpdateLlmSettingsSettingsLlmPutResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -21,7 +21,7 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 /**
  * List Runs
  */
-export const listRunsRunsGet = <ThrowOnError extends boolean = false>(options?: Options<ListRunsRunsGetData, ThrowOnError>): RequestResult<ListRunsRunsGetResponses, unknown, ThrowOnError> => (options?.client ?? client).get<ListRunsRunsGetResponses, unknown, ThrowOnError>({ url: '/runs', ...options });
+export const listRunsRunsGet = <ThrowOnError extends boolean = false>(options?: Options<ListRunsRunsGetData, ThrowOnError>): RequestResult<ListRunsRunsGetResponses, ListRunsRunsGetErrors, ThrowOnError> => (options?.client ?? client).get<ListRunsRunsGetResponses, ListRunsRunsGetErrors, ThrowOnError>({ url: '/runs', ...options });
 
 /**
  * Create Run
@@ -78,6 +78,49 @@ export const saveEditedStepRunsRunIdStepsStepNoEditedPut = <ThrowOnError extends
  * Stream Events
  */
 export const streamEventsRunsRunIdEventsGet = <ThrowOnError extends boolean = false>(options: Options<StreamEventsRunsRunIdEventsGetData, ThrowOnError>): RequestResult<StreamEventsRunsRunIdEventsGetResponses, StreamEventsRunsRunIdEventsGetErrors, ThrowOnError> => (options.client ?? client).get<StreamEventsRunsRunIdEventsGetResponses, StreamEventsRunsRunIdEventsGetErrors, ThrowOnError>({ url: '/runs/{run_id}/events', ...options });
+
+/**
+ * List Run Events
+ */
+export const listRunEventsRunsRunIdEventsHistoryGet = <ThrowOnError extends boolean = false>(options: Options<ListRunEventsRunsRunIdEventsHistoryGetData, ThrowOnError>): RequestResult<ListRunEventsRunsRunIdEventsHistoryGetResponses, ListRunEventsRunsRunIdEventsHistoryGetErrors, ThrowOnError> => (options.client ?? client).get<ListRunEventsRunsRunIdEventsHistoryGetResponses, ListRunEventsRunsRunIdEventsHistoryGetErrors, ThrowOnError>({ url: '/runs/{run_id}/events/history', ...options });
+
+/**
+ * Get Codebook
+ */
+export const getCodebookCodebooksDiseaseParameterGet = <ThrowOnError extends boolean = false>(options: Options<GetCodebookCodebooksDiseaseParameterGetData, ThrowOnError>): RequestResult<GetCodebookCodebooksDiseaseParameterGetResponses, GetCodebookCodebooksDiseaseParameterGetErrors, ThrowOnError> => (options.client ?? client).get<GetCodebookCodebooksDiseaseParameterGetResponses, GetCodebookCodebooksDiseaseParameterGetErrors, ThrowOnError>({ url: '/codebooks/{disease}/{parameter}', ...options });
+
+/**
+ * Get Step Index
+ *
+ * Aggregate the per-paper structured index JSONs a coding run produces
+ * (data/runs/{id}/step-{n}/index*.index.json) into a single review table.
+ */
+export const getStepIndexRunsRunIdStepsStepNoIndexGet = <ThrowOnError extends boolean = false>(options: Options<GetStepIndexRunsRunIdStepsStepNoIndexGetData, ThrowOnError>): RequestResult<GetStepIndexRunsRunIdStepsStepNoIndexGetResponses, GetStepIndexRunsRunIdStepsStepNoIndexGetErrors, ThrowOnError> => (options.client ?? client).get<GetStepIndexRunsRunIdStepsStepNoIndexGetResponses, GetStepIndexRunsRunIdStepsStepNoIndexGetErrors, ThrowOnError>({ url: '/runs/{run_id}/steps/{step_no}/index', ...options });
+
+/**
+ * Get Stage Prompt
+ *
+ * Resolve the prompt template a stage uses (read-only), for display +
+ * human-in-the-loop supplementation.
+ */
+export const getStagePromptPromptsStageGet = <ThrowOnError extends boolean = false>(options: Options<GetStagePromptPromptsStageGetData, ThrowOnError>): RequestResult<GetStagePromptPromptsStageGetResponses, GetStagePromptPromptsStageGetErrors, ThrowOnError> => (options.client ?? client).get<GetStagePromptPromptsStageGetResponses, GetStagePromptPromptsStageGetErrors, ThrowOnError>({ url: '/prompts/{stage}', ...options });
+
+/**
+ * Read Llm Settings
+ */
+export const readLlmSettingsSettingsLlmGet = <ThrowOnError extends boolean = false>(options?: Options<ReadLlmSettingsSettingsLlmGetData, ThrowOnError>): RequestResult<ReadLlmSettingsSettingsLlmGetResponses, unknown, ThrowOnError> => (options?.client ?? client).get<ReadLlmSettingsSettingsLlmGetResponses, unknown, ThrowOnError>({ url: '/settings/llm', ...options });
+
+/**
+ * Update Llm Settings
+ */
+export const updateLlmSettingsSettingsLlmPut = <ThrowOnError extends boolean = false>(options: Options<UpdateLlmSettingsSettingsLlmPutData, ThrowOnError>): RequestResult<UpdateLlmSettingsSettingsLlmPutResponses, UpdateLlmSettingsSettingsLlmPutErrors, ThrowOnError> => (options.client ?? client).put<UpdateLlmSettingsSettingsLlmPutResponses, UpdateLlmSettingsSettingsLlmPutErrors, ThrowOnError>({
+    url: '/settings/llm',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Health

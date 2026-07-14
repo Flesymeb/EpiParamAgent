@@ -5,7 +5,11 @@ import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom"
 import { AppSidebar } from "@/components/app-sidebar"
 import { StatusBadge } from "@/components/status-badge"
 import { ThemeProvider } from "@/components/theme-provider"
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import {
@@ -42,11 +46,15 @@ function ShellHeader() {
 
   return (
     <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b bg-background/95 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="flex min-w-0 flex-1 items-center gap-2">
+      <SidebarTrigger
+        aria-label="Open navigation"
+        className="-ml-1 size-8 lg:hidden"
+      />
+      <div className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-2">
         {header ? (
           <>
             <Link
-              className="shrink-0 rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+              className="-mx-1 inline-flex h-8 shrink-0 items-center rounded-md px-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
               to="/"
             >
               Runs
@@ -65,7 +73,7 @@ function ShellHeader() {
               <StatusBadge label="step running" status="running" />
             ) : null}
             <span
-              className="min-w-0 flex-1 truncate text-xs text-muted-foreground sm:text-sm"
+              className="ml-auto hidden min-w-0 max-w-[45%] truncate text-xs text-muted-foreground sm:block sm:text-sm"
               title={header.paramsSummary}
             >
               {header.paramsSummary}
@@ -93,7 +101,7 @@ function App() {
             <AppSidebar />
             <SidebarInset>
               <ShellHeader />
-              <main className="flex flex-1 flex-col bg-gradient-to-b from-muted/40 to-background p-4 md:p-6 dark:from-muted/15">
+              <main className="flex min-w-0 flex-1 flex-col overflow-x-hidden bg-gradient-to-b from-muted/40 to-background p-4 pb-20 md:p-6 dark:from-muted/15">
                 <Routes>
                   <Route path="/" element={<DashboardPage />} />
                   <Route path="/runs/:runId" element={<RunDetailPage />} />

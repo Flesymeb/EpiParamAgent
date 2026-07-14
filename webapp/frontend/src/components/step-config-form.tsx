@@ -116,6 +116,9 @@ const PROMPT_STAGES: Record<number, { stage: string; key: string }> = {
   5: { stage: "extract", key: "code_prompt_supplement" },
 }
 
+const fieldControlClass =
+  "h-8 rounded-lg bg-background px-2.5 text-sm shadow-xs dark:bg-input/30"
+
 export function StepConfigForm({
   stepNumber,
   initialValues,
@@ -171,33 +174,57 @@ export function StepConfigForm({
   const advancedFields = fields.filter((field) => field.advanced)
   const basicGroups = groupFields(basicFields)
   const advancedGroups = groupFields(advancedFields)
+  const hasSupplementaryPanels =
+    advancedFields.length > 0 ||
+    config.stepNumber === 4 ||
+    Boolean(promptMeta && supplementKey)
 
   return (
-    <>
-      {basicGroups.map((group, index) => (
+    <div className="min-w-0 space-y-2.5 sm:space-y-3">
+      {basicGroups.length > 0 ? (
         <SectionCard
-          icon={GROUP_ICONS[group.title] ?? SlidersHorizontalIcon}
-          key={group.title || `group-${index}`}
-          title={group.title || "Settings"}
+          icon={GROUP_ICONS[basicGroups[0]?.title ?? ""] ?? SlidersHorizontalIcon}
+          title={basicGroups[0]?.title || "Settings"}
         >
-          <div className="space-y-3">
-            {index === 0 ? (
-              <p className="text-sm text-muted-foreground">{config.blurb}</p>
-            ) : null}
-            <div className="grid gap-4 sm:grid-cols-2">
-              {group.fields.map((field) => (
-                <Field
-                  disabled={disabled}
-                  field={field}
-                  key={field.key}
-                  onChange={update}
-                  value={values[field.key]}
-                />
-              ))}
-            </div>
+          <div className="space-y-3 sm:space-y-4">
+            <p className="text-sm leading-5 text-muted-foreground">
+              {config.blurb}
+            </p>
+            {basicGroups.map((group, index) => {
+              const GroupIcon = GROUP_ICONS[group.title] ?? SlidersHorizontalIcon
+
+              return (
+                <div
+                  className={cn(
+                    "space-y-2.5",
+                    index > 0 && "border-t border-border/70 pt-3 sm:pt-4"
+                  )}
+                  key={group.title || `group-${index}`}
+                >
+                  {index > 0 && group.title ? (
+                    <div className="flex min-w-0 items-center gap-2 text-xs font-medium text-muted-foreground">
+                      <GroupIcon className="size-3.5 shrink-0 text-primary" />
+                      <span className="min-w-0 truncate">{group.title}</span>
+                    </div>
+                  ) : null}
+                  <div className="grid gap-3">
+                    {group.fields.map((field) => (
+                      <Field
+                        disabled={disabled}
+                        field={field}
+                        key={field.key}
+                        onChange={update}
+                        value={values[field.key]}
+                        wide={group.fields.length === 1}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </SectionCard>
-      ))}
+      ) : null}
 
       {basicGroups.length === 0 ? (
         <SectionCard
@@ -208,73 +235,78 @@ export function StepConfigForm({
         </SectionCard>
       ) : null}
 
-      {advancedFields.length > 0 ? (
-        <div className="rounded-lg border bg-card">
-          <Collapsible onOpenChange={setAdvancedOpen} open={advancedOpen}>
-            <CollapsibleTrigger
-              className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm font-medium transition-colors hover:bg-muted/40"
+      {hasSupplementaryPanels ? (
+        <>
+          {advancedFields.length > 0 ? (
+            <div className="overflow-hidden rounded-lg border border-border/70 bg-card shadow-xs">
+              <Collapsible onOpenChange={setAdvancedOpen} open={advancedOpen}>
+                <CollapsibleTrigger
+                  className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm font-medium transition-colors hover:bg-muted/40"
+                  disabled={disabled}
+                >
+                  <SlidersHorizontalIcon className="size-4 text-primary" />
+                  <span className="min-w-0 flex-1">Advanced settings</span>
+                  <ChevronsUpDownIcon className="size-4 text-muted-foreground" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="max-h-[min(48vh,420px)] space-y-3 overflow-y-auto overscroll-contain border-t p-3 shadow-[inset_0_-18px_18px_-22px_var(--muted-foreground)] sm:space-y-4 sm:p-4">
+                  {advancedGroups.map((group, index) => (
+                    <div className="space-y-2.5" key={group.title || `adv-${index}`}>
+                      {group.title ? (
+                        <h4 className="text-xs font-medium text-muted-foreground/70">
+                          {group.title}
+                        </h4>
+                      ) : null}
+                      <div className="grid gap-3">
+                        {group.fields.map((field) => (
+                          <Field
+                            disabled={disabled}
+                            field={field}
+                            key={field.key}
+                            onChange={update}
+                            value={values[field.key]}
+                            wide={group.fields.length === 1}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
+          ) : null}
+
+          {config.stepNumber === 4 ? (
+            <CodebookPanel
+              disease={typeof values.disease === "string" ? values.disease : ""}
+              overridePath={
+                typeof values.codebook_path === "string"
+                  ? values.codebook_path
+                  : ""
+              }
+              parameter={
+                typeof values.parameter === "string" ? values.parameter : ""
+              }
+            />
+          ) : null}
+
+          {promptMeta && supplementKey ? (
+            <PromptPanel
               disabled={disabled}
-            >
-              <SlidersHorizontalIcon className="size-4 text-primary" />
-              <span className="min-w-0 flex-1">Advanced settings</span>
-              <ChevronsUpDownIcon className="size-4 text-muted-foreground" />
-            </CollapsibleTrigger>
-            <CollapsibleContent className="space-y-4 border-t p-4">
-              {advancedGroups.map((group, index) => (
-                <div className="space-y-2.5" key={group.title || `adv-${index}`}>
-                  {group.title ? (
-                    <h4 className="text-xs font-medium text-muted-foreground/70">
-                      {group.title}
-                    </h4>
-                  ) : null}
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {group.fields.map((field) => (
-                      <Field
-                        disabled={disabled}
-                        field={field}
-                        key={field.key}
-                        onChange={update}
-                        value={values[field.key]}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </CollapsibleContent>
-          </Collapsible>
-        </div>
+              disease={resolveContext(values, initialValues, "disease")}
+              onSupplementChange={(value) => update(supplementKey, value)}
+              parameter={resolveContext(values, initialValues, "parameter")}
+              stage={promptMeta.stage}
+              strategy={resolveContext(values, initialValues, "strategy")}
+              supplement={
+                typeof values[supplementKey] === "string"
+                  ? (values[supplementKey] as string)
+                  : ""
+              }
+            />
+          ) : null}
+        </>
       ) : null}
-
-      {config.stepNumber === 4 ? (
-        <CodebookPanel
-          disease={typeof values.disease === "string" ? values.disease : ""}
-          overridePath={
-            typeof values.codebook_path === "string"
-              ? values.codebook_path
-              : ""
-          }
-          parameter={
-            typeof values.parameter === "string" ? values.parameter : ""
-          }
-        />
-      ) : null}
-
-      {promptMeta && supplementKey ? (
-        <PromptPanel
-          disabled={disabled}
-          disease={resolveContext(values, initialValues, "disease")}
-          onSupplementChange={(value) => update(supplementKey, value)}
-          parameter={resolveContext(values, initialValues, "parameter")}
-          stage={promptMeta.stage}
-          strategy={resolveContext(values, initialValues, "strategy")}
-          supplement={
-            typeof values[supplementKey] === "string"
-              ? (values[supplementKey] as string)
-              : ""
-          }
-        />
-      ) : null}
-    </>
+    </div>
   )
 }
 
@@ -315,13 +347,20 @@ function Field({
   value,
   onChange,
   disabled,
+  wide = false,
 }: {
   field: StepField
   value: FieldValue
   onChange: (key: string, value: FieldValue) => void
   disabled: boolean
+  wide?: boolean
 }) {
   const fieldId = `step-field-${field.key}`
+  const shouldSpanFull =
+    wide ||
+    field.type === "tags" ||
+    field.type === "textarea" ||
+    field.type === "year_range"
 
   if (field.type === "switch") {
     return (
@@ -351,8 +390,8 @@ function Field({
   return (
     <div
       className={cn(
-        "space-y-1.5",
-        (field.type === "textarea") && "sm:col-span-2"
+        "min-w-0 space-y-1.5",
+        shouldSpanFull && "sm:col-span-2"
       )}
     >
       <label className="flex items-center gap-1 text-xs font-medium" htmlFor={fieldId}>
@@ -384,7 +423,7 @@ function Field({
           onValueChange={(next) => onChange(field.key, next)}
           value={typeof value === "string" ? value : ""}
         >
-          <SelectTrigger className="w-full" id={fieldId}>
+          <SelectTrigger className={cn("w-full", fieldControlClass)} id={fieldId}>
             <SelectValue placeholder={field.placeholder ?? "Select…"} />
           </SelectTrigger>
           <SelectContent>
@@ -397,6 +436,7 @@ function Field({
         </Select>
       ) : field.type === "textarea" ? (
         <Textarea
+          className="rounded-lg bg-background text-sm shadow-xs dark:bg-input/30"
           disabled={disabled}
           id={fieldId}
           onChange={(event) => onChange(field.key, event.target.value)}
@@ -406,6 +446,11 @@ function Field({
         />
       ) : (
         <Input
+          className={cn(
+            fieldControlClass,
+            field.type === "number" &&
+              "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          )}
           disabled={disabled}
           id={fieldId}
           max={field.max}
@@ -490,8 +535,8 @@ function TagsField({
   const available = suggestions.filter((item) => !tags.includes(item))
 
   return (
-    <div className="space-y-2">
-      <div className="flex min-h-9 flex-wrap items-center gap-1.5 rounded-lg border border-input bg-background px-2 py-1.5 transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50">
+    <div className="min-w-0 space-y-2">
+      <div className="flex min-h-8 flex-wrap items-center gap-1.5 rounded-lg border border-input bg-background px-2 py-0 transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50">
         {tags.map((tag) => (
           <Badge className="gap-1 pr-1" key={tag} variant="secondary">
             {tag}
@@ -507,7 +552,7 @@ function TagsField({
           </Badge>
         ))}
         <input
-          className="min-w-24 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
+          className="h-8 min-w-24 flex-1 bg-transparent text-sm leading-8 outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
           disabled={disabled}
           id={id}
           onBlur={() => addTag(draft)}
@@ -529,18 +574,20 @@ function TagsField({
         />
       </div>
       {available.length > 0 ? (
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-xs text-muted-foreground">Suggestions</span>
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5 pb-0.5">
+          <span className="shrink-0 text-xs text-muted-foreground">
+            Suggestions
+          </span>
           {available.map((suggestion) => (
             <button
-              className="inline-flex items-center gap-0.5 rounded-full border border-dashed bg-background px-2 py-0.5 text-xs text-muted-foreground transition-colors hover:border-solid hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex max-w-full shrink-0 items-center gap-0.5 rounded-full border border-dashed bg-background px-2 py-0.5 text-xs text-muted-foreground transition-colors hover:border-solid hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
               disabled={disabled}
               key={suggestion}
               onClick={() => addTag(suggestion)}
               type="button"
             >
               <PlusIcon className="size-3" />
-              {suggestion}
+              <span className="min-w-0 truncate">{suggestion}</span>
             </button>
           ))}
         </div>
@@ -584,7 +631,7 @@ function YearRangeField({
         }}
         value={from || ANY}
       >
-        <SelectTrigger className="w-full" id={id}>
+        <SelectTrigger className={cn("w-full", fieldControlClass)} id={id}>
           <SelectValue placeholder="From" />
         </SelectTrigger>
         <SelectContent>
@@ -606,7 +653,7 @@ function YearRangeField({
         }}
         value={to || ANY}
       >
-        <SelectTrigger className="w-full">
+        <SelectTrigger className={cn("w-full", fieldControlClass)}>
           <SelectValue placeholder="To" />
         </SelectTrigger>
         <SelectContent>

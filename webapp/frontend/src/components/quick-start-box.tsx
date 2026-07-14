@@ -225,8 +225,8 @@ export function QuickStartBox() {
             <BlurText text="What would you like to review?" />
           </h2>
           <p className="max-w-md text-sm text-muted-foreground sm:text-base">
-            Describe your question — I'll set up the 5-step systematic-review
-            pipeline and you stay in control of every step.
+            Describe your question — I'll set up the review pipeline and keep
+            each stage under your control.
           </p>
         </motion.div>
 

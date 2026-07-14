@@ -15,7 +15,7 @@ import type {
   StartStepResponse,
   StepRead,
 } from "./client/types.gen"
-import { subscribeToRunEvents } from "./events"
+import { getRunEvents, subscribeToRunEvents } from "./events"
 import { getApiBaseUrl } from "@/lib/config"
 
 export type CreateRunParams = NonNullable<CreateRunRequest["params"]>
@@ -26,6 +26,11 @@ export type StartStepResult = StartStepResponse
 export type StepRows = GetStepRowsRunsRunIdStepsStepNoRowsGetResponse
 export type SaveEditedStepBody = SaveEditedStepRequest
 
+type ListRunsOptions = {
+  limit?: number
+  offset?: number
+}
+
 export async function createRun(params: CreateRunParams = {}): Promise<Run> {
   const response = await createRunRunsPost({
     body: { params },
@@ -35,8 +40,14 @@ export async function createRun(params: CreateRunParams = {}): Promise<Run> {
   return response.data
 }
 
-export async function listRuns(): Promise<Run[]> {
-  const response = await listRunsRunsGet({ throwOnError: true })
+export async function listRuns(options: ListRunsOptions = {}): Promise<Run[]> {
+  const response = await listRunsRunsGet({
+    query:
+      typeof options.limit === "number" || typeof options.offset === "number"
+        ? options
+        : undefined,
+    throwOnError: true,
+  })
 
   return response.data
 }
@@ -127,5 +138,5 @@ export function artifactUrl(runId: string, stepNo: number): string {
   )}/steps/${stepNo}/artifact`
 }
 
-export { subscribeToRunEvents }
-export type { RunEvent, SubscribeToRunEventsOptions } from "./events"
+export { getRunEvents, subscribeToRunEvents }
+export type { GetRunEventsOptions, RunEvent, SubscribeToRunEventsOptions } from "./events"

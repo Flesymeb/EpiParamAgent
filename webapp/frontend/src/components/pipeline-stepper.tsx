@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { CheckIcon, XIcon } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
@@ -48,11 +48,91 @@ export function PipelineStepper({
     return statuses
   }, [stepStatuses])
   const previousSnapshotRef = useRef<StepperSnapshot | null>(null)
+  const navRef = useRef<HTMLElement | null>(null)
+  const activeStepButtonRef = useRef<HTMLButtonElement | null>(null)
+  const hasAlignedStepRef = useRef(false)
   const [motionEvent, setMotionEvent] = useState<StepperMotionEvent>({
     sweepConnectorStepNo: null,
     spinStepNo: null,
     token: 0,
   })
+
+  const alignActiveStep = useCallback(
+    (behavior: ScrollBehavior) => {
+      const nav = navRef.current
+      const activeButton = activeStepButtonRef.current
+
+      if (!nav || !activeButton) {
+        return
+      }
+
+      if (nav.scrollWidth <= nav.clientWidth) {
+        if (nav.scrollLeft !== 0) {
+          nav.scrollTo({ behavior: "auto", left: 0 })
+        }
+        return
+      }
+
+      const navRect = nav.getBoundingClientRect()
+      const activeRect = activeButton.getBoundingClientRect()
+      const targetLeft =
+        nav.scrollLeft +
+        activeRect.left -
+        navRect.left -
+        (nav.clientWidth - activeRect.width) / 2
+      const maxLeft = nav.scrollWidth - nav.clientWidth
+
+      nav.scrollTo({
+        behavior: shouldReduceMotion ? "auto" : behavior,
+        left: Math.max(0, Math.min(targetLeft, maxLeft)),
+      })
+    },
+    [shouldReduceMotion]
+  )
+
+  useEffect(() => {
+    const isInitialAlignment = !hasAlignedStepRef.current
+    hasAlignedStepRef.current = true
+    const frameId = window.requestAnimationFrame(() => {
+      alignActiveStep(isInitialAlignment ? "auto" : "smooth")
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [alignActiveStep, currentStepId])
+
+  useEffect(() => {
+    const nav = navRef.current
+    if (!nav) {
+      return
+    }
+
+    let frameId: number | null = null
+    const scheduleAlignment = () => {
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId)
+      }
+      frameId = window.requestAnimationFrame(() => {
+        frameId = null
+        alignActiveStep("auto")
+      })
+    }
+
+    const resizeObserver =
+      "ResizeObserver" in window
+        ? new window.ResizeObserver(scheduleAlignment)
+        : null
+
+    resizeObserver?.observe(nav)
+    window.addEventListener("resize", scheduleAlignment)
+
+    return () => {
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId)
+      }
+      resizeObserver?.disconnect()
+      window.removeEventListener("resize", scheduleAlignment)
+    }
+  }, [alignActiveStep])
 
   useEffect(() => {
     const snapshot: StepperSnapshot = {
@@ -122,8 +202,12 @@ export function PipelineStepper({
   }, [motionEvent.token, shouldReduceMotion])
 
   return (
-    <nav aria-label="Pipeline steps" className="w-full overflow-x-auto px-2 pb-1 pt-2.5">
-      <ol className="flex w-full items-start justify-center px-1 py-1">
+    <nav
+      aria-label="Pipeline steps"
+      className="w-full snap-x snap-mandatory overflow-x-auto px-1 pb-0.5 pt-1.5 [mask-image:linear-gradient(to_right,transparent,black_18px,black_calc(100%-18px),transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_18px,black_calc(100%-18px),transparent)] sm:px-2 sm:pb-1 sm:pt-2.5 lg:[mask-image:none] lg:[-webkit-mask-image:none]"
+      ref={navRef}
+    >
+      <ol className="flex w-max min-w-full items-start justify-start px-1 py-0.5 sm:py-1 md:w-full md:justify-center">
         {PIPELINE_STEPS.map((step, index) => {
           const isActive = step.id === currentStepId
           const normalizedStatus =
@@ -148,13 +232,13 @@ export function PipelineStepper({
 
           return (
             <li
-              className="relative flex w-24 flex-none flex-col items-center gap-1.5"
+              className="relative flex w-[5.25rem] flex-none snap-center flex-col items-center gap-1 min-[360px]:w-28 sm:gap-1.5 md:w-24"
               key={step.id}
             >
               {index > 0 ? (
                 <span
                   aria-hidden="true"
-                  className="absolute left-[-28px] top-5 z-0 h-px w-[56px] overflow-hidden rounded-full bg-border"
+                  className="absolute left-[-22px] top-5 z-0 h-px w-11 overflow-hidden rounded-full bg-border min-[360px]:left-[-36px] min-[360px]:w-[72px] md:left-[-28px] md:w-[56px]"
                 >
                   {/* permanent green fill once the previous step is done */}
                   <motion.span
@@ -213,7 +297,7 @@ export function PipelineStepper({
                 aria-current={isActive ? "step" : undefined}
                 aria-label={`${step.number}. ${step.label}`}
                 className={cn(
-                  "relative z-10 size-10 overflow-visible rounded-full border bg-card p-0 transition-[border-color,box-shadow,transform] duration-200 hover:shadow-sm motion-safe:hover:-translate-y-0.5 dark:bg-background",
+                  "relative z-20 isolate size-10 overflow-visible rounded-full border bg-card p-0 transition-[border-color,box-shadow,transform] duration-200 hover:shadow-sm motion-safe:hover:-translate-y-0.5 dark:bg-card",
                   "border-border text-muted-foreground hover:bg-muted/70 hover:text-foreground",
                   isActive &&
                     "border-emerald-500/55 text-emerald-700 shadow-sm shadow-emerald-500/15 dark:text-emerald-300",
@@ -224,11 +308,12 @@ export function PipelineStepper({
                     "border-sky-500/45 text-sky-700 dark:text-sky-300"
                 )}
                 onClick={() => onStepChange(step.id)}
+                ref={isActive ? activeStepButtonRef : undefined}
                 variant="outline"
               >
                 <span
                   aria-hidden="true"
-                  className="absolute inset-0 z-0 rounded-full bg-card dark:bg-background"
+                  className="absolute inset-0 z-0 rounded-full bg-card dark:bg-card"
                 />
                 {buttonTintClass ? (
                   <span

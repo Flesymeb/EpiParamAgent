@@ -180,6 +180,16 @@ export const STEP_CONFIGS: Record<number, StepConfig> = {
       "The LLM screens each title/abstract for eligibility against the inclusion criteria. Tune batch size and decision strategy as needed.",
     fields: [
       {
+        key: "input_path",
+        label: "Raw CSV path (override)",
+        type: "text",
+        group: "Input",
+        placeholder: "dataset/covid19/screening/serial_interval/p13/raw.csv",
+        helperText:
+          "Skip Retrieval and screen this CSV directly. Leave blank to use the Retrieval output.",
+        advanced: true,
+      },
+      {
         key: "research_question",
         label: "Inclusion criteria",
         type: "textarea",
@@ -263,9 +273,9 @@ export const STEP_CONFIGS: Record<number, StepConfig> = {
           { value: "extract", label: "Extract — LLM coding (runs fetch+index)" },
           { value: "both", label: "Both — index + extract" },
         ],
-        defaultValue: "both",
+        defaultValue: "index",
         helperText:
-          "How far to run the coding pipeline. Both produces the structured index and the coding sheet in one pass.",
+          "How far to run the coding pipeline. Choose Both when you want the index and coding sheet in one pass.",
       },
       {
         key: "profile",

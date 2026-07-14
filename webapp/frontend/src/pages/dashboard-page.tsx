@@ -3,8 +3,10 @@ import { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import {
   ArrowUpRightIcon,
+  ChevronDownIcon,
   ClockIcon,
   InboxIcon,
+  LoaderCircleIcon,
   RefreshCwIcon,
   SearchXIcon,
 } from "lucide-react"
@@ -39,13 +41,18 @@ const STATUS_FILTERS = [
   { value: "pending", label: "Pending" },
 ] as const
 
+const RUNS_PAGE_SIZE = 24
+const RUNS_PAGE_QUERY_SIZE = RUNS_PAGE_SIZE + 1
+
 type StatusFilter = (typeof STATUS_FILTERS)[number]["value"]
 
 type RunsState = {
   runs: Run[]
   error: string | null
   isRefreshing: boolean
+  isLoadingMore: boolean
   hasLoaded: boolean
+  hasMore: boolean
 }
 
 export function DashboardPage() {
@@ -55,7 +62,9 @@ export function DashboardPage() {
     runs: [],
     error: null,
     isRefreshing: false,
+    isLoadingMore: false,
     hasLoaded: false,
+    hasMore: false,
   })
 
   useEffect(() => {
@@ -63,13 +72,17 @@ export function DashboardPage() {
 
     async function loadRuns() {
       try {
-        const runs = await listRuns()
+        const page = toRunsPage(
+          await listRuns({ limit: RUNS_PAGE_QUERY_SIZE, offset: 0 })
+        )
         if (active) {
           setRunsState({
-            runs,
+            runs: page.runs,
             error: null,
             isRefreshing: false,
+            isLoadingMore: false,
             hasLoaded: true,
+            hasMore: page.hasMore,
           })
         }
       } catch (error) {
@@ -79,7 +92,9 @@ export function DashboardPage() {
             runs: [],
             error: message,
             isRefreshing: false,
+            isLoadingMore: false,
             hasLoaded: true,
+            hasMore: false,
           })
           toast.error(`Failed to load runs: ${message}`)
         }
@@ -97,12 +112,16 @@ export function DashboardPage() {
     setRunsState((current) => ({ ...current, isRefreshing: true }))
 
     try {
-      const runs = await listRuns()
+      const page = toRunsPage(
+        await listRuns({ limit: RUNS_PAGE_QUERY_SIZE, offset: 0 })
+      )
       setRunsState({
-        runs,
+        runs: page.runs,
         error: null,
         isRefreshing: false,
+        isLoadingMore: false,
         hasLoaded: true,
+        hasMore: page.hasMore,
       })
     } catch (error) {
       const message = getErrorMessage(error)
@@ -110,9 +129,50 @@ export function DashboardPage() {
         ...current,
         error: message,
         isRefreshing: false,
+        isLoadingMore: false,
         hasLoaded: true,
       }))
       toast.error(`Failed to refresh runs: ${message}`)
+    }
+  }
+
+  async function loadMoreRuns() {
+    if (runsState.isLoadingMore || runsState.isRefreshing) {
+      return
+    }
+
+    const offset = runsState.runs.length
+    setRunsState((current) => ({ ...current, isLoadingMore: true }))
+
+    try {
+      const page = toRunsPage(
+        await listRuns({ limit: RUNS_PAGE_QUERY_SIZE, offset })
+      )
+      setRunsState((current) => {
+        const seenRunIds = new Set(current.runs.map((run) => run.id))
+        const mergedRuns = [
+          ...current.runs,
+          ...page.runs.filter((run) => !seenRunIds.has(run.id)),
+        ]
+
+        return {
+          ...current,
+          runs: mergedRuns,
+          error: null,
+          isLoadingMore: false,
+          hasLoaded: true,
+          hasMore: page.hasMore,
+        }
+      })
+    } catch (error) {
+      const message = getErrorMessage(error)
+      setRunsState((current) => ({
+        ...current,
+        error: message,
+        isLoadingMore: false,
+        hasLoaded: true,
+      }))
+      toast.error(`Failed to load older runs: ${message}`)
     }
   }
 
@@ -148,7 +208,9 @@ export function DashboardPage() {
               <BlurText text="Runs" />
             </h1>
             <Badge variant="outline">
-              {runsState.hasLoaded ? `${runsState.runs.length} runs` : "..."}
+              {runsState.hasLoaded
+                ? `${runsState.runs.length}${runsState.hasMore ? "+" : ""} runs`
+                : "..."}
             </Badge>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -342,6 +404,25 @@ export function DashboardPage() {
           })
         )}
       </div>
+
+      {runsState.hasLoaded && runsState.hasMore ? (
+        <div className="flex justify-center pt-1">
+          <Button
+            disabled={runsState.isLoadingMore || runsState.isRefreshing}
+            onClick={() => {
+              void loadMoreRuns()
+            }}
+            variant="outline"
+          >
+            {runsState.isLoadingMore ? (
+              <LoaderCircleIcon className="motion-safe:animate-spin motion-reduce:animate-none" />
+            ) : (
+              <ChevronDownIcon />
+            )}
+            Load older runs
+          </Button>
+        </div>
+      ) : null}
     </div>
   )
 }
@@ -368,6 +449,13 @@ function RunCardSkeleton() {
       </CardContent>
     </Card>
   )
+}
+
+function toRunsPage(runs: Run[]) {
+  return {
+    runs: runs.slice(0, RUNS_PAGE_SIZE),
+    hasMore: runs.length > RUNS_PAGE_SIZE,
+  }
 }
 
 function handleRunCardKeyDown(

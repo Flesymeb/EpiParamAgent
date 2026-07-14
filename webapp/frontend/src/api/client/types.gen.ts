@@ -5,6 +5,66 @@ export type ClientOptions = {
 };
 
 /**
+ * CodebookField
+ */
+export type CodebookField = {
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Label
+     */
+    label?: string | null;
+    /**
+     * Type
+     */
+    type?: string | null;
+    /**
+     * Required
+     */
+    required?: boolean;
+    /**
+     * Prompt
+     */
+    prompt?: string | null;
+};
+
+/**
+ * CodebookRead
+ */
+export type CodebookRead = {
+    /**
+     * Disease
+     */
+    disease: string;
+    /**
+     * Parameter
+     */
+    parameter: string;
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Effect Type
+     */
+    effect_type?: string | null;
+    /**
+     * Notes
+     */
+    notes?: string | null;
+    /**
+     * Fields
+     */
+    fields?: Array<CodebookField>;
+};
+
+/**
  * CreateRunRequest
  */
 export type CreateRunRequest = {
@@ -27,6 +87,130 @@ export type HttpValidationError = {
 };
 
 /**
+ * LLMProfileRead
+ */
+export type LlmProfileRead = {
+    /**
+     * Provider
+     */
+    provider?: string;
+    /**
+     * Model
+     */
+    model?: string;
+    /**
+     * Api Base
+     */
+    api_base?: string;
+    /**
+     * Temperature
+     */
+    temperature?: string;
+    /**
+     * Max Tokens
+     */
+    max_tokens?: string;
+    /**
+     * Timeout S
+     */
+    timeout_s?: string;
+    /**
+     * Verify Ssl
+     */
+    verify_ssl?: 'default' | 'true' | 'false';
+    /**
+     * Has Api Key
+     */
+    has_api_key?: boolean;
+    /**
+     * Has Module Api Key
+     */
+    has_module_api_key?: boolean;
+    /**
+     * Api Key Hint
+     */
+    api_key_hint?: string;
+    /**
+     * Resolved Provider
+     */
+    resolved_provider?: string;
+    /**
+     * Resolved Model
+     */
+    resolved_model?: string;
+    /**
+     * Resolved Api Base
+     */
+    resolved_api_base?: string;
+};
+
+/**
+ * LLMProfileUpdate
+ */
+export type LlmProfileUpdate = {
+    /**
+     * Provider
+     */
+    provider?: string | null;
+    /**
+     * Model
+     */
+    model?: string | null;
+    /**
+     * Api Base
+     */
+    api_base?: string | null;
+    /**
+     * Api Key
+     */
+    api_key?: string | null;
+    /**
+     * Clear Api Key
+     */
+    clear_api_key?: boolean;
+    /**
+     * Temperature
+     */
+    temperature?: string | null;
+    /**
+     * Max Tokens
+     */
+    max_tokens?: string | null;
+    /**
+     * Timeout S
+     */
+    timeout_s?: string | null;
+    /**
+     * Verify Ssl
+     */
+    verify_ssl?: 'default' | 'true' | 'false' | null;
+};
+
+/**
+ * LLMSettingsRead
+ */
+export type LlmSettingsRead = {
+    /**
+     * Profiles
+     */
+    profiles: {
+        [key: string]: LlmProfileRead;
+    };
+};
+
+/**
+ * LLMSettingsUpdate
+ */
+export type LlmSettingsUpdate = {
+    /**
+     * Profiles
+     */
+    profiles?: {
+        [key: string]: LlmProfileUpdate;
+    };
+};
+
+/**
  * RunDetail
  */
 export type RunDetail = {
@@ -35,6 +219,36 @@ export type RunDetail = {
      * Steps
      */
     steps: Array<StepRead>;
+};
+
+/**
+ * RunEventRead
+ */
+export type RunEventRead = {
+    /**
+     * Id
+     */
+    id: number;
+    /**
+     * Run Id
+     */
+    run_id: string;
+    /**
+     * Step No
+     */
+    step_no: number | null;
+    /**
+     * Ts
+     */
+    ts: string;
+    /**
+     * Level
+     */
+    level: string;
+    /**
+     * Message
+     */
+    message: string;
 };
 
 /**
@@ -81,6 +295,36 @@ export type SaveEditedStepRequest = {
     data?: {
         [key: string]: unknown;
     } | null;
+};
+
+/**
+ * StagePromptRead
+ */
+export type StagePromptRead = {
+    /**
+     * Stage
+     */
+    stage: string;
+    /**
+     * Has Prompt
+     */
+    has_prompt: boolean;
+    /**
+     * Source
+     */
+    source?: string | null;
+    /**
+     * System
+     */
+    system?: string | null;
+    /**
+     * User
+     */
+    user?: string | null;
+    /**
+     * Output
+     */
+    output?: string | null;
 };
 
 /**
@@ -212,9 +456,27 @@ export type ValidationError = {
 export type ListRunsRunsGetData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Limit
+         */
+        limit?: number | null;
+        /**
+         * Offset
+         */
+        offset?: number;
+    };
     url: '/runs';
 };
+
+export type ListRunsRunsGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListRunsRunsGetError = ListRunsRunsGetErrors[keyof ListRunsRunsGetErrors];
 
 export type ListRunsRunsGetResponses = {
     /**
@@ -453,6 +715,195 @@ export type StreamEventsRunsRunIdEventsGetResponses = {
      */
     200: unknown;
 };
+
+export type ListRunEventsRunsRunIdEventsHistoryGetData = {
+    body?: never;
+    path: {
+        /**
+         * Run Id
+         */
+        run_id: string;
+    };
+    query?: {
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/runs/{run_id}/events/history';
+};
+
+export type ListRunEventsRunsRunIdEventsHistoryGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListRunEventsRunsRunIdEventsHistoryGetError = ListRunEventsRunsRunIdEventsHistoryGetErrors[keyof ListRunEventsRunsRunIdEventsHistoryGetErrors];
+
+export type ListRunEventsRunsRunIdEventsHistoryGetResponses = {
+    /**
+     * Response List Run Events Runs  Run Id  Events History Get
+     *
+     * Successful Response
+     */
+    200: Array<RunEventRead>;
+};
+
+export type ListRunEventsRunsRunIdEventsHistoryGetResponse = ListRunEventsRunsRunIdEventsHistoryGetResponses[keyof ListRunEventsRunsRunIdEventsHistoryGetResponses];
+
+export type GetCodebookCodebooksDiseaseParameterGetData = {
+    body?: never;
+    path: {
+        /**
+         * Disease
+         */
+        disease: string;
+        /**
+         * Parameter
+         */
+        parameter: string;
+    };
+    query?: never;
+    url: '/codebooks/{disease}/{parameter}';
+};
+
+export type GetCodebookCodebooksDiseaseParameterGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetCodebookCodebooksDiseaseParameterGetError = GetCodebookCodebooksDiseaseParameterGetErrors[keyof GetCodebookCodebooksDiseaseParameterGetErrors];
+
+export type GetCodebookCodebooksDiseaseParameterGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: CodebookRead;
+};
+
+export type GetCodebookCodebooksDiseaseParameterGetResponse = GetCodebookCodebooksDiseaseParameterGetResponses[keyof GetCodebookCodebooksDiseaseParameterGetResponses];
+
+export type GetStepIndexRunsRunIdStepsStepNoIndexGetData = {
+    body?: never;
+    path: {
+        /**
+         * Run Id
+         */
+        run_id: string;
+        /**
+         * Step No
+         */
+        step_no: number;
+    };
+    query?: never;
+    url: '/runs/{run_id}/steps/{step_no}/index';
+};
+
+export type GetStepIndexRunsRunIdStepsStepNoIndexGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetStepIndexRunsRunIdStepsStepNoIndexGetError = GetStepIndexRunsRunIdStepsStepNoIndexGetErrors[keyof GetStepIndexRunsRunIdStepsStepNoIndexGetErrors];
+
+export type GetStepIndexRunsRunIdStepsStepNoIndexGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: StepTableRows;
+};
+
+export type GetStepIndexRunsRunIdStepsStepNoIndexGetResponse = GetStepIndexRunsRunIdStepsStepNoIndexGetResponses[keyof GetStepIndexRunsRunIdStepsStepNoIndexGetResponses];
+
+export type GetStagePromptPromptsStageGetData = {
+    body?: never;
+    path: {
+        /**
+         * Stage
+         */
+        stage: string;
+    };
+    query?: {
+        /**
+         * Disease
+         */
+        disease?: string | null;
+        /**
+         * Parameter
+         */
+        parameter?: string | null;
+        /**
+         * Strategy
+         */
+        strategy?: string | null;
+    };
+    url: '/prompts/{stage}';
+};
+
+export type GetStagePromptPromptsStageGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetStagePromptPromptsStageGetError = GetStagePromptPromptsStageGetErrors[keyof GetStagePromptPromptsStageGetErrors];
+
+export type GetStagePromptPromptsStageGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: StagePromptRead;
+};
+
+export type GetStagePromptPromptsStageGetResponse = GetStagePromptPromptsStageGetResponses[keyof GetStagePromptPromptsStageGetResponses];
+
+export type ReadLlmSettingsSettingsLlmGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/settings/llm';
+};
+
+export type ReadLlmSettingsSettingsLlmGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: LlmSettingsRead;
+};
+
+export type ReadLlmSettingsSettingsLlmGetResponse = ReadLlmSettingsSettingsLlmGetResponses[keyof ReadLlmSettingsSettingsLlmGetResponses];
+
+export type UpdateLlmSettingsSettingsLlmPutData = {
+    body: LlmSettingsUpdate;
+    path?: never;
+    query?: never;
+    url: '/settings/llm';
+};
+
+export type UpdateLlmSettingsSettingsLlmPutErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateLlmSettingsSettingsLlmPutError = UpdateLlmSettingsSettingsLlmPutErrors[keyof UpdateLlmSettingsSettingsLlmPutErrors];
+
+export type UpdateLlmSettingsSettingsLlmPutResponses = {
+    /**
+     * Successful Response
+     */
+    200: LlmSettingsRead;
+};
+
+export type UpdateLlmSettingsSettingsLlmPutResponse = UpdateLlmSettingsSettingsLlmPutResponses[keyof UpdateLlmSettingsSettingsLlmPutResponses];
 
 export type HealthHealthGetData = {
     body?: never;

@@ -15,6 +15,29 @@ export type SubscribeToRunEventsOptions = {
   signal?: AbortSignal
 }
 
+export type GetRunEventsOptions = {
+  limit?: number
+  signal?: AbortSignal
+}
+
+export async function getRunEvents(
+  runId: string,
+  { limit = 500, signal }: GetRunEventsOptions = {},
+): Promise<RunEvent[]> {
+  const base = getApiBaseUrl().replace(/\/$/, "")
+  const params = new URLSearchParams({ limit: String(limit) })
+  const response = await fetch(
+    `${base}/runs/${encodeURIComponent(runId)}/events/history?${params}`,
+    { signal },
+  )
+
+  if (!response.ok) {
+    throw new Error(`Events request failed (${response.status})`)
+  }
+
+  return (await response.json()) as RunEvent[]
+}
+
 export function subscribeToRunEvents(
   runId: string,
   { onEvent, onError, signal }: SubscribeToRunEventsOptions,

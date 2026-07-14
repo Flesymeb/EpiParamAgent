@@ -34,6 +34,17 @@ class RunDetail(BaseModel):
     steps: list[StepRead]
 
 
+class RunEventRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    run_id: str
+    step_no: int | None
+    ts: datetime
+    level: str
+    message: str
+
+
 class StartStepResponse(BaseModel):
     run: RunRead
     step: StepRead

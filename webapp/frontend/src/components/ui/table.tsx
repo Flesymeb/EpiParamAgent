@@ -4,26 +4,57 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-function Table({ className, ...props }: React.ComponentProps<"table">) {
+type TableProps = React.ComponentProps<"table"> & {
+  containerClassName?: string
+  unwrapped?: boolean
+}
+
+function Table({
+  className,
+  containerClassName,
+  unwrapped = false,
+  ...props
+}: TableProps) {
+  const table = (
+    <table
+      data-slot="table"
+      className={cn("w-full caption-bottom text-sm", className)}
+      {...props}
+    />
+  )
+
+  if (unwrapped) {
+    return table
+  }
+
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto"
+      className={cn("relative w-full overflow-x-auto", containerClassName)}
     >
-      <table
-        data-slot="table"
-        className={cn("w-full caption-bottom text-sm", className)}
-        {...props}
-      />
+      {table}
     </div>
   )
 }
 
-function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
+type TableHeaderProps = React.ComponentProps<"thead"> & {
+  sticky?: boolean
+}
+
+function TableHeader({
+  className,
+  sticky = false,
+  ...props
+}: TableHeaderProps) {
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:border-b", className)}
+      className={cn(
+        "[&_tr]:border-b",
+        sticky &&
+          "sticky top-0 z-30 bg-muted [&_th]:sticky [&_th]:top-0 [&_th]:z-30 [&_th]:bg-muted [&_th]:shadow-[0_1px_0_var(--border)]",
+        className
+      )}
       {...props}
     />
   )

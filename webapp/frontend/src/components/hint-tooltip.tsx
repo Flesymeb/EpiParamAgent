@@ -24,7 +24,7 @@ export function HintTooltip({
         <button
           aria-label={label}
           className={cn(
-            "inline-flex size-4 shrink-0 items-center justify-center rounded-full text-muted-foreground/70 outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50",
+            "inline-flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/70 outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50",
             className
           )}
           type="button"

@@ -226,39 +226,39 @@ export function SettingsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="h-[min(88vh,560px)] grid-rows-[auto_minmax(0,1fr)_auto] gap-0 overflow-hidden p-0 sm:max-w-[920px]">
+      <DialogContent className="h-[min(88vh,620px)] grid-rows-[auto_minmax(0,1fr)_auto] gap-0 overflow-hidden p-0 sm:max-w-[920px]">
         <DialogHeader className="px-5 pt-5 pr-12 pb-4">
           <DialogTitle>Settings</DialogTitle>
           <DialogDescription>
-            Configure local UI preferences, backend connection, and run
-            defaults.
+            Configure UI preferences, backend connection, LLM providers, and
+            run defaults.
           </DialogDescription>
         </DialogHeader>
 
         <Tabs
-          className="min-h-0 flex-col gap-0 overflow-hidden border-t sm:grid sm:grid-cols-[13.5rem_minmax(0,1fr)]"
+          className="min-h-0 gap-0 overflow-hidden border-t sm:grid sm:grid-cols-[13rem_minmax(0,1fr)]"
           defaultValue={settingsCategories[0].value}
-          orientation="vertical"
         >
           <TabsList
-            className="max-h-40 w-full items-stretch justify-start gap-1 overflow-y-auto rounded-none border-b bg-muted/25 p-2 sm:max-h-none sm:border-r sm:border-b-0 sm:bg-muted/20"
-            variant="line"
+            className="h-auto min-h-[52px] w-full justify-start gap-1 overflow-x-auto rounded-none border-b bg-muted/25 p-2 sm:h-full sm:min-h-0 sm:w-auto sm:flex-col sm:items-stretch sm:justify-start sm:overflow-visible sm:border-b-0 sm:border-r sm:bg-muted/15 sm:p-3"
           >
             {settingsCategories.map((item) => {
               const Icon = item.icon
 
               return (
                 <TabsTrigger
-                  className="h-auto w-full justify-start gap-2 px-2.5 py-2 text-left"
+                  aria-label={`${item.label}, ${item.description}`}
+                  className="h-9 flex-none justify-center gap-2 px-3 sm:h-12 sm:w-full sm:justify-start"
                   key={item.value}
                   value={item.value}
                 >
                   <Icon className="size-4 text-muted-foreground" />
-                  <span className="grid min-w-0 flex-1 gap-0.5">
-                    <span className="truncate text-sm font-medium">
-                      {item.label}
-                    </span>
-                    <span className="truncate text-xs font-normal text-muted-foreground">
+                  <span className="min-w-0 text-left sm:grid">
+                    <span className="text-sm font-medium">{item.label}</span>
+                    <span
+                      aria-hidden="true"
+                      className="hidden truncate text-xs font-normal text-muted-foreground sm:block"
+                    >
                       {item.description}
                     </span>
                   </span>
@@ -267,7 +267,7 @@ export function SettingsDialog({
             })}
           </TabsList>
 
-          <div className="min-h-0 overflow-y-auto p-4 sm:p-5">
+          <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-20 pt-4 sm:px-5 sm:pb-20 sm:pt-5">
             <TabsContent value="appearance" className="mt-0 space-y-4">
               <section className="space-y-3">
                 <SectionHeading icon={PaletteIcon} title="Appearance" />
@@ -326,7 +326,7 @@ export function SettingsDialog({
             </TabsContent>
 
             <TabsContent value="llm" className="mt-0 space-y-4">
-              <section className="space-y-3">
+              <section className="space-y-3 pb-2">
                 <SectionHeading icon={BrainCircuitIcon} title="LLM" />
                 <div className="flex flex-col gap-2 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
                   <p>
@@ -339,7 +339,7 @@ export function SettingsDialog({
                     <span>Loading LLM settings…</span>
                   ) : null}
                 </div>
-                <div className="grid gap-3 lg:grid-cols-2">
+                <div className="grid gap-3">
                   {llmModules.map((module) => (
                     <LLMProfilePanel
                       disabled={isLoadingLLM || isSavingLLM}
@@ -350,7 +350,7 @@ export function SettingsDialog({
                     />
                   ))}
                 </div>
-                <div className="flex justify-end">
+                <div className="sticky bottom-0 z-10 -mx-4 flex justify-end border-t border-border/70 bg-background/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/80 sm:-mx-5 sm:px-5">
                   <Button
                     disabled={isLoadingLLM || isSavingLLM}
                     onClick={() => {
@@ -370,7 +370,7 @@ export function SettingsDialog({
                   icon={SlidersHorizontalIcon}
                   title="Run defaults"
                 />
-                <div className="grid gap-3 sm:grid-cols-2">
+                <div className="grid gap-3">
                   <div className="space-y-1.5">
                     <FieldLabel htmlFor="settings-default-disease">
                       Default disease
@@ -517,11 +517,13 @@ function LLMProfilePanel({
   const fieldPrefix = `settings-llm-${module.id}`
 
   return (
-    <div className="space-y-3 rounded-lg border bg-muted/15 p-3">
-      <div className="space-y-1">
-        <div className="flex items-center justify-between gap-2">
-          <h4 className="text-sm font-medium">{module.label}</h4>
-          <span className="rounded-full border bg-background px-2 py-0.5 text-[0.7rem] text-muted-foreground">
+    <div className="min-w-0 space-y-3 rounded-lg border bg-muted/15 p-3">
+      <div className="min-w-0 space-y-1">
+        <div className="flex min-w-0 items-center justify-between gap-2">
+          <h4 className="min-w-0 truncate text-sm font-medium">
+            {module.label}
+          </h4>
+          <span className="shrink-0 rounded-full border bg-background px-2 py-0.5 text-[0.7rem] text-muted-foreground">
             {module.envPrefix}
           </span>
         </div>
@@ -532,9 +534,9 @@ function LLMProfilePanel({
         </p>
       </div>
 
-      <div className="grid gap-3">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-          <div className="space-y-1.5">
+      <div className="grid min-w-0 gap-3">
+        <div className="grid min-w-0 gap-3">
+          <div className="min-w-0 space-y-1.5">
             <FieldLabel htmlFor={`${fieldPrefix}-provider`}>
               Provider
             </FieldLabel>
@@ -546,7 +548,7 @@ function LLMProfilePanel({
               value={profile.provider}
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="min-w-0 space-y-1.5">
             <FieldLabel htmlFor={`${fieldPrefix}-model`}>Model</FieldLabel>
             <Input
               disabled={disabled}
@@ -558,7 +560,7 @@ function LLMProfilePanel({
           </div>
         </div>
 
-        <div className="space-y-1.5">
+        <div className="min-w-0 space-y-1.5">
           <FieldLabel
             hint="OpenAI-compatible base URL for this module. Stored as *_LLM_API_BASE in .env.local."
             htmlFor={`${fieldPrefix}-api-base`}
@@ -583,7 +585,7 @@ function LLMProfilePanel({
           ) : null}
         </div>
 
-        <div className="space-y-1.5">
+        <div className="min-w-0 space-y-1.5">
           <FieldLabel
             hint="Saved to backend .env.local. The current key is never sent back to the browser."
             htmlFor={`${fieldPrefix}-api-key`}
@@ -604,11 +606,11 @@ function LLMProfilePanel({
             type="password"
             value={profile.api_key}
           />
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-xs text-muted-foreground">
+          <div className="flex min-w-0 flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <span className="min-w-0 max-w-full truncate text-xs text-muted-foreground">
               {formatApiKeyStatus(profile)}
             </span>
-            <label className="flex items-center gap-2 text-xs text-muted-foreground">
+            <label className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
               <Switch
                 checked={profile.clear_api_key}
                 disabled={disabled || !profile.has_module_api_key}
@@ -625,8 +627,8 @@ function LLMProfilePanel({
           </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-          <div className="space-y-1.5">
+        <div className="grid min-w-0 gap-3">
+          <div className="min-w-0 space-y-1.5">
             <FieldLabel htmlFor={`${fieldPrefix}-temperature`}>
               Temperature
             </FieldLabel>
@@ -644,7 +646,7 @@ function LLMProfilePanel({
               value={profile.temperature}
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="min-w-0 space-y-1.5">
             <FieldLabel htmlFor={`${fieldPrefix}-max-tokens`}>
               Max tokens
             </FieldLabel>
@@ -661,7 +663,7 @@ function LLMProfilePanel({
               value={profile.max_tokens}
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="min-w-0 space-y-1.5">
             <FieldLabel htmlFor={`${fieldPrefix}-timeout`}>
               Timeout seconds
             </FieldLabel>
@@ -676,7 +678,7 @@ function LLMProfilePanel({
               value={profile.timeout_s}
             />
           </div>
-          <div className="space-y-1.5">
+          <div className="min-w-0 space-y-1.5">
             <FieldLabel htmlFor={`${fieldPrefix}-verify-ssl`}>
               Verify SSL
             </FieldLabel>

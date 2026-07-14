@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field as PydanticField
 from sqlmodel import Session, select
@@ -20,6 +20,7 @@ from app.events import event_hub, log_event, serialize_event
 from app.models import PipelineRun, PipelineStep, RunEvent
 from app.schemas import (
     RunDetail,
+    RunEventRead,
     RunRead,
     SaveEditedStepRequest,
     StartStepResponse,
@@ -72,12 +73,15 @@ def create_run(
 
 
 @router.get("/runs", response_model=list[RunRead])
-def list_runs(session: Session = Depends(get_session)) -> list[RunRead]:
-    runs = list(
-        session.exec(
-            select(PipelineRun).order_by(PipelineRun.created_at.desc())
-        ).all()
-    )
+def list_runs(
+    limit: int | None = Query(default=None, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+    session: Session = Depends(get_session),
+) -> list[RunRead]:
+    query = select(PipelineRun).order_by(PipelineRun.created_at.desc()).offset(offset)
+    if limit is not None:
+        query = query.limit(limit)
+    runs = list(session.exec(query).all())
     return [RunRead.model_validate(run) for run in runs]
 
 
@@ -477,6 +481,30 @@ async def stream_events(
                 }
 
     return EventSourceResponse(generate_events(), ping=15)
+
+
+@router.get("/runs/{run_id}/events/history", response_model=list[RunEventRead])
+def list_run_events(
+    run_id: str,
+    limit: int = 500,
+    session: Session = Depends(get_session),
+) -> list[RunEventRead]:
+    run = session.get(PipelineRun, run_id)
+    if run is None:
+        raise HTTPException(status_code=404, detail="Run not found")
+
+    bounded_limit = max(1, min(limit, 1000))
+    events = list(
+        session.exec(
+            select(RunEvent)
+            .where(RunEvent.run_id == run_id)
+            .order_by(RunEvent.id.desc())
+            .limit(bounded_limit)
+        ).all()
+    )
+    events.reverse()
+
+    return [RunEventRead.model_validate(event) for event in events]
 
 
 # ── Codebook introspection (read-only) ───────────────────────────────────────

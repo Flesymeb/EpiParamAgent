@@ -30,16 +30,16 @@ export function SectionCard({
   children: ReactNode
 }) {
   return (
-    <Card className="relative gap-0 overflow-hidden py-0">
+    <Card className="relative min-w-0 gap-0 overflow-hidden py-0">
       {running ? <RunningProgressBar /> : null}
-      <div className="flex items-center gap-2 border-b bg-muted/20 px-4 py-2.5">
+      <div className="flex items-center gap-2 border-b border-border/70 bg-muted/20 px-3 py-2 sm:px-4 sm:py-2.5">
         {Icon ? <Icon className="size-4 shrink-0 text-primary" /> : null}
         <span className="min-w-0 flex-1 truncate text-sm font-medium">
           {title}
         </span>
         {action ? <div className="shrink-0">{action}</div> : null}
       </div>
-      <div className="p-4">{children}</div>
+      <div className="min-w-0 overflow-x-clip p-3 sm:p-4">{children}</div>
     </Card>
   )
 }
