@@ -7,6 +7,7 @@ under ``evaluation/screening/``.
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -25,8 +26,13 @@ DATASET_DISEASE_DIRS = {
 }
 
 
-def _normalize_topic(topic: str) -> str:
+def normalize_key(topic: str) -> str:
+    """Normalize a human label for config and filesystem comparisons."""
     return str(topic).strip().lower().replace("-", "_").replace(" ", "_")
+
+
+def _normalize_topic(topic: str) -> str:
+    return normalize_key(topic)
 
 
 def _dataset_disease_dir_name(disease_key: str) -> str:
@@ -46,6 +52,8 @@ class ScreeningProfile:
     parameter_exclude: str
     thresholds: dict[str, Any]
     policies: dict[str, Any]
+    query_date_from: str | None = None
+    query_date_to: str | None = None
 
     @property
     def topic_key(self) -> str:
@@ -87,6 +95,8 @@ class ScreeningProfile:
             "parameter_exclude": self.parameter_exclude,
             "thresholds": self.thresholds,
             "policies": self.policies,
+            "query_date_from": self.query_date_from,
+            "query_date_to": self.query_date_to,
         }
 
 
@@ -122,6 +132,12 @@ def _merge_profile(defaults: dict[str, Any], profile_id: str, topic: str, diseas
         parameter_exclude=str(merged.get("parameter_exclude", "none")),
         thresholds=dict(merged.get("thresholds", {})),
         policies=dict(merged.get("policies", {})),
+        query_date_from=str(merged["query_date_from"])
+        if merged.get("query_date_from")
+        else None,
+        query_date_to=str(merged["query_date_to"])
+        if merged.get("query_date_to")
+        else None,
     )
 
 
@@ -160,6 +176,61 @@ def get_profile(profile_name: str | None) -> ScreeningProfile | None:
     if not profile_name:
         return None
     return load_profile_registry().get(str(profile_name).upper())
+
+
+def resolve_profile_context(
+    profile_name: str,
+    *,
+    disease: str | None = None,
+    topic: str | None = None,
+    project_id: str | None = None,
+) -> ScreeningProfile:
+    """Resolve a profile and reject explicit values that contradict it."""
+    profile = get_profile(profile_name)
+    if profile is None:
+        raise KeyError(f"Unknown screening profile: {profile_name}")
+
+    conflicts: list[str] = []
+    if disease and normalize_key(disease) != profile.disease_key:
+        conflicts.append(f"--disease={disease} (profile uses {profile.disease_key})")
+    if topic and normalize_key(topic) != profile.topic_key:
+        conflicts.append(f"--parameter={topic} (profile uses {profile.topic_key})")
+    if project_id and normalize_key(project_id) != profile.project_dir_name:
+        conflicts.append(
+            f"--project-id={project_id} (profile uses {profile.project_dir_name})"
+        )
+    if conflicts:
+        raise ValueError(
+            f"{', '.join(conflicts)} conflicts with profile {profile.profile_key}. "
+            "Use the profile alone, or omit --profile and provide an explicit project context."
+        )
+    return profile
+
+
+def load_profile_project_metadata(
+    *,
+    project_root: str | Path,
+    profile: ScreeningProfile,
+) -> dict[str, Any]:
+    """Load optional retrieval metadata stored with a profile's dataset project."""
+    project_file = (
+        Path(project_root)
+        / "dataset"
+        / _dataset_disease_dir_name(profile.disease_key)
+        / "screening"
+        / profile.topic_key
+        / profile.project_dir_name
+        / "project.json"
+    )
+    if not project_file.exists():
+        return {}
+    try:
+        payload = json.loads(project_file.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"Cannot read profile project metadata: {project_file}: {exc}") from exc
+    if not isinstance(payload, dict):
+        raise ValueError(f"Profile project metadata must be a JSON object: {project_file}")
+    return payload
 
 
 def resolve_profile_paths(
@@ -245,6 +316,9 @@ __all__ = [
     "ScreeningProfile",
     "ScreeningProjectPaths",
     "get_profile",
+    "load_profile_project_metadata",
     "load_profile_registry",
+    "normalize_key",
+    "resolve_profile_context",
     "resolve_profile_paths",
 ]

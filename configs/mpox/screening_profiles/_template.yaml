@@ -1,4 +1,5 @@
 topic: example_topic
+disease: mpox
 
 defaults:
   thresholds:
@@ -25,6 +26,8 @@ defaults:
 profiles:
   P00:
     project_number: 0
+    query_date_from: "YYYY-MM-DD"
+    query_date_to: "YYYY-MM-DD"
     research_question: Replace with the study question for this project.
     disease_focus: "(COVID-19 OR SARS-CoV-2)"
     disease_exclude: "none"

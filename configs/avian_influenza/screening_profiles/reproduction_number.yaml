@@ -46,6 +46,8 @@ defaults:
 profiles:
   AIR1:
     project_number: 1
+    query_date_from: "2000-01-01"
+    query_date_to: "2026-07-14"
     research_question: What are the reproduction number estimates for avian influenza transmission in humans?
     disease_focus: >-
       avian influenza or bird flu or human infection with an avian influenza A

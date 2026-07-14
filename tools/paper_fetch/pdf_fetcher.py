@@ -49,6 +49,15 @@ except ImportError:
         return re.sub(r"[^A-Za-z0-9._-]+", "_", s).strip("_")
 
 
+def normalize_pmcid(value):
+    """Return a canonical PMCID from common NCBI identifier representations."""
+    text = str(value or "").strip()
+    if text.isdigit():
+        return f"PMC{text}"
+    match = re.search(r"PMC\s*([0-9]+)", text, flags=re.IGNORECASE)
+    return f"PMC{match.group(1)}" if match else ""
+
+
 class SciHubUrlExtractor:
     def __init__(self):
         # Configure proxy if environment variable is set
@@ -792,7 +801,7 @@ class SciHubUrlExtractor:
                 if id_type == "doi" and value:
                     doi = value
                 if id_type in ("pmc", "pmcid") and value:
-                    pmcid = value if value.startswith("PMC") else f"PMC{value}"
+                    pmcid = normalize_pmcid(value)
             return (doi, pmcid)
         except Exception:
             return ("", "")
@@ -800,8 +809,9 @@ class SciHubUrlExtractor:
     def _try_pmc_by_pmcid(self, pmcid):
         """Try to get full-text PDF from PMC by PMCID."""
         try:
-            pmcid = re.sub(r"^.*?(PMC\d+).*$", r"\1", pmcid, flags=re.IGNORECASE)
-            pmcid = pmcid if pmcid.startswith("PMC") else f"PMC{pmcid}"
+            pmcid = normalize_pmcid(pmcid)
+            if not pmcid:
+                return None
             html_url = f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/"
             html_resp = self.sess.get(html_url, timeout=10)
             if html_resp.status_code != 200:
@@ -841,21 +851,64 @@ class SciHubUrlExtractor:
             pass
         return None
 
+    def _europe_pmc_pdf_urls(self, pmcid):
+        """Return open-access PDF candidates reported by Europe PMC."""
+        pmcid = normalize_pmcid(pmcid)
+        if not pmcid:
+            return []
+        try:
+            resp = self.sess.get(
+                "https://www.ebi.ac.uk/europepmc/webservices/rest/search",
+                params={
+                    "query": f"PMCID:{pmcid}",
+                    "format": "json",
+                    "resultType": "core",
+                    "pageSize": 1,
+                },
+                timeout=20,
+            )
+            if resp.status_code != 200:
+                return []
+            rows = resp.json().get("resultList", {}).get("result", [])
+            if not rows:
+                return []
+            links = rows[0].get("fullTextUrlList", {}).get("fullTextUrl", [])
+            candidates = []
+            for link in links:
+                if str(link.get("documentStyle", "")).casefold() != "pdf":
+                    continue
+                if str(link.get("availabilityCode", "")).upper() != "OA":
+                    continue
+                url = str(link.get("url", "")).strip()
+                if url and url not in candidates:
+                    candidates.append(url)
+            return candidates
+        except Exception:
+            return []
+
     def _process_pmcid(self, pmcid, download_dir=None):
         """Resolve PMCID to a PMC PDF and optionally download it."""
         url_results = []
-        pmcid = re.sub(r"^.*?(PMC\d+).*$", r"\1", pmcid, flags=re.IGNORECASE)
-        pmc_url = self._try_pmc_by_pmcid(pmcid)
-        if not pmc_url:
-            cprint(f"  [PMC] No PMC PDF found for {pmcid}", "yellow")
+        pmcid = normalize_pmcid(pmcid)
+        if not pmcid:
             return url_results
+        pmc_url = self._try_pmc_by_pmcid(pmcid)
+        oa_candidates = []
+        primary_source = "PubMed Central"
+        if not pmc_url:
+            oa_candidates = self._europe_pmc_pdf_urls(pmcid)
+            if not oa_candidates:
+                cprint(f"  [PMC] No open-access PDF found for {pmcid}", "yellow")
+                return url_results
+            pmc_url = oa_candidates[0]
+            primary_source = "Europe PMC open-access link"
 
         if not download_dir:
             url_results.append(
                 {
                     "url": pmc_url,
                     "download_url": pmc_url,
-                    "source": "PubMed Central",
+                    "source": primary_source,
                     "status": "available",
                     "code": 200,
                     "size": None,
@@ -871,7 +924,7 @@ class SciHubUrlExtractor:
                 {
                     "url": pmc_url,
                     "download_url": pmc_url,
-                    "source": "PubMed Central",
+                    "source": primary_source,
                     "status": "downloaded",
                     "local_path": str(pdf_path),
                     "code": 200,
@@ -903,11 +956,40 @@ class SciHubUrlExtractor:
                     {
                         "url": pmc_url,
                         "download_url": pmc_url,
-                        "source": "PubMed Central",
+                        "source": primary_source,
                         "status": "downloaded",
                         "local_path": str(pdf_path),
                         "code": 200,
                         "size": len(resp.content),
+                    }
+                )
+                return url_results
+
+            for fallback_url in oa_candidates or self._europe_pmc_pdf_urls(pmcid):
+                if fallback_url == pmc_url:
+                    continue
+                fallback = self.sess.get(
+                    fallback_url,
+                    headers=pmc_headers,
+                    timeout=30,
+                )
+                if fallback.status_code != 200 or fallback.content[:4] != b"%PDF":
+                    continue
+                pdf_path.write_bytes(fallback.content)
+                size_mb = len(fallback.content) / 1024 / 1024
+                cprint(
+                    f"  [PMC] Saved {pdf_path.name} via Europe PMC ({size_mb:.2f} MB)",
+                    "green",
+                )
+                url_results.append(
+                    {
+                        "url": fallback_url,
+                        "download_url": fallback_url,
+                        "source": "Europe PMC open-access link",
+                        "status": "downloaded",
+                        "local_path": str(pdf_path),
+                        "code": 200,
+                        "size": len(fallback.content),
                     }
                 )
                 return url_results

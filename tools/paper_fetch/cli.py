@@ -88,6 +88,8 @@ def _show_plan_summary(
 
 
 @pdf.command("fetch")
+@click.option("--profile", "-p", default=None, help="Review profile (AI1, AIR1, P10, etc.)")
+@click.option("--project-root", default="", help="Repository root (auto-detected if empty)")
 @click.option("--disease", help="Target disease or pathogen")
 @click.option("--parameter", help="Target epidemiological parameter")
 @click.option("--project-id", default=None, help="Review task identifier (default: p1)")
@@ -123,6 +125,8 @@ def _show_plan_summary(
 @click.option("--interactive/--no-interactive", default=None, help="Enable or disable the guided wizard")
 @click.option("--json", "json_output", is_flag=True, help="Emit a machine-readable result")
 def fetch(
+    profile,
+    project_root,
     disease,
     parameter,
     project_id,
@@ -145,7 +149,28 @@ def fetch(
     """
     if interactive is None:
         interactive = sys.stdin.isatty()
-    root = resolve_project_root()
+    root = (
+        resolve_project_root()
+        if not project_root
+        else Path(project_root).expanduser().resolve()
+    )
+    resolved_profile = None
+    if profile:
+        from metaagent.screening.profile_registry import resolve_profile_context
+
+        try:
+            resolved_profile = resolve_profile_context(
+                profile,
+                disease=disease,
+                topic=parameter,
+                project_id=project_id,
+            )
+        except (KeyError, ValueError) as exc:
+            raise click.UsageError(str(exc)) from exc
+        disease = resolved_profile.disease_key
+        parameter = resolved_profile.topic_key
+        project_id = resolved_profile.project_dir_name
+        source = source or "screened"
 
     if interactive and not json_output:
         console.print(
@@ -188,16 +213,25 @@ def fetch(
     if source == "custom" and input_path is None:
         raise click.UsageError("--input is required when --source=custom")
     if input_path is None:
-        try:
-            input_path = default_fetch_input(
+        if resolved_profile is not None and source in {"raw", "screened"}:
+            from metaagent.screening.profile_registry import resolve_profile_paths
+
+            _, paths = resolve_profile_paths(
                 project_root=root,
-                disease=disease,
-                parameter=parameter,
-                project_id=project_id,
-                source=source,
+                profile_name=resolved_profile.profile_key,
             )
-        except ValueError as exc:
-            raise click.UsageError(str(exc)) from exc
+            input_path = paths.raw_file if source == "raw" else paths.screened_file
+        else:
+            try:
+                input_path = default_fetch_input(
+                    project_root=root,
+                    disease=disease,
+                    parameter=parameter,
+                    project_id=project_id,
+                    source=source,
+                )
+            except ValueError as exc:
+                raise click.UsageError(str(exc)) from exc
     input_path = input_path.expanduser().resolve()
 
     if tiers is None:
@@ -280,6 +314,7 @@ def fetch(
             console.print(f"[{ACCENT_DIM}]Status manifest: {result_path}[/{ACCENT_DIM}]")
 
     payload = {
+        "profile": resolved_profile.profile_key if resolved_profile else None,
         "disease": disease,
         "parameter": parameter,
         "project_id": project_id,

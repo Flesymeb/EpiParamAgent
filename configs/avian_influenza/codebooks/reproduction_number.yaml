@@ -1,0 +1,68 @@
+topic: reproduction_number
+
+project:
+  name: "Avian Influenza Human Reproduction Number"
+  description: "Extract original human-transmission R0, Rt, or Re estimates."
+  effect_type: "reproduction_number"
+
+stage_a:
+  prompt_file: ../coding_prompts/stage_a_reproduction_number.py
+stage_b:
+  prompt_file: ../coding_prompts/stage_b_reproduction_number.py
+
+parameters:
+  research_question: >
+    What reproduction-number estimates have been produced for avian-influenza
+    transmission involving humans?
+
+notes: |
+  Extract estimates produced by the primary paper from human outbreak or
+  transmission data. Prefer R0 over Rt/Re when both are reported. Exclude
+  animal-only estimates, cited values, and fixed or hypothetical model inputs.
+
+fields:
+  - {name: pmid, label: PMID, type: str, required: true, prompt: "PubMed ID."}
+  - {name: study, label: Study, type: str, required: true, prompt: "Author/year or short study label."}
+  - {name: region, label: Region, type: str, required: true, prompt: "Study country or region."}
+  - {name: estimation_period, label: Estimation_Period, type: str, required: true, prompt: "Time window used for estimation."}
+  - {name: population, label: Population, type: str, prompt: "Human population or outbreak context."}
+  - {name: sample_size, label: Sample_Size, type: str, prompt: "Cases, contacts, clusters, or observations used."}
+  - {name: method, label: Method, type: str, required: true, prompt: "Estimation method as reported."}
+  - {name: model_type, label: Model_Type, type: str, prompt: "SIR | SEIR | branching process | other | NR."}
+  - {name: data_type, label: Data_Type, type: str, prompt: "Cases | clusters | contacts | incidence | other."}
+  - {name: parameter_type, label: Parameter_Type, type: str, required: true, prompt: "R0 | Rt | Re | other."}
+  - {name: estimate_measure, label: Estimate_Measure, type: str, required: true, prompt: "Use mean as the standardized pooling tag."}
+  - {name: point_estimate, label: Point_Estimate, type: float, prompt: "Primary reproduction-number estimate."}
+  - {name: unit, label: Unit, type: str, required: true, prompt: "Use dimensionless."}
+  - {name: uncertainty_type, label: Uncertainty_Type, type: str, prompt: "CI | CrI | SD | SE | Range | NR."}
+  - {name: uncertainty_level, label: Uncertainty_Level, type: str, prompt: "95% | 90% | NR | Other."}
+  - {name: uncertainty_low, label: Uncertainty_Low, type: float, prompt: "Lower uncertainty bound."}
+  - {name: uncertainty_high, label: Uncertainty_High, type: float, prompt: "Upper uncertainty bound."}
+  - {name: is_pre_intervention, label: Is_Pre_Intervention, type: bool, prompt: "True for a naive/pre-control population."}
+  - {name: method_category, label: Method_Category, type: str, prompt: "Growth | likelihood | Bayesian | compartmental | branching | other."}
+  - {name: generation_interval_assumed, label: Generation_Interval_Assumed, type: str, prompt: "External SI/GI assumption, if any."}
+  - {name: method_notes, label: Method_Notes, type: str, prompt: "Context needed to interpret the estimate."}
+  - {name: notes, label: Notes, type: str, prompt: "Alternative estimates or caveats."}
+  - {name: evidence_locations, label: Evidence_Locations, type: "list[str]", prompt: "One to three supporting locations."}
+
+index_schema:
+  - {name: region_raw, path: study_meta.region_raw}
+  - {name: period_raw, path: study_meta.period_raw}
+  - {name: population_raw, path: study_meta.population_raw}
+  - {name: sample_size_raw, path: study_meta.sample_size_raw}
+  - {name: method_raw, path: study_meta.method_raw}
+  - {name: data_type_raw, path: study_meta.data_type_raw}
+  - {name: method_category, path: method_index.method_category}
+  - {name: generation_interval_assumed, path: method_index.generation_interval_assumed}
+  - {name: is_pre_intervention, path: method_index.is_pre_intervention}
+  - {name: parameter_hint, path: field_evidence.parameter_type}
+  - {name: estimate_hint, path: field_evidence.point_estimate}
+
+quality_rules:
+  missing_penalties: {point_estimate: 0.3}
+  review_threshold: 0.7
+
+extraction:
+  mode: full_context
+  max_input_chars: 500000
+  truncation_marker: "\n\n[... document truncated ...]\n"

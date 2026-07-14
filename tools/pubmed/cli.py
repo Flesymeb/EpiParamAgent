@@ -20,6 +20,13 @@ from metaagent._cli_shared import (
     console,
     resolve_project_root,
     show_success,
+    show_warning,
+)
+from tools.pubmed.metadata import (
+    MetadataCompleteness,
+    MetadataCompletionResult,
+    complete_csv_metadata,
+    inspect_csv_metadata,
 )
 from tools.pubmed.query_generator import (
     PubMedQueryGenerator,
@@ -110,8 +117,78 @@ def _show_query_summary(artifact, output_dir: Path) -> None:
         console.print(f"[yellow]Warning:[/yellow] {warning}")
 
 
+def _metadata_payload(summary: MetadataCompleteness) -> dict[str, int]:
+    """Return stable metadata counts for JSON output."""
+    return summary.as_dict()
+
+
+def _show_metadata_summary(
+    summary: MetadataCompleteness,
+    path: Path,
+    *,
+    title: str = "PubMed metadata",
+) -> None:
+    """Display available and missing screening metadata."""
+    table = Table(title=title, header_style=f"bold {ACCENT_BOLD}", border_style=ACCENT_DIM)
+    table.add_column("Field", style=f"bold {ACCENT}")
+    table.add_column("Available", justify="right")
+    table.add_column("Missing", justify="right")
+    for label, missing in (
+        ("PMID", summary.missing_pmid),
+        ("Title", summary.missing_title),
+        ("Abstract", summary.missing_abstract),
+        ("Keywords", summary.missing_keywords),
+    ):
+        available = max(0, summary.total_rows - missing)
+        missing_style = "yellow" if missing else "green"
+        table.add_row(label, str(available), f"[{missing_style}]{missing}[/{missing_style}]")
+    console.print(table)
+    console.print(f"[{ACCENT_DIM}]Records: {summary.total_rows}  •  File: {path}[/{ACCENT_DIM}]")
+
+
+def _show_metadata_completion(result: MetadataCompletionResult) -> None:
+    """Display before/after missing-field counts after completion."""
+    table = Table(
+        title="Metadata completion",
+        header_style=f"bold {ACCENT_BOLD}",
+        border_style=ACCENT_DIM,
+    )
+    table.add_column("Field", style=f"bold {ACCENT}")
+    table.add_column("Before", justify="right")
+    table.add_column("After", justify="right")
+    table.add_column("Recovered", justify="right")
+    for label, attr in (
+        ("PMID", "missing_pmid"),
+        ("Title", "missing_title"),
+        ("Abstract", "missing_abstract"),
+        ("Keywords", "missing_keywords"),
+    ):
+        before = getattr(result.before, attr)
+        after = getattr(result.after, attr)
+        table.add_row(label, str(before), str(after), str(max(0, before - after)))
+    console.print(table)
+    if result.backup_path:
+        console.print(f"[{ACCENT_DIM}]Backup: {result.backup_path}[/{ACCENT_DIM}]")
+    console.print(f"[{ACCENT_DIM}]Completion record: {result.marker_path}[/{ACCENT_DIM}]")
+    if result.after.has_any_gaps:
+        show_warning(
+            "Some fields remain unavailable. PubMed does not provide abstracts or "
+            "keywords for every record; these papers remain eligible for downstream handling."
+        )
+
+
+def _complete_metadata(path: Path, *, json_output: bool = False) -> MetadataCompletionResult:
+    """Complete metadata with a visible status in human-facing mode."""
+    if json_output:
+        return complete_csv_metadata(path, quiet=True)
+    with console.status("[bold cyan]Completing available metadata from PubMed...[/bold cyan]"):
+        return complete_csv_metadata(path, quiet=True)
+
+
 # ── query ──────────────────────────────────────────────────────────────
 @pubmed.command("query")
+@click.option("--profile", "-p", default=None, help="Review profile (AI1, AIR1, P10, etc.)")
+@click.option("--project-root", default="", help="Repository root (auto-detected if empty)")
 @click.option("--question", help="Systematic-review research question")
 @click.option("--disease", help="Target disease or pathogen")
 @click.option("--parameter", help="Target epidemiological parameter")
@@ -140,9 +217,16 @@ def _show_query_summary(artifact, output_dir: Path) -> None:
 @click.option("--search/--no-search", "run_search", default=None, help="Run PubMed after saving the query")
 @click.option("--retmax", default=None, help="Maximum PubMed records or 'all' (default: all)")
 @click.option("--medline-only", is_flag=True, help="Restrict retrieval to MEDLINE-indexed records")
+@click.option(
+    "--fix-missing/--no-fix-missing",
+    default=None,
+    help="Complete available title, abstract, and keyword metadata after retrieval.",
+)
 @click.option("--force", is_flag=True, help="Replace existing query/raw files")
 @click.option("--json", "json_output", is_flag=True, help="Emit a machine-readable result")
 def query_command(
+    profile,
+    project_root,
     question,
     disease,
     parameter,
@@ -159,6 +243,7 @@ def query_command(
     run_search,
     retmax,
     medline_only,
+    fix_missing,
     force,
     json_output,
 ):
@@ -171,9 +256,54 @@ def query_command(
     """
     if custom_query and query_file:
         raise click.UsageError("Use only one of --query and --query-file")
+    if fix_missing is True and run_search is False:
+        raise click.UsageError("--fix-missing requires --search")
     manual_mode = bool(manual_query or custom_query or query_file)
     if interactive is None:
         interactive = sys.stdin.isatty()
+    if fix_missing is True and not interactive and run_search is not True:
+        raise click.UsageError("--fix-missing requires --search in non-interactive mode")
+
+    root = (
+        resolve_project_root()
+        if not project_root
+        else Path(project_root).expanduser().resolve()
+    )
+    resolved_profile = None
+    if profile:
+        from metaagent.screening.profile_registry import (
+            load_profile_project_metadata,
+            resolve_profile_context,
+        )
+
+        try:
+            resolved_profile = resolve_profile_context(
+                profile,
+                disease=disease,
+                topic=parameter,
+                project_id=project_id,
+            )
+            project_metadata = load_profile_project_metadata(
+                project_root=root,
+                profile=resolved_profile,
+            )
+        except (KeyError, ValueError) as exc:
+            raise click.UsageError(str(exc)) from exc
+
+        question = question or resolved_profile.research_question
+        disease = disease or resolved_profile.disease_key.replace("_", " ")
+        parameter = parameter or resolved_profile.topic_key.replace("_", " ")
+        project_id = project_id or resolved_profile.project_dir_name
+        start_date = (
+            start_date
+            or resolved_profile.query_date_from
+            or project_metadata.get("query_date_from")
+        )
+        end_date = (
+            end_date
+            or resolved_profile.query_date_to
+            or project_metadata.get("query_date_to")
+        )
 
     required = {
         "--question": question,
@@ -228,12 +358,21 @@ def query_command(
         raise click.UsageError(str(exc)) from exc
 
     if output_dir is None:
-        output_dir = default_output_dir(
-            project_root=resolve_project_root(),
-            disease=request.disease,
-            parameter=request.parameter,
-            project_id=request.project_id,
-        )
+        if resolved_profile is not None:
+            from metaagent.screening.profile_registry import resolve_profile_paths
+
+            _, profile_paths = resolve_profile_paths(
+                project_root=root,
+                profile_name=resolved_profile.profile_key,
+            )
+            output_dir = profile_paths.project_dir
+        else:
+            output_dir = default_output_dir(
+                project_root=root,
+                disease=request.disease,
+                parameter=request.parameter,
+                project_id=request.project_id,
+            )
     output_dir = output_dir.expanduser().resolve()
 
     query_files_exist = any((output_dir / name).exists() for name in ("query.json", "query.txt"))
@@ -267,6 +406,8 @@ def query_command(
         run_search = click.confirm("Search PubMed now?", default=False) if interactive else False
 
     search_result = None
+    metadata_result: MetadataCompletionResult | None = None
+    metadata_before: MetadataCompleteness | None = None
     raw_path = output_dir / "raw.csv"
     if run_search:
         if raw_path.exists() and not force:
@@ -295,6 +436,33 @@ def query_command(
                 f"({search_result['total_matches']} total matches)"
             )
 
+        try:
+            metadata_before = inspect_csv_metadata(raw_path)
+        except (OSError, ValueError) as exc:
+            raise click.ClickException(f"Cannot inspect retrieved metadata: {exc}") from exc
+
+        if not json_output:
+            _show_metadata_summary(metadata_before, raw_path)
+
+        enrichment_available = bool(
+            metadata_before.needs_screening_enrichment
+            or metadata_before.has_optional_gaps
+        )
+        should_complete = bool(fix_missing)
+        if fix_missing is None and interactive and not json_output and enrichment_available:
+            should_complete = click.confirm(
+                "Complete available metadata from PubMed now?",
+                default=True,
+            )
+        if should_complete and enrichment_available:
+            try:
+                metadata_result = _complete_metadata(raw_path, json_output=json_output)
+            except Exception as exc:
+                raise click.ClickException(f"PubMed metadata completion failed: {exc}") from exc
+            if not json_output:
+                _show_metadata_completion(metadata_result)
+                show_success(f"Metadata-ready CSV: {raw_path}")
+
     if json_output:
         payload = artifact.model_dump(mode="json")
         payload["files"] = {
@@ -303,6 +471,20 @@ def query_command(
             "raw_csv": str(raw_path) if search_result is not None else None,
         }
         payload["search"] = search_result
+        if metadata_before is None:
+            payload["metadata"] = None
+        elif metadata_result is not None:
+            payload["metadata"] = metadata_result.as_dict()
+        else:
+            payload["metadata"] = {
+                "attempted": False,
+                "input": str(raw_path),
+                "output": str(raw_path),
+                "backup": None,
+                "marker": None,
+                "before": _metadata_payload(metadata_before),
+                "after": _metadata_payload(metadata_before),
+            }
         click.echo(json.dumps(payload, ensure_ascii=False))
 
 
@@ -330,12 +512,113 @@ def fetch(pmids, output):
     _run_pubmed_manager(argv)
 
 
+# ── metadata ───────────────────────────────────────────────────────────
+@pubmed.group("metadata", cls=StyledGroup)
+def metadata_group():
+    """Inspect or complete metadata used for screening."""
+
+
+@metadata_group.command("inspect")
+@click.option(
+    "--input",
+    "input_file",
+    type=click.Path(path_type=Path, exists=True, dir_okay=False, readable=True),
+    required=True,
+    help="PubMed CSV to inspect",
+)
+@click.option("--json", "json_output", is_flag=True, help="Emit machine-readable counts")
+def metadata_inspect(input_file: Path, json_output: bool):
+    """Report missing PMID, title, abstract, and keyword values."""
+    try:
+        summary = inspect_csv_metadata(input_file)
+    except (OSError, ValueError) as exc:
+        raise click.ClickException(f"Cannot inspect {input_file}: {exc}") from exc
+
+    if json_output:
+        click.echo(
+            json.dumps(
+                {"input": str(input_file.resolve()), **_metadata_payload(summary)},
+                ensure_ascii=False,
+            )
+        )
+        return
+    _show_metadata_summary(summary, input_file.resolve(), title="Metadata completeness")
+
+
+@metadata_group.command("complete")
+@click.option(
+    "--input",
+    "input_file",
+    type=click.Path(path_type=Path, exists=True, dir_okay=False, readable=True),
+    required=True,
+    help="PubMed CSV containing incomplete metadata",
+)
+@click.option(
+    "--output",
+    "output_file",
+    type=click.Path(path_type=Path, dir_okay=False),
+    default=None,
+    help="Output CSV; defaults to an in-place update with backup",
+)
+@click.option("--backup/--no-backup", default=True, help="Back up an in-place input before updating")
+@click.option("--force", is_flag=True, help="Replace an existing separate output file")
+@click.option("--json", "json_output", is_flag=True, help="Emit a machine-readable result")
+def metadata_complete(
+    input_file: Path,
+    output_file: Path | None,
+    backup: bool,
+    force: bool,
+    json_output: bool,
+):
+    """Retrieve available missing metadata from PubMed EFetch."""
+    source = input_file.expanduser().resolve()
+    target = (output_file or source).expanduser().resolve()
+    if target != source and target.exists() and not force:
+        raise click.ClickException(
+            f"Output already exists: {target}. Use --force to replace it."
+        )
+
+    try:
+        before = inspect_csv_metadata(source)
+    except (OSError, ValueError) as exc:
+        raise click.ClickException(f"Cannot inspect {source}: {exc}") from exc
+    if not json_output:
+        _show_metadata_summary(before, source, title="Before metadata completion")
+
+    try:
+        if json_output:
+            result = complete_csv_metadata(
+                source,
+                target,
+                create_backup=backup,
+                quiet=True,
+            )
+        else:
+            with console.status(
+                "[bold cyan]Completing available metadata from PubMed...[/bold cyan]"
+            ):
+                result = complete_csv_metadata(
+                    source,
+                    target,
+                    create_backup=backup,
+                    quiet=True,
+                )
+    except Exception as exc:
+        raise click.ClickException(f"PubMed metadata completion failed: {exc}") from exc
+
+    if json_output:
+        click.echo(json.dumps(result.as_dict(), ensure_ascii=False))
+        return
+    _show_metadata_completion(result)
+    show_success(f"Metadata-ready CSV: {result.output_path}")
+
+
 # ── fix ────────────────────────────────────────────────────────────────
-@pubmed.command("fix")
+@pubmed.command("fix", hidden=True)
 @click.option("--input", "-i", required=True, help="Input CSV with missing fields")
 @click.option("--output", "-o", required=True, help="Output CSV with fixed fields")
 def fix(input, output):
-    """Fix missing abstract/keywords in PubMed CSV."""
+    """Legacy alias for metadata completion."""
     argv = ["fix-missing", "--input", input, "--output", output]
     _run_pubmed_manager(argv)
 

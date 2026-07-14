@@ -47,6 +47,8 @@ DISEASE_DIR_ALIASES = {
     "covid-19": "covid19",
     "COVID-19": "covid19",
     "mpox": "mpox",
+    "avian_influenza": "avian_influenza",
+    "avian-influenza": "avian_influenza",
 }
 
 for p in (TOOLS_SRC,):
@@ -60,6 +62,7 @@ TOPIC_PARAM = {
     "serial_interval":     "serial_interval",
     "reproduction_number": "R0",
     "fatality":            "CFR",
+    "positivity_rate":     "positivity_rate",
 }
 
 

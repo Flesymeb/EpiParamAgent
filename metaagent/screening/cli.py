@@ -124,6 +124,22 @@ def run(project_root, profile, disease, topic, input_file, output_file,
                      model, provider, temperature, strategy, experiment, prefer_llm_tier)
         return
 
+    if not profile and not input_file:
+        raise click.UsageError("Provide --profile or --input for screening.")
+    if not profile and not research_question:
+        raise click.UsageError(
+            "Explicit input mode requires --research-question when --profile is omitted."
+        )
+    if output_file and not input_file and not profile:
+        raise click.UsageError("--output without --input requires --profile.")
+    if profile:
+        from metaagent.screening.profile_registry import resolve_profile_context
+
+        try:
+            resolve_profile_context(profile, disease=disease, topic=topic or None)
+        except (KeyError, ValueError) as exc:
+            raise click.UsageError(str(exc)) from exc
+
     if interactive is None:
         interactive = sys.stdin.isatty()
     resolved_input = _resolve_run_input(
@@ -327,9 +343,22 @@ def _preflight_input_metadata(
         raise click.ClickException(f"Cannot inspect screening input {input_path}: {exc}") from exc
 
     marker_path = _metadata_marker_path(input_path)
-    optional_refresh_due = before.has_optional_gaps and not marker_path.exists()
-    enrichment_due = before.needs_screening_enrichment or optional_refresh_due
+    marker_is_current = bool(
+        marker_path.exists()
+        and marker_path.stat().st_mtime_ns >= input_path.stat().st_mtime_ns
+    )
+    has_enrichable_gaps = bool(
+        before.needs_screening_enrichment or before.has_optional_gaps
+    )
+    enrichment_due = has_enrichable_gaps and (
+        fix_missing is True or not marker_is_current
+    )
     if not enrichment_due:
+        if before.needs_screening_enrichment and marker_is_current:
+            show_warning(
+                "A previous PubMed completion attempt left some titles or abstracts "
+                "unavailable; screening will use the available metadata."
+            )
         return
 
     if interactive:

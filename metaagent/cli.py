@@ -15,8 +15,10 @@ from metaagent._cli_shared import (
     console,
 )
 from metaagent.coding.cli import coding
+from metaagent.completion import completion
 from metaagent.evaluation.cli import evaluation
 from metaagent.screening.cli import screening
+from metaagent.workflow import workflow
 from tools.paper_fetch.cli import pdf
 from tools.pubmed.cli import pubmed
 
@@ -38,7 +40,7 @@ _LOGO_META = [
     "╚═╝  ╚═╝╚═════╝   ╚═╝   ╚═╝  ╚═╝",
 ]
 _LOGO_AGENT = [
-    " █████╗  █████╗ ██████╗ ██╗ ██╗ ██████╗ ",
+    " █████╗  █████╗  ██████╗ ██╗ ██╗ ██████╗ ",
     "██╔══██╗██╔═══╝ ██╔═══╝ ███████║╚══██╔╝ ",
     "███████║██║ ██╗ █████╗  ██╔████║  ██║   ",
     "██╔══██║██║ ╚██╗██╔══╝  ██║╚███║  ██║   ",
@@ -93,6 +95,8 @@ main.add_command(coding)
 main.add_command(evaluation)
 main.add_command(pubmed)
 main.add_command(pdf)
+main.add_command(completion)
+main.add_command(workflow)
 
 
 if __name__ == "__main__":

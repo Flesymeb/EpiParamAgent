@@ -45,6 +45,8 @@ defaults:
 profiles:
   AI1:
     project_number: 1
+    query_date_from: "2000-01-01"
+    query_date_to: "2026-07-14"
     research_question: What is the positivity rate of avian influenza infection in humans?
     disease_focus: >-
       avian influenza or bird flu or fowl plague or human infection with an

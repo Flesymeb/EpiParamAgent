@@ -1,9 +1,14 @@
-"""Inspect PubMed CSV metadata before screening."""
+"""Inspect and complete PubMed CSV metadata used by screening."""
 
 from __future__ import annotations
 
 import csv
-from dataclasses import dataclass
+import json
+import shutil
+from contextlib import redirect_stdout
+from dataclasses import asdict, dataclass
+from datetime import UTC, datetime
+from io import StringIO
 from pathlib import Path
 
 
@@ -27,6 +32,45 @@ class MetadataCompleteness:
         """Return whether optional keyword metadata is incomplete."""
         return bool(self.missing_keywords)
 
+    @property
+    def has_any_gaps(self) -> bool:
+        """Return whether any inspected metadata field is incomplete."""
+        return bool(
+            self.missing_pmid
+            or self.missing_title
+            or self.missing_abstract
+            or self.missing_keywords
+        )
+
+    def as_dict(self) -> dict[str, int]:
+        """Return a stable JSON-serializable representation."""
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class MetadataCompletionResult:
+    """Outcome of one explicit PubMed metadata-completion attempt."""
+
+    input_path: Path
+    output_path: Path
+    backup_path: Path | None
+    marker_path: Path
+    before: MetadataCompleteness
+    after: MetadataCompleteness
+    log: str = ""
+
+    def as_dict(self) -> dict[str, object]:
+        """Return paths and before/after counts for CLI JSON output."""
+        return {
+            "attempted": True,
+            "input": str(self.input_path),
+            "output": str(self.output_path),
+            "backup": str(self.backup_path) if self.backup_path else None,
+            "marker": str(self.marker_path),
+            "before": self.before.as_dict(),
+            "after": self.after.as_dict(),
+        }
+
 
 def inspect_csv_metadata(path: Path) -> MetadataCompleteness:
     """Count missing PMID, title, abstract, and keyword values in a CSV."""
@@ -46,4 +90,83 @@ def inspect_csv_metadata(path: Path) -> MetadataCompleteness:
     )
 
 
-__all__ = ["MetadataCompleteness", "inspect_csv_metadata"]
+def metadata_marker_path(path: Path) -> Path:
+    """Return the marker written after a completion attempt."""
+    path = Path(path)
+    return path.with_name(f"{path.stem}.metadata_enrichment.json")
+
+
+def complete_csv_metadata(
+    input_path: Path,
+    output_path: Path | None = None,
+    *,
+    create_backup: bool = True,
+    quiet: bool = True,
+) -> MetadataCompletionResult:
+    """Retrieve available missing title, abstract, and keyword metadata.
+
+    The operation is safe for in-place updates: the original CSV is copied to
+    ``<stem>.before_enrichment.csv`` once, and a JSON marker records both the
+    pre- and post-completion counts. Missing fields that PubMed itself does not
+    provide remain empty.
+    """
+    from tools.scripts.pubmed_manager import fix_missing_fields
+
+    source = Path(input_path).expanduser().resolve()
+    target = Path(output_path or source).expanduser().resolve()
+    if not source.is_file():
+        raise FileNotFoundError(f"PubMed CSV not found: {source}")
+
+    before = inspect_csv_metadata(source)
+    backup_path: Path | None = None
+    if source == target and create_backup:
+        backup_path = source.with_name(f"{source.stem}.before_enrichment{source.suffix}")
+        if not backup_path.exists():
+            shutil.copy2(source, backup_path)
+
+    target.parent.mkdir(parents=True, exist_ok=True)
+    captured = StringIO()
+    if quiet:
+        with redirect_stdout(captured):
+            fix_missing_fields(source, target)
+    else:
+        fix_missing_fields(source, target)
+
+    if not target.exists():
+        # Empty retrievals have only a header and require no network repair.
+        shutil.copy2(source, target)
+    after = inspect_csv_metadata(target)
+    marker = metadata_marker_path(target)
+    marker.write_text(
+        json.dumps(
+            {
+                "completed_at": datetime.now(UTC).isoformat(),
+                "input_csv": str(source),
+                "output_csv": str(target),
+                "before": before.as_dict(),
+                "after": after.as_dict(),
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return MetadataCompletionResult(
+        input_path=source,
+        output_path=target,
+        backup_path=backup_path,
+        marker_path=marker,
+        before=before,
+        after=after,
+        log=captured.getvalue(),
+    )
+
+
+__all__ = [
+    "MetadataCompleteness",
+    "MetadataCompletionResult",
+    "complete_csv_metadata",
+    "inspect_csv_metadata",
+    "metadata_marker_path",
+]

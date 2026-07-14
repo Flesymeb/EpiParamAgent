@@ -1,0 +1,31 @@
+project:
+  name: "Stage A Evidence Index"
+  description: "Locate parameter evidence before structured extraction."
+  effect_type: "index"
+
+prompt:
+  prompt_file: stage_a.py
+
+parameters:
+  research_question: ""
+
+fields:
+  - name: study_id
+    label: "Study_ID"
+    type: str
+    required: true
+    prompt: "Study identifier; use PMID when available."
+  - name: index
+    label: "Index"
+    type: dict
+    required: true
+    prompt: "Structured evidence index defined by the parameter-specific prompt."
+
+quality_rules:
+  missing_penalties: {}
+  review_threshold: 0.7
+
+extraction:
+  mode: "full_context"
+  max_input_chars: 500000
+  truncation_marker: "\n\n[... document truncated ...]\n"

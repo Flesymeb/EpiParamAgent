@@ -7,8 +7,17 @@ from datetime import datetime
 from pathlib import Path
 
 import click
+from rich.panel import Panel
+from rich.table import Table
 
-from metaagent._cli_shared import DEV_ROOT, StyledGroup, resolve_project_root
+from metaagent._cli_shared import (
+    ACCENT,
+    DEV_ROOT,
+    StyledGroup,
+    console,
+    resolve_project_root,
+    show_success,
+)
 
 
 @click.group(cls=StyledGroup)
@@ -29,6 +38,12 @@ def coding():
     default=None,
     help="PMID list, PDF, or full-text directory; defaults to the project paper_pool manifest.",
 )
+@click.option(
+    "--paper-pool",
+    type=click.Path(path_type=Path, file_okay=False),
+    default=None,
+    help="Shared paper-pool root (default: <project>/paper_pool).",
+)
 @click.option("--stage", default="both", show_default=True, type=click.Choice(["fetch", "both", "index", "extract"]))
 @click.option(
     "--fetch-mode",
@@ -38,7 +53,7 @@ def coding():
 )
 @click.option("--out", type=click.Path(path_type=Path, file_okay=False), default=None, help="Explicit output directory")
 @click.option("--codebook", type=click.Path(path_type=Path, dir_okay=False), default=None, help="Explicit codebook YAML path")
-def extract(disease, topic, project_id, profile, input_path, stage, fetch_mode, out, codebook):
+def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, fetch_mode, out, codebook):
     """Run full-text evidence localization and structured extraction."""
     proj = resolve_project_root()
 
@@ -63,12 +78,12 @@ def extract(disease, topic, project_id, profile, input_path, stage, fetch_mode, 
             f"Codebook not found: {cb_path}. Add the parameter codebook or pass --codebook."
         )
 
+    pool_root = (paper_pool or (proj / "paper_pool")).expanduser().resolve()
     if input_path is not None:
         pmids_path = input_path.expanduser().resolve()
     elif disease and topic and project_id:
         project_manifest = (
-            proj
-            / "paper_pool"
+            pool_root
             / "projects"
             / disease
             / topic
@@ -122,8 +137,35 @@ def extract(disease, topic, project_id, profile, input_path, stage, fetch_mode, 
     else:
         raise click.UsageError("Provide --out when no project context is available.")
 
+    details = Table.grid(padding=(0, 2))
+    details.add_column(style="bold cyan")
+    details.add_column(style="white")
+    details.add_row("Profile", profile or "custom")
+    details.add_row("Input", str(pmids_path))
+    details.add_row("Codebook", str(cb_path))
+    details.add_row("Stage", stage)
+    details.add_row("Full-text mode", fetch_mode)
+    details.add_row("Paper pool", str(pool_root))
+    details.add_row("Output", str(out.expanduser().resolve()) if out else "profile coding_runs directory")
+    console.print(
+        Panel(
+            details,
+            title="[bold]Coding and extraction plan[/bold]",
+            border_style=ACCENT,
+            padding=(1, 2),
+        )
+    )
+
     script_path = proj / "tools" / "scripts" / "extract_coding.py"
-    _run_script(script_path, argv)
+    if paper_pool is not None:
+        _run_script(
+            script_path,
+            argv,
+            env_overrides={"METAAGENT_PAPER_POOL": str(pool_root)},
+        )
+    else:
+        _run_script(script_path, argv)
+    show_success("Coding and extraction completed")
 
 
 def _resolve_profile_context(
@@ -137,31 +179,16 @@ def _resolve_profile_context(
     if not profile:
         return disease, topic, None
     try:
-        from metaagent.screening.profile_registry import get_profile
+        from metaagent.screening.profile_registry import resolve_profile_context
 
-        resolved = get_profile(profile.upper())
-    except Exception:
-        resolved = None
-    if resolved is None:
-        return disease, topic, profile.lower()
-
-    def normalize_key(value: str) -> str:
-        return value.strip().casefold().replace("-", "_").replace(" ", "_")
-
-    conflicts = []
-    if disease and normalize_key(disease) != resolved.disease_key:
-        conflicts.append(f"--disease={disease} (profile uses {resolved.disease_key})")
-    if topic and normalize_key(topic) != resolved.topic_key:
-        conflicts.append(f"--parameter={topic} (profile uses {resolved.topic_key})")
-    if project_id and normalize_key(project_id) != resolved.project_dir_name:
-        conflicts.append(
-            f"--project-id={project_id} (profile uses {resolved.project_dir_name})"
+        resolved = resolve_profile_context(
+            profile,
+            disease=disease,
+            topic=topic,
+            project_id=project_id,
         )
-    if conflicts:
-        raise click.UsageError(
-            f"{', '.join(conflicts)} conflicts with profile {resolved.profile_key}. "
-            "Use the profile alone, or omit --profile and provide an explicit project context."
-        )
+    except (KeyError, ValueError) as exc:
+        raise click.UsageError(str(exc)) from exc
     return (
         resolved.disease_key,
         resolved.topic_key,
@@ -171,6 +198,7 @@ def _resolve_profile_context(
 
 # ── evaluate ───────────────────────────────────────────────────────────
 @coding.command("evaluate")
+@click.option("--profile", "-p", default=None, help="Review profile (AI1, AIR1, P10, etc.)")
 @click.option("--disease", default=None, metavar="KEY", help="Filter by disease key")
 @click.option(
     "--parameter",
@@ -193,9 +221,17 @@ def _resolve_profile_context(
 @click.option("--method", default="random", type=click.Choice(["random", "fixed"]))
 @click.option("--run", default=None, help="Exact coding run directory name to evaluate")
 @click.option("--output", default=None, help="Output CSV path")
-def evaluate(disease, topic, project, parameter_type, all_parameter_types,
+def evaluate(profile, disease, topic, project, parameter_type, all_parameter_types,
              estimate_measure, include_median, impute_se, method, run, output):
     """Compute pooled means from coding extraction results."""
+    disease, topic, inferred_project = _resolve_profile_context(
+        profile=profile,
+        disease=disease,
+        topic=topic,
+        project_id=project,
+    )
+    project = project or inferred_project
+
     argv = [
         "--estimate-measure", estimate_measure,
         "--method", method,
@@ -218,22 +254,41 @@ def evaluate(disease, topic, project, parameter_type, all_parameter_types,
         argv += ["--run", run]
     if output:
         argv += ["--output", output]
+    elif profile and disease and topic and project:
+        pooled_output = (
+            resolve_project_root()
+            / "evaluation"
+            / "coding"
+            / disease
+            / topic
+            / project
+            / "pooled_summary.csv"
+        )
+        argv += ["--output", str(pooled_output)]
 
     script_path = resolve_project_root() / "tools" / "scripts" / "evaluate_coding.py"
     _run_script(script_path, argv)
 
 
 # ── Helper ─────────────────────────────────────────────────────────────
-def _run_script(script_path: Path, argv: list[str]) -> None:
+def _run_script(
+    script_path: Path,
+    argv: list[str],
+    env_overrides: dict[str, str] | None = None,
+) -> None:
     """Run an existing argparse CLI script as a subprocess."""
+    import os
     import subprocess
 
     if not script_path.exists():
         raise click.ClickException(f"Script not found: {script_path}")
 
+    env = os.environ.copy()
+    env.update(env_overrides or {})
     result = subprocess.run(
         [sys.executable, str(script_path)] + argv,
         cwd=str(DEV_ROOT),
+        env=env,
     )
     if result.returncode != 0:
         raise click.ClickException(f"Script exited with code {result.returncode}")

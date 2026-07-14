@@ -22,6 +22,15 @@ manuscripts, and local tests remain outside Git.
 Run `metaagent <group> --help` or
 `metaagent <group> <command> --help` for the complete option list.
 
+At any point, inspect the artifacts and get the exact resume command:
+
+```bash
+metaagent workflow status --profile AI1
+```
+
+Use `--json` in scripts. The status check detects missing and stale artifacts,
+so an old full-text plan is not silently reused after screening changes.
+
 ## Requirements
 
 - Python 3.11 or newer
@@ -46,6 +55,9 @@ uv pip install -e ".[dev]"
 
 cp .env.example .env.local
 metaagent --help
+
+# Install Tab completion for Bash, Zsh, or Fish.
+metaagent completion install --shell auto
 ```
 
 On Windows PowerShell:
@@ -83,56 +95,68 @@ endpoint before starting a large run.
 
 ## Screening Workflow and Coding Hand-off
 
-The examples below use the included avian-influenza positivity-rate screening
-profile, `AI1`. The reproduction-number profile is `AIR1`. Steps 1-4 are the
-configured screening workflow. Steps 5-6 show the coding hand-off and become
-executable after a validated avian-influenza codebook and coding prompts have
-been added; the CLI fails clearly while those files are absent.
+The examples below use the included avian-influenza positivity-rate profile,
+`AI1`. The human reproduction-number profile is `AIR1`. Both include screening
+guidance, coding codebooks, and Stage A/B extraction prompts.
 
 ### 1. Generate a PubMed query and retrieve records
 
-Start the guided wizard:
+Start the guided wizard with a profile. It supplies the review question,
+disease, parameter, project ID, and configured date range:
 
 ```bash
-metaagent pubmed query
+metaagent pubmed query --profile AI1
 ```
 
-The wizard asks for the research question, disease, parameter, publication
-dates in `YYYY-MM-DD` format, and a project ID beginning with `p` (for example,
-`p1`). It saves the query first, then asks whether PubMed should be searched.
-Choose `yes` to create `raw.csv`.
+Without `--profile`, the wizard asks for the research question, disease,
+parameter, publication dates in `YYYY-MM-DD` format, and a project ID beginning
+with `p` (for example, `p1`). Profile mode loads those values from the review
+configuration. In both modes, the query is saved before the CLI asks whether
+PubMed should be searched. Choose `yes` to create `raw.csv`.
 Selecting `all` retrieves all matching PubMed records through paginated
 requests; it is not limited to 1,000 records.
+
+After retrieval, the CLI displays the number of available and missing PMIDs,
+titles, abstracts, and keywords. If recoverable fields are missing, the guided
+workflow asks `Complete available metadata from PubMed now? [Y/n]`. Accepting
+the default retrieves available values from PubMed, preserves
+`raw.before_enrichment.csv`, and records the attempt in
+`raw.metadata_enrichment.json`. Some articles genuinely have no PubMed
+abstract or keywords; unresolved fields remain visible and are not treated as
+screening exclusions.
 
 Equivalent non-interactive command:
 
 ```bash
 metaagent pubmed query \
+  --profile AI1 \
   --no-interactive \
-  --question "What is the positivity rate of avian influenza infection in humans?" \
-  --disease "Avian influenza" \
-  --parameter "Positivity rate" \
-  --start-date 2000-01-01 \
-  --end-date 2026-07-14 \
-  --project-id p1 \
   --search \
+  --fix-missing \
   --retmax all
 ```
+
+For automation, use `--fix-missing` to complete metadata or
+`--no-fix-missing` to retain the retrieved CSV unchanged. Existing retrievals
+can be inspected or completed independently:
+
+```bash
+metaagent pubmed metadata inspect --input path/to/raw.csv
+metaagent pubmed metadata complete --input path/to/raw.csv
+```
+
+Both commands support `--json`; `metadata complete` updates in place by
+default and creates a backup. Pass `--output` to write a separate CSV.
 
 To use a query you wrote or edited yourself, bypass LLM query generation while
 keeping the same metadata and retrieval workflow:
 
 ```bash
 metaagent pubmed query \
+  --profile AI1 \
   --no-interactive \
   --manual-query \
   --query-file /path/to/pubmed_query.txt \
-  --question "What is the positivity rate of avian influenza infection in humans?" \
-  --disease "Avian influenza" \
-  --parameter "Positivity rate" \
-  --start-date 2000-01-01 \
-  --end-date 2026-07-14 \
-  --project-id p1 \
   --search \
   --retmax all
 ```
@@ -147,6 +171,8 @@ dataset/avian_influenza/screening/positivity_rate/p1/
 ├── query.json
 ├── query.txt
 ├── raw.csv                 # present after PubMed retrieval
+├── raw.before_enrichment.csv       # present after in-place completion
+├── raw.metadata_enrichment.json    # completion counts and timestamp
 └── ground_truth.csv        # optional, supplied by the researcher
 ```
 
@@ -189,8 +215,24 @@ evaluation/screening/avian_influenza/positivity_rate/p1/project_1_screened.csv
 ```
 
 For a review without a YAML profile, pass `--input`, `--output`, and
-`--research-question` explicitly. Parameter-specific profile mode should be
-preferred for a formal experiment.
+`--research-question` explicitly. If `--output` is omitted, the CLI writes
+`<input-stem>_screened.csv` beside the input.
+
+To start from an externally prepared `raw.csv` while retaining the included
+parameter guidance:
+
+```bash
+metaagent pubmed metadata complete --input /path/to/raw.csv
+metaagent screening run \
+  --profile AI1 \
+  --input /path/to/raw.csv \
+  --batch-mode multi \
+  --batch-size 20 \
+  --batch-concurrency 5
+```
+
+With `--profile`, the screened output still goes to the profile's standard
+evaluation path. Supply `--output` only when a separate destination is needed.
 
 ### 3. Inspect screening decisions
 
@@ -232,17 +274,13 @@ The guided command is:
 metaagent pdf fetch
 ```
 
-For a reproducible unattended run:
+For a reproducible unattended run, the profile resolves the disease,
+parameter, project, and screened input; S+P is the default selection:
 
 ```bash
 metaagent pdf fetch \
+  --profile AI1 \
   --no-interactive \
-  --disease avian_influenza \
-  --parameter positivity_rate \
-  --project-id p1 \
-  --source screened \
-  --input evaluation/screening/avian_influenza/positivity_rate/p1/project_1_screened.csv \
-  --tiers S,P \
   --strategy pmc-only \
   --download
 ```
@@ -261,20 +299,26 @@ paper_pool/
 
 `pmc-only` is the safe default. A PMID without accessible PMC full text remains
 in `fetch_results.csv` with its failure status; it is not treated as an
-ineligible study.
+ineligible study. When the PMC page itself is blocked, the downloader can use
+an open-access PDF link indexed by Europe PMC; subscription links are not used
+in this mode.
 
 ### 5. Run full-text coding and extraction
 
-After a validated coding configuration has been added, `coding extract`
-automatically reads the project PMID list created in Step 4:
+`coding extract` automatically reads the project PMID list created in Step 4
+and resolves the profile-specific codebook:
 
 ```bash
 metaagent coding extract \
-  --disease avian_influenza \
-  --parameter positivity_rate \
-  --project-id p1 \
+  --profile AI1 \
   --stage both \
   --fetch-mode pmc_only
+```
+
+If PDF retrieval used a custom shared cache, pass the same path to coding:
+
+```bash
+metaagent coding extract --profile AI1 --paper-pool /path/to/paper_pool
 ```
 
 The command also resolves the codebook at:
@@ -283,12 +327,10 @@ The command also resolves the codebook at:
 configs/avian_influenza/codebooks/positivity_rate.yaml
 ```
 
-Before running a new disease/parameter formally, that codebook and its sibling
-`configs/avian_influenza/coding_prompts/` files must be created and validated.
-The repository currently includes complete coding examples for COVID-19 and
-mpox; the avian-influenza repository profiles currently configure screening,
-not a validated coding protocol. If the codebook is absent, the CLI stops with
-an actionable error instead of silently using a different disease's schema.
+Before running a new disease/parameter formally, its codebook and sibling
+`coding_prompts/` files must be created and validated. If the codebook is
+absent, the CLI stops with an actionable error instead of silently using a
+different disease's schema.
 
 An explicit input/codebook mode is also available:
 
@@ -324,12 +366,13 @@ After a coding sheet has been generated:
 
 ```bash
 metaagent coding evaluate \
-  --disease avian_influenza \
-  --parameter positivity_rate \
-  --project p1 \
-  --parameter-type positivity_rate \
+  --profile AI1 \
   --method random
 ```
+
+Profile mode writes the stable result to
+`evaluation/coding/avian_influenza/positivity_rate/p1/pooled_summary.csv`.
+Use explicit disease, parameter, project, and output options for custom runs.
 
 By default, evaluation uses the latest coding run that contains a coding sheet.
 For a frozen or published experiment, pin it with `--run <run-directory-name>`.
@@ -346,7 +389,8 @@ summary as a meta-analytic result.
 
 1. Add a screening profile under
    `configs/<disease>/screening_profiles/<parameter>.yaml`.
-2. Give every review task a unique profile ID and `project_number`.
+2. Give every review task a unique profile ID and `project_number`, and record
+   its reproducible `query_date_from` and `query_date_to` values.
 3. Run query generation/retrieval and verify `raw.csv` before screening.
 4. Keep any GT file small and separate from prompts.
 5. Before coding, add a parameter-specific codebook and Stage A/B prompt files

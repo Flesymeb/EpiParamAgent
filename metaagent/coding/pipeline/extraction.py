@@ -39,7 +39,8 @@ def _repo_root() -> Path:
 
 
 def _paper_pool_dirs() -> tuple[Path, Path]:
-    base = _repo_root() / "paper_pool"
+    configured = os.environ.get("METAAGENT_PAPER_POOL", "").strip()
+    base = Path(configured).expanduser().resolve() if configured else _repo_root() / "paper_pool"
     pdf_dir = base / "pdfs"
     md_dir = base / "markdown"
     pdf_dir.mkdir(parents=True, exist_ok=True)

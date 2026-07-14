@@ -41,6 +41,49 @@ def _resolve_profile_config(profile_name: str | None) -> tuple[dict[str, Any], s
 
 
 def _resolve_io_paths(args: argparse.Namespace) -> tuple[Path, Path, Path | None]:
+    if args.input:
+        input_path = Path(args.input).expanduser().resolve()
+        if args.output:
+            output_path = Path(args.output).expanduser().resolve()
+        elif args.project_root and args.profile:
+            from metaagent.screening.profile_registry import resolve_profile_paths
+
+            _, paths = resolve_profile_paths(
+                project_root=args.project_root,
+                profile_name=args.profile,
+                topic=args.topic or None,
+                disease=args.disease or None,
+                experiment=args.experiment or None,
+            )
+            output_path = paths.screened_file
+        else:
+            output_path = input_path.with_name(f"{input_path.stem}_screened.csv")
+        return (
+            input_path,
+            output_path,
+            Path(args.ground_truth).expanduser().resolve() if args.ground_truth else None,
+        )
+
+    if args.output:
+        if not (args.project_root and args.profile):
+            raise ValueError("--output without --input requires profile mode.")
+        from metaagent.screening.profile_registry import resolve_profile_paths
+
+        _, paths = resolve_profile_paths(
+            project_root=args.project_root,
+            profile_name=args.profile,
+            topic=args.topic or None,
+            disease=args.disease or None,
+            experiment=args.experiment or None,
+        )
+        return (
+            paths.raw_file,
+            Path(args.output).expanduser().resolve(),
+            Path(args.ground_truth).expanduser().resolve()
+            if args.ground_truth
+            else paths.ground_truth_file,
+        )
+
     if args.project_root and args.profile:
         from metaagent.screening.profile_registry import resolve_profile_paths
 
@@ -53,14 +96,8 @@ def _resolve_io_paths(args: argparse.Namespace) -> tuple[Path, Path, Path | None
         )
         return paths.raw_file, paths.screened_file, paths.ground_truth_file
 
-    if not (args.input and args.output):
-        raise ValueError(
-            "Use either --project-root/--profile or explicit --input/--output."
-        )
-    return (
-        Path(args.input).expanduser().resolve(),
-        Path(args.output).expanduser().resolve(),
-        Path(args.ground_truth).expanduser().resolve() if args.ground_truth else None,
+    raise ValueError(
+        "Use either --project-root/--profile or explicit --input/--output."
     )
 
 
@@ -270,6 +307,14 @@ def main() -> None:
     )
 
     screening_config, research_question = _resolve_profile_config(args.profile)
+    if args.profile:
+        from metaagent.screening.profile_registry import resolve_profile_context
+
+        resolve_profile_context(
+            args.profile,
+            disease=args.disease or None,
+            topic=args.topic or None,
+        )
     if args.no_fulltext_rescue:
         policies = screening_config.setdefault("policies", {})
         rescue_policy = dict(policies.get("fulltext_rescue", {}) or {})
@@ -277,6 +322,10 @@ def main() -> None:
         policies["fulltext_rescue"] = rescue_policy
     if args.research_question:
         research_question = args.research_question
+    if not research_question.strip():
+        raise ValueError(
+            "A research question is required. Use --profile or --research-question."
+        )
     input_file, output_file, gt_file = _resolve_io_paths(args)
 
     if not input_file.exists():

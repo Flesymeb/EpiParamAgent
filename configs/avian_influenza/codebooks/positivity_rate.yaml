@@ -1,0 +1,63 @@
+topic: positivity_rate
+
+project:
+  name: "Avian Influenza Human Positivity Rate"
+  description: "Extract original human avian-influenza positivity estimates."
+  effect_type: "positivity_rate"
+
+stage_a:
+  prompt_file: ../coding_prompts/stage_a_positivity_rate.py
+stage_b:
+  prompt_file: ../coding_prompts/stage_b_positivity_rate.py
+
+parameters:
+  research_question: >
+    What is the positivity rate of avian influenza infection or prior infection
+    among tested human populations?
+
+notes: |
+  Extract original results based on a tested human denominator. Prefer the
+  primary overall population estimate. Standardize all values to percentage
+  points. Exclude animal-only results and values copied from other papers.
+
+fields:
+  - {name: pmid, label: PMID, type: str, required: true, prompt: "PubMed ID."}
+  - {name: study, label: Study, type: str, required: true, prompt: "Author/year or short study label."}
+  - {name: region, label: Region, type: str, required: true, prompt: "Study country or region."}
+  - {name: study_period, label: Study_Period, type: str, prompt: "Sampling or surveillance period."}
+  - {name: population, label: Population, type: str, required: true, prompt: "Tested human population."}
+  - {name: sample_size, label: Sample_Size, type: int, prompt: "Number of humans tested."}
+  - {name: positive_count, label: Positive_Count, type: int, prompt: "Number testing positive under the selected definition."}
+  - {name: tested_count, label: Tested_Count, type: int, prompt: "Denominator corresponding to positive_count."}
+  - {name: assay, label: Assay, type: str, prompt: "PCR, serology, culture, antigen, or other test."}
+  - {name: specimen, label: Specimen, type: str, prompt: "Specimen type when reported."}
+  - {name: positivity_definition, label: Positivity_Definition, type: str, required: true, prompt: "Case/test threshold defining positivity."}
+  - {name: parameter_type, label: Parameter_Type, type: str, required: true, prompt: "Use exactly positivity_rate."}
+  - {name: estimate_measure, label: Estimate_Measure, type: str, required: true, prompt: "Use mean as the standardized pooling tag."}
+  - {name: point_estimate, label: Point_Estimate, type: float, prompt: "Positivity estimate in percentage points."}
+  - {name: unit, label: Unit, type: str, required: true, prompt: "Use %."}
+  - {name: uncertainty_type, label: Uncertainty_Type, type: str, prompt: "CI | CrI | SE | Range | NR."}
+  - {name: uncertainty_level, label: Uncertainty_Level, type: str, prompt: "95% | 90% | NR | Other."}
+  - {name: uncertainty_low, label: Uncertainty_Low, type: float, prompt: "Lower interval bound in percentage points."}
+  - {name: uncertainty_high, label: Uncertainty_High, type: float, prompt: "Upper interval bound in percentage points."}
+  - {name: notes, label: Notes, type: str, prompt: "Derivation, subgroup handling, or caveats."}
+  - {name: evidence_locations, label: Evidence_Locations, type: "list[str]", prompt: "One to three supporting locations."}
+
+index_schema:
+  - {name: region_raw, path: study_meta.region_raw}
+  - {name: period_raw, path: study_meta.period_raw}
+  - {name: population_raw, path: study_meta.population_raw}
+  - {name: sample_size_raw, path: study_meta.sample_size_raw}
+  - {name: assay_raw, path: study_meta.assay_raw}
+  - {name: tested_denominator, path: analysis_summary.tested_denominator}
+  - {name: positive_numerator, path: analysis_summary.positive_numerator}
+  - {name: estimate_hint, path: field_evidence.point_estimate}
+
+quality_rules:
+  missing_penalties: {point_estimate: 0.3, tested_count: 0.1}
+  review_threshold: 0.7
+
+extraction:
+  mode: full_context
+  max_input_chars: 500000
+  truncation_marker: "\n\n[... document truncated ...]\n"
