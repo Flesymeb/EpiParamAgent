@@ -49,15 +49,41 @@ commit `.env.local` or place credentials in scripts.
 
 ## Screening Quick Start
 
-For a new review, start with explicit CSV inputs. The candidate file must
-contain `PMID`, `Title`, and `Abstract` columns. A small evaluation set is
-optional and needs only a `PMID` column.
+Start the guided PubMed query wizard:
+
+```bash
+metaagent pubmed query
+```
+
+The wizard collects the research question, disease, epidemiological parameter,
+publication dates in `YYYY-MM-DD` format, and project ID. It always saves the
+generated query before asking whether PubMed should be searched. Answering
+`yes` creates `raw.csv`; answering `no` leaves only the reusable query files.
 
 ```text
 dataset/avian_influenza/screening/positivity_rate/p1/
+├── query.json
+├── query.txt
 ├── raw.csv
 └── ground_truth.csv
 ```
+
+The same operation can run non-interactively:
+
+```bash
+metaagent pubmed query \
+  --no-interactive \
+  --question "What is the positivity rate of avian influenza infection in humans?" \
+  --disease "Avian influenza" \
+  --parameter "Positivity rate" \
+  --start-date 2000-01-01 \
+  --end-date 2026-07-14 \
+  --project-id p1 \
+  --no-search
+```
+
+The candidate CSV must contain `PMID`, `Title`, and `Abstract` columns. A small
+evaluation set is optional and needs only a `PMID` column.
 
 Run title-and-abstract screening:
 
