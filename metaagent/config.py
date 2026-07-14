@@ -4,7 +4,7 @@
 Preferred rules:
 1. All configuration lives in ``.env.local`` at the project root.
 2. Module-specific values use root-level prefixes such as
-   ``SCREENING_LLM_MODEL`` or ``CODING_LLM_MODEL``.
+   ``QUERY_LLM_MODEL``, ``SCREENING_LLM_MODEL``, or ``CODING_LLM_MODEL``.
 3. Callers should pass ``module_hint`` so each workflow can select the right
    root-level module prefix without hidden module-local env files.
 """
@@ -18,7 +18,7 @@ from typing import Any, Iterable, Optional
 
 
 _DOTENV_LOADED: set[str] = set()
-_VALID_MODULE_HINTS = {"screening", "coding"}
+_VALID_MODULE_HINTS = {"query", "screening", "coding"}
 _PROVIDER_ALIASES = {
     "lab1": "lab",
     "lab-1": "lab",
@@ -82,7 +82,8 @@ def load_runtime_env(module_hint: Optional[str] = None) -> None:
     """Load root env files only.
 
     Module-specific settings should live in the project-root env file with
-    prefixes such as SCREENING_LLM_MODEL and CODING_LLM_MODEL.
+    prefixes such as QUERY_LLM_MODEL, SCREENING_LLM_MODEL, and
+    CODING_LLM_MODEL.
     """
     normalized = _normalize_module_hint(module_hint)
     cache_key = normalized or "__shared__"

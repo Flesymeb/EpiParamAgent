@@ -236,11 +236,11 @@ class PubMedQueryGenerator:
                 "llm_provider": self.provider or None,
                 "llm_model": self.model or None,
             },
-            module_hint="screening",
+            module_hint="query",
         )
         if not cfg.api_key:
             raise RuntimeError(
-                "Missing screening LLM credentials. Configure SCREENING_LLM_PROVIDER "
+                "Missing query LLM credentials. Configure QUERY_LLM_PROVIDER "
                 "and the provider API key in .env.local."
             )
         if not cfg.api_base:

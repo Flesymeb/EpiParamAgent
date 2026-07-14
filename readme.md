@@ -47,6 +47,11 @@ uv pip install -e .
 Set the provider, model, API base URL, and API key in `.env.local`. Never
 commit `.env.local` or place credentials in scripts.
 
+Query generation, screening, and coding can use separate models through
+`QUERY_LLM_*`, `SCREENING_LLM_*`, and `CODING_LLM_*`. The recommended student
+defaults are Qwen3.7 Plus for query generation and screening, and GLM-5.2 for
+coding.
+
 ## Screening Quick Start
 
 Start the guided PubMed query wizard:
