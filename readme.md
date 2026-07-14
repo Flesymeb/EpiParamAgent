@@ -4,15 +4,16 @@ MetaAgent-Epi is a CLI-first research codebase for LLM-assisted screening,
 full-text coding, extraction, and pooling in infectious-disease systematic
 reviews.
 
-This repository contains core runtime source code and configuration examples
-only. Manuscripts, datasets, cached papers, credentials, test workspaces,
-baseline experiments, and generated outputs are kept locally and are not
-versioned.
+This repository contains core runtime source code, configuration examples, and
+empty workspace documentation. Manuscripts, datasets, cached papers,
+credentials, test workspaces, baseline experiments, and generated outputs are
+kept locally and are not versioned.
 
 ## Requirements
 
 - Python 3.11 or newer
 - Git
+- [uv](https://docs.astral.sh/uv/)
 - Access to an OpenAI-compatible LLM endpoint
 - Optional: NCBI API credentials for PubMed retrieval
 - Optional: MinerU credentials for PDF parsing
@@ -20,22 +21,27 @@ versioned.
 ## Installation
 
 ```bash
+# Install uv on Linux or macOS
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
 git clone git@github.com:Flesymeb/MetaAgent-Epi.git
 cd MetaAgent-Epi
 
-python -m venv .venv
+uv venv --python 3.11
 source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -e .
+uv pip install -e .
 
 cp .env.example .env.local
 metaagent --help
 ```
 
-On Windows PowerShell, activate the environment with:
+On Windows PowerShell, install uv and activate the environment with:
 
 ```powershell
+irm https://astral.sh/uv/install.ps1 | iex
+uv venv --python 3.11
 .venv\Scripts\Activate.ps1
+uv pip install -e .
 ```
 
 Set the provider, model, API base URL, and API key in `.env.local`. Never
@@ -48,7 +54,7 @@ contain `PMID`, `Title`, and `Abstract` columns. A small evaluation set is
 optional and needs only a `PMID` column.
 
 ```text
-project_data/
+dataset/avian_influenza/screening/positivity_rate/p1/
 ├── raw.csv
 └── ground_truth.csv
 ```
@@ -57,9 +63,9 @@ Run title-and-abstract screening:
 
 ```bash
 metaagent screening run \
-  --input project_data/raw.csv \
-  --output project_output/screened.csv \
-  --ground-truth project_data/ground_truth.csv \
+  --input dataset/avian_influenza/screening/positivity_rate/p1/raw.csv \
+  --output evaluation/avian_influenza/screening/positivity_rate/p1/screened.csv \
+  --ground-truth dataset/avian_influenza/screening/positivity_rate/p1/ground_truth.csv \
   --research-question "Studies of avian influenza reporting positivity rates" \
   --strategy 5d \
   --batch-mode multi \
@@ -71,8 +77,8 @@ Evaluate the run against the small ground-truth set:
 
 ```bash
 metaagent screening evaluate performance \
-  --ground-truth project_data/ground_truth.csv \
-  --screened-results project_output/screened.csv
+  --ground-truth dataset/avian_influenza/screening/positivity_rate/p1/ground_truth.csv \
+  --screened-results evaluation/avian_influenza/screening/positivity_rate/p1/screened.csv
 ```
 
 Repeat the workflow with a separate research question and output directory for
@@ -103,12 +109,15 @@ prompts before its coding results are used in an experiment.
 - `metaagent/`: reusable screening, coding, extraction, and analysis package.
 - `configs/`: tracked screening profiles, codebooks, and prompt templates.
 - `tools/`: PubMed, PDF, MinerU, pooling, and evaluation utilities.
+- `dataset/`: local review inputs; only its README is tracked.
+- `evaluation/`: generated run outputs; only its README is tracked.
+- `paper_pool/`: local full-text cache; only its README is tracked.
 
 The following local paths are intentionally ignored by Git:
 
-- `dataset/` and `data/`
-- `paper_pool/` and `external/`
-- `baselines/`, `e2e/`, and `evaluation/`
+- all contents under `dataset/`, `evaluation/`, and `paper_pool/`
+- `data/` and `external/`
+- `baselines/` and `e2e/`
 - `tests/`, `scripts/`, and `webapp/`
 - `output/`
 - `docs/`

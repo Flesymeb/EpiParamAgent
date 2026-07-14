@@ -88,22 +88,27 @@ torch_cache/
 # Local research and experiment workspaces: retained on disk, not published
 /baselines/
 /e2e/
-/evaluation/
 /scripts/
 /tests/
 /webapp/
 /docs/
 /archive/
-/dataset/
 /data/
 /external/
 /output/
-/paper_pool/
 /paper_pool_*.tar.*
 /dev/
 /old/
 /misc/
 /workbench/
+
+# Runtime workspace skeletons. Track only the README in each directory.
+/dataset/*
+!/dataset/README.md
+/evaluation/*
+!/evaluation/README.md
+/paper_pool/*
+!/paper_pool/README.md
 
 # Keep only reusable CLI entrypoints under tools/scripts. One-off paper,
 # baseline, and appendix scripts remain local.
