@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import json
+import multiprocessing as mp
+import os
 import re
+import signal
 import sys
 import shutil
 import traceback
+from contextlib import contextmanager
 from pathlib import Path
 
 from metaagent.coding.llm import init_llm
@@ -50,6 +54,121 @@ def _ensure_tools_on_path() -> None:
 
 
 FETCH_STRATEGIES = ("pmc_only", "pmc_scihub", "pmc_scihub_manual")
+
+
+class LLMCallTimeoutError(TimeoutError):
+    """Raised when a single LLM call exceeds the configured wall-clock budget."""
+
+
+def _env_positive_int(*names: str) -> int | None:
+    for name in names:
+        value = os.environ.get(name)
+        if not value:
+            continue
+        try:
+            parsed = int(value)
+        except ValueError:
+            continue
+        if parsed > 0:
+            return parsed
+    return None
+
+
+def _effective_max_input_chars(config_value: int | None) -> int:
+    override = _env_positive_int("CODING_MAX_INPUT_CHARS", "CODING_FULLTEXT_MAX_CHARS")
+    if override:
+        return override
+    return int(config_value or 500000)
+
+
+def _llm_call_timeout_s() -> int | None:
+    return _env_positive_int(
+        "CODING_LLM_SUBPROCESS_TIMEOUT_S",
+        "CODING_LLM_CALL_TIMEOUT_S",
+        "CODING_LLM_TIMEOUT_S",
+        "LLM_TIMEOUT_S",
+    )
+
+
+def _invoke_messages_worker(
+    messages: list[dict[str, str]],
+    llm_overrides: dict[str, object] | None,
+    result_queue,
+) -> None:
+    try:
+        worker_model = init_llm(llm_overrides)
+        resp = worker_model.invoke(messages)
+        result_queue.put({"ok": True, "content": resp.content})
+    except BaseException as exc:  # pragma: no cover - runs in a child process
+        result_queue.put(
+            {
+                "ok": False,
+                "error_type": type(exc).__name__,
+                "error": str(exc),
+                "traceback": traceback.format_exc(),
+            }
+        )
+
+
+def _invoke_model_content(
+    *,
+    model,
+    messages: list[dict[str, str]],
+    llm_overrides: dict[str, object] | None,
+    pmid: str,
+    stage_name: str,
+) -> str:
+    timeout_s = _llm_call_timeout_s()
+    isolated_timeout_s = _env_positive_int("CODING_LLM_SUBPROCESS_TIMEOUT_S")
+    if isolated_timeout_s:
+        ctx = mp.get_context("fork")
+        result_queue = ctx.Queue(maxsize=1)
+        proc = ctx.Process(target=_invoke_messages_worker, args=(messages, llm_overrides, result_queue))
+        proc.start()
+        proc.join(isolated_timeout_s)
+        if proc.is_alive():
+            proc.terminate()
+            proc.join(5)
+            if proc.is_alive():
+                proc.kill()
+                proc.join(5)
+            raise LLMCallTimeoutError(
+                f"{stage_name} LLM subprocess timed out after {isolated_timeout_s}s for PMID {pmid}"
+            )
+        if result_queue.empty():
+            raise RuntimeError(f"{stage_name} LLM subprocess exited without a result for PMID {pmid}")
+        result = result_queue.get()
+        if result.get("ok"):
+            return str(result.get("content", ""))
+        raise RuntimeError(
+            f"{stage_name} LLM subprocess failed for PMID {pmid}: "
+            f"{result.get('error_type')}: {result.get('error')}\n{result.get('traceback', '')}"
+        )
+
+    with _llm_call_timeout(timeout_s, pmid=pmid, stage_name=stage_name):
+        resp = model.invoke(messages)
+    return str(resp.content)
+
+
+@contextmanager
+def _llm_call_timeout(timeout_s: int | None, *, pmid: str, stage_name: str):
+    if not timeout_s or not hasattr(signal, "SIGALRM"):
+        yield
+        return
+
+    def _handle_timeout(_signum, _frame):
+        raise LLMCallTimeoutError(f"{stage_name} LLM call timed out after {timeout_s}s for PMID {pmid}")
+
+    previous_handler = signal.getsignal(signal.SIGALRM)
+    signal.signal(signal.SIGALRM, _handle_timeout)
+    previous_timer = signal.setitimer(signal.ITIMER_REAL, timeout_s)
+    try:
+        yield
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, previous_handler)
+        if previous_timer[0] > 0:
+            signal.setitimer(signal.ITIMER_REAL, previous_timer[0], previous_timer[1])
 
 
 def _fetch_missing_pmids(
@@ -320,6 +439,7 @@ def run_index(
     abstract: str,
     config: ProjectConfig,
     model,
+    llm_overrides: dict[str, object] | None = None,
 ) -> dict:
     system_text = build_full_context_system_prompt(config)
     user_text = build_full_context_user_prompt(
@@ -335,8 +455,14 @@ def run_index(
         {"role": "system", "content": system_text},
         {"role": "user", "content": user_text},
     ]
-    resp = model.invoke(messages)
-    return _parse_json_object(resp.content)
+    content = _invoke_model_content(
+        model=model,
+        messages=messages,
+        llm_overrides=llm_overrides,
+        pmid=pmid,
+        stage_name="index",
+    )
+    return _parse_json_object(content)
 
 
 def run_extract(
@@ -349,6 +475,7 @@ def run_extract(
     index_json: str,
     config: ProjectConfig,
     model,
+    llm_overrides: dict[str, object] | None = None,
 ) -> list[dict]:
     system_text = build_full_context_system_prompt(config)
     context_section = "## Study Index (Stage A)\n" + index_json
@@ -365,8 +492,15 @@ def run_extract(
         {"role": "system", "content": system_text},
         {"role": "user", "content": user_text},
     ]
-    resp = model.invoke(messages)
-    return parse_json_records(resp.content)
+    pmid = title.removeprefix("PMID ")
+    content = _invoke_model_content(
+        model=model,
+        messages=messages,
+        llm_overrides=llm_overrides,
+        pmid=pmid,
+        stage_name="extract",
+    )
+    return parse_json_records(content)
 
 
 def run_pipeline(
@@ -429,6 +563,12 @@ def run_pipeline(
     index_rows: list[dict] = []
     errors: list[dict] = []
     xlsx_path: Path | None = None
+    max_input_chars = _effective_max_input_chars(effect_config.extraction.max_input_chars)
+    if max_input_chars != effect_config.extraction.max_input_chars:
+        print(
+            f"[coding] max_input_chars override: "
+            f"{effect_config.extraction.max_input_chars} -> {max_input_chars}"
+        )
 
     inputs = list(_iter_inputs(input_path, fetch_strategy=fetch_strategy))
     if not inputs:
@@ -436,14 +576,19 @@ def run_pipeline(
         return
 
     for path in inputs:
-        if path.suffix.lower() == ".pdf":
-            pmid = infer_pmid_from_path(path) or path.stem
-            markdown = _load_markdown_from_pdf(path, pmid)
-        else:
-            pmid = infer_pmid_from_path(path) or path.stem
-            markdown = read_text(path)
+        pmid = infer_pmid_from_path(path) or path.stem
+        try:
+            if path.suffix.lower() == ".pdf":
+                markdown = _load_markdown_from_pdf(path, pmid)
+            else:
+                markdown = read_text(path)
+        except Exception as exc:
+            _write_paper_error(out_dir, pmid, "load_fulltext", exc)
+            errors.append({"pmid": pmid, "stage": "load_fulltext", "error": str(exc)})
+            print(f"  [WARN] PMID {pmid}: full-text load failed: {exc}")
+            continue
 
-        max_chars = effect_config.extraction.max_input_chars
+        max_chars = max_input_chars
         trunc_marker = effect_config.extraction.truncation_marker
         processed = process_fulltext(markdown, max_chars=max_chars, truncation_marker=trunc_marker)
         fulltext = processed.content
@@ -469,6 +614,7 @@ def run_pipeline(
                         abstract=abstract,
                         config=stage_a_config,
                         model=model,
+                        llm_overrides=llm_overrides,
                     )
                     index_payload = index_obj.get("index") if isinstance(index_obj, dict) else None
                     index_envelope = {"pmid": pmid, "index": index_payload or index_obj}
@@ -498,6 +644,7 @@ def run_pipeline(
                     index_json=index_json,
                     config=effect_config,
                     model=model,
+                    llm_overrides=llm_overrides,
                 )
             except Exception as exc:
                 _write_paper_error(out_dir, pmid, "extract", exc)
@@ -560,6 +707,8 @@ def run_pipeline(
             "errors": errors,
             "input_files": [str(p) for p in inputs],
             "xlsx_path": str(xlsx_path) if xlsx_path else None,
+            "max_input_chars": max_input_chars,
+            "llm_call_timeout_s": _llm_call_timeout_s(),
         },
     )
     print(f"[OK] Manifest written: {manifest_path}")

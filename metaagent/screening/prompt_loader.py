@@ -51,6 +51,10 @@ PROMPT_FILES = {
         PROMPT_DIR / "5d" / "screening_system_rescue_full_text_conservative_llm.md",
         PROMPT_DIR / "5d" / "screening_user_rescue_full_text_conservative_llm.md",
     ),
+    "coding_fulltext_recall_guard_llm": (
+        PROMPT_DIR / "5d" / "screening_system_coding_fulltext_recall_guard_llm.md",
+        PROMPT_DIR / "5d" / "screening_user_coding_fulltext_recall_guard_llm.md",
+    ),
     "binary_title_abstract": (
         PROMPT_DIR / "binary" / "screening_system_title_abstract.md",
         PROMPT_DIR / "binary" / "screening_user_title_abstract.md",

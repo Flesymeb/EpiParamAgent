@@ -119,8 +119,9 @@ def init_llm_model(
         "max_tokens": cfg.max_tokens,
         "http_client": http_client,
         "http_async_client": http_async_client,
-        "http_socket_options": (),
     }
+    if cfg.reasoning_effort:
+        kwargs["reasoning_effort"] = cfg.reasoning_effort
     if "openrouter.ai" in api_base and "minimax/" not in llm_model.lower():
         # Some OpenRouter reasoning models otherwise return reasoning-only
         # payloads through the OpenAI-compatible API.

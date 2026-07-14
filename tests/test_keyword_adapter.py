@@ -13,6 +13,11 @@ from tools.epidemiology.keyword_generator import KeywordGeneratorAgent
 def test_http_fallback_success():
     # Prepare agent with dummy config
     agent = KeywordGeneratorAgent(llm_provider="siliconflow")
+    agent.llm = object()
+    agent.raw_openai_client = None
+    agent.api_base = "https://example.test/v1"
+    agent.api_key = "test-key"
+    agent.model = "test-model"
 
     # Mock requests.Session.post to return a fake response
     fake_resp = MagicMock()
