@@ -1,121 +1,143 @@
 # MetaAgent-Epi
 
-LLM-powered epidemiological systematic review automation with three active modules:
+MetaAgent-Epi is a CLI-first research codebase for LLM-assisted screening,
+full-text coding, extraction, and pooling in infectious-disease systematic
+reviews.
 
-- `metaagent/screening/`: literature search, screening, evaluation
-- `metaagent/coding/`: PDF-to-coding-sheet extraction
-- `workbench/`: local analysis and visualization console
+This repository contains source code, configuration examples, and tests only.
+Manuscripts, datasets, cached papers, credentials, and generated experiment
+outputs are kept locally and are not versioned.
 
-## Quick Start
+## Requirements
+
+- Python 3.11 or newer
+- Git
+- Access to an OpenAI-compatible LLM endpoint
+- Optional: NCBI API credentials for PubMed retrieval
+- Optional: MinerU credentials for PDF parsing
+
+## Installation
 
 ```bash
-# Run the CLI
-python -m metaagent.cli
+git clone git@github.com:Flesymeb/MetaAgent-Epi.git
+cd MetaAgent-Epi
 
-# Or use the shell entry point
-./metaagent.sh
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+
+cp .env.example .env.local
+metaagent --help
 ```
 
-## Project Structure
+On Windows PowerShell, activate the environment with:
 
-```
-MetaAgent-Epi/
-├── metaagent/              # Python package
-│   ├── cli/                # Click CLI commands (screening, coding, pubmed, pdf)
-│   ├── screening/          # LLM screening engine + cascade retrieval
-│   ├── coding/             # Coding sheet extraction pipeline
-│   ├── pubmed/             # PubMed + data source API clients
-│   ├── analysis/           # Meta-analysis pooling statistics
-│   ├── prompts/            # LLM prompt templates (5d, binary, peco, etc.)
-│   └── epidemiology/       # Epidemiological utilities
-├── tools/                  # Standalone scripts and utilities
-│   └── scripts/
-│       ├── screening_prepare.py    # Build screening-ready datasets
-│       ├── screening_llm_batch.py  # Run screening for profiles or explicit CSVs
-│       ├── screening_evaluation.py # Evaluate screening against ground truth
-│       ├── screening_report.py     # Generate academic reports
-│       ├── pubmed_manager.py       # PubMed batch operations
-│       ├── evaluate_coding.py      # Coding evaluation and pooling
-│       └── extract_coding.py       # Coding sheet extraction CLI
-├── configs/                # YAML configuration files
-│   ├── covid19/                # COVID-19 profiles, codebooks, prompts
-│   └── mpox/                   # mpox profiles, codebooks, prompts
-├── workbench/              # Web UI dashboard (FastAPI + React)
-├── dataset/                # Fixed task inputs by disease
-│   ├── covid19/
-│   │   ├── screening/
-│   │   └── coding/
-│   └── mpox/
-│       ├── screening/
-│       └── coding/
-├── evaluation/             # Experiment outputs only
-│   ├── screening/
-│   ├── coding/
-│   └── experiments/
-├── docs/                   # Documentation
-│   └── paper/              # Manuscript materials and generated figures
-├── tests/                  # Integration tests
-└── paper_pool/             # Cached PDFs and markdown (gitignored)
+```powershell
+.venv\Scripts\Activate.ps1
 ```
 
-## Module Map
+Set the provider, model, API base URL, and API key in `.env.local`. Never
+commit `.env.local` or place credentials in scripts.
 
-### `metaagent/screening/`
+## Screening Quick Start
 
-Purpose:
-- Run title/abstract and optional full-text screening
-- Cascade retrieval for uncertain papers (Tier 1→2→3)
-- Multi-strategy comparison (5d, binary, binary_baseline, binary_noguidance, peco)
-- Cost tracking (tokens, time, USD)
+For a new review, start with explicit CSV inputs. The candidate file must
+contain `PMID`, `Title`, and `Abstract` columns. A small evaluation set is
+optional and needs only a `PMID` column.
 
-CLI commands:
+```text
+project_data/
+├── raw.csv
+└── ground_truth.csv
+```
+
+Run title-and-abstract screening:
+
 ```bash
-python -m metaagent.cli screening run --input papers.csv --output screened.csv --research-question "..." --strategy peco
-python -m metaagent.cli screening run -p P4 --strategy 5d --provider lab --model deepseek-3.2
+metaagent screening run \
+  --input project_data/raw.csv \
+  --output project_output/screened.csv \
+  --ground-truth project_data/ground_truth.csv \
+  --research-question "Studies of avian influenza reporting positivity rates" \
+  --strategy 5d \
+  --batch-mode multi \
+  --batch-size 20 \
+  --batch-concurrency 5
 ```
 
-### `metaagent/coding/`
+Evaluate the run against the small ground-truth set:
 
-Purpose:
-- Stage A (indexing) + Stage B (extraction) from full-text PDFs
-- Codebook-driven configurable extraction
-- Export to XLSX with quality scoring
+```bash
+metaagent screening evaluate performance \
+  --ground-truth project_data/ground_truth.csv \
+  --screened-results project_output/screened.csv
+```
 
-### `workbench/`
+Repeat the workflow with a separate research question and output directory for
+the avian-influenza reproduction-number review. Keep the ground-truth labels
+for evaluation; do not insert them into prompts or decision rules.
 
-Purpose:
-- Inspect screening runs and failure cases
-- Visualize metrics and manifests
+Profile-based `prepare`, `run`, and `pipeline` commands are also available.
+Existing YAML files under `configs/*/screening_profiles/` show the expected
+profile structure. New disease profiles should define their own review
+question, PubMed query, eligibility criteria, date range, and local data paths.
 
-## Runtime Config
+## Coding and Extraction
 
-Runtime env is loaded from:
-1. `.env` -- shared defaults
-2. `.env.local` -- machine-local secrets
-3. `configs/` -- YAML profiles and codebooks
+The coding CLI operates on locally available full text and disease-specific
+codebooks:
 
-Module-specific LLM settings live in the root env file:
-`SCREENING_LLM_PROVIDER`, `SCREENING_LLM_MODEL`, `CODING_LLM_PROVIDER`, and
-`CODING_LLM_MODEL`. Provider profiles use variables such as
-`LAB_BASE_URL`, `LAB_API_KEY`, `LAB_MODEL`, `OPENROUTER_BASE_URL`, and
-`OPENROUTER_API_KEY`.
+```bash
+metaagent coding --help
+metaagent coding extract --help
+```
 
-## Shared Infrastructure
+The repository currently includes COVID-19 and mpox coding examples. A new
+avian-influenza study must add and validate parameter-specific codebooks and
+prompts before its coding results are used in an experiment.
 
-- `tools/common/`: runtime config and provenance helpers
-- `tools/paper_fetch/`: PDF download tooling (Sci-Hub)
-- `tools/mineru/`: PDF-to-Markdown parsing (MinerU API)
+## Repository Layout
 
-## Canonical Workflow
+- `metaagent/`: reusable screening, coding, extraction, and analysis package.
+- `configs/`: tracked screening profiles, codebooks, and prompt templates.
+- `tools/`: PubMed, PDF, MinerU, pooling, and evaluation utilities.
+- `tests/`: automated tests and small code-level fixtures.
+- `baselines/`: reproducible baseline implementations, without run outputs.
+- `e2e/`: end-to-end experiment runners, without generated results.
+- `evaluation/`: evaluation and summarization code only.
+- `webapp/`: optional human-review interface; not required for CLI experiments.
 
-For screening experiments:
-1. Fixed inputs live in `dataset/{disease}/screening/{topic}/pN/`.
-2. Run screening: `python -m metaagent.cli screening run -p P4 --strategy 5d --provider lab --model deepseek-3.2 --experiment my_run`.
-3. Evaluate: `python -m metaagent.cli screening evaluate performance -p P4 --screened-results ...`.
-4. Analyze: open `workbench/`
+The following local paths are intentionally ignored by Git:
 
-## Legacy
+- `dataset/` and `data/`
+- `paper_pool/` and `external/`
+- `evaluation/**/experiments/` and generated result files
+- `output/`
+- `docs/`
+- `archive/`
 
-The `dev/` directory contains the previous workspace structure and will be removed
-once the migration is fully validated. All functionality has been migrated to the
-new package layout.
+Do not force-add files from these paths. Share approved datasets and experiment
+artifacts through the project storage agreed by the research team.
+
+## Tests
+
+```bash
+PYTHONPATH=. pytest -q tests
+```
+
+Network-dependent PubMed and full-text checks are separate from the normal test
+suite and may require API credentials.
+
+## Optional Web Interface
+
+The Web UI is not required for CLI experiments. To run it locally, start the
+backend and frontend in separate terminals:
+
+```bash
+webapp/run-backend.sh
+webapp/run-frontend.sh
+```
+
+Then open [http://127.0.0.1:5173](http://127.0.0.1:5173). Additional setup is documented in
+[`webapp/README.md`](webapp/README.md).
