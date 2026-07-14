@@ -9,6 +9,7 @@ from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
+import httpx
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -246,6 +247,10 @@ class PubMedQueryGenerator:
             raise RuntimeError("Missing API base URL for the screening LLM provider")
         self.provider = cfg.provider or self.provider or "default"
         self.model = cfg.model or self.model or "unknown"
+        http_client = httpx.Client(
+            verify=cfg.verify_ssl,
+            timeout=cfg.timeout_s,
+        )
         self.llm = ChatOpenAI(
             model=self.model,
             temperature=cfg.temperature,
@@ -254,6 +259,7 @@ class PubMedQueryGenerator:
             max_tokens=min(cfg.max_tokens, 6000),
             max_retries=3,
             request_timeout=cfg.timeout_s,
+            http_client=http_client,
         )
         return self.llm
 
@@ -288,9 +294,16 @@ class PubMedQueryGenerator:
             "and historical names, not through broader neighboring outcomes."
         )
         bound_llm = self._get_llm().bind(response_format={"type": "json_object"})
-        response = bound_llm.invoke(
-            [SystemMessage(content=system_prompt), HumanMessage(content=user_prompt)]
-        )
+        try:
+            response = bound_llm.invoke(
+                [SystemMessage(content=system_prompt), HumanMessage(content=user_prompt)]
+            )
+        except Exception as exc:
+            root_cause = exc
+            while root_cause.__cause__ is not None:
+                root_cause = root_cause.__cause__
+            detail = str(root_cause).strip() or root_cause.__class__.__name__
+            raise RuntimeError(f"LLM query generation failed: {detail}") from exc
         terms = _parse_terms(response)
         return PubMedQueryArtifact(
             created_at=datetime.now(UTC),
