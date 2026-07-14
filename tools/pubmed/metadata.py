@@ -11,6 +11,8 @@ from datetime import UTC, datetime
 from io import StringIO
 from pathlib import Path
 
+REQUIRED_SCREENING_COLUMNS = ("PMID", "Title")
+
 
 @dataclass(frozen=True)
 class MetadataCompleteness:
@@ -76,6 +78,24 @@ def inspect_csv_metadata(path: Path) -> MetadataCompleteness:
     """Count missing PMID, title, abstract, and keyword values in a CSV."""
     with Path(path).open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
+        fieldnames = tuple(reader.fieldnames or ())
+        if not fieldnames:
+            raise ValueError("CSV has no header row")
+        missing_columns = [
+            column for column in REQUIRED_SCREENING_COLUMNS if column not in fieldnames
+        ]
+        if missing_columns:
+            case_hints = []
+            by_casefold = {name.casefold(): name for name in fieldnames}
+            for column in missing_columns:
+                existing = by_casefold.get(column.casefold())
+                if existing:
+                    case_hints.append(f"rename {existing!r} to {column!r}")
+            hint = f" ({'; '.join(case_hints)})" if case_hints else ""
+            raise ValueError(
+                "Screening CSV must contain columns named PMID and Title exactly; "
+                f"missing {', '.join(missing_columns)}. Found: {', '.join(fieldnames)}{hint}"
+            )
         rows = list(reader)
 
     def missing_count(field: str) -> int:
@@ -169,4 +189,5 @@ __all__ = [
     "complete_csv_metadata",
     "inspect_csv_metadata",
     "metadata_marker_path",
+    "REQUIRED_SCREENING_COLUMNS",
 ]

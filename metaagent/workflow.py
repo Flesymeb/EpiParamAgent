@@ -60,7 +60,22 @@ def _csv_rows(path: Path) -> int:
         return sum(1 for _ in csv.DictReader(handle))
 
 
-def _coding_config_files(root: Path, disease: str, topic: str) -> tuple[Path, list[Path]]:
+def _screening_error_count(path: Path) -> int:
+    if not path.exists():
+        return 0
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        return sum(
+            str(row.get("llm_suggest", "")).strip().casefold() == "error"
+            for row in csv.DictReader(handle)
+        )
+
+
+def resolve_coding_config_files(
+    root: Path,
+    disease: str,
+    topic: str,
+) -> tuple[Path, list[Path]]:
+    """Return a codebook and every prompt/schema file required by it."""
     codebook = root / "configs" / disease / "codebooks" / f"{topic}.yaml"
     prompts_dir = root / "configs" / disease / "coding_prompts"
     required = [codebook, prompts_dir / "stage_a.yaml"]
@@ -81,6 +96,21 @@ def _coding_config_files(root: Path, disease: str, topic: str) -> tuple[Path, li
 
 def _quoted_command(parts: list[str | Path]) -> str:
     return " ".join(shlex.quote(str(part)) for part in parts)
+
+
+def _llm_runtime_ready(module: str) -> bool:
+    from metaagent.config import is_usable_secret, load_llm_config
+
+    cfg = load_llm_config(module_hint=module)
+    endpoint_ready = cfg.provider in {None, "openai"} or bool(cfg.api_base)
+    return bool(cfg.model and is_usable_secret(cfg.api_key) and endpoint_ready)
+
+
+def _coding_runtime_ready() -> bool:
+    from metaagent.config import is_usable_secret, load_mineru_config
+
+    mineru = load_mineru_config(module_hint="coding")
+    return _llm_runtime_ready("coding") and is_usable_secret(mineru.api_key)
 
 
 @workflow.command("status")
@@ -147,9 +177,21 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
         / resolved.project_dir_name
     )
     coding_sheet = _newest_file(coding_project / "coding_runs", "*/coding_sheet*.xlsx")
+    coding_manifest = (
+        _newest_file(coding_sheet.parent, "run_manifest_coding_sheet_extraction*.json")
+        if coding_sheet
+        else None
+    )
+    coding_errors = 0
+    if coding_manifest:
+        try:
+            manifest_payload = json.loads(coding_manifest.read_text(encoding="utf-8"))
+            coding_errors = int((manifest_payload.get("extra") or {}).get("error_count", 0))
+        except (OSError, ValueError, TypeError):
+            coding_errors = 1
     pooled_path = coding_project / "pooled_summary.csv"
 
-    codebook, config_files = _coding_config_files(
+    codebook, config_files = resolve_coding_config_files(
         root,
         resolved.disease_key,
         resolved.topic_key,
@@ -159,7 +201,7 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
     stages["configuration"] = _stage(
         "ready" if not missing_config else "blocked",
         codebook,
-        "Coding configuration is ready."
+        "Coding schema files are ready."
         if not missing_config
         else "Missing: " + ", ".join(str(path) for path in missing_config),
     )
@@ -195,17 +237,31 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
     )
 
     screened_count = _csv_rows(screened_path)
+    screening_errors = _screening_error_count(screened_path)
     screening_fresh = bool(
         raw_count
-        and screened_count
+        and screened_count == raw_count
+        and not screening_errors
         and screened_path.stat().st_mtime_ns >= raw_path.stat().st_mtime_ns
     )
+    if screening_fresh:
+        screening_detail = f"{screened_count} decisions"
+    elif screening_errors:
+        screening_detail = f"{screened_count} rows; {screening_errors} LLM errors require rerun"
+    elif screened_count and screened_count != raw_count:
+        screening_detail = (
+            f"Row-count mismatch: raw={raw_count}, screened={screened_count}"
+        )
+    elif screened_count:
+        screening_detail = "Screening output predates raw.csv."
+    else:
+        screening_detail = "No screening output found."
     stages["screening"] = _stage(
-        "complete" if screening_fresh else ("stale" if screened_count else "pending"),
-        screened_path,
-        f"{screened_count} decisions"
+        "complete"
         if screening_fresh
-        else ("Screening output predates raw.csv." if screened_count else "No screening output found."),
+        else ("incomplete" if screening_errors else ("stale" if screened_count else "pending")),
+        screened_path,
+        screening_detail,
     )
 
     selected_count = _nonempty_lines(pmids_path)
@@ -244,6 +300,7 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
     coding_fresh = bool(
         coding_sheet
         and fetch_fresh
+        and not coding_errors
         and coding_sheet.stat().st_mtime_ns >= pmids_path.stat().st_mtime_ns
     )
     if missing_config:
@@ -252,6 +309,9 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
     elif coding_fresh:
         coding_status = "complete"
         coding_detail = "Latest coding sheet is current."
+    elif coding_errors:
+        coding_status = "incomplete"
+        coding_detail = f"Latest coding run reports {coding_errors} processing errors."
     elif coding_sheet:
         coding_status = "stale"
         coding_detail = "Coding output predates the current PMID selection."
@@ -274,7 +334,24 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
     )
 
     root_args = ["--project-root", root] if project_root else []
-    if not raw_count:
+    query_runtime_ready = _llm_runtime_ready("query")
+    screening_runtime_ready = _llm_runtime_ready("screening")
+    coding_runtime_ready = _coding_runtime_ready()
+    if not raw_count and not query_runtime_ready:
+        current_stage = "query_configuration"
+        next_command = _quoted_command(
+            [
+                "metaagent",
+                "config",
+                "check",
+                "--stage",
+                "query",
+                "--profile",
+                resolved.profile_key,
+                *root_args,
+            ]
+        )
+    elif not raw_count:
         current_stage = "retrieval"
         next_command = _quoted_command(
             ["metaagent", "pubmed", "query", "--profile", resolved.profile_key, *root_args]
@@ -283,6 +360,20 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
         current_stage = "metadata"
         next_command = _quoted_command(
             ["metaagent", "pubmed", "metadata", "complete", "--input", raw_path]
+        )
+    elif not screening_fresh and not screening_runtime_ready:
+        current_stage = "screening_configuration"
+        next_command = _quoted_command(
+            [
+                "metaagent",
+                "config",
+                "check",
+                "--stage",
+                "screening",
+                "--profile",
+                resolved.profile_key,
+                *root_args,
+            ]
         )
     elif not screening_fresh:
         current_stage = "screening"
@@ -293,6 +384,12 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
             "--profile",
             resolved.profile_key,
             *root_args,
+            "--batch-mode",
+            "multi",
+            "--batch-size",
+            "20",
+            "--batch-concurrency",
+            "5",
         ]
         if raw_csv is not None:
             command.extend(["--input", raw_path])
@@ -311,6 +408,20 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
     elif missing_config:
         current_stage = "coding_configuration"
         next_command = None
+    elif not coding_fresh and not coding_runtime_ready:
+        current_stage = "coding_configuration"
+        next_command = _quoted_command(
+            [
+                "metaagent",
+                "config",
+                "check",
+                "--stage",
+                "coding",
+                "--profile",
+                resolved.profile_key,
+                *root_args,
+            ]
+        )
     elif not coding_fresh:
         current_stage = "coding"
         command = ["metaagent", "coding", "extract", "--profile", resolved.profile_key]
@@ -333,6 +444,11 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
         "project": resolved.project_dir_name,
         "current_stage": current_stage,
         "next_command": next_command,
+        "runtime_ready": {
+            "query": query_runtime_ready,
+            "screening": screening_runtime_ready,
+            "coding": coding_runtime_ready,
+        },
         "stages": stages,
     }
     if json_output:
@@ -344,7 +460,8 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
     table.add_column("Status")
     table.add_column("Detail")
     for name, stage in stages.items():
-        table.add_row(name.replace("_", " ").title(), stage["status"], stage["detail"])
+        label = "Coding Schema" if name == "configuration" else name.replace("_", " ").title()
+        table.add_row(label, stage["status"], stage["detail"])
     console.print(table)
     if next_command:
         console.print(f"\n[bold]Next command[/bold]\n[cyan]{next_command}[/cyan]")
@@ -354,4 +471,4 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
         console.print("\n[yellow]Add the missing coding configuration before continuing.[/yellow]")
 
 
-__all__ = ["workflow"]
+__all__ = ["resolve_coding_config_files", "workflow"]

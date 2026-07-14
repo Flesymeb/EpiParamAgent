@@ -137,6 +137,9 @@ def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, 
     else:
         raise click.UsageError("Provide --out when no project context is available.")
 
+    if stage != "fetch":
+        _preflight_coding_llm()
+
     details = Table.grid(padding=(0, 2))
     details.add_column(style="bold cyan")
     details.add_column(style="white")
@@ -166,6 +169,27 @@ def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, 
     else:
         _run_script(script_path, argv)
     show_success("Coding and extraction completed")
+
+
+def _preflight_coding_llm() -> None:
+    """Validate coding credentials before launching the extraction worker."""
+    from metaagent.config import is_usable_secret, load_llm_config
+
+    cfg = load_llm_config(module_hint="coding")
+    missing = []
+    if not cfg.model:
+        missing.append("CODING_LLM_MODEL")
+    if not is_usable_secret(cfg.api_key):
+        missing.append("the selected provider API key")
+    if cfg.provider not in {None, "openai"} and not cfg.api_base:
+        missing.append("the selected provider base URL")
+    if missing:
+        raise click.ClickException(
+            "Coding LLM configuration is incomplete: missing "
+            + ", ".join(missing)
+            + ". Edit .env.local, then run "
+            "'metaagent config check --stage coding'."
+        )
 
 
 def _resolve_profile_context(
@@ -231,6 +255,21 @@ def evaluate(profile, disease, topic, project, parameter_type, all_parameter_typ
         project_id=project,
     )
     project = project or inferred_project
+    if profile and disease and topic and project:
+        coding_runs = (
+            resolve_project_root()
+            / "evaluation"
+            / "coding"
+            / disease
+            / topic
+            / project
+            / "coding_runs"
+        )
+        if not _coding_runs_available(coding_runs):
+            raise click.ClickException(
+                f"No coding runs found under {coding_runs}. "
+                f"Run 'metaagent coding extract --profile {profile.upper()}' first."
+            )
 
     argv = [
         "--estimate-measure", estimate_measure,
@@ -268,6 +307,11 @@ def evaluate(profile, disease, topic, project, parameter_type, all_parameter_typ
 
     script_path = resolve_project_root() / "tools" / "scripts" / "evaluate_coding.py"
     _run_script(script_path, argv)
+
+
+def _coding_runs_available(coding_runs: Path) -> bool:
+    """Return whether at least one run contains an evaluable coding sheet."""
+    return coding_runs.exists() and any(coding_runs.glob("*/coding_sheet*.xlsx"))
 
 
 # ── Helper ─────────────────────────────────────────────────────────────

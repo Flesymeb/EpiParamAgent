@@ -16,7 +16,9 @@ from metaagent._cli_shared import (
 )
 from metaagent.coding.cli import coding
 from metaagent.completion import completion
+from metaagent.config_cli import config
 from metaagent.evaluation.cli import evaluation
+from metaagent.profile_cli import profile
 from metaagent.screening.cli import screening
 from metaagent.workflow import workflow
 from tools.paper_fetch.cli import pdf
@@ -97,6 +99,8 @@ main.add_command(pubmed)
 main.add_command(pdf)
 main.add_command(completion)
 main.add_command(workflow)
+main.add_command(config)
+main.add_command(profile)
 
 
 if __name__ == "__main__":

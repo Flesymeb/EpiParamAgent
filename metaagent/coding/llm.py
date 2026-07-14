@@ -35,10 +35,10 @@ def init_llm(config_overrides: dict[str, object] | None = None):
     if str(tools_dir) not in sys.path:
         sys.path.insert(0, str(tools_dir))
 
-    from metaagent.config import load_llm_config
+    from metaagent.config import is_usable_secret, load_llm_config
 
     cfg = load_llm_config(config_overrides, module_hint="coding")
-    if not cfg.api_key:
+    if not is_usable_secret(cfg.api_key):
         raise RuntimeError("Missing LLM_API_KEY/OPENAI_API_KEY")
     model = cfg.model or "openai/gpt-4.1"
 

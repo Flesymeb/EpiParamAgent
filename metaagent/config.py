@@ -43,6 +43,7 @@ _PROVIDER_ENV_SPECS: dict[str, dict[str, Any]] = {
         "base_vars": ("OPENAI_BASE_URL", "OPENAI_API_BASE"),
         "key_vars": ("OPENAI_API_KEY",),
         "model_vars": ("OPENAI_MODEL",),
+        "default_base": "https://api.openai.com/v1",
     },
     "lab": {
         "base_vars": ("LAB_BASE_URL", "LAB_API_BASE", "LAB1_BASE_URL", "LAB1_API_BASE"),
@@ -144,6 +145,16 @@ class MineruConfig:
     no_proxy: bool = False
     retry_attempts: int = 3
     retry_base_delay_s: float = 1.0
+
+
+def is_usable_secret(value: str | None) -> bool:
+    """Return whether a credential is non-empty and not an example placeholder."""
+    text = str(value or "").strip()
+    if not text:
+        return False
+    lowered = text.casefold()
+    placeholders = ("replace_", "your_", "example", "changeme", "<", ">")
+    return not any(marker in lowered for marker in placeholders)
 
 
 def load_llm_config(

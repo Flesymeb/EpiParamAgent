@@ -233,6 +233,13 @@ def fetch(
             except ValueError as exc:
                 raise click.UsageError(str(exc)) from exc
     input_path = input_path.expanduser().resolve()
+    if not input_path.exists():
+        recovery = (
+            f" Run 'metaagent screening run --profile {resolved_profile.profile_key}' first."
+            if resolved_profile is not None and source == "screened"
+            else " Pass an existing file with --input."
+        )
+        raise click.ClickException(f"Input file not found: {input_path}.{recovery}")
 
     if tiers is None:
         tiers = "S,P" if source == "screened" else "all"

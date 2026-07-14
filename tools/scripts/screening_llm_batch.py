@@ -538,11 +538,19 @@ def main() -> None:
         fulltext_errors=stage_state["fulltext_errors"],
     )
 
-    print("Screening completed.")
+    error_count = sum(paper.get("llm_suggest") == "error" for paper in papers)
+    status = "Screening completed." if not error_count else "Screening incomplete."
+    print(status)
     print(f"Latest output: {saved}")
     print(f"Run snapshot: {run_dir}")
     print(f"Report: {report}")
     print(f"Manifest: {manifest}")
+    if error_count:
+        print(
+            f"ERROR: {error_count}/{len(papers)} records have LLM errors. "
+            "Fix the provider configuration and rerun screening."
+        )
+        raise SystemExit(2)
 
 
 def _build_arg_parser() -> argparse.ArgumentParser:

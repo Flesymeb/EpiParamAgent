@@ -14,7 +14,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from metaagent.config import load_llm_config
+from metaagent.config import is_usable_secret, load_llm_config
 
 
 class PubMedQueryRequest(BaseModel):
@@ -258,13 +258,17 @@ class PubMedQueryGenerator:
             },
             module_hint="query",
         )
-        if not cfg.api_key:
+        if not is_usable_secret(cfg.api_key):
             raise RuntimeError(
                 "Missing query LLM credentials. Configure QUERY_LLM_PROVIDER "
                 "and the provider API key in .env.local."
             )
+        if not cfg.model:
+            raise RuntimeError(
+                "Missing query LLM model. Set QUERY_LLM_MODEL in .env.local."
+            )
         if not cfg.api_base:
-            raise RuntimeError("Missing API base URL for the screening LLM provider")
+            raise RuntimeError("Missing API base URL for the query LLM provider")
         self.provider = cfg.provider or self.provider or "default"
         self.model = cfg.model or self.model or "unknown"
         http_client = httpx.Client(

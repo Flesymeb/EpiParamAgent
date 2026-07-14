@@ -31,11 +31,11 @@ from tools.pubmed.metadata import inspect_csv_metadata
 
 @click.group(cls=StyledGroup)
 def screening():
-    """Literature screening workflow: prepare → run → evaluate."""
+    """Run, inspect, and evaluate literature screening."""
 
 
 # ── prepare ────────────────────────────────────────────────────────────
-@screening.command("prepare")
+@screening.command("prepare", hidden=True)
 @click.option("--project-root", default="", help="Repository root (auto-detected if empty)")
 @click.option("--profile", "-p", required=True, help="Screening profile (P10, MP4, etc.)")
 @click.option("--disease", default=None, help="Disease filter (covid19, mpox)")
@@ -120,6 +120,7 @@ def run(project_root, profile, disease, topic, input_file, output_file,
         fix_missing, interactive, prefer_llm_tier):
     """Run LLM-based batch screening with optional cascade retrieval."""
     if cascade:
+        _preflight_screening_llm(model=model, provider=provider)
         _run_cascade(project_root, profile, disease, topic, batch_size, batch_concurrency, batch_mode,
                      model, provider, temperature, strategy, experiment, prefer_llm_tier)
         return
@@ -149,12 +150,17 @@ def run(project_root, profile, disease, topic, input_file, output_file,
         topic=topic,
         input_file=input_file,
     )
-    if resolved_input is not None and resolved_input.exists():
-        _preflight_input_metadata(
-            resolved_input,
-            fix_missing=fix_missing,
-            interactive=interactive,
+    if resolved_input is None or not resolved_input.exists():
+        raise click.ClickException(
+            f"Screening input not found: {resolved_input}. "
+            "Run 'metaagent pubmed query --search' first or pass --input."
         )
+    _preflight_input_metadata(
+        resolved_input,
+        fix_missing=fix_missing,
+        interactive=interactive,
+    )
+    _preflight_screening_llm(model=model, provider=provider)
 
     argv = [
         "--batch-size", str(batch_size),
@@ -223,7 +229,7 @@ def summary(input_file, profile, disease, topic, project_root, json_output):
     try:
         with screened_path.open("r", encoding="utf-8-sig", newline="") as handle:
             rows = list(csv.DictReader(handle))
-    except (OSError, csv.Error) as exc:
+    except (OSError, ValueError, csv.Error) as exc:
         raise click.ClickException(f"Cannot read {screened_path}: {exc}") from exc
 
     counts = {"S": 0, "P": 0, "U": 0, "error": 0, "other": 0}
@@ -342,6 +348,17 @@ def _preflight_input_metadata(
     except (OSError, csv.Error) as exc:
         raise click.ClickException(f"Cannot inspect screening input {input_path}: {exc}") from exc
 
+    if before.total_rows == 0:
+        raise click.ClickException(
+            f"Screening input contains no records: {input_path}. "
+            "Retrieve records first or pass a non-empty --input CSV."
+        )
+    if before.missing_pmid == before.total_rows:
+        raise click.ClickException(
+            f"Every row in {input_path} is missing PMID. "
+            "Populate the PMID column before screening so full-text hand-off remains traceable."
+        )
+
     marker_path = _metadata_marker_path(input_path)
     marker_is_current = bool(
         marker_path.exists()
@@ -354,6 +371,10 @@ def _preflight_input_metadata(
         fix_missing is True or not marker_is_current
     )
     if not enrichment_due:
+        if before.missing_title == before.total_rows:
+            raise click.ClickException(
+                "Every screening record is missing Title. Run metadata completion or provide titles."
+            )
         if before.needs_screening_enrichment and marker_is_current:
             show_warning(
                 "A previous PubMed completion attempt left some titles or abstracts "
@@ -391,6 +412,10 @@ def _preflight_input_metadata(
         )
 
     if not should_enrich:
+        if before.missing_title == before.total_rows:
+            raise click.ClickException(
+                "Every screening record is missing Title. Re-run with --fix-missing or provide titles."
+            )
         return
 
     backup_path = input_path.with_name(
@@ -424,6 +449,34 @@ def _preflight_input_metadata(
         f"missing abstracts {before.missing_abstract} -> {after.missing_abstract}; "
         f"missing keywords {before.missing_keywords} -> {after.missing_keywords}"
     )
+    if after.missing_title == after.total_rows:
+        raise click.ClickException(
+            "PubMed completion could not recover any titles; screening cannot continue."
+        )
+
+
+def _preflight_screening_llm(*, model: str | None, provider: str | None) -> None:
+    """Fail before spawning a worker when the screening LLM is not configured."""
+    from metaagent.config import is_usable_secret, load_llm_config
+
+    cfg = load_llm_config(
+        {"llm_model": model, "llm_provider": provider},
+        module_hint="screening",
+    )
+    missing = []
+    if not cfg.model:
+        missing.append("SCREENING_LLM_MODEL")
+    if not is_usable_secret(cfg.api_key):
+        missing.append("the selected provider API key")
+    if cfg.provider not in {None, "openai"} and not cfg.api_base:
+        missing.append("the selected provider base URL")
+    if missing:
+        raise click.ClickException(
+            "Screening LLM configuration is incomplete: missing "
+            + ", ".join(missing)
+            + ". Edit .env.local, then run "
+            "'metaagent config check --stage screening'."
+        )
 
 
 def _run_cascade(project_root, profile, disease, topic, batch_size, batch_concurrency, batch_mode,
@@ -528,6 +581,35 @@ def evaluate(ctx, subcommand, project_root, profile, disease, topic,
     script_subcommand = "screening-performance" if subcommand == "performance" else subcommand
     argv = [script_subcommand]
     proj = str(resolve_project_root() if not project_root else Path(project_root).resolve())
+    if profile and subcommand in {"performance", "threshold-sweep"}:
+        from metaagent.screening.profile_registry import resolve_profile_paths
+
+        try:
+            _, paths = resolve_profile_paths(
+                project_root=proj,
+                profile_name=profile,
+                disease=disease,
+                topic=topic or None,
+                experiment=experiment or None,
+            )
+        except (KeyError, ValueError) as exc:
+            raise click.UsageError(str(exc)) from exc
+        gt_path = Path(ground_truth).expanduser().resolve() if ground_truth else paths.ground_truth_file
+        screened_path = (
+            Path(screened_results).expanduser().resolve()
+            if screened_results
+            else paths.screened_file
+        )
+        if not gt_path.exists():
+            raise click.ClickException(
+                f"Ground-truth file not found: {gt_path}. Add a PMID-labelled "
+                "ground_truth.csv or pass --ground-truth."
+            )
+        if not screened_path.exists():
+            raise click.ClickException(
+                f"Screening result not found: {screened_path}. Run screening first "
+                "or pass --screened-results."
+            )
     argv += ["--project-root", proj]
     if profile:          argv += ["--profile", profile]
     if disease:          argv += ["--disease", disease]
@@ -546,7 +628,7 @@ def evaluate(ctx, subcommand, project_root, profile, disease, topic,
 
 
 # ── report ─────────────────────────────────────────────────────────────
-@screening.command("report")
+@screening.command("report", hidden=True)
 @click.option("--disease", default="covid19", type=click.Choice(DISEASE_NAMES))
 @click.option("--root", default=None, help="GT_export root override")
 @click.option("--topics", default="", help="Comma-separated topics (auto-detect if empty)")
@@ -566,7 +648,7 @@ def report(disease, root, topics, out, with_plots, update_md):
 
 
 # ── pipeline (combined: prepare + run + evaluate) ──────────────────────
-@screening.command("pipeline")
+@screening.command("pipeline", hidden=True)
 @click.option("--project-root", default="", help="Repository root")
 @click.option("--profile", "-p", required=True, help="Screening profile")
 @click.option("--disease", default=None, help="Disease filter")
@@ -583,7 +665,7 @@ def report(disease, root, topics, out, with_plots, update_md):
 @click.option("--fulltext-only", is_flag=True)
 def pipeline(project_root, profile, disease, topic, include_gt, fix_missing,
              batch_size, batch_concurrency, batch_mode, model, provider, temperature, auto_fulltext, fulltext_only):
-    """Full screening pipeline: prepare → run → evaluate."""
+    """Legacy combined command; use the explicit workflow commands instead."""
     proj = str(resolve_project_root() if not project_root else Path(project_root).resolve())
 
     # Step 1: prepare

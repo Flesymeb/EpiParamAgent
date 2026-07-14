@@ -729,3 +729,9 @@ def run_pipeline(
             f"No coding records were produced from {len(inputs)} full-text input(s). "
             f"Inspect {out_dir / 'errors'} and the run manifest."
         )
+    if errors:
+        raise RuntimeError(
+            f"Coding is incomplete: {len(errors)} processing error(s) across "
+            f"{len(inputs)} full-text input(s). Partial outputs were retained; "
+            f"inspect {out_dir / 'errors'} and rerun before pooling."
+        )

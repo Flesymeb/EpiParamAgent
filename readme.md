@@ -55,6 +55,7 @@ uv pip install -e ".[dev]"
 
 cp .env.example .env.local
 metaagent --help
+metaagent profile list
 
 # Install Tab completion for Bash, Zsh, or Fish.
 metaagent completion install --shell auto
@@ -92,6 +93,17 @@ MINERU_API_KEY=replace_with_your_mineru_key
 
 Provider-specific model IDs can differ. Confirm the IDs exposed by your
 endpoint before starting a large run.
+
+After adding the API keys, validate the complete setup without making an API
+request:
+
+```bash
+metaagent config check --profile AI1
+```
+
+Use `--stage query`, `--stage screening`, or `--stage coding` to check only one
+part of the workflow. The command never prints credential values and supports
+`--json` for scripts.
 
 ## Screening Workflow and Coding Hand-off
 
@@ -233,6 +245,10 @@ metaagent screening run \
 
 With `--profile`, the screened output still goes to the profile's standard
 evaluation path. Supply `--output` only when a separate destination is needed.
+An external CSV must contain columns named `PMID` and `Title` exactly;
+`Abstract` and `Keywords` are optional and can be completed when PubMed makes
+them available. The CLI rejects an empty CSV or a file with no usable PMIDs
+before starting any paid model request.
 
 ### 3. Inspect screening decisions
 
@@ -402,6 +418,13 @@ influenza positivity rate and human reproduction number, respectively. The
 `_template.yaml` files under existing disease directories show the general
 profile structure.
 
+Inspect the resulting profile before use:
+
+```bash
+metaagent profile show AI1
+metaagent config check --profile AI1
+```
+
 ## Troubleshooting
 
 **`metaagent` cannot be imported after installation**
@@ -424,6 +447,18 @@ Use `--retmax all`. The CLI paginates through all PubMed matches. A numeric
 
 Run `metaagent pdf fetch` first, or pass `--input` explicitly. The default input
 is `paper_pool/projects/<disease>/<parameter>/<project>/pmids.txt`.
+
+**The screening or coding LLM is not configured**
+
+Run `metaagent config check --profile <ID>`. Set the missing module model,
+provider endpoint, and provider API key in `.env.local`; do not pass secrets as
+command-line arguments.
+
+**An external raw CSV is rejected**
+
+Keep one record per row and use the exact headers `PMID`, `Title`, `Abstract`,
+and `Keywords`. Only `PMID` and `Title` are mandatory. Run
+`metaagent pubmed metadata inspect --input <file>` before screening.
 
 **A codebook or Stage A schema was not found**
 

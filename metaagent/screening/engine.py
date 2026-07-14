@@ -14,7 +14,7 @@ from langchain_core.callbacks import BaseCallbackHandler
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 
-from metaagent.config import load_llm_config
+from metaagent.config import is_usable_secret, load_llm_config
 
 from metaagent.screening.models import (
     BinaryDecision,
@@ -83,7 +83,7 @@ def init_llm_model(
     if temperature_override is not None:
         params["llm_temperature"] = temperature_override
     cfg = load_llm_config(params, module_hint="screening")
-    if not cfg.api_key:
+    if not is_usable_secret(cfg.api_key):
         raise ValueError(
             "API key not found. Please set LLM_API_KEY or the selected "
             "provider key in .env.local"

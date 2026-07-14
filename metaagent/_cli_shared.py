@@ -73,12 +73,15 @@ class StyledGroup(click.Group):
             style=ACCENT,
         )
         console.print()
-        if self.commands:
+        visible_commands = [
+            (name, cmd) for name, cmd in sorted(self.commands.items()) if not cmd.hidden
+        ]
+        if visible_commands:
             table = Table(show_header=True, header_style=f"bold {ACCENT_BOLD}",
                           border_style=ACCENT_DIM, title="Commands", title_style=f"bold {ACCENT}")
             table.add_column("Command", style=f"bold {ACCENT}", min_width=14)
             table.add_column("Description", style="white")
-            for name, cmd in sorted(self.commands.items()):
+            for name, cmd in visible_commands:
                 desc = (cmd.help or "").split("\n")[0]
                 table.add_row(name, desc)
             console.print(table)
