@@ -2,13 +2,20 @@
 
 from __future__ import annotations
 
+import csv
+import json
+import shutil
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import click
+from rich.panel import Panel
+from rich.table import Table
 
 
 from metaagent._cli_shared import (DEV_ROOT, REPO_ROOT, DISEASE_NAMES, TOPIC_NAMES, resolve_project_root, show_step, show_success, show_error, show_warning, show_command_header, StyledGroup, console, ACCENT, ACCENT_BOLD, ACCENT_DIM)
+from tools.pubmed.metadata import inspect_csv_metadata
 
 
 @click.group(cls=StyledGroup)
@@ -80,6 +87,16 @@ def prepare(project_root, profile, disease, topic, query, date_range, retmax,
 @click.option("--resume-sp-fulltext", is_flag=True, help="Stage 2: PMC-only full-text for strong+possible")
 @click.option("--fulltext-cache-only", is_flag=True, help="Stage 2: use cached PDFs/markdown only")
 @click.option(
+    "--fix-missing/--no-fix-missing",
+    default=None,
+    help="Fill missing PubMed title, abstract, and keyword metadata before screening.",
+)
+@click.option(
+    "--interactive/--no-interactive",
+    default=None,
+    help="Enable or disable metadata-completion prompts.",
+)
+@click.option(
     "--prefer-llm-tier/--no-prefer-llm-tier",
     default=True,
     help="Use LLM's own tier classification instead of code-side thresholds.",
@@ -89,12 +106,28 @@ def run(project_root, profile, disease, topic, input_file, output_file,
         model, provider, temperature, strategy, experiment, cascade, auto_fulltext, fulltext_only,
         no_fulltext_rescue, skip_no_abstract,
         resume_fulltext, resume_possible_fulltext, resume_sp_fulltext, fulltext_cache_only,
-        prefer_llm_tier):
+        fix_missing, interactive, prefer_llm_tier):
     """Run LLM-based batch screening with optional cascade retrieval."""
     if cascade:
         _run_cascade(project_root, profile, disease, topic, batch_size, batch_concurrency, batch_mode,
                      model, provider, temperature, strategy, experiment, prefer_llm_tier)
         return
+
+    if interactive is None:
+        interactive = sys.stdin.isatty()
+    resolved_input = _resolve_run_input(
+        project_root=project_root,
+        profile=profile,
+        disease=disease,
+        topic=topic,
+        input_file=input_file,
+    )
+    if resolved_input is not None and resolved_input.exists():
+        _preflight_input_metadata(
+            resolved_input,
+            fix_missing=fix_missing,
+            interactive=interactive,
+        )
 
     argv = [
         "--batch-size", str(batch_size),
@@ -127,6 +160,128 @@ def run(project_root, profile, disease, topic, input_file, output_file,
     else:                   argv += ["--no-prefer-llm-tier"]
 
     _run_script("screening_llm_batch", argv)
+
+
+def _resolve_run_input(
+    *,
+    project_root: str,
+    profile: str | None,
+    disease: str | None,
+    topic: str,
+    input_file: str,
+) -> Path | None:
+    """Resolve the CSV that screening will read."""
+    if input_file:
+        return Path(input_file).expanduser().resolve()
+    if not profile:
+        return None
+
+    from metaagent.screening.profile_registry import resolve_profile_paths
+
+    root = resolve_project_root() if not project_root else Path(project_root).resolve()
+    _, paths = resolve_profile_paths(
+        project_root=root,
+        profile_name=profile,
+        disease=disease,
+        topic=topic or None,
+    )
+    return paths.raw_file
+
+
+def _metadata_marker_path(input_path: Path) -> Path:
+    return input_path.with_name(f"{input_path.stem}.metadata_enrichment.json")
+
+
+def _enrich_input_metadata(input_path: Path) -> None:
+    """Fill missing PubMed metadata in place using the existing fetcher."""
+    from metaagent.config import load_runtime_env
+    from tools.scripts.pubmed_manager import fix_missing_fields
+
+    load_runtime_env()
+    fix_missing_fields(input_path, input_path)
+
+
+def _preflight_input_metadata(
+    input_path: Path,
+    *,
+    fix_missing: bool | None,
+    interactive: bool,
+) -> None:
+    """Offer PubMed metadata completion before LLM screening starts."""
+    try:
+        before = inspect_csv_metadata(input_path)
+    except (OSError, csv.Error) as exc:
+        raise click.ClickException(f"Cannot inspect screening input {input_path}: {exc}") from exc
+
+    marker_path = _metadata_marker_path(input_path)
+    optional_refresh_due = before.has_optional_gaps and not marker_path.exists()
+    enrichment_due = before.needs_screening_enrichment or optional_refresh_due
+    if not enrichment_due:
+        return
+
+    if interactive:
+        details = Table.grid(padding=(0, 2))
+        details.add_column(style="bold cyan")
+        details.add_column(justify="right")
+        details.add_row("Records", str(before.total_rows))
+        details.add_row("Missing title", str(before.missing_title))
+        details.add_row("Missing abstract", str(before.missing_abstract))
+        details.add_row("Missing keywords", str(before.missing_keywords))
+        details.add_row("Missing PMID", str(before.missing_pmid))
+        console.print(
+            Panel(
+                details,
+                title="[bold]Screening metadata check[/bold]",
+                border_style=ACCENT,
+                padding=(1, 2),
+            )
+        )
+
+    should_enrich = bool(fix_missing)
+    if fix_missing is None and interactive:
+        should_enrich = click.confirm(
+            "Complete available metadata from PubMed before screening?",
+            default=True,
+        )
+    elif fix_missing is None and before.needs_screening_enrichment:
+        show_warning(
+            "Screening input has missing titles or abstracts; use --fix-missing to enrich it."
+        )
+
+    if not should_enrich:
+        return
+
+    backup_path = input_path.with_name(
+        f"{input_path.stem}.before_enrichment{input_path.suffix}"
+    )
+    if not backup_path.exists():
+        shutil.copy2(input_path, backup_path)
+
+    try:
+        _enrich_input_metadata(input_path)
+        after = inspect_csv_metadata(input_path)
+    except Exception as exc:
+        raise click.ClickException(f"PubMed metadata completion failed: {exc}") from exc
+
+    marker_path.write_text(
+        json.dumps(
+            {
+                "completed_at": datetime.now(timezone.utc).isoformat(),
+                "input_csv": str(input_path),
+                "before": before.__dict__,
+                "after": after.__dict__,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    show_success(
+        "Metadata completion finished: "
+        f"missing abstracts {before.missing_abstract} -> {after.missing_abstract}; "
+        f"missing keywords {before.missing_keywords} -> {after.missing_keywords}"
+    )
 
 
 def _run_cascade(project_root, profile, disease, topic, batch_size, batch_concurrency, batch_mode,

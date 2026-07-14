@@ -35,9 +35,12 @@ def download_pdfs_batch(
     pmid_overrides: dict[str, dict[str, str]] | None = None,
     *,
     source_strategy: str = "pmc_first",
+    pdf_cache_dir: Path | None = None,
+    prompt_for_manual: bool = True,
 ) -> dict[str, dict[str, str]]:
     """Download PDFs into the shared cache and return per-PMID status."""
-    ensure_fulltext_cache_dirs()
+    pdf_dir = Path(pdf_cache_dir) if pdf_cache_dir is not None else PDF_CACHE_DIR
+    pdf_dir.mkdir(parents=True, exist_ok=True)
     results: dict[str, dict[str, str]] = {}
     pmid_overrides = pmid_overrides or {}
     todo_pmids: list[str] = []
@@ -46,7 +49,7 @@ def download_pdfs_batch(
         pmid = (pmid or "").strip()
         if not pmid:
             continue
-        target_pdf = PDF_CACHE_DIR / f"PMID_{pmid}.pdf"
+        target_pdf = pdf_dir / f"PMID_{pmid}.pdf"
         if target_pdf.exists():
             print(f"[PDF] PMID_{pmid} cache hit: {target_pdf}")
             results[pmid] = {"status": "downloaded", "pdf_path": str(target_pdf)}
@@ -65,7 +68,7 @@ def download_pdfs_batch(
         extractor.get_mirrors()
 
     for pmid in todo_pmids:
-        target_pdf = PDF_CACHE_DIR / f"PMID_{pmid}.pdf"
+        target_pdf = pdf_dir / f"PMID_{pmid}.pdf"
         override = pmid_overrides.get(pmid, {})
         doi = (override.get("doi") or "").strip()
         pmcid_raw = (override.get("pmcid") or "").strip()
@@ -94,12 +97,12 @@ def download_pdfs_batch(
             if not pmcid:
                 results[pmid] = {"status": "pmc_unavailable", "pdf_path": ""}
                 continue
-            url_results = extractor._process_pmcid(pmcid, PDF_CACHE_DIR)
+            url_results = extractor._process_pmcid(pmcid, pdf_dir)
         else:
             print("  Full-text fetch (PMC first, Sci-Hub fallback):")
             url_results, doi, pmcid = extractor.process_pmid(
                 pmid,
-                download_dir=PDF_CACHE_DIR,
+                download_dir=pdf_dir,
                 doi_override=doi,
                 pmcid_override=pmcid,
                 prefer_pmc=True,
@@ -126,15 +129,15 @@ def download_pdfs_batch(
             }
 
     missing = [pmid for pmid, info in results.items() if info["status"] != "downloaded"]
-    if missing and sys.stdin.isatty():
-        print(f"⚠️  {len(missing)} PDFs still not downloaded. Manually download to {PDF_CACHE_DIR} to continue.")
+    if missing and prompt_for_manual and sys.stdin.isatty():
+        print(f"⚠️  {len(missing)} PDFs still not downloaded. Manually download to {pdf_dir} to continue.")
         try:
             user_input = input("⏸ Press Enter to re-scan cache, or type skip: ").strip().lower()
         except EOFError:
             user_input = "skip"
         if user_input != "skip":
             for pmid in missing:
-                target_pdf = PDF_CACHE_DIR / f"PMID_{pmid}.pdf"
+                target_pdf = pdf_dir / f"PMID_{pmid}.pdf"
                 if target_pdf.exists():
                     print(f"[PDF] PMID_{pmid} cache hit: {target_pdf}")
                     results[pmid] = {"status": "downloaded", "pdf_path": str(target_pdf)}

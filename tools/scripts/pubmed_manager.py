@@ -39,6 +39,14 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 from tools.pubmed.client import PubMedClient
 
 
+def _ncbi_verify_ssl() -> bool:
+    """Return the shared NCBI TLS policy used by the PubMed client."""
+    verify = os.getenv("NCBI_VERIFY_SSL", "true").strip().lower() != "false"
+    if not verify:
+        requests.packages.urllib3.disable_warnings()
+    return verify
+
+
 def _fetch_pubmed_details_with_keywords(
     pmid: str, api_key: Optional[str] = None
 ) -> Dict[str, str]:
@@ -49,7 +57,12 @@ def _fetch_pubmed_details_with_keywords(
         params["api_key"] = api_key
 
     try:
-        response = requests.get(url, params=params, timeout=15)
+        response = requests.get(
+            url,
+            params=params,
+            timeout=15,
+            verify=_ncbi_verify_ssl(),
+        )
         if response.status_code != 200:
             return {}
 
@@ -232,7 +245,12 @@ def _fetch_pubmed_details_with_keywords_batch(
         params["api_key"] = api_key
 
     try:
-        response = requests.get(url, params=params, timeout=30)
+        response = requests.get(
+            url,
+            params=params,
+            timeout=30,
+            verify=_ncbi_verify_ssl(),
+        )
         if response.status_code != 200:
             return {}
 
@@ -743,9 +761,10 @@ def fix_missing_fields(input_csv: Path, output_csv: Path):
         pmid = row.get("PMID", "").strip()
         if not pmid:
             continue
+        title = row.get("Title", "").strip()
         abstract = row.get("Abstract", "").strip()
         keywords = row.get("Keywords", "").strip()
-        if not (abstract and keywords):
+        if not (title and abstract and keywords):
             missing_pmids.append(pmid)
 
     missing_pmids = list(dict.fromkeys(missing_pmids))
@@ -776,13 +795,16 @@ def fix_missing_fields(input_csv: Path, output_csv: Path):
             print(f"[{i:2d}] [SKIP] 无PMID，跳过")
             continue
 
+        title = row.get("Title", "").strip()
         abstract = row.get("Abstract", "").strip()
         keywords = row.get("Keywords", "").strip()
-        if abstract and keywords:
+        if title and abstract and keywords:
             skipped += 1
             continue
 
         missing = []
+        if not title:
+            missing.append("标题")
         if not abstract:
             missing.append("摘要")
         if not keywords:

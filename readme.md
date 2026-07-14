@@ -125,6 +125,30 @@ metaagent screening run \
   --batch-concurrency 5
 ```
 
+Before the first LLM call, interactive screening inspects `PMID`, `Title`,
+`Abstract`, and `Keywords`. If metadata is incomplete, the CLI shows the
+missing-field counts and offers to retrieve available PubMed metadata. The
+input CSV is updated in place after a one-time backup such as
+`raw.before_enrichment.csv` is created. Records that still have no abstract
+remain eligible for title-only screening; they are not silently removed.
+
+For unattended runs, choose the behavior explicitly:
+
+```bash
+# Complete available metadata before screening.
+metaagent screening run ... --no-interactive --fix-missing
+
+# Keep the input unchanged and continue with available text.
+metaagent screening run ... --no-interactive --no-fix-missing
+```
+
+The standalone metadata command remains available when a separate output file
+is preferred:
+
+```bash
+metaagent pubmed fix --input raw.csv --output raw_enriched.csv
+```
+
 Evaluate the run against the small ground-truth set:
 
 ```bash
@@ -146,8 +170,45 @@ review and resolves to `dataset/avian_influenza/screening/positivity_rate/p1/`.
 
 ## Coding and Extraction
 
-The coding CLI operates on locally available full text and disease-specific
-codebooks:
+After reviewing the screening output and its strong, possible, and unlikely
+counts, prepare full text for the strong and possible candidates:
+
+```bash
+metaagent pdf fetch
+```
+
+The guided command asks for the disease, parameter, project ID, and record
+source. A screened source selects `S+P` by default. It saves the reproducible
+selection before asking whether PDFs should be fetched. Open-access PMC
+retrieval is the default; records without available PMC full text remain in the
+status manifest.
+
+```text
+paper_pool/
+├── pdfs/PMID_<id>.pdf
+└── projects/avian_influenza/positivity_rate/p1/
+    ├── pmids.txt
+    ├── fetch_plan.json
+    └── fetch_results.csv
+```
+
+The same operation can run non-interactively:
+
+```bash
+metaagent pdf fetch \
+  --no-interactive \
+  --disease "Avian influenza" \
+  --parameter "Positivity rate" \
+  --project-id p1 \
+  --source screened \
+  --input evaluation/avian_influenza/screening/positivity_rate/p1/screened.csv \
+  --tiers S,P \
+  --strategy pmc-only \
+  --download
+```
+
+The coding CLI then operates on the shared full-text cache and
+disease-specific codebooks:
 
 ```bash
 metaagent coding --help
