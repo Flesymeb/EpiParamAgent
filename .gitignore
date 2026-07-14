@@ -101,6 +101,7 @@ torch_cache/
 
 # Experiment outputs. Keep Python/YAML experiment implementations tracked.
 evaluation/experiments/
+evaluation/**/experiments/
 evaluation/results/
 evaluation/screening_prompt_eval/
 evaluation/_legacy/

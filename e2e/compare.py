@@ -9,6 +9,7 @@ Outputs:
 """
 from __future__ import annotations
 
+import argparse
 import glob
 import json
 import sys
@@ -23,8 +24,9 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 from tools.analysis.pooling import enrich_ci, summarize  # type: ignore
 
-MODULAR_XLSX = ROOT / "evaluation/coding/covid19/serial_interval/p13/coding_runs/20260421_125302_527/coding_sheet_20260421_135142.xlsx"
-E2E_XLSX = sorted((ROOT / "e2e/runs/p13").glob("coding_sheet*.xlsx"))
+DEFAULT_MODULAR_XLSX = ROOT / "evaluation/coding/covid19/serial_interval/p13/coding_runs/20260421_125302_527/coding_sheet_20260421_135142.xlsx"
+DEFAULT_E2E_DIR = ROOT / "e2e/runs/p13"
+DEFAULT_OUT_PREFIX = ROOT / "e2e/comparison_p13"
 PARAM = "serial_interval"
 MEASURE = "mean"
 
@@ -70,14 +72,21 @@ def pool(df: pd.DataFrame) -> dict:
 
 
 def main() -> None:
-    if not E2E_XLSX:
-        print("ERROR: no e2e coding_sheet xlsx found in e2e/runs/p13/")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--modular-xlsx", type=Path, default=DEFAULT_MODULAR_XLSX)
+    parser.add_argument("--e2e-dir", type=Path, default=DEFAULT_E2E_DIR)
+    parser.add_argument("--out-prefix", type=Path, default=DEFAULT_OUT_PREFIX)
+    args = parser.parse_args()
+
+    e2e_xlsx_files = sorted(args.e2e_dir.glob("coding_sheet*.xlsx"))
+    if not e2e_xlsx_files:
+        print(f"ERROR: no e2e coding_sheet xlsx found in {args.e2e_dir}")
         sys.exit(1)
-    e2e_xlsx = E2E_XLSX[-1]
-    mod = pd.read_excel(MODULAR_XLSX)
+    e2e_xlsx = e2e_xlsx_files[-1]
+    mod = pd.read_excel(args.modular_xlsx)
     e2e = pd.read_excel(e2e_xlsx)
     print(f"modular rows={len(mod)} e2e rows={len(e2e)}")
-    print(f"modular xlsx={MODULAR_XLSX.name}\ne2e xlsx={e2e_xlsx.name}")
+    print(f"modular xlsx={args.modular_xlsx.name}\ne2e xlsx={e2e_xlsx.name}")
 
     mp = primary_si_rows(mod).set_index("pmid")
     ep = primary_si_rows(e2e).set_index("pmid")
@@ -106,7 +115,10 @@ def main() -> None:
             "e2e_notes": (str(e["notes"])[:160] if e is not None and "notes" in e else ""),
         })
     comp = pd.DataFrame(rows)
-    comp.to_csv(ROOT / "e2e/comparison_p13_perpaper.csv", index=False)
+    perpaper_path = args.out_prefix.with_name(args.out_prefix.name + "_perpaper.csv")
+    pooled_path = args.out_prefix.with_name(args.out_prefix.name + "_pooled.csv")
+    summary_path = args.out_prefix.with_name(args.out_prefix.name + "_summary.json")
+    comp.to_csv(perpaper_path, index=False)
 
     matched = comp[comp["in_modular"] & comp["in_e2e"]].copy()
     matched_both_pt = matched[matched["modular_pt"].notna() & matched["e2e_pt"].notna()]
@@ -127,7 +139,7 @@ def main() -> None:
          "n_studies": OFFICIAL["n_studies"], "se_pooled": np.nan, "i2": np.nan,
          "tau2": np.nan, "p_het": np.nan, "n_excluded": np.nan, "n_imputed": np.nan},
     ])
-    pooled_df.to_csv(ROOT / "e2e/comparison_p13_pooled.csv", index=False)
+    pooled_df.to_csv(pooled_path, index=False)
 
     summary = {
         "n_modular_pmids": int(comp["in_modular"].sum()),
@@ -152,7 +164,7 @@ def main() -> None:
             "pooled_mean": round(pooled_e2e["pooled_mean"] - OFFICIAL["pooled_mean"], 4),
         },
     }
-    (ROOT / "e2e/comparison_p13_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    summary_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
     print("\n=== PER-PAPER AGREEMENT ===")
     for k, v in summary.items():

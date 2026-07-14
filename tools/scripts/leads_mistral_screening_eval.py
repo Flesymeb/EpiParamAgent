@@ -21,7 +21,7 @@ import time
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 import yaml
 
@@ -56,6 +56,9 @@ DEFAULT_PROFILES_BY_DISEASE = {
 
 PROMPT_STYLES = (
     "strict_simple",
+    "reviewcopilot_minimal",
+    "reviewcopilot_style",
+    "screenprompt_lite",
     "disease_parameter_minimal",
     "disease_parameter_relevance",
     "disease_parameter_useful",
@@ -64,6 +67,8 @@ PROMPT_STYLES = (
     "disease_parameter_numerical_value",
     "disease_parameter_primary_study",
     "disease_parameter_all_conditions",
+    "disease_parameter_broad",
+    "disease_parameter_keyword_only",
 )
 
 SIMPLE_DISEASE_LABELS = {
@@ -111,6 +116,13 @@ RESULT_FIELDS = [
     "parameter_score",
     "parameter_justification",
 ]
+
+DEFAULT_API_BASE_URL = "http://127.0.0.1:8000/v1"
+DEFAULT_API_KEY = "testtoken"
+DEFAULT_MODEL = "zifeng-ai/leads-mistral-7b-v1"
+ENDPOINT_ENV_VARS = ("LEADS_ENDPOINT", "LLM_API_BASE", "OPENAI_API_BASE")
+API_KEY_ENV_VARS = ("LEADS_API_KEY", "LLM_API_KEY", "OPENAI_API_KEY")
+MODEL_ENV_VARS = ("LEADS_MODEL", "LLM_MODEL", "OPENAI_MODEL")
 
 
 @dataclass(frozen=True)
@@ -343,17 +355,88 @@ def normalize_base_url(base_url: str) -> str:
     return value
 
 
+def first_nonempty(*values: Any) -> str | None:
+    for value in values:
+        if value is None:
+            continue
+        text = str(value).strip()
+        if text:
+            return text
+    return None
+
+
+def first_env(names: tuple[str, ...]) -> str | None:
+    for name in names:
+        value = os.getenv(name)
+        if value and value.strip():
+            return value.strip()
+    return None
+
+
+def load_project_llm_config(project_root: Path) -> Any | None:
+    if str(project_root) not in sys.path:
+        sys.path.insert(0, str(project_root))
+    try:
+        from metaagent.config import load_llm_config
+    except Exception:
+        return None
+    try:
+        return load_llm_config(module_hint="screening")
+    except Exception as exc:
+        print(f"WARN: could not load project LLM config: {exc}", file=sys.stderr)
+        return None
+
+
+def resolve_llm_runtime_args(args: argparse.Namespace, project_root: Path) -> None:
+    # Capture process env before metaagent.config loads .env.local. This keeps
+    # explicit shell overrides above project defaults.
+    endpoint_env = first_env(ENDPOINT_ENV_VARS)
+    api_key_env = first_env(API_KEY_ENV_VARS)
+    model_env = first_env(MODEL_ENV_VARS)
+    cfg = load_project_llm_config(project_root)
+
+    args.base_url = normalize_base_url(
+        first_nonempty(
+            args.base_url,
+            endpoint_env,
+            getattr(cfg, "api_base", None),
+            DEFAULT_API_BASE_URL,
+        )
+        or DEFAULT_API_BASE_URL
+    )
+    args.api_key = first_nonempty(
+        args.api_key,
+        api_key_env,
+        getattr(cfg, "api_key", None),
+        DEFAULT_API_KEY,
+    )
+    args.model = first_nonempty(
+        args.model,
+        model_env,
+        getattr(cfg, "model", None),
+        DEFAULT_MODEL,
+    )
+    if args.timeout_s is None:
+        args.timeout_s = float(getattr(cfg, "timeout_s", 120) or 120)
+    if args.verify_ssl is None:
+        args.verify_ssl = bool(getattr(cfg, "verify_ssl", True))
+
+
 def build_messages(
     profile: ScreeningProfile,
     row: dict[str, Any],
     *,
     abstract_max_chars: int,
     prompt_style: str,
+    title_only: bool = False,
 ) -> list[dict[str, str]]:
     title = truncate_text(get_field(row, "Title", "title"), 1200)
-    abstract = truncate_text(get_field(row, "Abstract", "abstract"), abstract_max_chars)
-    if not abstract:
-        abstract = "(No abstract.)"
+    if title_only:
+        abstract = "(No abstract — title-only screening.)"
+    else:
+        abstract = truncate_text(get_field(row, "Abstract", "abstract"), abstract_max_chars)
+        if not abstract:
+            abstract = "(No abstract.)"
 
     if prompt_style == "strict_simple":
         user = f"""
@@ -365,6 +448,65 @@ Abstract: {abstract}
 Be strict. Include only if the title/abstract clearly looks directly useful for the question.
 If it is vague, off-topic, review/editorial/protocol, or only mentions the topic, exclude it.
 JSON only: {{"include": true/false, "reason": "short"}}
+""".strip()
+    elif prompt_style == "reviewcopilot_minimal":
+        user = f"""
+You are assisting with title and abstract screening for a systematic review.
+
+Review question:
+{profile.research_question}
+
+Based only on the title and abstract, decide whether this record should be included.
+Include only if it clearly appears to directly address the review question with relevant empirical information.
+Exclude if it is unclear, only indirectly related, a background discussion, protocol, editorial, or secondary review.
+
+Title: {title}
+Abstract: {abstract}
+
+Return JSON only: {{"include": true/false, "reason": "short"}}
+""".strip()
+    elif prompt_style == "reviewcopilot_style":
+        user = f"""
+You are assisting with title and abstract screening for a systematic review.
+
+Review question:
+{profile.research_question}
+
+Inclusion focus:
+- Disease/population: {profile.disease_focus}
+- Target parameter or outcome: {profile.parameter_focus}
+
+Exclusion focus:
+- Disease/population exclusions: {profile.disease_exclude}
+- Parameter/outcome exclusions: {profile.parameter_exclude}
+- Exclude clearly irrelevant records, non-research items, protocols, editorials, and secondary reviews unless the abstract suggests original usable evidence for this review.
+
+Screening rule:
+- "include": likely meets the review question from title/abstract.
+- "unclear": insufficient information, but plausibly relevant and should proceed to manual or full-text review.
+- "exclude": clearly not relevant.
+Prefer "unclear" over "exclude" for borderline records, because title/abstract screening should preserve sensitivity.
+
+Title: {title}
+Abstract: {abstract}
+
+Return JSON only: {{"decision": "include/unclear/exclude", "include": true/false, "reason": "short"}}
+""".strip()
+    elif prompt_style == "screenprompt_lite":
+        disease = simple_disease_label(profile)
+        parameter = simple_parameter_label(profile)
+        user = f"""
+You are screening title/abstract records for an epidemiology systematic review.
+Review question: {profile.research_question}
+
+Include if the paper appears to study {disease} and may report data, estimates, or analysis relevant to {parameter}.
+Exclude if it is clearly unrelated, a review/editorial/protocol, or only mentions the topic without usable evidence.
+If uncertain from the title/abstract, include.
+
+Title: {title}
+Abstract: {abstract}
+
+Return JSON only: {{"include": true/false, "reason": "short"}}
 """.strip()
     elif prompt_style == "disease_parameter_minimal":
         disease = simple_disease_label(profile)
@@ -470,6 +612,32 @@ Abstract: {abstract}
 
 Return JSON only: {{"include": true/false, "reason": "short"}}
 """.strip()
+    elif prompt_style == "disease_parameter_broad":
+        disease = simple_disease_label(profile)
+        parameter = simple_parameter_label(profile)
+        user = f"""
+I am collecting papers broadly related to {disease} and {parameter} for a literature review.
+Include the paper if it is in any way related to {disease} or to {parameter}, even if it only
+mentions, discusses, reviews, models, or indirectly touches on them. Prefer including borderline
+or uncertain cases rather than excluding them. Only exclude if the paper is entirely unrelated to
+both {disease} and {parameter}.
+
+Title: {title}
+Abstract: {abstract}
+
+Return JSON only: {{"include": true/false, "reason": "short"}}
+""".strip()
+    elif prompt_style == "disease_parameter_keyword_only":
+        disease = simple_disease_label(profile)
+        parameter = simple_parameter_label(profile)
+        user = f"""
+Does this paper mention {disease} or {parameter} anywhere in the title or abstract?
+
+Title: {title}
+Abstract: {abstract}
+
+Return JSON only: {{"include": true/false, "reason": "short"}}
+""".strip()
     else:
         raise ValueError(f"Unknown prompt style: {prompt_style!r}")
     return [{"role": "user", "content": user}]
@@ -533,6 +701,18 @@ def normalize_bool(value: Any) -> bool | None:
     text = str(value).strip().lower()
     if text in {"true", "yes", "y", "include", "included", "eligible", "relevant", "1"}:
         return True
+    if text in {
+        "unclear",
+        "maybe",
+        "possible",
+        "possibly",
+        "possibly_include",
+        "needs_review",
+        "requires_review",
+        "full_text_review",
+        "manual_review",
+    }:
+        return True
     if text in {"false", "no", "n", "exclude", "excluded", "ineligible", "irrelevant", "0"}:
         return False
     if (
@@ -543,7 +723,14 @@ def normalize_bool(value: Any) -> bool | None:
         or "not relevant" in text
     ):
         return False
-    if "include" in text or "eligible" in text or "relevant" in text:
+    if (
+        "include" in text
+        or "eligible" in text
+        or "relevant" in text
+        or "unclear" in text
+        or "manual review" in text
+        or "full text" in text
+    ):
         return True
     return None
 
@@ -563,6 +750,15 @@ def parse_prediction(content: str, *, possible_confidence_threshold: float) -> d
             break
     include = normalize_bool(include_value)
     if include is None:
+        if parse_error:
+            return {
+                "include": False,
+                "confidence": 0.0,
+                "reason": f"Parse error: {parse_error}",
+                "llm_suggest": "error",
+                "parse_error": parse_error,
+                "parsed_json": data,
+            }
         include = False
         parse_error = parse_error or f"could not normalize include value: {include_value!r}"
 
@@ -583,8 +779,27 @@ def parse_prediction(content: str, *, possible_confidence_threshold: float) -> d
     if not reason and parse_error:
         reason = f"Parse error: {parse_error}"
 
+    decision_text = str(data.get("decision") or data.get("label") or include_value or "").strip().lower()
+    is_unclear = any(
+        marker in decision_text
+        for marker in (
+            "unclear",
+            "maybe",
+            "possible",
+            "needs_review",
+            "requires_review",
+            "manual_review",
+            "manual review",
+            "full_text",
+            "full text",
+        )
+    )
+    if is_unclear:
+        include = True
+        if raw_confidence is None:
+            confidence = min(confidence, possible_confidence_threshold - 0.01)
     if include:
-        label = "possible_candidate" if confidence < possible_confidence_threshold else "strong_candidate"
+        label = "possible_candidate" if is_unclear or confidence < possible_confidence_threshold else "strong_candidate"
     else:
         label = "unlikely_candidate"
 
@@ -633,6 +848,57 @@ async def check_server(client: Any, base_url: str, api_key: str, model: str) -> 
         print(f"WARN: requested model {model!r} not found in /models: {served_ids}")
 
 
+def build_chat_payload(
+    *,
+    model: str,
+    messages: list[dict[str, str]],
+    temperature: float,
+    max_tokens: int,
+    response_format_json: bool,
+    stream: bool,
+    reasoning_effort: str | None,
+) -> dict[str, Any]:
+    payload: dict[str, Any] = {
+        "model": model,
+        "messages": messages,
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+    }
+    if response_format_json:
+        payload["response_format"] = {"type": "json_object"}
+    if stream:
+        payload["stream"] = True
+        payload["stream_options"] = {"include_usage": True}
+    if reasoning_effort:
+        payload["reasoning_effort"] = reasoning_effort
+    return payload
+
+
+def parse_chat_completion_stream(lines: Iterable[str]) -> tuple[str, dict[str, Any]]:
+    content_parts: list[str] = []
+    usage: dict[str, Any] = {}
+    for raw_line in lines:
+        line = str(raw_line or "").strip()
+        if not line.startswith("data:"):
+            continue
+        body = line[5:].strip()
+        if not body or body == "[DONE]":
+            continue
+        try:
+            event = json.loads(body)
+        except json.JSONDecodeError:
+            continue
+        event_usage = event.get("usage")
+        if isinstance(event_usage, dict) and event_usage:
+            usage = event_usage
+        for choice in event.get("choices", []) or []:
+            delta = choice.get("delta") or {}
+            text = delta.get("content")
+            if isinstance(text, str):
+                content_parts.append(text)
+    return "".join(content_parts), usage
+
+
 async def call_chat_completion(
     client: Any,
     *,
@@ -643,6 +909,8 @@ async def call_chat_completion(
     temperature: float,
     max_tokens: int,
     response_format_json: bool,
+    stream: bool,
+    reasoning_effort: str | None,
     retries: int,
 ) -> tuple[str, dict[str, Any]]:
     url = f"{base_url}/chat/completions"
@@ -650,25 +918,32 @@ async def call_chat_completion(
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
     }
-    payload: dict[str, Any] = {
-        "model": model,
-        "messages": messages,
-        "temperature": temperature,
-        "max_tokens": max_tokens,
-    }
-    if response_format_json:
-        payload["response_format"] = {"type": "json_object"}
+    payload = build_chat_payload(
+        model=model,
+        messages=messages,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        response_format_json=response_format_json,
+        stream=stream,
+        reasoning_effort=reasoning_effort,
+    )
 
     last_error: Exception | None = None
     for attempt in range(1, max(1, retries) + 1):
         started = time.perf_counter()
         try:
-            response = await client.post(url, headers=headers, json=payload)
-            response.raise_for_status()
-            data = response.json()
+            if stream:
+                async with client.stream("POST", url, headers=headers, json=payload) as response:
+                    response.raise_for_status()
+                    lines = [line async for line in response.aiter_lines()]
+                content, usage = parse_chat_completion_stream(lines)
+            else:
+                response = await client.post(url, headers=headers, json=payload)
+                response.raise_for_status()
+                data = response.json()
+                content = data.get("choices", [{}])[0].get("message", {}).get("content", "")
+                usage = data.get("usage", {}) or {}
             wall_ms = round((time.perf_counter() - started) * 1000, 1)
-            content = data.get("choices", [{}])[0].get("message", {}).get("content", "")
-            usage = data.get("usage", {}) or {}
             usage["wall_time_ms"] = wall_ms
             return str(content), usage
         except Exception as exc:
@@ -858,6 +1133,7 @@ async def screen_one(
         row,
         abstract_max_chars=args.abstract_max_chars,
         prompt_style=args.prompt_style,
+        title_only=getattr(args, "title_only", False),
     )
     try:
         content, usage = await call_chat_completion(
@@ -869,6 +1145,8 @@ async def screen_one(
             temperature=args.temperature,
             max_tokens=args.max_tokens,
             response_format_json=args.response_format_json,
+            stream=args.stream,
+            reasoning_effort=args.reasoning_effort,
             retries=args.retries,
         )
         prediction = parse_prediction(
@@ -1074,24 +1352,29 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--base-url",
-        default=os.getenv("LEADS_ENDPOINT")
-        or os.getenv("LLM_API_BASE")
-        or os.getenv("OPENAI_API_BASE")
-        or "http://127.0.0.1:8000/v1",
-        help="OpenAI-compatible API base URL, e.g. http://127.0.0.1:8000/v1",
+        default=None,
+        help=(
+            "OpenAI-compatible API base URL. Resolution order: CLI, "
+            "LEADS_ENDPOINT/LLM_API_BASE/OPENAI_API_BASE, project .env.local, "
+            f"{DEFAULT_API_BASE_URL}."
+        ),
     )
     parser.add_argument(
         "--api-key",
-        default=os.getenv("LEADS_API_KEY")
-        or os.getenv("LLM_API_KEY")
-        or os.getenv("OPENAI_API_KEY")
-        or "testtoken",
-        help="API key for the OpenAI-compatible endpoint; vLLM accepts any non-empty value.",
+        default=None,
+        help=(
+            "API key for the OpenAI-compatible endpoint. Resolution order: CLI, "
+            "LEADS_API_KEY/LLM_API_KEY/OPENAI_API_KEY, project .env.local, "
+            "then a local vLLM placeholder."
+        ),
     )
     parser.add_argument(
         "--model",
-        default=os.getenv("LLM_MODEL") or "zifeng-ai/leads-mistral-7b-v1",
-        help="Served model name configured in vLLM.",
+        default=None,
+        help=(
+            "Served model name. Resolution order: CLI, LEADS_MODEL/LLM_MODEL/"
+            f"OPENAI_MODEL, project .env.local, {DEFAULT_MODEL}."
+        ),
     )
     parser.add_argument(
         "--prompt-style",
@@ -1099,24 +1382,36 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default="strict_simple",
         help=(
             "Prompt template to use. strict_simple keeps the previous strict question prompt; "
+            "screenprompt_lite is a short AgentSLR/ScreenPrompt-style adaptation; "
             "the disease_parameter_* variants progressively simplify the task into more ambiguous "
             "disease/parameter relevance judgments."
         ),
     )
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--max-tokens", type=int, default=64)
-    parser.add_argument("--timeout-s", type=float, default=120.0)
+    parser.add_argument("--timeout-s", type=float, default=None)
     parser.add_argument("--retries", type=int, default=3)
     parser.add_argument("--concurrency", type=int, default=8)
     parser.add_argument("--log-every", type=int, default=25)
     parser.add_argument("--abstract-max-chars", type=int, default=5000)
+    parser.add_argument(
+        "--title-only",
+        action="store_true",
+        help="Drop the abstract (simulate title-only metadata screening). Increases both FN and FP.",
+    )
     parser.add_argument("--limit", type=int, default=0, help="Smoke-test limit per profile; 0 means no limit")
     parser.add_argument("--possible-confidence-threshold", type=float, default=0.7)
     parser.add_argument("--response-format-json", action="store_true", help="Send response_format=json_object to vLLM")
+    parser.add_argument("--stream", action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument(
+        "--reasoning-effort",
+        choices=["none", "minimal", "low", "medium", "high", "xhigh"],
+        default=None,
+    )
     parser.add_argument("--save-raw-response", action="store_true", help="Also store raw model output in the screened CSV")
     parser.add_argument("--resume", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--check-server", action=argparse.BooleanOptionalAction, default=True)
-    parser.add_argument("--verify-ssl", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument("--verify-ssl", action=argparse.BooleanOptionalAction, default=None)
     parser.add_argument("--fail-on-missing", action="store_true", help="Exit non-zero if any raw/GT file is missing")
     parser.add_argument("--dry-run", action="store_true", help="Resolve profiles and paths without calling the model")
     return parser
@@ -1124,7 +1419,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 async def async_main(args: argparse.Namespace) -> int:
     project_root = Path(args.project_root).resolve()
-    args.base_url = normalize_base_url(args.base_url)
+    resolve_llm_runtime_args(args, project_root)
     args.data_root = str(args.data_root or "").strip()
     data_root = (project_root / args.data_root).resolve() if args.data_root else None
     if not args.experiment:
@@ -1156,6 +1451,8 @@ async def async_main(args: argparse.Namespace) -> int:
         "concurrency": args.concurrency,
         "limit": args.limit,
         "response_format_json": args.response_format_json,
+        "stream": args.stream,
+        "reasoning_effort": args.reasoning_effort,
         "created_at": datetime.now().isoformat(timespec="seconds"),
     }
     (aggregate_dir / "run_config.json").write_text(json.dumps(run_config, indent=2), encoding="utf-8")
