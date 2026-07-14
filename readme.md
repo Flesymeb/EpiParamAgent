@@ -103,30 +103,16 @@ prompts before its coding results are used in an experiment.
 - `metaagent/`: reusable screening, coding, extraction, and analysis package.
 - `configs/`: tracked screening profiles, codebooks, and prompt templates.
 - `tools/`: PubMed, PDF, MinerU, pooling, and evaluation utilities.
-- `webapp/`: optional human-review interface; not required for CLI experiments.
 
 The following local paths are intentionally ignored by Git:
 
 - `dataset/` and `data/`
 - `paper_pool/` and `external/`
 - `baselines/`, `e2e/`, and `evaluation/`
-- `tests/` and `scripts/`
+- `tests/`, `scripts/`, and `webapp/`
 - `output/`
 - `docs/`
 - `archive/`
 
 Do not force-add files from these paths. Share approved datasets and experiment
 artifacts through the project storage agreed by the research team.
-
-## Optional Web Interface
-
-The Web UI is not required for CLI experiments. To run it locally, start the
-backend and frontend in separate terminals:
-
-```bash
-webapp/run-backend.sh
-webapp/run-frontend.sh
-```
-
-Then open [http://127.0.0.1:5173](http://127.0.0.1:5173). Additional setup is documented in
-[`webapp/README.md`](webapp/README.md).

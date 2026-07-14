@@ -91,6 +91,7 @@ torch_cache/
 /evaluation/
 /scripts/
 /tests/
+/webapp/
 /docs/
 /archive/
 /dataset/
@@ -118,7 +119,6 @@ torch_cache/
 !/tools/scripts/screening_prepare.py
 !/tools/scripts/screening_report.py
 /tools/paper_fetch/pmid.txt
-/webapp/seed_example_run.py
 
 # Browser and UI debugging captures
 .playwright-cli/

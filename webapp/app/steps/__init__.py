@@ -1,2 +1,0 @@
-"""Pipeline step registry package."""
-
