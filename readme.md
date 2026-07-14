@@ -211,9 +211,19 @@ The coding CLI then operates on the shared full-text cache and
 disease-specific codebooks:
 
 ```bash
-metaagent coding --help
-metaagent coding extract --help
+metaagent coding extract \
+  --disease covid19 \
+  --topic reproduction_number \
+  --profile P17 \
+  --stage both \
+  --fetch-mode pmc_only
 ```
+
+`--stage both` runs Stage A evidence localization followed by Stage B
+structured extraction. Cached PDFs under `paper_pool/pdfs/` are reused, and
+the coding results are written under `evaluation/coding/`. Use
+`metaagent coding extract --help` to inspect the available stages and fetch
+strategies.
 
 The repository currently includes COVID-19 and mpox coding examples. A new
 avian-influenza study must add and validate parameter-specific codebooks and
