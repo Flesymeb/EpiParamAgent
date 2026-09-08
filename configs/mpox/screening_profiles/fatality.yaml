@@ -65,32 +65,46 @@ defaults:
 profiles:
   MP4:
     project_number: 4
-    research_question: What is the case fatality rate (CFR) of mpox?
-    disease_focus: mpox or monkeypox or MPXV
+    research_question: What fatality outcomes and case denominators are reported for mpox in Nigeria or exported cases linked to Nigeria?
+    disease_focus: >-
+      human mpox, monkeypox, or MPXV cases in Nigeria, including exported or
+      imported cases epidemiologically linked to Nigeria
     disease_exclude: none
-    parameter_focus: case fatality rate OR CFR OR mortality rate OR infection fatality rate OR IFR
-    parameter_exclude: studies that do not report fatality or mortality rate
+    parameter_focus: >-
+      fatality or mortality outcomes among human mpox cases, including deaths,
+      survival or no deaths, or confirmed-case denominators that can contribute
+      a zero-death estimate from original case, outbreak, clinical, cohort,
+      case-series, surveillance, exported-case, or case-linked environmental
+      investigation data
+    parameter_exclude: &mpox_fatality_parameter_exclude >-
+      studies without original human mpox cases or without patient outcome or
+      case-denominator data; animal-only or laboratory-only studies without
+      human cases; reviews, editorials, and commentaries without original data
 
   MP7:
     project_number: 7
-    research_question: What is the mortality/fatality of mpox?
-    disease_focus: mpox or monkeypox or MPXV
+    research_question: What fatality or mortality outcomes are reported among human mpox cases?
+    disease_focus: &mpox_fatality_disease_scope human mpox or monkeypox or MPXV cases
     disease_exclude: none
-    parameter_focus: mortality OR fatality OR case fatality rate OR death rate
-    parameter_exclude: studies with little plausible connection to extractable mpox CFR, mortality, fatality, or patient outcome data
+    parameter_focus: &mpox_fatality_parameter_scope >-
+      fatality or mortality outcomes among human mpox cases, including deaths,
+      survival or no deaths, or confirmed-case denominators that can contribute
+      a zero-death estimate from original case, outbreak, clinical, cohort,
+      case-series, or surveillance data
+    parameter_exclude: *mpox_fatality_parameter_exclude
 
   MP8:
     project_number: 8
-    research_question: What is the case fatality rate of mpox, restricted to records created on or before 2023-03-20?
-    disease_focus: mpox or monkeypox or MPXV
+    research_question: What fatality or mortality outcomes are reported among human mpox cases, restricted to records created on or before 2023-03-20?
+    disease_focus: *mpox_fatality_disease_scope
     disease_exclude: none
-    parameter_focus: case fatality rate, CFR, fatality rate, mortality, deaths, death rate, fatal outcomes, no deaths, survival/death status, or mortality among mpox cases
-    parameter_exclude: studies created after 2023-03-20 or studies with little plausible connection to extractable mpox CFR, mortality, fatality, or patient outcome data
+    parameter_focus: *mpox_fatality_parameter_scope
+    parameter_exclude: studies created after 2023-03-20; otherwise use the common mpox-fatality exclusion standard
 
   MP12:
     project_number: 12
-    research_question: What is the CFR of mpox?
-    disease_focus: mpox or monkeypox or MPXV
+    research_question: What fatality or mortality outcomes are reported among human mpox cases?
+    disease_focus: *mpox_fatality_disease_scope
     disease_exclude: none
-    parameter_focus: case fatality rate OR CFR OR mortality
-    parameter_exclude: studies that do not report fatality rate
+    parameter_focus: *mpox_fatality_parameter_scope
+    parameter_exclude: *mpox_fatality_parameter_exclude

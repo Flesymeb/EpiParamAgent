@@ -62,9 +62,13 @@ def init_llm(config_overrides: dict[str, object] | None = None):
         trust_env=trust_env,
     )
     extra_body = None
-    if cfg.provider == "bailian" and str(model).lower().startswith("glm-"):
-        # GLM models on Bailian default to thinking mode. Direct extraction
-        # baselines need compact, JSON-first responses, so use non-thinking mode.
+    if cfg.provider == "bailian" and (
+        str(model).lower().startswith("glm-")
+        or str(model).lower().startswith("qwen")
+    ):
+        # Bailian reasoning models default to thinking mode. Direct extraction
+        # needs compact, JSON-first responses, so use non-thinking mode for
+        # both the existing GLM baseline and the Qwen ablation backbone.
         extra_body = {"enable_thinking": False}
 
     return ChatOpenAI(

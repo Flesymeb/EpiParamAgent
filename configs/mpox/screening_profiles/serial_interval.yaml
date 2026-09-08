@@ -66,7 +66,7 @@ defaults:
 profiles:
   MP5:
     project_number: 5
-    research_question: What are the serial intervals and generation time of mpox?
+    research_question: What are the serial intervals, generation times, and incubation periods of mpox?
     disease_focus: mpox or monkeypox or MPXV
     disease_exclude: none
     parameter_focus: serial interval or generation interval or incubation period

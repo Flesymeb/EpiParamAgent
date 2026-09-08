@@ -19,6 +19,10 @@ PROMPT_FILES = {
         PROMPT_DIR / "5d" / "screening_system_full_text.md",
         PROMPT_DIR / "5d" / "screening_user_full_text.md",
     ),
+    "matched_full_text": (
+        PROMPT_DIR / "5d" / "screening_system_matched_full_text.md",
+        PROMPT_DIR / "5d" / "screening_user_title_abstract.md",
+    ),
     "possible_full_text": (
         PROMPT_DIR / "5d" / "screening_system_possible_full_text.md",
         PROMPT_DIR / "5d" / "screening_user_possible_full_text.md",

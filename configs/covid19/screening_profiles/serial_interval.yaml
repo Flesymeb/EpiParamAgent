@@ -55,11 +55,27 @@ profiles:
 
   P13:
     project_number: 13
-    research_question: What are the serial interval and generation time of COVID-19?
+    research_question: What serial interval and generation time evidence was reported or synthesized for COVID-19?
     disease_focus: (COVID-19 OR SARS-CoV-2 OR coronavirus OR 2019-nCoV OR SARS-CoV)
     disease_exclude: none
-    parameter_focus: (serial interval OR generation interval OR generation time OR serial distribution)
-    parameter_exclude: studies that do not report or estimate serial interval or generation time
+    parameter_focus: >-
+      serial interval, generation interval, generation time, or serial
+      distribution evidence reported by primary studies, modeling analyses,
+      rapid or systematic reviews, and transmission studies in which an
+      extractable timing estimate may be reported only in the full text
+    parameter_exclude: studies with no plausible extractable serial-interval or generation-time evidence
+    policies:
+      parameter_scoring_note: |
+        P13 source-review guidance:
+        - Retain papers that directly report or synthesize serial-interval,
+          generation-interval, generation-time, or serial-distribution estimates.
+        - Do not exclude a paper solely because it is a rapid review, systematic
+          review, or meta-analysis when it reports an extractable target estimate.
+        - Household-transmission, secondary-attack-rate, transmission-dynamics,
+          or clinical-severity studies can be Possible when their methods use
+          symptom-onset, contact-pair, or transmission-timing information and a
+          target estimate may appear only in the full text or supplementary data.
+        - Mere background mention without an extractable estimate remains Unlikely.
 
   P14:
     project_number: 14

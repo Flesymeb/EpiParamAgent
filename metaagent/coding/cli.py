@@ -46,6 +46,11 @@ def coding():
 )
 @click.option("--stage", default="both", show_default=True, type=click.Choice(["fetch", "both", "index", "extract"]))
 @click.option(
+    "--skip-stage-a",
+    is_flag=True,
+    help="Skip Stage A evidence localization and run Stage B directly on the full text.",
+)
+@click.option(
     "--fetch-mode",
     default="pmc_only",
     show_default=True,
@@ -53,7 +58,7 @@ def coding():
 )
 @click.option("--out", type=click.Path(path_type=Path, file_okay=False), default=None, help="Explicit output directory")
 @click.option("--codebook", type=click.Path(path_type=Path, dir_okay=False), default=None, help="Explicit codebook YAML path")
-def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, fetch_mode, out, codebook):
+def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, skip_stage_a, fetch_mode, out, codebook):
     """Run full-text evidence localization and structured extraction."""
     proj = resolve_project_root()
 
@@ -117,6 +122,8 @@ def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, 
         "--stage", stage,
         "--fetch-mode", fetch_mode,
     ]
+    if skip_stage_a:
+        argv += ["--skip-stage-a"]
     if out:
         argv += ["--out", str(out.expanduser().resolve())]
     elif profile:
@@ -147,6 +154,7 @@ def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, 
     details.add_row("Input", str(pmids_path))
     details.add_row("Codebook", str(cb_path))
     details.add_row("Stage", stage)
+    details.add_row("Stage A", "skipped" if skip_stage_a else "enabled")
     details.add_row("Full-text mode", fetch_mode)
     details.add_row("Paper pool", str(pool_root))
     details.add_row("Output", str(out.expanduser().resolve()) if out else "profile coding_runs directory")

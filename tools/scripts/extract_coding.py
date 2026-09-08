@@ -78,6 +78,11 @@ def main():
         "--codebook",
         default=str(MODULE_ROOT / "configs" / "codebook_epi.yaml"),
     )
+    parser.add_argument(
+        "--skip-stage-a",
+        action="store_true",
+        help="Skip Stage A evidence localization and run Stage B directly on the full text.",
+    )
     args = parser.parse_args()
 
     if args.out is not None:
@@ -95,6 +100,7 @@ def main():
             args.stage,
             Path(args.codebook),
             fetch_strategy=args.fetch_mode,
+            skip_stage_a=args.skip_stage_a,
         )
     except (FileNotFoundError, RuntimeError, ValueError) as exc:
         parser.exit(1, f"ERROR: {exc}\n")

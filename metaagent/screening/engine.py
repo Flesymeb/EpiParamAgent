@@ -122,6 +122,10 @@ def init_llm_model(
     }
     if cfg.reasoning_effort:
         kwargs["reasoning_effort"] = cfg.reasoning_effort
+    if cfg.provider == "bailian" and "qwen" in llm_model.lower():
+        # Screening requires concise structured classifications, not reasoning
+        # traces. Bailian Qwen models otherwise default to thinking mode.
+        kwargs["extra_body"] = {"enable_thinking": False}
     if "openrouter.ai" in api_base and "minimax/" not in llm_model.lower():
         # Some OpenRouter reasoning models otherwise return reasoning-only
         # payloads through the OpenAI-compatible API.

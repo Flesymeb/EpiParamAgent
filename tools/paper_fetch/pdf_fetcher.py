@@ -965,7 +965,14 @@ class SciHubUrlExtractor:
                 )
                 return url_results
 
-            for fallback_url in oa_candidates or self._europe_pmc_pdf_urls(pmcid):
+            fallback_urls = list(oa_candidates or self._europe_pmc_pdf_urls(pmcid))
+            # The PMC article page may expose a same-site PDF URL that returns
+            # 403 to scripted clients. Europe PMC can render the same lawful OA
+            # article directly, so always keep it as a deterministic fallback.
+            epmc_render_url = f"https://europepmc.org/articles/{pmcid}?pdf=render"
+            if epmc_render_url not in fallback_urls:
+                fallback_urls.append(epmc_render_url)
+            for fallback_url in fallback_urls:
                 if fallback_url == pmc_url:
                     continue
                 fallback = self.sess.get(

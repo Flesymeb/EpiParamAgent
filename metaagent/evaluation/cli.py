@@ -25,7 +25,7 @@ def evaluation():
 @click.option(
     "--output",
     type=click.Path(path_type=Path),
-    default=Path("docs/paper/screening/figures/generated/screening_recall_nns.png"),
+    default=Path("output/paper_figures/screening/screening_recall_nns.png"),
 )
 @click.option("--title", default="Screening Performance by Literature")
 def plot_screening(input_path: Path, output: Path, title: str) -> None:
@@ -41,7 +41,7 @@ def plot_screening(input_path: Path, output: Path, title: str) -> None:
 @click.option(
     "--output",
     type=click.Path(path_type=Path),
-    default=Path("docs/paper/coding/figures/generated/coding_intervals.png"),
+    default=Path("output/paper_figures/coding/coding_intervals.png"),
 )
 @click.option("--title", default="Coding Estimates vs Source Review")
 @click.option("--x-label", default="")

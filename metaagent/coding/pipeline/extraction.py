@@ -511,6 +511,7 @@ def run_pipeline(
     codebook_path: Path,
     fetch_strategy: str = "pmc_only",
     llm_overrides: dict[str, object] | None = None,
+    skip_stage_a: bool = False,
 ) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -609,7 +610,7 @@ def run_pipeline(
         title = f"PMID {pmid}"
         abstract = ""
 
-        if stage in ("index", "extract", "both"):
+        if stage in ("index", "extract", "both") and not skip_stage_a:
             index_path = index_dir / f"PMID_{pmid}.index.json"
             if index_path.exists():
                 index_envelope = json.loads(index_path.read_text(encoding="utf-8"))
@@ -690,6 +691,7 @@ def run_pipeline(
         module="coding_sheet",
         params={
             "stage": stage,
+            "skip_stage_a": skip_stage_a,
             "codebook": str(codebook_path.resolve()),
             "stage_a_config": str(getattr(stage_a_config, "_config_path", "")),
         },
@@ -720,6 +722,7 @@ def run_pipeline(
             "input_files": [str(p) for p in inputs],
             "xlsx_path": str(xlsx_path) if xlsx_path else None,
             "max_input_chars": max_input_chars,
+            "skip_stage_a": skip_stage_a,
             "llm_call_timeout_s": _llm_call_timeout_s(),
         },
     )
