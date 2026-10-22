@@ -1,0 +1,23 @@
+{
+  "id": 7,
+  "name": "mortality-1",
+  "title": "Global and regional mortality rate statistics of mpox (formerly monkeypox): a comprehensive systematic review and meta-analysis",
+  "pmid": "40884410",
+  "disease": "mpox",
+  "parameters": "mortality",
+  "query_text": "(mpox OR monkeypox OR monkeypox virus OR MPXV) AND (mortality OR \"case fatality\" OR death OR \"fatality rate\" OR \"global death rate\" OR pandemic)",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "1970-01-01",
+  "query_date_to": "2025-06-30",
+  "research_question": "What are the mortality and generation time of mpox",
+  "disease_focus": "mpox or monkeypox",
+  "disease_exclude": "none",
+  "transmission_focus": "mortality",
+  "transmission_exclude": "none",
+  "parameter_relevance": "mortality",
+  "parameter_exclude": "none",
+  "profile": "MP7",
+  "raw_record_count": 352,
+  "included_record_count": 27
+}

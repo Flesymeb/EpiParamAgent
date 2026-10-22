@@ -1,7 +1,14 @@
-# Dataset Workspace
+# Datasets
 
-This directory stores local inputs for screening and coding runs. Only this
-README is versioned; review data must not be committed.
+The public [benchmark_v1](benchmark_v1/README.md) contains the frozen inputs for
+the paper's 22 COVID-19 and mpox source-review tasks: 12,758 candidate records,
+668 source-review inclusion labels, source search queries and date ranges,
+and 22 manually extracted review-level reference estimates. These files are
+versioned and downloadable with the repository.
+
+All other subdirectories are local review workspaces and remain ignored.
+Model predictions, coding outputs, experimental results, tests, credentials,
+and downloaded full texts are not part of the public dataset.
 
 Recommended layout:
 

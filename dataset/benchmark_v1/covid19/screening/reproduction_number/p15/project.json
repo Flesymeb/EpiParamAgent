@@ -1,0 +1,21 @@
+{
+  "id": 15,
+  "name": "basic reproduction number-3",
+  "title": "Reproductive number of coronavirus: A systematic review and meta-analysis based on global level evidence",
+  "pmid": "33175914",
+  "disease": "COVID-19",
+  "parameters": "basic reproduction number",
+  "query_text": "corona virus, coronavirus, SARS-CoV-2, COVID-19, nCoV-2019, reproduction number, transmissibility\r\n((((((Coronavirus) OR (Corona virus)) OR (COVID-19)) OR (SARS-CoV-2)) OR (n2019-CoV)) OR (novel coronavirus)))) AND (Reproductive number)",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "2019-12-01",
+  "query_date_to": "2020-09-15",
+  "research_question": "What is the reproduction/reproductive number (R0) of COVID-19?",
+  "disease_focus": "(Coronavirus OR \\\"Corona virus\\\" OR COVID-19 OR SARS-CoV-2 OR n2019-CoV OR \\\"novel coronavirus\\\")",
+  "disease_exclude": "none",
+  "transmission_focus": "(reproductive number OR reproduction number OR R0 OR \\\"R naught\\\")",
+  "transmission_exclude": "none",
+  "profile": "P15",
+  "raw_record_count": 709,
+  "included_record_count": 25
+}

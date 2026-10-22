@@ -1,0 +1,21 @@
+{
+  "id": 5,
+  "name": "fatality-2",
+  "title": "Infection fatality rate of COVID-19 inferred from seroprevalence data",
+  "pmid": "33716331",
+  "disease": "COVID-19",
+  "parameters": "fatality",
+  "query_text": "“seroprevalence” OR “antibodies”",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "2020-05-01",
+  "query_date_to": "2020-09-09",
+  "research_question": "What are the fatality rates of SARS-CoV-2 inferred from seroprevalence or antibody studies?",
+  "disease_focus": "(COVID-19 OR COVID19 OR SARS-CoV-2 OR SARS-COV-2 OR 2019-nCoV OR coronavirus)",
+  "disease_exclude": "none",
+  "transmission_focus": "(seroprevalence OR antibodies)",
+  "transmission_exclude": "none",
+  "profile": "P5",
+  "raw_record_count": 1882,
+  "included_record_count": 48
+}

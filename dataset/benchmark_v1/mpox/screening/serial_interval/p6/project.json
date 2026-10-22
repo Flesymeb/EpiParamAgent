@@ -1,0 +1,23 @@
+{
+  "id": 6,
+  "name": "serial Intervals-2",
+  "title": "Incubation period and serial interval of mpox in 2022 global outbreak compared with historical estimates",
+  "pmid": "38781950",
+  "disease": "mpox",
+  "parameters": "serial Intervals",
+  "query_text": "(monkeypox OR mpox OR mpx) AND (incubation OR serial OR symptoms OR onset OR rash)",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "1970-01-01",
+  "query_date_to": "2024-01-04",
+  "research_question": "What are the serial Intervals and generation time of mpox",
+  "disease_focus": "mpox or monkeypox",
+  "disease_exclude": "none",
+  "transmission_focus": "serial Intervals",
+  "transmission_exclude": "none",
+  "parameter_relevance": "serial Intervals",
+  "parameter_exclude": "none",
+  "profile": "MP6",
+  "raw_record_count": 522,
+  "included_record_count": 5
+}

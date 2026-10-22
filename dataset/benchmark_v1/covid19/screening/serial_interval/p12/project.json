@@ -1,0 +1,21 @@
+{
+  "id": 12,
+  "name": "serial Interval-3",
+  "title": "Serial interval and incubation period of COVID-19: a systematic review and meta-analysis",
+  "pmid": "33706702",
+  "disease": "COVID-19",
+  "parameters": "serial Interval",
+  "query_text": "“serial interval” OR “generation time” AND “incubation period” OR “infectious period” AND “COVID-19” OR “SARS-CoV-2” OR “novel coronavirus”",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "2020-06-01",
+  "query_date_to": "2020-07-31",
+  "research_question": "What are the serial interval and generation time of COVID-19?",
+  "disease_focus": "(COVID-19 OR SARS-CoV-2 OR novel coronavirus)",
+  "disease_exclude": "none",
+  "transmission_focus": "(serial interval OR generation time OR generation interval)",
+  "transmission_exclude": "studies that do not report or estimate serial interval or generation time",
+  "profile": "P12",
+  "raw_record_count": 146,
+  "included_record_count": 19
+}

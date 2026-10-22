@@ -1,0 +1,23 @@
+{
+  "id": 10,
+  "name": "R0, Rt, serial intervals-1",
+  "title": "Global transmission characteristics of mpox outbreaks: a systematic review and meta-analysis",
+  "pmid": "41079025",
+  "disease": "mpox",
+  "parameters": "R0, Rt, serial intervals",
+  "query_text": "\"mpox\" OR \"monkeypox\"",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "1970-01-01",
+  "query_date_to": "2025-02-28",
+  "research_question": "What are the R0, Rt, serial intervals and generation time of mpox",
+  "disease_focus": "mpox or monkeypox",
+  "disease_exclude": "none",
+  "transmission_focus": "R0, Rt, serial intervals",
+  "transmission_exclude": "none",
+  "parameter_relevance": "R0, Rt, serial intervals",
+  "parameter_exclude": "none",
+  "profile": "MP10",
+  "raw_record_count": 612,
+  "included_record_count": 15
+}

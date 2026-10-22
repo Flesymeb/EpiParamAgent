@@ -1,0 +1,23 @@
+{
+  "id": 11,
+  "name": "serial intervals-3",
+  "title": "Decoding mpox: a systematic review and meta-analysis of the transmission and severity parameters of the 2022-2023 global outbreak",
+  "pmid": "39890207",
+  "disease": "mpox",
+  "parameters": "serial intervals",
+  "query_text": "(mpox OR monkeypox) AND  (serial interval OR transmission parameters)",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "2022-01-01",
+  "query_date_to": "2024-04-11",
+  "research_question": "What are the serial intervals and generation time of mpox",
+  "disease_focus": "mpox or monkeypox",
+  "disease_exclude": "none",
+  "transmission_focus": "serial intervals",
+  "transmission_exclude": "none",
+  "parameter_relevance": "serial intervals",
+  "parameter_exclude": "none",
+  "profile": "MP11",
+  "raw_record_count": 63,
+  "included_record_count": 5
+}

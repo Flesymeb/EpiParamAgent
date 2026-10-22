@@ -1,0 +1,21 @@
+{
+  "id": 13,
+  "name": "serial Interval-4",
+  "title": "Serial intervals and case isolation delays for Coronavirus disease 2019: A systematic review and meta-analysis",
+  "pmid": "34037748",
+  "disease": "COVID-19",
+  "parameters": "serial Interval",
+  "query_text": "(\"serial interval\" OR \"generation interval\" OR \"generation time\" OR \"serial distribution\") AND (\"COVID-19\" OR \"coronavirus\" OR \"2019 nCoV\" OR \"SARS CoV 2\" OR \"SARS-CoV-2\" OR \"SARS-CoV\" OR \"SARS CoV\" OR \"2019 CoV\" OR \"Pneumonia\")",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "2020-01-01",
+  "query_date_to": "2020-10-22",
+  "research_question": "What are the serial interval and generation time of COVID-19?",
+  "disease_focus": "(COVID-19 OR SARS-CoV-2 OR coronavirus OR 2019-nCoV OR SARS-CoV)",
+  "disease_exclude": "none",
+  "transmission_focus": "(serial interval OR generation interval OR generation time OR serial distribution)",
+  "transmission_exclude": "studies that do not report or estimate serial interval or generation time",
+  "profile": "P13",
+  "raw_record_count": 111,
+  "included_record_count": 51
+}
