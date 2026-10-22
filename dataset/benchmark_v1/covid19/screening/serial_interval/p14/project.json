@@ -1,0 +1,21 @@
+{
+  "id": 14,
+  "name": "serial Interval-5",
+  "title": "Estimates of serial interval for COVID-19: A systematic review and meta-analysis",
+  "pmid": "32869006",
+  "disease": "COVID-19",
+  "parameters": "serial Interval",
+  "query_text": "“COVID 19 and serial interval”, “2019-nCoV and serial interval”, “Coronavirus and serial interval”",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "2019-12-01",
+  "query_date_to": "2020-08-26",
+  "research_question": "What is the serial interval of COVID-19?",
+  "disease_focus": "(COVID-19 OR 2019-nCoV OR coronavirus)",
+  "disease_exclude": "none",
+  "transmission_focus": "(serial interval)",
+  "transmission_exclude": "studies that do not report or estimate serial interval",
+  "profile": "P14",
+  "raw_record_count": 94,
+  "included_record_count": 9
+}

@@ -1,0 +1,21 @@
+{
+  "id": 17,
+  "name": "basic reproductive number-5",
+  "title": "Estimate of the basic reproduction number for COVID-19: A systematic review and meta-analysis",
+  "pmid": "32498136",
+  "disease": "COVID-19",
+  "parameters": "basic reproductive number",
+  "query_text": "\"COVID-19” and “basic reproductionnumber” or “R0.”",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "2019-12-01",
+  "query_date_to": "2020-03-20",
+  "research_question": "What is the basic reproduction number (R0) of COVID-19?",
+  "disease_focus": "(COVID-19)",
+  "disease_exclude": "none",
+  "transmission_focus": "(basic reproduction number OR R0)",
+  "transmission_exclude": "none",
+  "profile": "P17",
+  "raw_record_count": 209,
+  "included_record_count": 15
+}

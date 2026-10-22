@@ -1,0 +1,21 @@
+{
+  "id": 4,
+  "name": "fatality-1",
+  "title": "Case Fatality Rates for Patients with COVID-19 Requiring Invasive Mechanical Ventilation. A Meta-analysis",
+  "pmid": "33119402",
+  "disease": "COVID-19",
+  "parameters": "fatality",
+  "query_text": "“mortality,”“fatality,”“ICU,” “characteristic,”“invasive,”“mechanical,” “ventilation,”“death,” and “died”",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "2020-01-01",
+  "query_date_to": "2020-07-08",
+  "research_question": "What are the fatality- and severity-related outcomes of SARS-CoV-2 infection, including mortality, ICU admission, and invasive mechanical ventilation?",
+  "disease_focus": "(COVID-19 OR COVID19 OR SARS-CoV-2 OR SARS-COV-2 OR 2019-nCoV OR coronavirus OR coronavirus disease 2019)",
+  "disease_exclude": "none",
+  "transmission_focus": "(mortality OR fatality OR death OR died OR ICU OR intensive care OR intensive care unit OR invasive mechanical ventilation OR mechanical ventilation OR ventilation OR clinical characteristic*)",
+  "transmission_exclude": "studies that do not report mortality, fatality, ICU admission, or invasive mechanical ventilation outcomes",
+  "profile": "P4",
+  "raw_record_count": 345,
+  "included_record_count": 56
+}

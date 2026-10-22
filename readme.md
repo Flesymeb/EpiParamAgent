@@ -4,9 +4,11 @@ MetaAgent-Epi is a CLI-first workflow for LLM-assisted literature screening,
 full-text coding, parameter extraction, and pooling in infectious-disease
 systematic reviews.
 
-The tracked repository contains reusable source code and configuration
-templates. Datasets, downloaded papers, credentials, experiment outputs,
-manuscripts, and local tests remain outside Git.
+The tracked repository contains reusable source code, configuration templates,
+and the public [source-review benchmark](dataset/benchmark_v1/README.md):
+22 review tasks, 12,758 candidate records, and 668 source-review inclusion labels.
+Downloaded papers, credentials, model predictions, coding outputs, experiment
+artifacts, manuscripts, and local tests remain outside Git.
 
 ## Workflow
 
@@ -46,8 +48,8 @@ so an old full-text plan is not silently reused after screening changes.
 # Install uv on Linux or macOS.
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-git clone https://github.com/Flesymeb/MetaAgent-Epi.git
-cd MetaAgent-Epi
+git clone https://github.com/Flesymeb/EpiParamAgent.git
+cd EpiParamAgent
 
 uv venv --python 3.11
 source .venv/bin/activate
@@ -476,13 +478,13 @@ not an exclusion decision, and should be reported separately.
 - `metaagent/`: reusable screening, coding, extraction, and analysis package.
 - `configs/`: tracked screening profiles, codebooks, and prompt templates.
 - `tools/`: PubMed, PDF, MinerU, pooling, and evaluation utilities.
-- `dataset/`: local review inputs; only its README is tracked.
+- `dataset/benchmark_v1/`: public benchmark inputs, labels, queries, and source-review references.
+- `dataset/`: other review inputs remain local.
 - `evaluation/`: generated run outputs; only its README is tracked.
 - `paper_pool/`: local full-text cache; only its README is tracked.
 
-The following local workspaces are intentionally ignored by Git: `dataset/`,
+The public benchmark is explicitly allowed by `.gitignore`. Other local inputs,
 `evaluation/`, `paper_pool/`, `docs/`, `tests/`, `scripts/`, `baselines/`,
-`e2e/`, `webapp/`, `output/`, and `archive/` (except tracked placeholder
-READMEs). Do not force-add local datasets, credentials, downloaded papers, or
-experiment artifacts. Share approved research data through the storage agreed
-by the project team.
+`e2e/`, `webapp/`, `output/`, and `archive/` remain ignored (except tracked
+placeholder READMEs). Do not force-add model predictions, coding outputs,
+experimental results, tests, credentials, or downloaded full texts.

@@ -1,0 +1,63 @@
+#1
+(((coronavirus*[Title/Abstract]) OR (coronavirus infection[Title/Abstract]) OR (coronavirus disease[Title/Abstract]) OR
+(coronavirus disease 2019[Title/Abstract]) OR (coronavirus disease-19[Title/Abstract]) OR (coronavirus disease
+19[Title/Abstract]) OR (covid19[Title/Abstract]) OR (covid 19[Title/Abstract]) OR (covid-19[Title/Abstract]) OR (covid-19
+pandemic[Title/Abstract]) OR (covid 19 pandemic[Title/Abstract]) OR (covid-19 virus infection[Title/Abstract]) OR (covid 19
+virus infection[Title/Abstract]) OR (covid-19 virus disease[Title/Abstract]) OR (covid 2019[Title/Abstract]) OR (sars-cov-
+2[Title/Abstract]) OR (sars cov 2[Title/Abstract]) OR (severe acute respiratory syndrome coronavirus 2[Title/Abstract]) OR
+(severe acute respiratory syndrome coronavirus 2[Supplementary Concept]) OR (novel coronavirus 2019[Title/Abstract]) OR
+(2019 novel coronavirus disease[Title/Abstract]) OR (2019 novel coronavirus infection[Title/Abstract]) OR (2019-nCoV
+infection[Title/Abstract]) OR (2019-nCoV[Title/Abstract]) OR (2019nCov[Title/Abstract]) OR (2019 nCov[Title/Abstract]))
+#2
+((Basic Reproduction Number[Title/Abstract]) OR (Basic reproductive number[Title/Abstract]) OR (Morbidity[Title/Abstract])
+OR
+(Mortality[Title/Abstract])
+OR
+(Mortality
+rate[Title/Abstract])
+OR
+(Case
+fatality
+rate[Title/Abstract])
+OR
+(Incidence[Title/Abstract]) OR (Prevalence[Title/Abstract]) OR (Serial interval[Title/Abstract]) OR (Attack rate[Title/Abstract])
+OR (Rate change[Title/Abstract]) OR (Percentage change[Title/Abstract]) OR (Percent change[Title/Abstract]) OR (Reduction
+rate[Title/Abstract]) OR (Absolute change[Title/Abstract]) OR (Reduction[Title/Abstract]) OR (Reduc*[Title/Abstract]) OR
+(Death[Title/Abstract]) OR (Excess death[Title/Abstract]) OR (Asymptomatic[Title/Abstract]) OR (Asymptomatic
+Infection[Title/Abstract]) OR (Asymptomatic Disease[Title/Abstract]) OR (Asymptomatic covid-19[Title/Abstract]) OR
+(Infection
+rate[Title/Abstract])
+OR
+(Misreport*[Title/Abstract])
+OR
+(Misreporting
+rate[Title/Abstract])
+OR
+(Forecast*[Title/Abstract])
+OR
+(Forecasting[Title/Abstract])
+OR
+(Population
+Forecast[Title/Abstract])
+OR
+(Prediction[Title/Abstract]) OR (trends[Title/Abstract]) OR (trend*[Title/Abstract]) OR (trend analysis[Title/Abstract]) OR
+(Lockdown[Title/Abstract])
+OR
+(Lock
+down[Title/Abstract])
+OR
+(travel
+ban[Title/Abstract])
+OR
+(travel
+restriction[Title/Abstract])
+OR
+(travel
+restrictions[Title/Abstract])
+OR
+(quarantine[Title/Abstract])
+OR
+(shut
+down[Title/Abstract]) OR (shutdown[Title/Abstract])))
+#3
+#1 AND #2 (human, 2019/12/1-2020/9/30)

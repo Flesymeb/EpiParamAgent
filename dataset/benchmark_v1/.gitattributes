@@ -1,0 +1,3 @@
+# Preserve original input bytes (including CSV line endings and data whitespace).
+raw.csv -text -whitespace
+query.txt -text -whitespace

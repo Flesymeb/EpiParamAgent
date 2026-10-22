@@ -1,0 +1,624 @@
+{
+  "dataset": "EpiParamAgent source-review benchmark",
+  "version": "1",
+  "published_date": "2026-10-22",
+  "source_freeze_date": "2026-05-08",
+  "profiles": 22,
+  "raw_records": 12758,
+  "included_records": 668,
+  "counting_unit": "review-record instance; articles may recur across reviews",
+  "source_code_commit": "296d27e053859c8ba4447af8e4d0c5fc67a62ae6",
+  "contents": "Benchmark inputs, reference labels, retrieval queries, and source-review reference estimates. No model predictions, coding outputs, experiment artifacts, or tests.",
+  "transformations": {
+    "raw.csv": "Byte-identical PubMed metadata snapshot from the frozen local input.",
+    "ground_truth.csv": "Bibliographic fields and source-review membership only; internal review notes and annotator metadata removed.",
+    "project.json": "Public review/query fields selected; counts recomputed from released CSVs; annotator identifiers and internal timestamps removed.",
+    "reference_estimates.csv": "Manually transcribed source-review targets only; no model-generated estimates."
+  },
+  "files": [
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p4/raw.csv",
+      "sha256": "4f19ebf097c37edfdbef06a34aecb9f486a847874f8971c3ba619e613d5ee3be",
+      "bytes": 721150,
+      "source_sha256": "4f19ebf097c37edfdbef06a34aecb9f486a847874f8971c3ba619e613d5ee3be"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p4/ground_truth.csv",
+      "sha256": "1ee900a44e298da0f945cbe76d6e2c7c5fe81266ecf7faf271f0c6594b7ed65c",
+      "bytes": 8936,
+      "source_sha256": "7b7bc5fd8695350fcfd36f4aa03196ab2f1fcd0ce328d1b34c442abc7a40ae18"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p4/project.json",
+      "sha256": "0e81f59368c3076c2006e6fcf3950e350c238f6b43f1e5be5dbaea3fda8c6c59",
+      "bytes": 1289
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p4/query.txt",
+      "sha256": "2f6abf1d031b5ba6dd91017d275a0daa37f9cb9592f613f59ef3641c60926b3c",
+      "bytes": 142
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p4/pmids.txt",
+      "sha256": "7da6df32d92653dfe83d0c6080658a672ced116e52df0ebd9326cc5b16316f22",
+      "bytes": 3105
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p5/raw.csv",
+      "sha256": "a814d424462b5bd565f40b4381888e3cbe1bf6bd8b40135a5b4d051eb307d6e1",
+      "bytes": 3131337,
+      "source_sha256": "a814d424462b5bd565f40b4381888e3cbe1bf6bd8b40135a5b4d051eb307d6e1"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p5/ground_truth.csv",
+      "sha256": "b961f6e90f2c3921d9124d7c138fadafcca52ca048c5a201b1367dc5a14d8a30",
+      "bytes": 7489,
+      "source_sha256": "501e0dbe670ce3ae916e40cdfcff9ef977a9bbb0df208750f42d4ce96a630191"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p5/project.json",
+      "sha256": "b8530a7b00c57038771e0f4cd47f69d96735707ff7613acc97fb306fb702f88b",
+      "bytes": 802
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p5/query.txt",
+      "sha256": "504a0863ff2855c3cd32fa646b7959673046112f0abde79cb4c65ef3ac959f39",
+      "bytes": 41
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p5/pmids.txt",
+      "sha256": "b87c8dc50b0a4be5d71356ef9f7ff76d8165993b4bddbe4491371a339b864ad6",
+      "bytes": 16938
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p6/raw.csv",
+      "sha256": "bfd99d9326db9a18f517ad660f1e9dda423bc37bd88e12b16b6866fd7fb39825",
+      "bytes": 4273411,
+      "source_sha256": "bfd99d9326db9a18f517ad660f1e9dda423bc37bd88e12b16b6866fd7fb39825"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p6/ground_truth.csv",
+      "sha256": "e42169ca338c81f69eb95ba8afb7f674e47c0ef6a42c69ffffd6a1b7eee6a350",
+      "bytes": 4852,
+      "source_sha256": "0cd701018c39bafceece8aa32f01b4e004483909ad6a2e7e5a0f1d429f3d2ad5"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p6/project.json",
+      "sha256": "5b337b4998833a5f6d45907cacd848c8dbe26ae06735c9be4054e38d9ca340f2",
+      "bytes": 1260
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p6/query.txt",
+      "sha256": "1c3e99f4fb2dd57b999fb74367512c4be0a0e7a16991df17d6c64ee4e6a3768c",
+      "bytes": 421
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/fatality/p6/pmids.txt",
+      "sha256": "28e1d33cd2cf45b8e853f9004a2ebac1d08292881ef6d41067c2c728b26fe256",
+      "bytes": 20277
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p7/raw.csv",
+      "sha256": "164c5e0a563d7ba84e038ec3b34efd621162f613107e5a7f11cd8db9fa78d84d",
+      "bytes": 1311286,
+      "source_sha256": "164c5e0a563d7ba84e038ec3b34efd621162f613107e5a7f11cd8db9fa78d84d"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p7/ground_truth.csv",
+      "sha256": "d1c54461f045b81aaff3ac439e07e2acba48b6d04ddf3f7a42607858e3bad75a",
+      "bytes": 18607,
+      "source_sha256": "bf265b1097216ad363a54f7497c5966636957b3e68e1bd598b432533a39855a5"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p7/project.json",
+      "sha256": "172c84960ed33cee2fda7653f3f3f1ceffb784ce2af778b2ac2f6196db418aae",
+      "bytes": 3592
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p7/query.txt",
+      "sha256": "a4e0e884e5908c1790ea42b07958b5044e9ee210c33f7ce7288a7e74bfd8262c",
+      "bytes": 2622
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p7/pmids.txt",
+      "sha256": "98ce14a539a43b4c43a72e45fbbe6014339c88c41de129cb74cc2eac41a4aac0",
+      "bytes": 5166
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p8/raw.csv",
+      "sha256": "6e333746528d6b21b03ef6208c68aded6e8ff57b6515bb0a270a51d23d981b43",
+      "bytes": 1163885,
+      "source_sha256": "6e333746528d6b21b03ef6208c68aded6e8ff57b6515bb0a270a51d23d981b43"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p8/ground_truth.csv",
+      "sha256": "cb58264365ba204425a044038cb36aee6acd0bc8d17d76c6c8dc9e8eb9cf7666",
+      "bytes": 6980,
+      "source_sha256": "81643008c208911bdc9687097e2784b8ca47b443513791e71e613f05afded62d"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p8/project.json",
+      "sha256": "b07f0844abeb9c2729e95c807c6c08d5318f67293d98b11c082078faccf4cd59",
+      "bytes": 980
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p8/query.txt",
+      "sha256": "66ace16d3df0ce126d4129eb88d16e9df34bc348e4f9c028f67c4ea54310d45e",
+      "bytes": 125
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p8/pmids.txt",
+      "sha256": "b2b38719117086cdcb0f51ce51b1cb4c40e6756a450c39eca8721c5e68d2b879",
+      "bytes": 5175
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p15/raw.csv",
+      "sha256": "c4e98c0f1ec7ed657c728b0d4b731ca64f6a202abdfee56001d128c12ac73cf4",
+      "bytes": 1444423,
+      "source_sha256": "c4e98c0f1ec7ed657c728b0d4b731ca64f6a202abdfee56001d128c12ac73cf4"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p15/ground_truth.csv",
+      "sha256": "71a84396bffdefcad4341fb6d647a401901e07cc5862f4b674bfa4eaa9627add",
+      "bytes": 3909,
+      "source_sha256": "68d283a495e27c2bcc219cb735254643233fd996e6b0a602a651e0afd98c9d95"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p15/project.json",
+      "sha256": "6bd3e25920bf6825996bd6dc32a2dc657a925783d687cad152c967ed22827705",
+      "bytes": 1109
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p15/query.txt",
+      "sha256": "63c0dd457a23a58713cf281cf7061ac73c34902534c9b654ec3c437beaf69cde",
+      "bytes": 237
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p15/pmids.txt",
+      "sha256": "763f2dc37b362f54815ab5ebd217d57fc16932981e8a36e4d3bc067094f0101f",
+      "bytes": 6381
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p16/raw.csv",
+      "sha256": "9e669d3314422d3645384c0360c46f341e9659e92332e2966b99f16214c439e9",
+      "bytes": 1158067,
+      "source_sha256": "9e669d3314422d3645384c0360c46f341e9659e92332e2966b99f16214c439e9"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p16/ground_truth.csv",
+      "sha256": "509bc0561aac52d1a9a38cd6eb9ca91921ca72a9d6514921287a482f474ca841",
+      "bytes": 5494,
+      "source_sha256": "0434716f918d2d8d12d337ac587342cd716ce7b5e4768caf2e8c0b1ca40fc60a"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p16/project.json",
+      "sha256": "d66758c6d0b550505894527ab8b374d9a1eeeaaeddedc1da8bde256c603347e1",
+      "bytes": 1034
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p16/query.txt",
+      "sha256": "a15baacaef06f10cb5b4cd039e962fb7817dbc3731bf0ecdcb98f8b27f20fe09",
+      "bytes": 201
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p16/pmids.txt",
+      "sha256": "c263aa3106b59b5cafac34679f82deebaa5f05314ef0543ee8d78bd0a6a6b035",
+      "bytes": 5175
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p17/raw.csv",
+      "sha256": "3e493516ad1fd1b2871697774a4639a40de124c8386557a792f347d21349221b",
+      "bytes": 411407,
+      "source_sha256": "3e493516ad1fd1b2871697774a4639a40de124c8386557a792f347d21349221b"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p17/ground_truth.csv",
+      "sha256": "f428cd05b35ba9001b3c4943c70b3b5ea034b6809dcc647a4da29de26b76ecb4",
+      "bytes": 2451,
+      "source_sha256": "e9a6d4090d1e0073b004cfb663da5af34267df3a0ec3091b962516d6dc6c63f9"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p17/project.json",
+      "sha256": "f2248cb4686703b8f805a1cdc90b23c432640ee5f06aee0d0f6542a415fe92ed",
+      "bytes": 782
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p17/query.txt",
+      "sha256": "a477164e6261c7581ccb38cfb5aa179b0b73affc3d0a3d08941992a00ba9b328",
+      "bytes": 61
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/reproduction_number/p17/pmids.txt",
+      "sha256": "5fbe28b196b1c16f544f4f0823f488b5fa318ab41974db1a8e7bac0a32d3f2e7",
+      "bytes": 1881
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p10/raw.csv",
+      "sha256": "b482d1aff62d60bd7317bb0a3993fb3082e874911c9ce59a86f26bc63d313184",
+      "bytes": 1456655,
+      "source_sha256": "b482d1aff62d60bd7317bb0a3993fb3082e874911c9ce59a86f26bc63d313184"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p10/ground_truth.csv",
+      "sha256": "5b1c6ff3c71f9127f35184acc8f77602f1960391dfa3062768a3b555d37dec73",
+      "bytes": 4507,
+      "source_sha256": "d2eb52f7bffda689077d55d7e41d0915c8cc380d5b27308edb99340e7ea8ea54"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p10/project.json",
+      "sha256": "6a3da0c43c4423663cae96ace9ba73a2995a9fed1159fe1284239c0f019059f6",
+      "bytes": 1108
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p10/query.txt",
+      "sha256": "3bbb59e98aa89ff1189698a4a2220a3ec19a8b311cb49d2e8d9bf263817acff8",
+      "bytes": 123
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p10/pmids.txt",
+      "sha256": "20b3690f54529d71096e8536dbb40b82d337816b3935b52bb0d4f2de8af79ac1",
+      "bytes": 5391
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p11/raw.csv",
+      "sha256": "9d9679f1998bf24831b19ef075dedf9a77822c7b4a2e71e9e0ad0ca9fbc13664",
+      "bytes": 1694170,
+      "source_sha256": "9d9679f1998bf24831b19ef075dedf9a77822c7b4a2e71e9e0ad0ca9fbc13664"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p11/ground_truth.csv",
+      "sha256": "c1e4753130a2b7d4a5b4edf879551334be9e93734af4979f0ee29d668a8c290e",
+      "bytes": 12346,
+      "source_sha256": "a6518252a673de10fe258c19c82397fc7d9a90ca9d1f0f16dab68de936a85169"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p11/project.json",
+      "sha256": "043fee2591d40da4a09c607ec309154214144fb72bef2a96dea4eab4afaf893d",
+      "bytes": 1450
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p11/query.txt",
+      "sha256": "6d7e2ad5414a239d9706cca7ac3cba362e3825bc2c616d3ce3e4d11bac2c0364",
+      "bytes": 393
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p11/pmids.txt",
+      "sha256": "4b21039c683abac6269bac2ee1b914ba47837797fca503010aea286943bb1f4d",
+      "bytes": 7569
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p12/raw.csv",
+      "sha256": "3075c373b96baabb2064f39749ed2efa01e2da2b9b13db48815a04c81c843505",
+      "bytes": 286718,
+      "source_sha256": "3075c373b96baabb2064f39749ed2efa01e2da2b9b13db48815a04c81c843505"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p12/ground_truth.csv",
+      "sha256": "4cb6065e4c439e615aaacb19b36a26fd17647aa6f3990f9dc1148d1af037f812",
+      "bytes": 2887,
+      "source_sha256": "eebafd46342b91d04b62082922b34aa67752ce4ab85fb06a7d723bc6d08ea263"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p12/project.json",
+      "sha256": "f496e410312827ce658528581f182d5ccf37f6d6c6388c6cdf21952198981343",
+      "bytes": 999
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p12/query.txt",
+      "sha256": "f8c3d3e52c5bf4e1e7118e80453d15ca010b014114bae3f777c934831ef87cca",
+      "bytes": 168
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p12/pmids.txt",
+      "sha256": "1a720b291e76027375f014a3ebbb899dfeb56f7395b8c0de84a8f42d3c01008a",
+      "bytes": 1314
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p13/raw.csv",
+      "sha256": "af81b5f0a4267be51fbcdb54d464951e1b78f9b4985aee72848e3e4d40c4bcf2",
+      "bytes": 230284,
+      "source_sha256": "af81b5f0a4267be51fbcdb54d464951e1b78f9b4985aee72848e3e4d40c4bcf2"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p13/ground_truth.csv",
+      "sha256": "16058b13c1050e72adf8866b27f628d16508d9b688c2c63f64924d03f7848f9f",
+      "bytes": 7937,
+      "source_sha256": "2b056d03552bcc3f3b821ddf6a48c578cab83be50c3e4b10ba21a4548955a273"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p13/project.json",
+      "sha256": "39315a90aeb3d9d8f35d27ba4fdf1b2a7285849b89b34c19c1978df22e4c9963",
+      "bytes": 1150
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p13/query.txt",
+      "sha256": "cbc73d3c8287f54b0cc8a9baff2899c66b83a8b28898b187959e978987e7f626",
+      "bytes": 229
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p13/pmids.txt",
+      "sha256": "71657b03733e5a373a44b56bc5f7e14c7221fff079a1348a52f8c83615dc1fd5",
+      "bytes": 999
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p14/raw.csv",
+      "sha256": "087fb40ae334c924d6795618272afa19da801e4e3071252225ee82f85b764b2c",
+      "bytes": 202877,
+      "source_sha256": "087fb40ae334c924d6795618272afa19da801e4e3071252225ee82f85b764b2c"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p14/ground_truth.csv",
+      "sha256": "a1d2f3b464f2ec862f9cbd638f98b2fe812a98298093f40fb57619466c76f6d6",
+      "bytes": 1462,
+      "source_sha256": "f10c221f5fecffb5646239395c6b6ce0b2d5e573bfba63208ae4640de5aa4284"
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p14/project.json",
+      "sha256": "d46e9380f418e17091f1fa680f07d1c77cae859e616ca26b089752d6a1d23a4a",
+      "bytes": 843
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p14/query.txt",
+      "sha256": "28402a392d13659c78a64d652d6c0c13abe2e6ed336b34acf2a07c0ae26fc0e0",
+      "bytes": 111
+    },
+    {
+      "path": "dataset/benchmark_v1/covid19/screening/serial_interval/p14/pmids.txt",
+      "sha256": "c1eefbaf9d79c366b9e8f697367302d31091d821a4966bff6b03b18f07a2fcd4",
+      "bytes": 846
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p4/raw.csv",
+      "sha256": "71f62786ef5a34ffd8d9b3b5614a514f15c160297e34a0b5fe98ba3aa81c61bc",
+      "bytes": 141390,
+      "source_sha256": "71f62786ef5a34ffd8d9b3b5614a514f15c160297e34a0b5fe98ba3aa81c61bc"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p4/ground_truth.csv",
+      "sha256": "8db161ebad5523a5389076fb5dfad3cd7559de5a337a82df2be38359eeed9c10",
+      "bytes": 1821,
+      "source_sha256": "2f7e1981b23ac800447a79693513f9af935aa269f991b30f7bc7e844a482e3e8"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p4/project.json",
+      "sha256": "9b9584d9423c6188667ed35c6792b0a107370ac143bb853834a20057652d7808",
+      "bytes": 1368
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p4/query.txt",
+      "sha256": "f779028413dfd35ea9d6b7b515e4bb2aab2a5673800ef30b09998685b184764d",
+      "bytes": 636
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p4/pmids.txt",
+      "sha256": "6ee5201eb665ee789c5216c6dd59ddebec0a2557f6e2c00f3cdf33a66f4601d1",
+      "bytes": 824
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p7/raw.csv",
+      "sha256": "e1d29fb8b5c6364a87b724059fc50087cc5acbdf46e1ad82b95fa3d5915129b6",
+      "bytes": 691014,
+      "source_sha256": "e1d29fb8b5c6364a87b724059fc50087cc5acbdf46e1ad82b95fa3d5915129b6"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p7/ground_truth.csv",
+      "sha256": "77a5dd0444f5a69ed858ef22e3d8976b8a18e98b2e420376648053bc4a770a6e",
+      "bytes": 4029,
+      "source_sha256": "08ba66de184dbb66229e323723e0f82fb9fadd84bb60ea3f422ee89cdd1b3d8e"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p7/project.json",
+      "sha256": "2e58ca75e81d3b98fd3cb88030f5cbe7322031a2634b1b908164a8b2bdd7a145",
+      "bytes": 915
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p7/query.txt",
+      "sha256": "3ea697ef8fad624de9760cf8d3f671382c76c95397b47f545456df67b8b276af",
+      "bytes": 145
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p7/pmids.txt",
+      "sha256": "f9008de61ac1f3bc8219d0d221ae8b4bcc26aa7b1a5b0e38f519865a39a4328f",
+      "bytes": 3164
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p8/raw.csv",
+      "sha256": "63f3aa9f809b57262c1d63e3b771fc098112972e440772b9ea1a2798c53176ba",
+      "bytes": 1163600,
+      "source_sha256": "63f3aa9f809b57262c1d63e3b771fc098112972e440772b9ea1a2798c53176ba"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p8/ground_truth.csv",
+      "sha256": "23893414e26e4efcc1117c626d635a6e9dace19b5b513b66faaef77f91d99398",
+      "bytes": 2353,
+      "source_sha256": "23bbd894f3ed0ac208649e242ab12b9a46ea43e73f7c9f715557bd2a384c974a"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p8/project.json",
+      "sha256": "0f5ac5f3ba6f4e99d47370c78b39b9bdc94e9b9172582d89d1afaddeb7f02207",
+      "bytes": 1013
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p8/query.txt",
+      "sha256": "3db723efd3eb71330a391fdf3111287576d79228657ff8b6c283baff8e2d0460",
+      "bytes": 231
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p8/pmids.txt",
+      "sha256": "6ca697cf0dbd06c90725f91e1d8767ab5d6e2ad1045619cd3ee5849f34329a60",
+      "bytes": 6128
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p12/raw.csv",
+      "sha256": "49cf8d380eaf6282dc39ad04f047c225407fabc668ebc981f69ba3d057cd194e",
+      "bytes": 994879,
+      "source_sha256": "49cf8d380eaf6282dc39ad04f047c225407fabc668ebc981f69ba3d057cd194e"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p12/ground_truth.csv",
+      "sha256": "c47f3d721bc2ea5a4bf0a7bc056dfd6974d75bc8bdffe315c9d4104c5367ce6d",
+      "bytes": 2393,
+      "source_sha256": "f06854f43cc822e2a5f4d61cdf6f7c16c014d879b2e851e28de1016a6fd66f3a"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p12/project.json",
+      "sha256": "1bf8f4de4380c8d7187204e601fd62f4da37b1d99bc035f6b81af9f0d5e80bef",
+      "bytes": 904
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p12/query.txt",
+      "sha256": "58dd46c3015c5f6b64dbfa862c8822de7e7b3ae179ad842e8af329083257b539",
+      "bytes": 210
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/fatality/p12/pmids.txt",
+      "sha256": "39fabae73e06018ed1c4c3e2119d24560691c7e058517627baec49faa93a2312",
+      "bytes": 5757
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/reproduction_number/p9/raw.csv",
+      "sha256": "c17637acc0a6ece9786f4054fa86c873e137585553c85eee431005ea22959125",
+      "bytes": 1299539,
+      "source_sha256": "c17637acc0a6ece9786f4054fa86c873e137585553c85eee431005ea22959125"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/reproduction_number/p9/ground_truth.csv",
+      "sha256": "d9bb3d06ee6ff5e93c0caa5ca14af08ca674e3ad236848f3a7961db25639332a",
+      "bytes": 552,
+      "source_sha256": "f2329e99c071ac4142d73e2b2f44fe510c6a66d62c4c30fe6b3c867a2ae8dce4"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/reproduction_number/p9/project.json",
+      "sha256": "cae8ec1554ce24bf6eb8775b5d83b649c6d0a2aaab6cf7b0ba9177424f7878d4",
+      "bytes": 934
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/reproduction_number/p9/query.txt",
+      "sha256": "bc96c5eba593cddb416516b59d9e197922287c4c4bde2caf8876624dd3aa44c1",
+      "bytes": 128
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/reproduction_number/p9/pmids.txt",
+      "sha256": "8981bb265e5ca981568cf8fc362f9908001d7f9f722d3f92b46d6b8db65f01a2",
+      "bytes": 7348
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p5/raw.csv",
+      "sha256": "01af0ed038a0223b98ab36b7cdfcf1e6b0778b060d28dd46b4cbc2cf58f98584",
+      "bytes": 130819,
+      "source_sha256": "01af0ed038a0223b98ab36b7cdfcf1e6b0778b060d28dd46b4cbc2cf58f98584"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p5/ground_truth.csv",
+      "sha256": "e1e94fd8f6fff90e58256e3147415e40eff71cb327215c6dd36aa7392e55497d",
+      "bytes": 1207,
+      "source_sha256": "fdb558d8030c7900f1d63ec2a6c079227fbe977b442174e97c9f6556a6e76074"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p5/project.json",
+      "sha256": "ad9415b56eb6b4c5af13b1d7c94ef664cf2aaaa75330f44c60d7fdd654f90e4a",
+      "bytes": 891
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p5/query.txt",
+      "sha256": "09181547fd552e5d17f9f17978a016c71df8e5ac53f265b127cd70b227db54c3",
+      "bytes": 130
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p5/pmids.txt",
+      "sha256": "0d66eb1fda6dbf38de8f0b7908b0a011bf9e39720e433f7d2445a1a0107e6eb6",
+      "bytes": 531
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p6/raw.csv",
+      "sha256": "9291cf1bcfd756f192d48e5a93180670377f6812e368d9043c0f5bad555eb8c1",
+      "bytes": 939502,
+      "source_sha256": "9291cf1bcfd756f192d48e5a93180670377f6812e368d9043c0f5bad555eb8c1"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p6/ground_truth.csv",
+      "sha256": "2e88ca0160d1a4c7338e1df2e3d9f399ea63480a8718eda62db1a3aa0b8b317c",
+      "bytes": 830,
+      "source_sha256": "53bde536514d94602caaff22945b2f7d6310e5cf8fab1169f28ef9ea32e19743"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p6/project.json",
+      "sha256": "772ae75fd1023ef503268349e9ffe2784e568c50a6da57a605e99a9de9d6cb4b",
+      "bytes": 858
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p6/query.txt",
+      "sha256": "e70e1612fc300656412029ad2fbe30e19789d9b3c460eab40606f051749242b3",
+      "bytes": 83
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p6/pmids.txt",
+      "sha256": "f4725e89c9b0eac3c6a7b23348b05d3d2c29ddfa66344d96dd4fbf6f5e3ed13a",
+      "bytes": 4669
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p10/raw.csv",
+      "sha256": "27ed3110d69e669ad413c378a5b32f157c4ef2c669027d48df6fa33442cf93ce",
+      "bytes": 964310,
+      "source_sha256": "27ed3110d69e669ad413c378a5b32f157c4ef2c669027d48df6fa33442cf93ce"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p10/ground_truth.csv",
+      "sha256": "c516b6085d2c8fd32f56c75f80cc8d6648a34dc4b70e655c33358dd5fc5b5b11",
+      "bytes": 2277,
+      "source_sha256": "3b55be8d0a355ef9bb288387831446da7581a01c19484b78542a07df9b21d431"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p10/project.json",
+      "sha256": "ebfacfc236d5561f5959b67c83ac03f4d594260a125f52fc7228fb98696ff602",
+      "bytes": 832
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p10/query.txt",
+      "sha256": "27e778da6c0f88034fc0884c3ab580e4b4ca7e5e85d4e8efb058a2ca1dc592f7",
+      "bytes": 22
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p10/pmids.txt",
+      "sha256": "7b9657577f6b17e18ddee8816b5e51bb2ff6ee56248b628275a51cd8220073c2",
+      "bytes": 5484
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p11/raw.csv",
+      "sha256": "ab1441267bf4dcf7954c3ed48010e8144179f3d3e8539ab47e4d9d0733d9a162",
+      "bytes": 136089,
+      "source_sha256": "ab1441267bf4dcf7954c3ed48010e8144179f3d3e8539ab47e4d9d0733d9a162"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p11/ground_truth.csv",
+      "sha256": "1d36d6cace81714709c925ee01d435e1341ca085fd8f4d74258a7aea9c72d8ab",
+      "bytes": 823,
+      "source_sha256": "1c05e51ff1e1bfb3c837604dde7bc1a9dc706e845b6157db83adb34fc6702f86"
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p11/project.json",
+      "sha256": "de5fe02c9eae32b17fbde4b750cbbecc859dd414646b50c2c82d7a7e1a378bbe",
+      "bytes": 871
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p11/query.txt",
+      "sha256": "83ab51739958ae29ec5a22d610e72fe66e862a15f58032dad4af817f212afd79",
+      "bytes": 70
+    },
+    {
+      "path": "dataset/benchmark_v1/mpox/screening/serial_interval/p11/pmids.txt",
+      "sha256": "6183fda9310fe9ac736abd39f31545695742340e22fa048196713e1777248d9e",
+      "bytes": 567
+    },
+    {
+      "path": "dataset/benchmark_v1/profiles.csv",
+      "sha256": "529f78ce846efae1133fd3c2071ab1d898499accc1c7872f322dfbff665cb18b",
+      "bytes": 5062
+    },
+    {
+      "path": "dataset/benchmark_v1/reference_estimates.csv",
+      "sha256": "b48a00ef834e81fd8d2e666af2a843129b99c72a8c6c9f192f2305aaac0908da",
+      "bytes": 2311
+    }
+  ]
+}

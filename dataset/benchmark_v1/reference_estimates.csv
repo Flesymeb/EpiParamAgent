@@ -1,0 +1,23 @@
+profile,disease,parameter,source_review,reference_value,reference_ci_lower,reference_ci_upper,unit,reference_note,reference_endpoint
+P10,covid19,Serial interval,Madewell et al. 2023,3.55,3.28,3.82,d,mixed,Mixed-variant serial interval
+P11,covid19,Serial interval,Xu et al. 2023,3.5,3.0,4.0,d,,Serial interval
+P12,covid19,Serial interval,Alene et al. 2021,5.2,4.9,5.5,d,,Serial interval
+P13,covid19,Serial interval,Ali et al. 2022,4.9,1.9,6.5,d,post-peak,Post-peak serial interval
+P14,covid19,Serial interval,Rai et al. 2021,5.4,5.19,5.61,d,fixed,Fixed-effect serial interval
+P4,covid19,Fatality,Lim et al. 2021,45.0,39.0,52.0,%,,Case fatality among patients requiring invasive mechanical ventilation
+P5,covid19,Fatality,Ioannidis 2021,0.27,,,%,median,Median infection fatality rate; interval not reported
+P6,covid19,Fatality,Alimohamadi et al. 2021,13.0,9.0,17.0,%,,Hospital case fatality rate
+P7,covid19,Reproduction number,Dhungel et al. 2022,2.66,2.41,2.94,,,Basic reproduction number
+P8,covid19,Reproduction number,Ahammed et al. 2021,2.69,2.4,2.98,,,Basic reproduction number
+P15,covid19,Reproduction number,Billah et al. 2020,2.87,2.39,3.44,,,Basic reproduction number
+P16,covid19,Reproduction number,Yu et al. 2021,4.08,3.09,5.39,,,Basic reproduction number
+P17,covid19,Reproduction number,Alimohamadi et al. 2020,3.32,2.81,3.82,,,Basic reproduction number
+MP9,mpox,Reproduction number,Okoli et al. 2024,1.8,1.7,1.9,,,Basic reproduction number
+MP6,mpox,Serial interval,Ponce et al. 2024,8.7,6.5,11.0,d,,Serial interval
+MP10,mpox,Serial interval,Wu et al. 2025,12.0,8.01,15.99,d,,Serial interval
+MP11,mpox,Serial interval,Diaz Brochero et al. 2025,8.3,6.74,10.23,d,,Serial interval
+MP5,mpox,Serial interval,Wang et al. 2022,8.26,7.55,8.97,d,,Incubation period
+MP4,mpox,Fatality,Cadmus et al. 2024,5.8,3.39,9.59,%,Wilson CI from 13/226,Aggregate case fatality rate; Wilson interval reconstructed
+MP7,mpox,Fatality,Vasudevan et al. 2025,11.4,5.8,21.1,%,,Case fatality rate before 2016
+MP8,mpox,Fatality,Sharif et al. 2023,9.8,8.19,11.73,%,derived Wilson CI from 107/1090; SR did not report CI,Clade I case fatality rate; Wilson interval reconstructed from 107/1090
+MP12,mpox,Fatality,Sanchez Clemente et al. 2024,11.0,4.0,20.0,%,<=11,Paediatric case fatality rate; source-review point treated as 11 percent

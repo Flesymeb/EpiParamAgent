@@ -106,6 +106,7 @@ torch_cache/
 # Runtime workspace skeletons. Track only the README in each directory.
 /dataset/*
 !/dataset/README.md
+!/dataset/benchmark_v1/
 /evaluation/*
 !/evaluation/README.md
 /paper_pool/*

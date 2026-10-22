@@ -1,0 +1,21 @@
+{
+  "id": 16,
+  "name": "basic reproductive number-4",
+  "title": "Assessment of basic reproductive number for COVID-19 at global level: A meta-analysis: A meta-analysis",
+  "pmid": "33950996",
+  "disease": "COVID-19",
+  "parameters": "basic reproductive number",
+  "query_text": "(“novel coronavirus” or “SARS-CoV2” or “2019 novel coronavirus disease” or “COVID-19”) and (“basic reproduction number” or “R0” or “transmission” or“epidemic dynamics”)",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "2019-12-01",
+  "query_date_to": "2021-04-16",
+  "research_question": "What is the basic reproduction number (R0) of COVID-19?",
+  "disease_focus": "(novel coronavirus OR SARS-CoV-2 OR 2019 novel coronavirus disease OR COVID-19)",
+  "disease_exclude": "none",
+  "transmission_focus": "(basic reproduction number OR R0 OR R naught OR reproduction number)",
+  "transmission_exclude": "none",
+  "profile": "P16",
+  "raw_record_count": 575,
+  "included_record_count": 36
+}

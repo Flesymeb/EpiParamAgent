@@ -1,0 +1,23 @@
+{
+  "id": 5,
+  "name": "serial intervals-1",
+  "title": "Serial intervals and incubation periods of the monkeypox virus clades",
+  "pmid": "36130210",
+  "disease": "mpox",
+  "parameters": "serial intervals",
+  "query_text": "(“monkeypox” or “monkey pox” or “MPXV”) and (“serial interval” or “incubation period” or “latent period”)",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "1970-01-01",
+  "query_date_to": "2022-08-26",
+  "research_question": "What are the serial intervals, generation times, and incubation periods of mpox",
+  "disease_focus": "mpox or monkeypox",
+  "disease_exclude": "none",
+  "transmission_focus": "serial intervals",
+  "transmission_exclude": "none",
+  "parameter_relevance": "serial intervals",
+  "parameter_exclude": "none",
+  "profile": "MP5",
+  "raw_record_count": 59,
+  "included_record_count": 8
+}

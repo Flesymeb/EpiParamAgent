@@ -1,0 +1,21 @@
+{
+  "id": 8,
+  "name": "basic reproduction number-2",
+  "title": "Estimation of novel coronavirus (COVID-19) reproduction number and case fatality rate: A systematic review and meta-analysis",
+  "pmid": "33977156",
+  "disease": "COVID-19",
+  "parameters": "basic reproduction number",
+  "query_text": "“2019 novel coronavirus and COVID-19” AND “Basic reproduction number”, OR “Basic reproduction rate” OR “R0.”",
+  "query_platform": "PubMed",
+  "query_platform_other": "",
+  "query_date_from": "2020-01-01",
+  "query_date_to": "2020-08-31",
+  "research_question": "What is the basic reproduction number (R0) of COVID-19?",
+  "disease_focus": "(COVID-19 OR SARS-CoV-2 OR 2019-nCoV OR coronavirus)",
+  "disease_exclude": "none",
+  "transmission_focus": "(basic reproduction number OR basic reproductive number OR R0 OR R naught OR reproduction number)",
+  "transmission_exclude": "none",
+  "profile": "P8",
+  "raw_record_count": 575,
+  "included_record_count": 44
+}
