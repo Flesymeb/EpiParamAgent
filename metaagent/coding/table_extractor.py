@@ -56,7 +56,18 @@ def _find_caption_near_table(
     Returns:
         Caption string if found, empty string otherwise
     """
-    # First check AFTER the table (more common in MinerU output)
+    # An immediately preceding caption belongs to this table. Check it before
+    # looking after the table: the next table's caption can otherwise be stolen.
+    before_start = max(0, table_start - max_distance)
+    before_text = text[before_start:table_start]
+    before_lines = before_text.strip().split("\n")
+    if before_lines:
+        match = _CAPTION_PATTERN.match(before_lines[-1].strip())
+        if match:
+            number, caption_text = match.group(1), match.group(2).strip()
+            return f"Table {number}: {caption_text}" if caption_text else f"Table {number}"
+
+    # Otherwise accept a caption placed immediately after the table.
     after_start = table_end
     after_end = min(len(text), table_end + max_distance)
     after_text = text[after_start:after_end]

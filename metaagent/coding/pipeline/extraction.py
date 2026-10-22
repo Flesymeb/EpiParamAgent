@@ -55,6 +55,7 @@ def _ensure_tools_on_path() -> None:
 
 
 FETCH_STRATEGIES = ("pmc_only", "pmc_scihub", "pmc_scihub_manual")
+EXTRACTION_BACKENDS = ("llm", "langextract")
 
 
 class LLMCallTimeoutError(TimeoutError):
@@ -477,7 +478,26 @@ def run_extract(
     config: ProjectConfig,
     model,
     llm_overrides: dict[str, object] | None = None,
+    backend: str = "llm",
+    evidence_dir: Path | None = None,
 ) -> list[dict]:
+    if backend not in EXTRACTION_BACKENDS:
+        raise ValueError(f"Unknown extraction backend: {backend}")
+    if backend == "langextract":
+        from .langextract_backend import extract_with_langextract
+
+        def invoke(messages):
+            return _invoke_model_content(
+                model=model, messages=messages, llm_overrides=llm_overrides,
+                pmid=title.removeprefix("PMID "), stage_name="extract",
+            )
+
+        return extract_with_langextract(
+            fulltext=fulltext, tables_summary=tables_summary,
+            was_truncated=was_truncated, title=title, abstract=abstract,
+            index_json=index_json, config=config, invoke=invoke,
+            evidence_dir=evidence_dir,
+        )
     system_text = build_full_context_system_prompt(config)
     context_section = "## Study Index (Stage A)\n" + index_json
     user_text = build_full_context_user_prompt(
@@ -512,7 +532,14 @@ def run_pipeline(
     fetch_strategy: str = "pmc_only",
     llm_overrides: dict[str, object] | None = None,
     skip_stage_a: bool = False,
+    extraction_backend: str = "llm",
 ) -> None:
+    if extraction_backend not in EXTRACTION_BACKENDS:
+        raise ValueError(f"Unknown extraction backend: {extraction_backend}")
+    if extraction_backend == "langextract" and stage in {"extract", "both"}:
+        from .langextract_backend import require_langextract
+
+        require_langextract()
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # ── Phase 0: fetch-only ──────────────────────────────────────────────────
@@ -658,6 +685,8 @@ def run_pipeline(
                     config=effect_config,
                     model=model,
                     llm_overrides=llm_overrides,
+                    backend=extraction_backend,
+                    evidence_dir=out_dir / "evidence" if extraction_backend == "langextract" else None,
                 )
             except Exception as exc:
                 _write_paper_error(out_dir, pmid, "extract", exc)
@@ -692,6 +721,7 @@ def run_pipeline(
         params={
             "stage": stage,
             "skip_stage_a": skip_stage_a,
+            "extraction_backend": extraction_backend,
             "codebook": str(codebook_path.resolve()),
             "stage_a_config": str(getattr(stage_a_config, "_config_path", "")),
         },
@@ -724,6 +754,8 @@ def run_pipeline(
             "max_input_chars": max_input_chars,
             "skip_stage_a": skip_stage_a,
             "llm_call_timeout_s": _llm_call_timeout_s(),
+            "extraction_backend": extraction_backend,
+            "review_record_count": sum(bool(r.get("needs_review")) for r in records),
         },
     )
     print(f"[OK] Manifest written: {manifest_path}")

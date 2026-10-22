@@ -34,6 +34,52 @@ def screening():
     """Run, inspect, and evaluate literature screening."""
 
 
+@screening.command("apply-router")
+@click.option("--input", "input_path", type=click.Path(exists=True, dir_okay=False, path_type=Path), required=True)
+@click.option("--router", "router_path", type=click.Path(exists=True, dir_okay=False, path_type=Path), required=True)
+@click.option("--out", type=click.Path(dir_okay=False, path_type=Path), required=True)
+def apply_router_command(input_path, router_path, out):
+    """Apply a frozen 5D router to title/abstract results without new LLM calls."""
+    import hashlib
+
+    from metaagent.screening.calibration import route_screened_record
+
+    if out.resolve() == input_path.resolve():
+        raise click.UsageError("--out must differ from --input; preserve original decisions.")
+    try:
+        artifact = json.loads(router_path.read_text(encoding="utf-8"))
+        if artifact.get("method") != "calibrated_5d":
+            raise ValueError("This command requires a calibrated_5d artifact with complete 5D features.")
+        with input_path.open(encoding="utf-8-sig", newline="") as handle:
+            inputs = list(csv.DictReader(handle))
+        if not inputs:
+            raise ValueError("Input contains no screening records.")
+        rows = [route_screened_record(row, artifact) for row in inputs]
+        out.parent.mkdir(parents=True, exist_ok=True)
+        columns = list(dict.fromkeys(key for row in rows for key in row))
+        with out.open("w", encoding="utf-8-sig", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=columns)
+            writer.writeheader()
+            writer.writerows(rows)
+        unresolved = sum(row.get("router_status") != "applied" for row in rows)
+        manifest = {
+            "input": str(input_path.resolve()),
+            "input_sha256": hashlib.sha256(input_path.read_bytes()).hexdigest(),
+            "router": str(router_path.resolve()),
+            "router_sha256": hashlib.sha256(router_path.read_bytes()).hexdigest(),
+            "output": str(out.resolve()), "records": len(rows), "unresolved": unresolved,
+            "scope": "title/abstract 5D decisions; no fitting, no labels used, no LLM calls",
+        }
+        out.with_suffix(".router.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    except (ValueError, KeyError, OSError, TypeError) as exc:
+        raise click.ClickException(str(exc)) from exc
+    if unresolved:
+        raise click.ClickException(
+            f"Retained {len(rows)} records in {out}, including {unresolved} unresolved/error records; inspect router_status."
+        )
+    show_success(f"Wrote {len(rows)} routed screening records to {out}")
+
+
 # ── prepare ────────────────────────────────────────────────────────────
 @screening.command("prepare", hidden=True)
 @click.option("--project-root", default="", help="Repository root (auto-detected if empty)")

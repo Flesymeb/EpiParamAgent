@@ -319,6 +319,23 @@ ineligible study. When the PMC page itself is blocked, the downloader can use
 an open-access PDF link indexed by Europe PMC; subscription links are not used
 in this mode.
 
+An experimental frozen decision router can also be applied to existing 5D
+title/abstract screening results, without further LLM calls:
+
+```bash
+metaagent screening apply-router \
+  --input /path/to/screened.csv \
+  --router /path/to/calibrated_5d.json \
+  --out /path/to/screened_routed.csv
+```
+
+The router requires all five dimension scores and preserves the previous
+decision in `llm_suggest_before_router`. Errors remain explicit; it writes a
+separate provenance manifest. A fitted score is not a guaranteed correctness
+probability. Routers require confirmation on the intended review distribution:
+the local October 2026 pilot reduced FP but increased FN on confirmation, so
+its fitted weights have not been made the default screening policy.
+
 ### 5. Run full-text coding and extraction
 
 `coding extract` automatically reads the project PMID list created in Step 4
@@ -369,6 +386,37 @@ Coding stages are:
 - `index`: run high-recall evidence localization (Stage A);
 - `extract`: reuse or create the evidence index and run structured extraction (Stage B);
 - `both`: run Stage A and Stage B; recommended for a fresh coding run.
+
+To use [LangExtract](https://github.com/google/langextract) for Stage B, install
+the optional dependency and select the backend explicitly:
+
+```bash
+pip install -e '.[langextract]'
+metaagent coding extract --profile AI1 --stage both --extraction-backend langextract
+```
+
+Alternatively, use `uv sync --inexact --extra langextract`. Stage A still builds the evidence
+index. Stage B uses the existing coding model/provider settings and codebook;
+it does not require a separate Gemini account or LangExtract API key. The default
+`--extraction-backend llm` retains the original extraction path. The same flag is
+available in `tools/scripts/extract_coding.py`.
+
+LangExtract emits coding records and linked `field_evidence` annotations. Numeric
+types and ranges are validated against the codebook. The coding sheet includes
+`evidence_json`, `evidence_file`, `evidence_source_sha256`, `needs_review` and
+`review_notes`. Each `evidence/*.evidence.json` retains the exact processed source,
+library annotations, match status, validated records and dependency version,
+including errors. Character offsets are zero-based and end-exclusive into that
+saved Markdown after table marking/truncation; they are not PDF page numbers.
+
+Missing field evidence, inexact alignment, repeated evidence text, missing
+required fields and truncated sources trigger review. Schema and parse failures
+are reported as paper-level errors, without silently switching backends. Exact
+alignment only establishes that a quote exists; it does not establish the correct
+population, denominator, time point or value. Review flagged records before
+pooling: the current pooling command does not automatically exclude them.
+This initial integration uses one whole-document extraction pass, without
+cross-chunk record merging or an automatic increase in the model context limit.
 
 Generated runs are stored under:
 

@@ -58,7 +58,12 @@ def coding():
 )
 @click.option("--out", type=click.Path(path_type=Path, file_okay=False), default=None, help="Explicit output directory")
 @click.option("--codebook", type=click.Path(path_type=Path, dir_okay=False), default=None, help="Explicit codebook YAML path")
-def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, skip_stage_a, fetch_mode, out, codebook):
+@click.option(
+    "--extraction-backend", type=click.Choice(["llm", "langextract"]),
+    default="llm", show_default=True,
+    help="Stage B backend; langextract adds record and field evidence alignment.",
+)
+def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, skip_stage_a, fetch_mode, out, codebook, extraction_backend):
     """Run full-text evidence localization and structured extraction."""
     proj = resolve_project_root()
 
@@ -121,6 +126,7 @@ def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, 
         "--codebook", str(cb_path),
         "--stage", stage,
         "--fetch-mode", fetch_mode,
+        "--extraction-backend", extraction_backend,
     ]
     if skip_stage_a:
         argv += ["--skip-stage-a"]
@@ -145,6 +151,13 @@ def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, 
         raise click.UsageError("Provide --out when no project context is available.")
 
     if stage != "fetch":
+        if extraction_backend == "langextract" and stage in {"both", "extract"}:
+            from metaagent.coding.pipeline.langextract_backend import require_langextract
+
+            try:
+                require_langextract()
+            except RuntimeError as exc:
+                raise click.ClickException(str(exc)) from exc
         _preflight_coding_llm()
 
     details = Table.grid(padding=(0, 2))
@@ -155,6 +168,7 @@ def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, 
     details.add_row("Codebook", str(cb_path))
     details.add_row("Stage", stage)
     details.add_row("Stage A", "skipped" if skip_stage_a else "enabled")
+    details.add_row("Stage B backend", extraction_backend)
     details.add_row("Full-text mode", fetch_mode)
     details.add_row("Paper pool", str(pool_root))
     details.add_row("Output", str(out.expanduser().resolve()) if out else "profile coding_runs directory")

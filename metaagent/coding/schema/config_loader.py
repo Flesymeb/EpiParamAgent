@@ -440,15 +440,16 @@ def create_model_from_config(config: ProjectConfig) -> Type[BaseModel]:
     class ValidatedModel(DynamicModel):  # type: ignore
         model_config = {"extra": "ignore"}
 
-        @field_validator(*required_str_fields, mode="before")
-        @classmethod
-        def _non_empty_str(cls, v):
-            if v is None:
-                return "NR"
-            v = str(v).strip()
-            if not v:
-                return "NR"
-            return v
+        if required_str_fields:
+            @field_validator(*required_str_fields, mode="before")
+            @classmethod
+            def _non_empty_str(cls, v):
+                if v is None:
+                    return "NR"
+                v = str(v).strip()
+                if not v:
+                    return "NR"
+                return v
 
         @model_validator(mode="after")
         def _quality_check(self):

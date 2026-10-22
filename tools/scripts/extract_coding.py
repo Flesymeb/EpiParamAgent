@@ -12,7 +12,7 @@ SCREENING_SRC = REPO_ROOT
 sys.path.insert(0, str(MODULE_ROOT))
 sys.path.insert(0, str(SCREENING_SRC))
 
-from metaagent.coding.pipeline.extraction import FETCH_STRATEGIES, run_pipeline
+from metaagent.coding.pipeline.extraction import EXTRACTION_BACKENDS, FETCH_STRATEGIES, run_pipeline
 
 
 DISEASE_DIRS = {
@@ -83,6 +83,10 @@ def main():
         action="store_true",
         help="Skip Stage A evidence localization and run Stage B directly on the full text.",
     )
+    parser.add_argument(
+        "--extraction-backend", choices=EXTRACTION_BACKENDS, default="llm",
+        help="Stage B backend; langextract retains source-aligned field evidence.",
+    )
     args = parser.parse_args()
 
     if args.out is not None:
@@ -101,6 +105,7 @@ def main():
             Path(args.codebook),
             fetch_strategy=args.fetch_mode,
             skip_stage_a=args.skip_stage_a,
+            extraction_backend=args.extraction_backend,
         )
     except (FileNotFoundError, RuntimeError, ValueError) as exc:
         parser.exit(1, f"ERROR: {exc}\n")
