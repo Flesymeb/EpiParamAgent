@@ -1,0 +1,31 @@
+{
+  "schema_version": "1",
+  "purpose": "Three fixed-document developer cases, not natural E2E or the 22-SR benchmark. References are never passed to model CLI.",
+  "cases": [
+    {
+      "id": "covid_serial_mean_32191173",
+      "task": "configs/validation/covid_serial_mean_32191173.yaml",
+      "documents": "configs/validation/covid_serial_mean_32191173.documents.jsonl",
+      "source_scope": "full_text_cached_parse",
+      "purpose": "development_only",
+      "reference_id": "covid_serial_mean_32191173"
+    },
+    {
+      "id": "covid_incubation_median_32150748",
+      "task": "configs/validation/covid_incubation_median_32150748.yaml",
+      "documents": "configs/validation/covid_incubation_median_32150748.documents.jsonl",
+      "source_scope": "primary_abstract_only",
+      "purpose": "development_only",
+      "reference_id": "covid_incubation_median_32150748"
+    },
+    {
+      "id": "mpox_incubation_CrI_36323407",
+      "task": "configs/validation/mpox_incubation_CrI_36323407.yaml",
+      "documents": "configs/validation/mpox_incubation_CrI_36323407.documents.jsonl",
+      "source_scope": "full_text_cached_parse",
+      "purpose": "development_only",
+      "reference_id": "mpox_incubation_CrI_36323407"
+    }
+  ],
+  "references": "configs/validation/references.json"
+}

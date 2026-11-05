@@ -4,7 +4,8 @@
 Preferred rules:
 1. All configuration lives in ``.env.local`` at the project root.
 2. Module-specific values use root-level prefixes such as
-   ``QUERY_LLM_MODEL``, ``SCREENING_LLM_MODEL``, or ``CODING_LLM_MODEL``.
+   ``QUERY_LLM_MODEL``, ``SCREENING_LLM_MODEL``, ``CODING_LLM_MODEL``,
+   or ``SYNTHESIS_LLM_MODEL``.
 3. Callers should pass ``module_hint`` so each workflow can select the right
    root-level module prefix without hidden module-local env files.
 """
@@ -14,11 +15,12 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Iterable, Optional
+from typing import Any, Iterable, Literal, Optional
+from urllib.parse import urlsplit, urlunsplit
 
 
 _DOTENV_LOADED: set[str] = set()
-_VALID_MODULE_HINTS = {"query", "screening", "coding"}
+_VALID_MODULE_HINTS = {"query", "screening", "coding", "synthesis"}
 _PROVIDER_ALIASES = {
     "lab1": "lab",
     "lab-1": "lab",
@@ -84,7 +86,7 @@ def load_runtime_env(module_hint: Optional[str] = None) -> None:
 
     Module-specific settings should live in the project-root env file with
     prefixes such as QUERY_LLM_MODEL, SCREENING_LLM_MODEL, and
-    CODING_LLM_MODEL.
+    CODING_LLM_MODEL, and SYNTHESIS_LLM_MODEL.
     """
     normalized = _normalize_module_hint(module_hint)
     cache_key = normalized or "__shared__"
@@ -134,6 +136,7 @@ class LLMConfig:
     verify_ssl: bool = True
     force_streaming: bool = False
     reasoning_effort: Optional[str] = None
+    thinking: Literal["enabled", "disabled"] | None = None
 
 
 @dataclass
@@ -157,6 +160,23 @@ def is_usable_secret(value: str | None) -> bool:
     return not any(marker in lowered for marker in placeholders)
 
 
+def normalize_api_base(value: str | None, *, append_version: bool = False) -> str | None:
+    """Accept a base or full chat-completions endpoint without inventing paths."""
+    if not value:
+        return None
+    parsed = urlsplit(value.strip())
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        raise ValueError("API base must be an absolute http(s) URL")
+    if parsed.username or parsed.password or parsed.query or parsed.fragment:
+        raise ValueError("API base must not contain credentials, query parameters or fragments")
+    path = parsed.path.rstrip("/")
+    if path.endswith("/chat/completions"):
+        path = path[:-len("/chat/completions")]
+    elif not path or (append_version and not path.endswith("/v1")):
+        path += "/v1"
+    return urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
+
+
 def load_llm_config(
     params: Optional[dict[str, Any]] = None,
     *,
@@ -166,21 +186,24 @@ def load_llm_config(
     params = params or {}
     normalized_module = _normalize_module_hint(module_hint)
 
-    provider = _normalize_provider(
-        _first_config_value(
-            params.get("llm_provider"),
-            params.get("provider"),
-            _module_env_value(normalized_module, "LLM_PROVIDER"),
-            os.getenv("LLM_PROVIDER"),
-        )
-    )
+    inherited_provider = _normalize_provider(_first_config_value(
+        _module_env_value(normalized_module, "LLM_PROVIDER"), os.getenv("LLM_PROVIDER"),
+    ))
+    explicit_provider = _normalize_provider(_first_config_value(
+        params.get("llm_provider"), params.get("provider"),
+    ))
+    provider = explicit_provider or inherited_provider
+    # Module identity fields belong to their selected provider. When a caller
+    # explicitly selects another provider, carrying those fields over could send
+    # a credential or model to the wrong service. Generation budgets remain
+    # module-specific below; only identity fallback is isolated here.
+    provider_switched = explicit_provider is not None and explicit_provider != inherited_provider
     model = _first_config_value(
-        params.get("llm_model"),
-        params.get("model"),
-        _module_env_value(normalized_module, "LLM_MODEL"),
+        params.get("llm_model"), params.get("model"),
+        None if provider_switched else _module_env_value(normalized_module, "LLM_MODEL"),
         _provider_env_value(provider, "model_vars"),
-        os.getenv("LLM_MODEL"),
-        os.getenv("ANTHROPIC_MODEL"),
+        None if provider_switched else os.getenv("LLM_MODEL"),
+        None if provider_switched else os.getenv("ANTHROPIC_MODEL"),
     )
     # Strip [1m] suffix if present — proxy does not support it as a model variant
     if model and "[1m]" in model:
@@ -191,32 +214,28 @@ def load_llm_config(
         provider_api_base = _provider_default_base(provider)
 
     api_key = _first_config_value(
-        params.get("llm_api_key"),
-        _module_env_value(normalized_module, "LLM_API_KEY"),
+        params.get("llm_api_key"), params.get("api_key"),
+        None if provider_switched else _module_env_value(normalized_module, "LLM_API_KEY"),
         provider_api_key,
-        os.getenv("LLM_API_KEY"),
-        os.getenv("OPENAI_API_KEY"),
-        os.getenv("OPENROUTER_API_KEY"),
-        os.getenv("ANTHROPIC_API_KEY"),
-        os.getenv("ANTHROPIC_AUTH_TOKEN"),
+        *(() if provider_switched else (
+            os.getenv("LLM_API_KEY"), os.getenv("OPENAI_API_KEY"),
+            os.getenv("OPENROUTER_API_KEY"), os.getenv("ANTHROPIC_API_KEY"),
+            os.getenv("ANTHROPIC_AUTH_TOKEN"),
+        )),
     )
     api_base = _first_config_value(
-        params.get("llm_api_base"),
-        _module_env_value(normalized_module, "LLM_API_BASE"),
-        _module_env_value(normalized_module, "LLM_BASE_URL"),
+        params.get("llm_api_base"), params.get("api_base"),
+        None if provider_switched else _module_env_value(normalized_module, "LLM_API_BASE"),
+        None if provider_switched else _module_env_value(normalized_module, "LLM_BASE_URL"),
         provider_api_base,
-        os.getenv("LLM_API_BASE"),
-        os.getenv("LLM_BASE_URL"),
-        os.getenv("OPENAI_API_BASE"),
-        os.getenv("OPENAI_BASE_URL"),
-        os.getenv("OPENROUTER_API_BASE"),
-        os.getenv("OPENROUTER_BASE_URL"),
-        os.getenv("ANTHROPIC_API_BASE"),
-        os.getenv("ANTHROPIC_BASE_URL"),
+        *(() if provider_switched else (
+            os.getenv("LLM_API_BASE"), os.getenv("LLM_BASE_URL"),
+            os.getenv("OPENAI_API_BASE"), os.getenv("OPENAI_BASE_URL"),
+            os.getenv("OPENROUTER_API_BASE"), os.getenv("OPENROUTER_BASE_URL"),
+            os.getenv("ANTHROPIC_API_BASE"), os.getenv("ANTHROPIC_BASE_URL"),
+        )),
     )
-    # Auto-append /v1 for OpenAI-compatible proxies
-    if api_base and not api_base.rstrip("/").endswith("/v1"):
-        api_base = api_base.rstrip("/") + "/v1"
+    api_base = normalize_api_base(api_base, append_version=True)
 
     default_max_tokens = LLMConfig().max_tokens
     max_tokens = _safe_int(
@@ -267,10 +286,22 @@ def load_llm_config(
     reasoning_effort = _first_config_value(
         params.get("llm_reasoning_effort"),
         params.get("reasoning_effort"),
-        _module_env_value(normalized_module, "LLM_REASONING_EFFORT"),
+        None if provider_switched else _module_env_value(normalized_module, "LLM_REASONING_EFFORT"),
         _provider_env_value(provider, "reasoning_vars"),
-        os.getenv("LLM_REASONING_EFFORT"),
+        None if provider_switched else os.getenv("LLM_REASONING_EFFORT"),
     )
+    thinking = _first_config_value(
+        params.get("llm_thinking"), params.get("thinking"),
+        None if provider_switched else _module_env_value(normalized_module, "LLM_THINKING"),
+        _provider_env_value(provider, "thinking_vars"),
+        None if provider_switched else os.getenv("LLM_THINKING"),
+    )
+    if thinking is not None:
+        thinking = thinking.lower()
+        if thinking not in {"enabled", "disabled"}:
+            raise ValueError("LLM thinking must be 'enabled' or 'disabled'")
+    if thinking == "disabled" and reasoning_effort:
+        raise ValueError("thinking=disabled is incompatible with reasoning_effort; configure one explicit policy")
 
     return LLMConfig(
         provider=provider,
@@ -283,7 +314,100 @@ def load_llm_config(
         verify_ssl=verify_ssl,
         force_streaming=force_streaming,
         reasoning_effort=reasoning_effort,
+        thinking=thinking,
     )
+
+
+def merge_thinking_policy(extra_body: dict | None, thinking: str | None) -> dict | None:
+    """Merge an explicit native thinking policy without hiding contradictory JSON.
+
+    No payload is generated when thinking is unspecified. Legacy enable_thinking
+    and nested chat_template_kwargs.enable_thinking may coexist only when they
+    express the same explicit policy.
+    """
+    if extra_body is not None and not isinstance(extra_body, dict):
+        raise ValueError("LLM extra_body must be a JSON object")
+    body = dict(extra_body or {})
+    native = body.get("thinking")
+    native_mode = native.get("type") if isinstance(native, dict) else None
+    template = body.get("chat_template_kwargs")
+    nested_present = isinstance(template, dict) and "enable_thinking" in template
+    if nested_present and not isinstance(template["enable_thinking"], bool):
+        raise ValueError("extra_body.chat_template_kwargs.enable_thinking must be a boolean")
+    # Each supported spelling describes one mode. Preserve all user fields, but
+    # never forward incompatible settings to a provider for silent precedence.
+    policies = []
+    if native_mode in {"enabled", "disabled"}:
+        policies.append(native_mode == "enabled")
+    if "enable_thinking" in body:
+        alias = body["enable_thinking"]
+        if not isinstance(alias, bool) and (policies or nested_present):
+            raise ValueError("extra_body contains contradictory thinking policies")
+        if isinstance(alias, bool):
+            policies.append(alias)
+    if nested_present:
+        policies.append(template["enable_thinking"])
+    if len(set(policies)) > 1:
+        raise ValueError("extra_body contains contradictory thinking policies")
+    if thinking is None:
+        return body or None
+    if thinking not in {"enabled", "disabled"}:
+        raise ValueError("LLM thinking must be 'enabled' or 'disabled'")
+    native = {"type": thinking}
+    if "thinking" in body:
+        existing = body["thinking"]
+        if not isinstance(existing, dict) or existing.get("type", thinking) != thinking:
+            raise ValueError("Explicit thinking policy conflicts with extra_body.thinking")
+        # Provider-specific controls such as GLM clear_thinking are part of the
+        # same policy, rather than a conflicting replacement of its mode.
+        native = {**existing, "type": thinking}
+    if "enable_thinking" in body and (not isinstance(body["enable_thinking"], bool) or body["enable_thinking"] != (thinking == "enabled")):
+        raise ValueError("Explicit thinking policy conflicts with extra_body.enable_thinking")
+    if nested_present and template["enable_thinking"] != (thinking == "enabled"):
+        raise ValueError("Explicit thinking policy conflicts with extra_body.chat_template_kwargs.enable_thinking")
+    body["thinking"] = native
+    return body
+
+
+def resolve_extra_body(params: dict[str, Any] | None = None, *, module_hint: str | None = None) -> dict | None:
+    """Merge already-loaded module body JSON with explicit invocation options.
+
+    Call after load_llm_config, as the transport callers already do. Keeping
+    this resolver read-only avoids reloading dotenv over per-run overrides.
+    Explicit vendor keys replace the same environment keys; unrelated keys
+    such as Coding response_format remain intact. Pi adds its own control-field
+    allowlist after this common, backwards-compatible merge.
+    """
+    import json
+    module = _normalize_module_hint(module_hint)
+    env_name = f'{module.upper()}_LLM_EXTRA_BODY_JSON' if module else 'LLM_EXTRA_BODY_JSON'
+    def parse(value, label):
+        if value is None or value == '':return {}
+        if isinstance(value, str):
+            try:value = json.loads(value)
+            except ValueError:raise ValueError(f'{label} must be a valid JSON object') from None
+        if not isinstance(value, dict):raise ValueError(f'{label} must be a JSON object')
+        try:return json.loads(json.dumps(value, allow_nan=False))
+        except (ValueError, TypeError):raise ValueError(f'{label} must contain finite JSON values') from None
+    environment = parse(os.environ.get(env_name, '').strip(), env_name)
+    params = params or {}
+    explicit = parse(params.get('llm_extra_body', params.get('extra_body')), 'LLM extra_body override')
+    body = {**environment, **explicit}
+    # These values belong to the declared runtime/tool transport, not provider
+    # extensions. OpenAI-compatible clients merge extra_body last, so permitting
+    # them here would silently change the model, request budget or destination.
+    reserved = {
+        'model', 'messages', 'tools', 'tool_choice', 'functions', 'function_call',
+        'stream', 'stream_options', 'max_tokens', 'max_completion_tokens',
+        'max_output_tokens', 'max_input_tokens', 'temperature', 'n', 'best_of',
+        'api_key', 'api_base', 'base_url', 'endpoint', 'url', 'api_version',
+        'authorization', 'auth', 'headers', 'extra_headers', 'extra_query',
+        'organization', 'project', 'timeout', 'timeout_s', 'request_timeout',
+        'max_retries', 'retries', 'credentials', 'access_token',
+    }
+    if any(str(key).lower() in reserved for key in body):
+        raise ValueError('LLM extra_body contains forbidden control fields; use runtime settings instead')
+    return merge_thinking_policy(body, None)
 
 
 def load_mineru_config(
@@ -414,6 +538,8 @@ def _dynamic_provider_env_names(provider: str, key: str) -> tuple[str, ...]:
         return (f"{prefix}_MODEL",)
     if key == "streaming_vars":
         return (f"{prefix}_FORCE_STREAMING", f"{prefix}_STREAMING")
+    if key == "thinking_vars":
+        return (f"{prefix}_THINKING", f"{prefix}_LLM_THINKING")
     if key == "reasoning_vars":
         return (f"{prefix}_REASONING_EFFORT",)
     return ()

@@ -1,0 +1,300 @@
+{
+  "generic": [
+    {
+      "source": "Record A: A primary report gives an estimate of 0.8.",
+      "records": [
+        {
+          "point_estimate": 0.8,
+          "_record_quote": "Record A:",
+          "_field_evidence": {
+            "point_estimate": [
+              "A primary report gives an estimate of 0.8."
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "reproduction_number": [
+    {
+      "source": "Record A: The fitted basic reproduction number R0 was 0.8. Record B: The fitted effective reproduction number Rt was 0.6.",
+      "records": [
+        {
+          "parameter_type": "R0",
+          "point_estimate": 0.8,
+          "_record_quote": "Record A:",
+          "_field_evidence": {
+            "parameter_type": [
+              "The fitted basic reproduction number R0 was 0.8."
+            ],
+            "point_estimate": [
+              "The fitted basic reproduction number R0 was 0.8."
+            ]
+          }
+        },
+        {
+          "parameter_type": "Rt",
+          "point_estimate": 0.6,
+          "_record_quote": "Record B:",
+          "_field_evidence": {
+            "parameter_type": [
+              "The fitted effective reproduction number Rt was 0.6."
+            ],
+            "point_estimate": [
+              "The fitted effective reproduction number Rt was 0.6."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "A synthetic report assumed R0=2 as a borrowed model input; it did not estimate R0.",
+      "records": []
+    }
+  ],
+  "serial_interval": [
+    {
+      "source": "Record A: The mean serial interval was 4 days. Record B: The median serial interval was 3 days.",
+      "records": [
+        {
+          "parameter_type": "serial_interval",
+          "estimate_measure": "mean",
+          "point_estimate": 4,
+          "unit": "days",
+          "_record_quote": "Record A:",
+          "_field_evidence": {
+            "parameter_type": [
+              "The mean serial interval was 4 days."
+            ],
+            "estimate_measure": [
+              "The mean serial interval was 4 days."
+            ],
+            "point_estimate": [
+              "The mean serial interval was 4 days."
+            ],
+            "unit": [
+              "The mean serial interval was 4 days."
+            ]
+          }
+        },
+        {
+          "parameter_type": "serial_interval",
+          "estimate_measure": "median",
+          "point_estimate": 3,
+          "unit": "days",
+          "_record_quote": "Record B:",
+          "_field_evidence": {
+            "parameter_type": [
+              "The median serial interval was 3 days."
+            ],
+            "estimate_measure": [
+              "The median serial interval was 3 days."
+            ],
+            "point_estimate": [
+              "The median serial interval was 3 days."
+            ],
+            "unit": [
+              "The median serial interval was 3 days."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "A synthetic report assumed a serial interval of 8 days from another study. It did not estimate it.",
+      "records": []
+    }
+  ],
+  "incubation_period": [
+    {
+      "source": "Record A: The mean incubation period was 7.2 days. Its 90% confidence interval was 6.1 to 8.3.",
+      "records": [
+        {
+          "parameter_type": "incubation_period",
+          "estimate_measure": "mean",
+          "point_estimate": 7.2,
+          "unit": "days",
+          "uncertainty_type": "CI",
+          "uncertainty_level": "90%",
+          "uncertainty_low": 6.1,
+          "uncertainty_high": 8.3,
+          "_record_quote": "Record A:",
+          "_field_evidence": {
+            "parameter_type": [
+              "The mean incubation period was 7.2 days. Its 90% confidence interval was 6.1 to 8.3."
+            ],
+            "estimate_measure": [
+              "The mean incubation period was 7.2 days. Its 90% confidence interval was 6.1 to 8.3."
+            ],
+            "point_estimate": [
+              "The mean incubation period was 7.2 days. Its 90% confidence interval was 6.1 to 8.3."
+            ],
+            "unit": [
+              "The mean incubation period was 7.2 days. Its 90% confidence interval was 6.1 to 8.3."
+            ],
+            "uncertainty_type": [
+              "The mean incubation period was 7.2 days. Its 90% confidence interval was 6.1 to 8.3."
+            ],
+            "uncertainty_level": [
+              "The mean incubation period was 7.2 days. Its 90% confidence interval was 6.1 to 8.3."
+            ],
+            "uncertainty_low": [
+              "The mean incubation period was 7.2 days. Its 90% confidence interval was 6.1 to 8.3."
+            ],
+            "uncertainty_high": [
+              "The mean incubation period was 7.2 days. Its 90% confidence interval was 6.1 to 8.3."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "Record A: The median incubation period was 6 days (IQR 4 to 8 days).",
+      "records": [
+        {
+          "parameter_type": "incubation_period",
+          "estimate_measure": "median",
+          "point_estimate": 6,
+          "unit": "days",
+          "uncertainty_type": "IQR",
+          "uncertainty_low": 4,
+          "uncertainty_high": 8,
+          "_record_quote": "Record A:",
+          "_field_evidence": {
+            "parameter_type": [
+              "The median incubation period was 6 days (IQR 4 to 8 days)."
+            ],
+            "estimate_measure": [
+              "The median incubation period was 6 days (IQR 4 to 8 days)."
+            ],
+            "point_estimate": [
+              "The median incubation period was 6 days (IQR 4 to 8 days)."
+            ],
+            "unit": [
+              "The median incubation period was 6 days (IQR 4 to 8 days)."
+            ],
+            "uncertainty_type": [
+              "The median incubation period was 6 days (IQR 4 to 8 days)."
+            ],
+            "uncertainty_low": [
+              "The median incubation period was 6 days (IQR 4 to 8 days)."
+            ],
+            "uncertainty_high": [
+              "The median incubation period was 6 days (IQR 4 to 8 days)."
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "fatality": [
+    {
+      "source": "Record A: All 40 confirmed cases completed follow-up and no deaths occurred. No rate or interval was reported.",
+      "records": [
+        {
+          "parameter_type": "CFR",
+          "record_kind": "count_only",
+          "deaths": 0,
+          "denominator_count": 40,
+          "confirmed_cases": 40,
+          "estimate_measure": "count_only",
+          "_record_quote": "Record A:",
+          "_field_evidence": {
+            "parameter_type": [
+              "All 40 confirmed cases completed follow-up and no deaths occurred. No rate or interval was reported."
+            ],
+            "record_kind": [
+              "All 40 confirmed cases completed follow-up and no deaths occurred. No rate or interval was reported."
+            ],
+            "deaths": [
+              "All 40 confirmed cases completed follow-up and no deaths occurred. No rate or interval was reported."
+            ],
+            "denominator_count": [
+              "All 40 confirmed cases completed follow-up and no deaths occurred. No rate or interval was reported."
+            ],
+            "confirmed_cases": [
+              "All 40 confirmed cases completed follow-up and no deaths occurred. No rate or interval was reported."
+            ],
+            "estimate_measure": [
+              "All 40 confirmed cases completed follow-up and no deaths occurred. No rate or interval was reported."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "source": "Record A: The infection fatality proportion was 0.02 with a 90% credible interval of 0.01 to 0.03.",
+      "records": [
+        {
+          "parameter_type": "IFR",
+          "record_kind": "rate_estimate",
+          "point_estimate": 0.02,
+          "unit": "proportion",
+          "estimate_measure": "proportion",
+          "uncertainty_type": "CrI",
+          "uncertainty_level": "90%",
+          "uncertainty_low": 0.01,
+          "uncertainty_high": 0.03,
+          "_record_quote": "Record A:",
+          "_field_evidence": {
+            "parameter_type": [
+              "The infection fatality proportion was 0.02 with a 90% credible interval of 0.01 to 0.03."
+            ],
+            "record_kind": [
+              "The infection fatality proportion was 0.02 with a 90% credible interval of 0.01 to 0.03."
+            ],
+            "point_estimate": [
+              "The infection fatality proportion was 0.02 with a 90% credible interval of 0.01 to 0.03."
+            ],
+            "unit": [
+              "The infection fatality proportion was 0.02 with a 90% credible interval of 0.01 to 0.03."
+            ],
+            "estimate_measure": [
+              "The infection fatality proportion was 0.02 with a 90% credible interval of 0.01 to 0.03."
+            ],
+            "uncertainty_type": [
+              "The infection fatality proportion was 0.02 with a 90% credible interval of 0.01 to 0.03."
+            ],
+            "uncertainty_level": [
+              "The infection fatality proportion was 0.02 with a 90% credible interval of 0.01 to 0.03."
+            ],
+            "uncertainty_low": [
+              "The infection fatality proportion was 0.02 with a 90% credible interval of 0.01 to 0.03."
+            ],
+            "uncertainty_high": [
+              "The infection fatality proportion was 0.02 with a 90% credible interval of 0.01 to 0.03."
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "positivity": [
+    {
+      "source": "Record A: The survey found 3 positive people among 50 people tested by PCR. It did not report a percentage.",
+      "records": [
+        {
+          "parameter_type": "positivity_rate",
+          "positive_count": 3,
+          "tested_count": 50,
+          "estimate_measure": "count_only",
+          "_record_quote": "Record A:",
+          "_field_evidence": {
+            "parameter_type": [
+              "The survey found 3 positive people among 50 people tested by PCR. It did not report a percentage."
+            ],
+            "positive_count": [
+              "The survey found 3 positive people among 50 people tested by PCR. It did not report a percentage."
+            ],
+            "tested_count": [
+              "The survey found 3 positive people among 50 people tested by PCR. It did not report a percentage."
+            ],
+            "estimate_measure": [
+              "The survey found 3 positive people among 50 people tested by PCR. It did not report a percentage."
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

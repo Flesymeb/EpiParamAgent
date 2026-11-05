@@ -20,10 +20,16 @@ parameters:
 
 notes: |
   Goal: extract fatality rate information FROM EACH PRIMARY STUDY.
-  Point estimates in percentage (%). 1.5% not 0.015.
-  Prefer overall population estimate; note age/severity subgroups separately.
+  Preserve explicitly reported values and original units; normalization occurs in audited code.
+  Extract overall and explicitly reported age/severity subgroups as separate records.
   Record denominator_type carefully: confirmed cases vs estimated infections changes interpretation substantially.
-  Do NOT compute CFR unless explicitly stated.
+  Extract explicitly reported deaths and their matched denominator even without a reported rate.
+  Such a record is count_only: point_estimate and unreported uncertainty fields remain null.
+  Do NOT calculate a fatality rate or CI from counts, infer missing counts, or combine distinct cohorts.
+  Preserve the source case definition and its reported parameter label. CFR may
+  refer to cases under the explicit source case definition; do not infer all cases
+  are laboratory-confirmed. Keep hospital/ICU/IMV subtypes and denominators specific.
+  IFR requires a total-infections denominator. Conflicting definitions stay pending.
 
 fields:
   - name: pmid
@@ -60,11 +66,49 @@ fields:
     type: str
     prompt: "Number of cases or infections as reported."
 
+  - name: parameter_type
+    label: "Parameter_Type"
+    type: str
+    required: true
+    prompt: "Preserve reported parameter meaning: CFR for cases under the stated source case definition, IFR for estimated total infections; other/NR when ambiguous. Keep endpoint subtype and denominator specific; never infer confirmation."
+
+  - name: source_case_definition
+    label: "Source_Case_Definition"
+    type: str
+    prompt: "Exact case definition reported by the source: laboratory-confirmed, probable, suspected, mixed, or unclear; never infer confirmation."
+
+  - name: record_kind
+    label: "Record_Kind"
+    type: str
+    required: true
+    prompt: "rate_estimate if a fatality rate is explicitly reported; count_only if mortality counts are reported without a rate; NR otherwise."
+
+  - name: deaths
+    label: "Deaths"
+    type: float
+    review_range: [0, null]
+    range: [0, null]
+    prompt: "Explicitly reported number of deaths in this exact population, subgroup and time window; null if absent. Do not derive from percentages, sum rows, or infer zero from silence."
+
+  - name: denominator_count
+    label: "Denominator_Count"
+    type: float
+    review_range: [0, null]
+    range: [0, null]
+    prompt: "Explicitly reported denominator matched to these deaths/rate and follow-up window. It may be confirmed cases, estimated infections, hospitalizations, ICU admissions or IMV patients; label denominator_type. Never use a different cohort total or calculate a missing denominator."
+
+  - name: confirmed_cases
+    label: "Confirmed_Cases"
+    type: float
+    review_range: [0, null]
+    range: [0, null]
+    prompt: "Populate only when this record's denominator is explicitly confirmed cases, including explicitly confirmed-case subgroups. Do not rename estimated infections, unspecified patients, hospitalizations, ICU or IMV counts as confirmed cases without explicit confirmation; otherwise null."
+
   - name: fatality_type
     label: "Fatality_Type"
     type: str
     required: true
-    prompt: "CFR (confirmed cases) | IFR (estimated infections) | HFR (hospitalized) | ICU_fatality_rate | IMV_fatality_rate (invasive mechanical ventilation) | other."
+    prompt: "CFR (source-defined cases) | IFR (estimated infections) | HFR (hospitalized) | ICU_fatality_rate | IMV_fatality_rate (invasive mechanical ventilation) | other."
 
   - name: denominator_type
     label: "Denominator_Type"
@@ -96,18 +140,19 @@ fields:
     label: "Estimate_Measure"
     type: str
     required: true
-    prompt: "proportion | percentage | rate | other."
+    prompt: "proportion | percentage | rate | count_only | other. Use count_only when there is no explicitly reported rate."
 
   - name: point_estimate
     label: "Point_Estimate"
     type: float
-    prompt: "Main fatality rate estimate in % (e.g. 1.5 for 1.5%)."
+    review_range: [0, null]
+    prompt: "Explicitly reported fatality value in its original source unit. Null for count_only; never calculate deaths/denominator."
 
   - name: unit
     label: "Unit"
     type: str
     required: true
-    prompt: "% (percentage). Always percent, not proportion."
+    prompt: "Original reported unit, e.g. percentage or proportion; NR for count_only."
 
   - name: uncertainty_type
     label: "Uncertainty_Type"
@@ -122,12 +167,12 @@ fields:
   - name: uncertainty_low
     label: "Uncertainty_Low"
     type: float
-    prompt: "Lower uncertainty bound in % (same unit as point_estimate)."
+    prompt: "Lower reported uncertainty bound in the original unit of point_estimate."
 
   - name: uncertainty_high
     label: "Uncertainty_High"
     type: float
-    prompt: "Upper uncertainty bound in %."
+    prompt: "Upper reported uncertainty bound in the original unit of point_estimate."
 
   - name: notes
     label: "Notes"
@@ -166,6 +211,10 @@ index_schema:
     path: field_evidence.fatality_type
   - name: estimate_hint
     path: field_evidence.point_estimate
+  - name: deaths_hint
+    path: field_evidence.deaths
+  - name: denominator_count_hint
+    path: field_evidence.denominator_count
 
 quality_rules:
   missing_penalties:

@@ -1,95 +1,36 @@
-You are assisting with title-only screening for a systematic review in epidemiology.
+You assist systematic-review screening. Assess only the supplied source and metadata.
 
-Your task is to score the study on five relevance dimensions using sparse metadata
-and classify it into one of three tiers. Title-only screening is high-risk for
-false positives, so require concrete metadata cues before assigning "P".
-
+Task authority
 Research question: {research_question}
+Disease scope: {disease_focus}
+Disease exclusions: {disease_exclude}
+Parameter/outcome scope: {parameter_focus}
+Parameter exclusions: {parameter_exclude}
+Task-specific scientific notes: {parameter_scoring_note}
 
-Stage: title-only screening.
-Available evidence: title, keywords, publication types, MeSH terms, and dates,
-with little or no abstract text.
+The complete research question and explicit eligibility criteria take precedence over general examples or terminology notes. Do not narrow a whole-review task to a selected pooled-analysis target. Do not invent human-only, geographic, language, date, publication-type or sample-size requirements. In the overall justification, check every explicitly declared restriction and distinguish supported, conflicting and unavailable information.
 
-Assess the study on these dimensions:
+Five dimensions (each requires its own integer 0-4 and source-based reason)
+- disease_relevance: Does the disease/pathogen match the task? Variants, lineages or wild-type comparisons are required only when the task says so.
+- population_relevance: Do the people, cases, specimens or data units match the declared population and setting? Do not replace the task with a universal population rule.
+- location_relevance: Apply any explicit geographic requirement. Distinguish exposure/infection origin, case ascertainment, recruitment/sampling and residence. Imported cases are not automatically irrelevant; missing a particular country is not a mismatch when the task has no such restriction.
+- original_evidence: Do study type and data provenance meet the task? Original observations, reanalysis and newly fitted estimates can qualify when accepted. This is not a quality ranking. Letter/Review indexing or small sample size alone does not establish ineligibility; inspect the actual contribution and any explicit task rule.
+- parameter_relevance: Match the requested definition and role: this study's result or observations versus a borrowed fixed input, background citation or another endpoint. An original fitted model output is not automatically capped below an observed estimate. Respect whether the task accepts one or several outcomes.
 
-1. Disease relevance
-- The study should plausibly investigate {disease_focus}.
+Score anchors describe each dimension, not tag thresholds: 0 = clear nonmatch; 1 = weak support or a substantially conflicting requirement; 2 = insufficient/ambiguous information; 3 = supported match; 4 = strong direct support. A missing abstract or keyword is not affirmative exclusion evidence. Metadata can aid interpretation but cannot create unreported methods, outcomes or facts.
 
-2. Population relevance
-- Prefer human population studies.
+Give your own holistic tag using the five assessments, source evidence and the task:
+S: evidence supports eligibility and proceeding.
+P: informative source supports a task-specific plausible eligibility path with unresolved details; or the record is unassessable because only citation identifiers are available, requiring metadata/full-text retrieval rather than an eligibility claim.
+U: the supplied evidence supports an out-of-scope decision. Disease-name overlap alone is not a plausible eligibility path; do not label every disease-related record P. Explain the actual task-based reason, rather than treating missing text as a negative finding.
+No weighted total, score sum, fixed dimension cutoff or quota determines the tag. Return all five assessments, overall_justification and exactly one tier S/P/U. Do not fabricate missing assessments or transfer facts between papers. Never use benchmark membership or a published pooled answer as eligibility evidence.
+Interpret date requirements by the stated event; database Create Date is not automatically publication, exposure or sampling date.
 
-3. Location relevance
-- Real-world setting is preferred when it can be inferred.
+Evidence-boundary checks
+- Citation-only records with no informative title or abstract cannot establish eligibility or ineligibility. Defer them as P for metadata/full-text checking; do not infer design, population or sample size from author/year, DOI or missing material.
+- Interpret geographic exclusions together with stated inclusion exceptions. An explicitly allowed exported/linked-case exception must be assessed from actual exposure/linkage evidence; overseas sampling alone does not prove an excluded case origin. Do not assume an exception when its evidence is missing.
+- If the source explicitly presents the target only as borrowed, assumed or illustrative values and the task requires its own estimate, choose U unless actual source evidence supports another eligible contribution. Imagined unreported results are not a reason for P.
+- Mentioning one input source does not prove that other required inputs are absent. A stated original target estimate can support P while methods/inputs await full text; affirmative statements that only excluded data were used remain a mismatch. Do not relax the required inputs.
+- Confirmed violations of explicit design restrictions, including an excluded retrospective design, remain U. Historical inclusion elsewhere cannot override the current task criteria.
 
-4. Original empirical evidence
-- Primary data studies should score higher than reviews or commentary.
-- Reviews, editorials, comments, letters, news, perspectives, and generic
-  methods/theory papers should usually score evidence 0-1 unless the title or
-  metadata clearly indicates an original cohort, case series, outbreak
-  investigation, surveillance dataset, contact-tracing dataset, or fitted
-  analysis of observed human data.
-- Do not treat a paper as original empirical evidence merely because it mentions
-  the target disease.
-
-5. Target parameter relevance
-- The study should plausibly concern {parameter_focus}.
-- Studies that look unrelated to the target parameter or {parameter_exclude} should score low.
-- With sparse metadata, "plausible disease relevance" is not enough. Score
-  parameter 3-4 only when the title/keywords/MeSH terms contain the exact target
-  parameter or a close synonym. Score 2 only when the title gives a direct,
-  parameter-specific path to full-text verification. Score 0-1 when the title is
-  merely about the disease, clinical presentation, diagnosis, vaccination,
-  public-health response, broad transmission, broad modeling, genomics, or policy.
-- For fatality, mortality, severity, hospitalization, ICU, or clinical-outcome
-  reviews, use "P" only when title/keywords/MeSH contain an explicit outcome cue
-  such as death, fatal, mortality, severe disease, hospitalization, ICU,
-  maternal/fetal outcome, survival, or clinical outcome. A bare case report,
-  imported-case report, contact-tracing report, or outbreak report without an
-  outcome cue should usually be "U" in title-only mode.
-- For serial interval, generation time, incubation period, or latent period
-  reviews, use "P" only when title/keywords/MeSH explicitly mention interval,
-  generation time, incubation/latent period, exposure-to-onset timing,
-  symptom-onset timing, linked infector-infectee timing, or contact-tracing
-  intervals. Broad Rt/R0, family-cluster, outbreak, intervention, or transmission
-  papers without a timing cue should usually be "U".
-- For reproduction-number reviews, use "P" only when title/keywords/MeSH
-  explicitly mention R0, Rt, Re, reproduction/reproductive number, effective
-  reproduction number, epidemic threshold, or an equivalent transmissibility
-  estimate. Broad outbreak, surveillance, contact-tracing, genomic, or risk
-  papers without this cue should usually be "U".
-
-Profile-specific parameter scoring:
-{parameter_scoring_note}
-
-Scoring rubric for each dimension:
-- 4: explicit and unmistakable from the title/metadata
-- 3: clearly indicated from the title/metadata
-- 2: plausible but not confirmed
-- 1: weakly related
-- 0: absent or irrelevant
-
-Title-only policy:
-- Do not over-claim certainty from sparse metadata.
-- Use score 2 for plausible but uncertain relevance. Use the final tier to express
-  whether the balance of evidence favors full-text verification ("P") or exclusion
-  ("U").
-- Strong scores should be rare in title-only mode unless the title is unambiguous.
-- If the title/metadata lacks both original-evidence cues and target-parameter
-  cues, choose "U" even when the disease is correct.
-- With no abstract, the review should not spend full-text effort on broad disease
-  papers unless the title/metadata contains a specific target-parameter cue.
-
-Tier classification:
-- "S": the title/metadata clearly indicates the target disease, original evidence,
-  and target parameter.
-- "P": the title/metadata provides a concrete target-parameter cue or a direct
-  parameter-specific full-text path, but confirmation requires full text.
-- "U": the title/metadata gives little reason to expect the target parameter,
-  wrong disease/population, or weak/non-original evidence.
-- The tier value MUST be exactly one of "S", "P", or "U".
-
-Output requirements:
-- Return all five dimension assessments.
-- Justifications should explicitly mention that evidence is limited when metadata is sparse.
-- Provide an overall_justification that reflects the uncertainty of title-only screening.
-- Provide a tier classification reflecting your holistic judgment.
+Stage: title/metadata only. There is no abstract. Mark unresolved dimensions as uncertain and explain what must be checked in full text. A missing abstract is not an exclusion reason; P still needs a specific plausible connection to the declared task.

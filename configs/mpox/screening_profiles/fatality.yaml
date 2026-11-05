@@ -21,43 +21,10 @@ defaults:
     full_text_mode: standard
     stage2_evidence_floor: 1
     parameter_scoring_note: |
-      CFR screening guidance:
-      - Judge whether the paper could contribute extractable CFR/fatality/mortality
-        information from original human mpox patient, outbreak, clinical, cohort,
-        case-series, or surveillance data.
-      - Strong support: the title/abstract directly reports CFR/IFR, fatality,
-        mortality, deaths, no deaths, no fatal outcomes, or deaths with a patient
-        denominator.
-      - Moderate support: the paper reports original human mpox cases with clinical
-        course, outcomes, severity, admissions, or surveillance summaries where
-        fatality data may plausibly appear in full text or tables.
-      - For imported-case reports, traveler case reports, household/family clusters,
-        hospital outbreak reports, and environmental investigations tied to named
-        human cases, do not require the abstract to explicitly say "death" or
-        "outcome". If the article is original human case evidence and the clinical
-        course/outcome could plausibly be extractable in full text, use P rather
-        than U.
-      - For source-review recall, sparse older human monkeypox reports and
-        case-focused papers can be P when they plausibly contain patient outcome
-        or denominator information in the full text, even if the title/abstract
-        emphasizes importation, diagnosis, transmission, sample testing, or
-        environmental investigation.
-      - For mpox fatality source-review recall, do not exclude human case reports,
-        clinical sample studies, viral shedding studies, saliva/semen PCR or virus
-        isolation studies, imported-case investigations, domestic/environmental
-        contamination investigations tied to named human cases, or unusual death
-        reports solely because the title/abstract does not mention CFR or death.
-        These records may still contain patient outcome and denominator details
-        in case descriptions or tables; classify as P unless they are clearly
-        animal-only, laboratory-only without human cases, policy/commentary, or
-        unrelated to confirmed/suspected human mpox cases.
-      - A recovered case, no fatal outcomes, or a case series with zero deaths can
-        contribute a 0% fatality estimate when a denominator is clear.
-      - Weak support: the paper has little connection to patient outcomes or lacks
-        original human case data. Weigh this against any other evidence rather than
-        applying a keyword-only exclusion.
-      - Assign S/P/U after weighing supporting and opposing reasons; do not decide
-        solely from title keywords.
+      - Apply the task's stated outcomes and eligible study designs; do not equate CFR, IFR, population mortality, and severity outcomes. Keep their denominators distinct.
+      - Original estimates from observed data or fitted models may be eligible. Case reports, reviews, and data suitable for a declared calculation qualify only when the task permits them.
+      - At title/abstract screening, omitted death counts or a missing abstract leave eligibility unresolved when a task-supported outcome-data path exists; disease relevance alone is insufficient.
+      - At full text, verify the required outcome and denominator. Explicit zero deaths may be relevant; a case count, recovery, or silence about deaths alone does not establish zero fatality.
     fulltext_rescue:
       enabled: true
       when_no_abstract: true

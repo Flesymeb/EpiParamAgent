@@ -45,8 +45,10 @@ def _resolve_output_from_profile(profile_name: str) -> Path:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Epi coding sheet extraction (Stage A/B)")
-    parser.add_argument("--input", required=True, help="PMID list (.txt), PDF file, or directory")
+    parser = argparse.ArgumentParser(description="Epi coding sheet extraction (Stage A/B)", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    inputs=parser.add_mutually_exclusive_group(required=True)
+    inputs.add_argument("--input", help="Numeric PMID list (.txt), PDF, Markdown file, or full-text directory")
+    inputs.add_argument("--document-manifest", help="JSON/JSONL source bundles with record_id, path and optional supplements")
     parser.add_argument(
         "--profile",
         default=None,
@@ -61,7 +63,7 @@ def main():
         help="Explicit output directory. Overrides --profile auto-path when given.",
     )
     parser.add_argument("--stage", choices=["fetch", "index", "extract", "both"], default="both",
-                        help="fetch=download+MinerU only; index=Stage A; extract=Stage B; both=A+B")
+                        help="fetch=download+MinerU; index=legacy index; extract/both=selected A/B variant")
     parser.add_argument(
         "--fetch-mode",
         dest="fetch_mode",
@@ -76,7 +78,7 @@ def main():
     )
     parser.add_argument(
         "--codebook",
-        default=str(MODULE_ROOT / "configs" / "codebook_epi.yaml"),
+        required=True,
     )
     parser.add_argument(
         "--skip-stage-a",
@@ -84,10 +86,28 @@ def main():
         help="Skip Stage A evidence localization and run Stage B directly on the full text.",
     )
     parser.add_argument(
-        "--extraction-backend", choices=EXTRACTION_BACKENDS, default="llm",
-        help="Stage B backend; langextract retains source-aligned field evidence.",
+        "--extraction-backend", choices=EXTRACTION_BACKENDS, default="langextract",
+        help="Internal Stage A backend; B performs semantic finalization.",
     )
+    parser.add_argument("--ablation", choices=["full", "without_a", "without_b"], default="full")
+    parser.add_argument("--chunk-chars", type=int, default=None)
+    parser.add_argument("--stage-a-empty-retries", type=int, choices=range(3), default=1)
+    parser.add_argument("--extraction-scope", default=None)
+    parser.add_argument("--research-question",default=None)
+    parser.add_argument("--task-context",default=None,help="JSON/YAML research_question and review_protocol")
     args = parser.parse_args()
+    from metaagent.coding.prompt_context import load_review_context
+    try:review_context=load_review_context(args.task_context,args.research_question)
+    except (OSError,ValueError) as exc:parser.error(str(exc))
+    source=Path(args.document_manifest or args.input).expanduser().resolve()
+    if not source.exists():
+        parser.error(f"Coding input not found: {source}")
+    if args.chunk_chars is not None and args.chunk_chars < 256:
+        parser.error("--chunk-chars must be at least 256")
+    if args.skip_stage_a and args.ablation == "without_b":
+        parser.error("--skip-stage-a conflicts with --ablation without_b")
+    if not Path(args.codebook).expanduser().is_file():
+        parser.error(f"Codebook not found: {args.codebook}")
 
     if args.out is not None:
         out_dir = Path(args.out)
@@ -99,13 +119,16 @@ def main():
     print(f"Output: {out_dir}")
     try:
         run_pipeline(
-            Path(args.input),
+            source,
             out_dir,
             args.stage,
             Path(args.codebook),
             fetch_strategy=args.fetch_mode,
             skip_stage_a=args.skip_stage_a,
             extraction_backend=args.extraction_backend,
+            document_manifest=source if args.document_manifest else None,
+            extraction_scope=args.extraction_scope, review_context=review_context,
+            ablation=args.ablation, chunk_chars=args.chunk_chars, stage_a_empty_retries=args.stage_a_empty_retries,
         )
     except (FileNotFoundError, RuntimeError, ValueError) as exc:
         parser.exit(1, f"ERROR: {exc}\n")

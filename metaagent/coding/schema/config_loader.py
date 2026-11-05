@@ -6,6 +6,8 @@ Load YAML config → Create dynamic Pydantic model → Generate prompts.
 from __future__ import annotations
 
 import logging
+import math
+import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -27,9 +29,39 @@ class FieldConfig:
     prompt: str = ""
     examples: List[str] = field(default_factory=list)
     range: Optional[List[Optional[float]]] = None  # [min, max]
+    review_range: Optional[List[Optional[float]]] = None  # advisory, never rejects a record
+    review_range_unit: Optional[str] = None  # optional time unit for advisory comparisons
+
+    def __post_init__(self):
+        if not isinstance(self.name,str) or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*",self.name):
+            raise ValueError(f"Invalid codebook field name: {self.name!r}")
+        supported={"str","int","float","bool","list[str]","list[int]","dict","list[dict]"}
+        if not isinstance(self.type,str) or self.type not in supported:
+            raise ValueError(f"Unsupported codebook field type for {self.name}: {self.type!r}")
+        if self.range is not None:
+            if not isinstance(self.range,list) or len(self.range)!=2 or any(v is not None and (isinstance(v,bool) or not isinstance(v,(int,float))) for v in self.range):
+                raise ValueError(f"Field range requires two numeric/null bounds: {self.name}")
+            if all(v is not None for v in self.range) and self.range[0]>self.range[1]:
+                raise ValueError(f"Field range bounds are reversed: {self.name}")
+        if self.review_range is not None:
+            bounds = self.review_range
+            if self.type not in {"int", "float"}:
+                raise ValueError(f"review_range requires a numeric field: {self.name}")
+            if not isinstance(bounds, list) or len(bounds) != 2 or any(
+                v is not None and (isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v))
+                for v in bounds
+            ):
+                raise ValueError(f"review_range requires two finite numeric/null bounds: {self.name}")
+            if all(v is not None for v in bounds) and bounds[0] > bounds[1]:
+                raise ValueError(f"review_range bounds are reversed: {self.name}")
+        if self.review_range_unit is not None:
+            if self.review_range is None or self.review_range_unit not in {"days", "hours", "weeks"}:
+                raise ValueError(f"review_range_unit requires review_range and days/hours/weeks: {self.name}")
 
     @classmethod
     def from_dict(cls, data: dict) -> "FieldConfig":
+        if not isinstance(data,dict) or "name" not in data:
+            raise ValueError("Every codebook field must be an object with a name")
         return cls(
             name=data["name"],
             label=data.get("label", data["name"]),
@@ -38,6 +70,8 @@ class FieldConfig:
             prompt=data.get("prompt", ""),
             examples=data.get("examples", []),
             range=data.get("range"),
+            review_range=data.get("review_range"),
+            review_range_unit=data.get("review_range_unit"),
         )
 
 
@@ -116,10 +150,29 @@ class ProjectConfig:
     quality_rules: QualityRules = field(default_factory=QualityRules)
     extraction: ExtractionConfig = field(default_factory=ExtractionConfig)
 
+    # Explicit domain metadata is optional; older books retain name-based mpox scope.
+    disease: str = ""
+
+    def __post_init__(self):
+        # An empty/invalid book must not become valid merely by adding context.
+        if not self.fields:
+            return
+        from .context_fields import context_field_definitions
+        self.fields = list(self.fields)
+        existing = {field.name for field in self.fields}
+        for definition in context_field_definitions(name=self.name, effect_type=self.effect_type,
+                                                   disease=self.disease, parameters=self.parameters):
+            if definition["name"] not in existing:
+                self.fields.append(FieldConfig.from_dict(definition))
+                existing.add(definition["name"])
+
     @classmethod
     def from_dict(cls, data: dict) -> "ProjectConfig":
+        if not isinstance(data,dict):raise ValueError("Codebook YAML must contain an object")
         project = data.get("project", {})
         fields_data = data.get("fields", [])
+        if not isinstance(project,dict) or not isinstance(fields_data,list) or not fields_data:
+            raise ValueError("Codebook requires a project object and a nonempty fields list")
         quality_data = data.get("quality_rules")
         extraction_data = data.get("extraction")
         prompt_data = data.get("prompt")
@@ -128,6 +181,7 @@ class ProjectConfig:
             name=project.get("name", "Unnamed Project"),
             description=project.get("description", ""),
             effect_type=project.get("effect_type", ""),
+            disease=project.get("disease", ""),
             fields=[FieldConfig.from_dict(f) for f in fields_data],
             extraction_instructions=data.get("extraction_instructions", ""),
             parameters=data.get("parameters", {}) or {},
@@ -143,10 +197,10 @@ def _resolve_config_path(path: Path, base_dir: Optional[Path] = None) -> Path:
 
     if base_dir and not path.is_absolute():
         candidate = (base_dir / path).resolve()
-        if candidate.exists() and candidate.suffix == ".yaml":
+        if candidate.exists() and candidate.suffix.lower() in {".yaml", ".yml"}:
             return candidate
 
-    if path.exists() and path.suffix == ".yaml":
+    if path.exists() and path.suffix.lower() in {".yaml", ".yml"}:
         return path
 
     path_str = str(path).replace("\\", "/")
@@ -177,6 +231,7 @@ def _load_yaml_dict(path: Path) -> dict:
 
     with open(path, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f) or {}
+    if not isinstance(data,dict):raise ValueError("Codebook YAML must contain an object")
     return data
 
 
@@ -334,6 +389,8 @@ def _load_config_dict(path: Path, visited: set[str]) -> dict:
     data = _load_yaml_dict(resolved)
     if "base" in data:
         base_path = Path(str(data.get("base")))
+        if not base_path.is_absolute() and (resolved.parent/base_path).is_file():
+            base_path=(resolved.parent/base_path).resolve()
         base_data = _load_config_dict(base_path, visited)
         data = _merge_configs(base_data, data)
 
@@ -379,7 +436,8 @@ def _python_type(type_str: str) -> type:
         "dict": Dict[str, Any],
         "list[dict]": List[Dict[str, Any]],
     }
-    return mapping.get(type_str, str)
+    if type_str not in mapping:raise ValueError(f"Unsupported codebook field type: {type_str!r}")
+    return mapping[type_str]
 
 
 def _build_field_definition(fc: FieldConfig) -> tuple[type, Any]:
@@ -408,6 +466,8 @@ def _build_field_definition(fc: FieldConfig) -> tuple[type, Any]:
 
 
 def create_model_from_config(config: ProjectConfig) -> Type[BaseModel]:
+    if len({fc.name for fc in config.fields})!=len(config.fields):
+        raise ValueError("Codebook field names must be unique")
     field_definitions: Dict[str, Any] = {}
     required_str_fields: List[str] = []
 

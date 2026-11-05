@@ -1,0 +1,175 @@
+{
+  "schema_version": "1",
+  "analysis_id": "incubation-mean-example",
+  "status": "complete",
+  "protocol_sha256": "6173cfcfb0d36c68142285a3de767f0e42b56eeae7199c02110cecf4cacb0d67",
+  "input_sha256": "4b22678e262c43fd64d9c0aa8e659d6427bb0fa06fac4c0dc965c8e0e9d3040e",
+  "protocol_gaps": [],
+  "selection": [
+    {
+      "estimate_id": "browser-estimate-0",
+      "input_index": 0,
+      "decision": "select",
+      "reasons": [
+        "protocol_requirements_met"
+      ],
+      "transformations": [
+        {
+          "field": "se",
+          "derivation": {
+            "method": "reported_se",
+            "input": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "estimate_id": "browser-estimate-1",
+      "input_index": 1,
+      "decision": "select",
+      "reasons": [
+        "protocol_requirements_met"
+      ],
+      "transformations": [
+        {
+          "field": "se",
+          "derivation": {
+            "method": "reported_se",
+            "input": 1.0
+          }
+        }
+      ]
+    }
+  ],
+  "selected_estimates": [
+    {
+      "record_id": "browser-report-0",
+      "estimate_id": "browser-estimate-0",
+      "cohort_id": "browser-cohort-0",
+      "parameter_type": "incubation_period",
+      "estimate_measure": "mean",
+      "unit": "days",
+      "point_estimate": 4.0,
+      "uncertainty_type": "SE",
+      "se": 1.0,
+      "notes": "Synthetic software acceptance input; not scientific evidence or human gold.",
+      "raw_values": {
+        "point_estimate": 4,
+        "unit": "days",
+        "uncertainty_type": "SE",
+        "uncertainty_level": null,
+        "uncertainty_low": null,
+        "uncertainty_high": null,
+        "sd": null,
+        "se": 1
+      },
+      "source_raw": {
+        "record_id": "browser-report-0",
+        "estimate_id": "browser-estimate-0",
+        "cohort_id": "browser-cohort-0",
+        "parameter_type": "incubation_period",
+        "estimate_measure": "mean",
+        "unit": "days",
+        "point_estimate": 4,
+        "uncertainty_type": "SE",
+        "se": 1,
+        "notes": "Synthetic software acceptance input; not scientific evidence or human gold."
+      },
+      "source_record_sha256": "c78540b5a65cd8c60e408f496965cf16525581999681431d189e241f750f53ab"
+    },
+    {
+      "record_id": "browser-report-1",
+      "estimate_id": "browser-estimate-1",
+      "cohort_id": "browser-cohort-1",
+      "parameter_type": "incubation_period",
+      "estimate_measure": "mean",
+      "unit": "days",
+      "point_estimate": 6.0,
+      "uncertainty_type": "SE",
+      "se": 1.0,
+      "notes": "Synthetic software acceptance input; not scientific evidence or human gold.",
+      "raw_values": {
+        "point_estimate": 6,
+        "unit": "days",
+        "uncertainty_type": "SE",
+        "uncertainty_level": null,
+        "uncertainty_low": null,
+        "uncertainty_high": null,
+        "sd": null,
+        "se": 1
+      },
+      "source_raw": {
+        "record_id": "browser-report-1",
+        "estimate_id": "browser-estimate-1",
+        "cohort_id": "browser-cohort-1",
+        "parameter_type": "incubation_period",
+        "estimate_measure": "mean",
+        "unit": "days",
+        "point_estimate": 6,
+        "uncertainty_type": "SE",
+        "se": 1,
+        "notes": "Synthetic software acceptance input; not scientific evidence or human gold."
+      },
+      "source_record_sha256": "8bed3b1af888b6576a34aabafdf4a7e8f444bebf19c90d4eec776798d318fb56"
+    }
+  ],
+  "result": {
+    "pooled_mean": 5.0,
+    "se_pooled": 0.7071067811865476,
+    "ci_lower": 3.614096175650322,
+    "ci_upper": 6.385903824349678,
+    "i2": 50.0,
+    "tau2": 0.0,
+    "Q": 2.0,
+    "df": 1,
+    "p_het": 0.15729920705028105,
+    "n_studies": 2,
+    "n_excluded": 0,
+    "ci_type": "CI",
+    "ci_level": 0.95,
+    "interval_method": "normal",
+    "unit": "days",
+    "parameter_type": "incubation_period",
+    "estimate_measure": "mean",
+    "input_estimate_measure": "mean",
+    "method": "fixed",
+    "method_detail": "inverse_variance_fixed",
+    "log_transform": false,
+    "n_reports": 2,
+    "n_independent_units": 2,
+    "n_estimates": 2
+  },
+  "forest_data": [
+    {
+      "estimate_id": "browser-estimate-0",
+      "point_estimate": 4.0,
+      "ci_lower": 2.040036015459946,
+      "ci_upper": 5.959963984540054,
+      "weight": 0.5,
+      "weight_kind": "inverse_variance",
+      "source": "selected_estimates",
+      "source_record_sha256": "c78540b5a65cd8c60e408f496965cf16525581999681431d189e241f750f53ab",
+      "protocol_sha256": "6173cfcfb0d36c68142285a3de767f0e42b56eeae7199c02110cecf4cacb0d67"
+    },
+    {
+      "estimate_id": "browser-estimate-1",
+      "point_estimate": 6.0,
+      "ci_lower": 4.040036015459946,
+      "ci_upper": 7.959963984540054,
+      "weight": 0.5,
+      "weight_kind": "inverse_variance",
+      "source": "selected_estimates",
+      "source_record_sha256": "8bed3b1af888b6576a34aabafdf4a7e8f444bebf19c90d4eec776798d318fb56",
+      "protocol_sha256": "6173cfcfb0d36c68142285a3de767f0e42b56eeae7199c02110cecf4cacb0d67"
+    }
+  ],
+  "sensitivity_results": [],
+  "counts": {
+    "input": 2,
+    "selected": 2,
+    "excluded": 0,
+    "review": 0,
+    "independent_units": 2
+  },
+  "workflow_coverage": {}
+}

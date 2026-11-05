@@ -15,25 +15,17 @@ stage_b:
 
 parameters:
   research_question: >
-    This project extracts basic reproduction number (R0) and effective reproduction number (Rt)
-    estimates from primary COVID-19 epidemiological studies. The goal is to capture the headline
-    R0/Rt estimate with its uncertainty, method, and study metadata.
+    Extract all original reported R0 and Rt estimates in the declared scope,
+    retaining each method, population, time window and statistic separately.
 
 notes: |
-  Goal: extract reproduction number information FROM EACH PRIMARY STUDY.
-  Do NOT copy R0 values from systematic review tables.
-
-  Priority rule: R0 (basic reproduction number, pre-intervention/naive population) > Rt.
-  - If the paper reports BOTH R0 and Rt, extract only R0 as the main record.
-  - If the paper reports ONLY Rt (effective/control-period), mark parameter_type='Rt'
-    and note that no R0 was estimated; still extract for completeness.
-  - R0 must be ≥ 1.0 in an epidemic context; if the extracted value is <1.0,
-    it is almost certainly Rt under control measures — label it Rt, not R0.
-  - Do NOT compute R0 unless the study explicitly reports it as R0.
-  - If the paper uses an assumed SI or assumed R0 as a model input (not estimated
-    from their own data), do NOT extract it as a new estimate; note it instead.
-  - Do NOT extract estimates from sensitivity analyses or hypothetical scenarios
-    as the main estimate; prefer the headline/primary result.
+  Extract original study results from the supplied report only, never from SR answers.
+  Retain all scoped R0/Rt results, including strata, periods and sensitivity analyses.
+  Distinguish an original estimate from an assumed or borrowed model input.
+  Preserve raw parameter labels and source definitions; numeric values below one
+  do not imply Rt. If source definitions conflict, retain the conflict for review.
+  Do not use typical disease ranges or presumed generation intervals to fill data.
+  Keep original units and uncertainty type/level. Analysis selection happens later.
 
 fields:
   - name: pmid
@@ -101,6 +93,7 @@ fields:
   - name: point_estimate
     label: "Point_Estimate"
     type: float
+    review_range: [0, null]
     prompt: "Main reported point estimate."
 
   - name: unit

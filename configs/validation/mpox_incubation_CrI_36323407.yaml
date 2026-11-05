@@ -1,0 +1,46 @@
+version: '1'
+task_id: mpox_incubation_CrI_36323407
+disease: mpox
+topic: incubation_period
+research_question: What mean incubation period is reported in the declared primary
+  report?
+codebook: codebooks/incubation_period.yaml
+coding:
+  backend: langextract
+  chunk_chars: 24000
+  stage_a_empty_retries: 1
+  extraction_scope: Incubation-period mean estimated using the interval-censored corrected
+    (ICC) model in the overall primary analysis. Distinguish it from ICRTC, medians,
+    generation/serial intervals and alternative estimators; preserve the reported
+    credible interval type. If text and tables conflict, preserve the conflicting
+    source-supported records and mark the unresolved discrepancy; never silently decide
+    which original value is true.
+review_protocol:
+  version: development-scope-v1
+  criteria:
+  - id: disease
+    description: Original human mpox study
+  - id: outcome
+    description: Reports incubation period estimates
+  logic:
+    all:
+    - disease
+    - outcome
+search: {}
+analysis_protocol:
+  analysis_id: mpox_incubation_CrI_36323407-analysis
+  parameter_type: incubation_period
+  estimate_measure: mean
+  unit: days
+  method: fixed
+  independence:
+    unit: record_id
+    assert_independent_reports: true
+    multiple_estimates: review
+  minimum_estimates: 1
+  llm_report: false
+  uncertainty_rules:
+    allowed_types:
+    - CI
+    - SE
+    - SD

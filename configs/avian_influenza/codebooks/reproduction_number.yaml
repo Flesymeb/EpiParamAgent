@@ -32,7 +32,7 @@ fields:
   - {name: data_type, label: Data_Type, type: str, prompt: "Cases | clusters | contacts | incidence | other."}
   - {name: parameter_type, label: Parameter_Type, type: str, required: true, prompt: "R0 | Rt | Re | other."}
   - {name: estimate_measure, label: Estimate_Measure, type: str, required: true, prompt: "Use mean as the standardized pooling tag."}
-  - {name: point_estimate, label: Point_Estimate, type: float, prompt: "Primary reproduction-number estimate."}
+  - {name: point_estimate, label: Point_Estimate, type: float, review_range: [0, null], prompt: "Primary reproduction-number estimate."}
   - {name: unit, label: Unit, type: str, required: true, prompt: "Use dimensionless."}
   - {name: uncertainty_type, label: Uncertainty_Type, type: str, prompt: "CI | CrI | SD | SE | Range | NR."}
   - {name: uncertainty_level, label: Uncertainty_Level, type: str, prompt: "95% | 90% | NR | Other."}

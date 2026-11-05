@@ -30,7 +30,7 @@ def config():
     """Inspect runtime configuration without exposing credentials."""
 
 
-def _llm_check(module: str) -> dict[str, Any]:
+def _llm_check(module: str, *, required: bool = True) -> dict[str, Any]:
     cfg = load_llm_config(module_hint=module)
     missing = []
     if not cfg.model:
@@ -41,8 +41,8 @@ def _llm_check(module: str) -> dict[str, Any]:
         missing.append("provider base URL")
     return {
         "component": f"{module} LLM",
-        "status": "ready" if not missing else "missing",
-        "required": True,
+        "status": "ready" if not missing else ("missing" if required else "optional"),
+        "required": required,
         "detail": (
             f"{cfg.provider or 'default'}/{cfg.model or 'model not set'}"
             if not missing
@@ -139,7 +139,7 @@ def _profile_checks(profile_id: str, root: Path, stage: str) -> list[dict[str, A
 @click.option("--profile", "profile_id", default=None, help="Also validate one review profile")
 @click.option(
     "--stage",
-    type=click.Choice(["all", "query", "screening", "coding"]),
+    type=click.Choice(["all", "query", "screening", "coding", "synthesis"]),
     default="all",
     show_default=True,
     help="Limit checks to one workflow stage",
@@ -161,8 +161,8 @@ def check_config(
         if not project_root
         else Path(project_root).expanduser().resolve()
     )
-    modules = ["query", "screening", "coding"] if stage == "all" else [stage]
-    checks = [_llm_check(module) for module in modules]
+    modules = ["query", "screening", "coding", "synthesis"] if stage == "all" else [stage]
+    checks = [_llm_check(module, required=not (stage == "all" and module == "synthesis")) for module in modules]
     if stage in {"all", "coding"}:
         checks.append(_mineru_check())
     if stage in {"all", "query"}:

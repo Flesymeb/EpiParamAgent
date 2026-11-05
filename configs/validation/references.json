@@ -1,0 +1,168 @@
+{
+  "schema_version": "1",
+  "reference_status": "developer_source_checked_provisional_not_independent_gold",
+  "cases": [
+    {
+      "case_id": "covid_serial_mean_32191173",
+      "record_id": "pmid:32191173",
+      "pmid": "32191173",
+      "source_path": "runs/cli_effect_validation_20261104/sources/PMID_32191173.md",
+      "source_sha256": "cda149c3781f39057682b9a37b30f14e49001eed75a3436ef11f6751d209008a",
+      "source_version": "full_text_cached_parse; published report identified by DOI; frozen 2026-11-03",
+      "source_url": "https://wwwnc.cdc.gov/eid/article/26/6/20-0357_article",
+      "doi": "10.3201/eid2606.200357",
+      "source_scope": "full_text_cached_parse",
+      "annotation_status": "developer_source_checked_provisional",
+      "independent_human_gold": false,
+      "scope_description": "The overall mean observed serial interval for all analyzed transmission events; do not substitute the local-transmission-only subset, other coronaviruses, borrowed values, or sensitivity analyses.",
+      "scope_source_ranges": [
+        {
+          "start": 1021,
+          "end": 1330
+        },
+        {
+          "start": 2411,
+          "end": 3845
+        }
+      ],
+      "primary_evidence": {
+        "quote": "mean interval was 3.96 days $9 5 \\%$ CI 3.53–4.39 days)",
+        "start": 1163,
+        "end": 1218,
+        "offset_convention": "zero-based Python Unicode characters into frozen source_path"
+      },
+      "fields": {
+        "parameter_type": "serial_interval",
+        "estimate_measure": "mean",
+        "point_estimate": 3.96,
+        "unit": "days",
+        "uncertainty_type": "CI",
+        "uncertainty_level": "95%",
+        "uncertainty_low": 3.53,
+        "uncertainty_high": 4.39
+      },
+      "absolute_tolerance": 1e-06,
+      "safety_expectation": "ordinary_CI_mean",
+      "source_conflicts": [],
+      "coverage_limitations": [
+        "Cached full-text parse; undeclared supplements not certified complete."
+      ]
+    },
+    {
+      "case_id": "covid_incubation_median_32150748",
+      "record_id": "pmid:32150748",
+      "pmid": "32150748",
+      "source_path": "runs/cli_effect_validation_20261104/sources/PMID_32150748.abstract.md",
+      "source_sha256": "d05f5fd3ff6cd55082bdd3e14db26f25af860e373f3de8d109759fbff27af25b",
+      "source_version": "primary_abstract_only; published report identified by DOI; frozen 2026-11-03",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/32150748/",
+      "doi": "10.7326/M20-0504",
+      "source_scope": "primary_abstract_only",
+      "annotation_status": "developer_source_checked_provisional",
+      "independent_human_gold": false,
+      "scope_description": "The overall primary fitted median incubation period for the full confirmed-case sample. Keep it distinct from the mean, quantiles, quarantine exceedance probabilities, rounded discussion summaries, and sensitivity results.",
+      "scope_source_ranges": [
+        {
+          "start": 1133,
+          "end": 1638
+        }
+      ],
+      "primary_evidence": {
+        "quote": "median incubation period was estimated to be 5.1 days (95% CI, 4.5 to 5.8 days)",
+        "start": 1268,
+        "end": 1347,
+        "offset_convention": "zero-based Python Unicode characters into frozen source_path"
+      },
+      "fields": {
+        "parameter_type": "incubation_period",
+        "estimate_measure": "median",
+        "point_estimate": 5.1,
+        "unit": "days",
+        "uncertainty_type": "CI",
+        "uncertainty_level": "95%",
+        "uncertainty_low": 4.5,
+        "uncertainty_high": 5.8
+      },
+      "absolute_tolerance": 1e-06,
+      "safety_expectation": "median_not_mean",
+      "source_conflicts": [],
+      "coverage_limitations": [
+        "Primary abstract only; no complete-fulltext extraction or absence claim."
+      ]
+    },
+    {
+      "case_id": "mpox_incubation_CrI_36323407",
+      "record_id": "pmid:36323407",
+      "pmid": "36323407",
+      "source_path": "runs/cli_effect_validation_20261104/sources/PMID_36323407.md",
+      "source_sha256": "849b5709a724aee01f70cec5f307ca2f231065fc7c77ca6366eeef777123c834",
+      "source_version": "full_text_cached_parse; published report identified by DOI; frozen 2026-11-03",
+      "source_url": "https://www.bmj.com/content/379/bmj-2022-073153",
+      "doi": "10.1136/bmj-2022-073153",
+      "source_scope": "full_text_cached_parse",
+      "annotation_status": "developer_source_checked_provisional",
+      "independent_human_gold": false,
+      "scope_description": "Incubation-period mean estimated using the interval-censored corrected (ICC) model in the overall primary analysis. Distinguish it from ICRTC, medians, generation/serial intervals and alternative estimators; preserve the reported credible interval type.",
+      "scope_source_ranges": [
+        {
+          "start": 1970,
+          "end": 2445
+        },
+        {
+          "start": 37126,
+          "end": 38117
+        },
+        {
+          "start": 20363,
+          "end": 20797
+        },
+        {
+          "start": 24570,
+          "end": 25043
+        },
+        {
+          "start": 29957,
+          "end": 30393
+        },
+        {
+          "start": 33039,
+          "end": 33512
+        }
+      ],
+      "primary_evidence": {
+        "quote": "mean incubation period was estimated to be 7.6 days $9 5 \\%$ credible interval 6.5 to 9.9) using the ICC model",
+        "start": 2127,
+        "end": 2237,
+        "offset_convention": "zero-based Python Unicode characters into frozen source_path"
+      },
+      "fields": {
+        "parameter_type": "incubation_period",
+        "estimate_measure": "mean",
+        "point_estimate": 7.6,
+        "unit": "days",
+        "uncertainty_type": "CrI",
+        "uncertainty_level": "95%",
+        "uncertainty_low": 6.5,
+        "uncertainty_high": 9.9
+      },
+      "absolute_tolerance": 1e-06,
+      "safety_expectation": "CrI_must_not_be_CI",
+      "source_conflicts": [
+        "Primary abstract reports ICC upper CrI 9.9 while cached Table 1 ICC row reports 8.9; neither is adjudicated here. Upper bound is not scored, and a faithful table value is not counted wrong. Preserve source conflict rather than silently resolving it."
+      ],
+      "coverage_limitations": [
+        "Cached full-text parse; undeclared supplements not certified complete."
+      ],
+      "field_status": {
+        "uncertainty_high": "not_scored_source_conflict"
+      },
+      "source_conflict_values": {
+        "uncertainty_high": [
+          8.9,
+          9.9
+        ]
+      },
+      "conflict_visibility_required": true
+    }
+  ]
+}

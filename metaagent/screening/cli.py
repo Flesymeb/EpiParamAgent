@@ -156,7 +156,7 @@ def prepare(project_root, profile, disease, topic, query, date_range, retmax,
 @click.option(
     "--prefer-llm-tier/--no-prefer-llm-tier",
     default=True,
-    help="Use LLM's own tier classification instead of code-side thresholds.",
+    help="Default: use the LLM's holistic S/P/U tag from five scores and reasons, without a weighted total. --no-prefer-llm-tier explicitly enables legacy score thresholds.",
 )
 def run(project_root, profile, disease, topic, input_file, output_file,
         ground_truth, research_question, batch_size, batch_concurrency, batch_mode,
@@ -389,21 +389,30 @@ def _preflight_input_metadata(
     interactive: bool,
 ) -> None:
     """Offer PubMed metadata completion before LLM screening starts."""
+    from metaagent.screening.context import normalize_bibliographic_aliases
+    from tools.pubmed.metadata import MetadataCompleteness
     try:
-        before = inspect_csv_metadata(input_path)
+        with input_path.open(encoding="utf-8-sig", newline="") as handle:
+            rows = [normalize_bibliographic_aliases(row) for row in csv.DictReader(handle)]
     except (OSError, csv.Error) as exc:
         raise click.ClickException(f"Cannot inspect screening input {input_path}: {exc}") from exc
-
-    if before.total_rows == 0:
-        raise click.ClickException(
-            f"Screening input contains no records: {input_path}. "
-            "Retrieve records first or pass a non-empty --input CSV."
-        )
+    if not rows:
+        raise click.ClickException(f"Screening input contains no records: {input_path}")
+    missing_identity = sum(not any(str(row.get(k) or "").strip() for k in ("PMID", "doi", "DOI", "record_id", "source_id", "native_id")) for row in rows)
+    if missing_identity == len(rows):
+        raise click.ClickException("Every row is missing a traceable identity; provide PMID, DOI, record_id or source_id.")
+    if missing_identity:
+        show_warning(f"{missing_identity}/{len(rows)} records have no traceable identity; preserve them for review.")
+    before = MetadataCompleteness(total_rows=len(rows),
+        missing_pmid=sum(not str(r.get("PMID") or "").strip() for r in rows),
+        missing_title=sum(not str(r.get("Title") or "").strip() for r in rows),
+        missing_abstract=sum(not str(r.get("Abstract") or "").strip() for r in rows),
+        missing_keywords=sum(not str(r.get("Keywords") or "").strip() for r in rows))
     if before.missing_pmid == before.total_rows:
-        raise click.ClickException(
-            f"Every row in {input_path} is missing PMID. "
-            "Populate the PMID column before screening so full-text hand-off remains traceable."
-        )
+        show_warning("No PubMed IDs; skipping PubMed-only completion and retaining DOI/source identities.")
+        if before.missing_title == before.total_rows:
+            raise click.ClickException("Every screening record is missing Title; provide available titles or use literature enrich.")
+        return
 
     marker_path = _metadata_marker_path(input_path)
     marker_is_current = bool(
@@ -787,3 +796,119 @@ def _run_script(script_name: str, argv: list[str]) -> None:
     )
     if result.returncode != 0:
         raise click.ClickException(f"Script exited with code {result.returncode}")
+
+
+@screening.command("protocol-run")
+@click.option("--input", "input_path", type=click.Path(exists=True, dir_okay=False, path_type=Path), required=True)
+@click.option("--protocol", "protocol_path", type=click.Path(exists=True, dir_okay=False, path_type=Path), required=True)
+@click.option("--out", type=click.Path(dir_okay=False, path_type=Path), required=True)
+@click.option("--stage", type=click.Choice(["title_abstract", "full_text"]), default="title_abstract", show_default=True)
+@click.option("--research-question", default=None, help="Research question as context; protocol criteria determine eligibility.")
+@click.option("--model", default=None)
+@click.option("--api-base", default=None)
+@click.option("--api-key-env", default=None)
+@click.option("--batch-size", type=click.IntRange(min=1), default=20)
+@click.option("--batch-concurrency", type=click.IntRange(min=1), default=1)
+@click.option("--batch-mode", type=click.Choice(["single", "multi"]), default="single")
+def protocol_run(input_path, protocol_path, out, stage, research_question, model, api_base, api_key_env,
+                 batch_size, batch_concurrency, batch_mode):
+    """Screen bibliographic JSONL/CSV against a protocol without a registered profile.
+
+    Full-text rows supply fulltext or source_blocks plus fulltext_coverage. Relative
+    fulltext_path entries resolve against the input file's directory. PDF inputs use
+    the shared MinerU cache; coverage is never automatically asserted complete.
+    """
+    import asyncio
+    import hashlib
+    import os
+    import yaml
+    from metaagent.screening.engine import init_llm_model, screen_papers_batch_async
+    from metaagent.screening.protocol import validate_protocol
+
+    if out.resolve() in {input_path.resolve(), protocol_path.resolve()}:
+        raise click.UsageError("Output must differ from input and protocol files")
+    try:
+        protocol = yaml.safe_load(protocol_path.read_text(encoding="utf-8-sig"))
+        validate_protocol(protocol)
+        if input_path.suffix.lower() == ".csv":
+            with input_path.open(encoding="utf-8-sig", newline="") as handle:
+                rows = list(csv.DictReader(handle))
+        else:
+            rows = [json.loads(line) for line in input_path.read_text(encoding="utf-8-sig").splitlines() if line.strip()]
+        if not rows or any(not isinstance(r, dict) for r in rows):
+            raise ValueError("Input must contain bibliographic record objects")
+        from metaagent.screening.context import normalize_bibliographic_aliases
+        for row in rows:
+            normalize_bibliographic_aliases(row)
+            for field in ("fulltext_coverage", "source_blocks"):
+                if isinstance(row.get(field), str) and row[field].strip():
+                    row[field] = json.loads(row[field])
+            if stage == "full_text":
+                if row.get("fulltext_path") and not row.get("fulltext"):
+                    source = Path(row["fulltext_path"]).expanduser()
+                    if not source.is_absolute():
+                        source = input_path.parent / source
+                    if source.suffix.lower() == ".pdf":
+                        from tools.mineru.cache import parse_pdf
+                        row["fulltext"] = parse_pdf(source, row.get("PMID")).text
+                    else:
+                        row["fulltext"] = source.read_text(encoding="utf-8")
+                row.setdefault("fulltext_coverage", {"complete": False, "truncated": False,
+                                                      "missing_materials": ["coverage_not_declared"]})
+                if not row.get("fulltext") and not row.get("source_blocks"):
+                    row["fulltext_coverage"] = {"complete": False, "missing_materials": ["full_text"]}
+        overrides = {"llm_" + k: v for k, v in (("model", model), ("api_base", api_base)) if v is not None}
+        if api_key_env:
+            if not os.environ.get(api_key_env):
+                raise ValueError("Missing credential environment variable " + api_key_env)
+            overrides["llm_api_key"] = os.environ[api_key_env]
+        llm = init_llm_model(config_overrides=overrides)
+        asyncio.run(screen_papers_batch_async(
+            rows, research_question or protocol.get("research_question") or "Review protocol eligibility", llm,
+            screening_config={"review_protocol": protocol, "call_log":str(out.with_suffix(".calls.jsonl"))}, screening_stage=stage,
+            content_key="fulltext" if stage == "full_text" else "Abstract",
+            batch_size=batch_size, batch_concurrency=batch_concurrency, batch_mode=batch_mode))
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text("".join(json.dumps(r, ensure_ascii=False, default=str) + "\n" for r in rows), encoding="utf-8")
+        errors = sum(r.get("llm_suggest") == "error" for r in rows)
+        from metaagent.screening.guards import screening_audit
+        manifest = {"screening_audit": screening_audit(rows), "schema_version": "1", "input_sha256": hashlib.sha256(input_path.read_bytes()).hexdigest(),
+                    "protocol_sha256": hashlib.sha256(protocol_path.read_bytes()).hexdigest(),
+                    "stage": stage, "records": len(rows), "errors": errors,
+                    "status": "partial" if errors else "complete", "output": str(out.resolve())}
+        out.with_suffix(out.suffix + ".manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    except (ValueError, OSError, TypeError) as exc:
+        raise click.ClickException(str(exc)) from exc
+    click.echo(f"{manifest['status']}: {len(rows)} records → {out}")
+    if errors:
+        raise click.exceptions.Exit(1)
+
+
+# Use the canonical command's JSON parse-error contract and stage executors.
+from metaagent.workflow import JsonOutputCommand
+
+
+@screening.command("task", cls=JsonOutputCommand)
+@click.option("--task-config", required=True, type=click.Path(path_type=Path, dir_okay=False))
+@click.option("--input", "input_path", required=True, type=click.Path(path_type=Path, dir_okay=False))
+@click.option("--output-dir", required=True, type=click.Path(path_type=Path, file_okay=False))
+@click.option("--input-mode", type=click.Choice(["raw_search", "raw_pool"]), default="raw_search", show_default=True)
+@click.option("--model", default=None, help="Optional explicit model override; otherwise use task/SCREENING settings.")
+@click.option("--batch-size", type=click.IntRange(1), default=20, show_default=True)
+@click.option("--batch-concurrency", type=click.IntRange(1), default=1, show_default=True)
+@click.option("--batch-mode", type=click.Choice(["single", "multi"]), default="single", show_default=True)
+@click.option("--dry-run", is_flag=True, help="Validate and plan locally without network or writing output.")
+@click.option("--json", "json_output", is_flag=True)
+def task_command(task_config,input_path,output_dir,input_mode,model,batch_size,batch_concurrency,batch_mode,dry_run,json_output):
+    """Screen CSV/JSONL bibliographies with a unified task's review protocol.
+
+    This is the same Screening executor as workflow run, including independent
+    SCREENING configuration, original identities, provenance and resume checks.
+    DOI-only/preprint records do not require PubMed IDs. No Coding or Synthesis runs.
+    """
+    from metaagent.workflow import _execute_workflow_command
+    return _execute_workflow_command(
+        dry_run=dry_run,json_output=json_output,profile="task",dataset_root=task_config.parent,
+        task_config=task_config,output_dir=output_dir,start_at="screening",stop_after="screening",
+        input_mode=input_mode,raw_input=input_path,model=model,batch_size=batch_size,
+        batch_concurrency=batch_concurrency,batch_mode=batch_mode)

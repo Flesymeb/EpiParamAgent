@@ -4,12 +4,23 @@ Use only evidence from the provided text. Do not guess.
 """
 
 USER = """
-Task: Parse the structure of this paper to identify where fatality rate evidence is located.
+Task: Parse the structure of this paper to identify where fatality rate AND mortality count evidence is located.
+
+Index explicit deaths and matched denominators even when no rate or CI is reported.
+For count-only evidence, leave value_raw and uncertainty_raw null; retain numerator_raw,
+denominator_raw, population/subgroup, time window and source location. Do not calculate
+rates, intervals or missing counts. Keep different cohorts/subgroups/windows separate.
+parameter_type is CFR only when the denominator consists of explicitly confirmed cases,
+including confirmed hospitalized/ICU/IMV subgroups; IFR only for estimated total infections.
+Preserve HFR/ICU_fatality_rate/IMV_fatality_rate as fatality_type with the specific denominator.
+Unclear confirmed-case status stays other/NR with an explanation, never automatically CFR.
 
 Focus specifically on:
 1. Case fatality rate (CFR) = deaths / confirmed cases × 100%
 2. Infection fatality rate (IFR) = deaths / estimated infections × 100%
 3. Hospital fatality rate (HFR) = deaths among hospitalized / hospitalized × 100%
+4. ICU fatality rate: deaths among ICU-admitted patients / ICU admissions
+5. IMV fatality rate: deaths among invasive-mechanical-ventilation patients / IMV patients
 
 These may appear as:
 - Explicit labels: "CFR", "IFR", "fatality rate", "mortality rate", "case fatality ratio"
@@ -33,7 +44,7 @@ Return a JSON object:
     "period_raw": "study period",
     "population_raw": "population studied",
     "sample_size_raw": "number of cases/infections/deaths",
-    "fatality_type_raw": "CFR|IFR|HFR|mortality rate",
+    "fatality_type_raw": "CFR|IFR|HFR|ICU fatality|IMV fatality|mortality rate",
     "clade_raw": "clade I|clade Ia|clade II|clade IIb|West African|Congo Basin|NR"
   },
 
@@ -42,15 +53,19 @@ Return a JSON object:
     "pooling_method": "DL_random_effects | REML | HKSJ | fixed_effects | none | other",
     "ci_method": "standard | HKSJ | bayesian | profile_likelihood | none | not_reported",
     "is_single_study": true or false,
-    "denominator_type": "confirmed_cases | estimated_infections | hospitalized | other",
+    "denominator_type": "confirmed_cases | estimated_infections | hospitalized | ICU_admissions | IMV_patients | other | NR",
     "adjustment": "none | seroprevalence_corrected | age_standardized | ascertainment_corrected | other",
     "processing_hint": "compare_with_median | compare_with_pooled_mean | logit_transform_needed | direct_proportion"
   },
 
   "parameter_mentions": [
     {
-      "param": "CFR|IFR|HFR",
-      "value_raw": "e.g. '2.3%' or '0.023'",
+      "param": "CFR|IFR|HFR|ICU_fatality_rate|IMV_fatality_rate",
+      "value_raw": "explicit rate or null for count_only",
+      "record_kind": "rate_estimate | count_only",
+      "parameter_type": "CFR | IFR | other | NR",
+      "population_raw": "exact cohort/subgroup",
+      "period_raw": "matched follow-up/time window",
       "numerator_raw": "number of deaths if stated",
       "denominator_raw": "number of cases/infections if stated",
       "uncertainty_raw": "CI/SE if stated",
@@ -60,7 +75,9 @@ Return a JSON object:
 
   "field_evidence": {
     "fatality_type": "where fatality type is defined",
-    "point_estimate": "where the main % value appears",
+    "point_estimate": "where the main % value appears, or null",
+    "deaths": "where explicit death counts appear",
+    "denominator_count": "where matched denominator counts appear",
     "denominator_type": "what the denominator represents",
     "summary_statistic": "where median/mean/pooled is stated"
   }

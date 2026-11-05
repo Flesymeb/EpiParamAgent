@@ -3,6 +3,10 @@
 from __future__ import annotations
 
 import csv
+import contextlib
+import os
+import re
+import sys
 import json
 import shlex
 from collections import Counter
@@ -21,6 +25,20 @@ from metaagent._cli_shared import (
     resolve_project_root,
 )
 from tools.pubmed.metadata import inspect_csv_metadata
+
+
+class JsonOutputCommand(click.Command):
+    """Keep --json parse failures inside the same single-document contract."""
+    def make_context(self, info_name, args, parent=None, **extra):
+        json_output = "--json" in args
+        try:
+            return super().make_context(info_name, args, parent=parent, **extra)
+        except click.ClickException as exc:
+            if not json_output:
+                raise
+            command = f"{parent.command_path} {info_name}" if parent else info_name
+            _command_failure(exc, True, exit_code=exc.exit_code or 2,
+                             suggestion=f"Check the indicated argument; run {command} --help for accepted inputs.")
 
 
 @click.group(cls=StyledGroup)
@@ -113,8 +131,10 @@ def _coding_runtime_ready() -> bool:
     return _llm_runtime_ready("coding") and is_usable_secret(mineru.api_key)
 
 
-@workflow.command("status")
-@click.option("--profile", "-p", required=True, help="Review profile (AI1, AIR1, P10, etc.)")
+@workflow.command("status", cls=JsonOutputCommand)
+@click.option("--profile", "-p", help="Review profile (AI1, AIR1, P10, etc.)")
+@click.option("--run-dir", type=click.Path(path_type=Path, file_okay=False), help="Compatibility alias for --output-dir; inspect a workflow run manifest.")
+@click.option("--output-dir", type=click.Path(path_type=Path, file_okay=False), help="Inspect a saved run; outputs JSON by default. No service calls.")
 @click.option("--project-root", default="", help="Repository root (auto-detected if empty)")
 @click.option(
     "--raw-csv",
@@ -135,8 +155,51 @@ def _coding_runtime_ready() -> bool:
     help="Paper-pool root (default: <project>/paper_pool).",
 )
 @click.option("--json", "json_output", is_flag=True, help="Emit a machine-readable result")
-def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output):
+def status(profile, run_dir, output_dir, project_root, raw_csv, screened_csv, paper_pool, json_output):
     """Show completed artifacts and the exact command for the next stage."""
+    json_output = json_output or output_dir is not None
+    if run_dir and output_dir and run_dir.resolve() != output_dir.resolve():
+        _command_failure(ValueError("--run-dir and --output-dir must refer to the same run"), json_output, exit_code=2)
+    run_dir = output_dir or run_dir
+    if profile and run_dir:
+        _command_failure(ValueError("Choose --profile for legacy inspection or --output-dir/--run-dir for a saved run"), json_output, exit_code=2)
+    if run_dir:
+        from metaagent.workflow_runner import file_hash
+
+        path = run_dir / "workflow_manifest.json"
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            if not isinstance(payload, dict) or not isinstance(payload.get("stage_results", {}), dict) or not isinstance(payload.get("status"), str):
+                raise ValueError("Manifest requires status and stage_results fields")
+            payload["manifest"] = str(path.resolve())
+            invalid = []
+            for name, stage in payload.get("stage_results", {}).items():
+                hashes = stage.get("output_hashes", {})
+                valid = bool(hashes) and all(Path(p).is_file() and file_hash(Path(p)) == digest for p, digest in hashes.items())
+                stage["outputs_verified"] = valid
+                if stage.get("status") == "complete" and not valid:
+                    invalid.append(name)
+            if not invalid:
+                invalid = [name for name, stage in payload.get("stage_results", {}).items() if stage.get("stale")]
+            if invalid:
+                payload["recorded_status"] = payload.get("status")
+                payload["status"] = "stale"
+                payload["invalid_stages"] = invalid
+        except (OSError, ValueError, TypeError, AttributeError) as exc:
+            _command_failure(exc, json_output, suggestion="Check --output-dir contains a readable workflow_manifest.json; rerun the original workflow command if outputs are missing.")
+        payload["stages"] = {k: {"status": v.get("status"), "stale": v.get("stale", False), "reused": v.get("reused", False), "outputs_verified": v.get("outputs_verified", False)} for k, v in payload.get("stage_results", {}).items()}
+        payload.setdefault("artifact_overrides", {})
+        if json_output:
+            click.echo(json.dumps(payload, ensure_ascii=False))
+        else:
+            click.echo(f"{payload.get('profile', run_dir.name)}: {payload['status']}")
+            for name, stage in payload.get("stage_results", {}).items():
+                click.echo(f"  {name}: {stage['status']}; outputs verified={stage['outputs_verified']}")
+        if payload["status"] not in {"complete", "completed", "ok"}:
+            raise click.exceptions.Exit(1)
+        return
+    if not profile:
+        _command_failure(ValueError("Provide --output-dir (or --run-dir) for a saved run, or --profile for legacy artifacts"), json_output, exit_code=2)
     from metaagent.screening.profile_registry import (
         resolve_profile_context,
         resolve_profile_paths,
@@ -154,7 +217,7 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
             profile_name=resolved.profile_key,
         )
     except (KeyError, ValueError) as exc:
-        raise click.UsageError(str(exc)) from exc
+        _command_failure(exc, json_output, exit_code=2)
 
     raw_path = (raw_csv or paths.raw_file).expanduser().resolve()
     screened_path = (screened_csv or paths.screened_file).expanduser().resolve()
@@ -472,3 +535,185 @@ def status(profile, project_root, raw_csv, screened_csv, paper_pool, json_output
 
 
 __all__ = ["resolve_coding_config_files", "workflow"]
+
+
+def _execution_options(func):
+    """Keep plan and run options identical for reviewable execution plans."""
+    from metaagent.workflow_runner import STAGES
+
+    options = [
+        click.option("--profile", "-p", default="task", help="Registered benchmark profile, or use --task-config."),
+        click.option("--dataset-root", type=click.Path(path_type=Path, exists=True, file_okay=False), default="."),
+        click.option("--task-config", type=click.Path(path_type=Path, exists=True, dir_okay=False), help="Standalone YAML/JSON review task, independent of benchmark profiles."),
+        click.option("--document-manifest", type=click.Path(path_type=Path, exists=True, dir_okay=False)),
+        click.option("--estimates-input", type=click.Path(path_type=Path, exists=True, dir_okay=False)),
+        click.option("--chunk-chars", type=click.IntRange(min=256)),
+        click.option("--stage-a-empty-retries", type=click.IntRange(min=0, max=2), default=None, help="Bounded A-only verification of empty candidates; inherits task settings."),
+        click.option("--analysis-protocol", type=click.Path(path_type=Path, exists=True, dir_okay=False)),
+        click.option("--synthesis-backend", type=click.Choice(["pi", "deterministic"]), default=None,
+                     help="Pi plans, writes, executes and validates analysis code; old tasks retain deterministic synthesis."),
+        click.option("--research-question", default=None, help="Synthesis question override; otherwise inherit the task/profile question."),
+        click.option("--method-source", "method_sources", multiple=True, type=click.Path(path_type=Path, exists=True, dir_okay=False),
+                     help="Explicit original method document; repeat for PDF/MD/TXT/HTML/DOCX sources."),
+        click.option("--synthesis-max-executions", type=click.IntRange(1, 8), default=None),
+        click.option("--synthesis-max-turns", type=click.IntRange(1, 100), default=None),
+        click.option("--synthesis-max-tokens", type=click.IntRange(1, 1000000), default=None),
+        click.option("--synthesis-total-timeout-s", type=click.IntRange(1, 86400), default=None),
+        click.option("--synthesis-exec-timeout-s", type=click.IntRange(1, 3600), default=None),
+        click.option("--pi-command", default=None, help="Pinned local Pi executable name/path; no shell evaluation."),
+        click.option("--ablation", type=click.Choice(["full", "without_a", "without_b"]), default="full", show_default=True),
+        click.option("--output-dir", type=click.Path(path_type=Path, file_okay=False), required=True),
+        click.option("--project-root", type=click.Path(path_type=Path, exists=True, file_okay=False)),
+        click.option("--start-at", type=click.Choice(STAGES), default="retrieval", show_default=True),
+        click.option("--stop-after", type=click.Choice(STAGES), default="pooling", show_default=True),
+        click.option("--input-mode", type=click.Choice(["search", "raw_search", "raw_pool"]), default="search", show_default=True,
+                     help="search runs task sources or PubMed; raw_search replays a frozen natural pool; raw_pool explicitly opts into an augmented pool."),
+        click.option("--raw-input", type=click.Path(path_type=Path, exists=True, dir_okay=False)),
+        click.option("--query", help="Explicit final PubMed query, with any desired date filters included."),
+        click.option("--model", envvar="WORKFLOW_LLM_MODEL", help="Optional global override; otherwise resolve each module independently."),
+        click.option("--api-base", envvar="WORKFLOW_LLM_API_BASE", help="API base or complete /chat/completions URL."),
+        click.option("--api-key-env", default="WORKFLOW_LLM_API_KEY", show_default=True),
+        click.option("--limit", type=click.IntRange(min=1)),
+        click.option("--resume/--no-resume", default=True, show_default=True),
+        click.option("--batch-size", type=click.IntRange(min=1), default=20),
+        click.option("--batch-concurrency", type=click.IntRange(min=1), default=1),
+        click.option("--batch-mode", type=click.Choice(["single", "multi"]), default="single", show_default=True,
+                     help="single makes one model request per record; multi sends a batch per request."),
+        click.option("--strategy", type=click.Choice(["5d", "binary", "peco"]), default="5d"),
+        click.option("--fetch-mode", type=click.Choice(["pmc_only"]), default="pmc_only"),
+        click.option("--codebook", type=click.Path(path_type=Path, exists=True, dir_okay=False)),
+        click.option("--parameter-type"),
+        click.option("--estimate-measure", default="mean"),
+        click.option("--pooling-method", type=click.Choice(["random", "fixed"]), default="random"),
+        click.option("--extraction-backend", type=click.Choice(["llm", "langextract"]), default=None, help="Task coding backend; new tasks default to LangExtract inside A."),
+        click.option("--skip-fulltext-screening", is_flag=True, help="Explicitly bypass eligibility screening for a fixed coding-only input set."),
+        click.option("--temperature", type=float, default=None),
+        click.option("--start-date", help="Publication start date for generated queries (YYYY-MM-DD)."),
+        click.option("--end-date", help="Publication end date for generated queries (YYYY-MM-DD)."),
+        click.option("--json", "json_output", is_flag=True),
+    ]
+    for option in reversed(options):
+        func = option(func)
+    return func
+
+
+def _safe_error_message(exc):
+    """Expose actionable validation locations, never Pydantic inputs/YAML source."""
+    from pydantic import ValidationError
+    if isinstance(exc, ValidationError):
+        message = "; ".join(".".join(map(str, item["loc"])) + ": " + item["msg"] for item in exc.errors(include_input=False))
+    elif isinstance(exc, yaml.YAMLError):
+        mark = getattr(exc, "problem_mark", None)
+        message = f"Invalid YAML at line {mark.line + 1}, column {mark.column + 1}" if mark else "Invalid YAML; check indentation and document structure"
+    else:
+        message = str(exc)
+    for key, value in os.environ.items():
+        if ("API_KEY" in key or "AUTH_TOKEN" in key) and value and len(value) >= 4:
+            message = message.replace(value, "[REDACTED]")
+    # A credential can be accidentally pasted into a method/other rejected field
+    # before it is configured in the environment. Do not echo common key tokens.
+    return re.sub(r"\bsk-[A-Za-z0-9_-]{8,}\b", "[REDACTED]", message)
+
+
+def _command_failure(exc, json_output, *, suggestion="Correct the indicated configuration, then run workflow validate before retrying.", exit_code=1, manifest=None):
+    detail = {"type": type(exc).__name__, "message": _safe_error_message(exc), "suggestion": suggestion, "retryable": False}
+    if json_output:
+        payload = dict(manifest or {})
+        payload.setdefault("status", "failed")
+        payload["error"] = detail
+        click.echo(json.dumps(payload, ensure_ascii=False, default=str))
+        raise click.exceptions.Exit(exit_code) from exc
+    error_type = click.UsageError if exit_code == 2 else click.ClickException
+    raise error_type(detail["message"] + "\n" + suggestion) from exc
+
+
+def _local_validation(options):
+    if not options.task_config:
+        return None
+    from metaagent.workflow_task import validate_task_files
+    from metaagent.workflow_runner import STAGES
+    selected = STAGES[STAGES.index(options.start_at):STAGES.index(options.stop_after) + 1]
+    return validate_task_files(Path(options.task_config), codebook_override=options.codebook,
+                               backend_override=options.extraction_backend,
+                               check_codebook="coding" in selected, check_analyses="pooling" in selected,
+                               check_backend="coding" in selected and options.ablation != "without_a",
+                               analysis_override=options.analysis_protocol, synthesis_options=options)
+
+
+def _execute_workflow_command(*, dry_run, json_output, **kwargs):
+    from metaagent.workflow_runner import WorkflowOptions, WorkflowRunError, plan_workflow, run_workflow
+    try:
+        # Preserve stdout as a single JSON document. Core diagnostics remain on stderr.
+        with contextlib.redirect_stdout(sys.stderr) if json_output else contextlib.nullcontext():
+            options = WorkflowOptions(**kwargs)
+            validation = _local_validation(options)
+            result = plan_workflow(options) if dry_run else run_workflow(options)
+            if validation is not None:
+                result["local_validation"] = validation
+    except WorkflowRunError as exc:
+        _command_failure(exc, json_output, manifest=exc.manifest,
+                         suggestion=f"Inspect workflow status --output-dir {kwargs['output_dir']} and the recorded stage logs; fix the cause, then resume the original workflow run command.")
+    except Exception as exc:
+        _command_failure(exc, json_output)
+    if json_output:
+        click.echo(json.dumps(result, ensure_ascii=False, default=str))
+    else:
+        click.echo(f"{result.get('status', 'planned')}: {result['profile']} ({result['pool_kind']})")
+        click.echo("Stages: " + " -> ".join(result["stages"]))
+        if not dry_run:
+            click.echo(str(Path(result["output_dir"]) / "workflow_manifest.json"))
+    if not dry_run and result.get("status") not in {"complete", "completed", "ok"}:
+        raise click.exceptions.Exit(1)
+    return result
+
+
+@workflow.command("plan", cls=JsonOutputCommand)
+@_execution_options
+def plan_command(**kwargs):
+    """Inspect an execution plan without network access or filesystem writes."""
+    _execute_workflow_command(dry_run=True, **kwargs)
+
+
+@workflow.command("run", cls=JsonOutputCommand)
+@_execution_options
+@click.option("--dry-run", is_flag=True, help="Render the same plan as workflow plan without executing.")
+def run_command(dry_run, **kwargs):
+    """Run any stage range, resuming only verified input/config/output hashes."""
+    _execute_workflow_command(dry_run=dry_run, **kwargs)
+
+
+@workflow.command('variants', cls=JsonOutputCommand)
+@_execution_options
+def variants_command(json_output, **kwargs):
+    """Run explicit stage ablations against one frozen screened document bundle."""
+    from metaagent.experiments import run_variants
+    from metaagent.workflow_runner import WorkflowOptions, WorkflowRunError
+    try:
+        with contextlib.redirect_stdout(sys.stderr) if json_output else contextlib.nullcontext():
+            options = WorkflowOptions(**kwargs)
+            _local_validation(options)
+            result = run_variants(options)
+    except WorkflowRunError as exc:
+        _command_failure(exc, json_output, manifest=exc.manifest)
+    except Exception as exc:
+        _command_failure(exc, json_output)
+    click.echo(json.dumps(result, ensure_ascii=False) if json_output else f"{result['status']}: {Path(kwargs['output_dir']) / 'variants.json'}")
+    if result['status'] != 'complete':
+        raise click.exceptions.Exit(1)
+
+
+@workflow.command('validate', cls=JsonOutputCommand)
+@click.option('--task-config', required=True, type=click.Path(path_type=Path, dir_okay=False))
+@click.option('--json', 'json_output', is_flag=True, help='Emit exactly one JSON validation result (also the default for this command).')
+def validate_task_command(task_config, json_output):
+    """Check task, review/analysis protocols, codebook and backend locally. No API calls.
+
+    Example: metaagent workflow validate --task-config task.yaml --json
+    """
+    from metaagent.workflow_task import validate_task_files
+    try:
+        with contextlib.redirect_stdout(sys.stderr):
+            result = validate_task_files(task_config)
+    except Exception as exc:
+        _command_failure(exc, True)
+    click.echo(json.dumps(result, ensure_ascii=False))

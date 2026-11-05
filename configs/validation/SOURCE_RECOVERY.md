@@ -1,0 +1,13 @@
+# Source recovery and frozen development scope
+
+This three-case pack is a developer check, not independent human gold or the 22-review benchmark. Only small task/codebook/reference/hash files belong in version control. Complete source text, PubMed XML, CLI stdout/stderr, model responses and generated artifacts stay under ignored `runs/cli_effect_validation_20261104/`.
+
+The frozen Markdown inputs are recorded individually in `references.json` and `freeze.json`. The validator refuses missing or changed bytes; it never silently updates a reference or rebuilds a different source version.
+
+- PMID 32191173: original research letter, DOI `10.3201/eid2606.200357`, CDC publication page `https://wwwnc.cdc.gov/eid/article/26/6/20-0357_article`. The snapshot was copied byte-for-byte from the existing shared `paper_pool/markdown/PMID_32191173/fulltext.md` cache. Its full-text scope is distinct from author references, subgroup analyses and other diseases discussed in the same article.
+- PMID 32150748: original research article, DOI `10.7326/M20-0504`, PMCID `PMC7081172`. Publisher/PMC full-text access was unavailable during preparation. The frozen input is explicitly **primary_abstract_only**, taken from the article's official NLM PubMed XML record, not a review or model-generated summary. No complete-fulltext coverage or absence claim is supported.
+- PMID 36323407: original research article, DOI `10.1136/bmj-2022-073153`, publisher page `https://www.bmj.com/content/379/bmj-2022-073153`. The snapshot was copied from `paper_pool/markdown/PMID_36323407/fulltext.md`. It contains an unresolved Abstract/Table 1 interval-upper-bound discrepancy. That field is not scored; a faithful table value is not marked wrong. The primary check is preserving CrI semantics and refusing an unauthorized CI-based synthesis.
+
+To restore missing snapshots, first use an existing byte-identical cached file and verify its SHA256 against `freeze.json`. The Lauer abstract was built from NLM EFetch `db=pubmed&id=32150748&retmode=xml`: title, the literal source-scope header in the snapshot, then each AbstractText element's concatenated text separated by blank lines. The raw PubMed XML snapshot is also hashed. NLM metadata may change: a current download is not automatically the same frozen version.
+
+If identical bytes cannot be recovered, record a new source version, recheck source evidence/offsets independently of model output, and create an explicitly reviewed new freeze revision before further model validation. Never change an expected numeric field because the system produced a different number. The existing reference annotation status must remain `developer_source_checked_provisional` until actual independent human review occurs.

@@ -1,0 +1,40 @@
+version: '1'
+task_id: covid_incubation_median_32150748
+disease: covid19
+topic: incubation_period
+research_question: What median incubation period is reported in the declared primary
+  report?
+codebook: codebooks/incubation_period.yaml
+coding:
+  backend: langextract
+  chunk_chars: 24000
+  stage_a_empty_retries: 1
+  extraction_scope: The overall primary fitted median incubation period for the full
+    confirmed-case sample. Keep it distinct from the mean, quantiles, quarantine exceedance
+    probabilities, rounded discussion summaries, and sensitivity results. If text
+    and tables conflict, preserve the conflicting source-supported records and mark
+    the unresolved discrepancy; never silently decide which original value is true.
+review_protocol:
+  version: development-scope-v1
+  criteria:
+  - id: disease
+    description: Original human covid19 study
+  - id: outcome
+    description: Reports incubation period estimates
+  logic:
+    all:
+    - disease
+    - outcome
+search: {}
+analysis_protocol:
+  analysis_id: covid_incubation_median_32150748-analysis
+  parameter_type: incubation_period
+  estimate_measure: median
+  unit: days
+  method: median
+  independence:
+    unit: record_id
+    assert_independent_reports: true
+    multiple_estimates: review
+  minimum_estimates: 1
+  llm_report: false

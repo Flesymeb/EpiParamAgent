@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
+import os
 import re
 from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 import httpx
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -15,6 +18,7 @@ from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from metaagent.config import is_usable_secret, load_llm_config
+from .query_validation import validate_pubmed_query, query_guide, verify_mesh_terms
 
 
 class PubMedQueryRequest(BaseModel):
@@ -28,6 +32,7 @@ class PubMedQueryRequest(BaseModel):
     start_date: date
     end_date: date
     project_id: str = "p1"
+    verify_mesh: bool = False
 
     @field_validator("start_date", "end_date", mode="before")
     @classmethod
@@ -101,6 +106,8 @@ class PubMedQueryArtifact(BaseModel):
     request: PubMedQueryRequest
     terms: PubMedQueryTerms
     query: str
+    validation: dict[str, Any] = Field(default_factory=dict)
+    mesh_validation: dict[str, Any] = Field(default_factory=lambda: {"status": "not_performed"})
 
 
 def create_manual_query_artifact(
@@ -120,6 +127,7 @@ def create_manual_query_artifact(
             rationale="The final PubMed query was supplied by the user; no LLM expansion was applied."
         ),
         query=normalized_query,
+        validation=validate_pubmed_query(normalized_query),
     )
 
 
@@ -271,9 +279,17 @@ class PubMedQueryGenerator:
             raise RuntimeError("Missing API base URL for the query LLM provider")
         self.provider = cfg.provider or self.provider or "default"
         self.model = cfg.model or self.model or "unknown"
+        host = (urlsplit(cfg.api_base).hostname or "").lower()
+        no_proxy = os.environ.get("NO_PROXY") or os.environ.get("no_proxy") or ""
+        bypass_proxy = any(
+            entry == "*" or host == entry.lstrip(".") or host.endswith("." + entry.lstrip("."))
+            for entry in (part.strip().lower() for part in no_proxy.split(","))
+            if entry
+        )
         http_client = httpx.Client(
             verify=cfg.verify_ssl,
             timeout=cfg.timeout_s,
+            trust_env=not bypass_proxy,
         )
         self.llm = ChatOpenAI(
             model=self.model,
@@ -317,6 +333,7 @@ class PubMedQueryGenerator:
             "Generate retrieval vocabulary. Preserve sensitivity through true synonyms "
             "and historical names, not through broader neighboring outcomes."
         )
+        system_prompt += "\n\n" + query_guide()
         bound_llm = self._get_llm().bind(response_format={"type": "json_object"})
         try:
             response = bound_llm.invoke(
@@ -336,6 +353,8 @@ class PubMedQueryGenerator:
             request=request,
             terms=terms,
             query=build_pubmed_query(request, terms),
+            validation=validate_pubmed_query(build_pubmed_query(request, terms)),
+            mesh_validation=verify_mesh_terms(terms.disease_mesh_terms + terms.parameter_mesh_terms) if request.verify_mesh else {"status": "not_performed"},
         )
 
 
@@ -346,6 +365,10 @@ def save_query_artifact(
     force: bool = False,
 ) -> tuple[Path, Path]:
     """Atomically save query metadata and the copy-ready PubMed expression."""
+    validation = validate_pubmed_query(artifact.query)
+    if validation["errors"]:
+        raise ValueError("Invalid PubMed query: " + "; ".join(validation["errors"]))
+    artifact = artifact.model_copy(update={"validation": validation})
     output_dir.mkdir(parents=True, exist_ok=True)
     json_path = output_dir / "query.json"
     text_path = output_dir / "query.txt"
@@ -376,8 +399,19 @@ def search_pubmed_to_csv(
     """Run the saved query and write screening-compatible PubMed metadata."""
     from tools.pubmed.client import PubMedClient
 
+    validation = validate_pubmed_query(query)
+    if validation["errors"]:
+        raise ValueError("Invalid PubMed query: " + "; ".join(validation["errors"]))
     client = PubMedClient(medline_only=medline_only)
-    papers = client.search(query, retmax=retmax, year=None)
+    try:
+        papers = client.search(query, retmax=retmax, year=None)
+    except Exception as exc:
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        failure = {"schema_version": 1, "status": "failed", "executed_at": datetime.now(UTC).isoformat(),
+                   "query": query, "local_validation": validation, "error_type": type(exc).__name__,
+                   "retrieval_complete": False, "ncbi_search_calls": getattr(client, "last_search_diagnostics", [])}
+        output_file.with_suffix(output_file.suffix + ".retrieval.json").write_text(json.dumps(failure, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        raise
     fieldnames = [
         "PMID",
         "Title",
@@ -415,9 +449,9 @@ def search_pubmed_to_csv(
                 "NIHMS ID": "",
                 "DOI": paper.doi or "",
                 "Abstract": paper.abstract,
-                "Keywords": "",
-                "mesh_terms": "",
-                "pub_types": "",
+                "Keywords": "; ".join(getattr(paper, "keywords", []) or []),
+                "mesh_terms": "; ".join(getattr(paper, "mesh_terms", []) or []),
+                "pub_types": "; ".join(getattr(paper, "pub_types", []) or []),
             }
         )
 
@@ -426,6 +460,17 @@ def search_pubmed_to_csv(
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
+    diagnostics = getattr(client, "last_search_diagnostics", [])
+    identities = [row["PMID"] for row in rows]
+    receipt = {"schema_version": 1, "status": "exported", "executed_at": datetime.now(UTC).isoformat(), "query": query, "local_validation": validation,
+               "requested_limit": retmax, "medline_only": medline_only, "total_matches": int(client.last_total or 0),
+               "retrieved": len(rows), "unique_ids": len(set(identities)), "returned_ids": identities,
+               "ids_sha256": hashlib.sha256(json.dumps(sorted(identities)).encode()).hexdigest(),
+               "metadata_sha256": hashlib.sha256(output_file.read_bytes()).hexdigest(),
+               "retrieval_complete": client.last_total is not None and len(set(identities)) == int(client.last_total) and len(identities) == len(set(identities)) and bool(diagnostics) and not any(d.get("error") or d.get("errorlist") for d in diagnostics),
+               "ncbi_search_calls": diagnostics, "remote_validation": "executed" if diagnostics else "unavailable",
+               "mesh_descriptor_validation": "not_performed"}
+    output_file.with_suffix(output_file.suffix + ".retrieval.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return {
         "retrieved": len(rows),
         "total_matches": int(client.last_total or 0),
@@ -437,6 +482,8 @@ __all__ = [
     "PubMedQueryArtifact",
     "PubMedQueryGenerator",
     "PubMedQueryTerms",
+    "verify_mesh_terms",
+    "validate_pubmed_query",
     "build_pubmed_query",
     "create_manual_query_artifact",
     "default_output_dir",

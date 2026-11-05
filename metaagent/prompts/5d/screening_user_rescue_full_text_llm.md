@@ -1,11 +1,18 @@
+Stage: full-text assessment. Check the supplied primary text, tables and available supplements. Do not infer absence from an incomplete bundle. Accept original counts, paired times or other data forms when the task explicitly permits them; if the task requires a reported estimate, raw data alone do not satisfy that requirement. Do not invent an unreported distribution, model, transformation or endpoint. Recheck an earlier U using the newly supplied source. Rescue only for a task-specific eligibility path or supported match, not merely a disease mention. Keep a clear task mismatch as U; the prior label is not evidence.
+
 Research question: {research_question}
-
-This paper was previously labeled UNLIKELY. Use the full text to decide whether it should remain U or be rescued as P/S.
-
 Title: {title}
-Publication year: {publication_year}
-Create date: {create_date}
+Official title: {official_title}
+Publication Year: {publication_year}
+Publication Date: {publication_date}
+Create Date: {create_date}
+Authors: {authors}
+Citation: {citation}
+Journal/Book: {journal}
+Language: {language}
 Keywords: {keywords}
+Publication Types: {pub_types}
+MeSH Terms: {mesh_terms}
 {content_label}: {content}
 
-Return JSON only. Include a tier field: S, P, or U.
+Return the complete five assessments and your holistic S/P/U tier as JSON. Use publication types and MeSH as context, not as proof of methods, outcomes or eligibility. In overall_justification, explain the decisive task criteria and any unresolved explicit restrictions.

@@ -21,9 +21,10 @@ defaults:
     full_text_mode: standard
     stage2_evidence_floor: 1
     parameter_scoring_note: |
-      - Score 3–4 if the paper directly reports fatality or severity rates (CFR, IFR, hospitalization rate, case severity distribution) computed or estimated from its own real patient or surveillance data.
-      - Score 2 if the paper estimates fatality using a model adjustment applied to aggregate counts, or borrows fatality estimates from another study as an input assumption.
-      - Score 0–1 if the paper only mentions fatality or severity in the introduction/background without reporting a new estimate.
+      - Apply the task's stated outcomes and eligible study designs; do not equate CFR, IFR, population mortality, and severity outcomes. Keep their denominators distinct.
+      - Original estimates from observed data or fitted models may be eligible. Case reports, reviews, and data suitable for a declared calculation qualify only when the task permits them.
+      - At title/abstract screening, omitted death counts or a missing abstract leave eligibility unresolved when a task-supported outcome-data path exists; disease relevance alone is insufficient.
+      - At full text, verify the required outcome and denominator. Explicit zero deaths may be relevant; a case count, recovery, or silence about deaths alone does not establish zero fatality.
     fulltext_rescue:
       enabled: true
       when_no_abstract: true

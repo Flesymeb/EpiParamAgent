@@ -4,7 +4,16 @@ Use only evidence from the provided text. Do not guess.
 """
 
 USER = """
-Task: Parse the structure of this paper to identify where fatality rate evidence is located.
+Task: Parse the structure of this paper to identify where fatality rate AND mortality count evidence is located.
+
+Index explicit deaths and matched denominators even when no rate or CI is reported.
+For count-only evidence, leave value_raw and uncertainty_raw null; retain numerator_raw,
+denominator_raw, population/subgroup, time window and source location. Do not calculate
+rates, intervals or missing counts. Keep different cohorts/subgroups/windows separate.
+parameter_type is CFR only when the denominator consists of explicitly confirmed cases,
+including confirmed hospitalized/ICU/IMV subgroups; IFR only for estimated total infections.
+Preserve HFR/ICU_fatality_rate/IMV_fatality_rate as fatality_type with the specific denominator.
+Unclear confirmed-case status stays other/NR with an explanation, never automatically CFR.
 
 Focus specifically on:
 1. Case fatality rate (CFR) = deaths / confirmed cases × 100%
@@ -50,7 +59,11 @@ Return a JSON object:
   "parameter_mentions": [
     {
       "param": "CFR|IFR|HFR|ICU_fatality_rate|IMV_fatality_rate",
-      "value_raw": "e.g. '2.3%' or '0.023'",
+      "value_raw": "explicit rate or null for count_only",
+      "record_kind": "rate_estimate | count_only",
+      "parameter_type": "CFR | IFR | other | NR",
+      "population_raw": "exact cohort/subgroup",
+      "period_raw": "matched follow-up/time window",
       "numerator_raw": "number of deaths if stated",
       "denominator_raw": "number of cases/infections if stated",
       "uncertainty_raw": "CI/SE if stated",
@@ -60,7 +73,9 @@ Return a JSON object:
 
   "field_evidence": {
     "fatality_type": "where fatality type is defined",
-    "point_estimate": "where the main % value appears",
+    "point_estimate": "where the main % value appears, or null",
+    "deaths": "where explicit death counts appear",
+    "denominator_count": "where matched denominator counts appear",
     "denominator_type": "what the denominator represents",
     "summary_statistic": "where median/mean/pooled is stated"
   }

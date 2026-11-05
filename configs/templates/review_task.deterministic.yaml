@@ -1,0 +1,45 @@
+# Explicit deterministic example; requires its declared analysis protocol.
+version: '1'
+task_id: mpox-incubation-example
+disease: mpox
+topic: incubation_period
+research_question: What incubation-period estimates are reported in primary human
+  mpox studies?
+codebook: ../mpox/codebooks/incubation_period.yaml
+review_protocol:
+  version: example-v1
+  criteria:
+  - id: disease
+    description: The report studies mpox or monkeypox infection in humans.
+  - id: original
+    description: The report contains original observations or an original analysis
+      of human data; short reports and imported cases are allowed.
+  - id: outcome
+    description: The report provides an incubation-period estimate or observed exposure-to-onset
+      data suitable for its estimation.
+  logic:
+    all:
+    - disease
+    - original
+    - outcome
+search:
+  pubmed: (mpox OR monkeypox) AND (incubation OR exposure onset)
+  europepmc: (mpox OR monkeypox) AND incubation
+analysis_protocol:
+  analysis_id: incubation-mean-example
+  parameter_type: incubation_period
+  estimate_measure: mean
+  unit: days
+  method: fixed
+  uncertainty_rules:
+    allowed_types:
+    - CI
+    - SE
+    - SD
+  independence:
+    unit: cohort_id
+    multiple_estimates: review
+  allow_unit_conversion: true
+  minimum_estimates: 2
+synthesis:
+  backend: deterministic

@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import asyncio
+import contextvars
+import hashlib
 import csv
+import json
 import os
 import time
 from pathlib import Path
@@ -14,7 +17,7 @@ from langchain_core.callbacks import BaseCallbackHandler
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 
-from metaagent.config import is_usable_secret, load_llm_config
+from metaagent.config import is_usable_secret, load_llm_config, merge_thinking_policy
 
 from metaagent.screening.models import (
     BinaryDecision,
@@ -26,7 +29,7 @@ from metaagent.screening.models import (
     resolve_stage2_evidence_floor,
     resolve_stage_mode,
 )
-from metaagent.screening.prompt_loader import PROMPT_FILES, load_prompt_templates
+from metaagent.screening.prompt_loader import PROMPT_FILES, load_prompt_templates, load_parameter_guides
 
 
 def _matches_no_proxy(url: str, no_proxy: str) -> bool:
@@ -66,6 +69,7 @@ def init_llm_model(
     provider_override: str | None = None,
     temperature_override: float | None = None,
     config_overrides: dict[str, Any] | None = None,
+    module_hint: str = "screening",
 ) -> Any:
     """Initialize screening model from shared runtime config.
 
@@ -82,7 +86,7 @@ def init_llm_model(
         params["llm_provider"] = provider_override
     if temperature_override is not None:
         params["llm_temperature"] = temperature_override
-    cfg = load_llm_config(params, module_hint="screening")
+    cfg = load_llm_config(params, module_hint=module_hint)
     if not is_usable_secret(cfg.api_key):
         raise ValueError(
             "API key not found. Please set LLM_API_KEY or the selected "
@@ -97,15 +101,19 @@ def init_llm_model(
 
     no_proxy = os.environ.get("NO_PROXY") or os.environ.get("no_proxy") or ""
     trust_env = cfg.provider not in {"lab", "lab2"} and not _matches_no_proxy(api_base, no_proxy)
+    from metaagent.llm_rate_limit import async_httpx_event_hooks, httpx_event_hooks
+
     http_client = httpx.Client(
         verify=cfg.verify_ssl,
         timeout=cfg.timeout_s,
         trust_env=trust_env,
+        event_hooks=httpx_event_hooks(),
     )
     http_async_client = httpx.AsyncClient(
         verify=cfg.verify_ssl,
         timeout=cfg.timeout_s,
         trust_env=trust_env,
+        event_hooks=async_httpx_event_hooks(),
     )
 
     kwargs: dict[str, Any] = {
@@ -113,7 +121,9 @@ def init_llm_model(
         "temperature": cfg.temperature,
         "api_key": cfg.api_key,
         "base_url": api_base,
-        "max_retries": 3,
+        # Retries are explicit in invoke_with_retry_async. Both transports use
+        # the shared request gate, so each actual attempt consumes its slot.
+        "max_retries": 0,
         "request_timeout": cfg.timeout_s,
         "streaming": cfg.force_streaming,
         "max_tokens": cfg.max_tokens,
@@ -122,7 +132,7 @@ def init_llm_model(
     }
     if cfg.reasoning_effort:
         kwargs["reasoning_effort"] = cfg.reasoning_effort
-    if cfg.provider == "bailian" and "qwen" in llm_model.lower():
+    if cfg.provider == "bailian" and "qwen" in llm_model.lower() and cfg.thinking is None:
         # Screening requires concise structured classifications, not reasoning
         # traces. Bailian Qwen models otherwise default to thinking mode.
         kwargs["extra_body"] = {"enable_thinking": False}
@@ -131,6 +141,17 @@ def init_llm_model(
         # payloads through the OpenAI-compatible API.
         kwargs["reasoning"] = {"exclude": True}
 
+    policy_body = merge_thinking_policy(kwargs.get("extra_body"), cfg.thinking)
+    if policy_body is not None:
+        kwargs["extra_body"] = policy_body
+    from metaagent.config import resolve_extra_body
+    extra_body = resolve_extra_body(params, module_hint=module_hint)
+    if extra_body:
+        body = dict(kwargs.get("extra_body", {}))
+        if "thinking" in extra_body or "enable_thinking" in extra_body:
+            body.pop("thinking", None)
+            body.pop("enable_thinking", None)
+        kwargs["extra_body"] = merge_thinking_policy({**body, **extra_body}, None)
     return ChatOpenAI(**kwargs)
 
 
@@ -144,6 +165,7 @@ class _TokenCounter(BaseCallbackHandler):
         self.prompt_tokens: int = 0
         self.completion_tokens: int = 0
         self.total_tokens: int = 0
+        self.observed = False
 
     def on_llm_end(self, response: Any, **kwargs: Any) -> None:
         try:
@@ -156,11 +178,15 @@ class _TokenCounter(BaseCallbackHandler):
                         msg = getattr(gen, "message", None)
                         if msg and hasattr(msg, "usage_metadata"):
                             u = msg.usage_metadata
+                            if not u:
+                                continue
+                            self.observed = True
                             self.prompt_tokens += u.get("input_tokens", 0)
                             self.completion_tokens += u.get("output_tokens", 0)
                             self.total_tokens += u.get("total_tokens", 0)
                             return
             if usage:
+                self.observed = True
                 self.prompt_tokens = usage.get("prompt_tokens", 0)
                 self.completion_tokens = usage.get("completion_tokens", 0)
                 self.total_tokens = usage.get("total_tokens", 0)
@@ -168,44 +194,45 @@ class _TokenCounter(BaseCallbackHandler):
             pass  # Token counting is best-effort
 
 
-async def invoke_with_retry_async(llm, prompt, max_retries=3, delay=1.0):
-    """Invoke structured output with bounded retries, exponential backoff, and cost tracking.
+_CALL_AUDIT = contextvars.ContextVar("screening_call_audit", default=None)
+_CALL_PURPOSE = contextvars.ContextVar("screening_call_purpose", default="initial")
 
-    Returns:
-        (result, cost_dict) where cost_dict has keys: prompt_tokens, completion_tokens,
-        total_tokens, wall_time_ms.
-    """
+
+async def invoke_with_retry_async(llm, prompt, max_retries=3, delay=1.0):
+    """Bounded retries with raw response/usage retained per actual attempt."""
     last_exception = None
     for attempt in range(max_retries):
+        started = time.perf_counter()
+        event = {"attempt": attempt + 1, "purpose": _CALL_PURPOSE.get(), "stage": "screening", "request_sha256": hashlib.sha256(str(prompt).encode()).hexdigest()}
         try:
             counter = _TokenCounter()
-            t0 = time.perf_counter()
             result = await llm.ainvoke(prompt, config={"callbacks": [counter]})
-            wall_ms = (time.perf_counter() - t0) * 1000
-            cost = {
-                "prompt_tokens": counter.prompt_tokens,
-                "completion_tokens": counter.completion_tokens,
-                "total_tokens": counter.total_tokens,
-                "wall_time_ms": round(wall_ms, 1),
-            }
+            cost = {"prompt_tokens": counter.prompt_tokens, "completion_tokens": counter.completion_tokens,
+                    "total_tokens": counter.total_tokens, "wall_time_ms": round((time.perf_counter()-started)*1000, 1)}
+            event.update(status="ok", raw_response=_result_content_to_string(result), usage=getattr(result,"usage_metadata",None) or (cost if counter.observed else None), response_metadata=getattr(result,"response_metadata",None))
             return result, cost
-        except Exception as e:
-            last_exception = e
-            error_str = str(e)
-
-            if "context_length_exceeded" in error_str:
-                print("      ⚠ Context length exceeded, skipping retry.")
-                raise e
-
+        except Exception as exc:
+            last_exception = exc
+            event.update(status="error", error_type=type(exc).__name__)
+            if "context_length_exceeded" in str(exc):
+                raise
             if attempt < max_retries - 1:
-                err_short = error_str.split('\n')[0][:80]
-                print(f"      Retry {attempt+1}/{max_retries} ({delay}s): {err_short}")
-                await asyncio.sleep(delay)
+                headers = getattr(getattr(exc,"response",None),"headers",{})
+                try:
+                    wait = max(delay, float(headers.get("Retry-After",0)))
+                except (TypeError, ValueError):
+                    wait = delay
+                await asyncio.sleep(wait)
                 delay *= 2
-            else:
-                print(f"      ❌ Failed after {max_retries} attempts.")
-
-    raise last_exception if last_exception else Exception("Unknown error in retry loop")
+        finally:
+            event['wall_time_ms'] = round((time.perf_counter()-started)*1000, 1)
+            audit = _CALL_AUDIT.get()
+            if audit:
+                path, identities = audit
+                path = Path(path); path.parent.mkdir(parents=True,exist_ok=True)
+                with path.open('a') as handle:
+                    handle.write(json.dumps({**event,"record_ids":identities},ensure_ascii=False,default=str)+'\n')
+    raise last_exception if last_exception else RuntimeError("No model attempt was scheduled")
 
 
 async def _screen_individual_prompts(
@@ -234,7 +261,7 @@ async def _screen_individual_prompts(
         try:
             decision, cost = result
             _write_cost(paper, cost)
-            parsed = _coerce_structured_result(decision, output_schema)
+            parsed = _coerce_structured_result(decision, output_schema, strict_5d=prefer_llm_tier)
             _write_parsed_result(
                 paper,
                 parsed,
@@ -247,11 +274,11 @@ async def _screen_individual_prompts(
             try:
                 retry_result, retry_cost = await invoke_with_retry_async(
                     structured_llm,
-                    prompt,
-                    max_retries=2,
+                    _contract_correction_prompt(prompt, parse_error, output_schema, require_tier=prefer_llm_tier),
+                    max_retries=1,
                 )
                 _write_cost(paper, retry_cost)
-                parsed = _coerce_structured_result(retry_result, output_schema)
+                parsed = _coerce_structured_result(retry_result, output_schema, strict_5d=prefer_llm_tier)
                 _write_parsed_result(
                     paper,
                     parsed,
@@ -268,6 +295,192 @@ async def _screen_individual_prompts(
     return single_errors
 
 
+def _protocol_source(paper: dict[str, Any], content_key: str) -> str:
+    """Whitelist source fields; task labels and reference answers never enter evidence."""
+    from metaagent.screening.context import bibliographic_context, metadata_text
+    context = bibliographic_context(paper)
+    fields = {"Title": context["title"], "Official title": metadata_text(paper.get("official_title")), content_key: metadata_text(paper.get(content_key)) or context["abstract"] if content_key != "fulltext" else metadata_text(paper.get("fulltext")),
+              "Keywords": context["keywords"], "pub_types": context["pub_types"],
+              "mesh_terms": context["mesh_terms"], "language": context["language"],
+              "publication_date": context["publication_date"], "Publication Year": context["year"],
+              "Authors": context["authors"], "Journal/Book": context["journal"],
+              "Create Date": metadata_text(paper.get("Create Date")), "Citation": metadata_text(paper.get("Citation"))}
+    text = "\n".join(f"{key}: {value}" for key, value in fields.items() if value)
+    if content_key == "fulltext":
+        blocks = paper.get("source_blocks") or []
+        if isinstance(blocks, list):
+            text += "\n" + "\n".join(f"Block {b.get('block_id', i)}: {b.get('text', '')}"
+                                            for i, b in enumerate(blocks) if isinstance(b, dict))
+    return text
+
+
+async def _screen_protocol_records(
+    papers, llm_model, protocol, *, screening_stage, content_key,
+    batch_size, batch_concurrency, batch_mode, audit_path=None, research_question="",
+):
+    """Execute protocol screening without legacy scores or target-parameter gates."""
+    from metaagent.screening.protocol import (
+        ProtocolDecision, evidence_source_context, reduce_assessments, render_protocol_messages, validate_protocol,
+    )
+    validate_protocol(protocol)
+    if batch_size < 1 or batch_concurrency < 1:
+        raise ValueError("Screening batch size and concurrency must be positive")
+    ids = [str(p.get("record_id") or p.get("PMID") or f"row_{i}")
+           for i, p in enumerate(papers)]
+    if len(ids) != len(set(ids)):
+        raise ValueError("Protocol screening requires unique record identities")
+    # Source-roster identifiers are transport keys, not study evidence. Blind only
+    # these identifiers and map responses back strictly; ordinary IDs stay compatible.
+    wire_ids = {identity: ("record_" + hashlib.sha256((str(index) + ":" + identity).encode()).hexdigest()[:20]
+                           if identity.startswith("sr:") else identity)
+                for index, identity in enumerate(ids)}
+    if len(set(wire_ids.values())) != len(ids):
+        raise ValueError("Screening model identity collision")
+    entries = [(paper, {"record_id": wire_ids[identity], "source": _protocol_source(paper, content_key),
+                        "coverage": {key: value for key, value in (paper.get("fulltext_coverage") or {"supplied_content": content_key}).items()
+                                     if key in {"complete", "truncated", "missing_materials", "required_materials", "provided_materials", "supplied_content"}}})
+               for paper, identity in zip(papers, ids)]
+    model = llm_model.bind(response_format={"type": "json_object"})
+    semaphore = asyncio.Semaphore(batch_concurrency)
+    width = batch_size if batch_mode == "multi" else 1
+
+    async def run(batch):
+        async with semaphore:
+            for paper, _ in batch:
+                paper.pop("criterion_assessments", None)
+                paper.pop("protocol_decision", None)
+                paper.pop("protocol_error", None)
+                paper.pop("evidence_correction", None)
+                paper["screening_protocol_version"] = str(protocol["version"])
+                paper["screening_execution_mode"] = batch_mode
+            for paper, record in batch:
+                if str(paper.get("record_id")) != record["record_id"]:
+                    paper["screening_model_record_id"] = record["record_id"]
+            audit_token = _CALL_AUDIT.set((audit_path,[r['record_id'] for _,r in batch]) if audit_path else None)
+            try:
+                messages = render_protocol_messages(protocol, [r for _, r in batch],
+                                                    screening_stage, multi=batch_mode == "multi", research_question=research_question)
+                result, cost = await invoke_with_retry_async(model, messages)
+                initial_cost = dict(cost)
+                correction_cost = None
+                data = result if isinstance(result, dict) else _load_json_data(_result_content_to_string(result))
+                values = data.get("records") if batch_mode == "multi" else [data]
+                if not isinstance(values, list):
+                    raise ValueError("Protocol batch result requires records array")
+                parsed = [ProtocolDecision.model_validate(value) for value in values]
+                actual = [value.record_id for value in parsed]
+                expected = {r["record_id"] for _, r in batch}
+                if len(actual) != len(set(actual)) or set(actual) != expected:
+                    raise ValueError("Protocol response identities differ from scheduled records")
+                # Validate the whole envelope before publishing any decisions. A
+                # malformed batch must never become a partial set of exclusions.
+                by_id = {value.record_id: value for value in parsed}
+                reduced = {r["record_id"]: reduce_assessments(protocol, by_id[r["record_id"]], r["source"], stage=screening_stage, coverage=r["coverage"])
+                           for _, r in batch}
+                # Correct quote-format mistakes once using the exact same stage
+                # source. Grounded criteria are never overwritten by this pass.
+                affected = {identity: [a["criterion_id"] for a in result["assessments"]
+                                       if "missing_or_unmatched_evidence" in a["validation_flags"]]
+                            for identity, result in reduced.items()}
+                affected = {identity: names for identity, names in affected.items() if names}
+                correction_metadata = {}
+                if affected:
+                    target = [r for _, r in batch if r["record_id"] in affected]
+                    feedback = [{"record_id": r["record_id"], "criteria": [
+                        {"criterion_id": a["criterion_id"], "claimed_status": a["status"],
+                         "invalid_evidence": a["evidence"], "validation_error": "missing_or_unmatched_evidence",
+                         "same_source_locator": evidence_source_context(r["source"], a["evidence"])}
+                        for a in reduced[r["record_id"]]["assessments"] if a["criterion_id"] in affected[r["record_id"]]]}
+                        for r in target]
+                    repair_messages = render_protocol_messages(protocol, target, screening_stage, multi=batch_mode == "multi", research_question=research_question)
+                    request = json.loads(repair_messages[1]["content"])
+                    request["validation_feedback"] = feedback
+                    request["correction_task"] = (
+                        "Repair only the listed criterion evidence failures using the SAME record source above. "
+                        "Evidence must be an exact short contiguous source quotation, never a criterion description "
+                        "or your reasoning. Prefer a sufficient 5-15 word clause; you do not need to repeat the whole "
+                        "numerical estimate or uncertainty interval. Copy raw characters exactly, including LaTeX, "
+                        "Markdown, punctuation and whitespace: never clean up math or normalize 95% from source notation. "
+                        "The same_source_locator is only a navigation hint with raw offsets/context; it does not prove "
+                        "eligibility and is not automatically accepted as evidence. Select a short supporting substring "
+                        "from the same source, preferably outside noisy math where the claim remains supported. "
+                        "If a claim cannot be grounded, set that criterion unknown with empty "
+                        "evidence. Return the full declared schema for every listed record. Do not use an abstract "
+                        "in place of full text, external knowledge, or invented quotations. There is no further repair pass.")
+                    repair_messages[1]["content"] = json.dumps(request, ensure_ascii=False)
+                    phase_token = _CALL_PURPOSE.set("evidence_correction")
+                    repair_audit_token = _CALL_AUDIT.set((audit_path, [r["record_id"] for r in target]) if audit_path else None)
+                    try:
+                        repaired, repair_cost = await invoke_with_retry_async(model, repair_messages, max_retries=1)
+                        correction_cost = repair_cost
+                        repair_data = repaired if isinstance(repaired, dict) else _load_json_data(_result_content_to_string(repaired))
+                        repair_values = repair_data.get("records") if batch_mode == "multi" else [repair_data]
+                        if not isinstance(repair_values, list):
+                            raise ValueError("Correction response requires records array")
+                        repair_parsed = [ProtocolDecision.model_validate(value) for value in repair_values]
+                        repair_ids = [value.record_id for value in repair_parsed]
+                        if len(repair_ids) != len(set(repair_ids)) or set(repair_ids) != set(affected):
+                            raise ValueError("Correction identities differ from scheduled records")
+                        repaired_by_id = {value.record_id: value for value in repair_parsed}
+                        corrected = {}
+                        for record in target:
+                            identity = record["record_id"]
+                            proposal = repaired_by_id[identity]
+                            # Validate full criterion membership before selecting
+                            # the repairs, so malformed envelopes cannot pass.
+                            reduce_assessments(protocol, proposal, record["source"], stage=screening_stage, coverage=record["coverage"])
+                            replacements = {a.criterion_id: a for a in proposal.assessments}
+                            merged = by_id[identity].model_copy(update={"assessments": [
+                                replacements[a.criterion_id] if a.criterion_id in affected[identity] else a
+                                for a in by_id[identity].assessments]})
+                            corrected[identity] = reduce_assessments(protocol, merged, record["source"], stage=screening_stage, coverage=record["coverage"])
+                        for identity, result in corrected.items():
+                            reduced[identity] = result
+                            remaining = [a["criterion_id"] for a in result["assessments"]
+                                         if a["criterion_id"] in affected[identity] and a["effective_status"] == "unknown"]
+                            correction_metadata[identity] = {"attempts": 1, "criterion_ids": affected[identity],
+                                "status": "unresolved" if remaining else "corrected", "unresolved_criterion_ids": remaining}
+                    except Exception as exc:
+                        # Invalid repair, transport failure or identity mismatch:
+                        # keep the initial evidence-guarded result, not a pass.
+                        for identity in affected:
+                            correction_metadata[identity] = {"attempts": 1, "criterion_ids": affected[identity],
+                                                             "status": "failed", "error_type": type(exc).__name__}
+                    finally:
+                        _CALL_AUDIT.reset(repair_audit_token)
+                        _CALL_PURPOSE.reset(phase_token)
+                for paper, record in batch:
+                    decision = reduced[record["record_id"]]
+                    if record["record_id"] in correction_metadata:
+                        paper["evidence_correction"] = correction_metadata[record["record_id"]]
+                    # Restore the original transport key after exact model-ID validation.
+                    decision["record_id"] = str(paper.get("record_id") or paper.get("PMID") or record["record_id"])
+                    paper["protocol_decision"] = decision
+                    paper["criterion_assessments"] = decision["assessments"]
+                    paper["llm_suggest"] = {"retain": "strong_candidate", "exclude": "unlikely_candidate",
+                                            "review": "possible_candidate"}[decision["route"]]
+                    paper["llm_tier"] = {"retain": "S", "exclude": "U", "review": "P"}[decision["route"]]
+                    paper["overall_justification"] = "Protocol reduction: " + decision["route"]
+                    paper["overall_score"] = ""
+                    paper["confidence"] = None
+                    for dimension in ("disease", "population", "location", "evidence", "parameter"):
+                        paper[f"{dimension}_score"] = ""
+                        paper[f"{dimension}_justification"] = "Protocol criterion assessments are authoritative"
+                    _write_cost_share(paper, initial_cost, len(batch))
+                    if record["record_id"] in affected and correction_cost is not None:
+                        for key in ("prompt_tokens", "completion_tokens", "total_tokens"):
+                            paper[key] += round(float(correction_cost.get(key) or 0) / len(affected), 2)
+                        paper["wall_time_ms"] += correction_cost.get("wall_time_ms") or 0
+            except Exception as exc:
+                for paper, _ in batch:
+                    _mark_paper_error(paper, exc)
+                    paper["protocol_error"] = {"type": type(exc).__name__, "message": type(exc).__name__}
+            finally:
+                _CALL_AUDIT.reset(audit_token)
+    await asyncio.gather(*(run(entries[i:i + width]) for i in range(0, len(entries), width)))
+    return papers
+
+
 async def screen_papers_batch_async(
     papers: list[dict[str, Any]],
     research_question: str,
@@ -279,35 +492,56 @@ async def screen_papers_batch_async(
     screening_stage: str = "title_abstract",
     content_label: str = "Abstract",
     content_key: str = "Abstract",
-    content_fallback: str = "(NO ABSTRACT AVAILABLE — cannot assess evidence quality or parameter details. Score conservatively: evidence ≤ 2, parameter ≤ 2 unless title explicitly states the target parameter, tier at most P.)",
+    content_fallback: str = "(NO ABSTRACT AVAILABLE. Assess supplied metadata under the review criteria; missing information is not affirmative evidence of ineligibility.)",
     strategy: str = "5d",
     prefer_llm_tier: bool = True,
 ) -> list[dict[str, Any]]:
-    """Screen papers in async batches and write scores back onto each paper dict.
+    """Screen papers in async batches and write decisions onto each paper dict.
+
+    A supplied ``screening_config.review_protocol`` selects criterion-based
+    screening and deterministic reduction instead of legacy relevance scores.
 
     Args:
         strategy: Screening strategy. "5d" uses the five-dimension scoring model;
             "binary" uses a simpler include/exclude decision model.
         prefer_llm_tier: If True (default), use the LLM's own tier classification
-            (S/P/U) instead of code-side threshold rules. Falls back to thresholds
-            when the LLM did not provide a tier.
+            (S/P/U) without numeric score overrides. Missing/invalid tags require
+            a bounded contract correction or an explicit error.
     """
+    from metaagent.screening.guards import prepare_screening, apply_screening_guards, guide_text
     batch_mode = (batch_mode or "single").strip().lower()
     if batch_mode not in {"single", "multi"}:
         raise ValueError(f"batch_mode must be 'single' or 'multi', got {batch_mode!r}")
+    if batch_size < 1 or batch_concurrency < 1:
+        raise ValueError("Screening batch size and concurrency must be positive")
+    if screening_config and screening_config.get("review_protocol") is not None:
+        from .protocol import validate_protocol
+        validate_protocol(screening_config["review_protocol"])
+    original_papers = papers
+    papers = prepare_screening(papers, screening_config, content_key=content_key, stage=screening_stage)
+    if not papers:
+        return original_papers
+
+    if screening_config and screening_config.get("review_protocol") is not None:
+        await _screen_protocol_records(
+            papers, llm_model, screening_config["review_protocol"],
+            screening_stage=screening_stage, content_key=content_key,
+            batch_size=batch_size, batch_concurrency=batch_concurrency, batch_mode=batch_mode,
+            audit_path=screening_config.get("call_log"), research_question=research_question,
+        )
+        apply_screening_guards(papers, screening_config, protocol=True, content_key=content_key, stage=screening_stage)
+        return original_papers
 
     default_config = {
         "research_question": research_question,
-        "disease_focus": "(SARS-CoV-2 OR COVID-19 OR 2019-nCoV OR coronavirus) AND its (variant OR mutation OR lineage OR amino acid substitution)",
-        "disease_exclude": "studies that focus solely on other diseases or wild-type only without variant comparison",
-        "parameter_focus": "target epidemiological parameters related to the research question (e.g., reproduction number, serial interval, fatality rate)",
-        "parameter_exclude": "studies that discuss adjacent outcomes without actually reporting or estimating the target parameter",
+        "disease_focus": "The disease/pathogen scope explicitly stated in the research question.",
+        "disease_exclude": "Only settings explicitly outside the declared review criteria.",
+        "parameter_focus": "The parameter(s) or outcomes in the complete research question.",
+        "parameter_exclude": "Only parameter definitions or roles excluded by the declared review criteria.",
         "parameter_scoring_note": (
-            "- Score 3–4 only if the paper directly reports the parameter from its own observed individual-level data "
-            "(contact-tracing pairs, household contacts, clinical surveillance records).\n"
-            "- Score 2 if the paper estimates the parameter as a model output (transmission model calibration), "
-            "or uses the parameter value from another study as an input assumption.\n"
-            "- Score 0–1 if the paper only mentions the parameter in the introduction/background without reporting a new estimate."
+            "Distinguish this study's own observations or fitted estimates from borrowed fixed inputs and background mentions. "
+            "An original model-based estimate is not automatically weaker than directly observed data; apply the task's accepted study types. "
+            "At title/abstract screening, missing detail is uncertainty. At full text, verify the source and any task-authorized data form without inventing a model."
         ),
     }
     config = {**default_config, **(screening_config or {})}
@@ -388,6 +622,12 @@ async def screen_papers_batch_async(
         }
 
     system_text = system_text.format(**fmt_kwargs)
+    if not (is_noguidance or is_baseline):
+        system_text += "\n\n" + guide_text()
+    if not (is_binary or is_peco):
+        parameter_guides = load_parameter_guides(config, config["research_question"])
+        if parameter_guides:
+            system_text += "\n\n" + parameter_guides.replace("{", "{{").replace("}", "}}")
     if is_peco:
         output_schema = PECODecision
     elif is_binary:
@@ -397,8 +637,9 @@ async def screen_papers_batch_async(
 
     # Use JSON mode instead of function calling (works with more proxies/models)
     json_schema = output_schema.model_json_schema()
-    schema_hint = _build_json_schema_hint(output_schema)
+    schema_hint = _build_json_schema_hint(output_schema, require_tier=prefer_llm_tier)
     escaped_schema_hint = schema_hint.replace("{", "{{").replace("}", "}}")
+    tier_contract = ('Include an explicit "tier" of S, P or U based on your holistic assessment. Do not calculate a weighted total or derive the tag from numeric thresholds.' if output_schema is ScreeningDecision else "")
     if batch_mode == "multi":
         system_text += (
             "\n\nYou MUST respond with a single JSON object with exactly this top-level shape:\n"
@@ -408,8 +649,7 @@ async def screen_papers_batch_async(
             "Each decision object must match this schema. For each five-dimension field, "
             'return an object with exactly two keys: "score" (integer 0-4 only, never decimals) '
             'and "justification" (short text). Do not return bare strings for dimension fields. '
-            'The optional "overall_score" field, if included, must also be an integer 0-4; '
-            "do not output weighted decimals such as 3.6.\n"
+            f"{tier_contract}\n"
             f"{escaped_schema_hint}"
         )
     else:
@@ -419,7 +659,7 @@ async def screen_papers_batch_async(
             "For each five-dimension field, return an object with exactly two keys: "
             '"score" (integer 0-4 only, never decimals) and "justification" (short text). '
             'Do not return bare strings for dimension fields. '
-            'The optional "overall_score" field, if you include it, must also be an integer 0-4; do not output weighted decimals such as 3.6.\n'
+            f"{tier_contract}\n"
             f"{escaped_schema_hint}"
         )
 
@@ -429,13 +669,19 @@ async def screen_papers_batch_async(
     structured_llm = llm_model.bind(response_format={"type": "json_object"})
 
     all_prompts: list[tuple[dict[str, Any], Any, dict[str, str]]] = []
+    from metaagent.screening.context import bibliographic_context, normalize_bibliographic_aliases, metadata_text
     for paper in papers:
-        title = paper.get("Title", "").strip()
-        content = (paper.get(content_key) or "").strip() or content_fallback
-        keywords = (paper.get("Keywords") or "").strip() or "(No keywords available)"
+        normalize_bibliographic_aliases(paper)
+        bibliography = bibliographic_context(paper)
+        title = metadata_text(paper.get("Title"))
+        content = metadata_text(paper.get(content_key)) or content_fallback
+        keywords = bibliography["keywords"] or "(No keywords available)"
         prompt_kwargs: dict[str, str] = {
             "research_question": research_question,
             "title": title,
+            "official_title": metadata_text(paper.get("official_title")) or "(Not available)",
+            "publication_date": bibliography["publication_date"] or "(Not available)",
+            "language": bibliography["language"] or "(Not available)",
             "publication_year": str(paper.get("Publication Year") or "").strip() or "(Not available)",
             "create_date": str(paper.get("Create Date") or "").strip() or "(Not available)",
             "authors": str(paper.get("Authors") or "").strip() or "(Not available)",
@@ -444,8 +690,8 @@ async def screen_papers_batch_async(
             "content_label": content_label,
             "content": content,
             "keywords": keywords,
-            "pub_types": (paper.get("pub_types") or "").strip() or "(Not available)",
-            "mesh_terms": (paper.get("mesh_terms") or "").strip() or "(Not available)",
+            "pub_types": bibliography["pub_types"] or "(Not available)",
+            "mesh_terms": bibliography["mesh_terms"] or "(Not available)",
         }
         prompt = template.format_messages(**prompt_kwargs)
         all_prompts.append((paper, prompt, prompt_kwargs))
@@ -485,7 +731,18 @@ async def screen_papers_batch_async(
                     batch_prompt = batch_template.format_messages(batch_content=batch_content)
                     raw = await invoke_with_retry_async(structured_llm, batch_prompt)
                     decision, cost = raw
-                    parsed_by_id = _parse_multi_paper_result(decision, output_schema)
+                    try:
+                        parsed_by_id = _parse_multi_paper_result(decision, output_schema, strict_5d=prefer_llm_tier)
+                        if output_schema is ScreeningDecision and prefer_llm_tier:
+                            _check_batch_contract(parsed_by_id, paper_ids)
+                    except Exception as contract_error:
+                        if output_schema is not ScreeningDecision or not prefer_llm_tier:
+                            raise
+                        decision, retry_cost = await invoke_with_retry_async(
+                            structured_llm, _contract_correction_prompt(batch_prompt, contract_error, output_schema), max_retries=1)
+                        cost = {key: cost.get(key, 0) + retry_cost.get(key, 0) for key in ("prompt_tokens", "completion_tokens", "total_tokens", "wall_time_ms")}
+                        parsed_by_id = _parse_multi_paper_result(decision, output_schema, strict_5d=True)
+                        _check_batch_contract(parsed_by_id, paper_ids)
                     missing_ids: list[str] = []
                     for paper, paper_id in zip(batch_papers, paper_ids):
                         parsed = parsed_by_id.get(paper_id)
@@ -542,6 +799,13 @@ async def screen_papers_batch_async(
                             print(msg)
 
             except Exception as e:
+                if output_schema is ScreeningDecision and prefer_llm_tier:
+                    for paper in batch_papers:
+                        _mark_paper_error(paper, e)
+                    completed += len(batch_papers)
+                    async with print_lock:
+                        print(f"  [Batch {batch_idx}] Contract/transport failed; {len(batch_papers)} explicit errors")
+                    return
                 async with print_lock:
                     print(f"  [Batch {batch_idx}] Batch failed: {str(e)[:200]}")
                     print(f"  [Batch {batch_idx}] Retrying individual papers...")
@@ -553,7 +817,7 @@ async def screen_papers_batch_async(
                             _write_cost(paper, cost)
                         else:
                             llm_result = raw
-                        parsed = _coerce_structured_result(llm_result, output_schema)
+                        parsed = _coerce_structured_result(llm_result, output_schema, strict_5d=prefer_llm_tier)
                         _write_parsed_result(
                             paper,
                             parsed,
@@ -581,15 +845,19 @@ async def screen_papers_batch_async(
     print(
         f"Done: {total} papers in {elapsed_total/60:.1f}min ({rate_total:.1f}/s)"
     )
-    return papers
+    apply_screening_guards(papers, screening_config, content_key=content_key, stage=screening_stage,
+                           preserve_model_tier=output_schema is ScreeningDecision and prefer_llm_tier)
+    return original_papers
 
 
-def _coerce_structured_result(result: Any, output_schema: type) -> Any:
+def _coerce_structured_result(result: Any, output_schema: type, *, strict_5d: bool = True) -> Any:
     """Normalize provider responses before writing screening fields."""
     if isinstance(result, (BinaryDecision, ScreeningDecision, PECODecision)):
+        if strict_5d and isinstance(result, ScreeningDecision):
+            _validate_default_5d(result.model_dump())
         return result
     content_str = _result_content_to_string(result)
-    return _parse_json_result(content_str, output_schema)
+    return _parse_json_result(content_str, output_schema, strict_5d=strict_5d)
 
 
 def _result_content_to_string(result: Any) -> str:
@@ -635,6 +903,14 @@ def _build_multi_paper_user_content(
                 f"Paper ID: {paper_id}",
                 "Independent case: judge only this paper against the research question above.",
                 f"Title: {kwargs.get('title', '')}",
+                f"Official title: {kwargs.get('official_title', '(Not available)')}",
+                f"Publication Year: {kwargs.get('publication_year', '(Not available)')}",
+                f"Publication Date: {kwargs.get('publication_date', '(Not available)')}",
+                f"Create Date: {kwargs.get('create_date', '(Not available)')}",
+                f"Authors: {kwargs.get('authors', '(Not available)')}",
+                f"Citation: {kwargs.get('citation', '(Not available)')}",
+                f"Journal/Book: {kwargs.get('journal', '(Not available)')}",
+                f"Language: {kwargs.get('language', '(Not available)')}",
                 f"Keywords: {kwargs.get('keywords', '')}",
                 f"{kwargs.get('content_label', 'Abstract')}: {kwargs.get('content', '')}",
                 f"Publication Types: {kwargs.get('pub_types', '(Not available)')}",
@@ -645,7 +921,12 @@ def _build_multi_paper_user_content(
     return "\n".join(lines), ids
 
 
-def _parse_multi_paper_result(result: Any, output_schema: type) -> dict[str, Any]:
+def _check_batch_contract(parsed, expected_ids):
+    if set(parsed) != set(expected_ids):
+        raise ValueError(f"Batch IDs differ: missing={sorted(set(expected_ids)-set(parsed))}, extra={sorted(set(parsed)-set(expected_ids))}")
+
+
+def _parse_multi_paper_result(result: Any, output_schema: type, *, strict_5d: bool = True) -> dict[str, Any]:
     """Parse a multi-paper JSON response into decisions keyed by paper_id."""
     if isinstance(result, dict):
         data = result
@@ -669,7 +950,9 @@ def _parse_multi_paper_result(result: Any, output_schema: type) -> dict[str, Any
             for key, value in item.items()
             if key not in {"paper_id", "id", "PMID", "pmid"}
         }
-        parsed[str(paper_id)] = _parse_json_result(_json.dumps(decision_data), output_schema)
+        if output_schema is ScreeningDecision and strict_5d and str(paper_id) in parsed:
+            raise ValueError(f"Duplicate paper_id: {paper_id}")
+        parsed[str(paper_id)] = _parse_json_result(_json.dumps(decision_data), output_schema, strict_5d=strict_5d)
     return parsed
 
 
@@ -785,14 +1068,18 @@ def _write_cost_share(paper: dict[str, Any], cost: dict[str, Any], n_papers: int
     paper["wall_time_ms"] = cost.get("wall_time_ms", 0)
 
 
-def _build_json_schema_hint(model_class: type) -> str:
+def _build_json_schema_hint(model_class: type, *, require_tier: bool = True) -> str:
     """Build a compact JSON schema description for the LLM prompt."""
     schema = model_class.model_json_schema()
     props = schema.get("properties", {})
-    required = schema.get("required", [])
+    required = list(schema.get("required", []))
+    if model_class is ScreeningDecision and require_tier:
+        required.append("tier")
     defs = schema.get("$defs", {})
     lines = ["{"]
     for name, prop in props.items():
+        if model_class is ScreeningDecision and name == "overall_score":
+            continue  # Legacy storage field, not a requested aggregate.
         resolved = _resolve_schema_prop(prop, defs)
         ptype = _schema_type_name(resolved)
         desc = (prop.get("description", "") or "")[:80]
@@ -818,9 +1105,35 @@ def _build_json_schema_hint(model_class: type) -> str:
     return "\n".join(lines)
 
 
-def _parse_json_result(content: str, model_class: type) -> Any:
+def _validate_default_5d(data: dict[str, Any]) -> None:
+    """Validate actual assessments without filling, rounding or inferring scores."""
+    for name in ("disease_relevance", "population_relevance", "location_relevance", "original_evidence", "parameter_relevance"):
+        item = data.get(name)
+        if not isinstance(item, dict) or type(item.get("score")) is not int or not 0 <= item["score"] <= 4:
+            raise ValueError(f"{name} requires an explicitly returned integer score from 0 to 4")
+        if not isinstance(item.get("justification"), str) or not item["justification"].strip():
+            raise ValueError(f"{name} requires its own nonempty justification")
+    if not isinstance(data.get("tier"), str) or data["tier"].strip().upper() not in {"S", "P", "U"}:
+        raise ValueError("An explicit tier S, P or U is required; scores do not generate a tier")
+    if not isinstance(data.get("overall_justification"), str) or not data["overall_justification"].strip():
+        raise ValueError("overall_justification must explain the holistic tier")
+
+
+def _contract_correction_prompt(prompt, error, output_schema, *, require_tier=True):
+    from langchain_core.messages import HumanMessage
+    schema = _build_json_schema_hint(output_schema, require_tier=require_tier)
+    instruction = "Return the complete requested JSON using the SAME supplied source and criteria. Do not invent missing assessments or transfer evidence between papers. For a batch, return every original Paper ID exactly once."
+    if output_schema is ScreeningDecision and require_tier:
+        instruction += " Use the five assessments and their evidence for your own holistic S/P/U decision, without a weighted total or numeric tier formula."
+    return [*prompt, HumanMessage(content="The previous response violated the output contract: " + str(error)[:900] + "\n" + instruction + "\n" + schema)]
+
+
+def _parse_json_result(content: str, model_class: type, *, strict_5d: bool = True) -> Any:
     """Parse LLM JSON output into a Pydantic model, with fallbacks and field name mapping."""
     data = _load_json_data(content)
+    if model_class is ScreeningDecision and strict_5d:
+        _validate_default_5d(data)
+        return model_class.model_validate(data)
 
     # Map abbreviated/alternative field names to Pydantic model fields
     field_map = {
@@ -911,6 +1224,10 @@ def _parse_json_result(content: str, model_class: type) -> Any:
     _convert_flat_5d_scores(data)
     if model_class is ScreeningDecision:
         data.pop("overall_score", None)
+        # Historical normalization is available only in explicit legacy mode.
+        from .models import llm_tier_to_label
+        alias = llm_tier_to_label(data.get("tier"))
+        data["tier"] = {"strong_candidate":"S", "possible_candidate":"P", "unlikely_candidate":"U"}.get(alias)
         _fill_missing_5d_dimensions(data)
 
     return model_class(**data)
@@ -1128,7 +1445,9 @@ def _score_from_word(value: str) -> int:
 
 def _mark_paper_error(paper: dict[str, Any], error: Exception) -> None:
     paper["llm_suggest"] = "error"
-    paper["overall_score"] = 0
+    paper["overall_score"] = None
+    paper["llm_tier"] = ""
+    paper["confidence"] = None
     paper["overall_justification"] = f"LLM error: {str(error)[:200]}"
     for dimension in [
         "disease",
@@ -1137,5 +1456,5 @@ def _mark_paper_error(paper: dict[str, Any], error: Exception) -> None:
         "evidence",
         "parameter",
     ]:
-        paper[f"{dimension}_score"] = 0
-        paper[f"{dimension}_justification"] = "Error"
+        paper[f"{dimension}_score"] = None
+        paper[f"{dimension}_justification"] = ""

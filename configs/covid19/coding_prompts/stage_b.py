@@ -5,7 +5,7 @@ Use only evidence from the provided text. Do not guess.
 
 USER = """
 Task: Use the Codebook + full text, with the Study Index (Stage A) as guidance, to extract records.
-Stage B uses full text (no chunking). Stage A is guidance, not a substitute.
+Source coverage is declared by the caller; Stage A is guidance, not a substitute.
 
 Follow codebook field definitions and derivation rules strictly.
 If a field is not reported, use null for numbers and "NR" for required strings.

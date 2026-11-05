@@ -21,7 +21,11 @@ from metaagent.evaluation.cli import evaluation
 from metaagent.profile_cli import profile
 from metaagent.screening.cli import screening
 from metaagent.workflow import workflow
+from metaagent.review import review
+from metaagent.annotations import annotations
+from metaagent.synthesis.cli import synthesis
 from tools.paper_fetch.cli import pdf
+from tools.literature.cli import literature
 from tools.pubmed.cli import pubmed
 
 _LOGO_LEFT = "#f4a261"
@@ -94,13 +98,27 @@ def main(ctx):
 # ── Register command groups from domain modules ───────────────
 main.add_command(screening)
 main.add_command(coding)
+main.add_command(synthesis)
+main.add_command(review)
+main.add_command(annotations)
 main.add_command(evaluation)
 main.add_command(pubmed)
+main.add_command(literature)
 main.add_command(pdf)
 main.add_command(completion)
 main.add_command(workflow)
 main.add_command(config)
 main.add_command(profile)
+
+# Benchmark is an optional domain module; other commands remain usable while
+# installing extensions or when the benchmark dependency is unavailable.
+try:
+    from metaagent.benchmark.cli import benchmark
+except ModuleNotFoundError as exc:
+    if not (exc.name or "").startswith("metaagent.benchmark"):
+        raise
+else:
+    main.add_command(benchmark)
 
 
 if __name__ == "__main__":

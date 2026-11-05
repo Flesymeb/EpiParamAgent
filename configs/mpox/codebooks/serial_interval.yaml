@@ -15,15 +15,14 @@ parameters:
   research_question: >
     This project extracts study-level serial interval, generation interval, and incubation period
     evidence from primary epidemiological studies of mpox (monkeypox) transmission.
-    The goal is to capture the main serial-interval-type estimate reported in each study,
+    Capture all in-scope serial-interval estimates reported in each study,
     along with uncertainty and study metadata.
 
 notes: |
   Goal: extract serial interval related information FROM EACH PRIMARY STUDY on mpox/monkeypox.
-  Prefer the study's main serial interval estimate.
+  Retain all in-scope estimates and distinguish mean, median, strata, periods and methods.
   If serial interval is not reported but generation interval/time or incubation period is central,
   capture it and mark parameter_type accordingly.
-  mpox serial interval is typically longer than COVID-19 (7-14 days vs 4-7 days).
   Incubation period for mpox is also relevant (5-21 days) — capture if reported as primary result.
   Do NOT compute new estimates from raw counts.
   Keep uncertainty exactly as reported when possible.

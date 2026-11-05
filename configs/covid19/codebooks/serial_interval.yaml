@@ -14,11 +14,11 @@ stage_b:
 parameters:
   research_question: >
     This project extracts study-level serial interval evidence from primary epidemiological studies of SARS-CoV-2 transmission.
-    The goal is to capture the main serial-interval-type estimate reported in each study, along with uncertainty and study metadata.
+    Capture all in-scope serial-interval estimates reported in each study, along with uncertainty and study metadata.
 
 notes: |
   Goal: extract serial interval related information FROM EACH PRIMARY STUDY.
-  Prefer the study's main serial interval estimate.
+  Retain all in-scope estimates and distinguish mean, median, strata, periods and methods.
   If serial interval is not reported but generation interval/time is central, capture it and mark parameter_type accordingly.
   Do NOT compute new estimates from raw counts.
   Keep uncertainty exactly as reported when possible.

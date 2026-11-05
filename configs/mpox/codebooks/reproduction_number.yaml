@@ -15,22 +15,17 @@ stage_b:
 
 parameters:
   research_question: >
-    This project extracts basic reproduction number (R0) and effective reproduction number (Rt)
-    estimates from primary mpox (monkeypox) epidemiological studies. The goal is to capture the
-    headline R0/Rt estimate with its uncertainty, method, and study metadata.
+    Extract all original reported R0 and Rt estimates in the declared scope,
+    retaining each method, population, time window and statistic separately.
 
 notes: |
-  Goal: extract reproduction number information FROM EACH PRIMARY STUDY on mpox/monkeypox.
-  Do NOT copy R0 values from systematic review tables.
-
-  Priority rule: R0 (basic reproduction number, naive population) > Rt.
-  - If the paper reports BOTH R0 and Rt, extract only R0 as the main record.
-  - If the paper reports ONLY Rt (effective/time-varying), mark parameter_type='Rt'.
-  - R0 for mpox is typically 1.5-2.5 for the 2022 outbreak (clade IIb);
-    historical endemic clade I may have R0 <1 in some contexts.
-  - For the 2022 outbreak in non-endemic countries, Rt estimates often use
-    exponential growth methods from early case data — capture method carefully.
-  - Do NOT extract estimates from sensitivity analyses as the main estimate.
+  Extract original study results from the supplied report only, never from SR answers.
+  Retain all scoped R0/Rt results, including strata, periods and sensitivity analyses.
+  Distinguish an original estimate from an assumed or borrowed model input.
+  Preserve raw parameter labels and source definitions; numeric values below one
+  do not imply Rt. If source definitions conflict, retain the conflict for review.
+  Do not use typical disease ranges or presumed generation intervals to fill data.
+  Keep original units and uncertainty type/level. Analysis selection happens later.
 
 fields:
   - name: pmid
@@ -98,6 +93,7 @@ fields:
   - name: point_estimate
     label: "Point_Estimate"
     type: float
+    review_range: [0, null]
     prompt: "Main reported point estimate."
 
   - name: unit

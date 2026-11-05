@@ -238,8 +238,10 @@ def _reml_tau2(y: np.ndarray, var: np.ndarray) -> float:
         return -ll  # minimise negative log-likelihood
 
     upper = max(float(np.var(y)) * 10, 100.0)
-    result = minimize_scalar(neg_ll, bounds=(0.0, upper), method="bounded")
-    return max(0.0, float(result.x))
+    result = minimize_scalar(neg_ll, bounds=(0.0, upper), method="bounded", options={"xatol": 1e-12})
+    if not result.success or not math.isfinite(float(result.fun)):
+        raise ArithmeticError("REML likelihood optimization failed to converge")
+    return 0.0 if neg_ll(0.0) <= float(result.fun) else max(0.0, float(result.x))
 
 
 def pool_means(

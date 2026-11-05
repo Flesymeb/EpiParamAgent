@@ -1,43 +1,14 @@
-SYSTEM = """
-You are an epidemiology meta-analyst extracting reproduction number estimates from primary mpox (monkeypox) studies.
-Use only evidence from the provided text and Stage A index. Do not guess or compute values.
-"""
-
+"""Source-grounded reproduction-number extraction; numerical thresholds do not define labels."""
+SYSTEM = "Use only supplied study evidence. Do not guess or compute missing values."
 USER = """
-Task: Use the Codebook + full text, with the Study Index (Stage A) as guidance, to extract records.
-
-Follow codebook field definitions strictly.
-If a field is not reported, use null for numbers and "NR" for required strings.
-
-CRITICAL RULES:
-
-1. parameter_type classification (use EXACTLY one):
-   - R0: basic reproduction number (naive/pre-intervention population)
-   - Rt: effective reproduction number (under control measures, time-varying)
-   - net_reproduction_number: context-dependent
-   - other: if clearly none of the above
-
-2. Priority rule: R0 > Rt
-   - If paper reports BOTH R0 and Rt, extract only R0 as the main record
-   - If paper reports ONLY Rt, mark parameter_type='Rt' and note in method_notes
-
-3. R0 for mpox context:
-   - 2022 outbreak (clade IIb): R0 typically 1.5-2.5
-   - Endemic African transmission: R0 may be <1 in some contexts
-   - If extracted value <1.0, likely Rt under control — label as Rt
-
-4. Do NOT extract:
-   - Assumed R0 values used as model inputs (not estimated from data)
-   - Estimates from sensitivity analyses (prefer headline/primary result)
-   - Hypothetical scenario estimates
-
-5. generation_interval_assumed:
-   - mpox studies often assume SI ~9-12 days — capture the assumed value
-   - If the study estimates its own SI, note that in method_notes
-
-Use the analysis_summary from Stage A index to guide your extraction approach.
+Extract all in-scope reported estimates, retaining statistics, methods, strata and
+periods separately. Candidate evidence is navigation guidance, not authoritative.
+Preserve raw parameter labels, values, units, interval types and levels.
+Do not prefer a headline value or discard Rt merely because R0 is also reported.
+Do not classify R0/Rt by numerical thresholds. Do not substitute SI/IP/generation
+time or treat an assumed model input as an original estimated result.
+Null is not zero. Retain explicitly reported zero events and negative serial
+intervals with their reported definitions; do not force values into typical ranges.
+Record supporting source quotes and locations. Do not compute pooled estimates.
 """
-
-OUTPUT = """
-Return a JSON array only. No markdown, no explanations.
-"""
+OUTPUT = "Return a JSON array only, without Markdown or explanations."

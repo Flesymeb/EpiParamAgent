@@ -74,6 +74,7 @@ fields:
   - name: k_value
     label: "k"
     type: float
+    review_range: [0, null]
     prompt: "Dispersion parameter k (null if not reported)."
 
   - name: k_source
@@ -114,16 +115,19 @@ fields:
   - name: r_value
     label: "R_Value"
     type: float
+    review_range: [0, null]
     prompt: "Reported reproduction number R (if used with 20/80 rule)."
 
   - name: p_prop
     label: "P_Prop"
     type: float
+    review_range: [0, 1]
     prompt: "P: proportion of most infectious individuals (e.g., 0.2)."
 
   - name: q_prop
     label: "Q_Prop"
     type: float
+    review_range: [0, 1]
     prompt: "Q: proportion of transmissions (e.g., 0.8)."
 
   - name: notes

@@ -1,0 +1,22 @@
+{
+  "created_at": "2026-11-03T16:04:21.870935+00:00",
+  "status": "frozen_before_new_live_validation",
+  "files": {
+    "configs/validation/codebooks/incubation_period.yaml": "5dff84ac90adcaadb0e2560f5b3716f4841524833e1bbe1d15bc317859d017d5",
+    "configs/validation/codebooks/serial_interval.yaml": "c394c5aabfd42a86d11951c2bede0ff7821be3eaf2b9e03cc175e0e5baca5474",
+    "configs/validation/covid_incubation_median_32150748.documents.jsonl": "de519bec85dcd64c910eacf40f82c83a7bcbcd28a94974b7d4f629121c8b6b2f",
+    "configs/validation/covid_incubation_median_32150748.yaml": "ab058acc8ccb30061bce174c6c75f85e4650ddf81034dad10a30566232b3b4f8",
+    "configs/validation/covid_serial_mean_32191173.documents.jsonl": "534029b37fd69744e6e77e54f0c29753c9dc68ee5167700e5bdde50771b42f12",
+    "configs/validation/covid_serial_mean_32191173.yaml": "bba079b249af6a90b3b83f032f51ea5b4932989f4d1e847a05da9588ac2f9531",
+    "configs/validation/mpox_incubation_CrI_36323407.documents.jsonl": "7d72be973baa1d2d398611aac98b450463ab5bcaf86a1f969c1b89204c357cc1",
+    "configs/validation/mpox_incubation_CrI_36323407.yaml": "6ff03c770631c5fff8bf2fa9b4444f3fff13959a47550558682efc50789cb212",
+    "configs/validation/pack.json": "b2b7c13bda7bc3898d34facf0836e63073638c7f8b98dd229bb7aaf4a73fa03e",
+    "configs/validation/references.json": "acc01dcbb14c938d1e4c2820c873077306ba3f51d6860b793b4ae485f2690249",
+    "runs/cli_effect_validation_20261104/sources/PMID_32150748.abstract.md": "d05f5fd3ff6cd55082bdd3e14db26f25af860e373f3de8d109759fbff27af25b",
+    "runs/cli_effect_validation_20261104/sources/PMID_32150748.pubmed.xml": "5e89cb9a35aa9ca35104e76c9600ed3195db7b7a7a31b76bc47d2e7517e16ce1",
+    "runs/cli_effect_validation_20261104/sources/PMID_32191173.md": "cda149c3781f39057682b9a37b30f14e49001eed75a3436ef11f6751d209008a",
+    "runs/cli_effect_validation_20261104/sources/PMID_36323407.md": "849b5709a724aee01f70cec5f307ca2f231065fc7c77ca6366eeef777123c834"
+  },
+  "revision": "pre_live_source_storage_excluded_from_vcs",
+  "amendment_reason": "Coordinator requested whole primary-source/abstract snapshots remain in ignored runtime workspace; expected numeric fields unchanged."
+}

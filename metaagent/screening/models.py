@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import Any, Optional
+from typing import Any, Optional, Literal
 
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, field_validator
 
 DEFAULT_THRESHOLDS: dict[str, dict[str, int]] = {
     "strong": {
@@ -36,7 +36,7 @@ DIMENSION_KEY_MAP = {
 class DimensionAssessment(BaseModel):
     """Assessment for a single screening dimension."""
 
-    score: int = Field(
+    score: int = Field(strict=True, ge=0, le=4,
         description="Relevance score from 0 to 4 (0=not relevant, 1=mostly not relevant, 2=uncertain/possibly relevant, 3=relevant, 4=highly relevant)"
     )
     justification: str = Field(description="Brief justification in 1-2 sentences")
@@ -49,21 +49,21 @@ class ScreeningDecision(BaseModel):
         description="Disease relevance: whether the paper studies the target disease/pathogen"
     )
     population_relevance: DimensionAssessment = Field(
-        description="Population relevance: whether the paper concerns humans or human-derived data"
+        description="Population relevance: whether its population, cases, specimens or data units fit the declared review scope"
     )
     location_relevance: DimensionAssessment = Field(
-        description="Location relevance: whether the study is situated in a real-world geographic setting"
+        description="Location relevance: whether exposure origin, case ascertainment and sampling locations fit task geography; imported cases are not automatically irrelevant"
     )
     original_evidence: DimensionAssessment = Field(
-        description="Original evidence: whether the paper reports original empirical data rather than only review/background content"
+        description="Original evidence: whether study type and data provenance satisfy the task, including accepted original observations or fitted estimates; not a quality rank"
     )
     parameter_relevance: DimensionAssessment = Field(
-        description="Target-parameter relevance: whether the paper reports the epidemiological parameter required by the research question"
+        description="Target-parameter relevance: whether the parameter definition and its role fit the question and screening stage; distinguish study outputs from borrowed inputs"
     )
 
     overall_score: Optional[int] = Field(
         default=None,
-        description="Optional overall integer score from 0 to 4. If omitted, code will derive it from the five dimension scores.",
+        description="Optional legacy model-provided rating; never calculated, used for tier selection or ranking.",
     )
     overall_justification: str = Field(description="Overall assessment in 2-3 sentences")
     confidence: Optional[float] = Field(
@@ -72,7 +72,7 @@ class ScreeningDecision(BaseModel):
         le=1.0,
         description="Confidence from 0 to 1. 1.0 means the text directly covers all dimensions; 0.0 means there is not enough information to judge.",
     )
-    tier: Optional[str] = Field(
+    tier: Optional[Literal["S", "P", "U"]] = Field(
         default=None,
         description="Your own tier classification after holistic judgment: "
                     "'S' (Strong candidate — clearly mentions the target topic with high confidence, should proceed to next stage), "
@@ -85,30 +85,10 @@ class ScreeningDecision(BaseModel):
     @classmethod
     def normalize_tier(cls, value):
         if value is None:
-            return None
-        text = str(value).strip()
-        if not text:
-            return None
-        label = llm_tier_to_label(text)
-        if label == "strong_candidate":
-            return "S"
-        if label == "possible_candidate":
-            return "P"
-        if label == "unlikely_candidate":
-            return "U"
-        return None
-
-    @model_validator(mode="after")
-    def calculate_overall_score(self):
-        weighted_score = (
-            0.30 * self.disease_relevance.score
-            + 0.30 * self.parameter_relevance.score
-            + 0.25 * self.original_evidence.score
-            + 0.10 * self.population_relevance.score
-            + 0.05 * self.location_relevance.score
-        )
-        self.overall_score = round(weighted_score)
-        return self
+            return None  # Explicit legacy threshold mode permits an absent tier.
+        if not isinstance(value, str) or value.strip().upper() not in {"S", "P", "U"}:
+            raise ValueError("tier must be exactly S, P or U")
+        return value.strip().upper()
 
 
 class BinaryDecision(BaseModel):
@@ -258,42 +238,16 @@ def classify_screening_decision(
     evidence_floor: int = 1,
     prefer_llm_tier: bool = True,
 ) -> str:
-    """Map five-dimension scores to strong/possible/unlikely.
+    """Use the model's holistic tier by default; thresholds are explicit legacy mode."""
+    if prefer_llm_tier:
+        label = llm_tier_to_label(decision.tier)
+        if label is None:
+            raise ValueError("Default 5D screening requires an explicit valid S/P/U tier")
+        return label
 
-    When prefer_llm_tier=True and the LLM provided a tier, use the LLM's own
-    holistic judgment instead of code-side threshold rules. Falls back to
-    threshold-based classification when the LLM did not provide a tier.
-
-    Core exclusion and full-text hard gates always run regardless of prefer_llm_tier,
-    because the LLM's tier is a holistic judgment, not a veto of objective dimension facts.
-    """
-    # Hard gates always run first — LLM tier cannot override them.
+    # Preserve historical threshold experiments only through the explicit opt-out.
     if _violates_core_exclusion(decision):
         return "unlikely_candidate"
-
-    normalized = normalize_thresholds(thresholds)
-
-    if prefer_llm_tier and decision.tier is not None:
-        label = llm_tier_to_label(decision.tier)
-        if label is not None:
-            if stage_mode == "confirm_parameter":
-                # Always run 5D gate for strong-candidate confirmation, regardless of tier.
-                # Strong candidates entering this stage deserve a gate check even when the
-                # full-text LLM says tier=U, because a borderline paper (par=2, ev=4) should
-                # be downgraded to possible rather than excluded outright.
-                possible_block = _apply_stage_mode(normalized["possible"], stage_mode=stage_mode)
-                gate = _classify_confirm_parameter(decision, possible_block, evidence_floor=evidence_floor)
-                if gate == "unlikely_candidate":
-                    return "unlikely_candidate"
-                # Gate passed: if LLM said U, downgrade to possible (not exclude).
-                return "possible_candidate" if label == "unlikely_candidate" else label
-            if stage_mode == "filter_possible" and label != "unlikely_candidate":
-                possible_block = _apply_stage_mode(normalized["possible"], stage_mode=stage_mode)
-                gate = _classify_possible_fulltext(decision, possible_block, evidence_floor=evidence_floor)
-                if gate == "unlikely_candidate":
-                    return "unlikely_candidate"
-            return label
-
     normalized = normalize_thresholds(thresholds)
 
     if _meets_threshold_block(decision, normalized["strong"]):

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import sys
+import json
 from pathlib import Path
 
 import httpx
@@ -31,11 +32,12 @@ def _matches_no_proxy(url: str, no_proxy: str) -> bool:
 
 
 def init_llm(config_overrides: dict[str, object] | None = None):
+    from metaagent.llm_rate_limit import httpx_event_hooks
     tools_dir = Path(__file__).resolve().parents[2] / "tools"
     if str(tools_dir) not in sys.path:
         sys.path.insert(0, str(tools_dir))
 
-    from metaagent.config import is_usable_secret, load_llm_config
+    from metaagent.config import is_usable_secret, load_llm_config, merge_thinking_policy, resolve_extra_body
 
     cfg = load_llm_config(config_overrides, module_hint="coding")
     if not is_usable_secret(cfg.api_key):
@@ -54,15 +56,19 @@ def init_llm(config_overrides: dict[str, object] | None = None):
         write=min(30, cfg.timeout_s),
         pool=min(10, cfg.timeout_s),
     )
-    max_retries = _env_int("CODING_LLM_MAX_RETRIES", "LLM_MAX_RETRIES", default=3)
+    # The extraction call wrapper owns retries so every attempt is recorded.
+    # Hidden SDK retries would make timing, cost and failure logs incomplete.
+    max_retries = 0
 
     http_client = httpx.Client(
         verify=cfg.verify_ssl,
         timeout=timeout,
         trust_env=trust_env,
+        event_hooks=httpx_event_hooks(),
     )
     extra_body = None
-    if cfg.provider == "bailian" and (
+    thinking = getattr(cfg, "thinking", None)
+    if thinking is None and cfg.provider == "bailian" and (
         str(model).lower().startswith("glm-")
         or str(model).lower().startswith("qwen")
     ):
@@ -70,8 +76,23 @@ def init_llm(config_overrides: dict[str, object] | None = None):
         # needs compact, JSON-first responses, so use non-thinking mode for
         # both the existing GLM baseline and the Qwen ablation backbone.
         extra_body = {"enable_thinking": False}
+    extra_body = merge_thinking_policy(extra_body, thinking)
+    parsed_body = resolve_extra_body(config_overrides, module_hint="coding")
+    if parsed_body:
+        # Explicit transport JSON remains the highest-precedence coding override.
+        # Remove generated thinking aliases before applying a user-supplied mode,
+        # so an implicit policy cannot contradict the explicit native protocol.
+        if "thinking" in parsed_body or "enable_thinking" in parsed_body:
+            extra_body = {key:value for key,value in (extra_body or {}).items()
+                          if key not in {"thinking", "enable_thinking"}}
+        extra_body = {**(extra_body or {}), **parsed_body}
 
-    return ChatOpenAI(
+    extra_body = merge_thinking_policy(extra_body, None)
+
+    if (config_overrides or {}).get('_coding_response_format'):
+        extra_body={**(extra_body or {}),'response_format':config_overrides['_coding_response_format']}
+
+    options = dict(
         model=model,
         api_key=cfg.api_key,
         base_url=cfg.api_base,
@@ -80,4 +101,9 @@ def init_llm(config_overrides: dict[str, object] | None = None):
         request_timeout=cfg.timeout_s,
         http_client=http_client,
         extra_body=extra_body,
+        max_tokens=cfg.max_tokens,
+        streaming=cfg.force_streaming,
     )
+    if cfg.reasoning_effort:
+        options["reasoning_effort"] = cfg.reasoning_effort
+    return ChatOpenAI(**options)

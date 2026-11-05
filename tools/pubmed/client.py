@@ -7,7 +7,7 @@ import logging
 import os
 import time
 import xml.etree.ElementTree as ET
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional
 
@@ -36,6 +36,12 @@ except Exception:
         doi: Optional[str] = None
         citation_count: int = 0
         source: str = "pubmed"
+        keywords: List[str] = field(default_factory=list)
+        mesh_terms: List[str] = field(default_factory=list)
+        pub_types: List[str] = field(default_factory=list)
+        language: List[str] = field(default_factory=list)
+        publication_date: str = ""
+        pmcid: str = ""
 
         def to_dict(self) -> Dict[str, Any]:
             return {
@@ -53,6 +59,10 @@ except Exception:
                 "doi": self.doi,
                 "citation_count": self.citation_count,
                 "source": self.source,
+                "keywords": self.keywords, "mesh_terms": self.mesh_terms,
+                "pub_types": self.pub_types, "language": self.language,
+                "publication_date": self.publication_date,
+                "pmcid": self.pmcid,
             }
 
 
@@ -90,6 +100,7 @@ class PubMedClient:
         if not self.verify_ssl:
             requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
         self.last_total: Optional[int] = None
+        self.last_search_diagnostics: list[dict] = []
 
     def _base_params(self) -> Dict[str, str]:
         params: Dict[str, str] = {"tool": self.tool}
@@ -120,6 +131,7 @@ class PubMedClient:
     ) -> List[Paper]:
         """Search PubMed and return Paper objects."""
         self.last_total = None
+        self.last_search_diagnostics = []
         term = self._build_term(query, year)
         logger.debug(f"Searching PubMed for: {term}")
         target: Optional[int]
@@ -160,6 +172,12 @@ class PubMedClient:
             response.raise_for_status()
             data = response.json()
             result = data.get("esearchresult", {})
+            self.last_search_diagnostics.append({"query": term, "retstart": retstart,
+                "querytranslation": result.get("querytranslation"), "warninglist": result.get("warninglist", {}),
+                "errorlist": result.get("errorlist", {}), "error": data.get("error") or result.get("ERROR"),
+                "count": result.get("count"), "returned_ids": list(result.get("idlist", []))})
+            if data.get("error") or result.get("ERROR"):
+                raise ValueError("PubMed rejected the search query")
             if total is None:
                 try:
                     total = int(result.get("count", 0))
@@ -318,10 +336,22 @@ class PubMedClient:
                 doi=doi,
                 citation_count=0,
                 source="pubmed",
+                keywords=[self._text(n) or "" for n in article.findall("./MedlineCitation/KeywordList/Keyword") if self._text(n)],
+                mesh_terms=[self._text(n) or "" for n in article.findall("./MedlineCitation/MeshHeadingList/MeshHeading/DescriptorName") if self._text(n)],
+                pub_types=[self._text(n) or "" for n in article.findall("./MedlineCitation/Article/PublicationTypeList/PublicationType") if self._text(n)],
+                language=[self._text(n) or "" for n in article.findall("./MedlineCitation/Article/Language") if self._text(n)],
+                publication_date=self._literal_publication_date(article),
+                pmcid=next((self._text(n) or "" for n in article.findall("./PubmedData/ArticleIdList/ArticleId") if n.get("IdType") == "pmc"), ""),
             )
         except Exception as e:
             logger.warning(f"Failed to parse PubMed article: {e}")
             return None
+
+    def _literal_publication_date(self, article: ET.Element) -> str:
+        node = article.find("./MedlineCitation/Article/Journal/JournalIssue/PubDate")
+        if node is None:
+            return ""
+        return "-".join(node.findtext(key, "").strip() for key in ("Year", "Month", "Day") if node.findtext(key, "").strip()) or node.findtext("MedlineDate", "").strip()
 
     def _extract_abstract(self, article: ET.Element) -> str:
         """Extract abstract, falling back to OtherAbstract (e.g., Chinese) if English is missing."""
@@ -383,7 +413,7 @@ class PubMedClient:
         return datetime(year_i, month_i, day_i)
 
     def _extract_doi(self, article: ET.Element) -> Optional[str]:
-        for node in article.findall(".//ArticleId"):
+        for node in article.findall("./PubmedData/ArticleIdList/ArticleId"):
             if node.get("IdType") == "doi":
                 text = self._text(node)
                 if text:

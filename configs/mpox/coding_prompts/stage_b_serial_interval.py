@@ -1,20 +1,14 @@
-SYSTEM = """
-You are an epidemiology meta-analyst extracting coding-sheet records for mpox serial interval evidence.
-Use only evidence from the provided text. Do not guess.
-"""
-
+"""Source-grounded serial-interval extraction; numerical thresholds do not define labels."""
+SYSTEM = "Use only supplied study evidence. Do not guess or compute missing values."
 USER = """
-Task: Use the Codebook + full text, with the Study Index (Stage A) as guidance, to extract records.
-Stage B uses full text. Stage A is guidance, not a substitute.
-
-Follow codebook field definitions strictly.
-If a field is not reported, use null for numbers and "NR" for required strings.
-Extract the main serial-interval-type estimate reported by the primary study.
-If the paper reports multiple related estimates, prefer the estimate most central to the study's headline result and note alternatives in notes.
-Do not convert medians to means or compute pooled values.
-Report evidence locations in notes/evidence fields.
+Extract all in-scope reported estimates, retaining statistics, methods, strata and
+periods separately. Candidate evidence is navigation guidance, not authoritative.
+Preserve raw parameter labels, values, units, interval types and levels.
+Do not prefer a headline value or discard Rt merely because R0 is also reported.
+Do not classify R0/Rt by numerical thresholds. Do not substitute SI/IP/generation
+time or treat an assumed model input as an original estimated result.
+Null is not zero. Retain explicitly reported zero events and negative serial
+intervals with their reported definitions; do not force values into typical ranges.
+Record supporting source quotes and locations. Do not compute pooled estimates.
 """
-
-OUTPUT = """
-Return a JSON array only. No markdown, no explanations.
-"""
+OUTPUT = "Return a JSON array only, without Markdown or explanations."

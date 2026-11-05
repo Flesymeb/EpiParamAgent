@@ -168,6 +168,8 @@ def pdf_file_to_markdown(
         "model_version": model_version,
     }
 
+    payload.update({k: v for k, v in (params or {}).items() if k in {"is_ocr", "enable_formula", "enable_table", "language"}})
+
     logger.info("Requesting upload URL for: %s", pdf_path.name)
     response = _json_post_with_retry(
         batch_url, payload, token=token, timeout_s=cfg.timeout_s, cfg=cfg
@@ -290,6 +292,7 @@ def pdf_url_to_markdown(
 
     task_url = base + "/" + (cfg.endpoint or "/api/v4/extract/task").lstrip("/")
     payload = {"url": pdf_url, "model_version": model_version}
+    payload.update({k: v for k, v in (params or {}).items() if k in {"is_ocr", "enable_formula", "enable_table", "language"}})
 
     logger.info("Submitting PDF to MinerU: %s", pdf_url)
     created = _json_post(task_url, payload, token=token, timeout_s=cfg.timeout_s, cfg=cfg)
@@ -476,7 +479,13 @@ def _download_zip_extract_markdown(
         if p.suffix.lower() == ".zip":
             p.write_bytes(zbytes)
         else:
+            p.mkdir(parents=True, exist_ok=True)
+            (p / "result.zip").write_bytes(zbytes)
             with zipfile.ZipFile(BytesIO(zbytes)) as z:
+                for member in z.infolist():
+                    target = (p / member.filename).resolve()
+                    if not target.is_relative_to(p.resolve()) or ((member.external_attr >> 16) & 0o170000) == 0o120000:
+                        raise ValueError("MinerU archive contains an unsafe path")
                 z.extractall(p)
 
     with zipfile.ZipFile(BytesIO(zbytes)) as z:

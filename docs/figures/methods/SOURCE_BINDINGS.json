@@ -1,0 +1,28 @@
+{
+  "audit_date": "2026-11-05",
+  "scope": "Methods documentation and static diagrams; no production edits or experiments",
+  "source_sha256_at_readonly_audit": {
+    "metaagent/synthesis/pi_agent.py": "6b76d63e8e061b138da269948eafecdd6dacf31d00aa02f220ea36d8f574b717",
+    "metaagent/synthesis/pi_tools.py": "1e95b8696b97d7c07fea4b1d7536c33cd8baa2dc323f0a29e357009eee251378",
+    "metaagent/synthesis/pi_runtime.py": "bf6aa124668f898eff61fa33e16686ab3b950048a771a52edc6f18b89e91f537",
+    "metaagent/synthesis/pi_extension.ts": "219a363bace37ab1f0a0d3edb86b7fa2053f8cbfb7e305cf21f96bf4ac9708db",
+    "metaagent/synthesis/execution.py": "b2c068f379c5a7fe50d54cf76c90063c4c8e1dbbea7b797c0882ee3c8108b109",
+    "metaagent/prompts/synthesis/pi_agent.md": "9bcc455ddee1ad659f6cc4934f0863fb854611403f3eeedf252be2c1e879c642",
+    "metaagent/workflow_runner.py": "679040a7b980b65365e440f244fe0d9e407cb9aa7cfe14405cb77543d958118a",
+    "metaagent/screening/context.py": "276a90805e3d9a5f0a6841bd3f4041cd8123e7027b49fa8aa125fb2a6288fc9a"
+  },
+  "figure_renderer_sha256": "02b4e01e46b51aeca12722ddd7b21bb7da3c3b175bba5d129c45d671fb07a0bc",
+  "artifact_sha256": {
+    "benchmark.svg": "30d2120a1dcb378329950f5db3fd70765e6bb2aa6c3f028aa0ccae2008e34318",
+    "end_to_end.png": "ad5c009df69f4470481df5becef9d7ceb16b0acb9dabfa6e78bbbc2df1aefcd5",
+    "end_to_end.json": "70233f55af6c13edf88b3c514e0b52a55f050d1a7017044bae28b4efa6f5ca2c",
+    "benchmark.pdf": "3634e71e018013cdd66a41c103a886895c044f71f4c5efe1ee6712e48aea59d4",
+    "end_to_end.pdf": "bf381b0cc240d3b987bdf679263d6db4e0c58af2c0d6b47189293b6a1002cfc2",
+    "benchmark.png": "9d7b96606afa104f8787e2800a2b8077a2a4f2d784d50b487e6232027adda665",
+    "end_to_end.svg": "4442e701e15b4cc48d5f007251b2fcbf72b3f75a4c94a62f7f9e97224b854c32",
+    "layout-checks.json": "fce6839f5a79df7486b565be51b22f84774ce6bb0bef80b70ca8b71e27383abe",
+    "benchmark.json": "1761e3873f638c34822b3a01777e5b6a5e7a9661a532dacee23fd9df3e0d0e01"
+  },
+  "strict_answer_masking_claimed": false,
+  "actual_results_or_counts_invented": false
+}

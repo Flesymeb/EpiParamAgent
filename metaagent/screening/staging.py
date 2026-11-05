@@ -34,7 +34,9 @@ def annotate_ground_truth(
     if not gt_pmids:
         return None
 
+    from metaagent.screening.context import normalize_bibliographic_aliases
     for paper in papers:
+        normalize_bibliographic_aliases(paper)
         pmid = (paper.get("PMID") or "").strip()
         paper["is_ground_truth"] = "✓" if pmid in gt_pmids else ""
     gt_count = sum(1 for p in papers if p.get("is_ground_truth") == "✓")
@@ -70,7 +72,9 @@ def partition_papers(
     title_only_mode = str(policies.get("title_only_mode", "lenient")).strip().lower()
     full_text_mode = str(policies.get("full_text_mode", "standard")).strip().lower()
 
+    from metaagent.screening.context import normalize_bibliographic_aliases
     for paper in papers:
+        normalize_bibliographic_aliases(paper)
         pmid = (paper.get("PMID") or "").strip()
         abstract = (paper.get("Abstract") or "").strip()
         fulltext_markdown = (paper.get("fulltext_markdown") or "").strip()

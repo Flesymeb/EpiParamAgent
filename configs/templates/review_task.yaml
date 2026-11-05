@@ -1,0 +1,37 @@
+# New-review example, not original-SR methods or benchmark reference.
+# Pi plans and executes analysis from the question, coding table and explicit method documents.
+# Add local PDF/MD/TXT/HTML/DOCX paths under synthesis.method_sources. No credentials or reference answers belong here.
+version: '1'
+task_id: mpox-incubation-example
+disease: mpox
+topic: incubation_period
+research_question: What incubation-period estimates are reported in primary human
+  mpox studies?
+codebook: ../mpox/codebooks/incubation_period.yaml
+review_protocol:
+  version: example-v1
+  criteria:
+  - id: disease
+    description: The report studies mpox or monkeypox infection in humans.
+  - id: original
+    description: The report contains original observations or an original analysis
+      of human data; short reports and imported cases are allowed.
+  - id: outcome
+    description: The report provides an incubation-period estimate or observed exposure-to-onset
+      data suitable for its estimation.
+  logic:
+    all:
+    - disease
+    - original
+    - outcome
+search:
+  pubmed: (mpox OR monkeypox) AND (incubation OR exposure onset)
+  europepmc: (mpox OR monkeypox) AND incubation
+synthesis:
+  backend: pi
+  method_sources: []
+  max_executions: 6
+  max_turns: 16
+  max_tokens: 256000
+  total_timeout_s: 1200
+  exec_timeout_s: 120

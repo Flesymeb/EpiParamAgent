@@ -1,0 +1,44 @@
+version: '1'
+task_id: covid_serial_mean_32191173
+disease: covid19
+topic: serial_interval
+research_question: What mean serial interval is reported in the declared primary report?
+codebook: codebooks/serial_interval.yaml
+coding:
+  backend: langextract
+  chunk_chars: 24000
+  stage_a_empty_retries: 1
+  extraction_scope: The overall mean observed serial interval for all analyzed transmission
+    events; do not substitute the local-transmission-only subset, other coronaviruses,
+    borrowed values, or sensitivity analyses. If text and tables conflict, preserve
+    the conflicting source-supported records and mark the unresolved discrepancy;
+    never silently decide which original value is true.
+review_protocol:
+  version: development-scope-v1
+  criteria:
+  - id: disease
+    description: Original human covid19 study
+  - id: outcome
+    description: Reports serial interval estimates
+  logic:
+    all:
+    - disease
+    - outcome
+search: {}
+analysis_protocol:
+  analysis_id: covid_serial_mean_32191173-analysis
+  parameter_type: serial_interval
+  estimate_measure: mean
+  unit: days
+  method: fixed
+  independence:
+    unit: record_id
+    assert_independent_reports: true
+    multiple_estimates: review
+  minimum_estimates: 1
+  llm_report: false
+  uncertainty_rules:
+    allowed_types:
+    - CI
+    - SE
+    - SD

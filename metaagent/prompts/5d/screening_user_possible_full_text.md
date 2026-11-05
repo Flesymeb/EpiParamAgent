@@ -1,12 +1,18 @@
+Stage: full-text assessment. Check the supplied primary text, tables and available supplements. Do not infer absence from an incomplete bundle. Accept original counts, paired times or other data forms when the task explicitly permits them; if the task requires a reported estimate, raw data alone do not satisfy that requirement. Do not invent an unreported distribution, model, transformation or endpoint. The earlier P marks unresolved eligibility. Resolve it from source evidence without assuming that progression proves eligibility.
+
 Research question: {research_question}
-
-This paper was flagged as a possible candidate at stage 1 but could not be confirmed from title/abstract alone.
-Use the full text to score it accurately — do not assume it is relevant just because it reached stage 2.
-
 Title: {title}
+Official title: {official_title}
+Publication Year: {publication_year}
+Publication Date: {publication_date}
+Create Date: {create_date}
+Authors: {authors}
+Citation: {citation}
+Journal/Book: {journal}
+Language: {language}
 Keywords: {keywords}
+Publication Types: {pub_types}
+MeSH Terms: {mesh_terms}
 {content_label}: {content}
 
-Score the paper across the five relevance dimensions using the full text.
-Pay particular attention to whether the target parameter is actually reported or estimated in the body text, tables, appendix, or figure captions — or only mentioned as background context.
-If the full text does not provide concrete evidence for the target parameter, score that dimension 2 or lower.
+Return the complete five assessments and your holistic S/P/U tier as JSON. Use publication types and MeSH as context, not as proof of methods, outcomes or eligibility. In overall_justification, explain the decisive task criteria and any unresolved explicit restrictions.

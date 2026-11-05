@@ -1,0 +1,34 @@
+{
+  "end_to_end": {
+    "spec_validated": true,
+    "node_bounds_outside_canvas": [],
+    "node_text_overflow": [],
+    "canonical_spec_mirror_identical": true,
+    "repeat_svg_byte_identical": true,
+    "embedded_raster_images": 0,
+    "native_svg_text_nodes": 64,
+    "png_size": [
+      1700,
+      1140
+    ],
+    "pdf_pages": 1,
+    "rendered_png_visually_inspected": true,
+    "root_requested_layout_corrections_applied": true
+  },
+  "benchmark": {
+    "spec_validated": true,
+    "node_bounds_outside_canvas": [],
+    "node_text_overflow": [],
+    "canonical_spec_mirror_identical": true,
+    "repeat_svg_byte_identical": true,
+    "embedded_raster_images": 0,
+    "native_svg_text_nodes": 38,
+    "png_size": [
+      1650,
+      1120
+    ],
+    "pdf_pages": 1,
+    "rendered_png_visually_inspected": true,
+    "root_requested_layout_corrections_applied": true
+  }
+}

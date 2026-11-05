@@ -16,11 +16,9 @@ def infer_pmid_from_path(path: Path) -> str | None:
         match = PMID_PATTERN.search(component)
         if match:
             return match.group(1)
-    if name.upper().startswith("DOI_"):
+    # Arbitrary filename digits and DOI suffixes are not evidence of a PubMed ID.
+    if name.isdigit():
         return name
-    digits = re.findall(r"\d{6,}", name)
-    if digits:
-        return digits[0]
     return None
 
 

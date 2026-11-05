@@ -588,13 +588,13 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         dest="prefer_llm_tier",
         action="store_true",
         default=True,
-        help="Use LLM's own S/P/U tier classification instead of code-side thresholds (default).",
+        help="Use the LLM's holistic S/P/U tag from five scores and reasons, without a weighted total (default).",
     )
     parser.add_argument(
         "--no-prefer-llm-tier",
         dest="prefer_llm_tier",
         action="store_false",
-        help="Use code-side score thresholds instead of the LLM's S/P/U tier.",
+        help="Explicit compatibility mode: use legacy score thresholds instead of the LLM's S/P/U tag.",
     )
     return parser
 

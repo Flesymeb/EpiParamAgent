@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import json
 import shutil
 from datetime import datetime
 from pathlib import Path
@@ -41,6 +42,9 @@ def save_screening_outputs(
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     run_dir = output_file.parent / "screening_runs" / timestamp
     run_dir.mkdir(parents=True, exist_ok=True)
+    from .guards import screening_audit
+    audit_path = run_dir / "screening_audit.json"
+    audit_path.write_text(json.dumps(screening_audit(papers), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     # Archive previous result before overwriting so multi-run history is preserved.
     # The canonical output_file always holds the latest run; backups accumulate in screening_logs/.
@@ -130,6 +134,7 @@ def save_screening_outputs(
             },
         },
         extra={
+            "screening_audit": str(audit_path),
             "paper_count": len(papers),
             "ground_truth_count": len(gt_pmids),
             "ground_truth_in_pool": gt_count if gt_pmids else None,
@@ -201,6 +206,10 @@ def _build_report_lines(
     errors: list[dict[str, Any]],
     llm_cfg: Any,
 ) -> list[str]:
+    denominator = len(papers)
+    def share(rows):
+        return len(rows) / denominator * 100 if denominator else 0.0
+
     report_lines: list[str] = []
     report_lines.append("=" * 80)
     report_lines.append("LLM Screening Detailed Report")
@@ -226,19 +235,19 @@ def _build_report_lines(
     report_lines.append("│ Category                │ Count    │ Share    │")
     report_lines.append("├─────────────────────────┼──────────┼──────────┤")
     report_lines.append(
-        f"│ 💪 Strong candidates     │   {len(strong):4d}   │  {len(strong)/len(papers)*100:5.1f}%  │"
+        f"│ 💪 Strong candidates     │   {len(strong):4d}   │  {share(strong):5.1f}%  │"
     )
     report_lines.append(
-        f"│ 🤔 Possible candidates   │   {len(possible):4d}   │  {len(possible)/len(papers)*100:5.1f}%  │"
+        f"│ 🤔 Possible candidates   │   {len(possible):4d}   │  {share(possible):5.1f}%  │"
     )
     report_lines.append(
-        f"│ 😐 Unlikely candidates   │   {len(unlikely):4d}   │  {len(unlikely)/len(papers)*100:5.1f}%  │"
+        f"│ 😐 Unlikely candidates   │   {len(unlikely):4d}   │  {share(unlikely):5.1f}%  │"
     )
     report_lines.append(
-        f"│ ⚠️  Errors               │   {len(errors):4d}   │  {len(errors)/len(papers)*100:5.1f}%  │"
+        f"│ ⚠️  Errors               │   {len(errors):4d}   │  {share(errors):5.1f}%  │"
     )
     report_lines.append("├─────────────────────────┼──────────┼──────────┤")
-    report_lines.append(f"│ Total records           │   {len(papers):4d}   │ 100.0%   │")
+    report_lines.append(f"│ Total records           │   {len(papers):4d}   │  {100.0 if papers else 0.0:5.1f}%  │")
     report_lines.append("└─────────────────────────┴──────────┴──────────┘")
 
     if fulltext_errors:
@@ -267,7 +276,7 @@ def _build_report_lines(
         "\n┌─────────────────┬─────────┬──────────┬────────────────────────────────┐"
     )
     report_lines.append(
-        "│ Dimension        │ Average │ High-rate │ Score distribution (0/1/2/3/4)  │"
+        "│ Dimension        │ Average │ Missing   │ Score distribution (0/1/2/3/4)  │"
     )
     report_lines.append(
         "├─────────────────┼─────────┼──────────┼────────────────────────────────┤"
@@ -275,20 +284,13 @@ def _build_report_lines(
 
     for dim, label in dimensions:
         score_field = f"{dim}_score"
-        score_counts = [
-            sum(1 for p in papers if str(p.get(score_field, "")).strip() == str(i))
-            for i in range(5)
-        ]
-        valid_scores = [
-            int(p.get(score_field, 0))
-            for p in papers
-            if p.get(score_field) not in ["", None]
-        ]
-        avg_score = sum(valid_scores) / len(valid_scores) if valid_scores else 0
-        high_relevance = sum(1 for s in valid_scores if s >= 3)
-        high_pct = (high_relevance / len(valid_scores) * 100) if valid_scores else 0
+        scores = [_dimension_score(p.get(score_field)) for p in papers]
+        valid_scores = [score for score in scores if score is not None]
+        score_counts = [valid_scores.count(i) for i in range(5)]
+        average = f"{sum(valid_scores) / len(valid_scores):4.2f}" if valid_scores else " N/A"
+        missing = len(scores) - len(valid_scores)
         report_lines.append(
-            f"│ {label:15s} │  {avg_score:4.2f}  │  {high_pct:5.1f}%  │ {score_counts[0]:2d}/{score_counts[1]:2d}/{score_counts[2]:2d}/{score_counts[3]:2d}/{score_counts[4]:2d}                 │"
+            f"│ {label:15s} │  {average}  │  {missing:5d}   │ {score_counts[0]:2d}/{score_counts[1]:2d}/{score_counts[2]:2d}/{score_counts[3]:2d}/{score_counts[4]:2d}                 │"
         )
 
     report_lines.append(
@@ -297,20 +299,31 @@ def _build_report_lines(
 
     if strong:
         report_lines.append("\n" + "=" * 80)
-        report_lines.append(f"Strong Candidates ({len(strong)} papers)")
+        report_lines.append(f"Strong Candidates ({len(strong)} papers, input order)")
         report_lines.append("=" * 80)
-        high_relevance = sorted(
-            strong, key=lambda x: int(x.get("overall_score", 0)), reverse=True
-        )
-        for i, paper in enumerate(high_relevance, 1):
+        for i, paper in enumerate(strong, 1):
+            record_id = paper.get("record_id") or paper.get("PMID") or paper.get("pmid") or "N/A"
             report_lines.append(
-                f"\n{i}. PMID: {paper.get('PMID', 'N/A')} [Score: {paper.get('overall_score')}/4]"
+                f"\n{i}. Record: {record_id} | Tier: {paper.get('llm_tier') or 'N/A'} | Label: {paper.get('llm_suggest') or 'N/A'}"
             )
-            report_lines.append(f"   Title: {paper.get('Title', 'N/A')}")
+            report_lines.append(f"   Title: {paper.get('Title') or paper.get('title') or 'N/A'}")
             report_lines.append(
-                f"   Overall: {paper.get('overall_justification', 'N/A')}"
+                f"   Rationale: {paper.get('overall_justification') or 'N/A'}"
             )
-            report_lines.append(
-                f"   Dimension scores: D={paper.get('disease_score')} P={paper.get('population_score')} L={paper.get('location_score')} E={paper.get('evidence_score')} Param={paper.get('parameter_score')}"
-            )
+            values = [_dimension_score(paper.get(f"{dimension}_score")) for dimension, _ in dimensions]
+            scores = " ".join(f"{label}={value if value is not None else 'N/A'}" for label, value in zip(("D", "P", "L", "E", "Param"), values))
+            report_lines.append(f"   Dimension scores: {scores}")
+            if paper.get("screening_requires_review") or paper.get("screening_review_flags"):
+                report_lines.append(f"   Review: {paper.get('screening_review_flags') or 'required'}")
     return report_lines
+
+
+def _dimension_score(value: Any) -> int | None:
+    """Read an ordinal dimension score; missing/malformed values stay missing."""
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        number = float(value)
+    except (ValueError, TypeError):
+        return None
+    return int(number) if number in (0, 1, 2, 3, 4) else None

@@ -1,64 +1,36 @@
-You are assisting with second-stage full-text screening for a systematic review in epidemiology.
+You assist systematic-review screening. Assess only the supplied source and metadata.
 
-The paper was flagged as a possible candidate at stage 1 based on title/abstract.
-Stage 1 could not confirm or reject it with confidence. Your job is to use the full text to resolve that ambiguity with accurate, evidence-based scoring.
-Do not output include/exclude language. The application will compute the final candidate label in code.
-
+Task authority
 Research question: {research_question}
+Disease scope: {disease_focus}
+Disease exclusions: {disease_exclude}
+Parameter/outcome scope: {parameter_focus}
+Parameter exclusions: {parameter_exclude}
+Task-specific scientific notes: {parameter_scoring_note}
 
-Stage: second-stage possible-candidate full-text screening.
-Available evidence: title, keywords, and full-text content.
+The complete research question and explicit eligibility criteria take precedence over general examples or terminology notes. Do not narrow a whole-review task to a selected pooled-analysis target. Do not invent human-only, geographic, language, date, publication-type or sample-size requirements. In the overall justification, check every explicitly declared restriction and distinguish supported, conflicting and unavailable information.
 
-Assess the study on these dimensions:
+Five dimensions (each requires its own integer 0-4 and source-based reason)
+- disease_relevance: Does the disease/pathogen match the task? Variants, lineages or wild-type comparisons are required only when the task says so.
+- population_relevance: Do the people, cases, specimens or data units match the declared population and setting? Do not replace the task with a universal population rule.
+- location_relevance: Apply any explicit geographic requirement. Distinguish exposure/infection origin, case ascertainment, recruitment/sampling and residence. Imported cases are not automatically irrelevant; missing a particular country is not a mismatch when the task has no such restriction.
+- original_evidence: Do study type and data provenance meet the task? Original observations, reanalysis and newly fitted estimates can qualify when accepted. This is not a quality ranking. Letter/Review indexing or small sample size alone does not establish ineligibility; inspect the actual contribution and any explicit task rule.
+- parameter_relevance: Match the requested definition and role: this study's result or observations versus a borrowed fixed input, background citation or another endpoint. An original fitted model output is not automatically capped below an observed estimate. Respect whether the task accepts one or several outcomes.
 
-1. Disease relevance
-- The study must investigate {disease_focus}.
+Score anchors describe each dimension, not tag thresholds: 0 = clear nonmatch; 1 = weak support or a substantially conflicting requirement; 2 = insufficient/ambiguous information; 3 = supported match; 4 = strong direct support. A missing abstract or keyword is not affirmative exclusion evidence. Metadata can aid interpretation but cannot create unreported methods, outcomes or facts.
 
-2. Population relevance
-- Prefer human population studies.
+Give your own holistic tag using the five assessments, source evidence and the task:
+S: evidence supports eligibility and proceeding.
+P: informative source supports a task-specific plausible eligibility path with unresolved details; or the record is unassessable because only citation identifiers are available, requiring metadata/full-text retrieval rather than an eligibility claim.
+U: the supplied evidence supports an out-of-scope decision. Disease-name overlap alone is not a plausible eligibility path; do not label every disease-related record P. Explain the actual task-based reason, rather than treating missing text as a negative finding.
+No weighted total, score sum, fixed dimension cutoff or quota determines the tag. Return all five assessments, overall_justification and exactly one tier S/P/U. Do not fabricate missing assessments or transfer facts between papers. Never use benchmark membership or a published pooled answer as eligibility evidence.
+Interpret date requirements by the stated event; database Create Date is not automatically publication, exposure or sampling date.
 
-3. Location relevance
-- Real-world geographic or field context is preferred.
+Evidence-boundary checks
+- Citation-only records with no informative title or abstract cannot establish eligibility or ineligibility. Defer them as P for metadata/full-text checking; do not infer design, population or sample size from author/year, DOI or missing material.
+- Interpret geographic exclusions together with stated inclusion exceptions. An explicitly allowed exported/linked-case exception must be assessed from actual exposure/linkage evidence; overseas sampling alone does not prove an excluded case origin. Do not assume an exception when its evidence is missing.
+- If the source explicitly presents the target only as borrowed, assumed or illustrative values and the task requires its own estimate, choose U unless actual source evidence supports another eligible contribution. Imagined unreported results are not a reason for P.
+- Mentioning one input source does not prove that other required inputs are absent. A stated original target estimate can support P while methods/inputs await full text; affirmative statements that only excluded data were used remain a mismatch. Do not relax the required inputs.
+- Confirmed violations of explicit design restrictions, including an excluded retrospective design, remain U. Historical inclusion elsewhere cannot override the current task criteria.
 
-4. Original empirical evidence
-
-Scoring guide — read carefully, these tiers determine inclusion:
-- 4: original primary data from individual contact-tracing records, household surveillance with case-level linelists, or prospective/retrospective cohort with individual case data.
-- 3: re-analysis of a publicly shared individual-level linelist or registry that the authors did not themselves collect.
-- 2: systematic review, meta-analysis, or transmission model that fits aggregate epidemic curves — even if the model uses real incidence data, the parameter is a calibrated output, not a direct observation.
-- 1: study that only inputs or cites others' estimates as model assumptions; purely theoretical derivation with no real-data fitting.
-- 0: no empirical component.
-
-Only score 3 or higher if the study used its own individual-level case data to directly observe or compute the target parameter.
-
-5. Target parameter relevance
-- The study should report or estimate {parameter_focus}.
-- The target parameter may appear in methods, results, tables, appendix, or figure captions rather than the abstract.
-- If the full text only discusses the topic broadly, uses the parameter as background context, or does not actually report or estimate the target parameter, score this dimension low.
-- Studies that do not actually report the parameter or {parameter_exclude} should score low.
-
-**Critical distinction (primary output vs. intermediate/secondary):**
-- Score 4: the target parameter is the primary estimated output — Methods is structured around estimating it, Results leads with it.
-- Score 3: the target parameter is explicitly estimated but is one of several co-equal parameters.
-- Score 2: the target parameter appears numerically as a secondary or intermediate result (e.g., estimated to feed into R0, or one row in a large parameter table without a distributional fit).
-- Score 1: appears only as a cited value from another paper, or mentioned without a new estimate.
-- Score 0: absent.
-
-Watch for: paper estimates a different primary parameter (generation time, incubation period, Rt) and uses SI only as an input → score 1-2. Paper reports SI in aggregate/model context without individual contact-pair data → score evidence 1-2 even if SI is prominently reported.
-
-Scoring note for this dimension:
-{parameter_scoring_note}
-
-Strain scope note:
-- If the research question explicitly covers both original strains and variants, original wild-type strain studies are equally in scope. Do NOT score original-strain papers lower on disease relevance than variant-specific papers.
-
-Second-stage policy:
-- You now have the full text. This paper was ambiguous at stage 1 — resolve that ambiguity decisively.
-- For disease, population, and location: carry over the stage-1 judgment unless the full text clearly contradicts it.
-- For **original_evidence**: score precisely. Meta-analyses, systematic reviews, and transmission models that calibrate against aggregate curves are score 1-2, not 3-4. Score 3-4 only for studies with original individual-level contact or case data.
-- For **parameter_relevance**: score 3-4 only if the target parameter is explicitly reported. If it is used as a background input, assumed fixed, or only cited from another study, score 1-2. Ambiguity from the abstract should now be resolved — lean toward the lower score if the full text does not show actual reporting.
-
-Output requirements:
-- Return all five dimension assessments.
-- In each justification, cite the most informative evidence (or lack thereof) from the full text.
-- Provide an overall_justification summarizing whether the full text confirms or rules out relevance.
+Stage: full-text assessment. Check the supplied primary text, tables and available supplements. Do not infer absence from an incomplete bundle. Accept original counts, paired times or other data forms when the task explicitly permits them; if the task requires a reported estimate, raw data alone do not satisfy that requirement. Do not invent an unreported distribution, model, transformation or endpoint. The earlier P marks unresolved eligibility. Resolve it from source evidence without assuming that progression proves eligibility.

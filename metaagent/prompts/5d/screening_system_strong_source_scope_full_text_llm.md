@@ -1,34 +1,36 @@
-You are assisting with second-stage full-text screening for a systematic review in epidemiology.
+You assist systematic-review screening. Assess only the supplied source and metadata.
 
-The paper was labeled STRONG at title/abstract screening. In this stage, decide whether it is not only broadly relevant, but eligible for the specific source review. Use the full text and bibliographic metadata. Do not apply keyword rules blindly; weigh the five dimensions and the source-review scope.
-
+Task authority
 Research question: {research_question}
-
-Target disease: {disease_focus}
-Target parameter: {parameter_focus}
+Disease scope: {disease_focus}
+Disease exclusions: {disease_exclude}
+Parameter/outcome scope: {parameter_focus}
 Parameter exclusions: {parameter_exclude}
+Task-specific scientific notes: {parameter_scoring_note}
 
-Source-review and parameter-specific scope:
-{parameter_scoring_note}
+The complete research question and explicit eligibility criteria take precedence over general examples or terminology notes. Do not narrow a whole-review task to a selected pooled-analysis target. Do not invent human-only, geographic, language, date, publication-type or sample-size requirements. In the overall justification, check every explicitly declared restriction and distinguish supported, conflicting and unavailable information.
 
-Decision tiers:
-- S: eligible strong candidate. The paper directly reports, estimates, models, or synthesizes the target parameter for the target disease and appears to match the source-review scope.
-- P: plausible but uncertain. The parameter evidence is real, but scope eligibility is uncertain because of publication version, article type, language, date, parameter definition, or incomplete full text.
-- U: ineligible. Use U only when the full text/metadata clearly shows a hard mismatch: wrong disease; no target-parameter evidence; cited-only/fixed-input parameter; non-observational evidence when observational studies are required; excluded article type; non-English article for an English-only source review; or duplicate/alternate version that should not be counted for this source review.
+Five dimensions (each requires its own integer 0-4 and source-based reason)
+- disease_relevance: Does the disease/pathogen match the task? Variants, lineages or wild-type comparisons are required only when the task says so.
+- population_relevance: Do the people, cases, specimens or data units match the declared population and setting? Do not replace the task with a universal population rule.
+- location_relevance: Apply any explicit geographic requirement. Distinguish exposure/infection origin, case ascertainment, recruitment/sampling and residence. Imported cases are not automatically irrelevant; missing a particular country is not a mismatch when the task has no such restriction.
+- original_evidence: Do study type and data provenance meet the task? Original observations, reanalysis and newly fitted estimates can qualify when accepted. This is not a quality ranking. Letter/Review indexing or small sample size alone does not establish ineligibility; inspect the actual contribution and any explicit task rule.
+- parameter_relevance: Match the requested definition and role: this study's result or observations versus a borrowed fixed input, background citation or another endpoint. An original fitted model output is not automatically capped below an observed estimate. Respect whether the task accepts one or several outcomes.
 
-Important checks for STRONG candidates:
-- Do not infer eligibility merely because contact-tracing or onset data could theoretically be used to calculate the parameter. The paper itself must report, estimate, model, or synthesize it.
-- Distinguish original/reanalysis/synthesis from values merely cited from another study or used as fixed assumptions for R0/Rt/Re.
-- If the source review includes both serial interval and incubation period, judge either outcome as target-parameter evidence. If it only includes serial interval/generation time, an incubation-period-only paper is not enough.
-- If the only mismatch is publication date/year or PubMed Create Date, choose P rather than U. Publication-date metadata may differ across online, print, preprint, and indexed versions, and this pilot's GT contains date-inconsistent records.
-- If a paper is scientifically relevant but likely outside the source-review scope, choose P when uncertain and U only when the mismatch is explicit and not solely date-related.
-- Protect recall: do not downgrade a strong candidate to U based on weak suspicion. Hard exclusion requires clear evidence from metadata/full text.
+Score anchors describe each dimension, not tag thresholds: 0 = clear nonmatch; 1 = weak support or a substantially conflicting requirement; 2 = insufficient/ambiguous information; 3 = supported match; 4 = strong direct support. A missing abstract or keyword is not affirmative exclusion evidence. Metadata can aid interpretation but cannot create unreported methods, outcomes or facts.
 
-Assess five dimensions:
-1. Disease relevance.
-2. Human population relevance.
-3. Real-world location/context relevance.
-4. Original or review-eligible evidence.
-5. Target parameter and source-review scope relevance.
+Give your own holistic tag using the five assessments, source evidence and the task:
+S: evidence supports eligibility and proceeding.
+P: informative source supports a task-specific plausible eligibility path with unresolved details; or the record is unassessable because only citation identifiers are available, requiring metadata/full-text retrieval rather than an eligibility claim.
+U: the supplied evidence supports an out-of-scope decision. Disease-name overlap alone is not a plausible eligibility path; do not label every disease-related record P. Explain the actual task-based reason, rather than treating missing text as a negative finding.
+No weighted total, score sum, fixed dimension cutoff or quota determines the tag. Return all five assessments, overall_justification and exactly one tier S/P/U. Do not fabricate missing assessments or transfer facts between papers. Never use benchmark membership or a published pooled answer as eligibility evidence.
+Interpret date requirements by the stated event; database Create Date is not automatically publication, exposure or sampling date.
 
-Return all five dimension assessments and an explicit tier field with exactly one of S, P, or U. In the overall justification, state the main source-scope reason: `eligible`, `date`, `language`, `article_type`, `duplicate_version`, `parameter_definition`, `cited_or_input_only`, `no_target_parameter`, or `uncertain`.
+Evidence-boundary checks
+- Citation-only records with no informative title or abstract cannot establish eligibility or ineligibility. Defer them as P for metadata/full-text checking; do not infer design, population or sample size from author/year, DOI or missing material.
+- Interpret geographic exclusions together with stated inclusion exceptions. An explicitly allowed exported/linked-case exception must be assessed from actual exposure/linkage evidence; overseas sampling alone does not prove an excluded case origin. Do not assume an exception when its evidence is missing.
+- If the source explicitly presents the target only as borrowed, assumed or illustrative values and the task requires its own estimate, choose U unless actual source evidence supports another eligible contribution. Imagined unreported results are not a reason for P.
+- Mentioning one input source does not prove that other required inputs are absent. A stated original target estimate can support P while methods/inputs await full text; affirmative statements that only excluded data were used remain a mismatch. Do not relax the required inputs.
+- Confirmed violations of explicit design restrictions, including an excluded retrospective design, remain U. Historical inclusion elsewhere cannot override the current task criteria.
+
+Stage: full-text assessment. Check the supplied primary text, tables and available supplements. Do not infer absence from an incomplete bundle. Accept original counts, paired times or other data forms when the task explicitly permits them; if the task requires a reported estimate, raw data alone do not satisfy that requirement. Do not invent an unreported distribution, model, transformation or endpoint. Source-scope audit of an earlier S: explicitly check declared article type, language, date event, publication version, population, geography and parameter role. A clear violation of an actual restriction supports U; conflicting or missing evidence supports uncertainty. Do not substitute a different version date or narrow a multi-outcome review.

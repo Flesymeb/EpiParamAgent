@@ -90,9 +90,29 @@ torch_cache/
 /e2e/
 /scripts/
 /tests/
-/webapp/
+!/tests/
+/tests/*
+!/tests/test_langextract_backend.py
+!/tests/test_workflow_run.py
+!/tests/test_public_retrieval.py
+!/tests/test_llm_rate_limit.py
+!/tests/test_literature.py
+!/tests/test_mineru_cache.py
+!/tests/test_coding_stages.py
+!/tests/test_screening_protocol.py
+!/tests/test_synthesis.py
+!/tests/test_synthesis_evaluation.py
+!/tests/test_workflow_task.py
+# Web application source is part of the active product; generated assets and
+# dependencies are ignored separately above.
 /docs/
-/archive/
+# Archive payloads, snapshots, private configuration and manifests stay local.
+# Only the small index and reproducible archiver are publishable.
+/archive/*
+!/archive/20261103_160112_pre_refactor/
+/archive/20261103_160112_pre_refactor/*
+!/archive/20261103_160112_pre_refactor/README.md
+!/archive/20261103_160112_pre_refactor/archive_project.py
 /data/
 /external/
 /output/
@@ -108,7 +128,9 @@ torch_cache/
 !/dataset/README.md
 !/dataset/benchmark_v1/
 /evaluation/*
-!/evaluation/README.md
+!/evaluation/development_cli/
+/evaluation/development_cli/*
+!/evaluation/development_cli/README.md
 /paper_pool/*
 !/paper_pool/README.md
 
@@ -118,9 +140,7 @@ torch_cache/
 !/tools/scripts/__init__.py
 !/tools/scripts/evaluate_coding.py
 !/tools/scripts/extract_coding.py
-!/tools/scripts/pubmed_fix_missing.py
 !/tools/scripts/pubmed_manager.py
-!/tools/scripts/pubmed_search_titles.py
 !/tools/scripts/screening_evaluation.py
 !/tools/scripts/screening_llm_batch.py
 !/tools/scripts/screening_prepare.py
@@ -151,3 +171,90 @@ output/playwright/
 
 # Local agent settings
 .claude/
+
+# Local benchmark runtime cache
+/.benchmarks/
+
+# Task runs and service smoke artifacts are private runtime workspaces.
+/runs/
+!/tools/scripts/smoke_workflow.py
+!/tests/test_complete_workflow.py
+!/tests/test_integration_audit.py
+!/tests/test_annotations.py
+!/tests/test_coding_metrics.py
+!/tests/test_synthesis_methods.py
+
+!/tests/test_provider_switch.py
+!/tests/test_service_health.py
+!/tests/test_smoke_workflow.py
+
+!/tests/test_thinking_policy.py
+!/tests/test_thinking_coding.py
+!/tests/test_webapp_api.py
+!/tests/test_coding_subprocess.py
+!/tests/test_coding_pdf_workflow.py
+!/tests/test_cli_contract.py
+!/tests/test_cli_effect_validation.py
+!/tests/test_coding_cli.py
+!/tests/test_coding_failure_telemetry.py
+!/tests/test_coding_prompt_v2.py
+!/tests/test_coding_evidence_correction.py
+!/tests/test_pi_runtime.py
+!/tests/test_pi_synthesis.py
+!/tests/test_pi_tools.py
+!/tests/test_pi_execution.py
+!/tests/test_pi_cli.py
+!/tests/test_pi_synthesis_agent.py
+!/tests/test_synthesis_pi_cli.py
+!/tests/test_acquisition.py
+!/tools/scripts/validate_cli_effect.py
+!/tests/test_coding_context_schema.py
+!/tests/test_synthesis_generation.py
+!/tests/test_workflow_generation_profiles.py
+!/tests/test_coding_review_context.py
+!/tests/test_synthesis_context_contract.py
+!/tests/test_screening_metadata_context.py
+!/tests/test_pmc_cloud.py
+!/tests/test_coding_b_envelope.py
+!/tests/test_acquisition_preprint_cache.py
+!/docs/
+/docs/*
+!/docs/CLI_MODULES.md
+!/docs/METHODS.md
+!/docs/design/
+/docs/design/*
+!/docs/design/METHOD_IMPLEMENTATION_MAP.md
+!/docs/design/SCREENING_PROMPT_REVIEW.md
+!/docs/figures/
+/docs/figures/*
+!/docs/figures/methods/
+/docs/figures/methods/*
+!/docs/figures/methods/README.md
+!/docs/figures/methods/build_specs.py
+!/docs/figures/methods/end_to_end.json
+!/docs/figures/methods/end_to_end.svg
+!/docs/figures/methods/end_to_end.pdf
+!/docs/figures/methods/end_to_end.png
+!/docs/figures/methods/specs/
+/docs/figures/methods/specs/*
+!/docs/figures/methods/specs/end_to_end.json
+!/docs/figures/methods/check_layout.py
+!/docs/figures/methods/layout-checks.json
+!/docs/figures/methods/SOURCE_BINDINGS.json
+!/tests/test_screening_tier_reporting.py
+!/tests/test_screening_llm_tier_contract.py
+!/tests/test_screening_parameter_guides.py
+!/tests/test_screening_semantic_prompts.py
+
+# The benchmark harness, the reports it writes and the scripts that feed it
+# are development-time tools. The release inputs the pipeline reads stay under
+# dataset/benchmark_v1/.
+/metaagent/benchmark/
+/metaagent/evaluation/benchmark.py
+/metaagent/evaluation/benchmark_metrics.py
+/metaagent/evaluation/pi_comparison.py
+/tools/benchmark_v2/
+
+# Notes and plans written during a work session stay with the work.
+/IMPLEMENTATION_STATUS.md
+/OPTIMIZATION_PLAN.md

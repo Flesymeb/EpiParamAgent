@@ -101,3 +101,27 @@ def load_prompt_templates(screening_stage: str) -> tuple[str, str]:
         raise KeyError(f"Unknown screening prompt stage: {screening_stage}")
     system_path, user_path = prompt_pair
     return system_path.read_text(encoding="utf-8"), user_path.read_text(encoding="utf-8")
+
+
+def load_parameter_guides(config: dict | None, research_question: str = "") -> str:
+    """Load terminology relevant to the task, never extra eligibility criteria."""
+    import re
+    config = config or {}
+    patterns = {
+        "fatality": r"fatality|mortality|\b(?:CFR|IFR)\b|病死|死亡风险|死亡比例",
+        "reproduction_number": r"reproduction[_ -]?(?:number|ratio)|reproductive[_ -]?(?:number|ratio)|\bR[_ ]?0\b|(?-i:\bR[_ ]?[tTeE]\b)|再生数|再生系数",
+        "intervals": r"serial[_ -]?interval|(?:incubation|latent)[_ -]?period|generation[_ -]?(?:time|interval)|潜伏期|序列间隔|代际间隔",
+    }
+    task = " ".join([*(str(config.get(k) or "") for k in ("topic", "parameter_focus")), research_question])
+    selected = [name for name, pattern in patterns.items() if re.search(pattern, task, re.I)]
+    if str(config.get("topic", "")).strip().lower() == "intervals" and "intervals" not in selected:
+        selected.append("intervals")
+    if not selected:
+        return ""
+    blocks = ["Parameter interpretation notes: terminology only, not additional inclusion rules. "
+              "The complete research question and declared eligibility criteria take precedence. "
+              "Do not narrow whole-review eligibility to a downstream pooled-analysis target."]
+    for name in selected:
+        text = (PROMPT_DIR / "screening" / "guides" / f"{name}.md").read_text(encoding="utf-8")
+        blocks.append(f"[Parameter guide: {name}]\n{text.strip()}")
+    return "\n\n".join(blocks)

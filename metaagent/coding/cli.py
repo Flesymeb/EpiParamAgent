@@ -36,7 +36,11 @@ def coding():
     "input_path",
     type=click.Path(path_type=Path, exists=True, file_okay=True, dir_okay=True, readable=True),
     default=None,
-    help="PMID list, PDF, or full-text directory; defaults to the project paper_pool manifest.",
+    help="PMID list, PDF, or full-text directory. Missing PMID PDFs are acquired and parsed automatically.",
+)
+@click.option(
+    "--document-manifest", type=click.Path(path_type=Path, exists=True, dir_okay=False),
+    default=None, help="JSON/JSONL bundles: record_id plus local path or PMID/DOI/public PDF URL; version-pinned preprints and supplements supported.",
 )
 @click.option(
     "--paper-pool",
@@ -60,12 +64,22 @@ def coding():
 @click.option("--codebook", type=click.Path(path_type=Path, dir_okay=False), default=None, help="Explicit codebook YAML path")
 @click.option(
     "--extraction-backend", type=click.Choice(["llm", "langextract"]),
-    default="llm", show_default=True,
-    help="Stage B backend; langextract adds record and field evidence alignment.",
+    default="langextract", show_default=True,
+    help="Stage A candidate backend; B performs source-grounded semantic review.",
 )
-def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, skip_stage_a, fetch_mode, out, codebook, extraction_backend):
+@click.option("--ablation", type=click.Choice(["full", "without_a", "without_b"]), default="full", show_default=True)
+@click.option("--chunk-chars", type=click.IntRange(min=256), default=None, help="Maximum characters per atomic source block")
+@click.option("--extraction-scope", default=None, help="Binding inclusion scope within the full supplied source bundle")
+@click.option("--research-question", default=None, help="Review question supplied to both extraction stages")
+@click.option("--task-context", type=click.Path(path_type=Path,exists=True,dir_okay=False), default=None, help="JSON/YAML object with research_question and review_protocol")
+@click.option("--stage-a-empty-retries", type=click.IntRange(0,2), default=1, show_default=True)
+def extract(disease, topic, project_id, profile, input_path, document_manifest, paper_pool, stage, skip_stage_a, fetch_mode, out, codebook, extraction_backend, ablation, chunk_chars, extraction_scope, stage_a_empty_retries, research_question, task_context):
     """Run full-text evidence localization and structured extraction."""
     proj = resolve_project_root()
+    if input_path is not None and document_manifest is not None:
+        raise click.UsageError("Use --input or --document-manifest, not both.")
+    if skip_stage_a and ablation == "without_b":
+        raise click.UsageError("--skip-stage-a conflicts with --ablation without_b.")
 
     disease, topic, inferred_project = _resolve_profile_context(
         profile=profile,
@@ -89,7 +103,9 @@ def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, 
         )
 
     pool_root = (paper_pool or (proj / "paper_pool")).expanduser().resolve()
-    if input_path is not None:
+    if document_manifest is not None:
+        pmids_path = document_manifest.expanduser().resolve()
+    elif input_path is not None:
         pmids_path = input_path.expanduser().resolve()
     elif disease and topic and project_id:
         project_manifest = (
@@ -117,17 +133,27 @@ def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, 
         )
     if not pmids_path.exists():
         raise click.ClickException(
-            f"Coding input not found: {pmids_path}. Run 'metaagent pdf fetch' first "
-            "or pass --input explicitly."
+            f"Coding input manifest not found: {pmids_path}. Provide a PMID list or "
+            "--document-manifest with identities; PDF acquisition and MinerU run automatically."
         )
 
     argv = [
-        "--input", str(pmids_path),
+        "--document-manifest" if document_manifest is not None else "--input", str(pmids_path),
         "--codebook", str(cb_path),
         "--stage", stage,
         "--fetch-mode", fetch_mode,
         "--extraction-backend", extraction_backend,
+        "--ablation", ablation,
+        "--stage-a-empty-retries", str(stage_a_empty_retries),
     ]
+    if research_question is not None:
+        argv += ["--research-question", research_question]
+    if task_context is not None:
+        argv += ["--task-context", str(task_context.expanduser().resolve())]
+    if extraction_scope is not None:
+        argv += ["--extraction-scope", extraction_scope]
+    if chunk_chars is not None:
+        argv += ["--chunk-chars", str(chunk_chars)]
     if skip_stage_a:
         argv += ["--skip-stage-a"]
     if out:
@@ -151,7 +177,7 @@ def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, 
         raise click.UsageError("Provide --out when no project context is available.")
 
     if stage != "fetch":
-        if extraction_backend == "langextract" and stage in {"both", "extract"}:
+        if extraction_backend == "langextract" and ablation != "without_a" and not skip_stage_a and stage in {"both", "extract"}:
             from metaagent.coding.pipeline.langextract_backend import require_langextract
 
             try:
@@ -168,7 +194,8 @@ def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, 
     details.add_row("Codebook", str(cb_path))
     details.add_row("Stage", stage)
     details.add_row("Stage A", "skipped" if skip_stage_a else "enabled")
-    details.add_row("Stage B backend", extraction_backend)
+    details.add_row("Stage A backend", extraction_backend)
+    details.add_row("Ablation", "without_a" if skip_stage_a else ablation)
     details.add_row("Full-text mode", fetch_mode)
     details.add_row("Paper pool", str(pool_root))
     details.add_row("Output", str(out.expanduser().resolve()) if out else "profile coding_runs directory")
@@ -190,7 +217,7 @@ def extract(disease, topic, project_id, profile, input_path, paper_pool, stage, 
         )
     else:
         _run_script(script_path, argv)
-    show_success("Coding and extraction completed")
+    show_success("PDF acquisition and MinerU cache preparation completed" if stage == "fetch" else "Coding and extraction completed")
 
 
 def _preflight_coding_llm() -> None:
@@ -358,3 +385,25 @@ def _run_script(
     )
     if result.returncode != 0:
         raise click.ClickException(f"Script exited with code {result.returncode}")
+
+
+@coding.command('prefetch')
+@click.option('--dataset-root',type=click.Path(path_type=Path,exists=True,file_okay=False),default=None)
+@click.option('--out',type=click.Path(path_type=Path,file_okay=False),required=True)
+@click.option('--profile',multiple=True)
+@click.option('--allow-network',is_flag=True,help='Download public PDFs only; no MinerU or LLM')
+@click.option('--retry-failed',is_flag=True)
+@click.option('--max-workers',type=click.IntRange(1,3),default=3)
+def prefetch(dataset_root,out,profile,allow_network,retry_failed,max_workers):
+    """Verify/download all declared Coding PDFs with resumable receipts."""
+    from tools.scripts.prefetch_benchmark_pdfs import main
+    argv=['--output',str(out),'--max-workers',str(max_workers)]
+    if dataset_root:argv+=['--dataset-root',str(dataset_root)]
+    for value in profile:argv+=['--profile',value]
+    if allow_network:argv+=['--allow-network']
+    if retry_failed:argv+=['--retry-failed']
+    try:status=main(argv)
+    except (OSError,ValueError) as exc:raise click.ClickException(str(exc)) from exc
+    if status:raise click.ClickException('PDF prefetch checks incomplete; inspect COVERAGE.json')
+    click.echo('Coverage: '+str(out.resolve()/'COVERAGE.json'))
+    click.echo('Resume the same command; add --allow-network --retry-failed for missing PDFs.')
