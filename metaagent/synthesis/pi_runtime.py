@@ -198,6 +198,8 @@ class _RunProxy:
         self.spent = 0
         self.calls = 0
         self.blocked = None
+        self.last_prompt_tokens = 0
+        self.last_body_bytes = 0
         self.clients = set()
         self.sockets = set()
         self.workers = set()
@@ -243,6 +245,21 @@ class _RunProxy:
             with self.path.open('a') as handle:
                 handle.write(json.dumps(event, ensure_ascii=False) + '\n')
 
+    def _input_bound(self, body_bytes):
+        """Estimate the request's input tokens, anchored by the last measured prompt.
+
+        The body length in bytes overstates the token count about fourfold, so
+        charging bytes against a token budget stopped sessions that were well
+        inside their limit. The byte estimate stays as a floor at three bytes
+        per token, and the measured prompt anchors the growth, so a provider
+        that under-reports usage cannot widen the budget.
+        """
+        floor = body_bytes / 3
+        if self.last_prompt_tokens:
+            anchored = self.last_prompt_tokens + max(0, body_bytes - self.last_body_bytes) / 3
+            return int(max(floor, anchored)) + 512
+        return int(floor) + 512
+
     def forward(self, handler, payload):
         import httpx
         from metaagent import llm_rate_limit as pacing
@@ -254,7 +271,8 @@ class _RunProxy:
             raise ValueError('Unexpected model')
         payload = dict(payload)
         payload.pop('max_completion_tokens', None)
-        input_bound = len(json.dumps(payload, ensure_ascii=False).encode()) + 1024
+        body_bytes = len(json.dumps(payload, ensure_ascii=False).encode())
+        input_bound = self._input_bound(body_bytes)
         with self.lock:
             remaining = self.settings['max_tokens'] - self.spent
             cap = min(self.cfg.max_tokens, remaining - input_bound)
@@ -352,6 +370,10 @@ class _RunProxy:
             if usage and isinstance(usage.get('total_tokens'), int) and not isinstance(usage['total_tokens'], bool) and usage['total_tokens'] >= 0:
                 with self.lock:
                     self.spent += usage['total_tokens'] - reservation
+                    prompt_tokens = usage.get('prompt_tokens')
+                    if isinstance(prompt_tokens, int) and not isinstance(prompt_tokens, bool) and prompt_tokens > 0:
+                        self.last_prompt_tokens = prompt_tokens
+                        self.last_body_bytes = body_bytes
                     if usage['total_tokens'] > reservation:
                         self.blocked = 'provider_exceeded_token_reservation'
                         event['token_reservation_exceeded'] = True

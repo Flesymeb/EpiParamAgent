@@ -184,6 +184,26 @@ def test_proxy_budget_blocks_before_upstream(tmp_path, model, local_only, limit,
         proxy.close(); endpoint.close()
 
 
+def test_proxy_charges_input_tokens_not_request_bytes(tmp_path, model, local_only):
+    """A long prompt must not exhaust the budget by counting its bytes as tokens."""
+    import httpx
+    endpoint = LocalModel()
+    model.api_base = f'http://127.0.0.1:{endpoint.server.server_port}/v1'
+    proxy = runtime._RunProxy(model, {'max_turns':3,'max_tokens':10000}, tmp_path, time.monotonic()+10)
+    try:
+        with httpx.Client(trust_env=False) as client:
+            # Twenty thousand bytes of prompt are about seven thousand tokens, and
+            # the budget must not be spent as if they were twenty thousand tokens.
+            payload = {'model':model.model,'messages':[{'role':'user','content':'x'*20000}],'stream':True}
+            for _ in range(2):
+                response = client.post(proxy.url+'/chat/completions',headers={'Authorization':'Bearer '+proxy.token},json=payload)
+                assert response.status_code == 200, response.text
+        assert len(endpoint.requests) == 2
+        assert proxy.spent < 10000
+    finally:
+        proxy.close(); endpoint.close()
+
+
 def test_real_pi_budget_no_hidden_retry(tmp_path, model, local_only):
     if not runtime.inspect_pi_runtime()['available']:
         pytest.skip('Pi not installed')
