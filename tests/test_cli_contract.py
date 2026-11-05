@@ -43,7 +43,13 @@ def task(tmp_path, monkeypatch):
 
 
 def invoke(*args):
-    return CliRunner().invoke(main, list(map(str, args)))
+    # click < 8.2 merges stderr into stdout unless asked otherwise; click >= 8.2
+    # always captures stderr separately and no longer accepts the keyword.
+    try:
+        runner = CliRunner(mix_stderr=False)
+    except TypeError:
+        runner = CliRunner()
+    return runner.invoke(main, list(map(str, args)))
 
 
 def modify_task(task, change):

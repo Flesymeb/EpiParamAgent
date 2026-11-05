@@ -175,7 +175,7 @@ def discover_pmc_pdf(
     max_versions=8,
     max_response_bytes=2_097_152,
 ):
-    """Discover exact PMCID deposits; select one unambiguous OA PDF version.
+    """Discover exact PMCID deposits; only one clear non-manuscript yields ready.
 
     No PDFs are downloaded. License null is retained when official metadata says
     open access. Callers must still validate title/DOI and any requested source
@@ -339,23 +339,17 @@ def discover_pmc_pdf(
                     "selection_basis": "non_manuscript_openaccess_deposit",
                 }
             )
+        if len(formal) > 1:
+            raise _DiscoveryError("multiple_non_manuscript_versions")
         if not formal:
             raise _DiscoveryError("manuscript_only_no_automatic_mapping")
         if not result["candidates"]:
             result.update(status="unavailable", reason="no_pdf_in_metadata")
             return result
-        candidates = result["candidates"]
-        if len(candidates) > 1:
-            licensed = [candidate for candidate in candidates if candidate.get("license_code")]
-            if len(licensed) == 1:
-                candidates = licensed
-            else:
-                raise _DiscoveryError("multiple_non_manuscript_pdf_versions_ambiguous")
-        result["candidates"] = candidates
         result.update(
             status="ready",
-            reason="unique_pdf_or_single_explicitly_licensed_version",
-            pdf_url=candidates[0]["url"],
+            reason="unique_non_manuscript_deposit",
+            pdf_url=result["candidates"][0]["url"],
         )
     except _DiscoveryError as exc:
         result.update(status="pending", reason=exc.code)

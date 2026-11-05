@@ -640,6 +640,21 @@ def _local_validation(options):
                                analysis_override=options.analysis_protocol, synthesis_options=options)
 
 
+def _flush_diagnostics():
+    """Push buffered diagnostics out before the JSON document is written.
+
+    Python buffers a redirected stderr, so dependency chatter that was routed
+    away from stdout can still be pending when the command returns. Flushing
+    keeps the promise that stdout carries one JSON document and stderr carries
+    everything else.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.flush()
+        except (AttributeError, ValueError, OSError):
+            pass
+
+
 def _execute_workflow_command(*, dry_run, json_output, **kwargs):
     from metaagent.workflow_runner import WorkflowOptions, WorkflowRunError, plan_workflow, run_workflow
     try:
@@ -650,6 +665,7 @@ def _execute_workflow_command(*, dry_run, json_output, **kwargs):
             result = plan_workflow(options) if dry_run else run_workflow(options)
             if validation is not None:
                 result["local_validation"] = validation
+            _flush_diagnostics()
     except WorkflowRunError as exc:
         _command_failure(exc, json_output, manifest=exc.manifest,
                          suggestion=f"Inspect workflow status --output-dir {kwargs['output_dir']} and the recorded stage logs; fix the cause, then resume the original workflow run command.")
