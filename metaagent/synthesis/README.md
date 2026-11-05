@@ -93,6 +93,55 @@ Existing tasks that omit `synthesis` still select `deterministic`; the explicit
 legacy example is `configs/templates/review_task.deterministic.yaml`. The existing
 `synthesis run --protocol ...` contract below remains available.
 
+## Generated-code sandbox
+
+Generated analysis code runs under bubblewrap, never on the host. The sandbox
+unshares the network and every other namespace it can, drops all capabilities,
+and starts the interpreter with a cleared environment.
+
+Threads are available. Child processes are not.
+
+- `fork` and `vfork` are refused with `EPERM`.
+- `clone` is refused with `EPERM` unless its flags carry `CLONE_THREAD`, so a
+  thread can start but a new process cannot.
+- `clone3` answers `ENOSYS` on purpose. glibc tries `clone3` first and falls
+  back to `clone` only when it sees `ENOSYS`; refusing `clone3` outright would
+  leave no way to start a thread at all.
+
+A thread shares the sandbox address space and inherits every limit below, so
+allowing threads opens no way out of the sandbox. Libraries that start a
+thread at import time therefore work — matplotlib builds its font cache that
+way.
+
+Process creation stays closed, so generated code cannot shell out, cannot use
+`subprocess` or `multiprocessing`, and cannot reach the host filesystem through
+a child process.
+
+Each execution is bounded:
+
+| Limit | Value |
+| --- | --- |
+| Wall time | `exec_timeout_s`, default 60 s, at most 120 s |
+| Address space | `memory_bytes`, default 2 GiB, at most 4 GiB |
+| CPU time | the wall-time budget plus one second |
+| One output file | `max_output_bytes`, default 16 MiB, at most 32 MiB |
+| Output directory | `max_output_bytes` and `max_output_files`, default 64 files, at most 256 |
+| Open files | 128 |
+| Processes and threads | the host user's thread count plus 128 |
+| Captured stdout and stderr | `max_log_bytes`, default 64 KiB, at most 256 KiB |
+
+Inside the sandbox, `/inputs`, `/sources`, `/helpers`, `/analysis_plan.json` and
+the staged code file are read-only. Only `/work` is writable, and `/tmp` is a
+temporary filesystem. The environment is cleared apart from a fixed list:
+`PATH`, `LANG`, `LC_ALL`, `PYTHONPATH`, `PYTHONNOUSERSITE`,
+`PYTHONDONTWRITEBYTECODE`, `MPLCONFIGDIR` and four thread-count variables
+pinned to one thread each.
+
+Python and R are supported. R needs `Rscript` on the host; without it the
+execution returns a recoverable error and the agent switches to Python. The
+code must be a regular staged file under the workspace `code` directory, not a
+symbolic link.
+
 ## Deterministic protocol API
 
 `run_synthesis(records, protocol, *, llm_invoke=None)` selects immutable coding
