@@ -1,0 +1,45 @@
+{
+  "execution_id": "90f1aebfb8aa49738f5a8776db4b9a55",
+  "status": "complete",
+  "sandbox": "bubblewrap",
+  "network": "unshared",
+  "code_sha256": "10a6deab872811554977226170f73e121899316aa3d102f86a9debb094ea198f",
+  "plan_sha256": "eec4efaeda6d285eb3ecc45c0b6bf84f00af1314cc868dde1a98067cd1f7614f",
+  "input_sha256": "68437ec0a1a6cb72041a9d04809aedbab4c129d1bdcf421f3cde91c9038a7621",
+  "workspace_sha256": "e8065f2702011cb9fa40079a9758541f017f0bcd89fc282c3323907af503e1ab",
+  "language": "python",
+  "limits": {
+    "walltime_s": 120,
+    "memory_bytes": 2147483648,
+    "output_bytes": 16777216,
+    "output_files": 64,
+    "log_bytes": 65536,
+    "host_uid_process_thread_cap": 6170,
+    "host_uid_headroom": 128,
+    "generated_process_creation": "seccomp_denied"
+  },
+  "output_directory": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/executions/90f1aebfb8aa49738f5a8776db4b9a55",
+  "returncode": 0,
+  "outputs": {
+    "forest.pdf": {
+      "bytes": 16295,
+      "sha256": "b1622e9e2783e8c61fe82ff5f4c4d990f9e23f16daec6f0275272d893aa78e9f"
+    },
+    "result.json": {
+      "bytes": 4024,
+      "sha256": "2c96de99f562763fc7352d91abef8d6d78884d680b1b9e6b394996f038e724ae"
+    },
+    "forest.png": {
+      "bytes": 49469,
+      "sha256": "ea01e362146cc74aaddf767268889319751995df8745ee925d104723dd67ff63"
+    }
+  },
+  "walltime_s": 1.0607589250430465,
+  "stdout_tail": "Done. Pooled: 5.238908179149273 CI: 4.788537394208007 - 5.689278964090538 tau2: 0.08370425702542335 I2: 0.3986697008524146\n",
+  "stdout_sha256": "41118fc671f90d52dc99daa5d703c161fcde2b593f4dc6e3bad3c181c1143f8f",
+  "stderr_tail": "",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "validation_status": "verified",
+  "repeat_execution_id": "81a3745ac4424207a63efae8987cad08",
+  "result_sha256": "2c96de99f562763fc7352d91abef8d6d78884d680b1b9e6b394996f038e724ae"
+}

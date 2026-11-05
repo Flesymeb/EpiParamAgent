@@ -1,0 +1,97 @@
+{
+  "pi": {
+    "available": true,
+    "version": "1.3.0",
+    "compatible": true,
+    "executable": "/home/yanhaoyang/.pi/agent/bin/pi",
+    "executable_sha256": "da0c6a49fe94aadc9765cc7afc6ba6b17e553eed0247d0385c160bc188f5cfbb",
+    "package_sha256": "83c3bb7619f590c213cc96a24216eb29a819a3ef6dc548607cc037ed276e8dc5",
+    "installed_cli_sha256": "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774",
+    "extension_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/metaagent/synthesis/pi_extension.ts",
+    "extension_sha256": "308c8754e464946711ee083abef2b6ddb1f30919b0d275c1c01e09b7064949df",
+    "fingerprint": "1b548f7da1651b2228aef2ed3fd4129c62e889e1922febac503587d391bf4f97"
+  },
+  "settings": {
+    "max_turns": 20,
+    "max_tokens": 600000,
+    "total_timeout_s": 1200.0,
+    "exec_timeout_s": 120.0
+  },
+  "model": "qwen3.8-27b-fp8",
+  "provider": "pjlab",
+  "api_base": "https://token.pjlab.org.cn/v1",
+  "thinking": "disabled",
+  "max_output_tokens": 8000,
+  "generation_binding": {
+    "provider": "pjlab",
+    "model": "qwen3.8-27b-fp8",
+    "api_base": "https://token.pjlab.org.cn/v1",
+    "thinking": "disabled",
+    "reasoning_effort": null,
+    "temperature": 0.1,
+    "max_tokens": 8000,
+    "timeout_s": 120,
+    "verify_ssl": true,
+    "force_streaming": false,
+    "extra_body": {
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      },
+      "thinking": {
+        "type": "disabled"
+      }
+    }
+  },
+  "temperature": 0.1,
+  "session_continuation": null,
+  "command": [
+    "/home/yanhaoyang/.pi/agent/bin/pi",
+    "--mode",
+    "rpc",
+    "--provider",
+    "metaagent-synthesis",
+    "--model",
+    "qwen3.8-27b-fp8",
+    "--thinking",
+    "off",
+    "--no-builtin-tools",
+    "--no-extensions",
+    "-e",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/metaagent/synthesis/pi_extension.ts",
+    "--tools",
+    "epi_tool",
+    "--no-context-files",
+    "--no-skills",
+    "--no-prompt-templates",
+    "--no-mcp",
+    "--offline",
+    "--no-approve",
+    "--no-themes",
+    "--session-dir",
+    "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/pi/sessions",
+    "--system-prompt",
+    "You are an epidemiological synthesis agent. Use only epi_tool for data, evidence, planning, code execution and finalization. Never invent analysis results or access external files. A final answer requires a successful finalize tool result."
+  ],
+  "automatic_retries": false,
+  "credential_storage": "host_memory_only",
+  "tool_actions": [
+    "profile",
+    "read_skill",
+    "query",
+    "evidence",
+    "save_plan",
+    "write_code",
+    "run_code",
+    "finalize"
+  ],
+  "completion_guard": {
+    "enabled": true,
+    "max_continuations": 3
+  },
+  "timeout_policy": {
+    "local_relay_wait_s": 1200.0,
+    "upstream_wire_timeout_s": 120,
+    "queue_deadline": "original_session_deadline",
+    "automatic_queue_retries": false
+  }
+}

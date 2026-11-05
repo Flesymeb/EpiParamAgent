@@ -1,0 +1,82 @@
+{
+  "fingerprint": "a125991c28543623a6f04b11e3c30c3b7c55fc19b945fe347288607df6547752",
+  "input_bindings": {
+    "input_sha256": "6c84279160331a1b8a1ad01be723858cd898cc55c7737f99086dad66f6d86882",
+    "research_question": "What is the pooled mean incubation period, in days, of the included adult study cohorts?",
+    "review_context": {
+      "eligibility": "Study-level estimates of the incubation period from laboratory-confirmed cases, reported in days or in hours, with a mean estimate and a reported measure of uncertainty.\n",
+      "endpoint_definition": "infection to symptom onset",
+      "exclusions": "Estimates reported only as a median or as an interquartile range are not eligible for a pooled mean, and paediatric cohorts are out of scope.\n",
+      "group": null,
+      "parameter_type": "incubation_period",
+      "population": "adults"
+    },
+    "method_sources": [
+      {
+        "name": "original_methods.md",
+        "sha256": "1065a105534a80ffc18c95821f334e7adfda0a57e1c5224bd24bf5db66b685c9",
+        "role": "original_methods"
+      }
+    ],
+    "protocol": null,
+    "settings": {
+      "max_turns": 20,
+      "max_tokens": 600000,
+      "total_timeout_s": 1200,
+      "exec_timeout_s": 120,
+      "max_executions": 6,
+      "max_tool_calls": 80,
+      "max_output_bytes": 16777216,
+      "max_output_files": 64,
+      "max_log_bytes": 65536,
+      "memory_bytes": 2147483648
+    },
+    "generation_binding": {
+      "provider": "pjlab",
+      "model": "qwen3.8-27b-fp8",
+      "api_base": "https://token.pjlab.org.cn/v1",
+      "thinking": "disabled",
+      "reasoning_effort": null,
+      "temperature": 0.1,
+      "max_tokens": 8000,
+      "timeout_s": 120,
+      "verify_ssl": true,
+      "force_streaming": false,
+      "extra_body": {
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "thinking": {
+          "type": "disabled"
+        }
+      }
+    },
+    "row_count": 6,
+    "input_pending": false,
+    "implementation": {
+      "pi_agent.py": "53a39480e7dd84f4c1d3cdee8ad88f98ab26fcb11037c3795581d245b36da0c0",
+      "pi_tools.py": "608c3f65efc51c601d768160d532830bf65f79d86cdb4ee776c4f2448f5bdcec",
+      "execution.py": "93a7ab9d824a90d948619c62561a92067b2b0a4638fe5567f3373b5c85f425e1",
+      "engine.py": "2024a51592d12b764783cba65f72921966acfd6ff093f351153d64bab6d7a5a5",
+      "methods.py": "be01ff60ac3f8c6966472fbddbf7caab7e3db29af5f2a97d6dfaf3a52e012b7c",
+      "statistical_verification.py": "dbdffe581e58b8abfe6ca9301f6bc73f0fa59fcf7e93e1f5c70b26e1a1c4ad16",
+      "diagnostics.py": "0ab627bc6cca6660137164bec31accd6bf8dc456276fa19786f1fd917ab8dc6d",
+      "pooling.py": "491aa189e3c90e57ebd1955114b33748b9b20db2dbbaada1b550fa211d4bf88f",
+      "evidence_search.py": "ffa72e4eaa1127d80ea380dd903f08c84b8d04d3c51d17e789066a4a2acc0f3f",
+      "statistics_guide.md": "f0362f54cd3c5bf6d94d30b1f1759b4b3c4d750ac1f029f055ce5616640d2d70",
+      "pi_runtime.py": "76e644af0015627512b87668dff1f89e3a7bd6b6bbbe5d9f236849ba1b499238",
+      "pi_extension.ts": "308c8754e464946711ee083abef2b6ddb1f30919b0d275c1c01e09b7064949df",
+      "pi_agent.md": "3bd49864959cebd8392ad233b17e803b39584b6d4689cc0f930b8bfd87328f79",
+      "epidemiology_parameters.md": "52fbe37612813fd487261c0d886f04d473739a91420641bb26e8d3893f19bd73",
+      "estimands.md": "506401417a10e29c1d98ee492f3db21b3c0f6d2961dc5c9ed4baa2da5d37d105",
+      "python_meta_analysis.md": "72bbcd77415406a8899699bcd6b4b429b832fe4a031b2e1a15cbdf6a6c7ac747",
+      "r_meta_analysis.md": "ba013da5c78daf165a30199c652edd62b8f7da2ff9a9c1ed635051afbbbdb149",
+      "sandbox_environment.md": "30f2909e1fccbe070f9f59146d26917aaeb1797ef12569858710f0ef5bbcbbc6"
+    },
+    "fingerprint": "a125991c28543623a6f04b11e3c30c3b7c55fc19b945fe347288607df6547752"
+  },
+  "workspace": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266",
+  "status": "complete",
+  "session_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/pi/sessions/2026-11-05T07-13-50-807Z_01a1aa8e-8ad7-76d4-95c2-431760e2d968.jsonl",
+  "result_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/synthesis_result.json"
+}

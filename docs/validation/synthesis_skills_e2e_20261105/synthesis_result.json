@@ -1,0 +1,312 @@
+{
+  "status": "complete",
+  "result": {
+    "point_estimate": 5.238908179149273,
+    "unit": "days",
+    "method": "random",
+    "ci_lower": 4.788537394208007,
+    "ci_upper": 5.689278964090538,
+    "ci_level": 0.95,
+    "interval_type": "CI",
+    "tau2": 0.08370425702542335,
+    "Q": 4.988938698503375,
+    "I2": 0.3986697008524146
+  },
+  "contributions": [
+    {
+      "input_id": "r1",
+      "value_used": 5.2,
+      "se_used": 0.30612807415479243,
+      "weight": 0.2976082437229644,
+      "source_raw": {
+        "estimate_id": "r1",
+        "study": "Alvarez 2020",
+        "region": "Spain",
+        "population": "adults",
+        "parameter_type": "incubation_period",
+        "estimate_measure": "mean",
+        "point_estimate": 5.2,
+        "unit": "days",
+        "uncertainty_type": "CI",
+        "uncertainty_level": "95%",
+        "uncertainty_low": 4.6,
+        "uncertainty_high": 5.8,
+        "cohort_id": "cohort-alvarez",
+        "input_id": "r1"
+      },
+      "source_row_sha256": "863b0ec625db258bff76476461a32e4059282648f5b7cdf91ab595626d0dca9d"
+    },
+    {
+      "input_id": "r2",
+      "value_used": 6.1,
+      "se_used": 0.4591921112321885,
+      "weight": 0.17925366012774316,
+      "source_raw": {
+        "estimate_id": "r2",
+        "study": "Boot 2020",
+        "region": "Canada",
+        "population": "adults",
+        "parameter_type": "incubation_period",
+        "estimate_measure": "mean",
+        "point_estimate": 6.1,
+        "unit": "days",
+        "uncertainty_type": "CI",
+        "uncertainty_level": "95%",
+        "uncertainty_low": 5.2,
+        "uncertainty_high": 7.0,
+        "cohort_id": "cohort-boot",
+        "input_id": "r2"
+      },
+      "source_row_sha256": "95a2750c1e46720c2de89c163d6723c993245f770f8b6007d5e2cef5e8c1a957"
+    },
+    {
+      "input_id": "r3",
+      "value_used": 4.8,
+      "se_used": 0.4,
+      "weight": 0.21666118969980738,
+      "source_raw": {
+        "estimate_id": "r3",
+        "study": "Chen 2021",
+        "region": "China",
+        "population": "adults",
+        "parameter_type": "incubation_period",
+        "estimate_measure": "mean",
+        "point_estimate": 4.8,
+        "unit": "days",
+        "uncertainty_type": "SE",
+        "se": 0.4,
+        "cohort_id": "cohort-chen",
+        "input_id": "r3"
+      },
+      "source_row_sha256": "c65ab1936677586a0d469df981b61e63d6626df2f0d7048f60db252dad97d472"
+    },
+    {
+      "input_id": "r5",
+      "value_used": 5.083333333333333,
+      "se_used": 0.2976245165393815,
+      "weight": 0.306476906449485,
+      "source_raw": {
+        "estimate_id": "r5",
+        "study": "Ewing 2022",
+        "region": "United States",
+        "population": "adults",
+        "parameter_type": "incubation_period",
+        "estimate_measure": "mean",
+        "point_estimate": 122.0,
+        "unit": "hours",
+        "uncertainty_type": "CI",
+        "uncertainty_level": "95%",
+        "uncertainty_low": 108.0,
+        "uncertainty_high": 136.0,
+        "cohort_id": "cohort-ewing",
+        "input_id": "r5"
+      },
+      "source_row_sha256": "ff9dfa6a5ef459223e839d0f943acee42334b58acd8e1c2d4983ee67bbab8546"
+    }
+  ],
+  "transformations": [
+    {
+      "input_id": "r1",
+      "field": "se",
+      "before": null,
+      "after": 0.30612807415479243,
+      "expression": "(uncertainty_high - uncertainty_low) / 3.919927969080108",
+      "reason": "Derive SE from the reported 95% CI (4.6, 5.8) assuming a symmetric normal interval."
+    },
+    {
+      "input_id": "r2",
+      "field": "se",
+      "before": null,
+      "after": 0.4591921112321885,
+      "expression": "(uncertainty_high - uncertainty_low) / 3.919927969080108",
+      "reason": "Derive SE from the reported 95% CI (5.2, 7.0) assuming a symmetric normal interval."
+    },
+    {
+      "input_id": "r5",
+      "field": "point_estimate",
+      "before": 122.0,
+      "after": 5.083333333333333,
+      "expression": "point_estimate / 24",
+      "reason": "Convert hours to days per the original method (divide by 24)."
+    },
+    {
+      "input_id": "r5",
+      "field": "se",
+      "before": null,
+      "after": 0.2976245165393815,
+      "expression": "(uncertainty_high - uncertainty_low) / 3.919927969080108 / 24",
+      "reason": "Derive SE from the reported 95% CI in hours, then convert to days by dividing by 24."
+    }
+  ],
+  "sensitivity": [
+    {
+      "name": "fixed_effects",
+      "result": {
+        "point_estimate": 5.2136929436296935,
+        "ci_lower": 4.872260910796545,
+        "ci_upper": 5.555124976462842,
+        "ci_level": 0.95
+      },
+      "selected_input_ids": [
+        "r1",
+        "r2",
+        "r3",
+        "r5"
+      ],
+      "interpretation": "Fixed-effect pool for comparison; assesses sensitivity to the random-effects assumption."
+    },
+    {
+      "name": "reml",
+      "result": {
+        "point_estimate": 5.246424196988579,
+        "ci_lower": 4.752092523376006,
+        "ci_upper": 5.740755870601153,
+        "ci_level": 0.95,
+        "tau2": 0.12531653608615337
+      },
+      "selected_input_ids": [
+        "r1",
+        "r2",
+        "r3",
+        "r5"
+      ],
+      "interpretation": "REML random-effects pool; assesses sensitivity to the DL tau2 estimator."
+    },
+    {
+      "name": "exclude_r5",
+      "result": {
+        "point_estimate": 5.325150532994546,
+        "ci_lower": 4.6586002536159095,
+        "ci_upper": 5.991700812373183,
+        "ci_level": 0.95,
+        "tau2": 0.19881834954210298
+      },
+      "selected_input_ids": [
+        "r1",
+        "r2",
+        "r3"
+      ],
+      "interpretation": "DL random-effects pool excluding the hours-converted row r5; assesses sensitivity to the unit conversion."
+    }
+  ],
+  "limitations": [
+    "Exploratory analysis on current data; not a reproduction of the original review.",
+    "r4 (Dilmore 2021, 90% CI) excluded: CI level not harmonizable to 95% without unsupported assumption.",
+    "r6 (Fraser 2022, median/IQR) excluded: different statistic per original method and review exclusions.",
+    "CI-derived SEs assume symmetric normal intervals at the reported confidence level.",
+    "Only 4 independent cohorts; heterogeneity estimates (tau2, I2) are imprecise.",
+    "No publication bias assessment performed (insufficient studies for Egger test)."
+  ],
+  "independent_verification": {
+    "status": "verified",
+    "version": "synthesis-statistics-v1",
+    "method": "random",
+    "checked": [
+      "point_estimate",
+      "tau2",
+      "ci_lower",
+      "ci_upper"
+    ],
+    "convergence": {
+      "method": "closed_form",
+      "converged": true,
+      "boundary": false
+    },
+    "scope": "numerical_consistency_not_scientific_eligibility_or_independence"
+  },
+  "reproduction_status": "exploratory",
+  "research_question": "What is the pooled mean incubation period, in days, of the included adult study cohorts?",
+  "validation": {
+    "numeric_provenance": "sandbox_executed_and_repeated",
+    "scientific_correctness": "not_independently_verified"
+  },
+  "execution_id": "90f1aebfb8aa49738f5a8776db4b9a55",
+  "input_sha256": "68437ec0a1a6cb72041a9d04809aedbab4c129d1bdcf421f3cde91c9038a7621",
+  "code_sha256": "10a6deab872811554977226170f73e121899316aa3d102f86a9debb094ea198f",
+  "plan_sha256": "eec4efaeda6d285eb3ecc45c0b6bf84f00af1314cc868dde1a98067cd1f7614f",
+  "estimand": {
+    "endpoint_definition": "infection to symptom onset",
+    "group": null,
+    "parameter_type": "incubation_period",
+    "population": "adults",
+    "statistic": "mean",
+    "timepoint": "infection to symptom onset",
+    "uncertainty": {
+      "level": 0.95,
+      "type": "CI"
+    },
+    "unit": "days"
+  },
+  "analysis_method": {
+    "ci_level": 0.95,
+    "influence_diagnostics": false,
+    "interval_method": "normal",
+    "log_transform": false,
+    "name": "random",
+    "prediction_interval": false,
+    "publication_bias": false,
+    "tau_estimator": "DL",
+    "unit": "days"
+  },
+  "method_sources": [
+    {
+      "source_id": "method_001",
+      "role": "original_methods",
+      "name": "original_methods.md",
+      "text_path": "sources/method_001.txt",
+      "original_path": "sources/originals/method_001.md",
+      "original_sha256": "1065a105534a80ffc18c95821f334e7adfda0a57e1c5224bd24bf5db66b685c9",
+      "text_sha256": "1065a105534a80ffc18c95821f334e7adfda0a57e1c5224bd24bf5db66b685c9",
+      "characters": 920
+    }
+  ],
+  "counts": {
+    "input": 6,
+    "selected": 4,
+    "excluded": 2,
+    "selected_needs_review": 0,
+    "independent_studies": null
+  },
+  "artifacts": {
+    "synthesis_result": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/published/synthesis_result.json",
+    "synthesis_report": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/published/report.md",
+    "analysis_plan": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/published/analysis_plan.json",
+    "analysis_selection": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/published/analysis_selection.jsonl",
+    "transformation_ledger": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/published/transformation_ledger.json",
+    "analysis_code": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/published/analysis.py",
+    "execution_receipt": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/published/execution_receipt.json",
+    "forest_png": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/published/forest.png",
+    "forest_pdf": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/published/forest.pdf",
+    "pi_session": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/pi/sessions/2026-11-05T07-13-50-807Z_01a1aa8e-8ad7-76d4-95c2-431760e2d968.jsonl",
+    "pi_events": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/pi/attempts/cb564e46816a4e389f7af37b86dbafa2/events.jsonl",
+    "pi_provider_calls": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/pi/attempts/cb564e46816a4e389f7af37b86dbafa2/provider_calls.jsonl",
+    "pi_tool_events": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266/tool_events.jsonl"
+  },
+  "pi_runtime": {
+    "status": "complete",
+    "pi_version": "1.3.0",
+    "usage": {
+      "coverage": "complete",
+      "provider_attempts": 13,
+      "incomplete_attempts": 0,
+      "known_subtotal": {
+        "prompt_tokens": 166098,
+        "completion_tokens": 6545,
+        "total_tokens": 172643
+      },
+      "total_tokens": 172643
+    },
+    "budget": {
+      "max_turns": 20,
+      "max_tokens": 600000,
+      "total_timeout_s": 1200.0,
+      "exec_timeout_s": 120.0,
+      "charged_tokens": 172643
+    },
+    "error": null,
+    "abort_reason": null,
+    "usage_scope": "current_rpc_attempt"
+  },
+  "workspace": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/run_e2e_final/pi_workspace/7fdc2ae662c44981b151d72718d5d266",
+  "reused": false
+}

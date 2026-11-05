@@ -162,6 +162,13 @@ carries the `read_skill` contract.
 The Python recipes were executed in this sandbox. The R recipes were not:
 the host has no R runtime, and the manual says so where it matters.
 
+A complete run against the real provider is recorded in
+[`docs/validation/synthesis_skills_e2e_20261105/`](../../docs/validation/synthesis_skills_e2e_20261105/VERIFICATION.md):
+the tool calls the agent made, the manuals it chose to pull, the plan, the
+code, both sandbox receipts and the published result with its independent
+verification. That run also found and fixed six defects in the manuals and
+one in the relay's budget accounting; the report lists them.
+
 ## Deterministic protocol API
 
 `run_synthesis(records, protocol, *, llm_invoke=None)` selects immutable coding

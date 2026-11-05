@@ -241,6 +241,11 @@ output/playwright/
 !/docs/figures/methods/check_layout.py
 !/docs/figures/methods/layout-checks.json
 !/docs/figures/methods/SOURCE_BINDINGS.json
+# Recorded end-to-end validation runs are evidence and travel with the code.
+!/docs/validation/
+/docs/validation/*
+!/docs/validation/synthesis_skills_e2e_20261105/
+!/docs/validation/synthesis_skills_e2e_20261105/*
 !/tests/test_screening_tier_reporting.py
 !/tests/test_screening_llm_tier_contract.py
 !/tests/test_screening_parameter_guides.py

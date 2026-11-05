@@ -1,0 +1,120 @@
+{
+  "assumptions": [
+    "Each selected row is an independent cohort (distinct cohort_id and study).",
+    "CI-derived SEs assume a symmetric normal interval at the reported confidence level.",
+    "The 90% CI row (r4) is excluded rather than reinterpreted at 95%.",
+    "The median/IQR row (r6) is excluded as a different statistic.",
+    "Pooling is exploratory on the current data: the original method is followed (DL random effects, 95% normal CI, hours-to-days conversion, one estimate per cohort), but the current table differs from the original review's included set, so this is not a reproduction."
+  ],
+  "compatibility": {
+    "mixed_uncertainty": {
+      "allowed": true,
+      "justification": "Rows report either a 95% CI or a direct SE; both are converted to a standard error on the days scale before inverse-variance pooling. The 90% CI row (r4) is excluded rather than harmonized."
+    }
+  },
+  "estimand": {
+    "endpoint_definition": "infection to symptom onset",
+    "group": null,
+    "parameter_type": "incubation_period",
+    "population": "adults",
+    "statistic": "mean",
+    "timepoint": "infection to symptom onset",
+    "uncertainty": {
+      "level": 0.95,
+      "type": "CI"
+    },
+    "unit": "days"
+  },
+  "method": {
+    "ci_level": 0.95,
+    "influence_diagnostics": false,
+    "interval_method": "normal",
+    "log_transform": false,
+    "name": "random",
+    "prediction_interval": false,
+    "publication_bias": false,
+    "tau_estimator": "DL",
+    "unit": "days"
+  },
+  "reproduction_status": "exploratory",
+  "research_question": "What is the pooled mean incubation period, in days, of the included adult study cohorts?",
+  "sensitivity": [
+    {
+      "description": "Repeat the pool with a fixed-effect (common-effect) inverse-variance model to assess sensitivity to the random-effects assumption.",
+      "name": "fixed_effects"
+    },
+    {
+      "description": "Repeat the pool with a REML between-study variance estimator to assess sensitivity to the DL estimator.",
+      "name": "reml"
+    },
+    {
+      "description": "Repeat the DL random-effects pool excluding the hours-converted row r5 to assess sensitivity to the unit conversion.",
+      "name": "exclude_r5"
+    }
+  ],
+  "selection": {
+    "dependence": {
+      "justification": "Each selected row has a distinct cohort_id (cohort-alvarez, cohort-boot, cohort-chen, cohort-ewing) and a distinct study, matching the original method's one-estimate-per-independent-cohort rule.",
+      "strategy": "one estimate per independent cohort"
+    },
+    "rationale": "Adult cohorts with estimate_measure=mean and a usable uncertainty (reported SE or CI with explicit level). r4 excluded: 90% CI level is not harmonizable to the 95% estimand without an unsupported assumption. r6 excluded: median/IQR is a different statistic per the original method and review exclusions.",
+    "selected_input_ids": [
+      "r1",
+      "r2",
+      "r3",
+      "r5"
+    ]
+  },
+  "source_mapping": [
+    {
+      "quote": "Study-level mean incubation-period estimates were pooled by the inverse-variance\nmethod with a random-effects model, using the DerSimonian-Laird estimator for\nbetween-study variance, and reported with a 95% confidence interval.",
+      "source_id": "method_001"
+    },
+    {
+      "quote": "One estimate per independent study cohort was retained.",
+      "source_id": "method_001"
+    },
+    {
+      "quote": "Estimates reported in hours were converted to days by dividing the point\nestimate and its standard error by 24.",
+      "source_id": "method_001"
+    },
+    {
+      "quote": "Estimates reported as a median or as an interquartile range were not pooled\nwith mean estimates, because they describe a different statistic of the\nincubation-period distribution.",
+      "source_id": "method_001"
+    }
+  ],
+  "transformations": [
+    {
+      "after": null,
+      "before": null,
+      "expression": "(uncertainty_high - uncertainty_low) / 3.919927969080108",
+      "field": "se",
+      "input_id": "r1",
+      "reason": "Derive SE from the reported 95% CI (4.6, 5.8) assuming a symmetric normal interval; z_0.975 = 1.959963984540054."
+    },
+    {
+      "after": null,
+      "before": null,
+      "expression": "(uncertainty_high - uncertainty_low) / 3.919927969080108",
+      "field": "se",
+      "input_id": "r2",
+      "reason": "Derive SE from the reported 95% CI (5.2, 7.0) assuming a symmetric normal interval."
+    },
+    {
+      "after": null,
+      "before": 122,
+      "expression": "point_estimate / 24",
+      "field": "point_estimate",
+      "input_id": "r5",
+      "reason": "Convert hours to days per the original method (divide by 24)."
+    },
+    {
+      "after": null,
+      "before": null,
+      "expression": "(uncertainty_high - uncertainty_low) / 3.919927969080108 / 24",
+      "field": "se",
+      "input_id": "r5",
+      "reason": "Derive SE from the reported 95% CI (108, 136) in hours, then convert to days by dividing by 24."
+    }
+  ]
+}

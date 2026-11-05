@@ -1,0 +1,11 @@
+population: adults
+parameter_type: incubation_period
+endpoint_definition: infection to symptom onset
+group: null
+eligibility: >
+  Study-level estimates of the incubation period from laboratory-confirmed
+  cases, reported in days or in hours, with a mean estimate and a reported
+  measure of uncertainty.
+exclusions: >
+  Estimates reported only as a median or as an interquartile range are not
+  eligible for a pooled mean, and paediatric cohorts are out of scope.

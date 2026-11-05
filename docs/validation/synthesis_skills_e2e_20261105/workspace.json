@@ -1,0 +1,66 @@
+{
+  "research_question": "What is the pooled mean incubation period, in days, of the included adult study cohorts?",
+  "review_context": {
+    "eligibility": "Study-level estimates of the incubation period from laboratory-confirmed cases, reported in days or in hours, with a mean estimate and a reported measure of uncertainty.\n",
+    "endpoint_definition": "infection to symptom onset",
+    "exclusions": "Estimates reported only as a median or as an interquartile range are not eligible for a pooled mean, and paediatric cohorts are out of scope.\n",
+    "group": null,
+    "parameter_type": "incubation_period",
+    "population": "adults"
+  },
+  "plan_contract_version": 2,
+  "review_context_sha256": "2df7eb96fa72b5ee6700eeda947ef5aee4c984f7929940c0d9316f96245065ae",
+  "sources": [
+    {
+      "source_id": "method_001",
+      "role": "original_methods",
+      "name": "original_methods.md",
+      "text_path": "sources/method_001.txt",
+      "original_path": "sources/originals/method_001.md",
+      "original_sha256": "1065a105534a80ffc18c95821f334e7adfda0a57e1c5224bd24bf5db66b685c9",
+      "text_sha256": "1065a105534a80ffc18c95821f334e7adfda0a57e1c5224bd24bf5db66b685c9",
+      "characters": 920
+    }
+  ],
+  "skills": [
+    {
+      "name": "epidemiology_parameters",
+      "description": "How to pool each parameter this project codes, with the traps that change the estimand.",
+      "path": "skills/epidemiology_parameters.md",
+      "sha256": "daea54af3fd418ef6cc94a6344eb60c1e3587aa563d64e7896be472e3f9a508c",
+      "characters": 4089
+    },
+    {
+      "name": "estimands",
+      "description": "How to turn the research question and the coding rows into one defensible estimand, and which pooling route it belongs to.",
+      "path": "skills/estimands.md",
+      "sha256": "23291f07ed1248ad294ccbb561d69f9ea4bf14e91617d8cabcc0ab2579b95543",
+      "characters": 3708
+    },
+    {
+      "name": "python_meta_analysis",
+      "description": "Recipes for pooling the selected coding rows with statsmodels and scipy inside the analysis sandbox, verified against the installed versions.",
+      "path": "skills/python_meta_analysis.md",
+      "sha256": "874bce0641973acebe4cd37d097c546d55acfa0864ccf4e4cac1ac59c5dca8fc",
+      "characters": 10683
+    },
+    {
+      "name": "r_meta_analysis",
+      "description": "metafor and meta recipes for the R route, with the runtime precondition stated up front.",
+      "path": "skills/r_meta_analysis.md",
+      "sha256": "9b4810a51bfce2cec8456f754ef6544fd027b38e387f7d0748b6260c965b4c94",
+      "characters": 6215
+    },
+    {
+      "name": "sandbox_environment",
+      "description": "What the analysis sandbox actually contains and permits, checked against this environment.",
+      "path": "skills/sandbox_environment.md",
+      "sha256": "b4127015c3f6863c9126da2ec916aeef08196f3f26fa2ec8d738bc81925088b2",
+      "characters": 3310
+    }
+  ],
+  "input_sha256": "68437ec0a1a6cb72041a9d04809aedbab4c129d1bdcf421f3cde91c9038a7621",
+  "original_input_sha256": "6c84279160331a1b8a1ad01be723858cd898cc55c7737f99086dad66f6d86882",
+  "original_input_path": "/home/yanhaoyang/AILab/Meta-Analysis/MetaAgent-Epi/runs/synthesis_skill_e2e_20261105/input/estimates.jsonl",
+  "row_count": 6
+}

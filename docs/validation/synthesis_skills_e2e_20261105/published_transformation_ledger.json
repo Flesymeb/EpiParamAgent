@@ -1,0 +1,34 @@
+[
+  {
+    "input_id": "r1",
+    "field": "se",
+    "before": null,
+    "after": 0.30612807415479243,
+    "expression": "(uncertainty_high - uncertainty_low) / 3.919927969080108",
+    "reason": "Derive SE from the reported 95% CI (4.6, 5.8) assuming a symmetric normal interval."
+  },
+  {
+    "input_id": "r2",
+    "field": "se",
+    "before": null,
+    "after": 0.4591921112321885,
+    "expression": "(uncertainty_high - uncertainty_low) / 3.919927969080108",
+    "reason": "Derive SE from the reported 95% CI (5.2, 7.0) assuming a symmetric normal interval."
+  },
+  {
+    "input_id": "r5",
+    "field": "point_estimate",
+    "before": 122.0,
+    "after": 5.083333333333333,
+    "expression": "point_estimate / 24",
+    "reason": "Convert hours to days per the original method (divide by 24)."
+  },
+  {
+    "input_id": "r5",
+    "field": "se",
+    "before": null,
+    "after": 0.2976245165393815,
+    "expression": "(uncertainty_high - uncertainty_low) / 3.919927969080108 / 24",
+    "reason": "Derive SE from the reported 95% CI in hours, then convert to days by dividing by 24."
+  }
+]
