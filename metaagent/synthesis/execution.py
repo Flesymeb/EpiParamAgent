@@ -19,6 +19,10 @@ import time
 import uuid
 
 
+_SCMP_CMP_MASKED_EQ=7
+_CLONE_THREAD=0x00010000
+
+
 def file_sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -52,8 +56,21 @@ def _mount_runtime(command: list[str]) -> None:
             command.extend(['--ro-bind', str(path), str(path)])
 
 
+class _ScmpArgCmp(ctypes.Structure):
+    """One libseccomp argument comparison, read as (arg & datum_a) == datum_b."""
+    _fields_=[('arg',ctypes.c_uint),('op',ctypes.c_int),('datum_a',ctypes.c_ulonglong),('datum_b',ctypes.c_ulonglong)]
+
+
 def _process_filter():
-    """Kernel filter: generated code cannot fork, clone threads or spawn helpers."""
+    """Kernel filter: generated code cannot fork or spawn helpers, but may start a thread.
+
+    A thread shares the sandbox address space and inherits every resource
+    limit, so it opens no way out of the sandbox. Process creation stays
+    closed: fork and vfork are refused, and clone is refused unless it
+    carries CLONE_THREAD. clone3 answers ENOSYS so that glibc falls back to
+    clone and meets the same rule; refusing clone3 outright would leave no
+    way to start a thread, and the sandboxed libraries need one.
+    """
     library=ctypes.CDLL('libseccomp.so.2',use_errno=True)
     library.seccomp_init.argtypes=[ctypes.c_uint32];library.seccomp_init.restype=ctypes.c_void_p
     library.seccomp_syscall_resolve_name.argtypes=[ctypes.c_char_p];library.seccomp_syscall_resolve_name.restype=ctypes.c_int
@@ -64,9 +81,17 @@ def _process_filter():
     if not context:raise RuntimeError('Cannot initialize generated-code process filter')
     handle=tempfile.TemporaryFile()
     try:
-        for syscall in ('fork','vfork','clone','clone3'):
+        for syscall in ('fork','vfork'):
             number=library.seccomp_syscall_resolve_name(syscall.encode())
             if number>=0 and library.seccomp_rule_add(context,0x00050000|errno.EPERM,number,0)!=0:
+                raise RuntimeError('Cannot constrain generated-code process creation')
+        number=library.seccomp_syscall_resolve_name(b'clone3')
+        if number>=0 and library.seccomp_rule_add(context,0x00050000|errno.ENOSYS,number,0)!=0:
+            raise RuntimeError('Cannot constrain generated-code process creation')
+        number=library.seccomp_syscall_resolve_name(b'clone')
+        if number>=0:
+            comparison=_ScmpArgCmp(arg=0,op=_SCMP_CMP_MASKED_EQ,datum_a=_CLONE_THREAD,datum_b=0)
+            if library.seccomp_rule_add(context,0x00050000|errno.EPERM,number,1,comparison)!=0:
                 raise RuntimeError('Cannot constrain generated-code process creation')
         if library.seccomp_export_bpf(context,handle.fileno())!=0:raise RuntimeError('Cannot export generated-code process filter')
         handle.seek(0)
