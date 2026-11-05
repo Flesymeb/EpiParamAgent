@@ -299,13 +299,19 @@ def _protocol_source(paper: dict[str, Any], content_key: str) -> str:
     """Whitelist source fields; task labels and reference answers never enter evidence."""
     from metaagent.screening.context import bibliographic_context, metadata_text
     context = bibliographic_context(paper)
+    if "*" in context["mesh_terms"]:
+        context["mesh_terms"] += " [* indicates a PubMed major topic]"
     fields = {"Title": context["title"], "Official title": metadata_text(paper.get("official_title")), content_key: metadata_text(paper.get(content_key)) or context["abstract"] if content_key != "fulltext" else metadata_text(paper.get("fulltext")),
+              "Source description (not an abstract)": metadata_text(paper.get("source_description")),
+              "Full-text excerpt (not an abstract)": metadata_text(paper.get("fulltext_excerpt")),
               "Keywords": context["keywords"], "pub_types": context["pub_types"],
               "mesh_terms": context["mesh_terms"], "language": context["language"],
               "publication_date": context["publication_date"], "Publication Year": context["year"],
               "Authors": context["authors"], "Journal/Book": context["journal"],
               "Create Date": metadata_text(paper.get("Create Date")), "Citation": metadata_text(paper.get("Citation"))}
     text = "\n".join(f"{key}: {value}" for key, value in fields.items() if value)
+    if context["mesh_terms"] or context["pub_types"]:
+        text += "\nIndexing note: publication types and MeSH are supplementary index metadata; missing or broad terms alone do not establish eligibility or ineligibility."
     if content_key == "fulltext":
         blocks = paper.get("source_blocks") or []
         if isinstance(blocks, list):
@@ -663,6 +669,8 @@ async def screen_papers_batch_async(
             f"{escaped_schema_hint}"
         )
 
+    system_text += ("\n\nPublication types, MeSH terms and indexing labels are supplementary metadata; "
+                    "missing or broad terms alone do not establish eligibility or ineligibility.")
     template = ChatPromptTemplate.from_messages(
         [("system", system_text), ("human", user_text)]
     )
@@ -673,8 +681,19 @@ async def screen_papers_batch_async(
     for paper in papers:
         normalize_bibliographic_aliases(paper)
         bibliography = bibliographic_context(paper)
+        if "*" in bibliography["mesh_terms"]:
+            bibliography["mesh_terms"] += " [* indicates a PubMed major topic]"
         title = metadata_text(paper.get("Title"))
-        content = metadata_text(paper.get(content_key)) or content_fallback
+        content = metadata_text(paper.get(content_key))
+        paper_content_label = content_label
+        if not content and content_key.lower() == "abstract":
+            if metadata_text(paper.get("source_description")):
+                content = metadata_text(paper.get("source_description"))
+                paper_content_label = "Source description (not an abstract)"
+            elif metadata_text(paper.get("fulltext_excerpt")):
+                content = metadata_text(paper.get("fulltext_excerpt"))
+                paper_content_label = "Full-text excerpt (not an abstract)"
+        content = content or content_fallback
         keywords = bibliography["keywords"] or "(No keywords available)"
         prompt_kwargs: dict[str, str] = {
             "research_question": research_question,
@@ -687,7 +706,7 @@ async def screen_papers_batch_async(
             "authors": str(paper.get("Authors") or "").strip() or "(Not available)",
             "citation": str(paper.get("Citation") or "").strip() or "(Not available)",
             "journal": str(paper.get("Journal/Book") or "").strip() or "(Not available)",
-            "content_label": content_label,
+            "content_label": paper_content_label,
             "content": content,
             "keywords": keywords,
             "pub_types": bibliography["pub_types"] or "(Not available)",

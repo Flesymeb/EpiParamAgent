@@ -76,8 +76,8 @@ def plot_coding(input_path: Path, output: Path, title: str, x_label: str) -> Non
 
 
 @evaluation.command("benchmark")
-@click.option("--dataset-root", type=click.Path(exists=True, file_okay=False, path_type=Path), default=Path("dataset/benchmark_releases/20261104_experiment_ready_v1"), show_default=True)
-@click.option("--output-dir", type=click.Path(file_okay=False, path_type=Path), default=Path("evaluation/experiment_ready_v1"), show_default=True)
+@click.option("--dataset-root", type=click.Path(exists=True, file_okay=False, path_type=Path), default=Path("dataset/benchmark_v0"), show_default=True)
+@click.option("--output-dir", type=click.Path(file_okay=False, path_type=Path), default=Path("evaluation/benchmark_v0"), show_default=True)
 @click.option("--run-id", required=True)
 @click.option("--profile", "profiles", multiple=True, help="Repeat for a subset; omitted means every task in profiles.csv.")
 @click.option("--mode", "modes", multiple=True, type=click.Choice(["screening", "coding", "synthesis", "e2e"]), default=("screening",), show_default=True)
@@ -98,15 +98,17 @@ def plot_coding(input_path: Path, output: Path, title: str, x_label: str) -> Non
 @click.option("--reference-target", default=None, help="Explicit catalog target ID for deterministic source-oracle synthesis; omitted selects declared main target.")
 @click.option("--analysis-protocol", type=click.Path(exists=True, dir_okay=False, path_type=Path), default=None, help="Explicit YAML/JSON analysis protocol, otherwise task.json.analysis_protocol.")
 @click.option("--synthesis-input", type=click.Path(exists=True, dir_okay=False, path_type=Path), default=None, help="Structured estimate input for synthesis mode, otherwise task synthesis_input.jsonl.")
+@click.option("--metadata-db", type=click.Path(exists=True, dir_okay=False, path_type=Path), default=None, help="Optional metadata and source-text sidecar bound to the dataset manifest.")
+@click.option("--allow-unscored-screening", is_flag=True, help="Run evidence-blocked screening tasks diagnostically without formal scores.")
 @click.option("--plan", "plan_only", is_flag=True, help="Validate/show the experiment without API calls or writes.")
 @click.option("--json", "json_output", is_flag=True)
-def benchmark(dataset_root, output_dir, run_id, profiles, modes, input_mode, limit, resume, model, api_base, api_key_env, extraction_backend, synthesis_backend, reference_policy, batch_size, batch_concurrency, batch_mode, codebook, retrieval_plan, reference_target, analysis_protocol, synthesis_input, plan_only, json_output):
+def benchmark(dataset_root, output_dir, run_id, profiles, modes, input_mode, limit, resume, model, api_base, api_key_env, extraction_backend, synthesis_backend, reference_policy, batch_size, batch_concurrency, batch_mode, codebook, retrieval_plan, reference_target, analysis_protocol, synthesis_input, allow_unscored_screening, metadata_db, plan_only, json_output):
     """Run task-level screening, extraction, or end-to-end benchmark evaluation."""
     import json
 
     from .benchmark import BenchmarkOptions, plan_benchmark, run_benchmark
 
-    options = BenchmarkOptions(dataset_root=dataset_root, output_dir=output_dir, run_id=run_id, profiles=profiles, modes=modes, input_mode=input_mode, limit=limit, resume=resume, model=model, api_base=api_base, api_key_env=api_key_env, extraction_backend=extraction_backend, synthesis_backend=synthesis_backend, reference_policy=reference_policy, batch_size=batch_size, batch_concurrency=batch_concurrency, batch_mode=batch_mode, codebook=codebook, retrieval_plan=retrieval_plan, analysis_protocol=analysis_protocol, synthesis_input=synthesis_input, reference_target=reference_target)
+    options = BenchmarkOptions(dataset_root=dataset_root, output_dir=output_dir, run_id=run_id, profiles=profiles, modes=modes, input_mode=input_mode, limit=limit, resume=resume, model=model, api_base=api_base, api_key_env=api_key_env, extraction_backend=extraction_backend, synthesis_backend=synthesis_backend, reference_policy=reference_policy, batch_size=batch_size, batch_concurrency=batch_concurrency, batch_mode=batch_mode, codebook=codebook, retrieval_plan=retrieval_plan, analysis_protocol=analysis_protocol, synthesis_input=synthesis_input, reference_target=reference_target, allow_unscored_screening=allow_unscored_screening, metadata_db=metadata_db)
     try:
         result = plan_benchmark(options) if plan_only else run_benchmark(options)
     except (ValueError, OSError) as exc:
@@ -118,5 +120,5 @@ def benchmark(dataset_root, output_dir, run_id, profiles, modes, input_mode, lim
         click.echo(f"Fingerprint: {result['fingerprint']}")
     else:
         click.echo(f"{result['status']}: {output_dir / run_id / 'benchmark_run.json'}")
-    if not plan_only and result["status"] != "completed":
+    if not plan_only and result["status"] != "completed" and not (allow_unscored_screening and result["status"] == "completed_with_scoring_gaps"):
         raise click.exceptions.Exit(1)
