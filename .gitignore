@@ -259,5 +259,22 @@ output/playwright/
 /IMPLEMENTATION_STATUS.md
 /OPTIMIZATION_PLAN.md
 
+# Deployment helpers
+!/scripts/
+/scripts/*
+!/scripts/deploy/
+/scripts/deploy/*
+!/scripts/deploy/sync_benchmark_v0.sh
+!/scripts/deploy/snapshot_benchmark_v0.sh
+!/scripts/deploy/activate_dev.sh
+!/scripts/deploy/README.md
+!/scripts/deploy/SANDBOX.md
+
+# Also ignore a project virtualenv symlink.
+/.venv
+
 # The synthesis skill manuals are covered by their own regression test.
 !/tests/test_synthesis_skills.py
+
+# Private deployment configuration and credentials stay local.
+/.deployment/

@@ -17,3 +17,13 @@
 ## 文献筛选设计
 
 用户于 2026-11-05 要求保留五维 0–4 分及依据，由模型综合给出 S/P/U 标签。默认流程不计算人为加权总分，也不用分数阈值代替模型标签。
+
+## 开发机部署
+
+用户于 2026-11-05 指定开发机为 `yanhaoyang-dev`，挂载目录为 `/mnt/shared-storage-user/yanhaoyang/Projects/EpiParamAgent`。保留原远端 `MetaAgent-Epi` 和本地源目录。
+
+使用 `dataset/benchmark_v0`。源端仍可能补充元数据，持续增量同步；每次实验使用独立快照。正式筛选实验保持暂停，迁移验收不代表已经重新运行实验。
+
+开发机从 `scripts/deploy/activate_dev.sh` 激活环境。项目 `.venv` 指向 `/data/EpiParamAgent-runtime/.venv`；Pi 和 bubblewrap 也在该私有运行目录。旧绝对缓存路径通过开发机上的项目兼容链接保留。
+
+开发机 `.env.local` 为外网访问调整了 `HTTP_PROXY`、`HTTPS_PROXY`、`NO_PROXY`、`MINERU_NO_PROXY`，原副本位于 `.deployment/env.local.source`。后续同步配置须保留这四项开发机设置。外网代理依赖源机已有代理与 SSH 回环隧道；重启命令见部署说明。实验室模型节点与本地缓存不经过该代理。

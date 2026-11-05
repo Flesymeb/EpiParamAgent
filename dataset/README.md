@@ -1,5 +1,7 @@
 # Datasets
 
+**当前 screening 实验快照：** [benchmark_v0](benchmark_v0/README.md)，使用方法和限制见[冻结说明](BENCHMARK_V0.md)。它仅开放 screening；coding 和 synthesis 的现有资料另存。
+
 当前基准与来源证据保留在 dataset；旧工作区已归档，仅4个兼容软链仍保留原入口。
 
 **Raw pool 后续复核提示：** 已发现旧池中有日期上界、晚入库记录、未来预印本版本及ICU子串误匹配问题。下文74693等数量属于旧实验快照；代码可运行不等于历史候选池复现已验收。请先看[历史检索范围复核与独立修订](../docs/audits/20261104_raw_pool_temporal/REPORT.zh-CN.md)，再确定screening实验输入。
