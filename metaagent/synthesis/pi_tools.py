@@ -17,6 +17,7 @@ from .execution import execute_code, file_sha
 TOOL_SCHEMA = {
     'method_capabilities': {},
     'compute_meta': {'contract':'Use saved plan selection and explicit method options; computes from reported SE/CI/SD only; cannot publish a final result'},
+    'read_skill': {'name':'one of the skill names listed in profile.skills'},
     'evidence_search': {'terms':['literal phrase'], 'source_id':'optional known source', 'limit':20, 'max_excerpt_chars':1600},
     'profile': {}, 'query': {'sql': 'SELECT columns FROM estimates WHERE ...', 'parameters': [], 'limit': 100, 'offset': 0},
     'evidence': {'source_id': 'method_001', 'offset': 0, 'length': 5000},
@@ -499,8 +500,18 @@ def dispatch(workspace: Path, action: str, payload: dict):
     if count>=int(settings.get('max_tool_calls',80)):raise ValueError('Workspace tool-call budget exhausted')
     with history.open('a') as h:h.write(json.dumps({'action':action})+'\n')
     if not isinstance(payload,dict):raise ValueError('Tool payload must be an object')
-    if action=='profile':return {**_json(workspace/'inputs/profile.json'),'sources':_json(workspace/'workspace.json')['sources'],'tool_schema':TOOL_SCHEMA,
+    if action=='profile':return {**_json(workspace/'inputs/profile.json'),'sources':_json(workspace/'workspace.json')['sources'],'skills':_json(workspace/'workspace.json').get('skills',[]),'tool_schema':TOOL_SCHEMA,
                                'json_contract':'Arrays are JSON lists: [] or [{...}], never {"item": [...]} or empty strings. Read the exact research_question and review_context here.'}
+    if action=='read_skill':
+        name=payload.get('name')
+        if not isinstance(name,str) or not name or not re.fullmatch(r'[a-z0-9_]+',name):raise ValueError('Skill name must be a plain identifier')
+        skill=next((s for s in _json(workspace/'workspace.json').get('skills',[]) if s['name']==name),None)
+        if not skill:raise ValueError('Unknown skill name')
+        path=workspace/skill['path']
+        if file_sha(path)!=skill['sha256']:raise ValueError('Staged skill changed')
+        text=path.read_text()
+        if len(text)!=int(skill['characters']):raise ValueError('Staged skill changed')
+        return {'name':skill['name'],'description':skill['description'],'text':text,'sha256':skill['sha256'],'characters':len(text)}
     if action=='method_capabilities':
         from .statistical_verification import method_capabilities
         return method_capabilities()

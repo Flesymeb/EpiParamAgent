@@ -1,5 +1,33 @@
 # Project synthesis statistics guide v1
 
+## Choosing the estimand and the method
+
+Read the coding columns before choosing: parameter_type, estimate_measure,
+point_estimate, unit, uncertainty_type, uncertainty_level, uncertainty_low,
+uncertainty_high, distribution, population, estimation_period, method.
+
+| parameter_type | statistic | method | unit |
+| --- | --- | --- | --- |
+| incubation_period | mean | fixed or random, normal interval | days |
+| serial_interval | mean | fixed or random, normal interval | days |
+| fatality_rate | proportion | binomial (common risk) or logit_fixed / logit_random | proportion or % |
+| positivity_rate | proportion | binomial or logit | proportion or % |
+| reproduction_number | derived from a growth rate or a transmission model | generated code | dimensionless |
+
+A mean and a median of one parameter are two estimands, and so are a case
+fatality rate among confirmed cases and one among estimated infections.
+Pooling rows that differ in measure, endpoint, population, group or time
+origin needs an explicit compatibility decision in the plan and an executed
+sensitivity analysis, not a silent merge.
+
+The independent oracle covers fixed, DL random and REML on the declared
+analysis scale. The other registered methods run and publish, and the result
+records that their numbers were not independently verified.
+
+Before writing code, pull the matching manual with read_skill; the names are
+in profile.skills: estimands, epidemiology_parameters, python_meta_analysis,
+r_meta_analysis, sandbox_environment.
+
 Use method_capabilities before selecting an inverse-variance method. The supported
 independent oracle covers fixed, DL random (aliases random/dl/random_effects) and
 REML. Declare method.interval_method as normal, hk or modified_hk, ci_level as an

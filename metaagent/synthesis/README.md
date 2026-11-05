@@ -142,6 +142,26 @@ execution returns a recoverable error and the agent switches to Python. The
 code must be a regular staged file under the workspace `code` directory, not a
 symbolic link.
 
+## Analysis manuals
+
+The agent pulls domain manuals through the `read_skill` action. The manuals
+are staged into the workspace with the run and are hashed into the synthesis
+fingerprint, so a changed manual invalidates an earlier resume.
+
+| Manual | Covers |
+| --- | --- |
+| `estimands` | turning the question and the coding rows into one estimand, and choosing the pooling route |
+| `epidemiology_parameters` | pooling each coded parameter, with the traps that change the estimand |
+| `python_meta_analysis` | statsmodels and scipy recipes, checked against the installed versions |
+| `r_meta_analysis` | metafor and meta recipes, for a host that has an R runtime |
+| `sandbox_environment` | what the sandbox holds and what it permits |
+
+`profile` lists the manuals with their descriptions, and the tool schema
+carries the `read_skill` contract.
+
+The Python recipes were executed in this sandbox. The R recipes were not:
+the host has no R runtime, and the manual says so where it matters.
+
 ## Deterministic protocol API
 
 `run_synthesis(records, protocol, *, llm_invoke=None)` selects immutable coding

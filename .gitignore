@@ -258,3 +258,6 @@ output/playwright/
 # Notes and plans written during a work session stay with the work.
 /IMPLEMENTATION_STATUS.md
 /OPTIMIZATION_PLAN.md
+
+# The synthesis skill manuals are covered by their own regression test.
+!/tests/test_synthesis_skills.py

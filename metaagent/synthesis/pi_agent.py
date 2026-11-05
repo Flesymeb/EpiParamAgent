@@ -19,6 +19,25 @@ DEFAULT_SETTINGS = {'max_turns': 12, 'max_tokens': 64000, 'total_timeout_s': 900
                     'max_executions': 3, 'max_tool_calls': 80, 'max_output_bytes': 16777216,
                     'max_output_files': 64, 'max_log_bytes': 65536, 'memory_bytes': 2147483648}
 
+SKILL_DIR = Path(__file__).with_name('skills')
+
+
+def _skill_documents():
+    """Read the skill manuals that the agent may pull on demand."""
+    documents = []
+    for path in sorted(SKILL_DIR.glob('*.md')) if SKILL_DIR.is_dir() else []:
+        text = path.read_text(encoding='utf-8')
+        name = path.stem
+        description = ''
+        if text.startswith('---'):
+            header, _, body = text.partition('\n---')
+            for line in header.splitlines()[1:]:
+                if line.startswith('description:'):
+                    description = line.split(':', 1)[1].strip()
+            text = body.lstrip('\n')
+        documents.append({'name': name, 'description': description, 'text': text})
+    return documents
+
 
 def _settings(settings):
     value = {**DEFAULT_SETTINGS}
@@ -101,7 +120,7 @@ def pi_synthesis_fingerprint(*, input_path=None, records=None, research_question
                'research_question': research_question, 'review_context': review_context, 'method_sources': sources, 'protocol': protocol, 'settings': config,
                'generation_binding': generation,
                'row_count': len(rows), 'input_pending': not rows,
-               'implementation': {p.name:file_sha(p) for p in [Path(__file__), Path(__file__).with_name('pi_tools.py'), Path(__file__).with_name('execution.py'), Path(__file__).with_name('engine.py'), Path(__file__).with_name('methods.py'), Path(__file__).with_name('statistical_verification.py'), Path(__file__).with_name('diagnostics.py'), Path(__file__).resolve().parents[2]/'tools/analysis/pooling.py', Path(__file__).resolve().parents[1]/'evidence_search.py', Path(__file__).resolve().parents[1]/'prompts/synthesis/statistics_guide.md', Path(__file__).with_name('pi_runtime.py'), Path(__file__).with_name('pi_extension.ts'), Path(__file__).resolve().parents[1]/'prompts/synthesis/pi_agent.md']}}
+               'implementation': {p.name:file_sha(p) for p in [Path(__file__), Path(__file__).with_name('pi_tools.py'), Path(__file__).with_name('execution.py'), Path(__file__).with_name('engine.py'), Path(__file__).with_name('methods.py'), Path(__file__).with_name('statistical_verification.py'), Path(__file__).with_name('diagnostics.py'), Path(__file__).resolve().parents[2]/'tools/analysis/pooling.py', Path(__file__).resolve().parents[1]/'evidence_search.py', Path(__file__).resolve().parents[1]/'prompts/synthesis/statistics_guide.md', Path(__file__).with_name('pi_runtime.py'), Path(__file__).with_name('pi_extension.ts'), Path(__file__).resolve().parents[1]/'prompts/synthesis/pi_agent.md', *sorted(SKILL_DIR.glob('*.md'))]}}
     _credential_check(payload, runtime_overrides)
     return {**payload, 'fingerprint': hashlib.sha256(json.dumps(payload,sort_keys=True,ensure_ascii=False,allow_nan=False).encode()).hexdigest()}
 
@@ -139,7 +158,7 @@ def _prepare_workspace(*, input_path=None, records=None, research_question, revi
         if len(text)>8*1024*1024:raise ValueError('Method source text exceeds staging budget')
         _credential_check(text,runtime_overrides);staged_sources.append((source,text,_source_role(source,source_roles)))
     workspace=Path(output_dir).resolve()/'pi_workspace'/uuid.uuid4().hex
-    for directory in ('inputs','sources','helpers','code','receipts','executions'):(workspace/directory).mkdir(parents=True,exist_ok=True)
+    for directory in ('inputs','sources','helpers','skills','code','receipts','executions'):(workspace/directory).mkdir(parents=True,exist_ok=True)
     canonical=[];seen=set()
     for index,row in enumerate(rows):
         item=dict(row);candidate=item.get('estimate_id') or item.get('input_id')
@@ -180,7 +199,12 @@ def _prepare_workspace(*, input_path=None, records=None, research_question, revi
     project=Path(__file__).resolve().parents[2]
     shutil.copyfile(project/'tools/analysis/pooling.py',workspace/'helpers/tools/analysis/pooling.py')
     (workspace/'helpers/epi_synthesis_helpers.py').write_text('from metaagent.synthesis.engine import run_synthesis\n')
-    _write(workspace/'workspace.json',{'research_question':research_question,'review_context':review_context,'plan_contract_version':2 if review_context is not None else 1,'review_context_sha256':file_sha(workspace/'inputs/review_context.json'),'sources':sources,'input_sha256':file_sha(table),'original_input_sha256':file_sha(Path(input_path)) if input_path else None,'original_input_path':str(Path(input_path).resolve()) if input_path else None,'row_count':len(rows)})
+    skills=[]
+    for document in _skill_documents():
+        target=workspace/'skills'/(document['name']+'.md');target.write_text(document['text'])
+        skills.append({'name':document['name'],'description':document['description'],'path':str(target.relative_to(workspace)),
+                       'sha256':file_sha(target),'characters':len(document['text'])})
+    _write(workspace/'workspace.json',{'research_question':research_question,'review_context':review_context,'plan_contract_version':2 if review_context is not None else 1,'review_context_sha256':file_sha(workspace/'inputs/review_context.json'),'sources':sources,'skills':skills,'input_sha256':file_sha(table),'original_input_sha256':file_sha(Path(input_path)) if input_path else None,'original_input_path':str(Path(input_path).resolve()) if input_path else None,'row_count':len(rows)})
     _write(workspace/'run_settings.json',config)
     return workspace
 
