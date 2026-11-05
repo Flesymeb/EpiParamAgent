@@ -18,23 +18,83 @@ one.
 
 ## Read the table and the plan
 
+`/inputs/table.jsonl` is JSON Lines, one object per line, so it has to be read
+line by line. The rows do not all carry the same columns — a row that reports
+an SE has no CI bounds — so the reader has to union the columns first:
+
 ```r
+read_table <- function(path) {
+  rows <- lapply(readLines(path, warn = FALSE), jsonlite::fromJSON)
+  cols <- Reduce(union, lapply(rows, names))
+  rows <- lapply(rows, function(r) {
+    values <- lapply(cols, function(cn) if (is.null(r[[cn]])) NA else r[[cn]])
+    names(values) <- cols
+    as.data.frame(values, stringsAsFactors = FALSE)
+  })
+  do.call(rbind, rows)
+}
+
 plan <- jsonlite::fromJSON("/analysis_plan.json")
-rows <- readLines("/inputs/table.jsonl")
-rows <- lapply(rows, function(x) jsonlite::fromJSON(x))
-keep <- rows[rows$input_id %in% plan$selection$selected_input_ids]
+rows <- read_table("/inputs/table.jsonl")
+keep <- rows[rows$input_id %in% plan$selection$selected_input_ids, ]
 ```
 
 `jsonlite` is the usual way to read JSON in R. If it is missing, write the
 result file by hand instead of installing anything: the sandbox has no
 network.
 
+## Derive the SE and the unit scale
+
+The table rows carry the reported uncertainty, not the pooled standard error,
+so the same derivation the engine uses has to run first:
+
+```r
+unit_scale <- list(days = 1, day = 1, d = 1,
+                   hours = 1 / 24, hour = 1 / 24, h = 1 / 24,
+                   weeks = 7, week = 7)
+
+se_of <- function(r) {
+  kind <- toupper(trimws(as.character(r$uncertainty_type)))
+  if (identical(kind, "SE")) {
+    return(as.numeric(r$se))
+  }
+  if (identical(kind, "SD")) {
+    return(as.numeric(r$sd) / sqrt(as.numeric(r$sample_size)))
+  }
+  if (identical(kind, "CI")) {
+    raw <- trimws(as.character(r$uncertainty_level))
+    level <- as.numeric(sub("%$", "", raw))
+    if (grepl("%", raw) || (level > 1 && level < 100)) level <- level / 100
+    low <- as.numeric(r$uncertainty_low)
+    high <- as.numeric(r$uncertainty_high)
+    point <- as.numeric(r$point_estimate)
+    if (!(level > 0 && level < 1) || low >= high) stop("Invalid CI bounds or level")
+    if (!(point >= low && point <= high)) stop("Point estimate lies outside the reported CI")
+    return((high - low) / (2 * qnorm((1 + level) / 2)))
+  }
+  stop(sprintf("Unsupported uncertainty type: %s", kind))
+}
+
+keep$se_used <- vapply(seq_len(nrow(keep)), function(i) se_of(keep[i, ]), numeric(1))
+factor <- vapply(keep$unit, function(u) {
+  source <- unit_scale[[tolower(trimws(as.character(u)))]]
+  target <- unit_scale[[tolower(trimws(as.character(plan$method$unit)))]]
+  if (is.null(source) || is.null(target)) stop("Unknown or incompatible unit")
+  source / target
+}, numeric(1))
+keep$value_used <- keep$point_estimate * factor
+keep$se_used <- keep$se_used * factor
+```
+
+The factor applies to the point estimate and the standard error together, and
+the `transformations` ledger has to say so for every row it touches.
+
 ## Pool with metafor
 
 ```r
 library(metafor)
 
-m <- rma(yi = keep$point_estimate, vi = keep$se_used^2,
+m <- rma(yi = keep$value_used, vi = keep$se_used^2,
          method = "DL", slab = keep$study, data = keep)
 ```
 

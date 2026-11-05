@@ -67,8 +67,8 @@ in the environment and no host filesystem beyond the mounted paths.
 
 ## The budgets
 
-Wall time is `exec_timeout_s`, at most 120 seconds. Address space is
-`memory_bytes`, at most 4 GiB. The output directory is bounded by
+Wall time is the run's `exec_timeout_s`, 120 seconds by default. Address space
+is `memory_bytes`, 2 GiB by default. The output directory is bounded by
 `max_output_bytes` and `max_output_files`. The captured stdout and stderr
 are bounded by `max_log_bytes`, and the whole session is bounded by the
 turn, token and tool-call budgets.

@@ -88,13 +88,58 @@ def se_from_row(row):
         if not low <= point <= high:
             raise ValueError('Point estimate lies outside the reported CI')
         z = float(norm.ppf((1 + level) / 2))
-        return (high - low) / (2 * z), {'method': 'ci_to_se', 'low': low, 'high': high, 'level': level}
+        return (high - low) / (2 * z), {'method': 'normal_ci_width', 'low': low, 'high': high,
+                                       'level': level, 'z': z}
     raise ValueError(f"Unsupported uncertainty type: {kind!r}")
 ```
 
 A confidence level must be explicit. A source interval whose level is not
 recorded is not a CI you may reinterpret; keep it as unknown and exclude the
 row rather than assume 0.95.
+
+## The ledger expression is re-evaluated, not trusted
+
+Every `transformations` entry carries an `expression` string, and the tool
+re-evaluates that string against the **original input row** before it accepts
+the entry. The grammar is deliberately small:
+
+- a numeric constant, or a raw numeric field name from that row
+  (`uncertainty_low`, `uncertainty_high`, `point_estimate`, `se`, `sd`);
+- `+`, `-`, `*`, `/`, and `**` with an exponent of at most ten in magnitude;
+- `sqrt`, `log`, `exp` and `abs`, each with a single argument.
+
+There is no quantile function in that grammar, so a CI-derived SE has to carry
+the normal quantile **as a number**. For a 95% interval `2 * z_{0.975}` is
+`3.919927969080108`:
+
+```python
+from scipy.stats import norm
+
+DIVISOR_95 = 2 * float(norm.ppf(0.975))   # 3.919927969080108
+```
+
+The ledger entry then reads:
+
+```python
+ledger_entry = {
+    'input_id': 'r1',
+    'field': 'se',
+    'before': None,                 # the source row had no se column
+    'after': 0.30612807415479243,   # what the executed code computed
+    'expression': '(uncertainty_high - uncertainty_low) / 3.919927969080108',
+    'reason': 'Derive SE from the reported 95% CI (4.6, 5.8) assuming a symmetric normal interval',
+}
+```
+
+The tool re-evaluates the expression on the original row and requires it to
+reproduce `after` to within `1e-9`. A row reported in hours carries the
+conversion in the same expression, `/ 3.919927969080108 / 24`, because the
+factor applies to the standard error exactly as it does to the point estimate.
+
+Writing `norm.ppf(0.975)` into the expression is the most common rejection:
+the grammar cannot call it, and the entry is refused with `Unsupported
+transformation expression`. In the plan, declare the same expression with
+`after` left null; the executed code fills `after` in.
 
 ## Pool with statsmodels
 
@@ -122,15 +167,22 @@ The fixed effect estimate is always computed as well.
 With `use_t=False` the pooled interval is the normal interval, and it
 reproduces the deterministic engine exactly — same point estimate, same
 bounds, same `tau2` — so a result written this way passes the independent
-comparison. This was checked on the same five effects with both routes.
+comparison. On a four-effect example the engine's `normal` interval is
+`(4.788537394208005, 5.689278964090542)` and `use_t=False` gives
+`(4.788537394208007, 5.689278964090538)`.
 
-`use_t=True` is **not** the interval the engine calls `hk`. Both routes use
-the same Hartung-Knapp scale for the standard error, but the engine takes a
-t quantile with `k-1` degrees of freedom while statsmodels keeps the normal
-quantile, so the bounds differ. For `hk`, `modified_hk` and prediction
-intervals, use the engine rather than statsmodels; the prediction interval is
-`t(k-2)` times the square root of `tau2` plus the interval variance, and it
-needs a random effects model with at least three independent estimates.
+`use_t=True` is **not** the interval the engine calls `hk`, even though both
+take the same t quantile with `k-1` degrees of freedom. The engine also
+applies the Hartung-Knapp rescaling: it multiplies the pooled standard error
+by `sqrt(sum(w * (x - pooled)**2) / (k - 1))` with `w = 1 / (v + tau2)` before
+applying the quantile, and statsmodels does not rescale at all. On the same
+four effects the engine's `hk` interval is
+`(4.4539357940754805, 6.023880564223067)` while `use_t=True` gives
+`(4.507629006751291, 5.9701873515472546)`. For `hk`, `modified_hk` and
+prediction intervals, use the engine rather than statsmodels; the prediction
+interval is `t(k-2)` times the square root of `tau2` plus the interval
+variance, and it needs a random effects model with at least three independent
+estimates.
 
 Read the numbers off `summary_frame()`, whose last four rows are the pooled
 rows:
@@ -153,7 +205,13 @@ the narrative, with the interval endpoints exponentiated as well.
 
 The per-study rows of the same frame carry `w_fe` and `w_re`, the normalized
 fixed and random effects weights. A contribution weight in the result must be
-the normalized share that sums to one, not the raw inverse variance.
+the normalized share that sums to one, not the raw inverse variance. Take the
+per-study weights from the study rows rather than from the pooled rows: the
+pooled `fixed effect` row has `w_re` = NaN and the pooled `random effect` row
+has `w_fe` = NaN, so a weight read from the wrong row is NaN and the result is
+rejected as non-finite. Computing the share yourself from
+`1 / (variance + tau2)`, normalized to sum to one, gives the same numbers and
+avoids the frame entirely.
 
 ## Proportion effect sizes
 
