@@ -9,18 +9,35 @@ Everything below was checked on this host, not assumed.
 
 ## Installed libraries
 
-| Library | Version |
-| --- | --- |
-| numpy | 2.1.3 |
-| pandas | 2.2.3 |
-| scipy | 1.15.3 |
-| matplotlib | 3.10.0 |
-| statsmodels | 0.14.4 |
-| scikit-learn | 1.6.1 |
-| patsy | 1.0.1 |
+Read the version you actually get instead of trusting a table:
 
-`lifelines` is not installed. `metafor` and `meta` are R packages, so they
-are out of reach from Python; there is no R runtime on this host either.
+```python
+from importlib.metadata import version
+print(version('statsmodels'))
+```
+
+The project runs on two hosts with different builds:
+
+| Library | analysis host | source host |
+| --- | --- | --- |
+| numpy | 2.5.1 | 2.1.3 |
+| pandas | 3.0.5 | 2.2.3 |
+| scipy | 1.18.0 | 1.15.3 |
+| matplotlib | 3.11.1 | 3.10.0 |
+| statsmodels | 0.14.4 | 0.14.4 |
+| patsy | 1.0.3 | 1.0.1 |
+| scikit-learn | not installed | 1.6.1 |
+
+The analysis host runs pandas 3, a major version above the source host's
+pandas 2. Text columns get the new `str` dtype there instead of `object`,
+and copy behaviour differs. Write frames with `to_csv` rather than relying
+on a repr, and read a column before using it in arithmetic, so the code does
+not depend on which host runs it. `numpy.asarray` is the safe way to turn an
+array into a matrix; `numpy.matrix` is deprecated and will go.
+
+`lifelines` is not installed on either host. `metafor` and `meta` are R
+packages, so they are out of reach from Python; there is no R runtime on
+either host either.
 
 ## The staged helpers
 

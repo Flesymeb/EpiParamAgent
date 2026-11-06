@@ -21,6 +21,7 @@ dependencies = [
     "pandas>=2.0.0",
     "pyyaml>=6.0.0",
     "scipy>=1.10.0",
+    "statsmodels==0.14.4",
     "tenacity>=8.0.0",
     "python-dotenv>=1.0.0",
     "beautifulsoup4>=4.13.0",
