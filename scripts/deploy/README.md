@@ -17,6 +17,8 @@ source /mnt/shared-storage-user/yanhaoyang/Projects/EpiParamAgent/scripts/deploy
 
 开发机通过源机 `PJNL251070223` 的已授权 HTTP 代理访问外网。当前连接路径是：开发机 `127.0.0.1:17890` → socat → 私有 Unix socket → SSH → 源机 `127.0.0.1:7890`。开发机已核实仅监听回环地址；socket 权限为 600，父目录为 700，SSH 密钥未复制到开发机。
 
+代理只覆盖通用外网。模型网关 `token.pjlab.org.cn` 和内部 PyPI 镜像 `mirrors.i.h.pjlab.org.cn` 在开发机所在网络内直连，不经代理：已用开发机自身的凭据实测网关返回 200。因此源机关机时，合成与 agent 流程的模型调用仍然可用，只有文献抓取（Crossref、PubMed、Europe PMC、OpenAlex）会中断。
+
 原TCP反向转发受开发机 SSH `GatewayPorts` 配置影响，会监听所有网卡，现已停止。重启使用下面的 Unix socket 路线。已有 SSH 隧道或 socat 桥接时，不重复启动。
 
 先在开发机准备私有目录：
