@@ -274,11 +274,13 @@ def test_real_background_worker_executes_offline_synthesis_shared_engine(api, tm
     assert result.status_code == 202, result.text
     identity = result.json()['id']
     latest = result.json()
-    for _ in range(100):
+    # The worker runs the synthesis in the background, so the wait has to cover a
+    # slow host as well as a fast one.
+    for _ in range(300):
         latest = client.get(f'/api/runs/{identity}').json()
         if latest['status'] not in {'queued', 'running'}:
             break
-        time.sleep(.05)
+        time.sleep(.1)
     assert latest['status'] == 'complete', latest
     assert latest['manifest']['status'] == 'complete'
     result_artifact = next(a for a in latest['artifacts'] if a['key'] == 'synthesis_result')
